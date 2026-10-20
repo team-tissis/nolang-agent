@@ -1,0 +1,67 @@
+#v2
+canvas 1280x720 bg=#0B1220
+theme dark
+palette a=#EE6A1F b=#22B8A7
+font "ZEN角ゴシックNew Bold"
+# 数字の書体 (`font-family: n`)。細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える
+fonts n="太い幾何学的なサンセリフの欧文、数字がくっきり"
+
+# 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
+motion title = in=y=-24,opacity=0,duration=700 ease=power3.out out=fade,300
+motion big = in=scale=0.92,opacity=0,duration=600 ease=power3.out out=fade,300
+motion div = in=y=18,opacity=0,duration=600 ease=power3.out out=fade,260
+motion row = in=x=-30,opacity=0,duration=500 ease=power3.out out=fade,240
+motion note = in=opacity=0,duration=450 ease=power2.out out=fade,240
+div { in: div }
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
+cut { stagger: sentence }
+# 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
+def h1(t) = p(font-size: 72px; line-height: 1.15; in: title; content: {t})
+def num(t) = p(font-size: 96px; color: $a; in: big; content: {t})
+def big(t) = p(font-size: 80px; text-align: center; in: big; content: {t})
+def sub(t) = p(font-size: 30px; color: $mute; in: note; content: {t})
+def body(t) = p(font-size: 32px; in: row; content: {t})
+def note(t) = p(font-size: 24px; color: $mute; in: note; content: {t})
+# 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
+def stat(v, u, l) = div(width: 560px; height: 166px; background: none; border: none; box-shadow: 0; padding: 0px)
+  p#l(left: 0px; top: 0px; font-size: 30px; color: $mute; content: {l})
+  p#v(left: 0px; top: 46px; font-size: 112px; font-family: n; color: $a; line-height: 1; content: {v})
+  p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
+# 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
+def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>名.i[k] check]` で語ごとに
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+  p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
+  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column) ×3
+    icon#ic(left: 0px; cy: 50%; font-size: 56px; name: {icons}; color: $b)
+    p#t(left: 80px; cy: 50%; font-size: 38px; content: {items})
+  p#cta(left: 0px; bottom: 0px; font-size: 38px; color: $a; content: {cta})
+image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
+# 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
+backdrop#bd(look: glow; vignette: 0.15)
+bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセパッドと軽いビート、解説動画向け
+bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
+sfx off
+# art は画風 (筆致・質感・色調) だけ。時間帯・天気・光は絵ごとの説明に (art の「夜」と絵の「真昼」がぶつかると上下 2 枚の絵になる)
+art "実写の映画のワンシーン、35mm フィルム、浅い被写界深度、琥珀色と深い影の落ち着いた色調、文字なし"
+
+section#open
+img#op_p(inset: 0; main: kb {scale: [1, 1.08]}) 夜明け前の酒蔵、甑から立ちのぼる蒸米の白い湯気、窓からの逆光
+h1#op_w(left: 843px; top: 112px; width: 262px; height: 486px; text-align: center; writing-mode: vertical-rl; in: fade {duration: 0.9}) 一滴に、一年を。
+
+section#scene1
+img#s1_p(inset: 0; main: kb {scale: [1.08, 1]}) 初夏の棚田を渡る風、稲の若い緑と遠くの山、朝靄
+h1#s1_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade {duration: 0.9}) 米が育ち、水が育てる
+
+section#scene2
+img#s2_p(inset: 0; main: kb {scale: [1, 1.1], focus: '40% 50%'}) 薄暗い蔵の中で並ぶ木桶、杜氏が櫂を入れる手元、静けさ
+h1#s2_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade {duration: 0.9}) 静かに、待つ
+
+section#scene3
+img#s3_p(inset: 0; main: kb {scale: [1.1, 1], focus: '50% 40%'}) 一滴の酒が落ちる瞬間、グラスの縁に光る琥珀色
+big#s3_w(left: 80px; top: 197px; width: 1120px; height: 231px) 一杯は、一年
+
+section#close
+img#cl_p(inset: 0; content: @bg)
+big#cl_w(left: 80px; top: 282px; width: 1120px; height: 61px; font-size: 88px; in: fade {duration: 1.2}) 田恵

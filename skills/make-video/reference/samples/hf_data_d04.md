@@ -78,10 +78,10 @@ bgm#music(fade: 400,1600) おしゃれで懐かしい中くらいのテンポの
 subtitle.hug(left: 33px; top: 949px; width: 653px; font-size: 32px; line-height: 1.32; letter-spacing: 0.01em; text-align: center; color: #FFFFFF; background: #090A24C7; border: 1px solid #FFFFFF1A; border-radius: 20px; padding: 9px 23px 11px 23px; unit: sentence; strip: 。; lead: 40; tail: 60; in: {y:9, scale:0.96, opacity:0, duration:0.16, ease:'power2.out'})
 
 # 全編の地: 夜の街の絵 (ゆっくり引く) + 紫とピンクのぼけた光 (漂う) + 瞬く星 46 (大きさの 3 群・群ごとの周期) + 上下の陰
-img#bg_base(inset: 0; z-index: back; main: kb,1.134@50%,46%>1.05@50%,54%) 縦長の夜空の背景。深い藍色から青紫へのなめらかなグラデーションに小さな星と柔らかく光る点が散り、右上の隅に小さな光る三日月。画面の最下部 (下 16%) だけに、静かな日本の住宅街の平らなシルエット (屋根・小さな集合住宅・電柱と電線) と暖かい黄色の灯りの窓がいくつか。中央は大きく空いた何もない夜空。人物なし
-div#blob1(left: -107px; top: 347px; width: 347px; height: 347px; border-radius: 999px; background: radial(#6B3FE08C,#6B3FE000@70%); z-index: back; main: sine,x=80,y=-107,freq_ms=256000; bleed)
-div#blob2(left: 480px; top: 787px; width: 347px; height: 347px; border-radius: 999px; background: radial(#FF5C9E40,#FF5C9E00@70%); z-index: back; main: sine,x=-93,y=-80,freq_ms=256000; bleed)
-div#star(left: "388;107;334;99;250;317;521;580;58;176;684;172;679;39;374;339;601;324;466;300;229;222;583;682;674;183;383;441;179;706;658;459;609;28;688;579;227;649;381;351;140;634;167;107;448;112"; top: "838;590;444;393;37;886;104;767;661;697;480;670;277;120;837;620;963;694;376;33;188;617;690;951;191;632;845;568;180;244;269;289;323;102;600;843;802;755;288;25;457;718;580;884;205;379"; width: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; height: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 0px 7px 1px #FFFFFF8C; opacity: "0.74;0.54;0.95;0.52;0.82;0.50;0.61;0.93;0.62;0.91;0.69;0.95;0.95;0.58;0.80;0.95;0.97;0.55;0.67;0.64;0.77;0.70;0.81;0.49;0.80;0.52;0.88;0.72;0.55;0.68;0.55;0.88;0.84;0.67;0.75;0.94;0.65;0.88;0.50;0.67;0.63;0.79;0.63;0.92;0.68;0.50"; z-index: back; main: sine,opacity=0.225,freq_ms=1716) ×46
+img#bg_base(inset: 0; z-index: back; main: kb {scale: [1.134, 1.05], focus: ['50% 46%', '50% 54%']}) 縦長の夜空の背景。深い藍色から青紫へのなめらかなグラデーションに小さな星と柔らかく光る点が散り、右上の隅に小さな光る三日月。画面の最下部 (下 16%) だけに、静かな日本の住宅街の平らなシルエット (屋根・小さな集合住宅・電柱と電線) と暖かい黄色の灯りの窓がいくつか。中央は大きく空いた何もない夜空。人物なし
+div#blob1(left: -107px; top: 347px; width: 347px; height: 347px; border-radius: 999px; background: radial(#6B3FE08C,#6B3FE000@70%); z-index: back; main: sine {x: 80, y: -107, period: '256s'}; bleed)
+div#blob2(left: 480px; top: 787px; width: 347px; height: 347px; border-radius: 999px; background: radial(#FF5C9E40,#FF5C9E00@70%); z-index: back; main: sine {x: -93, y: -80, period: '256s'}; bleed)
+div#star(left: "388;107;334;99;250;317;521;580;58;176;684;172;679;39;374;339;601;324;466;300;229;222;583;682;674;183;383;441;179;706;658;459;609;28;688;579;227;649;381;351;140;634;167;107;448;112"; top: "838;590;444;393;37;886;104;767;661;697;480;670;277;120;837;620;963;694;376;33;188;617;690;951;191;632;845;568;180;244;269;289;323;102;600;843;802;755;288;25;457;718;580;884;205;379"; width: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; height: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 0px 7px 1px #FFFFFF8C; opacity: "0.74;0.54;0.95;0.52;0.82;0.50;0.61;0.93;0.62;0.91;0.69;0.95;0.95;0.58;0.80;0.95;0.97;0.55;0.67;0.64;0.77;0.70;0.81;0.49;0.80;0.52;0.88;0.72;0.55;0.68;0.55;0.88;0.84;0.67;0.75;0.94;0.65;0.88;0.50;0.67;0.63;0.79;0.63;0.92;0.68;0.50"; z-index: back; main: sine {opacity: 0.225, period: 1.716}) ×46
 div#bgshade(inset: 0; background: linear(#0B0D2A59,#0B0D2A00@35%,#0B0D2A00@70%,#0B0D2A40,180); z-index: back)
 
 # 題つきの板 (番号の黄の丸札 + 題)・下から弾んで入り、上へ抜けて消える
@@ -97,7 +97,7 @@ def note = p(left: 29px; font-size: 17px; color: $ink3; font-family: m)
 section#hook
 # hf の作り: 架空の注は少女の絵の上に乗る (text_over_subject)
 # 生成の絵の少女は hf より小さく低い (顔が画面の 7 割下) — 不動点を下端左寄りに置いて拡大し、顔を字幕の帯の上 (画面の 6〜7 割) に上げる
-img#hero(inset: 0; content: @girl; subject: bottom 45%; room: top 55%; main: kb,1.58@30%,100%>1.42@30%,100%,ease=power1.out; out: {opacity:0, duration:0.35})
+img#hero(inset: 0; content: @girl; subject: bottom 45%; room: top 55%; main: kb {scale: [1.58, 1.42], focus: ['30% 100%', '30% 100%'], ease:'power1.out'}; out: {opacity:0, duration:0.35})
 # スマホの光 (screen で重ねる丸い光・振動で横に震え、呼吸する)
 div#glow(left: 43px; top: 823px; width: 267px; height: 267px; border-radius: 999px; background: radial(#AAE1FFD9,#78BEFF59@35%,#78BEFF00@70%); mix-blend-mode: screen; in: {scale:0.7, opacity:0, duration:0.25, ease:'power2.out'})
 svg#bz_l(left: 57px; top: 856px; width: 88px; height: 88px; part: buzz_l; in: {scale:0.55, opacity:0, duration:0.18, ease:'power2.out'})
@@ -207,8 +207,8 @@ board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
   # 線 (左から描く)・面 (薄く溶ける)・点 (弾む)・値 (上がる) を系列ごとに
   svg#aa(left: 105px; top: 245px; width: 480px; height: 335px; part: area_a; in: {opacity:0, duration:0.8})
   svg#ab(left: 105px; top: 245px; width: 480px; height: 335px; part: area_b; in: {opacity:0, duration:0.8})
-  svg#la(left: 105px; top: 245px; width: 480px; height: 335px; part: line_a; in: wipe,right,1100,ease=power1.inOut)
-  svg#lb(left: 105px; top: 245px; width: 480px; height: 335px; part: line_b; in: wipe,right,1100,ease=power1.inOut)
+  svg#la(left: 105px; top: 245px; width: 480px; height: 335px; part: line_a; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
+  svg#lb(left: 105px; top: 245px; width: 480px; height: 335px; part: line_b; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
   div#da(left: "102;219;336;452;569"; top: "440;405;349;273;243"; width: 23px; height: 23px; border-radius: 99px; background: $yellow; border: 4px solid $deep; z-index: front; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
   div#db(left: "102;219;336;452;569"; top: "521;506;476;430;405"; width: 23px; height: 23px; border-radius: 99px; background: $pink; border: 4px solid $deep; z-index: front; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
   p#va(cx: "113;230;347;463;580"; cy: "422;392;336;260;224"; font-size: "28;20;20;20;28"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:7, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 24%;31%;42%;57%;63%
@@ -223,7 +223,7 @@ board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
 section#exp(stagger: {each:0})
 board#b5(n: "04"; t: "2週間の実験")
   div#parta(left: 0px; top: 0px; width: 656px; height: 767px; out: {y:-27, opacity:0, duration:0.3, ease:'power2.in'})
-    img#room(left: 27px; top: 112px; width: 603px; height: 360px; border-radius: 23px; border: 2px solid #FFFFFF2E; main: kb,1.12>1.0,ease=power1.out; delay: 250; in: {scale:0.85, y:20, opacity:0, duration:0.5, ease:'back.out(2.2)'}) [ref:@girl]夜の小さな日本の家の、壁を挟んで隣り合う 2 部屋の断面図を横長の画面いっぱいに描く (周りに黒い余白や額縁を作らない)。左の部屋 (居間): 小さな棚の上でスマートフォンが立てて充電され、画面は暗く、充電ケーブルがミント色にやさしく光る。右の部屋 (寝室): 同じ少女がベッドで目を閉じて安らかに眠り、窓から三日月が見える。真ん中に閉じたドアのある壁。スマホが寝ている少女と別の部屋にあることがはっきり分かる。左上と右下に札が乗るので、そこは壁と床の平らな面にする
+    img#room(left: 27px; top: 112px; width: 603px; height: 360px; border-radius: 23px; border: 2px solid #FFFFFF2E; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 250; in: {scale:0.85, y:20, opacity:0, duration:0.5, ease:'back.out(2.2)'}) [ref:@girl]夜の小さな日本の家の、壁を挟んで隣り合う 2 部屋の断面図を横長の画面いっぱいに描く (周りに黒い余白や額縁を作らない)。左の部屋 (居間): 小さな棚の上でスマートフォンが立てて充電され、画面は暗く、充電ケーブルがミント色にやさしく光る。右の部屋 (寝室): 同じ少女がベッドで目を閉じて安らかに眠り、窓から三日月が見える。真ん中に閉じたドアのある壁。スマホが寝ている少女と別の部屋にあることがはっきり分かる。左上と右下に札が乗るので、そこは壁と床の平らな面にする
     p#pinphone(left: 63px; top: 143px; font-size: 19px; color: $navy; background: $mint; border-radius: 20px; padding: 10px 15px; box-shadow: 0px 5px 13px #0000004D; overlap: b5.parta.room; in: {scale:0.5, y:7, opacity:0, duration:0.4, ease:'back.out(2.2)'}) スマホは別の部屋で充電
     p#pinbed(left: 421px; top: 411px; font-size: 19px; color: $navy; background: #FFFFFF; border-radius: 20px; padding: 10px 15px; box-shadow: 0px 5px 13px #0000004D; overlap: b5.parta.room; in: {scale:0.5, y:7, opacity:0, duration:0.4, ease:'back.out(2.2)'}) 寝室にスマホなし
     # ルールの札 (黄の縁 + 上辺に乗る題の札 + 大きな時刻)

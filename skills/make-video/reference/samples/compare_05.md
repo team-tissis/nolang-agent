@@ -43,19 +43,19 @@ bgm#music 軽やかで前向きなミニマルエレクトロニカ、柔らか�
 bgm#music2(volume: 1dB) 同じ系統で少し明るく推進力のあるエレクトロニカ、ビートを足して前向きに高揚する、まとめ向け
 
 section#open
-img#op_bg(inset: 0; scrim: 0.55; main: kb,1.0@60%,50%>1.06@62%,50%) [photo][ref:@part]同じ部品、右半分は橙に光る線のワイヤーフレーム、左半分は青緑の細かい光の点の集まりに分かれていく、グラファイトの背景
+img#op_bg(inset: 0; scrim: 0.55; main: kb {scale: [1, 1.06], focus: ['60% 50%', '62% 50%']}) [photo][ref:@part]同じ部品、右半分は橙に光る線のワイヤーフレーム、左半分は青緑の細かい光の点の集まりに分かれていく、グラファイトの背景
 num#op_n(left: 80px; top: 140px) CAD MODELING / REVERSE MODELING
 h1#op_h(left: 80px; top: 184px; font-size: 64px) {a}CADモデリング{/}と[br]{b}リバースモデリング{/}
-shape#op_r(left: 80px; top: 356px; width: 160px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,700)
+shape#op_r(left: 80px; top: 356px; width: 160px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.7})
 pill#op_f(left: 80px; top: 392px) アイデア → 3Dデータ
-pill#op_g(left: 80px; top: 456px; background: $b; in: slide,left) 実物 → 3Dデータ
+pill#op_g(left: 80px; top: 456px; background: $b; in: slide {dir: 'left'}) 実物 → 3Dデータ
 sub#op_s(left: 80px; top: 540px) ちがいは、進む{k}向き{/}
 
 section#goal
-img#gl_bg(inset: 0; scrim: 0.6; main: kb,1.0@50%,50%>1.05) [photo][ref:@part]同じ部品の3Dモデルが大きなモニターに表示された作業机、暗い部屋、モニターの光
+img#gl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品の3Dモデルが大きなモニターに表示された作業机、暗い部屋、モニターの光
 num#gl_n(left: 80px; top: 110px) COMMON
 h1#gl_h(left: 80px; top: 150px) ゴールは同じ
-div#gl_c(left: 80px; top: 260px; width: 560px; height: 150px; padding: 0px; in: rise,24,500)
+div#gl_c(left: 80px; top: 260px; width: 560px; height: 150px; padding: 0px; in: rise {y: 24, duration: 0.5})
   shape#bg(left: 28px; cy: 50%; width: 88px; height: 88px; path: rect,r=0.5; background: $a_t)
   icon#i(left: 46px; cy: 50%; font-size: 52px; name: cube; color: $a)
   p#t(left: 140px; cy: 50%; font-size: 34px; color: $ink; line-height: 1.3) パソコンの中の[br]部品の3Dデータ
@@ -63,10 +63,10 @@ body#gl_q(left: 80px; top: 460px) ちがうのは {k}出発点{/}
 shape#gl_o(left: 820px; top: 120px; width: 380px; height: 380px; path: circle; background: none; border: 2px solid $b; opacity: 0.25; main: breathe)
 
 section#f_intro
-img#fi_bg(inset: 0; scrim: 0.5; main: kb,1.0@65%,50%>1.06@68%,48%) [photo]方眼紙に描いた鉛筆のスケッチから、橙に光る線の L 字ブラケットの3Dモデルが立ち上がる様子、グラファイトの机
+img#fi_bg(inset: 0; scrim: 0.5; main: kb {scale: [1, 1.06], focus: ['65% 50%', '68% 48%']}) [photo]方眼紙に描いた鉛筆のスケッチから、橙に光る線の L 字ブラケットの3Dモデルが立ち上がる様子、グラファイトの机
 num#fi_n(left: 80px; top: 150px) 01  FORWARD
 h1#fi_h(left: 80px; top: 190px; font-size: 64px) 通常の[br]{a}CADモデリング{/}
-shape#fi_r(left: 80px; top: 370px; width: 160px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,700)
+shape#fi_r(left: 80px; top: 370px; width: 160px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.7})
 sub#fi_s(left: 80px; top: 400px) アイデアから、{k}ゼロで{/}形を組み立てる
 pill#fi_p(left: 80px; top: 470px) アイデア → 3Dデータ
 
@@ -75,10 +75,10 @@ img#ff_bg(inset: 0; scrim: 0.6) [photo][ref:@part]同じ部品が工場の CNC �
 num#ff_n(left: 80px; top: 90px) FORWARD  FLOW
 h1#ff_h(left: 80px; top: 128px; font-size: 48px) 描いて、決めて、{a}形にする{/}
 node#ff_f(left: 80px; top: 280px; width: 1120px; height: 220px; display: flex; gap: 80px; t: "スケッチ;寸法を決める;立体にする;製品をつくる"; i: "pencil-simple;ruler;cube;factory") ×4
-shape#ff_a(left: "ff_f[1].right+12;ff_f[2].right+12;ff_f[3].right+12"; cy: ff_f[1].cy; width: 56px; height: 36px; path: arrow_r; background: $a; border: 4px solid $a; in: wipe,right,300) ×3
+shape#ff_a(left: "ff_f[1].right+12;ff_f[2].right+12;ff_f[3].right+12"; cy: ff_f[1].cy; width: 56px; height: 36px; path: arrow_r; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
 
 section#f_dim
-img#fd_bg(inset: 0; scrim: 0.6; main: kb,1.04@70%,50%>1.0) [photo][ref:@part]同じ部品の橙の線のワイヤーフレーム、設計図のような寸法線が添えられている、グラファイト
+img#fd_bg(inset: 0; scrim: 0.6; main: kb {scale: [1.04, 1], focus: '70% 50%'}) [photo][ref:@part]同じ部品の橙の線のワイヤーフレーム、設計図のような寸法線が添えられている、グラファイト
 num#fd_n(left: 80px; top: 100px) POINT
 h1#fd_h(left: 80px; top: 140px) 寸法は {a}狙った値{/}
 dimrow#fd_v1(left: 80px; top: 250px; k: "穴の直径"; v: "10.00 mm")
@@ -86,42 +86,42 @@ dimrow#fd_v2(left: 80px; top: 350px; k: "幅"; v: "50.00 mm")
 p#fd_st(left: 80px; top: 470px; font-size: 30px; color: $ink; background: $a_t; border: 2px solid $a; border-radius: 10px; padding: 10px 22px; in: pop) 設計者が決めた数字 = データ
 
 section#f_use
-img#fu_bg(inset: 0; scrim: 0.55; main: kb,1.0@50%,50%>1.05) [photo]新しい製品の試作品がいくつか並ぶ開発室の机、3D プリンタ、暖かい光
+img#fu_bg(inset: 0; scrim: 0.55; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]新しい製品の試作品がいくつか並ぶ開発室の机、3D プリンタ、暖かい光
 note#fu_n(left: 80px; top: 150px) 通常の CAD が向いているのは
-div#fu_c(left: 80px; top: 200px; width: 640px; height: 150px; padding: 0px; in: rise,24,500)
+div#fu_c(left: 80px; top: 200px; width: 640px; height: 150px; padding: 0px; in: rise {y: 24, duration: 0.5})
   shape#bg(left: 28px; cy: 50%; width: 88px; height: 88px; path: rect,r=0.5; background: $a_t)
   icon#i(left: 46px; cy: 50%; font-size: 52px; name: lightbulb; color: $a)
   p#t(left: 140px; cy: 50%; font-size: 36px; color: $ink; line-height: 1.3) 新しい製品を[br]一から設計する
 pill#fu_p(left: 80px; top: 390px; transform: rotate(-4deg)) NEW DESIGN
 
 section#r_intro
-img#ri_bg(inset: 0; scrim: 0.5; main: kb,1.0@65%,50%>1.06@66%,52%) [photo][ref:@part]同じ部品の使い込まれた実物、表面に細かな傷と摩耗、作業台の上に置かれている、横からの柔らかい光
+img#ri_bg(inset: 0; scrim: 0.5; main: kb {scale: [1, 1.06], focus: ['65% 50%', '66% 52%']}) [photo][ref:@part]同じ部品の使い込まれた実物、表面に細かな傷と摩耗、作業台の上に置かれている、横からの柔らかい光
 num#ri_n(left: 80px; top: 150px; color: $b) 02  REVERSE
 h1#ri_h(left: 80px; top: 190px; font-size: 64px) {b}リバース[br]モデリング{/}
-shape#ri_r(left: 80px; top: 370px; width: 160px; height: 3px; path: line_h; background: $b; border: 3px solid $b; in: wipe,left,700)
+shape#ri_r(left: 80px; top: 370px; width: 160px; height: 3px; path: line_h; background: $b; border: 3px solid $b; in: wipe {dir: 'left', duration: 0.7})
 sub#ri_s(left: 80px; top: 400px) {k}今ある実物{/}から出発する
 pill#ri_p(left: 80px; top: 470px; background: $b) 実物 → 3Dデータ
 
 section#r_scan
-img#rs_bg(inset: 0; scrim: 0.45; main: kb,1.0@60%,50%>1.08@62%,48%) [photo][ref:@part]同じ部品に青緑の縞模様の光を当てる据え置き型の3Dスキャナー、暗い作業室
+img#rs_bg(inset: 0; scrim: 0.45; main: kb {scale: [1, 1.08], focus: ['60% 50%', '62% 48%']}) [photo][ref:@part]同じ部品に青緑の縞模様の光を当てる据え置き型の3Dスキャナー、暗い作業室
 pill#rs_t(left: 80px; top: 110px; background: $b) STEP 1  測る
 h1#rs_h(left: 80px; top: 170px; font-size: 48px) 3Dスキャナーで{b}測る{/}
-div#rs_c(left: 80px; top: 280px; width: 480px; height: 200px; padding: 0px; in: rise,24,500)
+div#rs_c(left: 80px; top: 280px; width: 480px; height: 200px; padding: 0px; in: rise {y: 24, duration: 0.5})
   p#v(left: 28px; top: 26px; font-size: 72px; font-family: e; color: $b) [count:300,000]
   p#k(left: 30px; top: 124px; font-size: 26px; font-family: m; color: $mute) 点の位置を一気に読み取る (例)
 
 section#r_mesh
-img#rm_bg(inset: 0; scrim: 0.4; main: kb,1.0@30%,50%>1.05@30%,50%) [photo][ref:@part]同じ部品の形をした青緑の細かい光の点の集まり、点群、暗い空間に浮かぶ
+img#rm_bg(inset: 0; scrim: 0.4; main: kb {scale: [1, 1.05], focus: ['30% 50%', '30% 50%']}) [photo][ref:@part]同じ部品の形をした青緑の細かい光の点の集まり、点群、暗い空間に浮かぶ
 pill#rm_t(left: 80px; top: 90px; background: $b) STEP 2  つなぐ
 h1#rm_h(left: 80px; top: 146px; font-size: 48px) 点 → {b}三角形の面{/}
 pill#rm_l1(left: 80px; top: 520px; background: #12161C; color: $b; border: 2px solid $b) 点群
-shape#rm_a(left: 560px; top: 330px; width: 140px; height: 60px; path: arrow_r; background: $b; border: none; in: wipe,right,500)
+shape#rm_a(left: 560px; top: 330px; width: 140px; height: 60px; path: arrow_r; background: $b; border: none; in: wipe {dir: 'right', duration: 0.5})
 div#rm_m(left: 740px; top: 150px; width: 460px; height: 360px; padding: 0px; in: zoom)
   img#img(left: 0px; top: 0px; width: 460px; height: 360px) [photo][ref:@part]同じ部品の形をした細かい三角形のポリゴンメッシュ、青緑の線、暗い空間
 pill#rm_l2(left: 760px; top: 530px; background: $b) メッシュ
 
 section#r_cad
-img#rc_bg(inset: 0; scrim: 0.6; main: kb,1.0@50%,50%>1.05) [photo][ref:@part]同じ部品、左半分は青緑の三角形メッシュ、右半分はなめらかな面のきれいな3Dモデル、境目がはっきり
+img#rc_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品、左半分は青緑の三角形メッシュ、右半分はなめらかな面のきれいな3Dモデル、境目がはっきり
 pill#rc_t(left: 80px; top: 90px; background: $b) STEP 3  当てはめる
 h1#rc_h(left: 80px; top: 146px; font-size: 48px) メッシュに{b}形の意味{/}を与える
 note#rc_w(left: 80px; top: 226px) メッシュ = {x}表面の形だけ{/}
@@ -131,7 +131,7 @@ div#rc_c(left: 80px; top: 290px; width: 760px; height: 110px; gap: 24; padding: 
 p#rc_st(left: 80px; top: 450px; font-size: 32px; color: $ink; background: $b_t; border: 2px solid $b; border-radius: 10px; padding: 10px 22px; in: pop) 編集できる CAD データへ
 
 section#r_dim
-img#rd_bg(inset: 0; scrim: 0.6; main: kb,1.04@70%,50%>1.0) [photo][ref:@part]同じ部品の実物の穴のアップ、わずかな摩耗とバリ、金属のノギスが当てられている
+img#rd_bg(inset: 0; scrim: 0.6; main: kb {scale: [1.04, 1], focus: '70% 50%'}) [photo][ref:@part]同じ部品の実物の穴のアップ、わずかな摩耗とバリ、金属のノギスが当てられている
 num#rd_n(left: 80px; top: 100px; color: $b) POINT
 h1#rd_h(left: 80px; top: 140px) 寸法は {b}測った値{/}
 dimrow#rd_v1(left: 80px; top: 250px; k: "穴の直径"; v: "10.03 mm"; c: $b)
@@ -139,7 +139,7 @@ dimrow#rd_v2(left: 80px; top: 350px; k: "幅"; v: "49.80 mm"; c: $b)
 p#rd_m(left: 80px; top: 470px; font-size: 30px; color: $ink) 実物の{w}ズレや摩耗{/}も、そのまま入る
 
 section#r_use
-img#ru_bg(inset: 0; scrim: 0.6; main: kb,1.0@50%,50%>1.05) [photo]棚に並んだ古い機械部品と、手で削った木の試作品、柔らかい光の作業場
+img#ru_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]棚に並んだ古い機械部品と、手で削った木の試作品、柔らかい光の作業場
 note#ru_n(left: 80px; top: 96px) リバースが活きる場面
 div#ru_c(left: 80px; top: 150px; width: 700px; height: 400px; gap: 20; padding: 0px; display: flex; flex-direction: column) ×3
   shape#bg(left: 20px; cy: 50%; width: 64px; height: 64px; path: rect,r=0.5; background: $b_t)
@@ -161,18 +161,18 @@ div#cm_r(left: 660px; top: 110px; width: 540px; height: 470px; padding: 0px; bor
     p#v(left: 128px; cy: 50%; font-size: 34px; color: $ink) 実物;測った値;今あるものを写す
 
 section#combo
-img#cb_bg(inset: 0; scrim: 0.6; main: kb,1.0@50%,50%>1.05) [photo][ref:@part]同じ部品の実物の隣で、改良された新しい形の部品の3Dモデルがモニターに映る、作業机
+img#cb_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品の実物の隣で、改良された新しい形の部品の3Dモデルがモニターに映る、作業机
 num#cb_n(left: 80px; top: 90px) IN PRACTICE
 h1#cb_h(left: 80px; top: 128px; font-size: 48px) {b}写して{/}、{a}描き足す{/}
 node#cb_f(left: 80px; top: 280px; width: 1120px; height: 220px; display: flex; gap: 80px; t: "実物;スキャン;CAD で改良;新しい製品"; i: "package;scan;pencil-simple;rocket-launch"; c: "$b;$b;$a;$a") ×4
-shape#cb_a(left: "cb_f[1].right+12;cb_f[2].right+12;cb_f[3].right+12"; cy: cb_f[1].cy; width: 56px; height: 36px; path: arrow_r; background: "$b;$a;$a"; border: 4px solid $a; in: wipe,right,300) ×3
+shape#cb_a(left: "cb_f[1].right+12;cb_f[2].right+12;cb_f[3].right+12"; cy: cb_f[1].cy; width: 56px; height: 36px; path: arrow_r; background: "$b;$a;$a"; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
 
 section#close
-img#cl_bg(inset: 0; scrim: 0.6; main: kb,1.0@50%,50%>1.06) [photo][ref:@part]同じ部品が、橙の線のワイヤーフレームと青緑の点群から一つの完成品に重なっていく、明るく澄んだ光
-div#cl_a(left: 80px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $a; in: slide,left)
+img#cl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.06], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品が、橙の線のワイヤーフレームと青緑の点群から一つの完成品に重なっていく、明るく澄んだ光
+div#cl_a(left: 80px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $a; in: slide {dir: 'left'})
   p#k(left: 36px; top: 36px; font-size: 26px; font-family: e; color: $a; letter-spacing: 0.15em) 通常の CAD
   p#v(left: 36px; top: 100px; font-size: 52px; color: $ink) アイデア → 形
-div#cl_b(left: 660px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $b; in: slide,right)
+div#cl_b(left: 660px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $b; in: slide {dir: 'right'})
   p#k(left: 36px; top: 36px; font-size: 26px; font-family: e; color: $b; letter-spacing: 0.15em) リバース
   p#v(left: 36px; top: 100px; font-size: 52px; color: $ink) 形 → データ
 p#cl_t(left: 80px; top: 420px; width: 1120px; font-size: 44px; color: $ink; text-align: center; in: rise) {k}向き{/}のちがいで、使い分ける

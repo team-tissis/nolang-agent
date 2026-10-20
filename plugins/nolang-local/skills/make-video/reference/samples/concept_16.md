@@ -37,7 +37,7 @@ bgm#music 軽快でポップな中華風のビート、二胡と琵琶の旋律�
 bgm#music2(volume: 1dB) 同じ中華風ポップでテンポを上げた高揚感のあるビート、太鼓と琵琶が重なる、流行を語る山場向け
 
 section#hook
-img#hk_p(inset: 0; main: kb,1.0@50%,50%>1.08@50%,55%; scrim: 0.2) [photo]真上から見た湯気の立つ真っ赤な麻辣湯の丼、赤い唐辛子油、青菜、きのこ、春雨、木のテーブル
+img#hk_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 50%', '50% 55%']}; scrim: 0.2) [photo]真上から見た湯気の立つ真っ赤な麻辣湯の丼、赤い唐辛子油、青菜、きのこ、春雨、木のテーブル
 veil#hk_v(color: #2A1A14; opacity: 0.75; to: top; start: 0.55)
 p#hk_k(left: 48px; top: 96px; font-size: 26px; font-family: e; color: $gold; letter-spacing: 0.25em) MALATANG
 p#hk_t(left: 40px; top: 136px; font-size: 150px; font-family: h; color: $paper; text-shadow: 0px 4px 12px #00000080; in: zoom) 麻辣湯
@@ -46,21 +46,21 @@ p#hk_s(left: 410px; top: 770px; font-size: 30px; color: $ink; background: $gold;
 p#hk_q(left: 40px; top: 860px; font-size: 46px; color: $paper; background: $a; border-radius: 16px; padding: 14px 24px; border: 3px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-3deg)) なぜ今、爆発的ヒット？
 
 section#map
-img#mp_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.6,#2A1A14) [photo]夜の街に赤い提灯が灯る麻辣湯の店先、店の前に並ぶ若者たち、ぼけた背景
+img#mp_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.6,#2A1A14) [photo]夜の街に赤い提灯が灯る麻辣湯の店先、店の前に並ぶ若者たち、ぼけた背景
 p#mp_h(left: 40px; top: 80px; font-size: 52px; color: $paper; text-shadow: 0px 2px 8px #00000080) この動画でわかること
 div#mp_l(left: 40px; top: 190px; width: 640px; height: 560px; gap: 16; padding: 0px; box-shadow: 4px 4px 0px $ink; display: flex; flex-direction: column) ×5
   p#n(left: 22px; cy: 50%; font-size: 32px; font-family: e; color: $a) 01;02;03;04;05
   p#t(left: 100px; cy: 50%; font-size: 36px; color: $ink) 中身;ルーツ;流行の理由;体への影響;具材の選び方
 
 section#parts
-img#pt_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.4) [photo]ステンレスのトレーにずらりと並んだ麻辣湯の具材、青菜、きのこ、豆腐、春雨、肉団子、明るい店内
+img#pt_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]ステンレスのトレーにずらりと並んだ麻辣湯の具材、青菜、きのこ、豆腐、春雨、肉団子、明るい店内
 head#pt_h(n: "01 構成要素"; t: "麻辣湯は4つでできる")
 div#pt_c(left: 40px; top: 250px; width: 640px; height: 600px; gap: 20; padding: 0px; display: grid) ×4
   icon#i(cx: 50%; cy: 36%; font-size: 96px; name: "cooking-pot;pepper;carrot;bowl-food"; color: "$a;$a;$b;$b")
   p#t(cx: 50%; cy: 74%; font-size: 38px; color: $ink) スープ;麻辣タレ;具材;麺
 
 section#soup
-img#sp_p(inset: 0; main: kb,1.0@50%,60%>1.08; scrim: 0.3) [photo]大きな寸胴鍋で白く濁った豚骨と鶏ガラのスープがぐつぐつ煮立つ、立ちのぼる湯気、中華の厨房
+img#sp_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}; scrim: 0.3) [photo]大きな寸胴鍋で白く濁った豚骨と鶏ガラのスープがぐつぐつ煮立つ、立ちのぼる湯気、中華の厨房
 head#sp_h(n: "01 スープ"; t: "濃厚な白いスープ")
 div#sp_a(left: 40px; top: 620px; width: 640px; height: 130px; padding: 0px)
   p#t(left: 28px; cy: 50%; font-size: 40px; color: $ink) 豚骨・鶏ガラの出汁
@@ -70,7 +70,7 @@ div#sp_b(left: 40px; top: 860px; width: 640px; height: 130px; padding: 0px)
 #sp_b.on(background: $gold)
 
 section#mala
-img#ml_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.35) [photo]木の台に山盛りの真っ赤な乾燥唐辛子と、緑がかった花椒の実、横からの暖かい光
+img#ml_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.35) [photo]木の台に山盛りの真っ赤な乾燥唐辛子と、緑がかった花椒の実、横からの暖かい光
 head#ml_h(n: "01 麻辣タレ"; t: "味の決め手")
 div#ml_m(left: 40px; top: 290px; width: 300px; height: 460px; padding: 0px)
   p#k(cx: 50%; top: 24px; font-size: 180px; font-family: h; color: $b) 麻
@@ -82,7 +82,7 @@ div#ml_l(left: 380px; top: 290px; width: 300px; height: 460px; padding: 0px)
   p#d(cx: 50%; top: 300px; font-size: 36px; text-align: center; line-height: 1.3; color: $ink) 唐辛子の[br]辛味
 
 section#spice
-img#sc_p(inset: 0; main: kb,1.0@50%,50%>1.1; scrim: 0.35) [photo]中華鍋の熱い油で八角、クローブ、シナモンスティック、草果、唐辛子を炒める、立ちのぼる香りの煙
+img#sc_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['50% 50%', '']}; scrim: 0.35) [photo]中華鍋の熱い油で八角、クローブ、シナモンスティック、草果、唐辛子を炒める、立ちのぼる香りの煙
 head#sc_h(n: "01 薬膳・香辛料"; t: "香りの決め手")
 p#sc_s(left: 380px; top: 470px; font-size: 36px; color: $paper; background: $a; border-radius: 12px; padding: 8px 20px; border: 3px solid $ink; box-shadow: 5px 5px 0px $ink; in: pop; transform: rotate(-4deg)) 数十種類！
 div#sc_c(left: 40px; top: 600px; width: 640px; height: 380px; gap: 16; padding: 0px; box-shadow: 4px 4px 0px $ink; display: grid) ×4
@@ -90,7 +90,7 @@ div#sc_c(left: 40px; top: 600px; width: 640px; height: 380px; gap: 16; padding: 
   p#s(cx: 50%; cy: 74%; font-size: 24px; color: $mute) スターアニス;クローブ;シナモン;ソウカ
 
 section#roots
-img#rt_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.4) [photo]中国四川省の夜の屋台、串に刺した具材を赤いスープの大鍋で煮る、湯気と裸電球、庶民的な雰囲気
+img#rt_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]中国四川省の夜の屋台、串に刺した具材を赤いスープの大鍋で煮る、湯気と裸電球、庶民的な雰囲気
 head#rt_h(n: "02 歴史とルーツ"; t: "四川の屋台から")
 div#rt_a(left: 40px; top: 270px; width: 640px; height: 170px; padding: 0px)
   p#n(left: 24px; top: 22px; font-size: 24px; color: $paper; background: $b; border-radius: 99px; padding: 4px 14px) はじまり
@@ -105,25 +105,25 @@ div#rt_c(left: 40px; top: 758px; width: 640px; height: 170px; padding: 0px)
   p#t(left: 24px; top: 82px; font-size: 40px; color: $ink) 日本でも大流行
 
 section#trend
-img#tr_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.4) [photo]明るい店内で真っ赤な麻辣湯の丼をスマートフォンで撮影する若い女性の手元、背景はぼけた店内
+img#tr_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]明るい店内で真っ赤な麻辣湯の丼をスマートフォンで撮影する若い女性の手元、背景はぼけた店内
 head#tr_h(n: "03 流行の背景"; t: "ヒットの3つの理由")
 feat#tr_c(left: 36px; top: 250px; height: 660px; gap: 20; i: "camera;sliders-horizontal;heartbeat"; c: "$a;$a;$b"; d: "$rt;$rt;$gt"; t: "SNS映え;カスタマイズ性;健康・ダイエット"; s: "真っ赤な見た目;具材も辛さも自由;野菜たっぷり"; display: flex; flex-direction: column) ×3
 
 section#merit
-img#me_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.35) [photo]湯気の立つ赤いスープをれんげですくう手元、温かい光、木のテーブル
+img#me_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.35) [photo]湯気の立つ赤いスープをれんげですくう手元、温かい光、木のテーブル
 head#me_h(n: "04 身体への影響"; t: "うれしい効果")
 feat#me_a(left: 36px; top: 560px; i: fire; t: "カプサイシン"; s: "体を温め、代謝を助ける")
 feat#me_b(left: 36px; top: 770px; i: leaf; c: $b; d: $gt; t: "薬膳スパイス"; s: "香りで食欲を後押し")
 
 section#caution
-img#ca_p(inset: 0; main: kb,1.0@50%,50%>1.1; scrim: 0.4) [photo]赤い唐辛子油が厚く浮いた麻辣湯のスープの寄り、表面の油の輝き
+img#ca_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['50% 50%', '']}; scrim: 0.4) [photo]赤い唐辛子油が厚く浮いた麻辣湯のスープの寄り、表面の油の輝き
 head#ca_h(n: "04 注意点"; t: "ただし注意も")
 p#ca_s(left: 100px; top: 300px; font-size: 44px; color: $paper; background: $a; border-radius: 14px; padding: 12px 26px; border: 3px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-4deg)) スープは飲み干さない
 feat#ca_a(left: 36px; top: 560px; i: drop; t: "塩分が多め"; s: "スープに溶け込んでいる")
 feat#ca_b(left: 36px; top: 770px; i: drop-half; t: "脂質が多め"; s: "表面の赤い油")
 
 section#choose
-img#ch_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.4) [photo]麻辣湯店の冷蔵ショーケースに並ぶ色とりどりの具材、葉物野菜、きのこ、肉団子、練り物、トングとボウル
+img#ch_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]麻辣湯店の冷蔵ショーケースに並ぶ色とりどりの具材、葉物野菜、きのこ、肉団子、練り物、トングとボウル
 head#ch_h(n: "05 具材選び"; t: "お店の形式で変わる")
 div#ch_g(left: 40px; top: 520px; width: 640px; height: 250px; padding: 0px)
   p#tag(left: 24px; top: 22px; font-size: 26px; color: $paper; background: $a; border-radius: 99px; padding: 4px 16px) グラム売り
@@ -134,7 +134,7 @@ div#ch_t(left: 40px; top: 800px; width: 640px; height: 180px; padding: 0px)
   p#ok(left: 24px; top: 94px; font-size: 36px; color: $ink) たんぱく質を1品足す
 
 section#order
-img#or_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.3) [photo]青菜ときのこがたっぷり、豆腐と鶏肉、春雨が入った赤い麻辣湯の一杯を真上から、木のテーブル
+img#or_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.3) [photo]青菜ときのこがたっぷり、豆腐と鶏肉、春雨が入った赤い麻辣湯の一杯を真上から、木のテーブル
 head#or_h(n: "おすすめ"; t: "注文の組み立て例")
 p#or_s(left: 380px; top: 250px; font-size: 32px; color: $ink; background: $gold; border-radius: 12px; padding: 8px 18px; border: 3px solid $ink; in: pop; transform: rotate(5deg)) 辛さは控えめから
 div#or_c(left: 40px; top: 580px; width: 640px; height: 400px; gap: 16; padding: 0px; box-shadow: 4px 4px 0px $ink; display: flex; flex-direction: column) ×3
@@ -142,7 +142,7 @@ div#or_c(left: 40px; top: 580px; width: 640px; height: 400px; gap: 16; padding: 
   p#t(left: 210px; cy: 50%; font-size: 34px; color: $ink) 青菜ときのこたっぷり;豆腐か鶏肉を1品;春雨
 
 section#outro
-img#ou_p(inset: 0; main: kb,1.0@50%,50%>1.07; scrim: 0.25) [photo]夜の明るい麻辣湯の店で、湯気の立つ赤い丼を囲んで笑う若者たち、温かい光
+img#ou_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.25) [photo]夜の明るい麻辣湯の店で、湯気の立つ赤い丼を囲んで笑う若者たち、温かい光
 veil#ou_v(color: #2A1A14; opacity: 0.75; to: top; start: 0.6)
 p#ou_t(left: 40px; top: 110px; font-size: 64px; color: $paper; line-height: 1.25; text-shadow: 0px 2px 8px #00000080) あなただけの[br]{g}一杯{/}を組もう
 p#ou_s(left: 44px; top: 300px; font-size: 30px; color: $paper) 仕組みを知れば、もっとおいしい

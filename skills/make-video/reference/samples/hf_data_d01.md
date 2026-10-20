@@ -105,7 +105,7 @@ shape#glow2.ellipse(left: 846px; top: 353px; width: 667px; height: 667px; backgr
 
 # title — 題: 夜の雑貨店の写真が 1.12 → 1.02 に引きながら明け、左の暗い空きに英字の小札 → 2 行の題 → 琥珀の短い線 → 副題 → 3 つの札
 section#title(stagger: {each:0}; out: {opacity:0, duration:0.35, ease:'power2.in'})
-img#hero(inset: 0; subject: right 40%; room: left 55%; main: kb,1.12>1.02,ease=power1.out; in: fade,900) [photo]Cinematic low-key photograph of a cozy Japanese zakka (household goods) shop interior at night. Wooden shelves with handmade ceramic mugs, folded linen, small potted plants and glass jars, lit by a few warm pendant lamps. On a wooden counter in the right third of the frame sits a small woven wicker shopping basket with two items inside, left behind. Deep shadows, moody atmosphere, subtle teal and amber color grade, shallow depth of field, soft bokeh. The left half of the frame is very dark and uncluttered, leaving negative space for the title. No text, no letters, no logos, no people.
+img#hero(inset: 0; subject: right 40%; room: left 55%; main: kb {scale: [1.12, 1.02], ease:'power1.out'}; in: fade {duration: 0.9}) [photo]Cinematic low-key photograph of a cozy Japanese zakka (household goods) shop interior at night. Wooden shelves with handmade ceramic mugs, folded linen, small potted plants and glass jars, lit by a few warm pendant lamps. On a wooden counter in the right third of the frame sits a small woven wicker shopping basket with two items inside, left behind. Deep shadows, moody atmosphere, subtle teal and amber color grade, shallow depth of field, soft bokeh. The left half of the frame is very dark and uncluttered, leaving negative space for the title. No text, no letters, no logos, no people.
 # 写真の暗幕: 左から右へ薄れる幕 + 下から上へ薄れる幕 (題の側を沈める)
 div#shade_l(inset: 0; background: linear(#0A0E14F7,#0A0E14E6@34%,#0A0E1473@62%,#0A0E1433,90); in: none)
 div#shade_b(inset: 0; background: linear(#0A0E14D9,#0A0E1400@34%,0); in: none)
@@ -209,7 +209,7 @@ panel#wk(left: 64px; top: 153px; width: 767px; height: 460px; delay: 200)
   div#band(left: 73px; top: 182px; width: 653px; height: 13px; background: #35D0BA29; in: {scaleY:0, opacity:0, duration:0.6, ease:'power3.out'})
   p#bandl(right: 43px; top: 162px; font-size: 13px; font-family: c; color: $teal_l; in: {opacity:0, duration:0.4}) 32〜34% の帯
 # 折れ線・点・値は板の外 (canvas の座標の path は枠を持てない) に板の上へ重ねる
-shape#wk_line(path: "M211 335 L384 348 L557 335 L731 349"; background: none; border: 2px solid $teal; in: draw,1400)
+shape#wk_line(path: "M211 335 L384 348 L557 335 L731 349"; background: none; border: 2px solid $teal; in: draw {duration: 1.4})
 shape#wk_dot.ellipse(left: "206;379;552;726"; top: "330;343;330;344"; width: 11px; height: 11px; background: #0F141B; border: 2px solid $teal; in: {scale:0.2, opacity:0, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.42}}) ×4
 p#wk_pl(cx: "211;384;557;731"; top: "303;367;303;368"; font-size: 19px; font-family: n; in: {y:5, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.42}}) ×4 34.0%;32.0%;34.0%;31.9%
 panel#wc1(left: 852px; top: 153px; width: 364px; height: 131px; delay: 600; in: {x:16, opacity:0, duration:0.6, ease:'power3.out'})

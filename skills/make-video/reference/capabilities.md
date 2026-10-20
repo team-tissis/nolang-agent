@@ -9,9 +9,9 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 |---|---|---|
 | frame_layout x y w h | 根 `left= top= w= h=` / `inset=0` · 子 `left= top= right= bottom= w= h=` (親の内側から) | 語で動かす = `[!名 to,x+=dx,y+=dy]` `[!名 to,x= y= left= top= scale= w= h=]` |
 | frame_layout rot | `rotation=-8` · `[!名 to,rotation=-15,pivot=100%,0%]` · `[!名 to,rotation=720]` (上限なし = 2 周) | pivot= は回転・倍率の原点 (中心は原点のまわりの弧を辿る) |
-| frame_layout rx ry perspective (静止の 3D の傾き) | `rotationX=30 depth=0.8` · `[!名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main=constant,rotationX=30,depth=0.8,pivot=bottom`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main=constant,rotationX=70,depth=4,pivot=top`)・子は一緒に傾かない。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 520px → 高さ 440px・depth=440/520) |
+| frame_layout rx ry perspective (静止の 3D の傾き) | `rotationX=30 depth=0.8` · `[!名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main=constant,rotationX=70,depth=4,pivot=top`)・子は一緒に傾かない。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 520px → 高さ 440px・depth=440/520) |
 | frame_layout skx sky (静止の skew) | `skewX=-12` · `[!名 to,skewX=12]` (補間) | CSS の skewX と同じ向き・±80°・素材も塗りも文字も枠ごと傾く (子を持つ要素には書けない — 子ごと 1 枚の群は平面) |
-| media_layout (cover の切り抜き) | `fit=cover,focus=60%,0%,zoom=130%` · `main=kb,1.1@40%,60%>1.0` · `[!名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!名 to,w=640]` (切り抜きごと補間) | zoom_media は枠が動かず素材だけ寄る (cover の絵だけ — 箱の中の絵は `[!箱.子 zoom_media]`) |
+| media_layout (cover の切り抜き) | `fit=cover,focus=60%,0%,zoom=130%` · `main: kb {scale: [1.1, 1], focus: '40% 60%'}` · `[!名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!名 to,w=640]` (切り抜きごと補間) | zoom_media は枠が動かず素材だけ寄る (cover の絵だけ — 箱の中の絵は `[!箱.子 zoom_media]`) |
 | media_layout x_flip y_flip | `[image] flip=x\|y` (写真・生成画像・svg の鏡像) · `[icon] flip=x\|y` (svg を焼き直す) · `[avatar] flip=x` | |
 | visual_filter opacity contrast brightness saturation | `filter=sat:0.3,bright:1.2,contrast:1.1` · `[!名 filter,duration=600,sat:0]` / `[!名 sat,0.3]` / `[!名 gray]` | 素材 (絵・写真・svg) にだけ効く — 文字・図形の地には効かない・子を持つ div には書けない (中の絵に)・子を持つ絵は絵の素材だけ |
 | visual_filter blur (静止のぼかし px) | `filter=blur:4` (CSS の `filter: blur(4px)`) · `[!名 to,blur=8,duration=600]` (補間) | 層の raster 全体 (文字・板・絵) — 群と子を持つ要素には書けない |
@@ -45,7 +45,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | highlight underline strikethrough | `[!名{t} highlight,$色]` (run) · `underline=$色` (題の下の帯) · `[!名 strike]` (取り消し線の図形) | 進行の style は `in=marker` / `in=underline_draw` / `in=strikethrough` (文字の preset) |
 | italic | `italic=true` | |
 | runs (文字の一部の style) | 根の `run hl = color= size= stroke= font= marker= background= border= radius= padding=` + content の `{hl}…{/}` (地の枠と下帯の形 = ParagraphStyle.highlight_box・文字で 1 つ) | 語で `[!名{t} recolor / highlight / marker]` (`recolor,$o,250,400` = 250 ms で移り 400 ms で戻る)・一回きりの `[!名{t} punch,1.12,duration=440]`・`[=名{t} +600]` (span の切替を語から ms ずらす) |
-| counter | content の `[count:9.4 start=0 roll ms=1400]` · `[count:400 roll ms=1150,1000,850]` (桁の帯ごとの所要 = CounterSpec.digit_ms・0 = 回らない帯) · `laps=0,0,0,3` (帯ごとの周回数 = CounterSpec.digit_laps・0 = まっすぐ・既定 1) · `ease=ease_in_out delay=320` · `[!名 count]` | |
+| counter | content の `[count:9.4 start=0 roll ms=1400]` · `[count:400 roll ms=1150,1000,850]` (桁の帯ごとの所要 = CounterSpec.digit_ms・0 = 回らない帯) · `laps=0,0,0,3` (帯ごとの周回数 = CounterSpec.digit_laps・0 = まっすぐ・既定 1) · `ease=power1.inOut delay=320` · `[!名 count]` | |
 | spans (文言の切り替わり) | `[!名 text,"文"]` (`[=名]` で元の文) · 著者の変種の `content=` を `[!名 .tag]` で · 後の語の `[!名 count]` | 同じ層の文言の切替 (箱は全部の文の最大)。地を持ち寸法を書かない文字と跨ぐ文字は写しの層に入れ替える |
 | paragraph horizontal / vertical align | `align=` `valign=` | |
 | paragraph line_height letter_spacing writing_mode | `line_height=` · `letter_spacing=0.1` (文字サイズ比) · `vertical=true` | |
@@ -57,32 +57,32 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | channel | 書き方 | 備考 |
 |---|---|---|
-| dx dy rot sx sy alpha blur | `in=x=-30,opacity=0,duration=600` / `in=keys(at=0 … \| at=0.6 …),duration=900` / `main=sine,y=12` | 動きの `x y` は px (層の寸法で換算しない)・`scale scaleX scaleY` は倍率・`rotation` は deg |
+| dx dy rot sx sy alpha blur | `in: {x: -30, opacity: 0, duration: .6}` / `in=keys(at=0 … \| at=0.6 …),duration=900` / `main: sine {y: 12}` | 動きの `x y` は px (層の寸法で換算しない)・`scale scaleX scaleY` は倍率・`rotation` は deg |
 | skx sky | 同じ (`in=skewX=-20,opacity=0,duration=500`) | 静止の傾きは層の `skewX=-12` (上の frame_layout) |
-| rx ry perspective (+ `depth=`) | 同じ (`main=constant,rotationX=35,depth=0.8,pivot=bottom`) | layer の単位だけ |
+| rx ry perspective (+ `depth=`) | 同じ (`main: constant {rotationX: 35, depth: 0.8, pivot: 'bottom'}`) | layer の単位だけ |
 | color (描画色) | `in=color=#FF0000,…` | 文字の単位だけ (書けば unit=paragraph) |
-| glow gradient_shift stroke_width | `in=glow=3,…` · `main=sawtooth,gradient_shift=1,freq_ms=1800` (`color=linear(…)` の文字) | 文字の単位だけ (unit=paragraph が付く)・箱 / 絵に書くと欠陥 |
+| glow gradient_shift stroke_width | `in: {glow: 3, …}` · `main: sawtooth {gradient_shift: 1, period: 1.8}` (`color=linear(…)` の文字) | 文字の単位だけ (unit=paragraph が付く)・箱 / 絵に書くと欠陥 |
 | tracking | `in=letter_spacing=0.6,opacity=0,duration=900` (字間が詰まって入る) | 文字だけ・unit=grapheme が付く・字 i を i × 値 em 右へ (左揃えの伸び) |
 | scramble | `in=scramble=01ABCDEF,duration=600` / `in=decode` | 文字だけ |
 | elevation | **✕** (v2 の channel に無い) | 影 (`shadow=` / `glow=`) を持つ層だけの影の倍率 |
-| reveal (+ reveal_shape) | `in=wipe,right,angle=-20` · `in=circle_wipe` / `iris_wipe` (円の中心 `pivot=top` 等の 9 名・曲線 `ease=`) / `clock_wipe,left,splits=3` | out= も同じ・`in=wipe,center` は横の倍率 |
+| reveal (+ reveal_shape) | `in: wipe {dir: 'right', angle: -20}` · `in: circle_wipe` / `iris_wipe` (円の中心 `pivot: 'top'` 等の 9 名・曲線 `ease`) / `clock_wipe {dir: 'left', splits: 3}` | `out:` も同じ・`in: wipe {dir: 'center'}` は横の倍率 |
 | pixelate | `in=pixelate` | |
 | number | `[count:…]` | |
-| draw dash_offset | `in=draw[,ms]` · `main=sawtooth,dash_offset=1` | 枠線のある path の図形 |
+| draw dash_offset | `in: draw {duration: .6}` · `main: sawtooth {dash_offset: 1}` | 枠線のある path の図形 |
 | clip | `in=…,clip=true` · `in=mask_rise` | |
-| style (進行済みの文字の上書き) | `in=karaoke,color=#…` / `in=marker` / `in=color_sweep` | 文字の preset |
+| style (進行済みの文字の上書き) | `in: karaoke {color: '#…'}` / `in: marker` / `in: color_sweep` | 文字の preset |
 
 | 軸 | 書き方 | 備考 |
 |---|---|---|
-| unit | `in=rise,20,400,stagger=40` (1 字ずつの間隔) · range (`[!名{t} punch]` が作る) | 文字だけ |
-| order seed | `in=fade_stagger,from=random,seed=3` · 項目 `[>名[*] from=center]` `[<名[*] from=random +110]` | reverse / center_out / random |
-| step duration delay | 入場の tween の `stagger=40` (= step) · `in=pop,500` · `delay=` / 印の `+N` | |
+| unit | `in: rise {y: 20, duration: .4, stagger: .04}` (1 字ずつの間隔) · range (`[!名{t} punch]` が作る) | 文字だけ |
+| order seed | `in: fade_stagger {from: 'random', seed: 3}` · 項目 `[>名[*] from=center]` `[<名[*] from=random +110]` | reverse / center_out / random |
+| step duration delay | 入場の tween の `stagger: .04` (= step) · `in: pop {duration: .5}` · `delay:` / 印の `+N` | |
 | easing (bezier spring steps) | `ease=back.out(1.7)` / `back(2.2)` / `bezier(.2/.8/.2/1)` / `spring(10/240)` / `steps(4)` · 名は GSAP の綴り (lowering が EffectEasing に写す: power1 = ease_* · power2 = cubic_* · power3 / circ = quart_* · power4 / expo = strong_ease_*) · keys の区間ごと `at=… ease=bezier(.33/1/.68/1)` (main の keys も・at=1 は静止へ戻る最後の区間) | 係数つきは preset の入場と keys の key だけ |
 | pivot_point | `pivot=left` / `pivot=40%,60%` · `[!名 punch,1.05,duration=600,pivot=left]` · `[!名 to,rotation=,pivot=]` | |
-| target=media | `main=kb,…` · `main=ramp,target=media,scaleX=0.3,scaleY=0.3` · `[!名 zoom_media]` | x y scaleX scaleY rotation だけ |
-| path orient | `in=travel,start=名,arc=0.3` / `via=(x,y)[(x,y)…]` (経由点をなめらかに通る・2 点で S 字) · 変種の `move=600,sine.inOut,path="M…"` | path は quote |
-| main の waveform freq_ms phase_step phase_offset window reverse | `main=sine\|triangle\|square\|noise\|sawtooth\|ramp\|constant,…,freq_ms=,phase_offset=,window=0,2200,reverse=true` | |
-| main start_ratio end_ratio | `main=kb,1.0>1.06,start_ratio=0.3` / `main=ramp,…,start_ratio=` · 進行バー `[progress 名] until=cut\|end` (ramp が層の実効の窓 = 尺を書かない) | |
+| target=media | `main: kb {…}` · `main: ramp {target: 'media', scaleX: 0.3, scaleY: 0.3}` · `[!名 zoom_media]` | x y scaleX scaleY rotation だけ |
+| path orient | `in: travel {start: '名', arc: 0.3}` / `via: '(x,y)(x,y)…'` (経由点をなめらかに通る・2 点で S 字) · 変種の `move=600,sine.inOut,path="M…"` | path は quote |
+| main の waveform period (freq_ms) phase_step phase_offset window reverse | `main: sine\|triangle\|square\|noise\|sawtooth\|ramp\|constant {…, period: .9, phase_offset: 0.25, window: '0,2200', reverse: true}` | |
+| main start_ratio end_ratio | `main: kb {scale: [1, 1.06], start_ratio: 0.3}` / `main: ramp {…, start_ratio: 0.3}` · 進行バー `[progress 名] until=cut\|end` (ramp が層の実効の窓 = 尺を書かない) | |
 | settle · driver · blend_ms | **✕** | 正準の語彙外 (名前つき演出の畳み込み専用・avatar の話者状態) |
 | 一回きりの効果 | `[!名 shake / punch / blink / pop / spring / swing]` (`punch,1.1,duration=450,rotation=8,pivot=left`) | `in=…,then=shake` |
 
@@ -118,7 +118,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | alpha | `[!g dim]` / `to,opacity=` |
 | 子を持つ要素 (div・絵・文字 … 型を問わず) | 子ごと 1 枚 (CSS の stacking context): `opacity=` `rotation=`・入退場・`[!名 to,x= scale= rotation=]` / `move` / `scale` / `dim`・一回きりの効果は群 (子ごと・原点は描いた箱の中心)・塗り / 縁 / 影 / 印の glow / tint / frame・絵の Ken Burns / 色調 / 素材の寄り・文字の 1 字ずつの入場は要素自身 (子には掛からない) |
 | clip (角丸の窓) | `clip=24,g.bg` / `clip=true` (窓は箱の枠線の外周まで・def の中 / 箱の子の群にも) · 要素の `clip-path: inset(8% 0 78% 0)` (要素を群 + 本体にして箱の内側の矩形で切る — 動きは切り口ごと) |
-| motion_in / out / main | 群に `in=` `out=fade,400` `main=spin,9000,pivot=g.sun` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out=y=-9,blur=5,opacity=0,duration=320`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
+| motion_in / out / main | 群に `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out: {y: -9, blur: 5, opacity: 0, duration: .32}`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
 | camera viewport | `[!名 zoom,1.4,duration=700]` / `[=名]` · `[camera cam] left top zoom=` + `[cam .tight] left top zoom= move=700` + `[>cam]` `[!cam .tight]` |
 
 ## 音 (BgmLayer・SoundEffectFire・MasterLoudness)

@@ -88,7 +88,7 @@ svg gloom = """<svg viewBox="0 0 427 400"><defs><linearGradient id="g" gradientU
 
 # 冒頭: 馬が客車を引く絵に寄りから引き、上に「9月5日の歴史的珍事件」の帯・下に 2 行の大テロップが傾いて弾む
 section#hook
-img#hook_bg(inset: 0; content: @hero; main: kb,1.22@33%,36%>1.06@50%,50%)
+img#hook_bg(inset: 0; content: @hero; main: kb {scale: [1.22, 1.06], focus: ['33% 36%', '50% 50%']})
 shade#hook_shade
 # hf の作り: 帯の書体はアンチックの明朝 (新字体)・「9月5日」だけ run k で極太ゴシックの金
 p#hook_band(cx: 360px; top: 100px; font-family: z; font-size: 40px; letter-spacing: 0.07em; background: $shu; padding: 8px 27px 11px 27px; box-shadow: 0px 7px 0px #00000059; in: {y:-40, opacity:0, duration:0.3, ease:'power3.out'}) {k}9月5日{/}の歴史的珍事件
@@ -100,7 +100,7 @@ telop#ht2(top: 899px; s: 117; c: $white; transform-origin: 50% 80%; in: {scale:0
 # 其の一 開業: 峠の絵を下から上へ流し、年月日の札を叩きつけ (絵が揺れる)・「碓氷峠」の立て札のピンが弾む
 section#pass
 # hf は峠を上から下へ流す — 絵は上端の空から下端の茶屋まで描き込まれているので、不動点を下端の右寄りに置き、雲海の下の峰・つづら折りの山道・茶屋を大きく見せて引く
-img#pass_bg(inset: 0; content: @pass; main: kb,1.95@60%,100%>1.8@60%,100%)
+img#pass_bg(inset: 0; content: @pass; main: kb {scale: [1.95, 1.8], focus: ['60% 100%', '60% 100%']})
 shade#pass_shade
 # 章の札 (sticky・この章の最後の cut の末尾で閉じる)
 chapter#ch1.sticky(no: "其の一"; t: "開業")
@@ -130,13 +130,13 @@ ol#chiin(left: 0px; width: 720px; top: 753px; s: 127; f: b; color: $shu; stroke:
 # 答え: 回る金と橙の放射の地に、ウインクする馬の顔が回りながら弾み、白のテロップ「馬に引かせる！」
 section#answer
 div#rays_bg(inset: 0; background: $orange; in: none)
-shape#rays.bleed(left: -640px; top: -440px; width: 2000px; height: 2000px; path: sunburst,n=20; background: $kin; main: spin,13320; in: none)
+shape#rays.bleed(left: -640px; top: -440px; width: 2000px; height: 2000px; path: sunburst,n=20; background: $kin; main: spin {period: 13.32}; in: none)
 img#horse_pop(left: 60px; top: 240px; width: 600px; height: 600px; content: @horse; in: {scale:0.15, rotation:-12, opacity:0, duration:0.5, ease:'back.out(2.4)'})
 telop#answer_t(left: 4px; width: 712px; top: 827px; s: 100; c: $white; in: {scale:0.3, opacity:0, duration:0.42, ease:'back.out(2.4)'}) 馬に引かせる！
 
 # 名前: 同じ絵に寄った構図で「その名も」の黒札が上がり、二重枠の名札「碓氷馬車鉄道」(ふりがな・開業年) を叩きつける
 section#name
-img#name_bg(inset: 0; content: @hero; main: kb,1.3@13%,22%>1.16@15%,17%)
+img#name_bg(inset: 0; content: @hero; main: kb {scale: [1.3, 1.16], focus: ['13% 22%', '15% 17%']})
 shade#name_shade
 p#sonna(cx: 360px; top: 400px; font-family: z; font-size: 43px; background: $sumi; padding: 4px 20px 7px 20px; in: {y:27, opacity:0, duration:0.25, ease:'power3.out'}) その名も
 div#cartouche(left: 33px; top: 480px; width: 654px; height: 236px; background: $washi; border: 4px solid $sumi; box-shadow: 11px 11px 0px #00000080; in: {scale:1.8, opacity:0, duration:0.2, ease:'power4.in'})
@@ -151,7 +151,7 @@ section#side1
 land#land1
   img#bg(left: -131px; in: {x:24, duration:5.05, ease:'none'})
   div#sleepers(left: -496px; in: {x:229, duration:5.05, ease:'none'})
-img#cart1(left: 33px; top: 525px; width: 653px; height: 435px; content: @cart; in: {x:-667, duration:2.0, ease:'power2.out'}; main: sine,y=-5,freq_ms=260)
+img#cart1(left: 33px; top: 525px; width: 653px; height: 435px; content: @cart; in: {x:-667, duration:2.0, ease:'power2.out'}; main: sine {y: -5, period: 0.26})
 div#spec(left: 47px; top: 220px; width: 626px; height: 136px; background: $washi; border: 5px solid $sumi; box-shadow: 9px 9px 0px #00000066; padding: 12px 23px 17px 23px; display: flex; align-items: center; gap: 20px; in: {x:600, opacity:0, duration:0.35, ease:'back.out(1.4)'})
   p#k(font-family: z; font-size: 43px; background: $sumi; padding: 3px 12px 7px 12px) 動力
   p#v(width: 226px; font-family: d; font-size: 100px; line-height: 1.2; color: $shu; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(1.7)'}) 馬力
@@ -178,9 +178,9 @@ p#youyaku(left: 153px; top: 547px; width: 220px; height: 220px; font-family: z; 
 
 # 激怒: 揺れる車内で鼻をつまむ文豪の絵に寄り続け、ハエが飛び回る・「臭いと揺れが」→ 筆の朱「最悪！」で画面ごと揺れ → 判子「文豪、大激怒」
 section#rage
-img#rage_bg(inset: 0; main: kb,1.06>1.2) [ref:@ogai]狭くて激しく揺れる馬車鉄道の木造客車の車内、縦長の構図。口ひげをたくわえた明治時代の洋装の若い紳士（文豪）が、片手で鼻をつまみ、もう片方の手で帽子を押さえながら、顔を真っ赤にして激怒している。周りの乗客と肩がぶつかり合い、皆よろけている。窓の外には客車を引く馬の後ろ姿。頭から湯気が出ている。
+img#rage_bg(inset: 0; main: kb {scale: [1.06, 1.2]}) [ref:@ogai]狭くて激しく揺れる馬車鉄道の木造客車の車内、縦長の構図。口ひげをたくわえた明治時代の洋装の若い紳士（文豪）が、片手で鼻をつまみ、もう片方の手で帽子を押さえながら、顔を真っ赤にして激怒している。周りの乗客と肩がぶつかり合い、皆よろけている。窓の外には客車を引く馬の後ろ姿。頭から湯気が出ている。
 shade#rage_shade
-svg#fly(left: "467;220;520"; top: "347;313;507"; width: 37px; height: 29px; part: fly; in: none; main: noise,x=53,y=40,rotation=27,freq_ms=440) ×3
+svg#fly(left: "467;220;520"; top: "347;313;507"; width: 37px; height: 29px; part: fly; in: none; main: noise {x: 53, y: 40, rotation: 27, period: 0.44}) ×3
 ol#brush1(left: 0px; width: 720px; top: 587px; s: 69; stroke: $sumi,7; in: {scale:0.6, opacity:0, duration:0.42, ease:'back.out(2.4)'}; out: {opacity:0, duration:0.15, ease:'none'}) 臭いと揺れが
 ol#brush2(left: 16px; width: 688px; top: 680px; s: 200; f: b; line-height: 1.25; color: $shu; stroke: $white,7; text-shadow: 8px 8px 0px #000000CC; transform: rotate(-4deg); in: {scale:2.4, rotation:-8, opacity:0, duration:0.2, ease:'power4.in'}; out: {opacity:0, duration:0.15, ease:'none'}) 最悪！
 div#gekido(left: 167px; top: 587px; width: 387px; height: 213px; background: #FFFAF0E0; border: 11px solid $shu; box-shadow: 7px 7px 0px #00000059; transform: rotate(-9deg); in: {scale:2.6, rotation:-18, opacity:0, duration:0.2, ease:'power4.in'})
@@ -191,7 +191,7 @@ div#gekido(left: 167px; top: 587px; width: 387px; height: 213px; background: #FF
 # → 文の途中の語で「途中下車」の絵へ替え、金の「途中下車 続出!!」→ 乗客の吹き出し「歩いた方が早いわ！」で画面ごと揺れる
 section#slow
 land#land2
-img#cart2(left: 13px; top: 525px; width: 653px; height: 435px; content: @cart; in: {x:-33, duration:1.69, ease:'none'}; main: sine,y=-2,freq_ms=600)
+img#cart2(left: 13px; top: 525px; width: 653px; height: 435px; content: @cart; in: {x:-33, duration:1.69, ease:'none'}; main: sine {y: -2, period: 0.6})
 chapter#ch3.sticky(no: "其の三"; t: "遅すぎ")
 div#gauge(left: 127px; top: 220px; width: 467px; height: 280px; background: $washi; border: 5px solid $sumi; box-shadow: 9px 9px 0px #00000066; in: {y:-40, opacity:0, duration:0.3, ease:'power3.out'})
   svg#face(left: 0px; top: 0px; width: 457px; height: 270px; part: gauge)
@@ -202,7 +202,7 @@ div#gauge(left: 127px; top: 220px; width: 467px; height: 280px; background: $was
   p#slow_end(left: 27px; top: 235px; width: 54px; font-family: d; font-size: 23px; color: $sumi) 遅い
   p#fast_end(right: 27px; top: 235px; width: 54px; font-family: d; font-size: 23px; color: $sumi) 速い
 telop#slow_t(top: 827px; s: 120; c: $sky; sh: #14285AF2; in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.4)'}) 遅っ!!
-img#walk_bg(inset: 0; in: none; main: kb,1.16@9%,50%>1.1@96%,50%) [ref:@hero]山道の線路の上を、馬に引かれた小さな客車がのろのろと進んでいる。その横を、客車から降りた明治時代の乗客たち（着物の男性、洋装の紳士、荷物を背負った行商人）が呆れ顔ですたすた歩いて追い抜いていく縦長の構図。馬はへとへとで舌を出している。コミカル。
+img#walk_bg(inset: 0; in: none; main: kb {scale: [1.16, 1.1], focus: ['9% 50%', '96% 50%']}) [ref:@hero]山道の線路の上を、馬に引かれた小さな客車がのろのろと進んでいる。その横を、客車から降りた明治時代の乗客たち（着物の男性、洋装の紳士、荷物を背負った行商人）が呆れ顔ですたすた歩いて追い抜いていく縦長の構図。馬はへとへとで舌を出している。コミカル。
 shade#walk_shade
 telop#zoku_t(top: 293px; s: 100; in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.4)'}; out: {opacity:0, duration:0.12, ease:'none'}) 途中下車[br]続出!!
 p#bubble(left: 47px; top: 220px; width: 627px; font-family: d; font-size: 77px; line-height: 1.15; text-align: center; color: $sumi; background: $white; border: 7px solid $sumi; border-radius: 47px; box-shadow: 9px 9px 0px #00000066; padding: 23px 13px 29px 13px; pointer: below,25%; in: {scale:0.3, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 歩いた方が[br]{r}早いわ！{/}
@@ -210,15 +210,15 @@ p#bubble(left: 47px; top: 220px; width: 627px; font-family: d; font-size: 77px; 
 # 追い抜かれる: 同じ横の景色で、歩く乗客が左から右へ跳ねながら客車を追い抜く・「スタスタ」が並んで流れ、文末に筆の「トボトボ…」と青い陰の筋
 section#overtake
 land#land3
-img#cart3.bleed(left: 220px; top: 525px; width: 653px; height: 435px; content: @cart; in: none; main: sine,y=-1,freq_ms=700)
+img#cart3.bleed(left: 220px; top: 525px; width: 653px; height: 435px; content: @cart; in: none; main: sine {y: -1, period: 0.7})
 svg#gloom(left: 240px; top: 467px; width: 427px; height: 400px; part: gloom; in: {y:-40, opacity:0, duration:0.5, ease:'power2.out'})
-img#walker.bleed(left: 747px; top: 483px; width: 253px; height: 380px; aspect: 2:3; in: {x:-1027, duration:2.3, ease:'none'}; main: sine,y=-6,rotation=2,freq_ms=280) [transparent]真横から見た、右を向いてすたすた大股で歩く明治時代の着物姿の男性の全身。呆れたしかめ面で、風呂敷包みを肩にかついでいる。
+img#walker.bleed(left: 747px; top: 483px; width: 253px; height: 380px; aspect: 2:3; in: {x:-1027, duration:2.3, ease:'none'}; main: sine {y: -6, rotation: 2, period: 0.28}) [transparent]真横から見た、右を向いてすたすた大股で歩く明治時代の着物姿の男性の全身。呆れたしかめ面で、風呂敷包みを肩にかついでいる。
 ol#ono1(left: 287px; top: 400px; width: 236px; s: 53; overlap: land3.bg; in: {scale:0.4, opacity:0, duration:0.3, ease:'back.out(2.4)'}) スタスタ
 ol#ono2(left: 280px; top: 887px; s: 69; f: b; stroke: $sumi,6; in: {scale:0.6, opacity:0, duration:0.3, ease:'back.out(2.4)'}) トボトボ…
 
 # 其の四 暴走: 暴走する客車の絵を暗く沈め、紫の「ゴ」が 4 つ震え・「本当の地獄は」→ 朱の「下り坂」を叩きつけ画面ごと揺れる
 section#omen
-img#omen_bg(inset: 0; content: @down; filter: bright:0.55,sat:0.6; main: kb,1.06>1.18)
+img#omen_bg(inset: 0; content: @down; filter: bright:0.55,sat:0.6; main: kb {scale: [1.06, 1.18]})
 shade#omen_shade
 div#dark(inset: 0; background: radial(#3C000059,#140000D9,50%,50%); in: none)
 chapter#ch4.sticky(no: "其の四"; t: "暴走")
@@ -229,9 +229,9 @@ ol#go(left: "40;120;547;612"; top: "707;767;720;802"; width: 96px; s: 80; color:
 
 # 暴走: 同じ絵を明るく戻して寄り続け、全編揺れる・白の集中線・金の「ブレーキ 効かず!!」→ 1 字ずつ弾む悲鳴 → 「明治の ジェットコースター」と判子「命がけ」
 section#rush
-img#rush_bg(inset: 0; content: @down; main: kb,1.08>1.34)
+img#rush_bg(inset: 0; content: @down; main: kb {scale: [1.08, 1.34]})
 shade#rush_shade
-shape#speed.bleed(left: -640px; top: -373px; width: 2000px; height: 2000px; path: rays,n=30,inner=0.28; background: none; border: 3px solid #FFFFFFBF; in: {opacity:0, duration:0.2, ease:'none'}; main: noise,rotation=2.2,freq_ms=120)
+shape#speed.bleed(left: -640px; top: -373px; width: 2000px; height: 2000px; path: rays,n=30,inner=0.28; background: none; border: 3px solid #FFFFFFBF; in: {opacity:0, duration:0.2, ease:'none'}; main: noise {rotation: 2.2, period: 0.12})
 telop#rush1(top: 220px; s: 91; transform: rotate(-4deg); in: {scale:2.0, rotation:-8, opacity:0, duration:0.2, ease:'power4.in'}; out: {scale:0.8, opacity:0, duration:0.18, ease:'power2.in'}) ブレーキ[br]効かず!!
 ol#scream(left: 0px; width: 720px; top: 507px; s: 100; stroke: $sumi,7; in: {scale:0.3, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger: 0.06}; out: {opacity:0, duration:0.15, ease:'none'}) ぎゃああ!!
 ol#jc1(left: 0px; width: 720px; top: 227px; s: 56; f: z; in: {scale:0.6, opacity:0, duration:0.3, ease:'back.out(2.4)'}) 明治の
@@ -240,7 +240,7 @@ stamp#inochi(left: 167px; top: 547px; w: 387; s: 100; white-space: nowrap; trans
 
 # 其の五 引退: 赤レンガの橋を渡る汽車と見送る馬の絵を上から下へ・年表の板 (棒が伸びて 1893 に点)・判子「引退」→ 暖かい光と「馬たち、本当に おつかれさまでした」
 section#bridge
-img#bridge_bg(inset: 0; main: kb,1.22@50%,78%>1.08@50%,0%) 深い緑の山あいに架かる赤レンガ造りの大きなアーチ橋を、明治時代の蒸気機関車が白い煙を上げて渡っていく縦長の構図。手前の野原では、引退した馬たちがのんびり草を食べながら機関車を見送っている。晴れやかで穏やかな雰囲気。
+img#bridge_bg(inset: 0; main: kb {scale: [1.22, 1.08], focus: ['50% 78%', '50% 0%']}) 深い緑の山あいに架かる赤レンガ造りの大きなアーチ橋を、明治時代の蒸気機関車が白い煙を上げて渡っていく縦長の構図。手前の野原では、引退した馬たちがのんびり草を食べながら機関車を見送っている。晴れやかで穏やかな雰囲気。
 shade#bridge_shade
 chapter#ch5.sticky(no: "其の五"; t: "引退")
 div#warm(inset: 0; background: radial(#FFD67873,#FFD67800@70%,50%,70%); in: {opacity:0, duration:1.2, ease:'sine.inOut'})

@@ -47,21 +47,21 @@ sfx off
 art "実写の映画のワンシーン、35mm フィルム、浅い被写界深度、琥珀色と深い影の落ち着いた色調、文字なし"
 
 section#open
-img#op_p(inset: 0; main: kb,1.0>1.08) 夜明け前の酒蔵、甑から立ちのぼる蒸米の白い湯気、窓からの逆光
-h1#op_w(left: 843px; top: 112px; width: 262px; height: 486px; text-align: center; writing-mode: vertical-rl; in: fade,900) 一滴に、一年を。
+img#op_p(inset: 0; main: kb {scale: [1, 1.08]}) 夜明け前の酒蔵、甑から立ちのぼる蒸米の白い湯気、窓からの逆光
+h1#op_w(left: 843px; top: 112px; width: 262px; height: 486px; text-align: center; writing-mode: vertical-rl; in: fade {duration: 0.9}) 一滴に、一年を。
 
 section#scene1
-img#s1_p(inset: 0; main: kb,1.08>1.0) 初夏の棚田を渡る風、稲の若い緑と遠くの山、朝靄
-h1#s1_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade,900) 米が育ち、水が育てる
+img#s1_p(inset: 0; main: kb {scale: [1.08, 1]}) 初夏の棚田を渡る風、稲の若い緑と遠くの山、朝靄
+h1#s1_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade {duration: 0.9}) 米が育ち、水が育てる
 
 section#scene2
-img#s2_p(inset: 0; main: kb,1.0>1.1@40%,50%) 薄暗い蔵の中で並ぶ木桶、杜氏が櫂を入れる手元、静けさ
-h1#s2_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade,900) 静かに、待つ
+img#s2_p(inset: 0; main: kb {scale: [1, 1.1], focus: '40% 50%'}) 薄暗い蔵の中で並ぶ木桶、杜氏が櫂を入れる手元、静けさ
+h1#s2_w(left: 80px; top: 452px; width: 1120px; height: 61px; font-size: 56px; text-align: center; in: fade {duration: 0.9}) 静かに、待つ
 
 section#scene3
-img#s3_p(inset: 0; main: kb,1.1@50%,40%>1.0) 一滴の酒が落ちる瞬間、グラスの縁に光る琥珀色
+img#s3_p(inset: 0; main: kb {scale: [1.1, 1], focus: '50% 40%'}) 一滴の酒が落ちる瞬間、グラスの縁に光る琥珀色
 big#s3_w(left: 80px; top: 197px; width: 1120px; height: 231px) 一杯は、一年
 
 section#close
 img#cl_p(inset: 0; content: @bg)
-big#cl_w(left: 80px; top: 282px; width: 1120px; height: 61px; font-size: 88px; in: fade,1200) 田恵
+big#cl_w(left: 80px; top: 282px; width: 1120px; height: 61px; font-size: 88px; in: fade {duration: 1.2}) 田恵

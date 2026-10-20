@@ -77,7 +77,7 @@ progress#bar(left: 0px; top: 0px; width: 720px; height: 8px; background: linear(
 def burst(c) = div(width: 26px; height: 26px; border-radius: 6px; background: {c}; transform: rotate(45deg))
 # 主役のカード (白い角丸 + 内側の絵がゆっくり寄る)・既定は下から傾いて弾んで入り、上へ傾いて抜ける
 def card(src) = div(left: 60px; top: 167px; width: 600px; height: 600px; border-radius: 43px; background: #FFFFFF; box-shadow: 0px 20px 40px #785A3C29; transform: rotate(-1.2deg); in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {y:-47, scale:.9, rotation:4.2, opacity:0, duration:.22, ease:'power2.in'})
-  img#img(left: 12px; top: 12px; width: 576px; height: 576px; border-radius: 32px; main: kb,1.0>1.07; content: {src})
+  img#img(left: 12px; top: 12px; width: 576px; height: 576px; border-radius: 32px; main: kb {scale: [1, 1.07]}; content: {src})
 # 比べる場面の小さなカード
 def mini(src) = div(top: 313px; width: 313px; height: 313px; border-radius: 35px; background: #FFFFFF; box-shadow: 0px 17px 33px #785A3C26; out: {y:-40, opacity:0, duration:.22, ease:'power2.in'})
   img#img(left: 9px; top: 9px; width: 295px; height: 295px; border-radius: 27px; main: none; content: {src})
@@ -97,7 +97,7 @@ def sticker(t, c=$butter, s=40, r=-2) = p(cx: 360px; top: 727px; font-size: {s};
 # title — 開幕: 主人公のカードが傾いて弾み、珊瑚の札「1分でわかる」→ 題が 1 字ずつ上から回って落ち → 英字が横に縮んで締まる・四隅に菱形
 section#title
 div#t_hero(left: 93px; top: 427px; width: 533px; height: 533px; border-radius: 53px; background: #FFFFFF; box-shadow: 0px 20px 40px #785A3C29; delay: 80; in: {scale:.6, rotation:-8, opacity:0, duration:.7, ease:'back.out(1.6)'}; out: {y:80, scale:.7, rotation:6, opacity:0, duration:.24, ease:'power2.in'})
-  img#img(left: 11px; top: 11px; width: 511px; height: 511px; border-radius: 32px; content: @hero; main: kb,1.0>1.07)
+  img#img(left: 11px; top: 11px; width: 511px; height: 511px; border-radius: 32px; content: @hero; main: kb {scale: [1, 1.07]})
 p#t_chip(cx: 360px; top: 175px; font-size: 39px; font-family: r; line-height: 1; color: #FFFFFF; background: $coral; border: 5px solid #FFFFFF; border-radius: 99px; padding: 12px 32px 15px 32px; box-shadow: 0px 7px 0px #4A3B331A; rotation: -2; in: {scale:.2, rotation:-10, opacity:0, duration:.45, ease:'back.out(2.2)'}; out: {y:-60, opacity:0, duration:.22, ease:'power2.in'}) 1分でわかる
 p#t_title(cx: 360px; top: 267px; font-size: 60px; font-family: m; line-height: 1.1; white-space: nowrap; text-shadow: 0px 5px 0px #FF7E6B47; in: {y:-47, scale:.3, rotation:-14, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:.08}; out: {y:-60, opacity:0, duration:.22, ease:'power2.in'}) エフェクチュエーション
 p#t_sub(cx: 360px; top: 353px; font-size: 28px; font-family: r; line-height: 1; letter-spacing: .32em; color: $lavd; in: {scaleX:1.6, y:7, opacity:0, duration:.6, ease:'power3.out'}; out: {y:-60, opacity:0, duration:.22, ease:'power2.in'}) EFFECTUATION
@@ -110,12 +110,12 @@ p#header.sticky(cx: 360px; top: 72px; font-size: 21px; font-family: r; line-heig
 run c = color=$coral
 card#c1a(src: "[ref:@hero]The young woman stands in front of a slightly open pastel-colored door with warm light and sparkles spilling out of the gap, leaning forward with excited shining eyes and clasped hands, eager to start something new. Small stars and confetti float around."; transform: rotate(-1.5deg); in: {y:73, scale:.82, rotation:-6.5, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {x:-700, rotation:-10.5, opacity:0, duration:.45, ease:'power3.in'})
 card#c1b(src: "@stuck"; transform: rotate(1.5deg); in: {x:667, rotation:8.5, opacity:0, duration:.55, ease:'back.out(1.3)'})
-  img#img(main: kb,1.0>1.06)
+  img#img(main: kb {scale: [1, 1.06]})
 
 # term — 名を出す: 主人公のカード (語で一度ふくらむ) の下端に、黄の縁の白い札「エフェクチュエーション」が弾み菱形が散る・地が桃色に
 section#term
 card#c2(src: "@hero"; in: {y:73, scale:.6, rotation:6.8, opacity:0, duration:.6, ease:'back.out(1.5)'})
-  img#img(main: kb,1.0>1.1)
+  img#img(main: kb {scale: [1, 1.1]})
 div#term(left: 40px; top: 673px; width: 640px; height: 130px; border-radius: 29px; background: #FFFFFF; border: 5px solid $butter; box-shadow: 0px 8px 0px #4A3B331A; overlap: c2; in: {y:20, scale:.3, opacity:0, duration:.55, ease:'back.out(2)'}; out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'})
   p#main(cx: 50%; top: 13px; font-size: 51px; font-family: m; line-height: 1.1; color: $coral; white-space: nowrap) エフェクチュエーション
   p#sub(cx: 50%; top: 77px; font-size: 21px; font-family: r; line-height: 1; letter-spacing: .04em; white-space: nowrap) {e}EFFECTUATION{/}｜熟達した起業家の思考法
@@ -153,16 +153,16 @@ def tile(t, c, f) = div(width: 273px; height: 273px; border-radius: 35px; backgr
   p#t(cx: 50%; top: 212px; font-size: 36px; font-family: m; line-height: 1; color: {c}; content: {t})
 tile#tl(left: "73;373;73;373"; top: "200;200;500;500"; height: 273px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0%,0%;100%,0%;0%,100%;100%,100%") ×4
 card#c4(src: "[ref:@hero]The young woman takes a small first step onto the first of a row of round pastel stepping stones that lead into the distance, with a tiny sprout growing beside her foot and small flowers along the path; she looks determined and happy."; in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'})
-  img#img(main: kb,1.0>1.08)
+  img#img(main: kb {scale: [1, 1.08]})
 tag#tag4(n: "原則①"; t: "手中の鳥"; e: "Bird in Hand"; w: 345)
 sticker#st4(t: "まず小さく動く"; overlap: c4)
 
 # principles — 原則②〜④: カードを重ねていく (前のカードは傾いて後ろへ下がり薄れる)・札と判子札は文ごとに入れ替え・最後に菱形が散る
 section#principles
 card#c5a(src: "@pool"; transform: rotate(-1.5deg); in: {x:80, y:73, scale:.82, rotation:9.5, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {y:-53, opacity:0, duration:.22, ease:'power2.in'})
-  img#img(main: kb,1.0>1.06)
+  img#img(main: kb {scale: [1, 1.06]})
 card#c5b(src: "@quilt"; transform: rotate(1.5deg); in: {x:107, y:73, scale:.82, rotation:8.5, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {y:-53, opacity:0, duration:.22, ease:'power2.in'})
-  img#img(main: kb,1.0>1.06)
+  img#img(main: kb {scale: [1, 1.06]})
 card#c5c(src: "@lemon"; transform: rotate(-.8deg); in: {y:107, scale:.82, rotation:-5.2, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {y:-53, opacity:0, duration:.22, ease:'power2.in'})
 tag#tag5a(n: "原則②"; t: "許容可能な損失"; e: "Affordable Loss"; w: 444)
 tag#tag5b(n: "原則③"; t: "クレイジーキルト"; e: "Crazy Quilt"; w: 437)
@@ -180,10 +180,10 @@ group#b5(in: {opacity:0, duration:.05, stagger:.03}; out: none)
 # pilot — 原則⑤: 水晶玉のカードに灰紫の札「未来を予測する」と × → 下へ落ちて消え、飛行機のカードが左下から回って入る・地が水色に・ミントの札「行動しながら未来をつくる」
 section#pilot
 card#c6a(src: "A fortune teller's crystal ball resting on a small tasseled cushion, with a misty swirl and a few question-mark shapes floating inside the ball, small sparkles around it, centered on a plain cream background, no people."; transform: rotate(1.2deg); in: {y:73, scale:.82, rotation:4.8, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {y:173, rotation:12.8, opacity:0, duration:.45, ease:'power3.in'})
-  img#img(main: kb,1.0>1.08)
+  img#img(main: kb {scale: [1, 1.08]})
   ngx#ng(w: 267; h: 43)
 card#c6b(src: "@pilot"; transform: rotate(-1deg); in: {x:-600, y:173, scale:.85, rotation:-13, opacity:0, duration:.7, ease:'power3.out'}; out: {x:267, y:-80, scale:.9, rotation:9, opacity:0, duration:.22, ease:'power2.in'})
-  img#img(main: kb,1.12@40%,50%>1.02@60%,50%)
+  img#img(main: kb {scale: [1.12, 1.02], focus: ['40% 50%', '60% 50%']})
 tag#tag6(n: "原則⑤"; t: "飛行機のパイロット"; e: "Pilot in the Plane"; w: 518)
 sticker#st6a(t: "未来を予測する"; c: $negbg; color: $negink; r: 2; overlap: c6a)
 sticker#st6b(t: "行動しながら未来をつくる"; c: $mint; overlap: c6b)
@@ -194,7 +194,7 @@ card#c7a(src: "@stuck"; in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration
   img#img(filter: sat:0.75; main: none)
   ngx#ng(w: 267; h: 43)
 card#c7b(src: "[ref:@hero]The young woman runs forward energetically with a small backpack, a book, a wrench and a sprout peeking out of the backpack, soft motion lines behind her, bright and joyful, moving from left to right."; in: {x:-733, rotation:-6.8, opacity:0, duration:.45, ease:'power4.out'})
-  img#img(main: kb,1.0>1.08)
+  img#img(main: kb {scale: [1, 1.08]})
 sticker#st7a(t: "計画がないから動けない"; c: $negbg; color: $negink; overlap: c7a)
 sticker#st7b(t: "手元にあるもので今すぐ動く"; c: $mint; r: 2; overlap: c7b)
 
@@ -223,7 +223,7 @@ kcard#k2(left: 373px; top: 179px; rotation: 2.5; delay: 160; in: {scale:.4, rota
 p#ch1(left: 177px; top: 587px; font-size: 31px; font-family: r; line-height: 1; background: #FFFFFF; border: 3px solid $sky; border-radius: 15px; padding: 11px 23px 12px 23px; box-shadow: 0px 5px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) 概要欄
 p#ch2(left: 337px; top: 587px; font-size: 31px; font-family: r; line-height: 1; background: #FFFFFF; border: 3px solid $sky; border-radius: 15px; padding: 11px 23px 12px 23px; box-shadow: 0px 5px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) コメント欄
 p#btn(cx: 360px; top: 673px; font-size: 43px; font-family: m; line-height: 1; color: #FFFFFF; background: $coral; border: 6px solid #FFFFFF; border-radius: 99px; padding: 20px 40px 23px 40px; box-shadow: 0px 9px 0px #C2432E; white-space: nowrap; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(2.2)'}) リンクからチェック！
-shape#downs(left: "296;343;390"; top: 826px; width: 35px; height: 20px; path: tri,rot=180; background: $coral; opacity: .85; overlap: btn; in: {y:-13, opacity:0, duration:.3, ease:'power1.out', stagger:.08}; main: sine,y=11,freq_ms=900) ×3
+shape#downs(left: "296;343;390"; top: 826px; width: 35px; height: 20px; path: tri,rot=180; background: $coral; opacity: .85; overlap: btn; in: {y:-13, opacity:0, duration:.3, ease:'power1.out', stagger:.08}; main: sine {y: 11, period: 0.9}) ×3
 shape#cur(left: 507px; top: 733px; width: 60px; height: 73px; path: cursor; background: #FFFFFF; border: 4px solid $ink; overlap: btn; in: {x:147, y:173, opacity:0, duration:.55, ease:'power2.out'})
 ```
 

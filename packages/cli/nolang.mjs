@@ -6,19 +6,28 @@
 import { spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { chmod, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdir, open, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
 
+import { ASSET_KINDS, mimeOf, uploadKind } from "./lib/assets.mjs";
 import { codeFromCallback } from "./lib/callback.mjs";
+import { pickApi } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
 import { aspectOf, splitCuts } from "./lib/src.mjs";
 
 const VERSION = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
-const DEFAULT_API = "http://localhost:18000";
+// プラグインに入った CLI には、ビルドがそのプラグインの接続先を defaults.json (`{"api": "…"}`) として横に置く
+const PACKAGED_API = (() => {
+  try {
+    return JSON.parse(readFileSync(new URL("./defaults.json", import.meta.url), "utf8")).api;
+  } catch {
+    return undefined;
+  }
+})();
 const CONFIG_DIR = process.env.NOLANG_CONFIG_DIR || join(homedir(), ".config", "nolang");
 const CRED_FILE = join(CONFIG_DIR, "credentials.json");
 const PENDING_FILE = join(CONFIG_DIR, "pending-login.json");
@@ -46,8 +55,7 @@ async function writePrivate(path, obj) {
 const saveStore = (store) => writePrivate(CRED_FILE, store);
 
 async function resolveApi(flags) {
-  const raw = flags.api || process.env.NOLANG_API_URL || (await loadStore()).default_api || DEFAULT_API;
-  return raw.replace(/\/+$/, "");
+  return pickApi({ flag: flags.api, env: process.env.NOLANG_API_URL, packaged: PACKAGED_API, stored: (await loadStore()).default_api });
 }
 
 // ---- HTTP ----
@@ -232,17 +240,18 @@ async function accessToken(api, { forceRefresh = false } = {}) {
   return profile.access_token;
 }
 
-// NoLang API を呼ぶ。401 は 1 回だけ refresh して掛け直す
+// NoLang API を呼ぶ。body が FormData なら multipart (境界は fetch が付ける)。401 は 1 回だけ refresh して掛け直す
 async function callApi(api, method, path, body) {
+  const form = body instanceof FormData;
   const send = async (token) =>
     request(`${api}${path}`, {
       method,
       headers: {
         authorization: `Bearer ${token}`,
         accept: "application/json",
-        ...(body ? { "content-type": "application/json" } : {}),
+        ...(body && !form ? { "content-type": "application/json" } : {}),
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? (form ? body : JSON.stringify(body)) : undefined,
     });
   let res = await send(await accessToken(api));
   if (res.status === 401 && !process.env.NOLANG_TOKEN) res = await send(await accessToken(api, { forceRefresh: true }));
@@ -502,6 +511,99 @@ async function cmdAbort(positionals, flags) {
   out(await callApi(await resolveApi(flags), "DELETE", `/v1/unstable/drafts/${videoId}/`));
 }
 
+// ---- 素材 (検索と upload)。見つけた / 送った素材は `ref` (`id=<uuid>` など) を原稿の usage の位置に書けば使われる ----
+
+async function cmdAssetsSearch(positionals, flags) {
+  const [kind, ...words] = positionals;
+  if (!ASSET_KINDS.includes(kind)) {
+    throw new CliError(`使い方: nolang assets search <${ASSET_KINDS.join("|")}> "<探す物の説明か名前>" [--mine]`, { exit: EXIT.USAGE });
+  }
+  const query = words.join(" ");
+  if (!query && !flags.mine) throw new CliError("探す物の説明か名前が要る (自分の upload の一覧なら --mine)", { exit: EXIT.USAGE });
+  const params = new URLSearchParams({ kind, scope: flags.mine ? "mine" : "catalog", language: flags.language || "ja" });
+  if (query) params.set("q", query);
+  if (flags.limit) params.set("limit", flags.limit);
+  const result = await callApi(await resolveApi(flags), "GET", `/v1/unstable/assets/search/?${params}`);
+  for (const row of result.results || []) {
+    const extra = [row.duration_ms ? `${(row.duration_ms / 1000).toFixed(1)}s` : "", row.width ? `${row.width}x${row.height}` : ""].filter(Boolean).join(" ");
+    log(`${row.ref}  ${row.name || ""}${extra ? `  (${extra})` : ""}`);
+  }
+  log(`${(result.results || []).length} 件${result.degraded ? " (意味の検索が使えず表示名だけで探した)" : ""} — 書き方: ${result.usage}`);
+  out(result);
+}
+
+async function uploadImage(api, path, name) {
+  const form = new FormData();
+  form.append("image_file", new Blob([await readFile(path)], { type: mimeOf(path) }), basename(path));
+  if (name) form.append("names_by_languages", JSON.stringify({ default: name }));
+  const row = await callApi(api, "POST", "/v1/unstable/assets/images/", form);
+  return String(row.image_id);
+}
+
+// 動画素材: 分割 upload を始める → 各 part を S3 の presigned URL へ PUT → 確定 → 仕上げの job (尺・codec の検査と thumbnail) を待つ
+async function uploadFootage(api, path, name) {
+  const { size } = await stat(path);
+  const started = await callApi(api, "POST", "/v1/unstable/assets/footages/uploads/", { filename: basename(path), total_size: size });
+  const chunk = Number(started.chunk_size);
+  const partUrls = [...started.part_urls].sort((a, b) => a.part_number - b.part_number);
+  const parts = [];
+  const file = await open(path, "r");
+  try {
+    for (const part of partUrls) {
+      const offset = (part.part_number - 1) * chunk;
+      const buffer = Buffer.alloc(Math.min(chunk, size - offset));
+      await file.read(buffer, 0, buffer.length, offset);
+      const res = await request(part.url, { method: "PUT", body: buffer });
+      if (!res.ok) throw new CliError(`${basename(path)}: part ${part.part_number} の送信に失敗 (${res.status})`, { exit: EXIT.NETWORK });
+      parts.push({ part_number: part.part_number, etag: res.headers.get("etag") });
+      if (partUrls.length > 1) log(`  ${basename(path)}: part ${part.part_number}/${partUrls.length}`);
+    }
+  } finally {
+    await file.close();
+  }
+  const done = await callApi(api, "PATCH", `/v1/unstable/assets/footages/uploads/${started.upload_id}/`, {
+    upload_id: started.upload_id,
+    object_key: started.object_key,
+    filename: basename(path),
+    parts,
+    ...(name ? { name } : {}),
+  });
+  const deadline = Date.now() + 600_000;
+  for (;;) {
+    const job = await callApi(api, "GET", `/v1/unstable/jobs/${done.job_id}/`);
+    if (job.status === "succeeded") return String(done.footage_id);
+    if (job.status === "failed" || job.status === "canceled") {
+      throw new CliError(`${basename(path)}: 仕上げの job が ${job.status} (${job.error_code || ""})`, { exit: EXIT.FAIL, data: job });
+    }
+    if (Date.now() > deadline) throw new CliError(`${basename(path)}: 仕上げの job が 600 秒で終わらない (job ${done.job_id})`, { exit: EXIT.NETWORK });
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+}
+
+async function cmdAssetsUpload(positionals, flags) {
+  if (!positionals.length) throw new CliError("使い方: nolang assets upload <file>… [--name 表示名]", { exit: EXIT.USAGE });
+  const api = await resolveApi(flags);
+  const uploaded = [];
+  for (const file of positionals) {
+    const path = resolve(file);
+    try {
+      if (!(await stat(path)).isFile()) throw new Error();
+    } catch {
+      throw new CliError(`${file}: file が無い`, { exit: EXIT.USAGE });
+    }
+    const kind = uploadKind(path);
+    log(`${basename(path)} を${kind === "footage" ? "動画素材" : "画像"}として送る…`);
+    const id = kind === "footage" ? await uploadFootage(api, path, flags.name) : await uploadImage(api, path, flags.name);
+    log(`REF ${file} id=${id}`);
+    uploaded.push({ file, kind, id, ref: `id=${id}` });
+  }
+  out({
+    ok: true,
+    uploaded,
+    usage: "画像も動画素材も根に `image 名 = <ref>` を書き、置く所に `content: @名` (動画素材は `play: loop` も)",
+  });
+}
+
 const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントから作る
 
 使い方:
@@ -516,8 +618,12 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang status <video_id> [--wait] [--until playable|completed] [--timeout 秒]
   nolang abort <video_id>
+  nolang assets search <kind> "<説明か名前>" [--mine] [--limit N]
+                                        NoLang の素材を探す (kind: image|footage|bgm|soundeffect|speaker|avatar|font)
+  nolang assets upload <file>… [--name 表示名]
+                                        手元の画像 / 動画 (mp4・webm・mov) を自分の素材に送る → ref (id=<uuid>)
 
-共通: --api <URL> (既定: 前回ログインした接続先 → NOLANG_API_URL → ${DEFAULT_API})
+共通: --api <URL> (無ければ NOLANG_API_URL → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → 前回ログインした接続先 → http://localhost:18000)
 環境変数: NOLANG_TOKEN (API key か access token。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
 出力: 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 欠陥・失敗 / 2 使い方 / 3 未ログイン / 4 接続`;
 
@@ -533,6 +639,9 @@ const OPTIONS = {
   until: { type: "string" },
   timeout: { type: "string" },
   "dry-run": { type: "boolean" },
+  mine: { type: "boolean" },
+  limit: { type: "string" },
+  name: { type: "string" },
   help: { type: "boolean", short: "h" },
   version: { type: "boolean", short: "v" },
 };
@@ -569,6 +678,12 @@ async function main() {
       return cmdStatus(rest, flags);
     case "abort":
       return cmdAbort(rest, flags);
+    case "assets": {
+      const [sub, ...args] = rest;
+      if (sub === "search") return cmdAssetsSearch(args, flags);
+      if (sub === "upload") return cmdAssetsUpload(args, flags);
+      throw new CliError(`assets の後は search | upload\n\n${HELP}`, { exit: EXIT.USAGE });
+    }
     default:
       throw new CliError(`知らないコマンド: ${command}\n\n${HELP}`, { exit: EXIT.USAGE });
   }

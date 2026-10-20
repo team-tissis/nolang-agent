@@ -114,9 +114,9 @@ div#bg_dots(inset: 0; background: none; pattern: dots,24,#1E2B3C11; z-index: bac
 section#hook(out: {scale:0.97, opacity:0, duration:0.4, ease:'power2.in'})
 # 絵の枠は hf より大きく取る (生成の絵は余白が広い — 見える人物の大きさを hf に合わせた)
 img#hk_emp(left: 25px; top: 51px; width: 441px; height: 598px; content: @employee; fit: contain; delay: 150; in: {x:-27, opacity:0, duration:0.9, ease:'power3.out'})
-shape#hk_l1(path: "M840 249 C840 307 623 313 623 368"; background: none; border: 3px solid $amber; in: draw,600)
-shape#hk_l2(path: "M840 249 L840 368"; background: none; border: 3px solid $amber; in: draw,600)
-shape#hk_l3(path: "M840 249 C840 307 1057 313 1057 368"; background: none; border: 3px solid $amber; in: draw,600)
+shape#hk_l1(path: "M840 249 C840 307 623 313 623 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
+shape#hk_l2(path: "M840 249 L840 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
+shape#hk_l3(path: "M840 249 C840 307 1057 313 1057 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
 card#hk_pw(left: 607px; top: 131px; width: 467px; height: 117px; in: {y:16, opacity:0, duration:0.6, ease:'power3.out'})
   icon#ki(left: 20px; top: 16px; font-size: 15px; name: key; color: $amber; background: $amber_l; padding: 7px)
   p#label(left: 58px; cy: 31px; font-size: 17px; color: $sub) いつものパスワード
@@ -132,8 +132,8 @@ svc#hk_s(left: "527;743;960"; height: 157px; t: "通販サイト;SNS;会社の�
 
 # title — 声のない題: 2 重の輪を描き、研修の札・2 行の題 (「使い回し」は赤字 + 琥珀の下帯)・流れの 4 札が順に
 section#title(out: {scale:1.03, opacity:0, duration:0.4, ease:'power2.in'})
-shape#tt_r1.ellipse(left: 420px; top: 113px; width: 440px; height: 440px; background: none; border: 2px solid $blue_m; in: draw,1200)
-shape#tt_r2.ellipse(left: 465px; top: 158px; width: 350px; height: 350px; background: none; border: 2px solid $blue_m; in: draw,1200)
+shape#tt_r1.ellipse(left: 420px; top: 113px; width: 440px; height: 440px; background: none; border: 2px solid $blue_m; in: draw {duration: 1.2})
+shape#tt_r2.ellipse(left: 465px; top: 158px; width: 350px; height: 350px; background: none; border: 2px solid $blue_m; in: draw {duration: 1.2})
 p#tt_chip(cx: 640px; cy: 186px; font-size: 19px; letter-spacing: .06em; color: #FFFFFF; background: $blue; border-radius: 99px; padding: 7px 17px; in: {y:13, opacity:0, duration:0.5, ease:'power3.out'}) 新入社員向け 情報セキュリティ研修
 p#tt_l1(cx: 640px; cy: 274px; font-size: 64px; line-height: 1.28; letter-spacing: .03em; in: {y:29, opacity:0, duration:0.7, ease:'power3.out'}) パスワードの{u}使い回し{/}は、
 p#tt_l2(cx: 640px; cy: 356px; font-size: 64px; line-height: 1.28; letter-spacing: .03em; in: {y:29, opacity:0, duration:0.7, ease:'power3.out'}) なぜ危険か
@@ -181,7 +181,7 @@ card#lk_site(left: 73px; top: 187px; width: 427px; height: 307px; in: {y:20, opa
 icon#lk_zap(left: 47px; top: 159px; font-size: 32px; name: lightning; color: #FFFFFF; background: $red; padding: 15px; box-shadow: 0px 5px 12px #D94A3859; in: {scale:0.4, opacity:0, duration:0.35, ease:'power3.out'})
 p#lk_badge(left: 421px; top: 171px; overlap: lk_site; font-size: 17px; color: #FFFFFF; background: $red_d; border-radius: 99px; padding: 7px 13px 7px 33px; in: {scale:0.7, opacity:0, duration:0.45, ease:'power3.out'}) 漏えい
   icon#i(left: 9px; cy: 50%; font-size: 19px; name: warning; color: #FFFFFF)
-shape#lk_arrow(path: "M515 340 L659 340 M636 319 L660 340 L636 361"; background: none; border: 4px solid $red; in: draw,500)
+shape#lk_arrow(path: "M515 340 L659 340 M636 319 L660 340 L636 361"; background: none; border: 4px solid $red; in: draw {duration: 0.5})
 # 漏れた ID とパスワードの札が表から飛び出し、右の一覧へ流れて消える
 p#lk_fly(left: 513px; overlap: lk_list; top: "309;358;407"; font-size: 13px; font-family: m; color: $red_t; background: $red_l; border-radius: 7px; padding: 7px 9px; in: {x:-87, scale:0.9, opacity:0, duration:0.3, ease:'power2.out'}) ×3 taro.s@example.com / taro0401;hanako.k@example.com / hana1234;yamada88@example.com / yamada88
 # 漏えいの一覧 (赤の題の帯 + 4 行 + 「ほかにも」)・自分の行は琥珀
@@ -212,10 +212,10 @@ card#at_list(left: 64px; top: 220px; width: 267px; height: 220px; in: {x:-27, op
 img#at_att(left: 414px; top: 200px; width: 150px; height: 220px; content: @attacker; fit: contain; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
   p#l(cx: 50%; cy: 242px; font-size: 20px) 攻撃者
   p#s(cx: 50%; cy: 274px; font-size: 13px; color: $red_t; background: $red_l; border-radius: 99px; padding: 4px 9px; white-space: nowrap) 自動で次々にログインを試す
-shape#at_a0(path: "M337 330 L383 330 M367 315 L384 330 L367 345"; background: none; border: 3px solid $red; in: draw,400)
-shape#at_a1(path: "M593 313 C650 313 650 234 701 234 M687 222 L703 234 L687 246"; background: none; border: 3px solid $red; in: draw,450)
-shape#at_a2(path: "M593 333 L701 357 M685 348 L703 357 L688 372"; background: none; border: 3px solid $red; in: draw,450)
-shape#at_a3(path: "M593 353 C650 353 650 479 701 479 M687 467 L703 479 L687 491"; background: none; border: 3px solid $red; in: draw,450)
+shape#at_a0(path: "M337 330 L383 330 M367 315 L384 330 L367 345"; background: none; border: 3px solid $red; in: draw {duration: 0.4})
+shape#at_a1(path: "M593 313 C650 313 650 234 701 234 M687 222 L703 234 L687 246"; background: none; border: 3px solid $red; in: draw {duration: 0.45})
+shape#at_a2(path: "M593 333 L701 357 M685 348 L703 357 L688 372"; background: none; border: 3px solid $red; in: draw {duration: 0.45})
+shape#at_a3(path: "M593 353 C650 353 650 479 701 479 M687 467 L703 479 L687 491"; background: none; border: 3px solid $red; in: draw {duration: 0.45})
 panel#at_p(left: 713px; top: "181;304;427"; t: "通販サイト;SNS;会社のクラウド"; i: "shopping-cart;chat-circle;cloud"; ic: "$blue;$teal;$indigo"; bg: "$blue_l;$teal_l;$indigo_l") ×3
 
 # damage — STEP 3: 被害の札 3 枚を語ごとに (注文の判子・偽の札と友人への手紙・赤い縁と目) →「たった一つ」で 3 枚を沈め、鍵 → 矢印 → 会社の札
@@ -263,7 +263,7 @@ card#dm_sum(left: 173px; top: 212px; width: 933px; height: 253px; overlap: dm_c1
   div#b(left: 594px; top: 44px; width: 280px; height: 164px; background: none; in: {scale:0.85, opacity:0, duration:0.45, ease:'power3.out'})
     icon#i(cx: 50%; top: 0px; font-size: 59px; name: buildings; color: $red_t; background: $red_l; padding: 27px)
     p#t(cx: 50%; cy: 145px; font-size: 27px; color: $red_t) 会社全体のリスク
-shape#dm_arrow(path: "M547 338 L728 338 M705 319 L729 338 L705 357"; background: none; border: 5px solid $red; in: draw,450)
+shape#dm_arrow(path: "M547 338 L728 338 M705 319 L729 338 L705 357"; background: none; border: 5px solid $red; in: draw {duration: 0.45})
 
 # measures — STEP 4: 番号の幽霊の枠 3 つ → 「1 つ目」ごとに本物の札が置き換わり、札の中の図を語で動かす → 下の帯「覚えずに → 管理ツール」
 section#measures

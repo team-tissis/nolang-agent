@@ -84,15 +84,15 @@ def flowcard(t, s) = div(left: 827px; width: 367px; height: 133px; border-radius
   p#t(left: 124px; top: 36px; font-size: 27px; content: {t})
   p#s(left: 124px; top: 74px; font-family: m; font-size: 15px; color: $sub; content: {s})
 # 方眼の地 (40 px と 240 px の 2 重の格子・全編でゆっくり左上へ流れる) + 右上の白い光 + 下端の進行線
-div#grid1(left: 0px; top: 0px; width: 1440px; height: 800px; background: none; pattern: grid,27,$grid; bleed; z-index: back; in: none; main: ramp,x=-160,y=-80,freq_ms=180000)
-div#grid2(left: 0px; top: 0px; width: 1440px; height: 800px; background: none; pattern: grid,160,$grid2; bleed; z-index: back; in: none; main: ramp,x=-160,y=-80,freq_ms=180000)
+div#grid1(left: 0px; top: 0px; width: 1440px; height: 800px; background: none; pattern: grid,27,$grid; bleed; z-index: back; in: none; main: ramp {x: -160, y: -80, period: '180s'})
+div#grid2(left: 0px; top: 0px; width: 1440px; height: 800px; background: none; pattern: grid,160,$grid2; bleed; z-index: back; in: none; main: ramp {x: -160, y: -80, period: '180s'})
 div#glow(inset: 0; background: radial(#FFFFFFBF,#FFFFFF00,70%,40%); z-index: back; in: none)
 div#prog_track(left: 0px; top: 716px; width: 1280px; height: 4px; background: #14213D0F; z-index: front; in: none)
 progress#prog(left: 0px; top: 716px; width: 1280px; height: 4px; background: linear($blue,$orange,90); until: end; z-index: front; overlap: prog_track)
 
 # s1 開幕: 右に半分 CAD の線画・半分実物の金具の写真、左に題 (小見出し → 青 → と → 橙) が組み上がり、語で下線が伸びる・「なにが違う？」と逆向きの矢印 2 本
 section#s1
-img#s1_hero(left: 467px; top: 47px; width: 827px; height: 465px; bleed; delay: 100; in: {scale:1.08, opacity:0, duration:1.2, ease:'power2.out'}; main: kb,1.04@45%,50%>1.04@55%,50%) [photo]アルミを削り出したL字の取り付けブラケット（丸いボルト穴が2つ）が1つ、斜め45度から見た姿で中央に。左半分は青く光る精密なCADのワイヤーフレームと細い作図線、右半分はヘアラインの金属の実物で柔らかい反射、縦の境目でくっきり分かれる。ごく明るい冷たい灰色の継ぎ目のないスタジオの背景が画面の縁へ溶ける、拡散した柔らかい光、ミニマルで現代的な工業デザイン
+img#s1_hero(left: 467px; top: 47px; width: 827px; height: 465px; bleed; delay: 100; in: {scale:1.08, opacity:0, duration:1.2, ease:'power2.out'}; main: kb {scale: [1.04, 1.04], focus: ['45% 50%', '55% 50%']}) [photo]アルミを削り出したL字の取り付けブラケット（丸いボルト穴が2つ）が1つ、斜め45度から見た姿で中央に。左半分は青く光る精密なCADのワイヤーフレームと細い作図線、右半分はヘアラインの金属の実物で柔らかい反射、縦の境目でくっきり分かれる。ごく明るい冷たい灰色の継ぎ目のないスタジオの背景が画面の縁へ溶ける、拡散した柔らかい光、ミニマルで現代的な工業デザイン
 div#s1_k(left: 87px; top: 117px; width: 300px; height: 24px; background: none; delay: 300; in: {y:11, opacity:0, duration:.55, ease:'power3.out'})
   div#bar(left: 0px; cy: 50%; width: 31px; height: 3px; border-radius: 2px; background: $ink)
   p#t(left: 41px; cy: 50%; font-size: 20px; letter-spacing: .08em; color: $sub) 3分でわかる
@@ -113,10 +113,10 @@ pill#s2_l1(left: 87px; top: 247px; t: "CADモデリング"; c: $blue; in: {x:-27
 pill#s2_l2(left: 87px; top: 460px; t: "リバースモデリング"; c: $orange; in: {x:-27, opacity:0, duration:.55, ease:'power3.out'})
 p#s2_fwd(left: 87px; top: 313px; font-size: 20px; color: $blue_d; in: {x:-13, opacity:0, duration:.55, ease:'power3.out'}) 向き →
 p#s2_rev(left: 87px; top: 527px; font-size: 20px; color: $orange_d; in: {x:20, opacity:0, duration:.55, ease:'power3.out'}) ← 向きが逆
-shape#s2_a1(left: 592px; top: 257px; width: 109px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw,500)
-shape#s2_a2(left: 859px; top: 257px; width: 109px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw,500)
-shape#s2_a3(left: 859px; top: 470px; width: 109px; height: 20px; path: arrow_l; background: $orange; border: 5px solid $orange; in: draw,500)
-shape#s2_a4(left: 592px; top: 470px; width: 109px; height: 20px; path: arrow_l; background: $orange; border: 5px solid $orange; in: draw,500)
+shape#s2_a1(left: 592px; top: 257px; width: 109px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw {duration: 0.5})
+shape#s2_a2(left: 859px; top: 257px; width: 109px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw {duration: 0.5})
+shape#s2_a3(left: 859px; top: 470px; width: 109px; height: 20px; path: arrow_l; background: $orange; border: 5px solid $orange; in: draw {duration: 0.5})
+shape#s2_a4(left: 592px; top: 470px; width: 109px; height: 20px; path: arrow_l; background: $orange; border: 5px solid $orange; in: draw {duration: 0.5})
 node#s2_n1(left: 434px; top: 217px; t: "アイデア"; c: $blue)
   icon#i(cx: 50%; top: 25px; font-size: 51px; name: lightbulb; color: $blue)
 node#s2_n2(left: 700px; top: 217px; t: "形（3Dモデル）"; c: $blue)
@@ -145,7 +145,7 @@ card#req(left: 287px; top: 231px; width: 307px; height: 207px; in: up; out: {x:2
   p#l(left: 25px; top: "87;120;153"; font-family: m; font-size: 19px; in: {y:8, opacity:0, duration:.55, ease:'power3.out'}) ×3 ・長さ {bn}120{/} / 高さ {bn}90{/} mm;・板の厚さ {bn}14{/} mm;・ネジ穴を {bn}2{/} か所
 # 等角の L 字 (群 iso: 正面 = スケッチの輪郭の変種・残り 4 面は潰れた形で出て押し出しで伸びる・穴 2 つ・群ごと上下に浮く)
 group#iso
-shape#iso.front(path: "M251.3,211.7 M644.5,538.0 M253.3,477.3 L541.3,477.3 L541.3,443.7 L286.9,443.7 L286.9,261.3 L253.3,261.3 Z"; background: #2563EB0F; border: 3px solid $blue; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: draw,1700)
+shape#iso.front(path: "M251.3,211.7 M644.5,538.0 M253.3,477.3 L541.3,477.3 L541.3,443.7 L286.9,443.7 L286.9,261.3 L253.3,261.3 Z"; background: #2563EB0F; border: 3px solid $blue; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: draw {duration: 1.7})
 #iso.front.iso(path: "M251.3,211.7 M644.5,538.0 M306.7,444.0 L530.6,505.3 L530.6,477.6 L332.8,423.5 L332.8,273.2 L306.7,266.0 Z"; background: $f1; border: 2px solid $blue_d; move: 700,power2.inOut)
 #iso.front.long(path: "M251.3,211.7 M644.5,538.0 M269.4,454.2 L567.9,536.0 L567.9,508.3 L295.5,433.7 L295.5,283.4 L269.4,276.3 Z"; move: 1100,power2.inOut)
 shape#iso.top_h(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L530.6,477.6 L332.8,423.5 Z"; background: $blue_t; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
@@ -208,13 +208,13 @@ card#s4_vp(left: 87px; top: 131px; width: 707px; height: 460px; pattern: grid,23
 p#s4_ptitle(left: 830px; top: 130px; font-family: e; font-size: 13px; letter-spacing: .2em; color: $sub; in: {y:7, opacity:0, duration:.55, ease:'power3.out'}) PROCESS
 step#s4_st(left: 827px; top: "157;237;317;397;477"; height: 69px; tt: 12; st: 39; n: "1;2;3;4;5"; t: "実物;3Dスキャン;点群データ;メッシュ;CADモデル"; s: "図面のない部品など;表面の形を測る;無数の点の集まり;三角形の面でつなぐ;平面・円筒を当てはめる") ×5
 #s4_st.on(background: $orange_tt; border: 2px solid $orange)
-img#ph_old(left: 87px; top: 131px; width: 707px; height: 460px; border-radius: 17px; content: @old; in: fade,600; out: fade,600; main: kb,1.14>1.0,ease=power1.out)
+img#ph_old(left: 87px; top: 131px; width: 707px; height: 460px; border-radius: 17px; content: @old; in: fade {duration: 0.6}; out: fade {duration: 0.6}; main: kb {scale: [1.14, 1], ease:'power1.out'})
 p#stamp(left: 513px; top: 191px; font-size: 29px; color: $orange; background: #FFFFFFDB; border: 3px solid $orange; border-radius: 9px; padding: 7px 17px; transform: rotate(-7deg); in: {scale:1.7, opacity:0, duration:.5, ease:'back.out(1.7)'}; out: {opacity:0, duration:.25, ease:'power2.in'}) 図面なし
-img#ph_scan(left: 87px; top: 131px; width: 707px; height: 460px; border-radius: 17px; in: fade,500; out: fade,600; main: kb,1.0>1.08) [ref:@old]三脚に載った業務用の構造化光3Dスキャナーが、小さな丸いターンテーブルの上の同じ古い金属のL字ブラケットに細い平行な青い光の縞を投影している。明るい灰色の背景の清潔な工房、周りの光は少し落として部品の上の青い縞がくっきり見える、部品にピント
+img#ph_scan(left: 87px; top: 131px; width: 707px; height: 460px; border-radius: 17px; in: fade {duration: 0.5}; out: fade {duration: 0.6}; main: kb {scale: [1, 1.08]}) [ref:@old]三脚に載った業務用の構造化光3Dスキャナーが、小さな丸いターンテーブルの上の同じ古い金属のL字ブラケットに細い平行な青い光の縞を投影している。明るい灰色の背景の清潔な工房、周りの光は少し落として部品の上の青い縞がくっきり見える、部品にピント
 # スキャンの光の帯 (板の窓で切る群・帯は main の keys で出てから 2.8 秒かけて左から右へ走る)
 group#scan(clip: 17,scan.win)
   div#win(left: 87px; top: 131px; width: 707px; height: 460px; background: none)
-  div#bar(left: -20px; top: 131px; width: 93px; height: 460px; background: linear(#3B82F600,#60A5FA8C@70%,#DBEAFEF2@92%,#3B82F600,90); mix-blend-mode: screen; bleed; in: fade,150; out: fade,200; main: keys(at=0 x=0 | at=1 x=827 ease=power1.inOut),freq_ms=2800,window=0,2800,forwards)
+  div#bar(left: -20px; top: 131px; width: 93px; height: 460px; background: linear(#3B82F600,#60A5FA8C@70%,#DBEAFEF2@92%,#3B82F600,90); mix-blend-mode: screen; bleed; in: fade {duration: 0.15}; out: fade {duration: 0.2}; main: keys(at=0 x=0 | at=1 x=827 ease=power1.inOut),freq_ms=2800,window=0,2800,forwards)
 # 点群 → メッシュ → CAD モデルの群 (外の群 rv が図の板の窓で切り、中の群 rv.rev を寄る / 戻す / 薄める)・L 字の輪郭と穴 2 つの path が scatter の clip
 group#rv(clip: 17,rv.win)
 div#rv.win(left: 87px; top: 131px; width: 707px; height: 460px; background: none)
@@ -225,8 +225,8 @@ shape#rv.rev.inner_v(points: "305.8,432.3 387.2,375.2 387.2,211.2 305.8,268.3"; 
 shape#rv.rev.front(points: "277.3,454.7 521.6,521.6 521.6,491.4 305.8,432.3 305.8,268.3 277.3,260.5"; background: $r1; in: {opacity:0, duration:.45, ease:'power1.out'})
 shape#rv.rev.end_h(points: "521.6,521.6 603.0,464.5 603.0,434.3 521.6,491.4"; background: $r2; in: {opacity:0, duration:.45, ease:'power1.out'})
 shape#rv.rev.top_v(points: "277.3,260.5 305.8,268.3 387.2,211.2 358.7,203.4"; background: $orange_t; in: {opacity:0, duration:.45, ease:'power1.out'})
-shape#rv.rev.mesh(left: 273px; top: 199px; width: 334px; height: 326px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil,mesh=3; background: $orange; border: 1px solid $meshc; in: wipe,right,1400; out: fade,600)
-shape#rv.rev.cloud(left: 273px; top: 199px; width: 334px; height: 326px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil; background: $orange; in: wipe,right,1500; out: fade,700)
+shape#rv.rev.mesh(left: 273px; top: 199px; width: 334px; height: 326px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil,mesh=3; background: $orange; border: 1px solid $meshc; in: wipe {dir: 'right', duration: 1.4}; out: fade {duration: 0.6})
+shape#rv.rev.cloud(left: 273px; top: 199px; width: 334px; height: 326px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil; background: $orange; in: wipe {dir: 'right', duration: 1.5}; out: fade {duration: 0.7})
 shape#rv.rev.ha(points: "495.1,444.4 496.4,443.3 497.4,442.2 498.1,441.0 498.4,439.7 498.3,438.5 497.8,437.3 497.0,436.1 495.9,435.0 494.4,433.9 492.6,432.9 490.5,432.1 488.2,431.4 485.7,430.8 483.1,430.3 480.4,430.1 477.5,429.9 474.7,430.0 471.9,430.2 469.2,430.5 466.6,431.0 464.2,431.7 462.1,432.5 460.1,433.4 458.5,434.4 457.1,435.5 456.1,436.6 455.5,437.8 455.2,439.1 455.3,440.3 455.7,441.5 456.6,442.7 457.7,443.8 459.2,444.9 461.0,445.9 463.0,446.7 465.3,447.4 467.8,448.0 470.5,448.5 473.2,448.7 476.0,448.9 478.9,448.8 481.6,448.6 484.4,448.3 486.9,447.8 489.3,447.1 491.5,446.3 493.5,445.4"; background: $rhole; border: 2px solid $orange_d; in: popin)
 shape#rv.rev.hb(points: "358.0,305.1 357.9,302.6 357.6,300.3 357.1,298.3 356.4,296.5 355.6,294.9 354.6,293.7 353.5,292.8 352.2,292.3 350.9,292.1 349.5,292.3 348.0,292.8 346.5,293.7 345.0,294.9 343.6,296.4 342.1,298.3 340.8,300.3 339.6,302.6 338.4,305.1 337.4,307.7 336.6,310.4 336.0,313.1 335.5,315.9 335.2,318.6 335.1,321.2 335.2,323.6 335.5,325.9 336.0,328.0 336.6,329.8 337.4,331.3 338.4,332.5 339.6,333.4 340.8,334.0 342.1,334.1 343.6,334.0 345.0,333.4 346.5,332.5 348.0,331.3 349.5,329.8 350.9,328.0 352.2,325.9 353.5,323.6 354.6,321.2 355.6,318.6 356.4,315.9 357.1,313.1 357.6,310.4 357.9,307.7"; background: $rhole; border: 2px solid $orange_d; in: popin)
 shape#rv.rev.edges(path: "M277.3,454.7 L521.6,521.6 L521.6,491.4 L305.8,432.3 L305.8,268.3 L277.3,260.5 Z M305.8,432.3 L521.6,491.4 L603.0,434.3 L387.2,375.2 Z M521.6,521.6 L603.0,464.5 L603.0,434.3 L521.6,491.4 Z M305.8,432.3 L387.2,375.2 L387.2,211.2 L305.8,268.3 Z M277.3,260.5 L305.8,268.3 L387.2,211.2 L358.7,203.4 Z"; background: none; border: 2px solid $orange_d; in: {opacity:0, duration:.4})
@@ -274,13 +274,13 @@ div#r(left: 87px; top: "208;304;400;496"; width: 1107px; height: 91px; backgroun
 section#s6
 khead#s6_head(k: "USE CASE"; t: "どちらを使う？")
 card#u1(left: 87px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:0, duration:.7, ease:'power3.out'})
-  img#p(left: 0px; top: 0px; width: 533px; height: 267px; main: kb,1.08>1.0,ease=power1.out) [photo]明るく現代的な製品デザインのオフィス、白い机の大きなモニターに青と白の機械部品のブラケットの3D CADモデル、机の上に小さな3Dプリントの試作部品とデジタルノギス、観葉植物、大きな窓から柔らかい昼の光、落ち着いて風通しのよい親しみのある雰囲気、読める文字なし
+  img#p(left: 0px; top: 0px; width: 533px; height: 267px; main: kb {scale: [1.08, 1], ease:'power1.out'}) [photo]明るく現代的な製品デザインのオフィス、白い机の大きなモニターに青と白の機械部品のブラケットの3D CADモデル、机の上に小さな3Dプリントの試作部品とデジタルノギス、観葉植物、大きな窓から柔らかい昼の光、落ち着いて風通しのよい親しみのある雰囲気、読める文字なし
   p#q(left: 29px; top: 287px; font-family: m; font-size: 16px; color: $sub) こんなとき
   p#a(left: 29px; top: 311px; font-size: 27px; line-height: 1.3) 新しい製品を[br]一から考える
   pill#pl(left: 29px; bottom: 27px; t: "通常のCADモデリング"; c: $blue)
 card#u2(left: 660px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:0, duration:.7, ease:'power3.out'})
-  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; fit: cover,focus=50%,50%; main: kb,1.1>1.0,ease=power1.out)
-  img#p2(left: 268px; top: 0px; width: 265px; height: 267px; main: kb,1.1>1.0,ease=power1.out) [photo]手で削り出した工業デザインのクレイモデル、コンパクトで現代的な車、なめらかな艶消しの暖かい灰色の粘土の面、明るいデザインスタジオの白い机の上、そばにクレイ用のヘラが数本、柔らかく均一なスタジオの光、ミニマルで清潔な背景
+  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; fit: cover,focus=50%,50%; main: kb {scale: [1.1, 1], ease:'power1.out'})
+  img#p2(left: 268px; top: 0px; width: 265px; height: 267px; main: kb {scale: [1.1, 1], ease:'power1.out'}) [photo]手で削り出した工業デザインのクレイモデル、コンパクトで現代的な車、なめらかな艶消しの暖かい灰色の粘土の面、明るいデザインスタジオの白い机の上、そばにクレイ用のヘラが数本、柔らかく均一なスタジオの光、ミニマルで清潔な背景
   p#c1(left: 9px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 図面のない部品
   p#c2(left: 277px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 手作りの試作品
   p#q(left: 29px; top: 287px; font-family: m; font-size: 16px; color: $sub) こんなとき
@@ -297,8 +297,8 @@ card#combo(left: 173px; top: 200px; width: 933px; height: 313px; overlap: u1,u2;
   div#n3(left: 740px; top: 80px; width: 153px; height: 127px; border-radius: 15px; background: $blue_tt; in: popin)
     icon#i(cx: 50%; top: 22px; font-size: 43px; name: cube; color: $blue)
     p#t(cx: 50%; top: 82px; font-size: 20px; color: $blue_d; overlap: u2.c2) 改良した形
-  shape#a1(left: 207px; top: 133px; width: 166px; height: 20px; path: arrow_r; background: $orange; border: 5px solid $orange; in: draw,500)
-  shape#a2(left: 557px; top: 133px; width: 166px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw,500)
+  shape#a1(left: 207px; top: 133px; width: 166px; height: 20px; path: arrow_r; background: $orange; border: 5px solid $orange; in: draw {duration: 0.5})
+  shape#a2(left: 557px; top: 133px; width: 166px; height: 20px; path: arrow_r; background: $blue; border: 5px solid $blue; in: draw {duration: 0.5})
   p#l1(cx: 290px; top: 230px; font-size: 19px; color: $orange_d) リバースで取り込み
   p#l2(cx: 640px; top: 230px; font-size: 19px; color: $blue_d; overlap: u2.a) CADで改良
 
@@ -307,12 +307,12 @@ section#s7
 khead#s7_head(k: "SUMMARY"; t: "まとめ")
 div#sm1(left: 0px; top: 200px; width: 1280px; height: 64px; display: flex; justify-content: center; align-items: center; gap: 20px; background: none; in: {y:20, opacity:0, duration:.55, ease:'power3.out'})
   p#a(font-size: 36px; background: #FFFFFF; border-radius: 15px; padding: 12px 27px; box-shadow: 0 8px 23px #14213D1A) アイデア
-  shape#ar(width: 133px; height: 40px; path: arrow_r; background: $blue; border: 7px solid $blue; in: draw,550)
+  shape#ar(width: 133px; height: 40px; path: arrow_r; background: $blue; border: 7px solid $blue; in: draw {duration: 0.55})
   p#b(font-size: 36px; background: #FFFFFF; border-radius: 15px; padding: 12px 27px; box-shadow: 0 8px 23px #14213D1A) 形
   p#eq(font-size: 36px) ＝ {bl}CADモデリング{/}
 div#sm2(left: 0px; top: 347px; width: 1280px; height: 64px; display: flex; justify-content: center; align-items: center; gap: 20px; background: none; in: {y:20, opacity:0, duration:.55, ease:'power3.out'})
   p#a(font-size: 36px; background: #FFFFFF; border-radius: 15px; padding: 12px 27px; box-shadow: 0 8px 23px #14213D1A) 今ある形
-  shape#ar(width: 133px; height: 40px; path: arrow_r; background: $orange; border: 7px solid $orange; in: draw,550)
+  shape#ar(width: 133px; height: 40px; path: arrow_r; background: $orange; border: 7px solid $orange; in: draw {duration: 0.55})
   p#b(font-size: 36px; background: #FFFFFF; border-radius: 15px; padding: 12px 27px; box-shadow: 0 8px 23px #14213D1A) 設計データ
   p#eq(font-size: 36px; color: $orange) ＝ リバースモデリング
 p#sm3(cx: 640px; top: 490px; font-size: 29px; color: $sub; in: {y:13, opacity:0, duration:.55, ease:'power3.out'}) 向きの違いがわかれば、{m}使い分けが見えてくる{/}

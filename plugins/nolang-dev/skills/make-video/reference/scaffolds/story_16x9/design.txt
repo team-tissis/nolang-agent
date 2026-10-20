@@ -1,0 +1,82 @@
+#v2
+canvas 1280x720 bg=#0B1220
+theme dark
+palette a=#EE6A1F b=#22B8A7
+font "ZEN角ゴシックNew Bold"
+# 数字の書体 (`font-family: n`)。細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える
+fonts n="太い幾何学的なサンセリフの欧文、数字がくっきり"
+
+# 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
+motion title = in=y=-40,scale=0.94,opacity=0,duration=550 ease=back(1.6) out=y=-16,opacity=0,duration=240
+motion big = in=scale=0.6,opacity=0,duration=450 ease=back(2.2) out=fade,220
+motion div = in=y=24,opacity=0,duration=450 ease=power3.out out=fade,220
+motion row = in=x=-60,opacity=0,duration=400 ease=power2.out out=fade,200
+motion note = in=y=14,opacity=0,duration=350 ease=power2.out out=fade,200
+div { in: div }
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
+cut { stagger: sentence }
+# 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
+def h1(t) = p(font-size: 72px; line-height: 1.15; in: title; content: {t})
+def num(t) = p(font-size: 96px; color: $a; in: big; content: {t})
+def big(t) = p(font-size: 80px; text-align: center; in: big; content: {t})
+def sub(t) = p(font-size: 30px; color: $mute; in: note; content: {t})
+def body(t) = p(font-size: 32px; in: row; content: {t})
+def note(t) = p(font-size: 24px; color: $mute; in: note; content: {t})
+# 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
+def stat(v, u, l) = div(width: 560px; height: 166px; background: none; border: none; box-shadow: 0; padding: 0px)
+  p#l(left: 0px; top: 0px; font-size: 30px; color: $mute; content: {l})
+  p#v(left: 0px; top: 46px; font-size: 112px; font-family: n; color: $a; line-height: 1; content: {v})
+  p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
+# 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
+def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>名.i[k] check]` で語ごとに
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+  p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
+  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column) ×3
+    icon#ic(left: 0px; cy: 50%; font-size: 56px; name: {icons}; color: $b)
+    p#t(left: 80px; cy: 50%; font-size: 38px; content: {items})
+  p#cta(left: 0px; bottom: 0px; font-size: 38px; color: $a; content: {cta})
+image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
+# 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
+backdrop#bd(look: glow; vignette: 0.15)
+bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセパッドと軽いビート、解説動画向け
+bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
+sfx off
+subtitle.hug(font-size: 30px; bottom: 24px; unit: phrase)
+# 同じ人物は基準画像で揃える ([ref:@owner] を絵の説明の先頭に)・絵は寄り (表情・手元) と引きを交互に
+image owner = "[photo]50 代の男性のパン職人、白いコック帽と小麦粉のついたエプロン、人懐こい顔、文字なし"
+
+section#hook
+img#hk_p(inset: 0; main: kb {scale: [1, 1.06]}; scrim: 0.5) [photo]早朝の商店街の小さなパン屋、まだ暗い通りに灯る店の明かり、文字なし
+h1#hk_h(left: 80px; top: 112px; width: 739px; height: 144px) 売上が、半分になった朝
+
+section#shock
+img#sk_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}; scrim: 0.45) [ref:@owner]売上の帳簿を見て目を見開く店主の顔のアップ、朝の厨房、文字なし
+big#sk_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 何が、起きたんだ
+stat#sk_st(left: 80px; top: 112px; v: "50"; u: "% 減"; l: "先月の売上")
+
+section#cause
+img#cs_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['40% 50%', '']}; scrim: 0.5) [photo]駅前に開店したばかりの大型スーパー、開店セールの旗と人だかり、文字なし
+h1#cs_h(left: 80px; top: 112px; width: 739px; height: 144px) 駅前に、大型店
+
+section#empty
+img#em_p(inset: 0; main: kb {scale: [1.06, 1]}; scrim: 0.4) [photo]誰もいない朝のパン屋の店内、並んだパンと窓からの白い光、文字なし
+sub#em_s(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 朝の客が、消えた
+
+section#idea
+img#id_p(inset: 0; main: kb {scale: [1, 1.08], focus: '60% 45%'}; scrim: 0.45) [ref:@owner]店先で自転車を見つめて何かを決めた顔の店主、朝日、文字なし
+h1#id_h(left: 80px; top: 112px; width: 739px; height: 144px) 待つのは、やめだ
+
+section#action
+img#ac_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['30% 50%', '70% 50%']}; scrim: 0.45) [ref:@owner]パンの箱を積んだ自転車で朝の住宅街を走る店主、動きのある構図、文字なし
+big#ac_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 配達、開始
+stat#ac_st(left: 80px; top: 112px; v: "[count:120]"; u: "件"; l: "3 か月で")
+
+section#turn
+img#tn_p(inset: 0; main: kb {scale: [1.06, 1]}; scrim: 0.5) [ref:@owner]店先で常連の客と笑う店主、暖色の夕方の光、文字なし
+stat#tn_v(left: 80px; top: 180px; v: "9"; u: "割"; l: "売上は元の")
+
+section#close
+img#cl_p(inset: 0; main: kb {scale: [1, 1.05]}; scrim: 0.45) [photo]夕暮れの商店街、灯りのついたパン屋の看板を遠くから、文字なし
+big#cl_v(left: 80px; top: 280px; width: 1120px; height: 60px) 店は、動いた

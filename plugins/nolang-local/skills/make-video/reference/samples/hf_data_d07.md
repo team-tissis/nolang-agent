@@ -58,7 +58,7 @@ def tape = div(width: 100px; height: 27px; background: #E9DBB2DB; box-shadow: 0p
 def btitle(n, t, s="") = div(out: leave; left: 60px; top: 68px; width: 1100px; height: 56px)
   div#c(left: 0px; cy: 50%; width: 47px; height: 47px; border-radius: 99px; background: $ink; delay: 280; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)'})
     p#n(cx: 50%; cy: 50%; font-size: 23px; font-family: m; color: #FFFFFF; content: {n})
-  p#t(left: 62px; cy: 50%; font-size: 44px; font-family: m; line-height: 1; white-space: nowrap; delay: 340; in: wipe,right,550; content: "{hl}{t}{/}")
+  p#t(left: 62px; cy: 50%; font-size: 44px; font-family: m; line-height: 1; white-space: nowrap; delay: 340; in: wipe {dir: 'right', duration: 0.55}; content: "{hl}{t}{/}")
   p#s(left: .t.right+19; top: 26px; font-size: 19px; color: $ink2; white-space: nowrap; delay: 750; in: {y:8, opacity:0, duration:.45, ease:'power3.out'}; content: {s})
 # 赤い手書きの丸 (数字を囲む)
 def loop(d=550) = shape(path: circle_hand; background: none; border: 5px solid $red; in: draw,{d})
@@ -78,7 +78,7 @@ def pcard(c, img, nm, n, pct, ds, who, q, qr) = div(out: leave; top: 131px; widt
     p#n(left: 55px; top: 0px; font-size: 61px; font-family: m; line-height: 1; content: {n})
     p#u(left: .n.right+1; top: 27px; font-size: 29px; font-family: m; line-height: 1) 人
     p#p(left: .u.right+5; top: 30px; font-size: 23px; color: $ink2; line-height: 1; content: {pct})
-  shape#loop(left: 42px; top: 199px; width: 92px; height: 68px; path: circle_hand; background: none; border: 3px solid #D93F45CC; in: draw,500)
+  shape#loop(left: 42px; top: 199px; width: 92px; height: 68px; path: circle_hand; background: none; border: 3px solid #D93F45CC; in: draw {duration: 0.5})
   p#ds(left: 17px; top: 277px; width: 235px; font-size: 17px; line-height: 1.38; text-align: center; in: {y:8, opacity:0, duration:.45, ease:'power3.out'}; content: {ds})
   div#qt(left: 9px; top: 330px; width: 251px; height: 117px; border-radius: 2px 2px 12px 2px; background: $wht; box-shadow: 0px 9px 12px #503C1440; transform: rotate({qr}deg); in: {y:-17, scale:1.08, rotation:-6, opacity:0, duration:.5, ease:'back.out(1.6)'})
     p#who(left: 13px; top: 11px; font-size: 13px; color: #FFFFFF; background: $ink; border-radius: 3px; padding: 3px 6px 3px 6px; line-height: 1; content: {who})
@@ -98,7 +98,7 @@ def ocard(c, no, tt, f) = div(out: leave; top: 144px; width: 360px; height: 467p
   div#curl(right: 0px; bottom: 0px; width: 31px; height: 31px; border-radius: 0px 0px 12px 0px; background: linear(#00000000@45%,#0000001A@50%,#FFFFFFA6@57%,#FFFFFF00@78%,315))
   div#no(left: 20px; top: 19px; width: 44px; height: 44px; border-radius: 99px; border: 3px solid $ink)
     p#t(cx: 50%; cy: 50%; font-size: 24px; font-family: m; content: {no})
-  p#tt(left: 75px; top: 27px; font-size: 31px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe,right,500; content: {tt})
+  p#tt(left: 75px; top: 27px; font-size: 31px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe {dir: 'right', duration: 0.5}; content: {tt})
   p#for(left: 29px; top: 419px; font-size: 15px; color: $ink2; white-space: nowrap; in: {y:5, opacity:0, duration:.45, ease:'power3.out'}; content: {f})
 # 箇条の 1 行 (黒い点 + 文)
 def li(t) = div(width: 307px; height: 52px; in: {y:8, opacity:0, duration:.5, ease:'power3.out'})
@@ -110,7 +110,7 @@ def ccard(c, n, h, s) = div(out: leave; left: 64px; width: 867px; height: 140px;
   div#curl(right: 0px; bottom: 0px; width: 31px; height: 31px; border-radius: 0px 0px 12px 0px; background: linear(#00000000@45%,#0000001A@50%,#FFFFFFA6@57%,#FFFFFF00@78%,315))
   div#nb(left: 23px; top: 31px; width: 75px; height: 75px; border-radius: 99px; background: $ink)
     p#t(cx: 50%; cy: 50%; font-size: 43px; font-family: m; color: #FFFFFF; content: {n})
-  p#h(left: 121px; top: 27px; font-size: 37px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe,right,700; content: {h})
+  p#h(left: 121px; top: 27px; font-size: 37px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe {dir: 'right', duration: 0.7}; content: {h})
   p#s(left: 123px; top: 83px; font-size: 20px; color: $ink2; white-space: nowrap; in: {y:7, opacity:0, duration:.5, ease:'power3.out'}; content: {s})
 
 # 全編の地 (根・z back): 方眼の紙 + 周辺の焼け
@@ -125,13 +125,13 @@ img#cover(left: 767px; top: 112px; width: 467px; height: 311px; fit: contain; ma
 note#t_note(left: 87px; top: 127px; width: 673px; height: 433px; c: $yel; transform: rotate(-2deg); delay: 80; in: {y:-47, scale:1.14, rotation:-8, opacity:0, duration:.6, ease:'back.out(1.6)'})
   tape#tp(left: 280px; top: -13px; transform: rotate(2deg))
   p#kick(left: 52px; top: 43px; font-size: 23px; color: $ink2; letter-spacing: .06em; line-height: 1; delay: 320; in: {y:7, opacity:0, duration:.5, ease:'power3.out'}) 定性調査レポート ｜ ユーザーインタビュー
-  p#l1(left: 52px; top: 93px; font-size: 75px; font-family: m; line-height: 1; white-space: nowrap; delay: 370; in: wipe,right,500) 家計簿アプリを
-  p#l2a(left: 52px; top: 222px; font-size: 75px; font-family: m; line-height: 1; delay: 620; in: wipe,right,300) やめた
+  p#l1(left: 52px; top: 93px; font-size: 75px; font-family: m; line-height: 1; white-space: nowrap; delay: 370; in: wipe {dir: 'right', duration: 0.5}) 家計簿アプリを
+  p#l2a(left: 52px; top: 222px; font-size: 75px; font-family: m; line-height: 1; delay: 620; in: wipe {dir: 'right', duration: 0.3}) やめた
   p#n12(left: 261px; top: 164px; font-size: 141px; font-family: m; line-height: 1; letter-spacing: -.02em; color: $red; delay: 770; in: {scale:.1, opacity:0, duration:.5, ease:'back.out(2.4)'}) 12
-  p#l2b(left: 397px; top: 222px; font-size: 75px; font-family: m; line-height: 1; delay: 920; in: wipe,right,250) 人に
-  p#l3(left: 52px; top: 308px; font-size: 75px; font-family: m; line-height: 1; delay: 1070; in: wipe,right,300) 聞いた
+  p#l2b(left: 397px; top: 222px; font-size: 75px; font-family: m; line-height: 1; delay: 920; in: wipe {dir: 'right', duration: 0.25}) 人に
+  p#l3(left: 52px; top: 308px; font-size: 75px; font-family: m; line-height: 1; delay: 1070; in: wipe {dir: 'right', duration: 0.3}) 聞いた
   loop#ring(left: 245px; top: 186px; width: 186px; height: 113px; d: 650; delay: 1040; overlap: t_note.n12)
-  shape#u3(left: 48px; top: 372px; width: 238px; height: 8px; path: line_h; border: 6px solid $red; in: draw,450)
+  shape#u3(left: 48px; top: 372px; width: 238px; height: 8px; path: line_h; border: 6px solid $red; in: draw {duration: 0.45})
 note#t_sub(left: 440px; top: 490px; width: 407px; height: 133px; c: $pnk; transform: rotate(3deg); overlap: t_note; in: {y:-20, scale:1.14, rotation:8, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#a(left: 27px; top: 20px; font-size: 20px; color: $ink2) 架空の家計簿アプリ
   p#b(left: 27px; top: 50px; font-size: 36px; font-family: m; line-height: 1.2) 「ポケットノート」
@@ -151,8 +151,8 @@ note#m_a(left: 67px; top: 193px; width: 320px; height: 313px; c: $blu; transform
   p#n(left: 29px; top: 63px; font-size: 119px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:214 start=0 ms=2100]
   p#u(left: .n.right+2; top: 122px; font-size: 52px; font-family: m; line-height: 1) 人
   p#d(left: 29px; top: 194px; font-size: 23px; line-height: 1.32) 記録が{dr}30日以上{/}[br]止まった人
-shape#m_arrow(path: "M400 353 Q454 355 488 313"; background: none; border: 4px solid $ink; in: draw,350)
-shape#m_arrow_h(path: "M487 329 L488 313 L472 317"; background: none; border: 4px solid $ink; in: draw,350)
+shape#m_arrow(path: "M400 353 Q454 355 488 313"; background: none; border: 4px solid $ink; in: draw {duration: 0.35})
+shape#m_arrow_h(path: "M487 329 L488 313 L472 317"; background: none; border: 4px solid $ink; in: draw {duration: 0.35})
 img#m_img(left: 490px; top: 152px; width: 347px; height: 231px; fit: contain; main: none; in: {scale:.9, opacity:0, duration:.6, ease:'power3.out'}) [transparent]小さな丸テーブルで向かい合う 2 人の和やかな 1 対 1 のインタビュー。1 人はクリップボードとペンでメモを取り、もう 1 人は手を開いて話している。テーブルにコーヒーカップが 2 つ、頭上に白紙の付箋が数枚ふわりと浮かぶ。人物とテーブルを枠いっぱいに収め、余白を作らない
 note#m_b(left: 513px; top: 433px; width: 313px; height: 172px; c: $yel; transform: rotate(1.8deg); overlap: m_img)
   p#lbl(left: 27px; top: 20px; font-size: 21px; color: $ink2) インタビュー
@@ -169,12 +169,12 @@ note#m_c(left: 893px; top: 200px; width: 320px; height: 313px; c: $mnt; transfor
   p#u(left: .n.right+2; top: 191px; font-size: 48px; font-family: m; line-height: 1) 人
   p#s(left: 31px; top: 250px; font-size: 19px; color: $ink2) にも同じ質問をした
 # 「比較」の両矢印 (青いペン)
-shape#m_cmp_l(path: "M841 365 Q866 356 891 365"; background: none; border: 3px solid #2A63C9E6; in: draw,300)
-shape#m_cmp_h1(path: "M880 368 L891 365 L884 355"; background: none; border: 3px solid #2A63C9E6; in: draw,200)
-shape#m_cmp_h2(path: "M848 355 L841 365 L853 368"; background: none; border: 3px solid #2A63C9E6; in: draw,200)
+shape#m_cmp_l(path: "M841 365 Q866 356 891 365"; background: none; border: 3px solid #2A63C9E6; in: draw {duration: 0.3})
+shape#m_cmp_h1(path: "M880 368 L891 365 L884 355"; background: none; border: 3px solid #2A63C9E6; in: draw {duration: 0.2})
+shape#m_cmp_h2(path: "M848 355 L841 365 L853 368"; background: none; border: 3px solid #2A63C9E6; in: draw {duration: 0.2})
 p#m_cmp(left: 841px; top: 319px; font-size: 24px; font-family: h; color: $pen; in: {opacity:0, duration:.35, ease:'power1.out'}) 比較
-p#m_note(left: 307px; top: 617px; width: 667px; font-size: 33px; font-family: h; color: $red; text-align: center; white-space: nowrap; in: wipe,right,1100) 数が少ないので、割合より「型」を見る
-shape#m_note_u(path: "M353 657 Q640 660 927 654"; background: none; border: 3px solid #D93F45B3; overlap: m_note; in: draw,600)
+p#m_note(left: 307px; top: 617px; width: 667px; font-size: 33px; font-family: h; color: $red; text-align: center; white-space: nowrap; in: wipe {dir: 'right', duration: 1.1}) 数が少ないので、割合より「型」を見る
+shape#m_note_u(path: "M353 657 Q640 660 927 654"; background: none; border: 3px solid #D93F45B3; overlap: m_note; in: draw {duration: 0.6})
 loop#m_kata(left: 729px; top: 610px; width: 122px; height: 48px; border: 4px solid $red; overlap: m_note)
 
 # when — 方眼が送られ、章の付箋が「02」へ・4 列の付箋の四角が列ごとに降り積もる・「中央値」で黄の付箋に 26 を数えて丸・「12人中7人」で中括弧と赤字・「最初の1か月」で橙の列が弾む
@@ -198,7 +198,7 @@ div#w_leg(left: 80px; top: 649px; width: 480px; height: 20px; delay: 1400; in: {
   p#t1(left: 24px; top: 0px; font-size: 17px; color: $ink2; white-space: nowrap) ＝1人（最初の1か月）
   div#s2(left: 222px; top: 1px; width: 17px; height: 17px; border-radius: 1px 1px 4px 1px; background: $later)
   p#t2(left: 246px; top: 0px; font-size: 17px; color: $ink2; white-space: nowrap) ＝1人（それ以降）
-shape#w_brace(path: "M127 222 Q127 207 142 207 L235 207 Q250 207 250 192 Q250 207 265 207 L358 207 Q373 207 373 222"; background: none; border: 4px solid $red; in: draw,550)
+shape#w_brace(path: "M127 222 Q127 207 142 207 L235 207 Q250 207 250 192 Q250 207 265 207 L358 207 Q373 207 373 222"; background: none; border: 4px solid $red; in: draw {duration: 0.55})
 p#w_brace_l(left: 100px; top: 137px; width: 373px; font-size: 33px; font-family: m; color: $red; text-align: center; white-space: nowrap; in: {y:9, opacity:0, duration:.45, ease:'back.out(1.8)'}) 12人中 7人が最初の1か月
 note#w_med(left: 823px; top: 200px; width: 393px; height: 347px; c: $yel; transform: rotate(2deg))
   p#lbl(left: 35px; top: 27px; font-size: 21px; color: $ink2) やめるまでの期間
@@ -217,8 +217,8 @@ div#k_gl(left: 160px; top: "533;480;426;373;320;266;213"; width: 673px; height: 
 div#k_ya(left: 159px; top: 200px; width: 3px; height: 388px; background: $ink; delay: 450; in: {scaleY:0, duration:.5, ease:'power1.inOut', pivot:'bottom'})
 p#k_ay(left: 100px; top: "578;525;472;418;365;312;258;205"; width: 47px; font-size: 16px; color: $ink2; text-align: right; line-height: 1; delay: 550; in: {opacity:0, duration:.3, ease:'power1.out'}) ×8 0;1;2;3;4;5;6;7日
 p#k_ax(left: "167;347;527;707"; top: 600px; width: 107px; font-size: 20px; text-align: center; line-height: 1; delay: 600; in: {y:5, opacity:0, duration:.3, ease:'power3.out', stagger:{each:.08}}) ×4 1週目;2週目;3週目;4週目
-shape#k_area(path: "M220 278 L400 368 L580 448 L760 518 L760 587 L220 587 Z"; background: #DF5F4324; in: wipe,right,1270,ease=none)
-shape#k_line(path: "M220 278 L400 368 L580 448 L760 518"; background: none; border: 5px solid $cor_ink; in: draw,1270,ease=none)
+shape#k_area(path: "M220 278 L400 368 L580 448 L760 518 L760 587 L220 587 Z"; background: #DF5F4324; in: wipe {dir: 'right', duration: 1.27, ease: 'none'})
+shape#k_line(path: "M220 278 L400 368 L580 448 L760 518"; background: none; border: 5px solid $cor_ink; in: draw {duration: 1.27, ease: 'none'})
 shape#k_pt(left: "210;390;570;750"; top: "268;358;438;508"; width: 20px; height: 20px; path: ellipse; background: $cor_ink; border: 3px solid #FFFFFF; box-shadow: 0px 1px 4px #00000040; in: {scale:.1, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.42}}) ×4
 p#k_val(left: "193;408;588;768"; top: "223;313;393;463"; font-size: 36px; font-family: m; line-height: 1; white-space: nowrap; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.42}}) ×4 5.8{ku}日{/};4.1{ku}日{/};2.6{ku}日{/};1.3{ku}日{/}
 card#k_legend(left: 920px; top: 167px; width: 300px; height: 147px; transform: rotate(1deg); delay: 900; in: {y:-11, scale:1.04, rotation:3, opacity:0, duration:.55, ease:'back.out(1.6)'})
@@ -229,8 +229,8 @@ card#k_legend(left: 920px; top: 167px; width: 300px; height: 147px; transform: r
 note#k_take(left: 930px; top: 363px; width: 293px; height: 240px; c: $pnk; transform: rotate(-2deg); in: {y:-31, scale:1.14, rotation:-8, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#t(left: 27px; top: 27px; font-size: 41px; font-family: m; line-height: 1.15) 2週目から[br]坂を[br]下り始める
 loop#k_loop(left: 371px; top: 341px; width: 58px; height: 53px; d: 450; border: 4px solid $red; overlap: k_val)
-shape#k_arrow(path: "M420 409 Q586 470 740 556"; background: none; border: 4px solid $red; overlap: k_val; in: draw,550)
-shape#k_arrow_h(path: "M725 558 L740 556 L734 542"; background: none; border: 4px solid $red; in: draw,200)
+shape#k_arrow(path: "M420 409 Q586 470 740 556"; background: none; border: 4px solid $red; overlap: k_val; in: draw {duration: 0.55})
+shape#k_arrow_h(path: "M725 558 L740 556 L734 542"; background: none; border: 4px solid $red; in: draw {duration: 0.2})
 p#k_slope(left: 427px; top: 467px; font-size: 27px; font-family: h; color: $red; white-space: nowrap; transform: rotate(21deg); transform-origin: 0% 0%; in: {opacity:0, duration:.4, ease:'power1.out'}) 2週目から下り坂
 
 # patterns — 4 色の付箋の札が並び、型の名の語で札が浮き、人数の語で数と赤い丸・発言の白い付箋・下の 12 マスを型の色に塗る
@@ -282,20 +282,20 @@ cval#c_w4(left: 1035px; top: 516px; v: "2/12人")
 note#c_quote(left: 240px; top: 577px; width: 800px; height: 92px; c: $mnt; transform: rotate(-1deg); in: {y:-20, scale:1.14, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#q(left: 31px; top: 16px; font-size: 30px; font-family: h; line-height: 1; white-space: nowrap) {x2}「全部正確に」{/}より 「だいたい合っていればいい」
   p#w(left: 31px; top: 57px; font-size: 17px; color: $ink2; white-space: nowrap) ― 続けている人 6人中5人がこう話した
-  shape#x(left: 35px; top: 29px; width: 202px; height: 6px; path: line_h; border: 4px solid $red; in: draw,400)
-  shape#u(left: 319px; top: 49px; width: 371px; height: 6px; path: line_h; border: 5px solid #1F8D62D9; in: draw,800)
+  shape#x(left: 35px; top: 29px; width: 202px; height: 6px; path: line_h; border: 4px solid $red; in: draw {duration: 0.4})
+  shape#u(left: 319px; top: 49px; width: 371px; height: 6px; path: line_h; border: 5px solid #1F8D62D9; in: draw {duration: 0.8})
 
 # moments — 波のジャーニーの線を左から描いて段階の札・「3日以上」「初めて」で谷に赤い丸と稲妻 + 白い付箋 (人数・内訳の四角・理由)・「11人」で橙の付箋
 section#moments(stagger: {each:0}; out: {x:-93, opacity:0, duration:.36, ease:'power2.in'})
 btitle#bt6(n: "05"; t: "離脱が起きる2つの瞬間"; s: "ジャーニーのどこでやめたか")
-shape#j_path(path: "M80 220 C173 200 253 197 347 212 C433 225 480 280 547 288 C613 296 653 220 733 212 C827 204 907 293 973 299 C1040 304 1080 227 1200 208"; background: none; border: 5px solid #24304AE6; delay: 500; in: draw,1400)
-shape#j_head(path: "M1183 193 L1204 208 L1181 223"; background: none; border: 5px solid $ink; delay: 1850; in: draw,200)
+shape#j_path(path: "M80 220 C173 200 253 197 347 212 C433 225 480 280 547 288 C613 296 653 220 733 212 C827 204 907 293 973 299 C1040 304 1080 227 1200 208"; background: none; border: 5px solid #24304AE6; delay: 500; in: draw {duration: 1.4})
+shape#j_head(path: "M1183 193 L1204 208 L1181 223"; background: none; border: 5px solid $ink; delay: 1850; in: draw {duration: 0.2})
 p#j_lab(left: "33;220;393;640;1073"; top: 157px; width: 147px; font-size: 17px; color: $ink2; text-align: center; white-space: nowrap; delay: 600; in: {y:5, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.18}}) ×5 記録をはじめる;毎日つける;記録がたまる;月末・予算;目標を達成
 loop#j_loop1(left: 500px; top: 249px; width: 94px; height: 78px; d: 450; border: 6px solid $red)
 # hf の boltD (32x70 @1920 = 21x47) を canvas px の素の path で (名の bolt は縦横比を保って枠の幅に縮み半分の大きさになる)
-shape#j_bolt1(path: "M573.3,225.3 L562.6,250.7 L572.0,250.7 L566.6,272.0 L584.0,244.0 L574.6,244.0 L580.0,225.3 Z"; background: #FFD633F2; border: 3px solid $red; in: draw,350)
+shape#j_bolt1(path: "M573.3,225.3 L562.6,250.7 L572.0,250.7 L566.6,272.0 L584.0,244.0 L574.6,244.0 L580.0,225.3 Z"; background: #FFD633F2; border: 3px solid $red; in: draw {duration: 0.35})
 loop#j_loop2(left: 926px; top: 260px; width: 94px; height: 78px; d: 450; border: 6px solid $red)
-shape#j_bolt2(path: "M1000.0,236.0 L989.3,261.4 L998.7,261.4 L993.3,282.7 L1010.7,254.7 L1001.3,254.7 L1006.7,236.0 Z"; background: #FFD633F2; border: 3px solid $red; in: draw,350)
+shape#j_bolt2(path: "M1000.0,236.0 L989.3,261.4 L998.7,261.4 L993.3,282.7 L1010.7,254.7 L1001.3,254.7 L1006.7,236.0 Z"; background: #FFD633F2; border: 3px solid $red; in: draw {duration: 0.35})
 mcard#mc1(left: 347px; width: 407px; transform: rotate(-.8deg); b: "1"; t: "記録を3日以上ためた後の再開"; n: "7{nu}人{/}"; brk: "入力疲れ5・分類迷子2"; why: "たまった分を思い出せず、[br]「抜けがある家計簿」に戻る気がしなくなる")
   div#chips(left: "167;197;227;257;287;317;347"; top: 88px; width: 25px; height: 25px; border-radius: 1px 1px 5px 1px; background: "$yel;$yel;$yel;$yel;$yel;$blu;$blu"; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.06}}) ×7
 mcard#mc2(left: 780px; width: 427px; transform: rotate(.9deg); b: "2"; t: "初めて予算を超えた月の通知"; n: "4{nu}人{/}"; brk: "見て落ち込む2・分類迷子1・用済み1"; why: "「開くたびに怒られている気がして、[br]開かなくなった」（見て落ち込む）"; in: {y:-20, scale:1.14, rotation:6, opacity:0, duration:.55, ease:'back.out(1.6)'})
@@ -345,20 +345,20 @@ ocard#oc3(left: 859px; c: $pnk; transform: rotate(-.7deg); no: "3"; tt: "責め�
     p#t1(left: 28px; top: 111px; font-size: 17px; white-space: nowrap) 来月の調整案
     p#t2(left: 28px; top: 137px; font-size: 14px; color: $ink2; white-space: nowrap) ここを少し見直してみませんか？
   li#li1(left: 29px; top: 280px; t: "予算超過を赤字で示すより、[br]来月の調整案として見せる")
-shape#o_x1(path: "M1079 311 L1165 284"; background: none; border: 5px solid $red; overlap: oc3; in: draw,300)
-shape#o_x2(path: "M1080 284 L1164 311"; background: none; border: 5px solid $red; overlap: oc3; in: draw,300)
+shape#o_x1(path: "M1079 311 L1165 284"; background: none; border: 5px solid $red; overlap: oc3; in: draw {duration: 0.3})
+shape#o_x2(path: "M1080 284 L1164 311"; background: none; border: 5px solid $red; overlap: oc3; in: draw {duration: 0.3})
 
 # concl — 3 枚の帯の付箋を文の頭で 1 枚ずつ (題を拭き出し・要の語に赤い下線)・要の語で右端に赤いチェック・右にチームの絵・最後に桃の付箋の署名
 section#concl(stagger: {each:0})
 btitle#bt8(n: "07"; t: "結論"; s: "デザインで直すべきところ")
 img#e_team(left: 960px; top: 200px; width: 280px; height: 187px; fit: contain; main: none; delay: 500; in: {scale:.9, y:11, opacity:0, duration:.8, ease:'power3.out'}) [transparent]壁の前に立つ 3 人の小さなプロダクトデザインチームが、色とりどりの白紙の付箋を貼り、マーカーで付箋の間に矢印を描いている。協力的で楽しげ。人物と付箋を枠いっぱいに収め、余白を作らない
 ccard#cs1(top: 148px; c: $org; transform: rotate(-.6deg); n: "1"; h: "やめる人の半分以上は、最初の1か月"; s: "2週目から記録が減り始める（1週目 5.8日 → 4週目 1.3日）")
-  shape#u(left: 531px; top: 66px; width: 200px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw,500)
+  shape#u(left: 531px; top: 66px; width: 200px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw {duration: 0.5})
 ccard#cs2(top: 308px; c: $yel; transform: rotate(.5deg); n: "2"; h: "離脱の11/12は、2つの瞬間に集まる"; s: "→ 機能より「ためた後の再開」「初めての予算超過」の体験を直す")
-  shape#u(left: 417px; top: 66px; width: 170px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw,500)
+  shape#u(left: 417px; top: 66px; width: 170px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw {duration: 0.5})
 ccard#cs3(top: 468px; c: $mnt; transform: rotate(-.4deg); n: "3"; h: "続く人は「だいたいでいい」"; s: "正確さを求める設計が、離脱を生んでいる")
-  shape#u(left: 269px; top: 66px; width: 333px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw,500)
-shape#ck(left: 872px; top: "195;355;515"; width: 44px; height: 38px; path: check; background: none; border: 6px solid $red; in: draw,350) ×3
+  shape#u(left: 269px; top: 66px; width: 333px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw {duration: 0.5})
+shape#ck(left: 872px; top: "195;355;515"; width: 44px; height: 38px; path: check; background: none; border: 6px solid $red; in: draw {duration: 0.35}) ×3
 note#e_sign(left: 964px; top: 427px; width: 273px; height: 153px; c: $pnk; transform: rotate(2deg); in: {y:-31, scale:1.14, rotation:8, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#a(left: 23px; top: 20px; font-size: 17px; line-height: 1.35; color: $ink2) 定性調査レポート[br]家計簿アプリ（架空）
   p#b(left: 23px; top: 73px; font-size: 31px; font-family: m) ポケットノート

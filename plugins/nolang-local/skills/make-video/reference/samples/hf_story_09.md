@@ -56,63 +56,63 @@ subtitle(font-size: 31px; bottom: 44px; width: 1067px; background: none; color: 
 def shade() = div(inset: 0; border-radius: 0px; border: none; box-shadow: none; padding: 0px; background: linear(#0000009E,#00000040@34%,#00000000@55%,right))
 # 場面の札 (区分 > 名称 > 補足): 朱の縦の罫が上から伸び、区分が左から・名称が左から拭われ・補足がせり上がり、切替の前に揃って消える
 def scene_label(when, what, where) = group(left: 75px; top: 61px)
-  shape#bar(left: 0px; top: 4px; width: 5px; height: 145px; background: $shu; in: wipe,down,400,ease=power3.out; out: fade,350)
-  p#when(left: 23px; top: 0px; content: {when}; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.22em; text-shadow: 0px 1px 7px #000000B3; in: {x:-16, opacity:0, duration:0.45, ease:'power2.out', delay:0.08}; out: fade,350)
-  p#what(left: 23px; top: 36px; content: {what}; font-size: 69px; font-family: s; letter-spacing: 0.06em; text-shadow: 0px 3px 16px #000000A6; in: wipe,right,700,ease=power2.inOut,delay=150; out: fade,350)
-  p#where(left: 23px; top: 124px; content: {where}; font-size: 21px; color: #F1ECE2; letter-spacing: 0.08em; text-shadow: 0px 1px 8px #000000CC; in: {y:8, opacity:0, duration:0.5, ease:'power2.out', delay:0.45}; out: fade,350)
+  shape#bar(left: 0px; top: 4px; width: 5px; height: 145px; background: $shu; in: wipe {dir: 'down', duration: 0.4, ease: 'power3.out'}; out: fade {duration: 0.35})
+  p#when(left: 23px; top: 0px; content: {when}; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.22em; text-shadow: 0px 1px 7px #000000B3; in: {x:-16, opacity:0, duration:0.45, ease:'power2.out', delay:0.08}; out: fade {duration: 0.35})
+  p#what(left: 23px; top: 36px; content: {what}; font-size: 69px; font-family: s; letter-spacing: 0.06em; text-shadow: 0px 3px 16px #000000A6; in: wipe {dir: 'right', duration: 0.7, ease: 'power2.inOut', delay: 0.15}; out: fade {duration: 0.35})
+  p#where(left: 23px; top: 124px; content: {where}; font-size: 21px; color: #F1ECE2; letter-spacing: 0.08em; text-shadow: 0px 1px 8px #000000CC; in: {y:8, opacity:0, duration:0.5, ease:'power2.out', delay:0.45}; out: fade {duration: 0.35})
 # 全編の質感: 周辺減光 (写真の上・文字と札の下) + 動く grain (最前面)
 veil#vignette(background: radial(#00000000@55%,#0000006B@100%); in: none)
-veil#grain(grain: 0.07; color: #00000000; z-index: front; in: none; main: noise,x=4,y=4,freq_ms=100)
+veil#grain(grain: 0.07; color: #00000000; z-index: front; in: none; main: noise {x: 4, y: 4, period: 0.1})
 
 # 開幕: 黒から明ける夜明けの騎馬の列に塵が漂い、法螺貝で語りが始まる
 section#open
-img#open_photo(inset: 0; content: @dawn; main: kb,1.04@37%,22%>1.17@59%,55%,ease=sine.inOut)
+img#open_photo(inset: 0; content: @dawn; main: kb {scale: [1.04, 1.17], focus: ['37% 22%', '59% 55%'], ease:'sine.inOut'})
 # 塵 22 粒 (粒ごとの位置・大きさ・濃さと、場面の尺で漂う向き)
 shape#open_dust.ellipse.bleed(left: "193;48;286;1099;745;871;895;1255;855;742;898;29;317;1049;193;5;791;502;208;33;157;439"; top: "453;319;438;231;445;315;203;126;522;333;450;337;293;583;161;310;468;298;262;589;574;216"; width: "3.3;4;2.5;2.2;2.7;2.8;5.2;3.1;2.1;4.4;2.3;4.7;2.5;5.5;5.8;3.1;4.1;5.2;2.9;3.5;3.5;2.4"; height: "3.3;4;2.5;2.2;2.7;2.8;5.2;3.1;2.1;4.4;2.3;4.7;2.5;5.5;5.8;3.1;4.1;5.2;2.9;3.5;3.5;2.4"; background: #FFF0D6F2; box-shadow: 0px 0px 4px 1px #FFE2B48C; opacity: "0.38;0.21;0.39;0.22;0.38;0.40;0.37;0.46;0.50;0.53;0.48;0.22;0.21;0.33;0.27;0.39;0.51;0.41;0.18;0.23;0.35;0.24"; in: none; main: "ramp,x=-3,y=-44;ramp,x=7,y=5;ramp,x=3,y=14;ramp,x=-12,y=4;ramp,x=-53,y=-44;ramp,x=12,y=-29;ramp,x=83,y=-1;ramp,x=-38,y=-17;ramp,x=-11,y=-4;ramp,x=16,y=-5;ramp,x=-16,y=-23;ramp,x=-54,y=1;ramp,x=11,y=-13;ramp,x=-4,y=9;ramp,x=17,y=-10;ramp,x=96,y=-4;ramp,x=67,y=8;ramp,x=-54,y=-44;ramp,x=-39,y=-42;ramp,x=-22,y=-26;ramp,x=17,y=-43;ramp,x=-60,y=13") ×22
 # 字幕の下の陰 (最初の台詞の手前で出て、エンドカードで消える)
-veil#sub_shade.sticky(background: linear(#00000000@72%,#0000009E,bottom); z-index: front; in: fade,600; out: fade,900)
+veil#sub_shade.sticky(background: linear(#00000000@72%,#0000009E,bottom); z-index: front; in: fade {duration: 0.6}; out: fade {duration: 0.9})
 
 # 突進: 閃光と太鼓で切り替わり、場面ごと揺れる写真の上に「約 400 騎」が数えて上がる
 section#charge
 veil#charge_fl(color: #FFFFFF; opacity: 0.7; z: curtain; in: none)
-group#charge_shake(left: 0px; top: 0px; width: 1280px; height: 720px; main: noise,x=3,y=3,freq_ms=70)
-img#charge_shake.photo(inset: 0; main: kb,1.06>1.24@46%,43%,ease=power1.in) [photo]Low-angle dynamic photograph of a group of Japanese samurai riders in colorful traditional armor and helmets galloping toward the camera across a green grass field, tall colorful banners with simple geometric crest designs fluttering on their backs, horses with ornate traditional Japanese tack, clods of earth and dust flying, bright late-morning sunlight, slight motion blur on the hooves. Photorealistic sports documentary photograph with a telephoto lens. No readable text, no letters.
+group#charge_shake(left: 0px; top: 0px; width: 1280px; height: 720px; main: noise {x: 3, y: 3, period: 0.07})
+img#charge_shake.photo(inset: 0; main: kb {scale: [1.06, 1.24], focus: ['', '46% 43%'], ease:'power1.in'}) [photo]Low-angle dynamic photograph of a group of Japanese samurai riders in colorful traditional armor and helmets galloping toward the camera across a green grass field, tall colorful banners with simple geometric crest designs fluttering on their backs, horses with ornate traditional Japanese tack, clods of earth and dust flying, bright late-morning sunlight, slight motion blur on the hooves. Photorealistic sports documentary photograph with a telephoto lens. No readable text, no letters.
 shade#charge_shade
 group#riders(left: 79px; top: 380px; in: {y:16, opacity:0, duration:0.4, ease:'power2.out'})
-  p#cap(left: 4px; top: 0px; font-size: 21px; font-family: k; color: $gold; letter-spacing: 0.24em; out: fade,250) 甲冑の騎馬武者
-  p#pre(left: 0px; top: 124px; overlap: riders.num; font-size: 43px; font-family: s; text-shadow: 0px 4px 19px #00000099; out: fade,250) 約
-  p#num(left: 48px; top: 31px; font-size: 157px; font-family: s; letter-spacing: -0.01em; palt: off; text-shadow: 0px 4px 19px #00000099; out: fade,250) [count:400 roll ms=1150,1000,850]
-  p#unit(left: 330px; top: 100px; overlap: riders.num; font-size: 80px; font-family: s; text-shadow: 0px 4px 19px #00000099; out: fade,250) 騎
+  p#cap(left: 4px; top: 0px; font-size: 21px; font-family: k; color: $gold; letter-spacing: 0.24em; out: fade {duration: 0.25}) 甲冑の騎馬武者
+  p#pre(left: 0px; top: 124px; overlap: riders.num; font-size: 43px; font-family: s; text-shadow: 0px 4px 19px #00000099; out: fade {duration: 0.25}) 約
+  p#num(left: 48px; top: 31px; font-size: 157px; font-family: s; letter-spacing: -0.01em; palt: off; text-shadow: 0px 4px 19px #00000099; out: fade {duration: 0.25}) [count:400 roll ms=1150,1000,850]
+  p#unit(left: 330px; top: 100px; overlap: riders.num; font-size: 80px; font-family: s; text-shadow: 0px 4px 19px #00000099; out: fade {duration: 0.25}) 騎
 
 # 題: 鎧の武者の寄りが暗く沈み、閃光と太鼓で題字が着地・英字は字間が締まり、地名がせり上がる
 section#title
 veil#title_fl(color: #FFFFFF; opacity: 0.38; z: curtain; in: none)
-img#title_photo(inset: 0; main: kb,1.16@58%,47%>1.02,ease=power2.out) [photo]Close-up portrait of a mounted samurai warrior at a traditional festival in Japan: ornate black lacquered armor with dark blue silk lacing, kabuto helmet with a golden crescent crest, determined eyes, gloved hands on the reins, a tall black banner fluttering behind him showing a simple white crest of one large circle surrounded by eight smaller circles, shallow depth of field with bokeh of other riders and colorful flags in the background, warm early-summer light. Photorealistic editorial photograph. No text, no letters, no flower crests.
-veil#title_dim(opacity: 0.52; color: #000000; in: fade,500,ease=power2.out)
+img#title_photo(inset: 0; main: kb {scale: [1.16, 1.02], focus: '58% 47%', ease:'power2.out'}) [photo]Close-up portrait of a mounted samurai warrior at a traditional festival in Japan: ornate black lacquered armor with dark blue silk lacing, kabuto helmet with a golden crescent crest, determined eyes, gloved hands on the reins, a tall black banner fluttering behind him showing a simple white crest of one large circle surrounded by eight smaller circles, shallow depth of field with bokeh of other riders and colorful flags in the background, warm early-summer light. Photorealistic editorial photograph. No text, no letters, no flower crests.
+veil#title_dim(opacity: 0.52; color: #000000; in: fade {duration: 0.5, ease: 'power2.out'})
 # 題字: 朱に染めた筆の帯が左から拭われ、1 字ずつ拡大とぼかしから着地 (GSAP の stagger:.07 を 1 字ずつ 70 ms で)
 group#logo(left: 0px; top: 0px; width: 1280px; height: 720px)
-  img#brush(left: 120px; top: 151px; width: 1040px; height: 390px; content: @brush; filter: look:#B3261E; in: wipe,right,450,ease=power2.inOut; out: fade,500)
-  p#jp(cx: 640px; cy: 314px; font-size: 157px; font-family: y; letter-spacing: 0.06em; text-shadow: 0px 4px 20px #00000073; in: scale=1.5,blur=8,opacity=0,duration=500,ease=power3.out,delay=220,stagger=70,unit=grapheme; out: fade,500) 相馬野馬追
-  p#en(cx: 640px; cy: 432px; font-size: 23px; font-family: k; letter-spacing: 0.62em; in: {letter_spacing:0.48, opacity:0, duration:1, ease:'power2.out', delay:0.67}; out: fade,500) SOMA NOMAOI
-p#region(cx: 640px; cy: 472px; font-size: 27px; font-family: sm; color: $cream; letter-spacing: 0.3em; in: {y:9, opacity:0, duration:0.6, ease:'power2.out'}; out: fade,500) 福島県・相馬地方
+  img#brush(left: 120px; top: 151px; width: 1040px; height: 390px; content: @brush; filter: look:#B3261E; in: wipe {dir: 'right', duration: 0.45, ease: 'power2.inOut'}; out: fade {duration: 0.5})
+  p#jp(cx: 640px; cy: 314px; font-size: 157px; font-family: y; letter-spacing: 0.06em; text-shadow: 0px 4px 20px #00000073; in: scale=1.5,blur=8,opacity=0,duration=500,ease=power3.out,delay=220,stagger=70,unit=grapheme; out: fade {duration: 0.5}) 相馬野馬追
+  p#en(cx: 640px; cy: 432px; font-size: 23px; font-family: k; letter-spacing: 0.62em; in: {letter_spacing:0.48, opacity:0, duration:1, ease:'power2.out', delay:0.67}; out: fade {duration: 0.5}) SOMA NOMAOI
+p#region(cx: 640px; cy: 472px; font-size: 27px; font-family: sm; color: $cream; letter-spacing: 0.3em; in: {y:9, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.5}) 福島県・相馬地方
 
 # 起源: 墨絵に替わり、縦書きの 2 列が上から拭われ、朱の落款「伝承」が押される
 section#origin
-img#origin_ink(inset: 0; main: kb,1.12@15%,50%>1.12@76%,50%) Traditional Japanese suiboku ink wash painting on aged washi paper: ancient warriors on horseback chasing herds of wild horses across a vast open plain as military training, dynamic sweeping brush strokes, rising dust rendered as ink mist, distant low hills, monochrome sumi ink with a subtle warm sepia paper tone, generous empty space on the right side. No text, no seals, no letters, no signature.
-p#origin_years(left: 1002px; top: 66px; font-size: 88px; font-family: s; color: $ink; letter-spacing: 0.08em; writing-mode: vertical-rl; in: wipe,down,1000,ease=power2.inOut; out: fade,350) 千年以上前
-p#origin_lead(left: 1137px; top: 70px; font-size: 36px; font-family: sm; color: $ink; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe,down,700,ease=power2.inOut; out: fade,350) その起源は
-p#origin_seal(left: 1107px; top: 547px; width: 61px; font-size: 23px; font-family: s; color: $shu; line-height: 1.05; text-align: center; padding: 6px 0px; background: none; border: 3px solid $shu; border-radius: 7px; opacity: 0.92; overlap: origin_years,subtitle; transform: rotate(-4deg); in: {scale:1.7, rotation:-10, opacity:0, duration:0.22, ease:'power4.in'}; out: fade,350) 伝[br]承
+img#origin_ink(inset: 0; main: kb {scale: [1.12, 1.12], focus: ['15% 50%', '76% 50%']}) Traditional Japanese suiboku ink wash painting on aged washi paper: ancient warriors on horseback chasing herds of wild horses across a vast open plain as military training, dynamic sweeping brush strokes, rising dust rendered as ink mist, distant low hills, monochrome sumi ink with a subtle warm sepia paper tone, generous empty space on the right side. No text, no seals, no letters, no signature.
+p#origin_years(left: 1002px; top: 66px; font-size: 88px; font-family: s; color: $ink; letter-spacing: 0.08em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 1, ease: 'power2.inOut'}; out: fade {duration: 0.35}) 千年以上前
+p#origin_lead(left: 1137px; top: 70px; font-size: 36px; font-family: sm; color: $ink; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.7, ease: 'power2.inOut'}; out: fade {duration: 0.35}) その起源は
+p#origin_seal(left: 1107px; top: 547px; width: 61px; font-size: 23px; font-family: s; color: $shu; line-height: 1.05; text-align: center; padding: 6px 0px; background: none; border: 3px solid $shu; border-radius: 7px; opacity: 0.92; overlap: origin_years,subtitle; transform: rotate(-4deg); in: {scale:1.7, rotation:-10, opacity:0, duration:0.22, ease:'power4.in'}; out: fade {duration: 0.35}) 伝[br]承
 
 # 祖: 平将門の墨絵・名が縦に拭われ、読みと「相馬氏の遠祖とされる」が続き、「軍事訓練」で絵が武者へ寄る
 section#masakado
-img#masakado_ink(inset: 0; main: kb,1>1.1@86%,59%) Traditional Japanese suiboku ink wash painting on aged washi paper: a 10th-century Japanese warlord in classical armor on horseback atop a small hill, looking out over a wide plain where wild horses run free, dramatic clouds, expressive confident brush strokes, monochrome ink with a faint vermilion accent on the armor cords, empty space on the left side. No text, no letters, no seals, no signature.
-p#masakado_note(left: 100px; top: 160px; font-size: 29px; font-family: sm; color: $ink2; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe,down,900,ease=power2.inOut; out: fade,400) 相馬氏の遠祖とされる
-p#masakado_name(left: 144px; top: 80px; font-size: 100px; font-family: s; color: $ink; letter-spacing: 0.12em; writing-mode: vertical-rl; in: wipe,down,900,ease=power2.inOut; out: fade,400) 平将門
-p#masakado_ruby(left: 262px; top: 91px; font-size: 20px; font-family: sm; color: $sepia; letter-spacing: 0.32em; writing-mode: vertical-rl; in: fade,600; out: fade,400) たいらのまさかど
+img#masakado_ink(inset: 0; main: kb {scale: [1, 1.1], focus: '86% 59%'}) Traditional Japanese suiboku ink wash painting on aged washi paper: a 10th-century Japanese warlord in classical armor on horseback atop a small hill, looking out over a wide plain where wild horses run free, dramatic clouds, expressive confident brush strokes, monochrome ink with a faint vermilion accent on the armor cords, empty space on the left side. No text, no letters, no seals, no signature.
+p#masakado_note(left: 100px; top: 160px; font-size: 29px; font-family: sm; color: $ink2; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 相馬氏の遠祖とされる
+p#masakado_name(left: 144px; top: 80px; font-size: 100px; font-family: s; color: $ink; letter-spacing: 0.12em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 平将門
+p#masakado_ruby(left: 262px; top: 91px; font-size: 20px; font-family: sm; color: $sepia; letter-spacing: 0.32em; writing-mode: vertical-rl; in: fade {duration: 0.6}; out: fade {duration: 0.4}) たいらのまさかど
 
 # 現在: 墨絵と同じ構図の丘の武者の実写に、国指定の判子が押印の勢いで落ちて揺れる
 section#hill
-img#hill_photo(inset: 0; main: kb,1.08@86%,59%>1.17@84%,58%) [photo]Photorealistic photograph: a samurai rider in full armor with a tall banner on his back, on horseback atop a small grassy hill on the right side of the frame, seen from behind at three-quarter view, looking out over a wide green festival field on the left where hundreds of mounted samurai with colorful banners gather, distant low mountains, early summer, bright sky with soft clouds. Composition mirrors a classical ink painting: rider on the right, open plain on the left. No text, no letters.
+img#hill_photo(inset: 0; main: kb {scale: [1.08, 1.17], focus: ['86% 59%', '84% 58%']}) [photo]Photorealistic photograph: a samurai rider in full armor with a tall banner on his back, on horseback atop a small grassy hill on the right side of the frame, seen from behind at three-quarter view, looking out over a wide green festival field on the left where hundreds of mounted samurai with colorful banners gather, distant low mountains, early summer, bright sky with soft clouds. Composition mirrors a classical ink painting: rider on the right, open plain on the left. No text, no letters.
 div#hill_shade(left: 0px; top: 0px; width: 1280px; height: 280px; background: linear(#0000008C,#00000000,bottom))
 # 文化財の印: 朱の板 + 白の縁 + 外の朱の輪 (outline)・押印の勢いで落ちて揺れる
 div#seal(left: 80px; top: 73px; width: 540px; height: 127px; background: #B3261EF0; border: 2px solid #FFEBDCD9; border2: #B3261EF0,1,4; border-radius: 4px; box-shadow: 0px 7px 27px #00000073; transform: rotate(-2deg); in: {scale:1.75, rotation:-5, opacity:0, duration:0.2, ease:'power4.in'})
@@ -122,29 +122,29 @@ div#seal(left: 80px; top: 73px; width: 540px; height: 127px; background: #B3261E
 
 # 3 日間: 和紙の地の中央に見出しが出て定位置へ縮み、金の罫が伸びて 1〜3 日目の札が語ごとに出る・切替の前に揃って消える
 section#schedule
-img#schedule_washi(inset: 0; filter: bright:0.78; main: kb,1.04>1.1@66%,50%) [photo]Flat top-down macro photograph of handmade Japanese washi paper dyed deep charcoal black with a subtle indigo tint, visible long kozo fibers and soft uneven texture, evenly lit, no objects, no text, no folds, seamless full-frame texture.
+img#schedule_washi(inset: 0; filter: bright:0.78; main: kb {scale: [1.04, 1.1], focus: ['', '66% 50%']}) [photo]Flat top-down macro photograph of handmade Japanese washi paper dyed deep charcoal black with a subtle indigo tint, visible long kozo fibers and soft uneven texture, evenly lit, no objects, no text, no folds, seamless full-frame texture.
 # 見出しは 1.5 倍で中央に出て、1 枚目の札の前に左上の定位置へ縮む
 group#schedule_head(left: 253px; top: 243px; width: 900px; height: 165px; in: {opacity:0, scale:1.03, duration:0.8, ease:'power2.out'})
-  p#kick(left: 0px; top: 0px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade,400) 開催時期
-  p#head(left: 0px; top: 36px; font-size: 84px; font-family: s; letter-spacing: 0.06em; out: fade,400) 毎年5月下旬 {r}・{/} 3日間
-shape#schedule_rule(left: 100px; top: 200px; width: 1080px; height: 2px; background: linear(#D8B26A,#D8B26A40,right); in: wipe,right,4200,ease=power1.inOut; out: fade,400)
-div#day_card(left: "100;473;847"; top: 221px; width: 333px; height: 383px; border-radius: 0px; padding: 0px; background: #0E0C0BD1; border: 1px solid #D8B26A73; in: {y:47, opacity:0, duration:0.6, ease:'power3.out'}; out: fade,400) ×3
-  img#photo(left: 0px; top: 0px; width: 333px; height: 200px; content: "@dawn;@sky;@noma"; main: kb,1.16>1.0,ease=power1.out; out: fade,400)
-  shape#tick.ellipse(left: 23px; top: 193px; width: 15px; height: 15px; background: $shu; border: 2px solid $gold; out: fade,400)
-  p#day(left: 23px; top: 206px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.2em; out: fade,400) {dn}1{/}日目;{dn}2{/}日目;{dn}3{/}日目
-  p#event(left: 23px; top: 252px; font-size: 40px; font-family: s; letter-spacing: 0.06em; out: fade,400) 出陣・宵乗り;本祭り;野馬懸
-  p#detail(left: 23px; top: 318px; width: 300px; overlap: day_card.event,day_card.day; font-size: 18px; color: $gray; letter-spacing: 0.06em; out: fade,400) 出陣式 ・ 宵乗り競馬;お行列 ・ 甲冑競馬 ・ 神旗争奪戦;相馬小高神社
+  p#kick(left: 0px; top: 0px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) 開催時期
+  p#head(left: 0px; top: 36px; font-size: 84px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) 毎年5月下旬 {r}・{/} 3日間
+shape#schedule_rule(left: 100px; top: 200px; width: 1080px; height: 2px; background: linear(#D8B26A,#D8B26A40,right); in: wipe {dir: 'right', duration: 4.2, ease: 'power1.inOut'}; out: fade {duration: 0.4})
+div#day_card(left: "100;473;847"; top: 221px; width: 333px; height: 383px; border-radius: 0px; padding: 0px; background: #0E0C0BD1; border: 1px solid #D8B26A73; in: {y:47, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration: 0.4}) ×3
+  img#photo(left: 0px; top: 0px; width: 333px; height: 200px; content: "@dawn;@sky;@noma"; main: kb {scale: [1.16, 1], ease:'power1.out'}; out: fade {duration: 0.4})
+  shape#tick.ellipse(left: 23px; top: 193px; width: 15px; height: 15px; background: $shu; border: 2px solid $gold; out: fade {duration: 0.4})
+  p#day(left: 23px; top: 206px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.2em; out: fade {duration: 0.4}) {dn}1{/}日目;{dn}2{/}日目;{dn}3{/}日目
+  p#event(left: 23px; top: 252px; font-size: 40px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) 出陣・宵乗り;本祭り;野馬懸
+  p#detail(left: 23px; top: 318px; width: 300px; overlap: day_card.event,day_card.day; font-size: 18px; color: $gray; letter-spacing: 0.06em; out: fade {duration: 0.4}) 出陣式 ・ 宵乗り競馬;お行列 ・ 甲冑競馬 ・ 神旗争奪戦;相馬小高神社
 
 # 本祭り: 行列の実写に左からの陰と場面の札・「騎馬武者の行列」で絵が列へ寄る
 section#procession
-img#procession_photo(inset: 0; content: @procession; main: kb,1.02@100%,50%>1.13@38%,54%)
+img#procession_photo(inset: 0; content: @procession; main: kb {scale: [1.02, 1.13], focus: ['100% 50%', '38% 54%']})
 shade#procession_shade
 scene_label#procession_label(when: "2日目・午前"; what: "お行列"; where: "野馬追通り{g} → {/}雲雀ヶ原祭場地")
 
 # 甲冑競馬: 写真と塵が場面ごと小刻みに揺れ、塵が横へ大きく流れる・場面の札
 section#race
-group#race_shake(left: 0px; top: 0px; width: 1280px; height: 720px; main: noise,x=3,y=3,freq_ms=70)
-img#race_shake.photo(inset: 0; main: kb,1.16@79%,50%>1.22@33%,50%) [photo]Action photograph of an armored horse race at a traditional Japanese festival: riders in samurai armor without helmets, wearing white headbands, with tall colorful banners streaming from their backs, galloping at full speed side by side on a dirt track, thick clouds of dust kicked up behind them, spectators on a grassy hillside in the background, bright midday sun. Photorealistic sports photograph, fast shutter, panning motion blur in the background. No readable text, no letters.
+group#race_shake(left: 0px; top: 0px; width: 1280px; height: 720px; main: noise {x: 3, y: 3, period: 0.07})
+img#race_shake.photo(inset: 0; main: kb {scale: [1.16, 1.22], focus: ['79% 50%', '33% 50%']}) [photo]Action photograph of an armored horse race at a traditional Japanese festival: riders in samurai armor without helmets, wearing white headbands, with tall colorful banners streaming from their backs, galloping at full speed side by side on a dirt track, thick clouds of dust kicked up behind them, spectators on a grassy hillside in the background, bright midday sun. Photorealistic sports photograph, fast shutter, panning motion blur in the background. No readable text, no letters.
 shade#race_shake.shade
 # 塵 16 粒 (横へ大きく流れる)
 shape#race_shake.dust.ellipse.bleed(left: "717;806;53;676;1078;1277;90;1;806;151;573;273;505;989;769;234"; top: "620;540;656;90;372;664;523;182;531;205;170;219;577;255;281;148"; width: "3.8;4.1;4.8;2.1;3.7;3.1;3.1;5.4;2.3;5;4.3;3.7;2.9;3;3;5.5"; height: "3.8;4.1;4.8;2.1;3.7;3.1;3.1;5.4;2.3;5;4.3;3.7;2.9;3;3;5.5"; background: #FFF0D6F2; box-shadow: 0px 0px 4px 1px #FFE2B48C; opacity: "0.37;0.29;0.42;0.27;0.36;0.44;0.49;0.35;0.21;0.20;0.23;0.48;0.22;0.21;0.53;0.48"; in: none; main: "ramp,x=173,y=-60;ramp,x=-244,y=6;ramp,x=197,y=-63;ramp,x=-295,y=-31;ramp,x=236,y=-31;ramp,x=-55,y=-56;ramp,x=5,y=22;ramp,x=504,y=-38;ramp,x=-41,y=23;ramp,x=349,y=-61;ramp,x=221,y=-68;ramp,x=-65,y=14;ramp,x=511,y=-57;ramp,x=-244,y=-18;ramp,x=86,y=-19;ramp,x=-110,y=-60") ×16
@@ -154,37 +154,37 @@ scene_label#race_label(when: "2日目・正午から"; what: "甲冑競馬"; whe
 section#sky
 veil#sky_fl(color: #FFFFFF; opacity: 0.55; z: curtain; in: none)
 veil#sky_fl2(color: #FFFFFF; opacity: 0.32; z: curtain; in: none)
-img#sky_photo(inset: 0; content: @sky; main: kb,1.3@50%,96%>1.3@50%,7%,ease=sine.inOut)
+img#sky_photo(inset: 0; content: @sky; main: kb {scale: [1.3, 1.3], focus: ['50% 96%', '50% 7%'], ease:'sine.inOut'})
 # 争奪の寄り: 語で切り替わり、2.2 秒だけ揺れる
-group#scramble(left: 0px; top: 0px; width: 1280px; height: 720px; in: none; main: noise,x=4,y=4,freq_ms=70,window=0,2200)
-img#scramble.photo(inset: 0; in: none; main: kb,1.06>1.2@58%,41%,ease=power1.out) [photo]Intense close action photograph: several samurai riders on horseback crowd together, reaching up high with long riding whips to catch a small sacred flag fluttering down from the sky, horses jostling, banners on their backs tangling, dust lit by the sun, a dense crowd of riders behind them. Photorealistic, telephoto, dynamic diagonal composition. No readable text, no letters.
+group#scramble(left: 0px; top: 0px; width: 1280px; height: 720px; in: none; main: noise {x: 4, y: 4, period: 0.07, window: '0,2200'})
+img#scramble.photo(inset: 0; in: none; main: kb {scale: [1.06, 1.2], focus: ['', '58% 41%'], ease:'power1.out'}) [photo]Intense close action photograph: several samurai riders on horseback crowd together, reaching up high with long riding whips to catch a small sacred flag fluttering down from the sky, horses jostling, banners on their backs tangling, dust lit by the sun, a dense crowd of riders behind them. Photorealistic, telephoto, dynamic diagonal composition. No readable text, no letters.
 shade#sky_shade
 scene_label#sky_label(when: "2日目・午後1時から"; what: "神旗争奪戦"; where: "雲雀ヶ原祭場地")
 
 # 野馬懸: 神事の実写と場面の札・「素手で」で絵が馬を捕らえる手へ寄る
 section#noma
-img#noma_photo(inset: 0; content: @noma; main: kb,1.02>1.12@60%,58%)
+img#noma_photo(inset: 0; content: @noma; main: kb {scale: [1.02, 1.12], focus: ['', '60% 58%']})
 shade#noma_shade
 scene_label#noma_label(when: "3日目（最終日）"; what: "野馬懸"; where: "相馬小高神社")
 
 # 観覧の心得: ぼかした行列の上の暗い板に、2 つの決まりが語ごとに左から入り、板と中身が揃って消える
 section#manners
-img#manners_blur(inset: 0; content: @procession; filter: blur:16; main: kb,1.05>1.1)
+img#manners_blur(inset: 0; content: @procession; filter: blur:16; main: kb {scale: [1.05, 1.1]})
 veil#manners_dim(opacity: 0.42; color: #000000; in: none)
-div#manners_board(left: 200px; top: 113px; width: 880px; height: 400px; border-radius: 0px; padding: 0px; background: #0C0A09C7; border: 1px solid #D8B26A80; box-shadow: none; in: {y:20, opacity:0, duration:0.6, ease:'power2.out'}; out: fade,400)
-  p#kick(left: 53px; top: 43px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade,400) お行列を見るときは
-  p#head(left: 53px; top: 93px; font-size: 61px; font-family: s; letter-spacing: 0.1em; out: fade,400) 観覧の心得
-  div#rule(left: 53px; top: "190;280"; width: 780px; height: 61px; padding: 0px; background: none; border: none; box-shadow: none; in: {x:-24, opacity:0, duration:0.5, ease:'power3.out'}; out: fade,400) ×2
-    p#num(left: 0px; cy: 50%; width: 61px; height: 61px; font-size: 36px; font-family: s; text-align: center; vertical-align: center; background: $shu; border-radius: 99px; padding: 0px; out: fade,400) 一;二
-    p#words(left: 84px; cy: 50%; font-size: 41px; font-family: s; letter-spacing: 0.06em; out: fade,400) お行列を横切らない;高い所から見下ろさない{sm}（建物の2階など）{/}
+div#manners_board(left: 200px; top: 113px; width: 880px; height: 400px; border-radius: 0px; padding: 0px; background: #0C0A09C7; border: 1px solid #D8B26A80; box-shadow: none; in: {y:20, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.4})
+  p#kick(left: 53px; top: 43px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) お行列を見るときは
+  p#head(left: 53px; top: 93px; font-size: 61px; font-family: s; letter-spacing: 0.1em; out: fade {duration: 0.4}) 観覧の心得
+  div#rule(left: 53px; top: "190;280"; width: 780px; height: 61px; padding: 0px; background: none; border: none; box-shadow: none; in: {x:-24, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration: 0.4}) ×2
+    p#num(left: 0px; cy: 50%; width: 61px; height: 61px; font-size: 36px; font-family: s; text-align: center; vertical-align: center; background: $shu; border-radius: 99px; padding: 0px; out: fade {duration: 0.4}) 一;二
+    p#words(left: 84px; cy: 50%; font-size: 41px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) お行列を横切らない;高い所から見下ろさない{sm}（建物の2階など）{/}
 
 # 締め: 夕景の武者のシルエットに暗幕が降り、題字の組をもう一度 + 開催と会場の札 + URL (法螺貝と曲の山で終わる)
 section#finale
-img#finale_photo(inset: 0; main: kb,1>1.1@71%,63%) [photo]Silhouette of a lone mounted samurai with a tall banner on his back, standing on a gentle grassy hill against a vast golden sunset sky with dramatic glowing clouds, the horse's mane and the banner blowing in the wind, epic and peaceful mood. Photorealistic cinematic photograph, wide shot, the rider placed in the lower right third with large open sky. No text, no letters.
+img#finale_photo(inset: 0; main: kb {scale: [1, 1.1], focus: '71% 63%'}) [photo]Silhouette of a lone mounted samurai with a tall banner on his back, standing on a gentle grassy hill against a vast golden sunset sky with dramatic glowing clouds, the horse's mane and the banner blowing in the wind, epic and peaceful mood. Photorealistic cinematic photograph, wide shot, the rider placed in the lower right third with large open sky. No text, no letters.
 # エンドカード: 中央を残す暗幕 + 題字 (帯・1 字ずつ・字間が締まる英字)
-veil#end_dim(background: radial(#00000059@0%,#000000C7@100%,50%,45%); in: fade,900,ease=power1.inOut)
+veil#end_dim(background: radial(#00000059@0%,#000000C7@100%,50%,45%); in: fade {duration: 0.9, ease: 'power1.inOut'})
 group#end_logo(left: 0px; top: 0px; width: 1280px; height: 720px)
-  img#brush(left: 167px; top: 100px; width: 947px; height: 355px; content: @brush; filter: look:#B3261E; in: wipe,right,500,ease=power2.inOut)
+  img#brush(left: 167px; top: 100px; width: 947px; height: 355px; content: @brush; filter: look:#B3261E; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.inOut'})
   p#jp(cx: 640px; cy: 270px; font-size: 143px; font-family: y; letter-spacing: 0.06em; text-shadow: 0px 4px 20px #00000073; in: scale=1.45,blur=8,opacity=0,duration=500,ease=power3.out,delay=200,stagger=70,unit=grapheme) 相馬野馬追
   p#en(cx: 640px; cy: 411px; font-size: 23px; font-family: k; letter-spacing: 0.62em; in: {letter_spacing:0.48, opacity:0, duration:1, ease:'power2.out', delay:0.75}) SOMA NOMAOI
 group#end_info(left: 0px; top: 467px; width: 1280px; height: 40px; in: {y:11, opacity:0, duration:0.6, ease:'power2.out'})
@@ -192,7 +192,7 @@ group#end_info(left: 0px; top: 467px; width: 1280px; height: 40px; in: {y:11, op
   p#held(left: 288px; top: 2px; font-size: 27px; font-family: sm; letter-spacing: 0.08em) 毎年5月下旬の3日間
   p#venue_k(left: 599px; top: 6px; font-size: 19px; font-family: k; color: $dark; background: $gold; padding: 7px 9px 7px 12px; letter-spacing: 0.2em) 会場
   p#venue(left: 684px; top: 2px; font-size: 27px; font-family: sm; letter-spacing: 0.08em) 福島県 相馬市・南相馬市ほか
-p#end_url(cx: 640px; cy: 562px; font-size: 21px; color: $pale; letter-spacing: 0.14em; in: fade,600) 詳しくは 相馬野馬追 公式サイト（soma-nomaoi.jp）へ
+p#end_url(cx: 640px; cy: 562px; font-size: 21px; color: $pale; letter-spacing: 0.14em; in: fade {duration: 0.6}) 詳しくは 相馬野馬追 公式サイト（soma-nomaoi.jp）へ
 ```
 
 ```timeline.txt

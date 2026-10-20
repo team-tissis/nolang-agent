@@ -109,12 +109,12 @@ def concl(hd, d) = div(left: 64px; width: 867px; height: 80px; in: {x:-20, opaci
   p#d(left: 53px; top: 40px; font-size: 15px; font-family: m; color: $ink2; content: {d})
 
 # 全編の地 (根): 生成りに 32 px の方眼が 157 秒かけて左上へ流れる + 周辺の薄い陰
-div#bg_base.bleed(left: -80px; top: -80px; width: 1440px; height: 880px; background: $paper; pattern: grid,32,#1E2B3C0D; z-index: back; in: none; main: ramp,x=-64,y=-32)
+div#bg_base.bleed(left: -80px; top: -80px; width: 1440px; height: 880px; background: $paper; pattern: grid,32,#1E2B3C0D; z-index: back; in: none; main: ramp {x: -64, y: -32})
 veil#vig(background: radial(#F2EDE200@55%,#78644624@100%,50%,45%); z-index: back; in: none)
 
 # s01 問い: 走る人の絵が寄りから引き、左の空きに小札 → 明朝の 2 行の題 → 副題 → 「?」が回って弾む問い → 6 つの点の予告の板。「運動群」で全部を消して絵を紙色で覆い、研究デザインの図と 6 本 / 682 人を組む
 section#s01(stagger: {each:0})
-img#hero(inset: 0; subject: right 62%; room: left 36%; main: kb,1.1@72%,40%>1.0@70%,40%,ease=sine.out) 横長の絵。画面の右 3 分の 2 に、早朝のやわらかな光の川沿いの道を走る若い女性 (紺のジャケットと青緑のレギンス)。走る人の頭上と周りに、脳の形をした神経のネットワークの半透明の線画と、白紙の単語カードが数枚浮かび、記憶と学びを表す。画面の左 3 分の 1 は何も置かない淡い生成りの空の余白
+img#hero(inset: 0; subject: right 62%; room: left 36%; main: kb {scale: [1.1, 1], focus: ['72% 40%', '70% 40%'], ease:'sine.out'}) 横長の絵。画面の右 3 分の 2 に、早朝のやわらかな光の川沿いの道を走る若い女性 (紺のジャケットと青緑のレギンス)。走る人の頭上と周りに、脳の形をした神経のネットワークの半透明の線画と、白紙の単語カードが数枚浮かび、記憶と学びを表す。画面の左 3 分の 1 は何も置かない淡い生成りの空の余白
 div#s1_fade(inset: 0; background: linear(#F2EDE2F5,#F2EDE2DB@34%,#F2EDE200@62%,90); in: none)
 div#s1_dim(inset: 0; background: #F2EDE2E6; in: {opacity:0, duration:0.7, ease:'power2.inOut'})
 group#title(out: {opacity:0, duration:0.45, ease:'power2.in'})
@@ -135,14 +135,14 @@ div#teaser(left: 69px; top: 515px; width: 541px; height: 88px; background: #FBF8
 # 研究デザインの図: 参加者 → 無作為に 2 群 → 運動群 / 対照群 → 記憶テスト (矢印は語で左から描く)
 div#dg(left: 64px; top: 140px; width: 753px; height: 427px)
   dbox#pop(left: 0px; top: 167px; width: 153px; t: "参加者"; s: "研究ごとに募集")
-  shape#l1(left: 157px; top: 203px; width: 73px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; in: draw,400)
+  shape#l1(left: 157px; top: 203px; width: 73px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; in: draw {duration: 0.4})
   p#rand(left: 164px; top: 165px; font-size: 13px; line-height: 1.3; color: $ochre; in: up) 無作為に[br]2 群へ
-  shape#l2a(left: 209px; top: 162px; width: 93px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(-61.5deg); in: draw,350)
-  shape#l2b(left: 209px; top: 244px; width: 93px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(61.5deg); in: draw,350)
+  shape#l2a(left: 209px; top: 162px; width: 93px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(-61.5deg); in: draw {duration: 0.35})
+  shape#l2b(left: 209px; top: 244px; width: 93px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(61.5deg); in: draw {duration: 0.35})
   dbox#ex(left: 280px; top: 80px; width: 193px; t: "運動群"; s: "決められた運動をする"; bc: $teal; fl: $teal_l; tc: $teal)
   dbox#ct(left: 280px; top: 253px; width: 193px; t: "対照群"; s: "運動しない"; bc: $slate; fl: $slate_l; tc: #4F5966)
-  shape#l3(left: 462px; top: 157px; width: 131px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(38deg); in: draw,450)
-  shape#l4(left: 462px; top: 250px; width: 131px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(-38deg); in: draw,450)
+  shape#l3(left: 462px; top: 157px; width: 131px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(38deg); in: draw {duration: 0.45})
+  shape#l4(left: 462px; top: 250px; width: 131px; height: 12px; path: arrow_r,head=fill; background: $ink2; border: 2px solid $ink2; transform: rotate(-38deg); in: draw {duration: 0.45})
   dbox#test(left: 587px; top: 160px; width: 167px; height: 100px; t: "記憶テスト"; s: "成績の差を比べる")
   p#note(left: 0px; top: 393px; font-size: 13px; color: $brick; in: up) ※ 研究 A〜F はこの動画の解説用に設定した架空の研究です
 # 大きい数字 2 段 (上の黒い罫 + 題 + 桁ごとに回って止まる数字 + 単位)
@@ -249,12 +249,12 @@ group#ticks(in: {opacity:0, duration:0.4})
 shape#zero(left: 592px; top: 200px; width: 2px; height: 348px; path: line_v; border: 2px solid $brick; dash: 5,4; in: {scaleY:0, duration:0.6, ease:'power2.out', pivot:'top'})
 p#co0(left: 600px; top: 525px; font-size: 13px; color: $brick; in: {y:7, opacity:0, duration:0.4}; out: {opacity:0, duration:0.3}) 0 ＝ 差なし
 # 区間 (両端にかぎ・語で左から伸びる)・点の正方形の大きさ = まとめるときの重み
-shape#ci_a(path: "M608 219 L608 229 M608 224 L728 224 M728 219 L728 229"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
-shape#ci_b(path: "M623 263 L623 273 M623 268 L790 268 M790 263 L790 273"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
-shape#ci_c(path: "M578 307 L578 317 M578 312 L668 312 M668 307 L668 317"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
-shape#ci_d(path: "M648 351 L648 361 M648 356 L845 356 M845 351 L845 361"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
-shape#ci_e(path: "M515 395 L515 405 M515 400 L652 400 M652 395 L652 405"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
-shape#ci_f(path: "M577 439 L577 449 M577 444 L683 444 M683 439 L683 449"; background: none; border: 1.5px solid $ink; in: wipe,right,550,ease=power2.out)
+shape#ci_a(path: "M608 219 L608 229 M608 224 L728 224 M728 219 L728 229"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_b(path: "M623 263 L623 273 M623 268 L790 268 M790 263 L790 273"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_c(path: "M578 307 L578 317 M578 312 L668 312 M668 307 L668 317"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_d(path: "M648 351 L648 361 M648 356 L845 356 M845 351 L845 361"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_e(path: "M515 395 L515 405 M515 400 L652 400 M652 395 L652 405"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_f(path: "M577 439 L577 449 M577 444 L683 444 M683 439 L683 449"; background: none; border: 1.5px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
 # hf の作り: 点の正方形は場面の頭から出ている (scale 0 から出す入場が fromTo の即時描画で効かず、区間だけが後から伸びる)
 div#sq(left: "658;698;612;739;573;619"; top: "213;259;300;348;390;433"; width: "21;18;24;16;20;22"; height: "21;18;24;16;20;22"; background: $ink; in: none) ×6
 # まとめの行と罫・予測区間 (破線) と 0 より下の赤茶の部分・◆ (まとめた効果)・区間の端の値
@@ -400,7 +400,7 @@ group#sl(in: {opacity:0, duration:0.4})
   p#l(left: "317;230;457;205;271;364"; top: "355;295;426;232;488;415"; font-size: 12px; color: $ink2) ×6 A;B;C;D;E;F
 p#db_d(left: 217px; top: 232px; font-size: 12px; color: $brick; in: {opacity:0, duration:0.4}) 48 人・g 0.92
 p#db_b(left: 242px; top: 295px; font-size: 12px; color: $brick; in: {opacity:0, duration:0.4}) 64 人・g 0.68
-shape#trend(path: "M220 270 L460 410"; background: none; border: 2px solid $ochre; dash: 5,4; in: draw,900)
+shape#trend(path: "M220 270 L460 410"; background: none; border: 2px solid $ochre; dash: 5,4; in: draw {duration: 0.9})
 p#trend_l(left: 365px; top: 292px; font-size: 13px; line-height: 1.35; color: $ochre; in: {opacity:0, duration:0.4}) 小さい研究ほど[br]効果が大きい
 shape#gh(left: "172;200;225"; top: "463;508;450"; width: 15px; height: 15px; path: rect,r=0.5; background: none; border: 1.5px solid $brick; dash: 1,5; in: {scale:0.4, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.15}}) ×3
 p#gh_l(left: 131px; top: 429px; font-size: 12px; line-height: 1.3; color: $brick; in: {opacity:0, duration:0.4}) ここにあるはずの研究が[br]見えていない？
@@ -418,7 +418,7 @@ lcard#lc4(top: 499px; no: "4"; hd: "最長でも 52 週"; d: "何年も先の記
 # s09 結論: 遠くへ伸びる道の絵がゆっくり寄り、上を紙色の幕で空けて 3 行の結論を文の頭で。要の語に黄土の下帯が左から引かれる
 section#s09(stagger: {each:0})
 chap#ch8 {cn}08{/} 結論
-img#road(inset: 0; subject: bottom 40%; room: top 55%; main: kb,1.0@50%,62%>1.12@50%,62%,ease=sine.inOut) 横長の風景。日の出の、なだらかに起伏する丘のあいだを遠くの地平線までまっすぐ伸びる長い一本道。道のずっと先に小さな走る人がひとり、まだ長い道のりが続く感じ。丘と道は画面の下半分、上半分は柔らかなグラデーションの空で何も置かない
+img#road(inset: 0; subject: bottom 40%; room: top 55%; main: kb {scale: [1, 1.12], focus: ['50% 62%', '50% 62%'], ease:'sine.inOut'}) 横長の風景。日の出の、なだらかに起伏する丘のあいだを遠くの地平線までまっすぐ伸びる長い一本道。道のずっと先に小さな走る人がひとり、まだ長い道のりが続く感じ。丘と道は画面の下半分、上半分は柔らかなグラデーションの空で何も置かない
 div#veil9(inset: 0; background: linear(#F2EDE2F2,#F2EDE2E6@50%,#F2EDE28C@62%,#F2EDE214@80%,#F2EDE200,180); in: none)
 bt#bt9(no: "08"; ttl: "結論")
 concl#cc1(top: 157px; hd: "運動は記憶を「小〜中程度」良くする"; d: "6 本をまとめた効果　g = 0.34［95% 信頼区間 0.11〜0.58］")

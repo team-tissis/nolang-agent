@@ -64,18 +64,18 @@ cue step_on(x) = [>#x.cur][>#x.st][!#x.nm recolor,$ink,duration=300]
 cue step_done(x) = [<#x.cur][<#x.st][>#x.ck +50][>#x.ci +50]
 
 # テロップ (左下の白い札・青の縁) と章の札 (左上の白い丸札)
-def telop(t, y=582) = p(left: 64px; top: {y}; font-size: 31px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 7px; padding: 16px 29px 17px 31px; edge: left,4,$a; box-shadow: 0px 11px 29px #0E2A472E; in: wipe,right,550,ease=power3.out; out: {y:-4, opacity:0, duration:0.35})
+def telop(t, y=582) = p(left: 64px; top: {y}; font-size: 31px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 7px; padding: 16px 29px 17px 31px; edge: left,4,$a; box-shadow: 0px 11px 29px #0E2A472E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'}; out: {y:-4, opacity:0, duration:0.35})
 def chap(n, t) = p(left: 61px; top: 51px; font-size: 18px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 99px; padding: 11px 20px 11px 17px; box-shadow: 0px 7px 20px #0E2A471F; in: {x:-16, opacity:0, duration:0.55, ease:'power3.out'}; out: {x:-8, opacity:0, duration:0.3}) {k}STEP {n}{/}　{l}｜{/}　{t}
 # 写真の左下の札 (icon の丸 + 2 行)
-def photo_tag(ic, t) = div(width: 320px; height: 104px; background: #FFFFFFF2; border-radius: 8px; box-shadow: 0px 9px 27px #0E2A4724; in: rise,11,550)
+def photo_tag(ic, t) = div(width: 320px; height: 104px; background: #FFFFFFF2; border-radius: 8px; box-shadow: 0px 9px 27px #0E2A4724; in: rise {y: 11, duration: 0.55})
   shape#c.ellipse(left: 17px; cy: 50%; width: 39px; height: 39px; background: #EEF1F5)
   icon#i(left: 27px; cy: 50%; font-size: 20px; name: {ic}; color: #5D6D80)
   p#t(left: 69px; cy: 50%; font-size: 27px; line-height: 1.35; content: {t})
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
 def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back)
 def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0; border-radius: 0px)
-  shape#r1.ellipse(left: {x1}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp,scale=0.08)
-  shape#r2.ellipse(left: {x2}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp,scale=0.08)
+  shape#r1.ellipse(left: {x1}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp {scale: 0.08})
+  shape#r2.ellipse(left: {x2}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp {scale: 0.08})
 def wordmark(y) = p(cx: 640px; top: {y}; font-size: 100px; font-family: e; in: {y:27, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
 
 # タブレット: 枠・上の帯・右の側板。中の page と側板の中身は場面ごとに子で差す (def の実体の scale で縮める)
@@ -121,7 +121,7 @@ def help_panel() = div(width: 219px; height: 220px; border-radius: 11px; backgro
   p#d(left: 19px; top: 105px; width: 184px; font-size: 11px; color: $gray; line-height: 1.55) Live Assist なら、スタッフが画面を見ながらご案内します。
   div#b(left: 19px; top: 164px; width: 181px; height: 37px; border-radius: 19px; background: $a)
     p#t(cx: 50%; cy: 50%; font-size: 13px; font-family: b; color: #FFFFFF) スタッフにつなぐ
-def dropdown() = div(width: 448px; height: 144px; border-radius: 8px; background: #FFFFFF; box-shadow: 0px 12px 27px #0E2A4729; in: {y:-5, opacity:0, duration:0.3, ease:'power2.out'}; out: fade,300)
+def dropdown() = div(width: 448px; height: 144px; border-radius: 8px; background: #FFFFFF; box-shadow: 0px 12px 27px #0E2A4729; in: {y:-5, opacity:0, duration:0.3, ease:'power2.out'}; out: fade {duration: 0.3})
   div#hv(left: 0px; top: 36px; width: 448px; height: 36px; background: #F0F5FC)
   p#o1(left: 15px; top: 9px; font-size: 14px) スタンダードプラン
   p#o2(left: 15px; top: 45px; font-size: 14px) スタンダードプラス
@@ -135,8 +135,8 @@ def staff_msg() = div(width: 219px; height: 118px; border-radius: 9px; backgroun
     icon#i(left: 172px; cy: 50%; font-size: 10px; name: caret-right; color: $a)
 # 画面の上に重ねる物: 共有中の札・青い強調枠・スタッフの吹き出し・カーソル + 名札 (吹き出しとカーソルは page の文字より前 = z-index: front)
 def share_badge() = p(cx: 50%; top: 24px; font-size: 11px; font-family: b; color: #FFFFFF; letter-spacing: 0.08em; background: $a; border-radius: 99px; padding: 6px 16px; in: {scale:0.8, opacity:0, duration:0.4, ease:'back.out(2)'}) ●  画面共有中
-def focus_box(w, h) = div(width: {w}; height: {h}; border-radius: 9px; border: 2px solid $a; box-shadow: 0px 0px 0px 5px #1F6FE029; in: {scale:1.04, opacity:0, duration:0.35, ease:'power2.out'}; out: fade,300)
-def bubble(t, w) = div(width: {w}; height: 35px; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 8px 19px #0E2A472E; z-index: front; in: {y:7, opacity:0, duration:0.4, ease:'power2.out'}; out: fade,300)
+def focus_box(w, h) = div(width: {w}; height: {h}; border-radius: 9px; border: 2px solid $a; box-shadow: 0px 0px 0px 5px #1F6FE029; in: {scale:1.04, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration: 0.3})
+def bubble(t, w) = div(width: {w}; height: 35px; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 8px 19px #0E2A472E; z-index: front; in: {y:7, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration: 0.3})
   img#f(left: 5px; cy: 50%; width: 27px; height: 27px; border-radius: 99px; content: @staff_face; object-fit: cover,focus=50%,35%)
   p#t(left: 40px; cy: 50%; font-size: 13px; content: {t})
 def cursor() = shape(width: 27px; height: 27px; path: cursor; background: $a; border: 1px solid #FFFFFF; z-index: front)
@@ -144,7 +144,7 @@ def cursor_tag() = p(font-size: 9px; font-family: b; color: #FFFFFF; background:
 
 # 冒頭: 白から溶ける全面の写真に、手続きの札 4 枚が順に
 section#intro
-img#in_p(inset: 0; main: kb,1.1@19%,50%>1.0,ease=power1.out) [ref:@cust]Wide establishing shot of the same woman (same face, wavy dark brown hair, cream-white knit sweater, pearl earrings) on a light linen sofa in her bright white living room, relaxed, using a white tablet held in both hands, 3/4 side angle, large window, plants
+img#in_p(inset: 0; main: kb {scale: [1.1, 1], focus: '19% 50%', ease:'power1.out'}) [ref:@cust]Wide establishing shot of the same woman (same face, wavy dark brown hair, cream-white knit sweater, pearl earrings) on a light linen sofa in her bright white living room, relaxed, using a white tablet held in both hands, 3/4 side angle, large window, plants
 div#ch(left: 69px; top: "191;259;327;395"; width: 227px; height: 56px; border-radius: 9px; background: #FFFFFFF5; box-shadow: 0px 8px 20px #0E2A471A; in: {x:-17, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.2}}) ×4
   shape#c.ellipse(left: 16px; cy: 50%; width: 31px; height: 31px; background: $sky)
   icon#i(left: 23px; cy: 50%; font-size: 17px; color: $a; name: "file-text;clipboard-text;arrows-clockwise;credit-card")
@@ -153,9 +153,9 @@ telop#in_tel オンラインで{bb}完結する{/}時代
 
 # 問い: 戸惑う顔の寄り → ぼかした写真の上にタブレット (指が迷い、プランの一覧が開いて閉じる)
 section#confused
-img#cf_p(inset: 0; content: @conf; main: kb,1.0>1.09@67%,29%)
-img#cf_b(inset: 0; content: @conf; filter: blur:6; delay: 3500; in: fade,600; main: kb,1.0>1.06)
-tablet#tc(left: 286px; top: 91px; scale: 0.9; delay: 3500; in: fade,600)
+img#cf_p(inset: 0; content: @conf; main: kb {scale: [1, 1.09], focus: '67% 29%'})
+img#cf_b(inset: 0; content: @conf; filter: blur:6; delay: 3500; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
+tablet#tc(left: 286px; top: 91px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
   form_page#p1(left: 11px; top: 57px; scale: 0.9)
   help_panel#hp(left: 484px; top: 81px; scale: 0.9)
   dropdown#dd(left: 37px; top: 261px; scale: 0.9; z-index: front; overlap: tc.p1)
@@ -164,17 +164,17 @@ telop#cf_tel 「{bb}誰かに聞きたい{/}」と思う瞬間
 
 # つなぐ: 画面を押す指の波紋 → 白地で 2 人の顔を弧で結び、点が渡って「つなぐ。」
 section#tap_connect
-img#tp_p(inset: 0; main: kb,1.02>1.12@76%,65%; out: fade,600) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
-shape#rp.ellipse(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; background: none; border: 2px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade,400) ×2
-soft_bg#cn_bg(delay: 2300; in: fade,600)
-rings#cn_r(x1: 173; x2: 507; top: -40px; d: 600; delay: 2300; in: fade,600)
-shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid #1F6FE073; dash: 1,9; delay: 2600; in: fade,400)
-shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid $a; delay: 2750; in: draw,800)
+img#tp_p(inset: 0; main: kb {scale: [1.02, 1.12], focus: ['', '76% 65%']}; out: fade {duration: 0.6}) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
+shape#rp.ellipse(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; background: none; border: 2px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
+soft_bg#cn_bg(delay: 2300; in: fade {duration: 0.6})
+rings#cn_r(x1: 173; x2: 507; top: -40px; d: 600; delay: 2300; in: fade {duration: 0.6})
+shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid #1F6FE073; dash: 1,9; delay: 2600; in: fade {duration: 0.4})
+shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid $a; delay: 2750; in: draw {duration: 0.8})
 img#av1(left: 207px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @cust; object-fit: cover,focus=55%,28%,zoom=190%; delay: 2450; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 img#av2(left: 773px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @staff; object-fit: cover,focus=50%,28%,zoom=190%; delay: 2650; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 p#wh1(cx: 307px; top: 427px; font-size: 20px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750; in: {y:8, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
 p#wh2(cx: 873px; top: 427px; font-size: 20px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2950; in: {y:8, opacity:0, duration:0.5, ease:'power2.out'}) {k2}STAFF{/}[br]スタッフ
-shape#cd.ellipse(left: 501px; top: 294px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade,150; out: fade,200)
+shape#cd.ellipse(left: 501px; top: 294px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade {duration: 0.15}; out: fade {duration: 0.2})
 p#cbig(cx: 640px; top: 528px; font-size: 37px; letter-spacing: 0.08em; in: {y:11, opacity:0, duration:0.6, ease:'power2.out'}) お客様とスタッフを、{bb}つなぐ。{/}
 
 # 題: 1 字ずつ上がるロゴ + 罫 + 一言
@@ -182,28 +182,28 @@ section#title
 soft_bg#ti_bg
 rings#ti_r(x1: 220; x2: 60)
 wordmark#ti_w(top: 237px; delay: 250)
-shape#ti_rl(left: 593px; top: 377px; width: 93px; height: 2px; path: rect,r=0.5; background: $a; delay: 900; in: wipe,center,600,ease=power2.inOut)
+shape#ti_rl(left: 593px; top: 377px; width: 93px; height: 2px; path: rect,r=0.5; background: $a; delay: 900; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
 p#ti_t(cx: 640px; top: 404px; font-size: 28px; letter-spacing: 0.1em; color: $ink2; delay: 1350; in: {y:9, opacity:0, duration:0.8, ease:'power2.out'}) オンラインなのに、まるで隣にいるようなサポート。
 
 # 今の不便: チャットの写真が左半分に寄り、右から電話の写真が入る (写真の左下に札)
 section#chat_phone
-img#pn_c(inset: 0; object-fit: cover,focus=58%,50%; filter: sat:0.8; main: kb,1.04>1.1@60%,50%) [ref:@cust]Medium shot of the same woman at a white dining table at home, typing on the white tablet with a slightly troubled thoughtful expression, as if struggling to explain her problem in a text chat; the screen shows abstract gray and blue chat bubbles
+img#pn_c(inset: 0; object-fit: cover,focus=58%,50%; filter: sat:0.8; main: kb {scale: [1.04, 1.1], focus: ['', '60% 50%']}) [ref:@cust]Medium shot of the same woman at a white dining table at home, typing on the white tablet with a slightly troubled thoughtful expression, as if struggling to explain her problem in a text chat; the screen shows abstract gray and blue chat bubbles
 photo_tag#lb_c(left: 43px; top: 560px; ic: chat-circle-dots; t: "チャットだけでは[br]伝えにくい")
-img#pn_p(left: 640px; top: 0px; width: 640px; height: 720px; object-fit: cover,focus=52%,50%; filter: sat:0.8; main: kb,1.06>1.12@41%,50%; in: {x:640, duration:0.75, ease:'power3.inOut'}) [ref:@cust]Medium shot of the same woman at home holding a smartphone to her ear while looking down at a white tablet on the table with a confused expression, trying to follow spoken instructions about a screen the other person cannot see
+img#pn_p(left: 640px; top: 0px; width: 640px; height: 720px; object-fit: cover,focus=52%,50%; filter: sat:0.8; main: kb {scale: [1.06, 1.12], focus: ['', '41% 50%']}; in: {x:640, duration:0.75, ease:'power3.inOut'}) [ref:@cust]Medium shot of the same woman at home holding a smartphone to her ear while looking down at a white tablet on the table with a confused expression, trying to follow spoken instructions about a screen the other person cannot see
 shape#pn_d.bleed(left: 640px; top: 0px; width: 4px; height: 720px; path: rect; background: #FFFFFF; in: {x:640, duration:0.75, ease:'power3.inOut'})
 photo_tag#lb_p(left: 683px; top: 560px; ic: phone; t: "電話だけでは[br]確認しにくい")
 
 # STEP 01: 通話する客の肩越し → スタッフの側へ溶ける
 section#face
-img#fc1(inset: 0; main: kb,1.0>1.08@30%,50%) [ref:@cust][ref:@staff]Over-the-shoulder shot from behind and slightly to the side of the customer woman (cream-white knit sweater, wavy dark brown hair) on her sofa holding a white tablet; the tablet clearly shows a live video call with the staff woman (navy blazer, headset, low bun) smiling
-img#fc2(inset: 0; main: kb,1.05@81%,50%>1.0; in: fade,700,ease=power1.inOut) [ref:@staff][ref:@cust]The staff woman (navy blazer, low bun, single-ear headset) at her white desk in the bright support office, turning toward her monitor with a warm welcoming smile as an incoming video call with the customer woman connects, one hand lightly touching the headset
+img#fc1(inset: 0; main: kb {scale: [1, 1.08], focus: '30% 50%'}) [ref:@cust][ref:@staff]Over-the-shoulder shot from behind and slightly to the side of the customer woman (cream-white knit sweater, wavy dark brown hair) on her sofa holding a white tablet; the tablet clearly shows a live video call with the staff woman (navy blazer, headset, low bun) smiling
+img#fc2(inset: 0; main: kb {scale: [1.05, 1], focus: '81% 50%'}; in: fade {duration: 0.7, ease: 'power1.inOut'}) [ref:@staff][ref:@cust]The staff woman (navy blazer, low bun, single-ear headset) at her white desk in the bright support office, turning toward her monitor with a warm welcoming smile as an incoming video call with the customer woman connects, one hand lightly touching the headset
 chap#c1(n: 01; t: "顔を見て相談")
 telop#fc_tel {bb}顔を見ながら{/}、状況に合わせてサポート
 
 # STEP 02: スタッフの写真 + 共有中のタブレット。カーソルが動き、画面に寄って強調枠と吹き出しで案内
 section#share_screen
 div#sc_bg(inset: 0; background: $paper)
-img#pn_s(left: 0px; top: 0px; width: 573px; height: 720px; object-fit: cover,focus=47%,50%; main: kb,1.0>1.06@31%,50%) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
+img#pn_s(left: 0px; top: 0px; width: 573px; height: 720px; object-fit: cover,focus=47%,50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
 tablet#ts(left: 612px; top: 147px; scale: 0.8; delay: 200; in: {x:293, duration:0.9, ease:'power3.out'})
   form_page#p1(left: 10px; top: 50px; scale: 0.8)
   call_panel#cp(left: 415px; top: 50px; scale: 0.8)
@@ -219,12 +219,12 @@ telop#sc_tel(top: 538px) お客様の{bb}画面を見ながら{/}[br]リアル�
 
 # 安心: ほっとした顔の寄り
 section#relief
-img#rl_p(inset: 0; main: kb,1.0>1.08@63%,38%) [ref:@cust]Medium close-up of the same woman on her sofa looking at the white tablet with a relieved, understanding smile, nodding slightly, one hand lightly on her chest, soft warm daylight
+img#rl_p(inset: 0; main: kb {scale: [1, 1.08], focus: '63% 38%'}) [ref:@cust]Medium close-up of the same woman on her sofa looking at the white tablet with a relieved, understanding smile, nodding slightly, one hand lightly on her chest, soft warm daylight
 telop#rl_tel 迷いを、{bb}その場で解消{/}
 
 # STEP 03: スタッフのメッセージ → カーソルがリンクを押し、確認の page へ送る
 section#navigate
-img#nv_b(inset: 0; content: @tabtbl; filter: blur:6; main: kb,1.0>1.05)
+img#nv_b(inset: 0; content: @tabtbl; filter: blur:6; main: kb {scale: [1, 1.05]})
 tablet#tn(left: 286px; top: 127px; scale: 0.9)
   form_page#p1(left: 11px; top: 57px; scale: 0.9; out: {x:-30, opacity:0, duration:0.45, ease:'power3.in'})
   plan_page#p2(left: 11px; top: 57px; scale: 0.9; in: {x:30, opacity:0, duration:0.6, ease:'power3.out'})
@@ -239,7 +239,7 @@ telop#nv_tel 必要な情報へ、{bb}スムーズに{/}ご案内
 
 # STEP 04: 資料の札が飛んで来て、共有の通知
 section#document
-img#dc_p(inset: 0; main: kb,1.0>1.07@72%,50%) [ref:@cust][ref:@staff]Close shot of the customer woman (cream-white knit sweater, wavy dark brown hair) holding a white tablet tilted toward the camera; the screen shows a clean document page preview (white brochure page with a blue header band and gray lines) on the left and a small video call window with the staff woman on the right
+img#dc_p(inset: 0; main: kb {scale: [1, 1.07], focus: '72% 50%'}) [ref:@cust][ref:@staff]Close shot of the customer woman (cream-white knit sweater, wavy dark brown hair) holding a white tablet tilted toward the camera; the screen shows a clean document page preview (white brochure page with a blue header band and gray lines) on the left and a small video call window with the staff woman on the right
 div#doc1(left: 891px; top: 119px; width: 293px; height: 88px; border-radius: 11px; background: #FFFFFF; box-shadow: 0px 16px 40px #0E2A4738; in: {x:280, y:-27, rotation:6, opacity:0, duration:0.65, ease:'power3.out'})
   div#fi(left: 17px; cy: 50%; width: 49px; height: 61px; border-radius: 7px; background: $sky)
     icon#i(cx: 50%; top: 11px; font-size: 29px; name: file-text; color: $a)
@@ -255,7 +255,7 @@ telop#dc_tel 資料や書類も、{bb}その場で共有{/}
 # STEP 05: 左に写真・右に進行の板 (段ごとに ✓ と縦線が伸び → 完了の板) → 完了の写真が覆う
 section#procedure
 div#pr_bg(inset: 0; background: $paper)
-img#pr_p(left: 0px; top: 0px; width: 653px; height: 720px; main: kb,1.0>1.07@21%,50%) [ref:@cust]Medium shot of the same woman at a white dining table at home, entering information on a white tablet with her finger, calm and focused, a cup of tea and a pen beside her, a printed document on the table; the screen shows a simple form with blue progress steps
+img#pr_p(left: 0px; top: 0px; width: 653px; height: 720px; main: kb {scale: [1, 1.07], focus: '21% 50%'}) [ref:@cust]Medium shot of the same woman at a white dining table at home, entering information on a white tablet with her finger, calm and focused, a cup of tea and a pen beside her, a printed document on the table; the screen shows a simple form with blue progress steps
 div#fl(left: 701px; top: 80px; width: 520px; height: 560px; border-radius: 15px; background: #FFFFFF; border: 1px solid $rule; box-shadow: 0px 20px 53px #0E2A4724; delay: 300; in: {x:40, opacity:0, duration:0.8, ease:'power3.out'})
   p#h(left: 32px; top: 29px; font-size: 21px; font-family: b; letter-spacing: 0.06em) お手続きの進行状況
   p#sub(left: 32px; top: 63px; font-size: 13px; color: $gray) ご契約内容の変更 ・ 4 ステップ
@@ -269,16 +269,16 @@ div#fl(left: 701px; top: 80px; width: 520px; height: 560px; border-radius: 15px;
     shape#d.ellipse(left: 0px; cy: 50%; width: 35px; height: 35px; background: #FFFFFF; border: 2px solid $line)
     p#n(left: 13px; cy: 50%; font-size: 14px; font-family: e; color: $mute) 1;2;3;4
     p#nm(left: 51px; cy: 50%; font-size: 18px; color: $mute; letter-spacing: 0.05em) お客様情報の入力;ご契約プランの選択;お支払い方法の登録;内容の確認・完了
-    p#st(left: 380px; cy: 50%; font-size: 11px; font-family: b; color: $a; in: fade,300; out: fade,250) サポート中
-    shape#cur.ellipse(left: -5px; cy: 50%; width: 45px; height: 45px; background: none; border: 2px solid #1F6FE059; in: {scale:0.8, opacity:0, duration:0.35}; out: fade,250)
+    p#st(left: 380px; cy: 50%; font-size: 11px; font-family: b; color: $a; in: fade {duration: 0.3}; out: fade {duration: 0.25}) サポート中
+    shape#cur.ellipse(left: -5px; cy: 50%; width: 45px; height: 45px; background: none; border: 2px solid #1F6FE059; in: {scale:0.8, opacity:0, duration:0.35}; out: fade {duration: 0.25})
     shape#ck.ellipse(left: 0px; cy: 50%; width: 35px; height: 35px; background: $a; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     icon#ci(left: 8px; cy: 50%; font-size: 19px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
-  div#done(left: 0px; top: 0px; width: 520px; height: 560px; border-radius: 15px; background: #FFFFFF; in: fade,500; overlap: fl.s)
+  div#done(left: 0px; top: 0px; width: 520px; height: 560px; border-radius: 15px; background: #FFFFFF; in: fade {duration: 0.5}; overlap: fl.s)
     shape#c.ellipse(cx: 50%; top: 150px; width: 127px; height: 127px; background: $a; box-shadow: 0px 0px 0px 12px #1F6FE01F; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     icon#i(cx: 50%; top: 180px; font-size: 66px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     p#t1(cx: 50%; top: 314px; font-size: 28px; font-family: b; letter-spacing: 0.08em) お手続きが完了しました
     p#t2(cx: 50%; top: 365px; font-size: 15px; color: $gray; letter-spacing: 0.06em) ご利用ありがとうございました
-img#cp_p(inset: 0; main: kb,1.04>1.1@50%,59%; in: fade,600,ease=power1.inOut; overlap: fl) [ref:@cust]Medium shot of the same woman leaning back on her sofa with a satisfied bright smile, holding the white tablet whose screen shows one large soft-blue check mark in a circle on a white background, warm soft daylight, relief and completion
+img#cp_p(inset: 0; main: kb {scale: [1.04, 1.1], focus: ['', '50% 59%']}; in: fade {duration: 0.6, ease: 'power1.inOut'}; overlap: fl) [ref:@cust]Medium shot of the same woman leaning back on her sofa with a satisfied bright smile, holding the white tablet whose screen shows one large soft-blue check mark in a circle on a white background, warm soft daylight, relief and completion
 chap#c5(n: 05; t: "手続きをサポート")
 telop#pr_tel(top: 538px) 手続きの途中も、[br]{bb}リアルタイム{/}にサポート
 telop#pr_tel2(top: 538px) 完了まで、[br]{bb}迷わせない{/}サポート
@@ -287,7 +287,7 @@ telop#pr_tel2(top: 538px) 完了まで、[br]{bb}迷わせない{/}サポート
 section#anywhere
 soft_bg#aw_bg
 p#aw_h(cx: 640px; top: 49px; font-size: 35px; letter-spacing: 0.1em; in: {y:11, opacity:0, duration:0.7, ease:'power2.out'}) どこにいても、{bb}人による{/}サポートを。
-img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 240px; border-radius: 11px; box-shadow: 0px 12px 29px #0E2A4724; delay: "350;690;1030;1370;1710"; in: {y:27, opacity:0, duration:0.7, ease:'power3.out'}; main: kb,1.12>1.02) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
+img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 240px; border-radius: 11px; box-shadow: 0px 12px 29px #0E2A4724; delay: "350;690;1030;1370;1710"; in: {y:27, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
   div#lb(left: 15px; top: 188px; width: 150px; height: 36px; border-radius: 99px; background: #FFFFFFF2; box-shadow: 0px 4px 12px #0E2A4724)
   shape#c.ellipse(left: 24px; cy: 206px; width: 23px; height: 23px; background: $sky)
   icon#i(left: 28px; cy: 206px; font-size: 15px; color: $a; name: "device-mobile;laptop;device-tablet;storefront;buildings")
@@ -296,27 +296,27 @@ img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;38
 # 価値: 3 枚の写真を薄く並べ、語った列から点灯して下の文字の組が上がる
 section#values
 soft_bg#vl_bg
-img#vp(left: "80;467;853"; top: 77px; width: 347px; height: 347px; border-radius: 12px; box-shadow: 0px 13px 33px #0E2A4724; in: {y:20, opacity:0, duration:0.8, ease:'power3.out'}; main: kb,1.12>1.0) ×3 [ref:@cust]Tight close-up of the same woman looking at a tablet just below frame with a warm genuine smile, soft window light, creamy bokeh of the white living room, 85mm lens;[ref:@staff]The same staff woman working in a calm bright flexible workspace by a large window with plants and a light wood table, smiling while talking on a video call through a slim laptop;[photo]A modern Japanese corporate meeting room with large windows over a bright city, a small team of Japanese business people reviewing a large wall display showing an abstract customer-engagement dashboard with blue charts and connecting lines
+img#vp(left: "80;467;853"; top: 77px; width: 347px; height: 347px; border-radius: 12px; box-shadow: 0px 13px 33px #0E2A4724; in: {y:20, opacity:0, duration:0.8, ease:'power3.out'}; main: kb {scale: [1.12, 1]}) ×3 [ref:@cust]Tight close-up of the same woman looking at a tablet just below frame with a warm genuine smile, soft window light, creamy bokeh of the white living room, 85mm lens;[ref:@staff]The same staff woman working in a calm bright flexible workspace by a large window with plants and a light wood table, smiling while talking on a video call through a slim laptop;[photo]A modern Japanese corporate meeting room with large windows over a bright city, a small team of Japanese business people reviewing a large wall display showing an abstract customer-engagement dashboard with blue charts and connecting lines
 #vp.dim(opacity: 0.32)
 div#vc(border-radius: 0px; left: "80;467;853"; top: 454px; width: 347px; height: 196px; in: {y:12, opacity:0, duration:0.6, ease:'power3.out'}) ×3
   p#k(left: 3px; top: 0px; font-size: 11px; font-family: e; color: $a; letter-spacing: 0.26em) FOR CUSTOMERS;FOR STAFF;FOR BUSINESS
   p#n(left: 0px; top: 24px; font-size: 31px; font-family: b; letter-spacing: 0.1em) お客様;スタッフ;企業
-  shape#ul(left: 0px; top: 66px; width: 40px; height: 2px; path: rect; background: $a; in: wipe,right,500,ease=power2.out,delay=400)
+  shape#ul(left: 0px; top: 66px; width: 40px; height: 2px; path: rect; background: $a; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.out', delay: 0.4})
   p#d(left: 0px; top: 83px; font-size: 21px; line-height: 1.5; letter-spacing: 0.05em; color: $ink2) より安心で、[br]スムーズな体験を。;より柔軟な[br]接客環境を。;新たな[br]顧客接点を。
 
 # 人: スタッフの寄り + 右へ白む幕に 2 段の言葉 (「人。」は語で)
 section#human
-img#hm_p(inset: 0; main: kb,1.12@80%,50%>1.17@87%,50%) [ref:@staff]Tight close-up of the same staff woman, warm genuine smile, looking slightly off-camera toward her monitor, speaking softly into the headset microphone, soft key light from the window, creamy bokeh of the bright office, 85mm lens
-div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); delay: 200; in: fade,800)
+img#hm_p(inset: 0; main: kb {scale: [1.12, 1.17], focus: ['80% 50%', '87% 50%']}) [ref:@staff]Tight close-up of the same staff woman, warm genuine smile, looking slightly off-camera toward her monitor, speaking softly into the headset microphone, soft key light from the window, creamy bokeh of the bright office, 85mm lens
+div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); delay: 200; in: fade {duration: 0.8})
 p#hm1(left: 833px; top: 208px; font-size: 37px; font-family: r; letter-spacing: 0.12em; line-height: 1.55; in: {y:11, opacity:0, duration:0.7, ease:'power2.out'}) テクノロジーの[br]先にいるのは、
 p#hm2(left: 829px; top: 333px; font-size: 112px; letter-spacing: 0.06em; in: {y:16, opacity:0, duration:0.9, ease:'power3.out'}) {a}人{/}。
 
 # 結び: 2 人の写真を左右に、境目を点が降りる + 中央の札
 section#together
-img#tg1(left: 0px; top: 0px; width: 640px; height: 720px; content: @cust; object-fit: cover,focus=47%,50%; main: kb,1.08@24%,50%>1.0)
-img#tg2(left: 640px; top: 0px; width: 640px; height: 720px; content: @staff; object-fit: cover,focus=50%,50%; main: kb,1.08@76%,50%>1.0)
+img#tg1(left: 0px; top: 0px; width: 640px; height: 720px; content: @cust; object-fit: cover,focus=47%,50%; main: kb {scale: [1.08, 1], focus: '24% 50%'})
+img#tg2(left: 640px; top: 0px; width: 640px; height: 720px; content: @staff; object-fit: cover,focus=50%,50%; main: kb {scale: [1.08, 1], focus: '76% 50%'})
 shape#tg_d.bleed(left: 638px; top: 0px; width: 4px; height: 720px; path: rect; background: #FFFFFF)
-shape#tg_p.ellipse(left: 634px; top: 87px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade,200; out: fade,300)
+shape#tg_p.ellipse(left: 634px; top: 87px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade {duration: 0.2}; out: fade {duration: 0.3})
 p#tg_t(cx: 640px; top: 582px; font-size: 31px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 7px; padding: 16px 35px 17px 35px; box-shadow: 0px 9px 27px #0E2A4724; in: {y:9, opacity:0, duration:0.6, ease:'power2.out'}) デジタルと、人の接客を、{bb}もっと自然に。{/}
 
 # 締め: ロゴ + 罫 + by Kumolis
@@ -324,7 +324,7 @@ section#end
 soft_bg#en_bg
 rings#en_r(x1: 220; x2: 60)
 wordmark#en_w(top: 253px; delay: 450)
-shape#en_rl(left: 593px; top: 392px; width: 93px; height: 2px; path: rect,r=0.5; background: $a; delay: 1100; in: wipe,center,600,ease=power2.inOut)
+shape#en_rl(left: 593px; top: 392px; width: 93px; height: 2px; path: rect,r=0.5; background: $a; delay: 1100; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
 p#en_by(cx: 640px; top: 420px; font-size: 27px; font-family: e; letter-spacing: 0.08em; color: $ink2; in: {y:8, opacity:0, duration:0.8, ease:'power2.out'}) by {nv}Kumolis{/}
 ```
 

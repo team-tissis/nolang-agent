@@ -7,7 +7,7 @@
     "test": "npm --prefix packages/cli test",
     "build": "node scripts/build-plugins.mjs",
     "check": "node scripts/build-plugins.mjs --check && npm test",
-    "validate": "claude plugin validate --strict . && claude plugin validate --strict plugins/nolang-local",
+    "validate": "claude plugin validate --strict . && claude plugin validate --strict plugins/nolang-local && claude plugin validate --strict plugins/nolang-dev",
     "sync-reference": "node scripts/sync-reference.mjs"
   },
   "engines": {

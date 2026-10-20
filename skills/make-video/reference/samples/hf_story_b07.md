@@ -70,7 +70,7 @@ def scene() = img(left: 0px; top: 180px; width: 720px; height: 1100px; z-index: 
 
 # 常設の層: 題の帯 (紺の地 + 下に黄の線 + 影・白の斜めの縞が全編で左へ流れる)・前置き・題・番号の札 5 つ
 div#header(left: 0px; top: 0px; width: 720px; height: 220px; background: $navy; border-bottom: 4px solid $y; box-shadow: 0px 7px 16px #0000008C; z-index: front; in: none)
-div#stripes.bleed(left: -133px; top: 0px; width: 1000px; height: 216px; pattern: hatch,-45,#FFFFFF0B,48,24; z-index: front; in: none; main: ramp,x=-107)
+div#stripes.bleed(left: -133px; top: 0px; width: 1000px; height: 216px; pattern: hatch,-45,#FFFFFF0B,48,24; z-index: front; in: none; main: ramp {x: -107})
 p#hd_kicker(cx: 360px; top: 57px; font-size: 31px; color: $rose; letter-spacing: .04em; z-index: front; in: none) 【毎週の悪夢】
 p#hd_title(left: 0px; top: 96px; width: 720px; font-size: 53px; line-height: 1.25; text-align: center; color: #FFFFFF; stroke: $ink,8; z-index: front; in: {scale:1.12, duration:.32, ease:'back.out(2)'}) 月曜日が嫌すぎる瞬間{y}5選{/}
 # 番号の札: 淡い枠で並び、項目の頭で黄 (.on)・次の項目で赤 (.done)
@@ -83,15 +83,15 @@ div#bottomfade(left: 0px; top: 640px; width: 720px; height: 640px; background: l
 
 # つかみ: 日曜の夜に絶望する彼。青い縦縞の陰が上から降り、震える「明日が来るな…」→ 白の閃光と一緒に「月曜の絶望 あるある5選」が叩きつけられ、番号の札が並ぶ
 section#hook
-scene#p0(in: {scale:1.14, duration:.38, ease:'power3.out'}; main: kb,1.0@33%,36%>1.08@33%,36%) [ref:@tsukio]日曜の夜、薄暗いワンルームの部屋。グレーのパーカー姿の彼が床に体育座りし、壁に掛かったカレンダーの赤丸のついたマスを見つめ、真っ青な顔で絶望している。顔の上半分に縦線の影（ガーンという漫画表現）、大粒の冷や汗。窓の外は真っ暗な夜。部屋全体は青紫の暗いトーンで、カレンダーだけがスポットライトのように白く浮かび上がる。
+scene#p0(in: {scale:1.14, duration:.38, ease:'power3.out'}; main: kb {scale: [1, 1.08], focus: ['33% 36%', '33% 36%']}) [ref:@tsukio]日曜の夜、薄暗いワンルームの部屋。グレーのパーカー姿の彼が床に体育座りし、壁に掛かったカレンダーの赤丸のついたマスを見つめ、真っ青な顔で絶望している。顔の上半分に縦線の影（ガーンという漫画表現）、大粒の冷や汗。窓の外は真っ暗な夜。部屋全体は青紫の暗いトーンで、カレンダーだけがスポットライトのように白く浮かび上がる。
 div#gloom0(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#283CBE8C,19,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .9; in: {scaleY:.2, opacity:0, duration:.35, ease:'power2.out', pivot:'top'}; out: {opacity:0, duration:.5, ease:'power1.in'})
-p#hook1(cx: 360px; top: 667px; font-size: 67px; color: $ice; stroke: $ink,10; text-shadow: 0px 0px 17px #5078FFE6; in: {scale:1.25, duration:.3, ease:'back.out(2.2)'}; main: noise,x=3,y=3,freq_ms=60,window=320,2900) 明日が来るな…
+p#hook1(cx: 360px; top: 667px; font-size: 67px; color: $ice; stroke: $ink,10; text-shadow: 0px 0px 17px #5078FFE6; in: {scale:1.25, duration:.3, ease:'back.out(2.2)'}; main: noise {x: 3, y: 3, period: 0.06, window: '320,2900'}) 明日が来るな…
 p#hook2(left: 0px; top: 740px; width: 720px; font-size: 95px; line-height: 1.12; color: $hy; text-align: center; stroke: $ink,12; text-shadow: 7px 7px 0px $red; hide_subtitle: true; overlap: subtitle; in: {scale:1.6, opacity:0, duration:.2, ease:'back.out(2.4)'}) 月曜の絶望[br]あるある{five}5選{/}
 veil#fl0(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)
 
 # 1 つ目: 夕日のリビング。左上の時計の札が入り (日 18:30)、残り時間の札が数え減り、「……」の吹き出しがしぼむ
 section#one
-scene#p1(main: kb,1.0@42%,24%>1.08@42%,24%) [ref:@tsukio]日曜の夕方6時半、リビングのソファ。グレーのパーカー姿の彼がソファに座り、片手で胃のあたりを押さえ、口を真一文字に結んで青ざめた顔でテレビを見つめている。テレビ画面には夕焼けの街並みと家族のシルエットが歩く穏やかなアニメのエンディング風の映像（特定の作品やキャラクターは描かない）。窓から差し込む濃いオレンジの夕日と長い紫の影、哀愁とコミカルさ。
+scene#p1(main: kb {scale: [1, 1.08], focus: ['42% 24%', '42% 24%']}) [ref:@tsukio]日曜の夕方6時半、リビングのソファ。グレーのパーカー姿の彼がソファに座り、片手で胃のあたりを押さえ、口を真一文字に結んで青ざめた顔でテレビを見つめている。テレビ画面には夕焼けの街並みと家族のシルエットが歩く穏やかなアニメのエンディング風の映像（特定の作品やキャラクターは描かない）。窓から差し込む濃いオレンジの夕日と長い紫の影、哀愁とコミカルさ。
 stamp#st1(n: 1)
 headline#hl1(c: "サザエさんのエンディングで[br]{l2r}胃が痛む{/}"; n: 1)
 # 時計の札 (sticky・最後まで): 時計の icon + 曜日の色札 (日 = 赤 / 月 = 青) + 時刻。深夜 2 時で丸い札ごと赤 (赤い地の子 al を出して 3 つ目の頭で消す)
@@ -109,7 +109,7 @@ p#bub(left: 400px; top: 373px; width: 167px; font-size: 47px; line-height: 1; co
 
 # 2 つ目: 深夜の寝室でスマホ。時計の札が 23:00 → 2:00 まで刻んで赤に脈打ち、「スッ」が 2 回流れる
 section#two
-scene#p2(main: kb,1.0@48%,27%>1.08@48%,27%) [ref:@tsukio]深夜2時の真っ暗な寝室。ベッドで布団にくるまったグレーのパーカー姿の彼が、スマホの青白い光に顔だけを照らされ、充血した目を大きく見開いて画面を凝視している。目の下に濃いクマ。枕元には文字盤を簡略化した目覚まし時計とお菓子の空き袋。部屋は濃紺の闇で、スマホの光だけが強く輝く。
+scene#p2(main: kb {scale: [1, 1.08], focus: ['48% 27%', '48% 27%']}) [ref:@tsukio]深夜2時の真っ暗な寝室。ベッドで布団にくるまったグレーのパーカー姿の彼が、スマホの青白い光に顔だけを照らされ、充血した目を大きく見開いて画面を凝視している。目の下に濃いクマ。枕元には文字盤を簡略化した目覚まし時計とお菓子の空き袋。部屋は濃紺の闇で、スマホの光だけが強く輝く。
 stamp#st2(n: 2)
 headline#hl2(c: "謎の[br]{l2r}「寝たら負け」{/}{l2}精神{/}"; n: 2)
 ono#sw1(left: 427px; top: 520px; w: 130; t: スッ; c: $sky; transform: rotate(-12deg); in: {scale:.5, x:20, opacity:0, duration:.1, ease:'power2.out'}; out: {x:-33, opacity:0, duration:.22, ease:'power1.in'})
@@ -117,7 +117,7 @@ ono#sw2(left: 453px; top: 587px; w: 130; t: スッ; c: $sky; transform: rotate(-
 
 # 3 つ目: 朝の寝起きにおでこを触る。白の閃光で寄って入り、体温計が上がって下がり、「ペタ」2 つ → 「36.5℃ 平熱…」
 section#three
-scene#p3(main: kb,1.0@56%,20%>1.08@56%,20%) [ref:@tsukio]月曜の早朝、カーテンの隙間から差し込む冷たく青白い朝の光。ベッドで上半身を起こした寝ぐせ頭・パジャマ姿の彼が、片手のひらを自分のおでこにペタッと当て、熱があってほしいと祈るような必死の期待の表情で上目遣いをしている。枕元にはまだ鳴る前の目覚まし時計。
+scene#p3(main: kb {scale: [1, 1.08], focus: ['56% 20%', '56% 20%']}) [ref:@tsukio]月曜の早朝、カーテンの隙間から差し込む冷たく青白い朝の光。ベッドで上半身を起こした寝ぐせ頭・パジャマ姿の彼が、片手のひらを自分のおでこにペタッと当て、熱があってほしいと祈るような必死の期待の表情で上目遣いをしている。枕元にはまだ鳴る前の目覚まし時計。
 stamp#st3(n: 3)
 veil#fl3(color: #FFFFFF; opacity: .75; z-index: curtain; in: none)
 headline#hl3(c: "アラーム前の[br]{l2}謎の{/}{l2r}微熱チェック{/}"; n: 3)
@@ -138,7 +138,7 @@ div#read(left: 27px; top: 373px; width: 280px; height: 125px; background: none; 
 
 # 4 つ目: 鉄球を引きずって駅へ。左から押し出して入り、「重力 ×10」が上から落ちて画面が揺れ、足元の寄りの丸窓 + 「ズシッ」2 歩
 section#four
-scene#p4.bleed(content: @walk; main: kb,1.0@45%,17%>1.08@45%,17%)
+scene#p4.bleed(content: @walk; main: kb {scale: [1, 1.08], focus: ['45% 17%', '45% 17%']})
 stamp#st4(n: 4)
 headline#hl4(c: "駅へ向かう足が[br]{l2r}鉛{/}{l2}のように重い{/}"; n: 4)
 div#gv(left: 0px; top: 280px; width: 720px; height: 210px; background: none; in: {y:-280, scale:1.3, opacity:0, duration:.18, ease:'power4.in'}; out: {opacity:0, duration:.15})
@@ -152,7 +152,7 @@ ono#zu2(left: 60px; top: 620px; w: 250; overlap: hl4; t: ズシッ; s: 75; strok
 
 # 5 つ目: 会社のデスクで魂が抜ける。白の閃光で寄って入り、「あと 105 時間」が数え上がって赤に跳ね、白黒 + 紺の陰 + 縦縞で沈めて暗転
 section#five
-scene#p5.bleed(main: kb,1.0@48%,22%>1.08@48%,22%) [ref:@tsukio]月曜の朝のオフィスの自分のデスク。紺色のスーツの彼が椅子に座り、卓上カレンダーを前に指を折って何かを数えながら白目になり、口から白い魂がふわっと抜け出しかけている（漫画的な表現）。蛍光灯の白っぽい無機質な光、背景の同僚たちはぼかしたシルエット。
+scene#p5.bleed(main: kb {scale: [1, 1.08], focus: ['48% 22%', '48% 22%']}) [ref:@tsukio]月曜の朝のオフィスの自分のデスク。紺色のスーツの彼が椅子に座り、卓上カレンダーを前に指を折って何かを数えながら白目になり、口から白い魂がふわっと抜け出しかけている（漫画的な表現）。蛍光灯の白っぽい無機質な光、背景の同僚たちはぼかしたシルエット。
 # 絶望の幕 3 枚 (絵の直上・見出しと札より下): 彩度を抜く・紺を乗算・上から降りる暗い縦縞
 veil#desat(filter: sat:0.1; in: {opacity:0, duration:.5, ease:'power1.out'})
 div#tint(left: 0px; top: 220px; width: 720px; height: 1060px; background: #1B2350; mix-blend-mode: multiply; opacity: .55; in: {opacity:0, duration:.5, ease:'power1.out'})

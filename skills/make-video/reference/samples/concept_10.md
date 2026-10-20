@@ -33,18 +33,18 @@ bgm#music 静かなピアノのミニマルな曲、ゆっくりした単音と�
 bgm#music2 同じ静かなピアノに柔らかいストリングスが加わり少しだけ前向きに広がる曲、穏やか
 
 section#hook
-img#h_bg(inset: 0; main: kb,1.0@50%,50%>1.05@50%,45%) [ref:@yo]同じ若者が二つに分かれた小道の前で立ち止まり、あごに手を当てて考えている、全身、画面の中ほど
+img#h_bg(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [ref:@yo]同じ若者が二つに分かれた小道の前で立ち止まり、あごに手を当てて考えている、全身、画面の中ほど
 veil#h_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#h_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#h_k(left: 48px; top: 96px) 選ぶ順番
 h1#h_h(left: 48px; top: 140px) この順番、[br]{a}逆{/}かもしれない
 chip#h_o1(left: 48px; top: 900px; width: 250px; text-align: center) 見つかる
-shape#h_ar(left: 320px; top: 922px; width: 80px; height: 40px; path: arrow_r,head=line; background: none; border: 3px solid $ink; in: wipe,right,500)
+shape#h_ar(left: 320px; top: 922px; width: 80px; height: 40px; path: arrow_r,head=line; background: none; border: 3px solid $ink; in: wipe {dir: 'right', duration: 0.5})
 chip#h_o2(left: 422px; top: 900px; width: 250px; text-align: center) 選ぶ
 note#h_n(left: 48px; top: 1010px) やりたいこと → 選択
 
 section#worry
-img#w_bg(inset: 0; main: kb,1.04@50%,45%>1.0) [ref:@yo]同じ若者が求人票の束を両手に持って首をかしげている、頭の上に小さな疑問符が三つ、上半身
+img#w_bg(inset: 0; main: kb {scale: [1.04, 1], focus: '50% 45%'}) [ref:@yo]同じ若者が求人票の束を両手に持って首をかしげている、頭の上に小さな疑問符が三つ、上半身
 veil#w_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#w_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#w_k(left: 48px; top: 96px) 就職の迷い
@@ -54,7 +54,7 @@ div#w_c(left: 48px; top: 890px; width: 624px; height: 130px; padding: 0px)
   p#t(left: 110px; cy: 50%; font-size: 36px; font-family: m; color: $ink) 迷う人は、{m}多い{/}のでは
 
 section#sartre
-img#s_bg(inset: 0; main: kb,1.0@50%,50%>1.05@40%,50%) [ref:@yo]丸眼鏡をかけた年配の哲学者風の男性と同じ若者がカフェの小さなテーブルで向かい合って話している、横からの構図
+img#s_bg(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '40% 50%']}) [ref:@yo]丸眼鏡をかけた年配の哲学者風の男性と同じ若者がカフェの小さなテーブルで向かい合って話している、横からの構図
 veil#s_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#s_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#s_k(left: 48px; top: 96px) JEAN-PAUL SARTRE
@@ -63,23 +63,23 @@ div#s_q(left: 48px; top: 780px; width: 420px; height: 96px; padding: 0px)
   p#t(left: 28px; cy: 50%; font-size: 36px; color: $ink) {s}気持ちで決める{/}
 note#s_qn(left: 484px; top: 812px) 教え子の言葉
 chip#s_a(left: 48px; top: 900px; width: 220px; text-align: center) 行動
-shape#s_ar(left: 288px; top: 922px; width: 110px; height: 40px; path: arrow_r,head=line; background: none; border: 3px solid $a; in: wipe,right,600)
+shape#s_ar(left: 288px; top: 922px; width: 110px; height: 40px; path: arrow_r,head=line; background: none; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.6})
 chip#s_b(left: 418px; top: 900px; width: 254px; text-align: center) 気持ち
 body#s_c(left: 48px; top: 1000px) だから、{a}手引き{/}にならない
 
 section#study
-img#st_bg(inset: 0; main: kb,1.05@50%,55%>1.0) [ref:@yo]同じ若者が虫眼鏡で足元の一点だけをのぞき込んでいる、周りには気づかれない小さな花や本や楽器が点々と置かれている、引きの構図
+img#st_bg(inset: 0; main: kb {scale: [1.05, 1], focus: '50% 55%'}) [ref:@yo]同じ若者が虫眼鏡で足元の一点だけをのぞき込んでいる、周りには気づかれない小さな花や本や楽器が点々と置かれている、引きの構図
 veil#st_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#st_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#st_k(left: 48px; top: 96px) ある研究
 h1#st_h(left: 48px; top: 140px) 興味は{a}見つけるもの{/}、[br]と考える人ほど
 note#st_l(left: 48px; top: 880px) 興味の幅
-shape#st_bar(left: 48px; top: 928px; width: 624px; height: 28px; path: rect,r=0.5; background: $sand; border: none; in: wipe,right,700)
-shape#st_core(left: 294px; top: 928px; width: 132px; height: 28px; path: rect,r=0.5; background: $a; border: none; in: fade,400)
+shape#st_bar(left: 48px; top: 928px; width: 624px; height: 28px; path: rect,r=0.5; background: $sand; border: none; in: wipe {dir: 'right', duration: 0.7})
+shape#st_core(left: 294px; top: 928px; width: 132px; height: 28px; path: rect,r=0.5; background: $a; border: none; in: fade {duration: 0.4})
 body#st_c(left: 48px; top: 990px) {a}狭い{/}傾向があった
 
 section#concl
-img#c_bg(inset: 0; main: kb,1.0@50%,55%>1.06@50%,50%) [ref:@yo]同じ若者がしゃがんで小さな鉢の苗に水差しで水をやっている、芽が少し伸びている、穏やかな朝
+img#c_bg(inset: 0; main: kb {scale: [1, 1.06], focus: ['50% 55%', '50% 50%']}) [ref:@yo]同じ若者がしゃがんで小さな鉢の苗に水差しで水をやっている、芽が少し伸びている、穏やかな朝
 veil#c_vt(color: $paper; opacity: 0.96; to: top; start: 0.65)
 veil#c_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#c_k(left: 48px; top: 96px) 結論
@@ -91,11 +91,11 @@ div#c_r2(left: 48px; top: 916px; width: 624px; height: 110px; padding: 0px; bord
 #c_r2.on(background: #F6E3DC)
 
 section#close
-img#cl_bg(inset: 0; main: kb,1.0@50%,50%>1.07@50%,45%) [ref:@yo]同じ若者が少し開いた扉の前で一歩を踏み出そうとしている、扉の向こうから柔らかい光、後ろ姿
+img#cl_bg(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '50% 45%']}) [ref:@yo]同じ若者が少し開いた扉の前で一歩を踏み出そうとしている、扉の向こうから柔らかい光、後ろ姿
 veil#cl_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#cl_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 h1#cl_h(left: 48px; top: 120px) 見つかったら選ぶ、[br]で止めていませんか
-shape#cl_rule(left: 48px; top: 920px; width: 120px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,700)
+shape#cl_rule(left: 48px; top: 920px; width: 120px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.7})
 body#cl_n(left: 48px; top: 950px) まず一つ、{a}関わって{/}みる
 ```
 

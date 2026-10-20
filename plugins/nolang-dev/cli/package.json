@@ -1,0 +1,33 @@
+{
+  "name": "@no-lang/cli",
+  "version": "0.1.0",
+  "description": "NoLang の動画を AI エージェント (Claude Code / Codex) から作る CLI",
+  "keywords": [
+    "nolang",
+    "video",
+    "ai-agent",
+    "claude-code",
+    "codex",
+    "cli"
+  ],
+  "homepage": "https://no-lang.com",
+  "type": "module",
+  "bin": {
+    "nolang": "nolang.mjs"
+  },
+  "files": [
+    "nolang.mjs",
+    "lib/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "UNLICENSED"
+}

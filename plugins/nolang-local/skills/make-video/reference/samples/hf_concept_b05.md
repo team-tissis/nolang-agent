@@ -118,20 +118,20 @@ veil#h_flash(color: #FFFFFF; opacity: 1; z-index: curtain; in: {opacity:0, durat
 section#shock
 img#s_space(inset: 0; content: @space; main: none)
 # 地球の奥の半周 (円盤の下の写し — 前の半周は見えない)
-group#s_orb_b(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine,x=267,freq_ms=4804,phase_offset=0.274; in: {opacity:0, duration:.3})
-  group#oy_b(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine,y=93,freq_ms=4804,phase_offset=0.024)
-    img#earth_b(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine,scale=0.19,freq_ms=4804,phase_offset=0.024)
+group#s_orb_b(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine {x: 267, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
+  group#oy_b(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 93, period: 4.804, phase_offset: 0.024})
+    img#earth_b(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 img#s_bh(left: 184px; top: 497px; width: 352px; height: 352px; content: @bh_disc; fit: contain; in: {y:80, scale:1.18, duration:.9, ease:'power3.out'})
-shape#s_orbit.ellipse(left: 93px; top: 580px; width: 533px; height: 187px; background: none; border: 3px solid #9FE6FFB3; delay: 200; in: draw,1100)
+shape#s_orbit.ellipse(left: 93px; top: 580px; width: 533px; height: 187px; background: none; border: 3px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
 #s_orbit.bold(border: 5px solid #BFF0FFE6)
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
 group#s_tr(left: 0px; top: 0px; stack: z; width: 720px; height: 1280px; delay: 350; main: "sine,x=267,freq_ms=4804,phase_offset=0.260;sine,x=267,freq_ms=4804,phase_offset=0.233;sine,x=267,freq_ms=4804,phase_offset=0.206;sine,x=267,freq_ms=4804,phase_offset=0.179;sine,x=267,freq_ms=4804,phase_offset=0.152;sine,x=267,freq_ms=4804,phase_offset=0.125;sine,x=267,freq_ms=4804,phase_offset=0.098"; in: {opacity:0, duration:.3}) ×7
   group#ty(left: 0px; top: 0px; width: 720px; height: 1280px; main: "sine,y=93,freq_ms=4804,phase_offset=0.010;sine,y=93,freq_ms=4804,phase_offset=0.983;sine,y=93,freq_ms=4804,phase_offset=0.956;sine,y=93,freq_ms=4804,phase_offset=0.929;sine,y=93,freq_ms=4804,phase_offset=0.902;sine,y=93,freq_ms=4804,phase_offset=0.875;sine,y=93,freq_ms=4804,phase_offset=0.848")
     shape#d.ellipse(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)
-group#s_orb(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine,x=267,freq_ms=4804,phase_offset=0.274; in: {opacity:0, duration:.3})
-  group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine,y=93,freq_ms=4804,phase_offset=0.024)
-    img#earth(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine,scale=0.19,freq_ms=4804,phase_offset=0.024)
+group#s_orb(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine {x: 267, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
+  group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 93, period: 4.804, phase_offset: 0.024})
+    img#earth(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 chip#s_c1(left: 61px; width: 225px; text-align: center) 質量 {b}＝ 同じ{/}
 chip#s_c2(left: 363px; width: 290px; text-align: center) 重力 {b}＝ そのまま{/}
 chip#s_c3(left: 47px; width: 305px; text-align: center; border: 2px solid $ok) {g}✓{/} 吸い込まれない
@@ -213,7 +213,7 @@ telop#t_light_b(top: 313px)
 # 凍結: 消灯した街が凍った街へ溶け、霜と青い光が縁から広がり雪が降る・平均気温を数え下ろす (15℃ → −18℃ → −73℃) → 凍った海 → 凍った街の寄り → 宇宙で氷の地球が回り続ける
 section#freeze
 group#f_a(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
-  img#city(inset: 0; content: @city_frozen; subject: "0%,0%,100%,100%"; main: kb,1.12@50%,40%>1.0@50%,40%)
+  img#city(inset: 0; content: @city_frozen; subject: "0%,0%,100%,100%"; main: kb {scale: [1.12, 1], focus: ['50% 40%', '50% 40%']})
   img#night.bleed(left: -30px; top: -11px; width: 770px; height: 1370px; content: @city_night; subject: "0%,0%,100%,100%"; main: none; in: none; out: {opacity:0, duration:2.68, ease:'power1.inOut'})
   div#tint(z-index: front; inset: 0; background: #3C8CFF29; mix-blend-mode: screen; in: {opacity:0, duration:2})
   div#frost(z-index: front; inset: 0; background: radial(#C8F0FF00@52%,#CDF2FF80@88%,#EBFAFFCC,50%,50%); in: {opacity:0, duration:2, ease:'power2.out'})
@@ -235,9 +235,9 @@ group#f_c(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, dur
   group#cam(left: 0px; top: 0px; width: 720px; height: 1280px; transform-origin: 50% 53.7%; in: {scale:1.35, duration:4.63, ease:'power1.out'})
     img#bh(left: 248px; top: 575px; width: 224px; height: 224px; content: @bh_disc; fit: contain; opacity: .9)
     shape#orbit.ellipse(left: 107px; top: 600px; width: 507px; height: 173px; background: none; border: 2px solid #A0D7FF47)
-    group#ox(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine,x=253,freq_ms=6170,phase_offset=0.441)
-      group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine,y=87,freq_ms=6170,phase_offset=0.191)
-        img#earth(left: 308px; top: 635px; width: 104px; height: 104px; content: @earth_ice; fit: contain; main: sine,scale=0.17,freq_ms=6170,phase_offset=0.191)
+    group#ox(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {x: 253, period: 6.17, phase_offset: 0.441})
+      group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 87, period: 6.17, phase_offset: 0.191})
+        img#earth(left: 308px; top: 635px; width: 104px; height: 104px; content: @earth_ice; fit: contain; main: sine {scale: 0.17, period: 6.17, phase_offset: 0.191})
   topshade#shade(z-index: front)
 # 気温のテロップ: 上の札を語で差し替え、数字を数え下ろして弾ませる
 # hf の作り: 凍った街の写真は 2 回使う (duplicate_media)・消灯した街の写真を凍った街に重ねて溶かす (photo_hidden)
@@ -255,7 +255,7 @@ telop#t_freeze_c
 # 安心: 地球の夜明けに暖かい光 → 暗く沈めて「ブラックホールになる星」と「太陽」を並べ、判子「永遠に来ない」→ 眠る人の写真に Z が 3 つ浮かぶ
 section#relief
 group#r_a(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
-  img#sunrise(inset: 0; content: "[photo]Cinematic photo of a warm, gentle sunrise seen from space over the curved horizon of planet Earth, a soft golden sun peeking over the blue atmosphere glow near the center, thin clouds below, horizon in the lower third, hopeful, calm and reassuring"; main: kb,1.14@50%,52%>1.0@50%,52%)
+  img#sunrise(inset: 0; content: "[photo]Cinematic photo of a warm, gentle sunrise seen from space over the curved horizon of planet Earth, a soft golden sun peeking over the blue atmosphere glow near the center, thin clouds below, horizon in the lower third, hopeful, calm and reassuring"; main: kb {scale: [1.14, 1], focus: ['50% 52%', '50% 52%']})
   div#glow(z-index: front; inset: 0; background: radial(#FFC87873,#FFAA5000@45%,50%,52%); delay: 200; in: {opacity:0, duration:1.2, ease:'power2.out'})
   div#dim(z-index: front; inset: 0; background: #040610A8; in: {opacity:0, duration:.35})
   topshade#shade(z-index: front)
@@ -268,7 +268,7 @@ group#r_b(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, dur
   lab#l4(left: 290px; top: 868px; width: 380px; font-size: 28px; color: #9FD8FF) 太陽の数十倍の質量
   stamp#stamp(left: 167px; top: 360px; width: 387px; font-size: 53px; line-height: 1.5; c: $red; bg: #280008B8; transform: rotate(6deg); in: {scale:2.2, rotation:4, opacity:0, duration:.28, ease:'back.out(2.6)'}) 永遠に来ない
 group#r_c(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, duration:.5, ease:'power1.inOut'})
-  img#sleep(inset: 0; content: @sleep; main: kb,1.06@50%,45%>1.0@50%,45%)
+  img#sleep(inset: 0; content: @sleep; main: kb {scale: [1.06, 1], focus: ['50% 45%', '50% 45%']})
   topshade#shade(z-index: front)
   p#z(z-index: front; left: "507;547;593"; top: "373;313;240"; width: 100px; font-family: d; font-size: "43;56;69"; color: #FFF3C9; text-shadow: 0px 0px 12px #FFDC96E6; in: {y:20, opacity:0, duration:.35, ease:'power2.out'}) ×3 Z;Z;Z
 telop#t_relief_a

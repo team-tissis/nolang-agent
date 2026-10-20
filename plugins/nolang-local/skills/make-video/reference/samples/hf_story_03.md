@@ -87,7 +87,7 @@ subtitle.dash(in: {scale:1.4, opacity:0, duration:.18, ease:'power4.out'})
 subtitle.damage(font-size: 110px; in: {scale:1.5, opacity:0, duration:.12, ease:'power4.out'})
 subtitle.revive(font-size: 113px; color: #B6FFE9; text-shadow: 0px 0px 20px #3FFFB0; in: {scale:.45, rotation:-6, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.dim(font-size: 80px; color: #B9B4D8; text-shadow: 0px 0px 0px #00000000; in: {scale:.9, opacity:0, duration:.3, ease:'power2.out'})
-subtitle.victory(font-size: 143px; stroke: #2A0B00,10; text-shadow: 0px 0px 27px #FFC83C; in: {scale:.2, opacity:0, duration:.34, ease:'back.out(1.7)'}; main: sine,scale=0.06,freq_ms=1000)
+subtitle.victory(font-size: 143px; stroke: #2A0B00,10; text-shadow: 0px 0px 27px #FFC83C; in: {scale:.2, opacity:0, duration:.34, ease:'back.out(1.7)'}; main: sine {scale: 0.06, period: 1})
 subtitle.cool(font-size: 75px)
 
 # 部品: 写真カード (白の細い縁 + 青緑の光・下を暗く)・情報パネル (濃紺の半透明 + 薄い縁)・閃光の幕・字幕と同じ見た目の design の文字
@@ -112,13 +112,13 @@ def hudrow(n, d) = div(left: 20px; width: 573px; height: 71px; background: none;
 
 # 全編の地 (z: back): 斜めのネオングラデ・光の斑 4 つ (screen・36 秒で往復)・光の柱 4 本 (下を軸に揺れる)・透視の格子の床 (横線と縦線の 2 枚を 70° 倒す・hf の格子の流れは省略)・床の上の紫の霞・走査線
 div#neon(inset: 0; background: linear(#050A3C,#0B2BE0@26%,#5A1FD8@52%,#D4166A@78%,#FF2E3A,172); z-index: back; in: none)
-div#blob1(left: -253px; top: -173px; width: 600px; height: 600px; background: radial(#00D5FF,#00D5FF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine,x=87,y=60,freq_ms=36000; bleed)
-div#blob2(left: 413px; top: 347px; width: 547px; height: 547px; background: radial(#FF2BD6,#FF2BD600@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine,x=-80,y=-53,freq_ms=36000; bleed)
-div#blob3(left: -200px; top: 833px; width: 733px; height: 733px; background: radial(#FF2A3A,#FF2A3A00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine,x=67,freq_ms=24000; bleed)
-div#blob4(left: 427px; top: -133px; width: 507px; height: 507px; background: radial(#2A4BFF,#2A4BFF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine,x=-60,y=73,freq_ms=36000; bleed)
+div#blob1(left: -253px; top: -173px; width: 600px; height: 600px; background: radial(#00D5FF,#00D5FF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: 87, y: 60, period: 36}; bleed)
+div#blob2(left: 413px; top: 347px; width: 547px; height: 547px; background: radial(#FF2BD6,#FF2BD600@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -80, y: -53, period: 36}; bleed)
+div#blob3(left: -200px; top: 833px; width: 733px; height: 733px; background: radial(#FF2A3A,#FF2A3A00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: 67, period: 24}; bleed)
+div#blob4(left: 427px; top: -133px; width: 507px; height: 507px; background: radial(#2A4BFF,#2A4BFF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -60, y: 73, period: 36}; bleed)
 div#beam(left: "53;220;427;587"; top: -120px; width: 87px; height: 1533px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: "sine,rotation=21,freq_ms=4800,pivot=bottom;sine,rotation=-17,freq_ms=5800,pivot=bottom;sine,rotation=19,freq_ms=6800,pivot=bottom;sine,rotation=-23,freq_ms=7800,pivot=bottom"; z-index: back; in: none; bleed) ×4
-div#floor_h(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,0,#00F0FFBF,80,3; main: constant,rotationX=70,depth=0.85,pivot=top; z-index: back; in: none; bleed)
-div#floor_v(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,90,#FF46D2A6,80,3; main: constant,rotationX=70,depth=0.85,pivot=top; z-index: back; in: none; bleed)
+div#floor_h(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,0,#00F0FFBF,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
+div#floor_v(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,90,#FF46D2A6,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_fade(left: 0px; top: 920px; width: 720px; height: 133px; background: linear(#5A14AAE6,#5A14AA00,180); z-index: back; in: none)
 div#scan(inset: 0; background: none; pattern: hatch,0,#00000038,4,1.3; opacity: .45; z-index: back; in: none)
 
@@ -131,7 +131,7 @@ p#tag(right: 53px; top: 104px; font-size: 21px; opacity: .9; background: linear(
 # 解禁: 寝室のスマホの写真に通知のバナーが上から落ち、光が 2 回広がり、AM 0:00 のドット時計 (コロンが点滅)・「は？」で全面を灰に・「待て」3 つ
 section#hook
 card#c1(p: "[photo]真夜中の暗い寝室。ベッドのシーツの上に置かれたスマートフォンが画面を上にして強く発光している（画面は青白く光っているだけで文字やアイコンは無い）。画面の光が周囲をほのかに照らし、窓の外から赤いネオンの光が差し込む。縦構図、シネマティック、浅い被写界深度、青と赤の色調。")
-  img#p(main: kb,1.18>1.0,ease=power1.out)
+  img#p(main: kb {scale: [1.18, 1], ease:'power1.out'})
   # 画面の光 (静止は 1.6 倍で消えた姿・入場で 0.4 倍の濃い光から広がる)
   div#glow1(left: 94px; z-index: front; top: 100px; width: 427px; height: 427px; border-radius: 99px; background: radial(#8CF0FFF2,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; delay: 120; in: {scale:.25, opacity:.95, duration:.9, ease:'power2.out'})
   div#glow2(left: 94px; z-index: front; top: 100px; width: 427px; height: 427px; border-radius: 99px; background: radial(#8CF0FFE6,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; in: {scale:.25, opacity:.9, duration:.9, ease:'power2.out'})
@@ -161,7 +161,7 @@ section#clash
 img#gl(left: 13px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; filter: look:#000000/#00E5FF; mix-blend-mode: screen; opacity: .55; in: {x:40, opacity:0, duration:.5, ease:'power2.out'})
 img#gr(left: 93px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; filter: look:#000000/#FF2BD6; mix-blend-mode: screen; opacity: .55; in: {x:-40, opacity:0, duration:.5, ease:'power2.out'})
 card#c2(p: "@grounds")
-  img#p(main: kb,1.12@47%,50%>1.0@52%,50%,ease=sine.inOut)
+  img#p(main: kb {scale: [1.12, 1], focus: ['47% 50%', '52% 50%'], ease:'sine.inOut'})
   shape#dash(z-index: front; left: 107px; top: 249px; width: 400px; height: 5px; path: line_h; border: 5px solid #FFFFFF; dash: 17,12; in: {scaleX:0, duration:.45, ease:'power2.inOut', pivot:'left'})
   pin#pinw(z-index: front; left: 67px; top: 213px; lab: WEST; c: #2B7BFF; glow: #3FB5FF)
   pin#pine(z-index: front; left: 467px; top: 213px; lab: EAST; c: $red; glow: #FF4A6A)
@@ -184,7 +184,7 @@ panel#tt(h: 248px)
 # 灼熱: 太陽の写真・温度計のパネル (25.0 → 36.0℃ を数え、帯が伸び、危険が点滅、日陰 0%)・ぬるいスポドリが右から転がり込み陽炎が立つ・「走る」で流線とカードが左へ流れる
 section#heat
 card#c3(p: "[photo]真夏の野外フェス会場の芝生広場を低いアングルから見上げた縦構図の写真。真上でギラギラと輝く灼熱の太陽、強烈なレンズフレア、陽炎で揺らぐ空気、日陰がまったく無い。遠くにステージの骨組みと旗。彩度が高く暑さが伝わる色調。")
-  img#p(main: kb,1.2@50%,52%>1.05@50%,50%,ease=sine.out)
+  img#p(main: kb {scale: [1.2, 1.05], focus: ['50% 52%', '50% 50%'], ease:'sine.out'})
 panel#thermo(h: 227px; out: {x:-133, opacity:0, duration:.3, ease:'power2.in'})
   p#lab(left: 27px; top: 11px; font-size: 21px; font-family: dot; color: #FFD27A) TEMP
   p#num(left: 23px; top: 41px; font-size: 85px; font-family: d; line-height: 1; color: linear(#FFE08A,#FF7A1C@55%,#FF2448,180); text-shadow: 0px 0px 12px #FF781ECC) [count:36.0 start=25.0 ms=605]
@@ -203,7 +203,7 @@ div#speed(left: 0px; top: 0px; width: 1200px; height: 1280px; background: none; 
 # 限界突破: ステージの写真・HP のパネル (曲数・声 / 膝 / HP の残量が語で削れて赤くなり、ダメージ数字・警告の赤枠)・膝のポラロイド・「全部」で全回復と FULL RECOVERY・「限界？」で周辺減光 + 灰に沈む
 section#limit
 card#c4(p: "@stage")
-  img#p(main: kb,1.25>1.12,ease=power1.out)
+  img#p(main: kb {scale: [1.25, 1.12], ease:'power1.out'})
 panel#hud(h: 235px; border: 2px solid $c)
   p#song(left: 20px; top: 15px; font-size: 25px; font-family: dot; color: $y) SONG
   p#cnt(left: 113px; top: 11px; font-size: 33px; font-family: dot) 03 / 12
@@ -223,7 +223,7 @@ flash#fl_revive(o: .6)
 
 # 完全勝利: 白の閃光で全面のステージ写真へ切り替え、金の放射光が回り、紙吹雪、PERFECT VICTORY
 section#victory
-img#vimg(inset: 0; content: @stage; main: kb,1.3>1.08,ease=power2.out)
+img#vimg(inset: 0; content: @stage; main: kb {scale: [1.3, 1.08], ease:'power2.out'})
 svg#rays(left: -280px; top: 93px; width: 1280px; height: 1280px; part: rays; mix-blend-mode: screen; in: {opacity:0, duration:1.04, ease:'none'}; bleed)
 confetti#cf(n: 70; dot: 10-17; colors: #FFE94A,#3FF5FF,#FF2BD6,#FFFFFF,#FF3B3B,#3FFFB0; drift: down)
 p#perfect(cx: 360px; top: 580px; font-size: 39px; font-family: dot; color: #FFF3B0; letter-spacing: .3em; text-shadow: 0px 0px 13px #FFD84A; in: {scale:.5, opacity:0, duration:.25, ease:'back.out(1.7)'}) PERFECT VICTORY
@@ -232,11 +232,11 @@ flash#fl_vic(o: 1)
 # 持論: 左右 2 枚の縦カード (音源 = 青く沈んだイヤホン / フェス = 赤いスピーカーの壁)・比べる 2 列の板・「別物」で巨大な ≠・「鼓膜」で音源に赤の ×・「細胞」でフェスが中央へ寄り衝撃の輪が 4 重に広がる
 section#theory
 div#half_l(left: 47px; top: 167px; width: 293px; height: 533px; border-radius: 27px; background: #0A0630; border: 3px solid #BEE6FFE6; box-shadow: 0px 0px 33px 7px #3FB5FF99; in: {x:-200, scale:.9, opacity:0, duration:.3, ease:'power3.out'}; out: {opacity:0, duration:.2})
-  img#p(inset: 0; main: kb,1.1>1.0,ease=none) [photo]暗い部屋の机の上に置かれたワイヤレスイヤホンとそのケース、横に画面の消えたスマートフォン。冷たい青い光だけが当たる、静かでミニマルな構図。プロダクト写真、縦構図。
+  img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]暗い部屋の机の上に置かれたワイヤレスイヤホンとそのケース、横に画面の消えたスマートフォン。冷たい青い光だけが当たる、静かでミニマルな構図。プロダクト写真、縦構図。
   div#tint(z-index: front; inset: 0; background: #143CA059; mix-blend-mode: multiply)
   p#lbl(cx: 147px; top: 20px; font-size: 27px; background: #1D5DFF; border-radius: 99px; padding: 5px 15px) 音源
 div#half_r(left: 380px; top: 167px; width: 293px; height: 533px; border-radius: 27px; background: #0A0630; border: 3px solid #FFDCEBF2; box-shadow: 0px 0px 40px 9px #FF2B78BF; delay: 80; in: {x:200, scale:.9, opacity:0, duration:.3, ease:'power3.out'})
-  img#p(inset: 0; main: kb,1.1>1.0,ease=none) [photo]野外フェスのステージ脇にそびえる巨大なスピーカーの壁（ラインアレイ）をローアングルで見上げた縦構図の写真。重低音で空気が震えるような迫力、赤とマゼンタのステージ照明、スモークと光の粒。
+  img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]野外フェスのステージ脇にそびえる巨大なスピーカーの壁（ラインアレイ）をローアングルで見上げた縦構図の写真。重低音で空気が震えるような迫力、赤とマゼンタのステージ照明、スモークと光の粒。
   p#lbl(cx: 147px; top: 20px; font-size: 27px; background: $red; border-radius: 99px; padding: 5px 15px) フェス
 # 赤の × (白の縁取り・2 本の棒を ±45°)
 group#xmark(left: 60px; top: 298px; width: 267px; height: 267px; in: {scale:1.8, opacity:0, duration:.18, ease:'power4.out'}; out: {opacity:0, duration:.2})
@@ -257,7 +257,7 @@ flash#fl_neq(o: .5)
 # 予告: 夜のベランダのタオルの写真 (ゆっくり寄る・星がきらめく)・NEXT 7 DAYS LEFT のカレンダーと第2弾発表の板・斜めの帯を文字が流れる・「震えて待て」は字幕を閉じた design の文字 (色ずれ + 震え + 閃光で上へ跳ねる)
 section#next
 card#c6(p: "[photo]夜のベランダの物干しに干された、洗いたてで少し濡れたフェス用のマフラータオル（無地で青から赤へのグラデーション）。背景は青と赤のネオンに染まった都会の夜景のボケ。シネマティックな写真、縦構図。")
-  img#p(main: kb,1.0>1.18,ease=none)
+  img#p(main: kb {scale: [1, 1.18], ease:'none'})
   svg#sp(left: "200;407;280"; top: "173;280;400"; width: 40px; height: 40px; part: spark; in: {scale:.2, rotation:-90, opacity:0, duration:.25, ease:'power2.out'}; out: {scale:.2, rotation:90, opacity:0, duration:.25, ease:'power2.in'}) ×3
 panel#next_box(h: 200px)
   div#cal(left: 23px; top: 23px; width: 140px; height: 153px; border-radius: 15px; background: #FFFFFF)

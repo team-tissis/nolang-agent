@@ -33,23 +33,23 @@ bgm#music 軽やかなアコースティックギターと木琴の明るいBGM�
 bgm#music2(volume: 1dB) 同じ系統で少し弾むアコースティックポップ、手拍子とウクレレ、料理の仕上げ向け
 
 section#open
-img#op_p(inset: 0; main: kb,1.0@50%,40%>1.08@50%,38%) [ref:@dish]湯気の立つ和風きのこパスタ、真上より少し斜め、皿は画面の上半分に大きく
+img#op_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 40%', '50% 38%']}) [ref:@dish]湯気の立つ和風きのこパスタ、真上より少し斜め、皿は画面の上半分に大きく
 veil#op_v(color: #FBF5EA; opacity: 0.92; to: bottom; start: 0.5)
 p#op_k(left: 40px; top: 72px; font-size: 30px; color: $paper; background: $a; border-radius: 99px; padding: 6px 22px; border: 3px solid $ink; in: pop) 調理 10分
 p#op_t(left: 40px; top: 760px; width: 640px; font-size: 84px; font-family: f; color: $ink; line-height: 1.15; in: title) 和風[br]きのこパスタ
-shape#op_r(left: 40px; top: 980px; width: 300px; height: 6px; path: line_h; background: $a; border: 6px solid $a; in: wipe,right,600)
+shape#op_r(left: 40px; top: 980px; width: 300px; height: 6px; path: line_h; background: $a; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.6})
 p#op_s(left: 40px; top: 1006px; font-size: 34px; color: $mute; in: note) しめじ × えのき × バター醤油
 p#op_n(right: 40px; top: 72px; font-size: 30px; color: $ink; background: $paper; border: 3px solid $ink; border-radius: 99px; padding: 6px 22px; in: pop; transform: rotate(6deg)) 2人分
 
 section#ing
-img#ig_p(inset: 0; main: kb,1.06@50%,50%>1.0) [photo]木のテーブルの上に並べたパスタの材料を真上から、乾麺のスパゲッティ、しめじ、えのき、バター、醤油の小瓶、にんにく、刻みのり、青ねぎ
+img#ig_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) [photo]木のテーブルの上に並べたパスタの材料を真上から、乾麺のスパゲッティ、しめじ、えのき、バター、醤油の小瓶、にんにく、刻みのり、青ねぎ
 veil#ig_v(color: #2B2118; opacity: 0.35)
 p#ig_h(left: 40px; top: 64px; font-size: 40px; color: $paper; background: $a; border-radius: 99px; padding: 8px 24px; border: 3px solid $ink; in: pop) 材料（2人分）
 div#ig_c(left: 40px; top: 150px; width: 640px; height: 860px; padding: 0px)
 p#ig_i(left: 72px; top: 180px; width: 576px; height: 800px; overlap: ig_c; gap: 14; font-size: 36px; color: $ink; in: {x:-24, opacity:0, duration:0.4, ease:'power3.out'}; display: flex; flex-direction: column) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
 
 section#s1
-img#s1_p(inset: 0; main: kb,1.0@50%,35%>1.07@50%,30%) [photo]大きな鍋で沸騰した湯の中にスパゲッティを放射状に入れる手元、湯気、ガスの火
+img#s1_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 35%', '50% 30%']}) [photo]大きな鍋で沸騰した湯の中にスパゲッティを放射状に入れる手元、湯気、ガスの火
 num#s1_n(left: 40px; top: 64px) 01
 div#s1_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
   ttl#t1(left: 32px; top: 28px; right: 32px) 塩を入れた湯で茹でる
@@ -58,7 +58,7 @@ div#s1_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
 p#s1_st(left: 470px; top: 640px; font-size: 48px; font-family: e; color: $paper; background: $a; border-radius: 20px; padding: 10px 24px; border: 4px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-8deg)) −1分
 
 section#s2
-img#s2_p(inset: 0; main: kb,1.08@50%,40%>1.0) [photo]鉄のフライパンでバターが溶けて刻んだにんにくが泡立ち、しめじとえのきを炒めている手元、木べら、湯気
+img#s2_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}) [photo]鉄のフライパンでバターが溶けて刻んだにんにくが泡立ち、しめじとえのきを炒めている手元、木べら、湯気
 num#s2_n(left: 40px; top: 64px) 02
 p#s2_h(right: 40px; top: 80px; font-size: 40px; color: $paper; background: $b; border-radius: 99px; padding: 8px 26px; border: 3px solid $ink; in: pop) 弱火
 #s2_h.hot(background: $a) 強火
@@ -68,7 +68,7 @@ div#s2_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
   p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) バター 20g・にんにく 1片
 
 section#tip
-img#tp_p(inset: 0; main: kb,1.0@50%,45%>1.12@50%,45%) [photo]フライパンの中で焼き色が付いたしめじとえのきのクローズアップ、こんがりときつね色、湯気
+img#tp_p(inset: 0; main: kb {scale: [1, 1.12], focus: ['50% 45%', '50% 45%']}) [photo]フライパンの中で焼き色が付いたしめじとえのきのクローズアップ、こんがりときつね色、湯気
 veil#tp_v(color: #2B2118; opacity: 0.75; to: bottom; start: 0.45)
 p#tp_k(left: 40px; top: 72px; font-size: 34px; color: $ink; background: $c; border-radius: 99px; padding: 6px 22px; border: 3px solid $ink; in: pop) コツ
 p#tp_t(left: 40px; top: 760px; width: 640px; font-size: 60px; font-family: f; color: $paper; line-height: 1.25; in: title) 触らずに[br]焼き付ける
@@ -76,7 +76,7 @@ p#tp_s(left: 40px; top: 940px; font-size: 36px; color: $paper; in: note) 1分待
 p#tp_st(left: 440px; top: 620px; font-size: 44px; color: $ink; background: $c; border-radius: 20px; padding: 10px 22px; border: 4px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-6deg)) こんがり
 
 section#s3
-img#s3_p(inset: 0; main: kb,1.0@50%,40%>1.07@50%,35%) [photo]フライパンのきのこにお玉でパスタの茹で汁を注ぎ、醤油を回しかける手元、湯気が立つ
+img#s3_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 40%', '50% 35%']}) [photo]フライパンのきのこにお玉でパスタの茹で汁を注ぎ、醤油を回しかける手元、湯気が立つ
 num#s3_n(left: 40px; top: 64px) 03
 div#s3_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
   ttl#t1(left: 32px; top: 28px; right: 32px) 茹で汁＋醤油を回しかけ
@@ -86,7 +86,7 @@ p#s3_a(left: 40px; top: 650px; font-size: 34px; color: $ink; background: $paper;
 p#s3_b(left: 260px; top: 650px; font-size: 34px; color: $paper; background: $a; border: 3px solid $ink; border-radius: 99px; padding: 6px 20px; in: pop) 大さじ1.5
 
 section#s4
-img#s4_p(inset: 0; main: kb,1.06@50%,40%>1.0) [photo]フライパンでスパゲッティときのこをトングで和えている手元、ソースが絡んでつやつや、湯気
+img#s4_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 40%'}) [photo]フライパンでスパゲッティときのこをトングで和えている手元、ソースが絡んでつやつや、湯気
 num#s4_n(left: 40px; top: 64px) 04
 div#s4_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
   ttl#t1(left: 32px; top: 28px; right: 32px) パスタを和える
@@ -98,7 +98,7 @@ chip#s4_b(left: 250px; top: 650px) 青ねぎ
 #s4_b.done(background: $b)
 
 section#close
-img#cl_p(inset: 0; main: kb,1.0@50%,40%>1.06@50%,42%) [ref:@dish]食卓に置かれた二皿の和風きのこパスタとお箸、夕方の温かい灯り、湯気
+img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['50% 40%', '50% 42%']}) [ref:@dish]食卓に置かれた二皿の和風きのこパスタとお箸、夕方の温かい灯り、湯気
 veil#cl_v(color: #FBF5EA; opacity: 0.92; to: bottom; start: 0.5)
 p#cl_t(left: 40px; top: 770px; width: 640px; font-size: 72px; font-family: f; color: $ink; line-height: 1.2; in: title) 今日の晩ごはんに[br]どうぞ
 p#cl_a(left: 40px; top: 990px; font-size: 30px; color: $paper; background: $a; border-radius: 99px; padding: 6px 20px; border: 3px solid $ink; in: pop) 10分

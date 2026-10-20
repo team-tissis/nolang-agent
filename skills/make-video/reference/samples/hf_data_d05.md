@@ -122,7 +122,7 @@ def li(t, c) = div(left: 24px; width: 330px; height: 24px; in: {y:8, opacity:0, 
 # 全編の地 (根): 紺の地に右上と左下の放射の光・方眼が全編で右下へ 32 / 16 px 漂う・周辺減光・字幕の下の暗い帯
 veil#glow1(background: radial(#142540,#14254000@70%,72%,0%); z-index: back; in: none)
 veil#glow2(background: radial(#0F1D30,#0F1D3000@70%,0%,100%); z-index: back; in: none)
-div#grid.bleed(left: -64px; top: -64px; width: 1408px; height: 848px; pattern: grid,32,#94A3B80E; mask-image: radial-gradient(ellipse 72% 62% at 50% 46%, #000 25%, transparent 100%); z-index: back; in: none; main: ramp,x=32,y=16)
+div#grid.bleed(left: -64px; top: -64px; width: 1408px; height: 848px; pattern: grid,32,#94A3B80E; mask-image: radial-gradient(ellipse 72% 62% at 50% 46%, #000 25%, transparent 100%); z-index: back; in: none; main: ramp {x: 32, y: 16})
 veil#vig(background: radial(#00000000@55%,#00000099,50%,45%); z-index: back; in: none)
 div#capband(left: 0px; top: 607px; width: 1280px; height: 113px; background: linear(#060A1100,#060A11DB@70%,180); z-index: front; in: none)
 
@@ -253,8 +253,8 @@ board#wk(left: 64px; top: 93px; width: 1152px; height: 513px; k: "{cy}03{/} ／ 
   p#xl(cx: "182;329;476;622"; cy: 445px; font-size: 15px; color: $tx2; white-space: nowrap; delay: 250; in: {opacity:0, duration:0.6}) ×4 1 週目;2 週目;3 週目;4 週目
   # hf の作り: B と A の間の面は 9% の青緑 (check はこの面の上の数字を low_contrast に数えるが、面はほぼ透明で読める)
   shape#area(path: "M182 159 L329 281 L476 310 L622 303 L622 327 L476 352 L329 335 L182 374 Z"; background: #3DD9EB17; in: {opacity:0, duration:0.8})
-  shape#lb(path: "M182 159 L329 281 L476 310 L622 303"; background: none; border: 3px solid $cyan; in: draw,1200)
-  shape#la(path: "M182 374 L329 335 L476 352 L622 327"; background: none; border: 3px solid $va; in: draw,1200)
+  shape#lb(path: "M182 159 L329 281 L476 310 L622 303"; background: none; border: 3px solid $cyan; in: draw {duration: 1.2})
+  shape#la(path: "M182 374 L329 335 L476 352 L622 327"; background: none; border: 3px solid $va; in: draw {duration: 1.2})
   shape#g1(path: "M182 168 L182 364"; background: none; border: 1px solid $cyan; dash: 3,4; in: {opacity:0, duration:0.4})
   shape#g2(path: "M329 290 L329 325"; background: none; border: 1px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
   shape#g3(path: "M476 319 L476 342"; background: none; border: 1px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})

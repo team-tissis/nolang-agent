@@ -92,7 +92,7 @@ def flow(i, l, v, u, n) = div(top: 49px; width: 260px; height: 135px; in: {y:20,
 
 # title — 夕暮れの図書館の絵に寄りから引き、左の余白に題札 (前置き → 2 行の大題 → 揺れる ？ → 罫 → 副題)・語で出演者の札 2 枚
 section#title(stagger: {each:0})
-img#a_img(inset: 0; subject: right 60%; room: left 40%; main: kb,1.12@42%,50%>1.0@50%,50%,ease=sine.out) 夕暮れの日本の小さな市の、2 階建ての現代的な市立図書館を、並木のある静かな通りの向かいから見た横長の構図。大きなガラス窓から琥珀色の温かい光がもれ、中の本棚が見える。空は桃色からくすんだ藍へのやわらかなグラデーション。コートを着た通勤の人が数人、歩道を歩く。図書館と人は画面の右 6 割に置き、左の 4 割は空と並木だけの静かな余白にする
+img#a_img(inset: 0; subject: right 60%; room: left 40%; main: kb {scale: [1.12, 1], focus: ['42% 50%', '50% 50%'], ease:'sine.out'}) 夕暮れの日本の小さな市の、2 階建ての現代的な市立図書館を、並木のある静かな通りの向かいから見た横長の構図。大きなガラス窓から琥珀色の温かい光がもれ、中の本棚が見える。空は桃色からくすんだ藍へのやわらかなグラデーション。コートを着た通勤の人が数人、歩道を歩く。図書館と人は画面の右 6 割に置き、左の 4 割は空と並木だけの静かな余白にする
 div#a_shade(inset: 0; background: linear(#F7F0E5F5,#F7F0E5E6@36%,#F7F0E559@58%,#F7F0E500@72%,90))
 p#a_kick(left: 80px; top: 100px; font-size: 16px; color: $kick; background: #FFFBF3CC; border: 1.7px solid $amber; border-radius: 99px; padding: 5px 13px; delay: 200; in: {y:13, opacity:0, duration:.5, ease:'power2.out'}) 市民調査レポート
 p#a_t1(left: 80px; top: 153px; font-size: 47px; font-family: s; line-height: 1.15; color: $ink2; delay: 400; in: {x:-27, opacity:0, duration:.7, ease:'expo.out'}) 市立図書館、
@@ -120,7 +120,7 @@ div#hdr_r.sticky(left: 840px; top: 24px; width: 393px; height: 37px; background:
   div#seg(left: "210;231;252;273;294;315;336;357"; cy: 50%; width: 17px; height: 5px; border-radius: 3px; background: $segbg) ×8
     div#fill(left: 0px; top: 0px; width: 17px; height: 5px; border-radius: 3px; background: $amber; in: {scaleX:0, duration:.5, ease:'power2.out', pivot:'left'})
 card#b_photo(left: 60px; top: 100px; width: 533px; height: 333px; transform: rotate(-1.6deg); delay: 450; in: {y:27, rotation:-3.4, opacity:0, duration:.8, ease:'power3.out'})
-  img#img(left: 11px; top: 11px; width: 511px; height: 311px; border-radius: 11px; main: kb,1.12>1.0,ease=sine.out) 大学の研究室の木の机を真上から見た構図。返送された紙の調査票と封筒がきちんと積まれ、鉛筆でチェックが入った調査票が数枚、簡単な棒グラフを映すノートパソコン、紅茶のマグ、鉛筆、温かい光のデスクランプ。机の上の物を画面いっぱいに配して余白を作らない。読める文字や数字は描かない
+  img#img(left: 11px; top: 11px; width: 511px; height: 311px; border-radius: 11px; main: kb {scale: [1.12, 1], ease:'sine.out'}) 大学の研究室の木の机を真上から見た構図。返送された紙の調査票と封筒がきちんと積まれ、鉛筆でチェックが入った調査票が数枚、簡単な棒グラフを映すノートパソコン、紅茶のマグ、鉛筆、温かい光のデスクランプ。机の上の物を画面いっぱいに配して余白を作らない。読める文字や数字は描かない
 fact#b_fact(top: "467;522;576"; i: "map-pin;bank;clock"; t: "みなと野市;市立図書館;平日の閉館"; e: "人口 18万人;本館 1・分館 3;19時"; c: "$teal;$teal;$amber"; bc: "$line;$line;$amber"; delay: 700) ×3
 board#b_board(left: 640px; top: 107px; width: 587px; height: 467px; delay: 550; in: {y:20, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 調査のあらまし
@@ -130,7 +130,7 @@ board#b_board(left: 640px; top: 107px; width: 587px; height: 467px; delay: 550; 
   # 回収率の輪: 地の輪 + 上から右回りに半周の弧 (語で描く)・中に数える 50%
   div#ring(left: 33px; top: 240px; width: 193px; height: 193px; in: {scale:.85, opacity:0, duration:.5, ease:'power2.out'})
     shape#bg.ellipse(left: 6px; top: 6px; width: 181px; height: 181px; background: none; border: 23px solid $ringbg)
-    shape#arc(left: 0px; top: 0px; width: 193px; height: 193px; path: "M 96.5 17.5 C 140.1 17.5 175.5 52.9 175.5 96.5 C 175.5 140.1 140.1 175.5 96.5 175.5"; background: none; border: 23px solid $teal; main: sine,rotation=6,freq_ms=1600; in: draw,1000,ease=power2.inOut)
+    shape#arc(left: 0px; top: 0px; width: 193px; height: 193px; path: "M 96.5 17.5 C 140.1 17.5 175.5 52.9 175.5 96.5 C 175.5 140.1 140.1 175.5 96.5 175.5"; background: none; border: 23px solid $teal; main: sine {rotation: 6, period: 1.6}; in: draw {duration: 1, ease: 'power2.inOut'})
     p#v(cx: 50%; top: 56px; font-size: 61px; font-family: s; line-height: 1; color: $teal) [count:50 start=0 ms=1000 delay=200]{pc}%{/}
     p#l(cx: 50%; top: 120px; font-size: 17px; color: $ink2) 回収率
   div#note(left: 253px; top: 280px; width: 300px; height: 100px; in: {x:20, opacity:0, duration:.6, ease:'power2.out'})
@@ -197,7 +197,7 @@ board#d_40(left: 913px; top: 376px; width: 313px; height: 129px; border: 2px sol
 # reasons — 04 使わない理由: 右半分に閉まった図書館の前に立つ人の絵 (左の縁は紙へ溶ける)・板に理由の横棒 4 本を先に伸ばし「1位は…？」→ 1 位の行を語で伸ばして 41%・本の理由 2 行を薄め、時計の icon を回す
 section#reasons(stagger: {each:0})
 chap#ch4.sticky(n: "04"; t: "使わない理由")
-img#e_img(left: 640px; top: 0px; width: 640px; height: 720px; fit: cover,focus=16%,50%; main: kb,1.1>1.0,ease=sine.out) 夜、公立図書館の閉まったガラスの入口扉の前に立つ、20 代の疲れた日本人の会社員の男性。スーツに肩掛けのかばん、うつむきぎみに扉を見つめる。館内は暗く本棚がかすかに見え、入口近くの小さな壁掛け時計は 7 時過ぎを指す。街灯が歩道を温かく照らす。静かで少しさみしいがやさしい雰囲気。男性を画面の中央に大きく置く
+img#e_img(left: 640px; top: 0px; width: 640px; height: 720px; fit: cover,focus=16%,50%; main: kb {scale: [1.1, 1], ease:'sine.out'}) 夜、公立図書館の閉まったガラスの入口扉の前に立つ、20 代の疲れた日本人の会社員の男性。スーツに肩掛けのかばん、うつむきぎみに扉を見つめる。館内は暗く本棚がかすかに見え、入口近くの小さな壁掛け時計は 7 時過ぎを指す。街灯が歩道を温かく照らす。静かで少しさみしいがやさしい雰囲気。男性を画面の中央に大きく置く
 div#e_fade(left: 640px; top: 0px; width: 147px; height: 720px; background: linear($fade,#F4EDE100,90))
 p#e_tag(left: 947px; top: 513px; font-size: 20px; color: $cream; background: #1B2440E0; border-radius: 11px; padding: 9px 17px 9px 47px; delay: 1150; in: {y:13, opacity:0, duration:.5, ease:'power2.out'}) 平日は 19時に閉館
   icon#i(left: 15px; cy: 50%; font-size: 26px; name: clock; color: $lamp)
@@ -228,7 +228,7 @@ board#e_board(left: 53px; top: 107px; width: 640px; height: 467px; delay: 450; i
 section#wants(stagger: {each:0})
 chap#ch5.sticky(n: "05"; t: "来ない人が欲しいもの")
 card#f_photo(left: 53px; top: 107px; width: 507px; height: 467px; transform: rotate(1.2deg); delay: 250; in: {y:27, rotation:3.8, opacity:0, duration:.8, ease:'power3.out'})
-  img#img(left: 11px; top: 11px; width: 485px; height: 445px; border-radius: 11px; fit: cover,focus=30%,50%; main: kb,1.12>1.0,ease=sine.out) 夕方の明るく居心地のよい日本の公立図書館の館内。卓上ランプの並ぶ長い学習机で大人がノートパソコンやノートに向かい、隅には小さなカフェのカウンターとコーヒーマシンと丸いテーブル、やわらかい肘掛け椅子でタブレットの電子書籍を読む人、背の高い木の本棚。温かいランプの光でくつろいだ雰囲気。机と人を画面いっぱいに置いて余白を作らない
+  img#img(left: 11px; top: 11px; width: 485px; height: 445px; border-radius: 11px; fit: cover,focus=30%,50%; main: kb {scale: [1.12, 1], ease:'sine.out'}) 夕方の明るく居心地のよい日本の公立図書館の館内。卓上ランプの並ぶ長い学習机で大人がノートパソコンやノートに向かい、隅には小さなカフェのカウンターとコーヒーマシンと丸いテーブル、やわらかい肘掛け椅子でタブレットの電子書籍を読む人、背の高い木の本棚。温かいランプの光でくつろいだ雰囲気。机と人を画面いっぱいに置いて余白を作らない
 board#f_board(left: 600px; top: 107px; width: 627px; height: 467px; delay: 400; in: {x:27, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 来ない人が欲しいサービス（非利用者・複数回答）
   div#s(left: 27px; top: "47;147;247;347"; width: 573px; height: 89px; border-radius: 15px; border: 2px solid #FFFBF300; delay: 200; in: {y:16, opacity:0, duration:.45, ease:'power2.out', stagger: {each: .13}}) ×4
@@ -283,7 +283,7 @@ veil#g_dip(color: $night; opacity: 1; z-index: curtain; in: {opacity:0, duration
 # trial — 07 試しにやってみた: 夜の駅前分館の写真 (左を夜の色で沈め、灯りのぼけが昇る)・題と時刻の帯 (これまで 19 時 → 延長した 2 時間が伸びる) → 来館と新しい利用カードの前後の横棒を数え、倍率の札を弾ませる
 section#trial(stagger: {each:0})
 chap#ch7.sticky(n: "07"; t: "試しにやってみた")
-img#h_img(inset: 0; content: @station; main: kb,1.14@64%,50%>1.02@70%,50%,ease=sine.inOut)
+img#h_img(inset: 0; content: @station; main: kb {scale: [1.14, 1.02], focus: ['64% 50%', '70% 50%'], ease:'sine.inOut'})
 div#h_shade(inset: 0; background: linear(#141B32F2,#141B32E6@44%,#141B3273@62%,#141B320D@80%,90))
 # 灯りのぼけ 16 個 (hf の種つき乱数の位置・場面の尺で昇りながら灯る)
 div#h_bk.bleed(left: "971.3;971.6;1055.5;879.5;1159.9;687.1;861.7;1145.5;969;680.4;865.1;986.2;1027.5;1031.3;962;701.2"; top: "342.8;351;412.6;355.2;450.4;399.2;310.8;242.6;145.5;242;2;171.5;66.5;204.7;2;427.7"; width: "57.5;25.9;50.8;49;50.7;38.5;74.5;82.3;56.5;67.2;54.2;42;66.2;82.5;42.6;29.1"; height: "57.5;25.9;50.8;49;50.7;38.5;74.5;82.3;56.5;67.2;54.2;42;66.2;82.5;42.6;29.1"; border-radius: 99px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.78;0.59;0.44;0.65;0.51;0.50;0.77;0.39;0.72;0.84;0.56;0.43;0.54;0.64;0.50;0.61"; delay: "807;1265;414;864;934;219;214;1261;133;642;1139;177;1405;652;612;155"; in: {y:40, opacity:0, duration:19, ease:'sine.inOut'}) ×16
@@ -351,12 +351,12 @@ div#pt3(left: 53px; top: 434px; width: 1173px; height: 112px; background: $paper
   # 次の一手の札 (チェックの枠 + 語で描くチェック + 文)
   div#a(left: "81;576"; top: 54px; width: "480;271"; height: 43px; border-radius: 11px; background: $actbg; in: {x:-13, opacity:0, duration:.45, ease:'power2.out'}) ×2
     div#bx(left: 9px; cy: 50%; width: 29px; height: 29px; border-radius: 8px; border: 2px solid $amber; background: $paper2)
-    icon#ck(left: 13px; cy: 50%; font-size: 21px; name: check; weight: bold; color: $amber; in: draw,500)
+    icon#ck(left: 13px; cy: 50%; font-size: 21px; name: check; weight: bold; color: $amber; in: draw {duration: 0.5})
     p#t(left: 47px; cy: 50%; font-size: 19px) 駅前分館の夜間開館を続け、ほかの分館へ広げる;電子書籍の貸出を始める
 
 # end — 締め: 夜の駅前分館の写真に寄りから引き、左に題の 2 行 → 罫 → 主催 → 2 人の顔 → 注記・最後に夜の色へ溶ける
 section#end(stagger: {each:0})
-img#end_img(inset: 0; content: @station; main: kb,1.16@55%,50%>1.04@55%,50%,ease=sine.out)
+img#end_img(inset: 0; content: @station; main: kb {scale: [1.16, 1.04], focus: ['55% 50%', '55% 50%'], ease:'sine.out'})
 div#end_shade(inset: 0; background: radial(#141B32E0,#141B3299@55%,#141B3226,26%,52%))
 div#end_bk.bleed(left: "644.6;1220;1243.8;1028.1;1111.6;1099.9;741.9;1021.6;705.3;946.4;732;719.7;1142.6;1032.9"; top: "374.3;508.4;488.7;591.9;64.7;495.5;168.8;149.8;367.6;442.3;396.9;73.2;402.3;378.6"; width: "26.8;57.6;26.3;53.2;34;89.4;72;79.4;78.8;62.7;20.8;70.9;25.1;32.2"; height: "26.8;57.6;26.3;53.2;34;89.4;72;79.4;78.8;62.7;20.8;70.9;25.1;32.2"; border-radius: 99px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.51;0.70;0.72;0.77;0.54;0.67;0.80;0.45;0.74;0.50;0.64;0.63;0.70;0.56"; delay: "321;313;82;345;763;1217;1427;591;7;78;1406;460;34;360"; in: {y:40, opacity:0, duration:5.5, ease:'sine.inOut'}) ×14
 p#end_l1(left: 93px; top: 180px; font-size: 64px; font-family: s; line-height: 1.3; color: $cream; delay: 300; in: {y:20, opacity:0, duration:.7, ease:'power3.out'}) 夜の図書館でも、

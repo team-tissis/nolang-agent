@@ -93,10 +93,10 @@ subtitle.hug(left: 20px; top: 901px; width: 680px; wrap: comma,30; height: 131px
 
 # 全編の地: 縦グラデ・点の格子 (全編で 27 px 上へ流れる)・3 色のぼけ (全編でゆっくり漂う)
 div#bg_base(inset: 0; background: linear(#FFF9EF,#FFF1DC,180); z-index: back; in: none)
-div#dots(left: -27px; top: -27px; width: 774px; height: 1334px; pattern: dots,27,#96693221; z-index: back; in: none; main: ramp,y=-27)
-div#blob1(left: -253px; top: -173px; width: 600px; height: 600px; background: radial(#FFC4788C,#FFC47800@68%,50%,50%); z-index: back; in: none; main: ramp,x=80,y=53,ease=sine_in_out)
-div#blob2(left: 347px; top: 507px; width: 653px; height: 653px; background: radial(#96D6A073,#96D6A000@68%,50%,50%); z-index: back; in: none; main: ramp,x=-93,y=-80,ease=sine_in_out)
-div#blob3(left: -173px; top: 880px; width: 507px; height: 507px; background: radial(#FFAA9666,#FFAA9600@68%,50%,50%); z-index: back; in: none; main: ramp,x=107,y=-40,ease=sine_in_out)
+div#dots(left: -27px; top: -27px; width: 774px; height: 1334px; pattern: dots,27,#96693221; z-index: back; in: none; main: ramp {y: -27})
+div#blob1(left: -253px; top: -173px; width: 600px; height: 600px; background: radial(#FFC4788C,#FFC47800@68%,50%,50%); z-index: back; in: none; main: ramp {x: 80, y: 53, ease: 'sine.inOut'})
+div#blob2(left: 347px; top: 507px; width: 653px; height: 653px; background: radial(#96D6A073,#96D6A000@68%,50%,50%); z-index: back; in: none; main: ramp {x: -93, y: -80, ease: 'sine.inOut'})
+div#blob3(left: -173px; top: 880px; width: 507px; height: 507px; background: radial(#FFAA9666,#FFAA9600@68%,50%,50%); z-index: back; in: none; main: ramp {x: 107, y: -40, ease: 'sine.inOut'})
 # 常設の上端: 白い丸札の題 (朱の丸 + カート) と右の店名・その下に全編で伸びる進行線・下端の出典
 div#brand(left: 32px; top: 46px; width: 262px; height: 44px; background: #FFFFFF; border: 2px solid $ink; border-radius: 99px; box-shadow: 0px 3px 0px $ink; in: {y:-20, opacity:0, duration:.5, ease:'power3.out'})
   div#dot(left: 6px; cy: 50%; width: 27px; height: 27px; border-radius: 99px; background: $a)
@@ -135,7 +135,7 @@ board#st(n: "01"; t: "調査の舞台")
   p#t2(left: .tag.right+13; cy: 38px; font-size: 31px; line-height: 1.1; white-space: nowrap; in: {y:13, opacity:0, duration:.3}) 4週間の廃棄
   bsub#sub(out: {opacity:0, duration:.25}) 架空の地域スーパー
   div#a(inset: 0; out: {x:-40, opacity:0, duration:.24, ease:'power2.in'})
-    img#photo(left: 27px; top: 93px; width: 603px; height: 402px; border-radius: 20px; delay: 200; in: wipe,down,700,ease=power3.out; main: kb,1.12>1.0,ease=sine_out; subject: top 65%; room: bottom 30%) A cozy neighborhood supermarket storefront on a quiet street in a Japanese residential area: a single-story shop with a green-and-cream striped awning, large glass windows showing produce and bread shelves, a couple of shoppers with eco bags, a parked bicycle and potted plants, soft morning light. The shop fills the whole frame edge to edge; the lower-left quarter is plain pavement for a name plate.
+    img#photo(left: 27px; top: 93px; width: 603px; height: 402px; border-radius: 20px; delay: 200; in: wipe {dir: 'down', duration: 0.7, ease: 'power3.out'}; main: kb {scale: [1.12, 1], ease:'sine.out'}; subject: top 65%; room: bottom 30%) A cozy neighborhood supermarket storefront on a quiet street in a Japanese residential area: a single-story shop with a green-and-cream striped awning, large glass windows showing produce and bread shelves, a couple of shoppers with eco bags, a parked bicycle and potted plants, soft morning light. The shop fills the whole frame edge to edge; the lower-left quarter is plain pavement for a name plate.
     div#plate(left: 47px; top: 391px; width: 372px; height: 91px; background: #FFFFFF; border-radius: 15px; box-shadow: 0px 7px 16px #00000029; overlap: st.a.photo; in: {x:-27, opacity:0, duration:.45, ease:'back.out(1.6)'})
       p#b(left: 19px; top: 11px; font-size: 36px; line-height: 1.1; white-space: nowrap) まるみ屋 ひばり台店
       p#s(left: 19px; top: 56px; font-size: 17px; font-family: e; color: $ink2; white-space: nowrap) 住宅街にある地域スーパー（架空）
@@ -201,9 +201,9 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
     p#kg(left: 313px; top: 47px; font-size: 37px; line-height: 1; white-space: nowrap) 930{k3}kg ／ 全体 1,840kg{/}
     div#stk(left: 0px; top: 112px; width: 603px; height: 15px; border-radius: 7px; background: #ECE4D8)
     # 3 色の積み上げ (左から 1 本の帯として開く = 3 枚を続けて wipe)
-    div#s1(left: 0px; top: 112px; width: 141px; height: 15px; border-radius: 7px 0px 0px 7px; background: $souzai; in: wipe,right,330,ease=none)
-    div#s2(left: 141px; top: 112px; width: 95px; height: 15px; background: $seika; delay: 330; in: wipe,right,220,ease=none)
-    div#s3(left: 236px; top: 112px; width: 69px; height: 15px; background: $pan; delay: 550; in: wipe,right,150,ease=power2.out)
+    div#s1(left: 0px; top: 112px; width: 141px; height: 15px; border-radius: 7px 0px 0px 7px; background: $souzai; in: wipe {dir: 'right', duration: 0.33, ease: 'none'})
+    div#s2(left: 141px; top: 112px; width: 95px; height: 15px; background: $seika; delay: 330; in: wipe {dir: 'right', duration: 0.22, ease: 'none'})
+    div#s3(left: 236px; top: 112px; width: 69px; height: 15px; background: $pan; delay: 550; in: wipe {dir: 'right', duration: 0.15, ease: 'power2.out'})
     div#half(left: 301px; top: 103px; width: 3px; height: 33px; border-radius: 2px; background: $ink)
   # 金額の段: 1kg あたりの売値の札 ×3 が語ごとに弾む
   div#summ(left: 27px; top: 579px; width: 603px; height: 127px; in: {opacity:0, duration:.3})

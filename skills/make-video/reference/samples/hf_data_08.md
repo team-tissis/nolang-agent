@@ -50,7 +50,7 @@ img { main: none; out: none }
 shape { out: none }
 icon { out: none }
 svg { out: none }
-subtitle.hug(font-size: 31px; bottom: 36px; background: #111F34CC; color: #FFFFFF; border-radius: 11px; padding: 9px 24px; letter-spacing: 0.03em; line-height: 1.25; unit: sentence; strip: all; lead: 120; tail: 350; hold: off; in: fade,120; out: fade,100)
+subtitle.hug(font-size: 31px; bottom: 36px; background: #111F34CC; color: #FFFFFF; border-radius: 11px; padding: 9px 24px; letter-spacing: 0.03em; line-height: 1.25; unit: sentence; strip: all; lead: 120; tail: 350; hold: off; in: fade {duration: 0.12}; out: fade {duration: 0.1})
 bgm#music(volume: 6dB; duck: -8; fade: 1200,3400; keys: "0:0") 明るく穏やかで爽やかな日常のポップ、ピアノとアコースティックギターと高い弦、軽い打楽器、希望のある普通の速さ
 # 丸い札 (地と字の色を渡す)・段組の半分 (紙の板 573 px / 写真の枠 707 px・全高)
 def chip(t, fill_color=$navy, text_color=#FFFFFF) = p(content: {t}; font-size: 24px; line-height: 1; background: {fill_color}; color: {text_color}; border-radius: 99px; padding: 9px 19px; letter-spacing: 0.04em)
@@ -64,7 +64,7 @@ def dial(c) = div(width: 77px; height: 77px; border-radius: 39px; border: 5px so
 
 # title — 題の札: 朝の市役所に左から cream の幕 → 札 → 2 行が mask から上がる → 下線
 section#title(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
-img#title_photo(inset: 0; content: @hall_morning; main: kb,1.03@70%,60%>1.12@70%,60%)
+img#title_photo(inset: 0; content: @hall_morning; main: kb {scale: [1.03, 1.12], focus: ['70% 60%', '70% 60%']})
 div#title_veil(inset: 0; background: linear(#F6F1E6F2@0%,#F6F1E6E0@42%,#F6F1E680@56%,#F6F1E600@72%,90); delay: 50; in: {opacity:0, duration:0.8, ease:'power2.out'})
 chip#title_chip(left: 87px; top: 153px; padding: 9px 19px 9px 51px; delay: 300; in: {x:-20, scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'}; out: {x:-93, duration:0.7, ease:'power3.inOut'}) 市役所からのお知らせ
 svg#title_glyph(left: 106px; top: 162px; width: 24px; height: 24px; part: hall_white; delay: 300; in: {x:-20, scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'}; out: {x:-93, duration:0.7, ease:'power3.inOut'}; overlap: title_chip)
@@ -74,7 +74,7 @@ shape#title_rule(left: 87px; top: 440px; width: 547px; height: 8px; path: rect,r
 
 # change — 前 → 後: ぼかした窓口の写真に「これまで」の板 → 左へ寄せて「変更後」の板と矢印 → 針が回って時刻が出て判子
 section#change(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
-img#change_photo(inset: 0; content: @counter; filter: blur:5,sat:0.9; main: kb,1.08>1.16)
+img#change_photo(inset: 0; content: @counter; filter: blur:5,sat:0.9; main: kb {scale: [1.08, 1.16]})
 div#change_veil(inset: 0; background: #F6F1E6DB; in: none)
 # 常設の帯: 紺の丸札に glyph + 題 + 縦線 + 副題 (sticky で closing の頭まで残る)
 div#banner.sticky(left: 37px; top: 27px; width: 473px; height: 40px; border-radius: 99px; background: $navy; box-shadow: 0px 5px 15px #142A472E; delay: 500; in: {y:-16, opacity:0, duration:0.5, ease:'power3.out'}; out: {y:-16, opacity:0, duration:0.4, ease:'power2.in'})
@@ -90,14 +90,14 @@ div#before(left: 387px; top: 157px; width: 507px; height: 333px; border-radius: 
   shape#rule(left: 33px; bottom: 80px; width: 441px; height: 2px; path: line_h; border: 2px solid $line; dash: 6,6)
   p#foot(left: 33px; bottom: 27px; font-size: 24px; color: $gray) 1日の受付{num}9{/}時間
 # 矢印: 軸を描いてから頭が左から来る
-shape#arrow_line(path: "M 579 325 L 657 325"; background: none; border: 9px solid $orange; in: draw,400,ease=power2.out; out: {x:-93, duration:0.7, ease:'power3.inOut'})
+shape#arrow_line(path: "M 579 325 L 657 325"; background: none; border: 9px solid $orange; in: draw {duration: 0.4, ease: 'power2.out'}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
 shape#arrow_head(path: "M 639 301 L 667 325 L 639 348"; background: none; border: 9px solid $orange; in: {x:-13, opacity:0, duration:0.3, ease:'power3.out'}; out: {x:-93, duration:0.7, ease:'power3.inOut'}; overlap: arrow_line)
 div#after(left: 707px; top: 157px; width: 507px; height: 333px; border-radius: 23px; border: 3px solid $orange; overlap: before; box-shadow: 0px 16px 40px #142A4729; in: {x:53, opacity:0, duration:0.7, ease:'power3.out'}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
   chip#pill(left: 36px; top: 34px; fill_color: $orange) 変更後
   dial#dial(right: 34px; top: 26px; c: $orange)
   p#cap(left: 36px; top: 96px; font-size: 24px; color: $gray) 窓口開庁時間
   p#open(left: 36px; top: 131px; font-size: 61px; color: $orange; line-height: 1.1; in: {y:27, opacity:0, duration:0.45, ease:'back.out(1.6)'}) 9:00
-  p#sep(left: 190px; top: 142px; font-size: 43px; color: $orange; in: fade,300) 〜
+  p#sep(left: 190px; top: 142px; font-size: 43px; color: $orange; in: fade {duration: 0.3}) 〜
   p#close(left: 254px; top: 131px; font-size: 61px; color: $orange; line-height: 1.1; in: {y:27, opacity:0, duration:0.45, ease:'back.out(1.6)'}) 16:00
   shape#rule(left: 36px; bottom: 80px; width: 441px; height: 2px; path: line_h; border: 2px solid $line; dash: 6,6)
   p#foot(left: 36px; bottom: 27px; font-size: 24px; color: $gray) 1日の受付{num_o}7{/}時間
@@ -111,22 +111,22 @@ group#hanko(left: 1128px; top: 410px; width: 119px; height: 119px; transform: ro
 section#gaps(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
 div#bg_gaps(inset: 0; background: $paper; border-radius: 0; border: none; box-shadow: 0; padding: 0; in: none; out: none; z: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
-group#chart(main: ramp,scale=0.035,window=700,20830,pivot=50%,45%)
+group#chart(main: ramp {scale: 0.035, window: '700,20830', pivot: '50%,45%'})
 shape#chart.head_bar(left: 87px; top: 91px; width: 8px; height: 40px; path: rect; background: $orange; delay: 350; in: {y:13, opacity:0, duration:0.55, ease:'power3.out'})
 p#chart.head(left: 114px; top: 89px; font-size: 36px; color: $navy; line-height: 1.1; delay: 350; in: {y:13, opacity:0, duration:0.55, ease:'power3.out'}) 窓口で受付できる時間帯
-shape#chart.grid(left: 176px; top: 220px; width: 968px; height: 220px; gap: 0; path: line_v; border: 2px solid #1F3A5F29; dash: 4,4; in: fade,400,stagger=30; delay: 700; display: flex) ×11
+shape#chart.grid(left: 176px; top: 220px; width: 968px; height: 220px; gap: 0; path: line_v; border: 2px solid #1F3A5F29; dash: 4,4; in: fade {duration: 0.4, stagger: 0.03}; delay: 700; display: flex) ×11
 p#chart.label_before(left: 47px; top: 255px; width: 153px; font-size: 27px; color: $navy; text-align: right; in: {y:11, opacity:0, duration:0.4, ease:'power3.out'}; delay: 700) これまで
 p#chart.label_after(left: 47px; top: 369px; width: 153px; font-size: 27px; color: $navy; text-align: right; in: {y:11, opacity:0, duration:0.4, ease:'power3.out'}) 変更後
 div#chart.bar_before(left: 242px; top: 240px; width: 792px; height: 67px; border-radius: 9px; background: $slate; box-shadow: 0px 7px 16px #142A4724; in: {scaleX:0, duration:0.8, ease:'power3.inOut', pivot:'left'}; delay: 800)
   p#t(cx: 50%; cy: 50%; font-size: 28px; color: #FFFFFF; letter-spacing: 0.03em; in: {y:7, opacity:0, duration:0.4, ease:'power3.out'}; delay: 1400) 8:15〜17:15
 div#chart.bar_after(left: 308px; top: 353px; width: 616px; height: 67px; border-radius: 9px; background: $orange; box-shadow: 0px 7px 16px #142A4724; in: {scaleX:0, duration:0.8, ease:'power3.inOut', pivot:'left'})
   p#t(cx: 50%; cy: 50%; font-size: 28px; color: #FFFFFF; letter-spacing: 0.03em; in: {y:7, opacity:0, duration:0.4, ease:'power3.out'}) 9:00〜16:00
-div#chart.gap_am(left: 242px; top: 220px; width: 66px; height: 220px; border-radius: 7px; background: #D2463A14; border: 2px solid $red; in: fade,350)
-  div#hatch(left: 0px; top: 0px; width: 100%; height: 100%; border-radius: 5px; background: #FFFFFF80; pattern: hatch,45,#D2463A57,13,7; in: fade,400)
+div#chart.gap_am(left: 242px; top: 220px; width: 66px; height: 220px; border-radius: 7px; background: #D2463A14; border: 2px solid $red; in: fade {duration: 0.35})
+  div#hatch(left: 0px; top: 0px; width: 100%; height: 100%; border-radius: 5px; background: #FFFFFF80; pattern: hatch,45,#D2463A57,13,7; in: fade {duration: 0.4})
   div#xmark(cx: 50%; cy: 50%; width: 49px; height: 49px; border-radius: 25px; background: $red; box-shadow: 0px 4px 11px #D2463A59; in: {scale:0.85, opacity:0, duration:0.4, ease:'back.out(1.7)'})
     icon#cross(cx: 50%; cy: 50%; font-size: 26px; name: x; weight: bold; color: #FFFFFF)
-div#chart.gap_pm(left: 924px; top: 220px; width: 110px; height: 220px; border-radius: 7px; background: #D2463A14; border: 2px solid $red; in: fade,350)
-  div#hatch(left: 0px; top: 0px; width: 100%; height: 100%; border-radius: 5px; background: #FFFFFF80; pattern: hatch,45,#D2463A57,13,7; in: fade,400)
+div#chart.gap_pm(left: 924px; top: 220px; width: 110px; height: 220px; border-radius: 7px; background: #D2463A14; border: 2px solid $red; in: fade {duration: 0.35})
+  div#hatch(left: 0px; top: 0px; width: 100%; height: 100%; border-radius: 5px; background: #FFFFFF80; pattern: hatch,45,#D2463A57,13,7; in: fade {duration: 0.4})
   div#xmark(cx: 50%; cy: 50%; width: 49px; height: 49px; border-radius: 25px; background: $red; box-shadow: 0px 4px 11px #D2463A59; in: {scale:0.85, opacity:0, duration:0.4, ease:'back.out(1.7)'})
     icon#cross(cx: 50%; cy: 50%; font-size: 26px; name: x; weight: bold; color: #FFFFFF)
 p#chart.balloon_am(cx: 275px; top: 164px; font-size: 25px; line-height: 1; color: $red; background: #FFFFFF; border: 2px solid $red; border-radius: 9px; padding: 7px 13px 6px 13px; pointer: below; in: {y:11, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 45分 遅く
@@ -140,7 +140,7 @@ div#chart.caution(left: 172px; top: 526px; width: 936px; height: 75px; border-ra
 # reason — 理由: 左に紙の板 (札・3 行の見出し・お願いの札)・右に窓口の写真 (左端に橙の縁)
 section#reason(stagger: {each:0})
 half_paper#reason_paper(left: 0px)
-half_photo#reason_photo(left: 573px; src: @counter; focus_x: 46%; main: kb,1.12@33%,50%>1.02; edge: left,9,$orange)
+half_photo#reason_photo(left: 573px; src: @counter; focus_x: 46%; main: kb {scale: [1.12, 1.02], focus: '33% 50%'}; edge: left,9,$orange)
 chip#reason_chip(left: 67px; top: 131px; fill_color: none; text_color: $navy; border: 2px solid $navy; padding: 7px 17px; delay: 350; in: {y:9, opacity:0, duration:0.45, ease:'power3.out'}) 窓口サービスの見直し
 p#reason_l1(left: 67px; top: 200px; font-size: 44px; color: $navy; line-height: 1.3; letter-spacing: 0.02em; in: {y:72, duration:0.6, ease:'power3.out', clip:true}) より丁寧で
 p#reason_l2(left: 67px; top: 261px; font-size: 44px; color: $navy; line-height: 1.3; letter-spacing: 0.02em; in: {y:72, duration:0.6, ease:'power3.out', clip:true}) 正確な
@@ -151,12 +151,12 @@ div#reason_ask(left: 67px; top: 427px; width: 453px; height: 123px; border-radiu
 # confirm — 確かめ方: 同じ段組で絵を替える (玄関でスマホを見る人)・見出しのチェックと 2 枚の札
 section#confirm(stagger: {each:0})
 half_paper#confirm_paper(left: 0px)
-half_photo#confirm_photo(left: 573px; focus_x: 100%; main: kb,1.02>1.1; edge: left,9,$orange) A cozy Japanese home entryway (genkan) in the morning: a woman in her forties holding a smartphone and checking the screen before going out (the screen shows only a simple clock symbol), her tote bag and shoes ready by the door, warm sunlight through a small window, a wall calendar with blank squares. She looks attentive and calm. Place her on the right side of the frame; the left side is a simple plain wall
+half_photo#confirm_photo(left: 573px; focus_x: 100%; main: kb {scale: [1.02, 1.1]}; edge: left,9,$orange) A cozy Japanese home entryway (genkan) in the morning: a woman in her forties holding a smartphone and checking the screen before going out (the screen shows only a simple clock symbol), her tote bag and shoes ready by the door, warm sunlight through a small window, a wall calendar with blank squares. She looks attentive and calm. Place her on the right side of the frame; the left side is a simple plain wall
 chip#confirm_chip(left: 67px; top: 117px; delay: 350; in: {y:9, opacity:0, duration:0.45, ease:'power3.out'}) ご来庁の前に
 p#confirm_l1(left: 67px; top: 188px; font-size: 61px; color: $navy; line-height: 1.18; letter-spacing: 0.02em; in: {y:90, duration:0.6, ease:'power3.out', clip:true}) 開庁時間を
 p#confirm_l2(left: 67px; top: 265px; font-size: 61px; color: $orange; line-height: 1.18; letter-spacing: 0.02em; in: {y:90, duration:0.6, ease:'power3.out', clip:true}) チェック
 shape#confirm_dot.ellipse(left: confirm_l2.right+11; top: 270px; width: 56px; height: 56px; background: $orange; in: {scale:0, duration:0.4, ease:'back.out(2)'})
-icon#confirm_tick(left: confirm_l2.right+19; top: 278px; font-size: 40px; name: check; weight: bold; color: #FFFFFF; in: draw,350,ease=power2.out; overlap: confirm_dot)
+icon#confirm_tick(left: confirm_l2.right+19; top: 278px; font-size: 40px; name: check; weight: bold; color: #FFFFFF; in: draw {duration: 0.35, ease: 'power2.out'}; overlap: confirm_dot)
 div#via_web(left: 67px; top: 393px; width: 213px; height: 193px; border-radius: 17px; box-shadow: 0px 11px 27px #142A4721; in: {y:27, scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'})
   img#pic(cx: 50%; top: 21px; width: 113px; height: 113px; object-fit: contain) [transparent]a single flat vector icon, soft rounded shapes, deep navy outlines and fills with warm orange and white highlights, subtle soft shadow: a smartphone showing a simple web page layout with an analog clock symbol on its screen, centered with generous padding, transparent background, no text
   p#t(cx: 50%; top: 142px; font-size: 23px; color: $navy) 市のホームページ
@@ -166,20 +166,20 @@ div#via_paper(left: 300px; top: 393px; width: 213px; height: 193px; border-radiu
 
 # tips — 余裕をもって: 段組の左右を入れ替える (左に歩く人)・右に見出し・注記・受付の帯 (終了間際に斜線と札)
 section#tips(stagger: {each:0})
-half_photo#tips_photo(left: 0px; focus_x: 0%; main: kb,1.1@20%,40%>1.0@20%,40%; edge: right,9,$orange) A relaxed man in his sixties with a shoulder bag walking along a tree-lined path toward the entrance of a modern city hall in the early afternoon, glancing at his wristwatch with a calm smile because he has plenty of time. Sunny weather, soft tree shadows on the pavement. Place him on the left third of the frame; keep the right side open and simple (sky and building facade)
+half_photo#tips_photo(left: 0px; focus_x: 0%; main: kb {scale: [1.1, 1], focus: ['20% 40%', '20% 40%']}; edge: right,9,$orange) A relaxed man in his sixties with a shoulder bag walking along a tree-lined path toward the entrance of a modern city hall in the early afternoon, glancing at his wristwatch with a calm smile because he has plenty of time. Sunny weather, soft tree shadows on the pavement. Place him on the left third of the frame; keep the right side open and simple (sky and building facade)
 half_paper#tips_paper(left: 707px)
 chip#tips_chip(left: 774px; top: 117px; delay: 350; in: {y:9, opacity:0, duration:0.45, ease:'power3.out'}) ご来庁のポイント
 p#tips_l1(left: 774px; top: 188px; font-size: 49px; color: $navy; line-height: 1.22; letter-spacing: 0.02em; delay: 450; in: {y:75, duration:0.6, ease:'power3.out', clip:true}) 時間に
 p#tips_l2(left: 774px; top: 252px; font-size: 49px; color: $navy; line-height: 1.22; letter-spacing: 0.02em; delay: 650; in: {y:75, duration:0.6, ease:'power3.out', clip:true}) {o}余裕{/}をもって
 p#tips_note(left: 774px; top: 337px; font-size: 25px; color: $gray; line-height: 1.45; in: {y:12, opacity:0, duration:0.5, ease:'power3.out'}) 手続きによっては[br]時間がかかる場合があります
 shape#mini_bar(left: 774px; top: 516px; width: 440px; height: 43px; path: rect,r=0.19; background: $orange; in: {scaleX:0, duration:0.7, ease:'power3.inOut', pivot:'left'})
-div#mini_end(left: 1158px; top: 516px; width: 56px; height: 43px; border-radius: 0,8,8,0; background: #FFFFFFB8; pattern: hatch,45,#D2463A8C,11,5; border: 2px solid $red; in: fade,300)
+div#mini_end(left: 1158px; top: 516px; width: 56px; height: 43px; border-radius: 0,8,8,0; background: #FFFFFFB8; pattern: hatch,45,#D2463A8C,11,5; border: 2px solid $red; in: fade {duration: 0.3})
 p#mini_label(right: 66px; top: 460px; font-size: 21px; color: $red; pointer: below; in: {y:8, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 終了間際は避けて
-p#mini_tick(left: "774;994"; top: 565px; width: 220px; font-size: 20px; color: $navy; text-align: "left;right"; in: fade,300,stagger=100) ×2 9:00;16:00 受付終了
+p#mini_tick(left: "774;994"; top: 565px; width: 220px; font-size: 20px; color: $navy; text-align: "left;right"; in: fade {duration: 0.3, stagger: 100}) ×2 9:00;16:00 受付終了
 
 # closing — 締めの 1 枚: 夕方の市役所 + 左から cream の幕・白い板 (札・新しい時刻・罫・お願い・足)・帯を閉じる
 section#closing(stagger: {each:0})
-img#closing_photo(inset: 0; aspect: 16:9; main: kb,1.14@70%,55%>1.02@70%,55%,ease=power1.out) A modern Japanese city hall building seen across its small plaza in the late afternoon: warm golden light, long soft shadows, sky gradient from light blue to soft peach, trees glowing in the sun, a couple of people walking away calmly. Peaceful closing mood. Keep the left half of the image simple (open sky and plaza)
+img#closing_photo(inset: 0; aspect: 16:9; main: kb {scale: [1.14, 1.02], focus: ['70% 55%', '70% 55%'], ease:'power1.out'}) A modern Japanese city hall building seen across its small plaza in the late afternoon: warm golden light, long soft shadows, sky gradient from light blue to soft peach, trees glowing in the sun, a couple of people walking away calmly. Peaceful closing mood. Keep the left half of the image simple (open sky and plaza)
 div#closing_veil(inset: 0; background: linear(#F6F1E68C@0%,#F6F1E640@50%,#F6F1E600@70%,90); in: none)
 div#endcard(left: 73px; top: 131px; width: 667px; height: 407px; border-radius: 24px; background: #FFFFFFED; box-shadow: 0px 20px 47px #142A4738; delay: 400; in: {y:33, opacity:0, duration:0.8, ease:'power3.out'})
   chip#pill(left: 43px; top: 39px; delay: 750; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) 新しい窓口開庁時間

@@ -39,28 +39,28 @@ bgm#music2 同じ系統で少し前向きに高まるピアノとストリング
 subtitle.hug(font-size: 30px; bottom: 24px; background: #1D2B33E6; color: #F4F1EA; border-radius: 6px; padding: 8px 24px)
 
 section#open
-img#op_p(inset: 0; main: kb,1.0@60%,50%>1.06@64%,48%) [photo]木のダイニングテーブルに広げた家計簿のノートと公共料金の請求書と電卓、30代夫婦の手元だけ、朝の自然光
+img#op_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '64% 48%']}) [photo]木のダイニングテーブルに広げた家計簿のノートと公共料金の請求書と電卓、30代夫婦の手元だけ、朝の自然光
 veil#op_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.45)
 shape#op_c(left: 24px; top: 430px; width: 260px; height: 260px; path: circle; background: $a; opacity: 0.06; main: breathe)
 kick#op_k(left: 72px; top: 150px) HOUSEHOLD FIXED COSTS
-shape#op_r(left: 72px; top: 186px; width: 96px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,700)
+shape#op_r(left: 72px; top: 186px; width: 96px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.7})
 h1#op_h(left: 72px; top: 214px; width: 640px) 固定費を見直すと、[br]{t}年間{/}いくら浮く?
 sub#op_s(left: 72px; top: 380px) 30 代夫婦のモデルケース (架空) で試算
 
 section#model
-img#md_p(left: 660px; top: 0px; width: 620px; height: 720px; main: kb,1.0@50%,50%>1.05@50%,45%) [photo]30代の夫婦がリビングのソファに並んでノートパソコンで家計を確認する横顔、穏やかな表情、自然光
+img#md_p(left: 660px; top: 0px; width: 620px; height: 720px; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [photo]30代の夫婦がリビングのソファに並んでノートパソコンで家計を確認する横顔、穏やかな表情、自然光
 kick#md_k(left: 64px; top: 56px) MODEL CASE
 h1#md_h(left: 64px; top: 84px; font-size: 48px) 30 代の夫婦、3 つの固定費
 div#md_r(left: 64px; top: 184px; width: 560px; height: 264px; gap: 16; padding: 0px; display: flex; flex-direction: column) ×3
   icon#i(left: 22px; cy: 50%; font-size: 34px; name: "device-mobile;lightning;television-simple"; color: $a)
   p#n(left: 76px; cy: 50%; font-size: 28px; color: $ink) スマホ (2 人);電気;サブスク (3 本)
   p#v(right: 24px; cy: 50%; font-size: 36px; font-family: e; color: $ink) 16,000{y}円 / 月{/};11,000{y}円 / 月{/};3,300{y}円 / 月{/}
-shape#md_l(left: 64px; top: 476px; width: 560px; height: 2px; path: line_h; background: $ink; border: 2px solid $ink; in: wipe,right,600)
+shape#md_l(left: 64px; top: 476px; width: 560px; height: 2px; path: line_h; background: $ink; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.6})
 p#md_t(left: 64px; top: 494px; font-size: 28px; color: $ink) 3 つの合計
 p#md_v(right: 656px; top: 482px; font-size: 56px; font-family: e; color: $a; text-align: right) [count:30,300]{y}円 / 月{/}
 
 section#phone
-img#ph_p(inset: 0; main: kb,1.0@50%,50%>1.05@55%,50%) [photo]木の机の上に並べて置かれた2台のスマートフォン、画面は暗い、柔らかな自然光
+img#ph_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '55% 50%']}) [photo]木の机の上に並べて置かれた2台のスマートフォン、画面は暗い、柔らかな自然光
 paper#ph_v
 num#ph_n(left: 64px; top: 44px) 01
 h1#ph_h(left: 152px; top: 52px; font-size: 52px) スマホ
@@ -73,7 +73,7 @@ div#ph_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
   p#s(left: 28px; top: 182px; font-size: 24px; font-family: m; color: $ink) 月 11,000 円 × 12 か月
 
 section#power
-img#pw_p(inset: 0; main: kb,1.0@50%,50%>1.05@45%,50%) [photo]明るい部屋の壁のスイッチと電気メーター、柔らかな自然光、すっきりした住まい
+img#pw_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '45% 50%']}) [photo]明るい部屋の壁のスイッチと電気メーター、柔らかな自然光、すっきりした住まい
 paper#pw_v
 num#pw_n(left: 64px; top: 44px) 02
 h1#pw_h(left: 152px; top: 52px; font-size: 52px) 電気
@@ -88,7 +88,7 @@ div#pw_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
   p#s(left: 28px; top: 182px; font-size: 24px; font-family: m; color: $ink) 月 1,600 円 × 12 か月
 
 section#subs
-img#sb_p(inset: 0; main: kb,1.0@50%,50%>1.05@50%,55%) [photo]夜のリビングでテレビの前のソファに置かれたリモコンとヘッドホン、誰もいない、落ち着いた間接照明
+img#sb_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 55%']}) [photo]夜のリビングでテレビの前のソファに置かれたリモコンとヘッドホン、誰もいない、落ち着いた間接照明
 paper#sb_v
 num#sb_n(left: 64px; top: 44px) 03
 h1#sb_h(left: 152px; top: 52px; font-size: 52px) サブスク
@@ -104,7 +104,7 @@ div#sb_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
   p#s(left: 28px; top: 182px; font-size: 24px; font-family: m; color: $ink) 月 3,300 円 × 12 か月
 
 section#total
-img#tt_p(inset: 0; main: kb,1.0@50%,50%>1.04@50%,50%) [photo]整えられた家計簿のノートと電卓と万年筆を真上から、白い机、明るい自然光
+img#tt_p(inset: 0; main: kb {scale: [1, 1.04], focus: ['50% 50%', '50% 50%']}) [photo]整えられた家計簿のノートと電卓と万年筆を真上から、白い机、明るい自然光
 paper#tt_w
 kick#tt_k(left: 64px; top: 56px) ANNUAL SAVINGS
 h1#tt_h(left: 64px; top: 84px; font-size: 48px) 3 つ合わせると、1 年で
@@ -115,7 +115,7 @@ p#tt_v(left: 770px; top: 246px; font-size: 104px; font-family: e; color: $a) [co
 p#tt_s(left: 776px; top: 396px; font-size: 26px; color: $ink) うち 7 割がスマホ
 
 section#month
-img#mo_p(inset: 0; main: kb,1.0@40%,50%>1.06@35%,50%) [photo]木の机の上の白い給与明細の封筒と電卓と観葉植物、窓からの柔らかな光
+img#mo_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['40% 50%', '35% 50%']}) [photo]木の机の上の白い給与明細の封筒と電卓と観葉植物、窓からの柔らかな光
 veil#mo_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 shape#mo_c(left: 24px; top: 24px; width: 240px; height: 240px; path: circle; background: $a; opacity: 0.06; main: breathe)
 p#mo_k(left: 72px; top: 150px; font-size: 30px; font-family: m; color: $mute) 年 190,800 円は
@@ -125,7 +125,7 @@ div#mo_n(left: 72px; top: 420px; width: 420px; height: 64px; padding: 0px)
   p#t(left: 62px; cy: 50%; font-size: 26px; color: $ink) 一度の手続きで、毎年続く
 
 section#close
-img#cl_p(inset: 0; main: kb,1.0@60%,50%>1.06@65%,50%) [photo]朝の窓辺のテーブルでコーヒーを片手にスマートフォンを見る人の手元、明るい自然光、すがすがしい
+img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '65% 50%']}) [photo]朝の窓辺のテーブルでコーヒーを片手にスマートフォンを見る人の手元、明るい自然光、すがすがしい
 veil#cl_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 kick#cl_k(left: 72px; top: 120px) THIS WEEK
 h1#cl_h(left: 72px; top: 150px; font-size: 76px) まず 1 つだけ、[br]{u}今週やる。{/}

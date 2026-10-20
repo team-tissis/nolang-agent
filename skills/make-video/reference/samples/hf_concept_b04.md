@@ -73,12 +73,12 @@ div#bg_base(inset: 0; background: $bg; pattern: dots,24,#D9D4C88C; z-index: back
 
 # 役の場面の骨組み (def 4 つ)
 # 1. 右上の装飾の丸 (役の色の放射グラデ・場面の間ずっと左下へ漂う)
-def deco(c) = div(left: 853px; top: -253px; width: 667px; height: 667px; background: radial({c},#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp,x=-60,y=40)
+def deco(c) = div(left: 853px; top: -253px; width: 667px; height: 667px; background: radial({c},#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: -60, y: 40})
 # 2. 左の人物 (役の色の淡い丸 + 床の影 + 透過の人物が浮遊)
 def role_char(img, t) = group(left: 47px; top: 100px; width: 373px; height: 493px)
   div#circle(left: 20px; top: 140px; width: 333px; height: 333px; border-radius: 999px; background: {t}; delay: 400; in: {scale:.4, opacity:0, duration:.6, ease:'back.out(1.7)'})
   shape#floor.ellipse(left: 87px; top: 466px; width: 200px; height: 23px; background: #1E2A4A1A; delay: 550; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
-  img#char(left: 31px; top: 17px; width: 311px; height: 467px; content: @{img}; fit: contain; delay: 470; in: {y:47, opacity:0, duration:.6, ease:'power3.out'}; main: sine,y=-5,freq_ms=2200)
+  img#char(left: 31px; top: 17px; width: 311px; height: 467px; content: @{img}; fit: contain; delay: 470; in: {y:47, opacity:0, duration:.6, ease:'power3.out'}; main: sine {y: -5, period: 2.2})
 # 3. 右上の見出し (ROLE 0N・略称の大字・英語の正式名と和名は略称の語で下から — 正式名の文字は実体の子 en に書く)
 def role_head(n, a, ja, c, s=100, et=54, jt=96) = group(left: 453px; top: 73px; width: 780px; height: 135px)
   p#chap(left: 3px; top: 0px; font-size: 17px; font-family: h; letter-spacing: .12em; color: {c}; delay: 500; in: {x:-20, opacity:0, duration:.4, ease:'power3.out'}; content: {n})
@@ -87,7 +87,7 @@ def role_head(n, a, ja, c, s=100, et=54, jt=96) = group(left: 453px; top: 73px; 
   p#ja(left: .acr.right+23; top: {jt}; font-size: 20px; color: $sub; in: {y:13, opacity:0, duration:.45, ease:'power3.out'}; content: {ja})
 # 4. 下の POINT の帯 (役の色の板が左から開き、文が右から寄る)
 def sum(t, c) = group(left: 453px; top: 507px; width: 760px; height: 69px)
-  div#bg(left: 0px; top: 0px; width: 760px; height: 69px; border-radius: 15px; background: {c}; box-shadow: 0px 9px 23px #1E2A4A2E; in: wipe,right,550,ease=power3.out)
+  div#bg(left: 0px; top: 0px; width: 760px; height: 69px; border-radius: 15px; background: {c}; box-shadow: 0px 9px 23px #1E2A4A2E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'})
   p#pt(left: 23px; cy: 50%; font-size: 16px; font-family: h; letter-spacing: .1em; color: #FFFFFF; background: #14182847; border-radius: 7px; padding: 4px 11px; delay: 60; in: {opacity:0, duration:.15}) POINT
   p#st(left: 116px; cy: 50%; font-size: 33px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 200; in: {x:20, opacity:0, duration:.45, ease:'power2.out'}; content: {t})
 
@@ -113,8 +113,8 @@ div#hdr.sticky(left: 0px; top: 0px; width: 1280px; height: 73px; background: non
   p#c(left: "835;891;939;987;1035;1137"; top: 21px; font-size: 14px; font-family: h; color: #85817A; background: #FFFFFF; border: 2px solid #CFCABF; border-radius: 99px; padding: 4px 11px) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
 #hdr.c.on(color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border: "$pdm,2;$pm,2;$po,2;$bo,2;$eng,2;$des,2"; transform: scale(1.08))
 #hdr.c.done(color: "$pdm;$pm;$po;$bo;$eng;$des"; background: #FFFFFF; border: "$pdm,2;$pm,2;$po,2;$bo,2;$eng,2;$des,2")
-div#in_d1(left: -173px; top: 347px; width: 600px; height: 600px; background: radial(#12A4A029,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp,x=47,y=-27)
-div#in_d2(left: 867px; top: -200px; width: 600px; height: 600px; background: radial(#FF7A5924,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp,x=47,y=-27)
+div#in_d1(left: -173px; top: 347px; width: 600px; height: 600px; background: radial(#12A4A029,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 47, y: -27})
+div#in_d2(left: 867px; top: -200px; width: 600px; height: 600px; background: radial(#FF7A5924,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 47, y: -27})
 img#in_team(left: 320px; top: 117px; width: 640px; height: 427px; content: @team; fit: contain; delay: 500; in: {y:27, scale:.94, opacity:0, duration:.7, ease:'power3.out'}; out: {scale:.92, opacity:0, duration:.35, ease:'power1.in'}; main: keys(at=0 scale=1 | at=0.13 scale=1 | at=1 scale=1.05 ease=none),duration=6200)
 # 5 つの職種の札 (白い丸の icon + 職種の語)
 div#in_b(left: "167;127;1013;1053;967"; top: "167;373;147;333;480"; width: 113px; height: 105px; background: none; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(1.7)', stagger:{each:.22}}; out: {opacity:0, duration:.3, ease:'power1.in'}) ×5
@@ -266,18 +266,18 @@ div#eng_ed(left: 453px; top: 269px; width: 393px; height: 229px; border-radius: 
   div#eb(left: 0px; top: 0px; width: 393px; height: 29px; border-radius: 13,13,0,0; background: #16203A)
   div#dot(left: "12;27;41"; top: 10px; width: 9px; height: 9px; border-radius: 99px; background: "#FF6B6B;#FFC24B;#4CD4A0") ×3
   p#fn(left: 63px; top: 7px; font-size: 12px; font-family: m; color: #8F9BB8) app.js
-  p#l1(left: 16px; top: 40px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 350; in: wipe,right,350,ease=none) {cc}// 商品を検索する{/}
-  p#l2(left: 16px; top: 68px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 680; in: wipe,right,350,ease=none) {ck}function{/} {cf}search{/}(keyword) {
-  p#l3(left: 36px; top: 95px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1010; in: wipe,right,350,ease=none) {ck}const{/} items = db.{cf}find{/}(keyword);
-  p#l4(left: 36px; top: 123px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1340; in: wipe,right,350,ease=none) {ck}return{/} items.{cf}slice{/}({cn}0{/}, {cn}20{/});
-  p#l5(left: 16px; top: 150px; font-size: 17px; font-family: m; color: #E8ECF5; delay: 1670; in: wipe,right,350,ease=none) }
-  p#l6(left: 16px; top: 178px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 2000; in: wipe,right,350,ease=none) {cf}test{/}({cs}"検索できる"{/}, ...) {cc}// ✓ OK{/}
+  p#l1(left: 16px; top: 40px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 350; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cc}// 商品を検索する{/}
+  p#l2(left: 16px; top: 68px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 680; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}function{/} {cf}search{/}(keyword) {
+  p#l3(left: 36px; top: 95px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1010; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}const{/} items = db.{cf}find{/}(keyword);
+  p#l4(left: 36px; top: 123px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1340; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}return{/} items.{cf}slice{/}({cn}0{/}, {cn}20{/});
+  p#l5(left: 16px; top: 150px; font-size: 17px; font-family: m; color: #E8ECF5; delay: 1670; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) }
+  p#l6(left: 16px; top: 178px; font-size: 17px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 2000; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cf}test{/}({cs}"検索できる"{/}, ...) {cc}// ✓ OK{/}
 # 画面 (スマホの枠に色の棒が上から落ちて組み上がる)
 div#eng_ph(left: 887px; top: 269px; width: 127px; height: 187px; border-radius: 20px; background: #FFFFFF; border: 5px solid $ink; in: {y:27, opacity:0, duration:.45, ease:'power3.out'})
   div#pb(left: "14;14;14;14;32"; top: "14;44;110;132;154"; width: "99;99;99;99;63"; height: "23;60;16;16;20"; border-radius: 7px; background: "$eng;#D9D3FF;#E8E4DA;#E8E4DA;$po"; in: {y:-20, opacity:0, duration:.35, ease:'back.out(1.6)', stagger:{each:.1}}) ×5
 div#eng_flow(left: 1020px; top: 360px; width: 67px; height: 5px; border-radius: 3px; background: #DDD7CA; in: {scaleX:0, duration:.35, ease:'power2.out', pivot:'left'})
-shape#eng_d1.ellipse(left: 1020px; top: 356px; width: 13px; height: 13px; background: $eng; in: fade,200)
-shape#eng_d2.ellipse(left: 1073px; top: 356px; width: 13px; height: 13px; background: $eng; in: fade,200)
+shape#eng_d1.ellipse(left: 1020px; top: 356px; width: 13px; height: 13px; background: $eng; in: fade {duration: 0.2})
+shape#eng_d2.ellipse(left: 1073px; top: 356px; width: 13px; height: 13px; background: $eng; in: fade {duration: 0.2})
 # サーバー (紺の箱 3 段・青緑の灯と線)
 div#eng_sv(left: 1093px; top: 293px; width: 100px; height: 139px; background: none; in: {x:40, opacity:0, duration:.45, ease:'power3.out'})
   div#sv(left: 0px; top: "0;49;98"; width: 100px; height: 41px; background: none) ×3
@@ -314,7 +314,7 @@ sum#des_sum(t: 使いやすさと体験を設計する人; c: $des)
 
 # diff — 注意: 見出しの i が脈打ち、3 社の札 (兼ねる・1 人で複数・PM の別の意味) を語ごとに縁で光らせて顔と説明 → 上へ払い、新人と先輩の絵 + 確認のチェックリストに 3 つの ✓
 section#diff
-div#diff_deco(left: -200px; top: -200px; width: 667px; height: 667px; background: radial(#FF7A591F,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp,x=60,y=40)
+div#diff_deco(left: -200px; top: -200px; width: 667px; height: 667px; background: radial(#FF7A591F,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 60, y: 40})
 # 3 社の札 (紺の帯に社名・中に役の札と顔・下に説明)。語ごとに .hl (外側の太い縁 + 少し拡大) で 1 枚ずつ光らせる
 def ccard(t) = div(top: 180px; width: 333px; height: 313px; background: #FFFFFF; border-radius: 16px; border: 1px solid $line; box-shadow: 0px 8px 23px #1E2A4A1A; in: {y:40, opacity:0, duration:.5, ease:'power3.out'})
   div#hd(left: 0px; top: 0px; width: 333px; height: 64px; border-radius: 16,16,0,0; background: $ink)

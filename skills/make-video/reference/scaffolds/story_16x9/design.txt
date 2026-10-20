@@ -48,35 +48,35 @@ subtitle.hug(font-size: 30px; bottom: 24px; unit: phrase)
 image owner = "[photo]50 代の男性のパン職人、白いコック帽と小麦粉のついたエプロン、人懐こい顔、文字なし"
 
 section#hook
-img#hk_p(inset: 0; main: kb,1.0>1.06; scrim: 0.5) [photo]早朝の商店街の小さなパン屋、まだ暗い通りに灯る店の明かり、文字なし
+img#hk_p(inset: 0; main: kb {scale: [1, 1.06]}; scrim: 0.5) [photo]早朝の商店街の小さなパン屋、まだ暗い通りに灯る店の明かり、文字なし
 h1#hk_h(left: 80px; top: 112px; width: 739px; height: 144px) 売上が、半分になった朝
 
 section#shock
-img#sk_p(inset: 0; main: kb,1.08@50%,40%>1.0; scrim: 0.45) [ref:@owner]売上の帳簿を見て目を見開く店主の顔のアップ、朝の厨房、文字なし
+img#sk_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}; scrim: 0.45) [ref:@owner]売上の帳簿を見て目を見開く店主の顔のアップ、朝の厨房、文字なし
 big#sk_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 何が、起きたんだ
 stat#sk_st(left: 80px; top: 112px; v: "50"; u: "% 減"; l: "先月の売上")
 
 section#cause
-img#cs_p(inset: 0; main: kb,1.0@40%,50%>1.08; scrim: 0.5) [photo]駅前に開店したばかりの大型スーパー、開店セールの旗と人だかり、文字なし
+img#cs_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['40% 50%', '']}; scrim: 0.5) [photo]駅前に開店したばかりの大型スーパー、開店セールの旗と人だかり、文字なし
 h1#cs_h(left: 80px; top: 112px; width: 739px; height: 144px) 駅前に、大型店
 
 section#empty
-img#em_p(inset: 0; main: kb,1.06>1.0; scrim: 0.4) [photo]誰もいない朝のパン屋の店内、並んだパンと窓からの白い光、文字なし
+img#em_p(inset: 0; main: kb {scale: [1.06, 1]}; scrim: 0.4) [photo]誰もいない朝のパン屋の店内、並んだパンと窓からの白い光、文字なし
 sub#em_s(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 朝の客が、消えた
 
 section#idea
-img#id_p(inset: 0; main: kb,1.0>1.08@60%,45%; scrim: 0.45) [ref:@owner]店先で自転車を見つめて何かを決めた顔の店主、朝日、文字なし
+img#id_p(inset: 0; main: kb {scale: [1, 1.08], focus: '60% 45%'}; scrim: 0.45) [ref:@owner]店先で自転車を見つめて何かを決めた顔の店主、朝日、文字なし
 h1#id_h(left: 80px; top: 112px; width: 739px; height: 144px) 待つのは、やめだ
 
 section#action
-img#ac_p(inset: 0; main: kb,1.0@30%,50%>1.1@70%,50%; scrim: 0.45) [ref:@owner]パンの箱を積んだ自転車で朝の住宅街を走る店主、動きのある構図、文字なし
+img#ac_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['30% 50%', '70% 50%']}; scrim: 0.45) [ref:@owner]パンの箱を積んだ自転車で朝の住宅街を走る店主、動きのある構図、文字なし
 big#ac_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 配達、開始
 stat#ac_st(left: 80px; top: 112px; v: "[count:120]"; u: "件"; l: "3 か月で")
 
 section#turn
-img#tn_p(inset: 0; main: kb,1.06>1.0; scrim: 0.5) [ref:@owner]店先で常連の客と笑う店主、暖色の夕方の光、文字なし
+img#tn_p(inset: 0; main: kb {scale: [1.06, 1]}; scrim: 0.5) [ref:@owner]店先で常連の客と笑う店主、暖色の夕方の光、文字なし
 stat#tn_v(left: 80px; top: 180px; v: "9"; u: "割"; l: "売上は元の")
 
 section#close
-img#cl_p(inset: 0; main: kb,1.0>1.05; scrim: 0.45) [photo]夕暮れの商店街、灯りのついたパン屋の看板を遠くから、文字なし
+img#cl_p(inset: 0; main: kb {scale: [1, 1.05]}; scrim: 0.45) [photo]夕暮れの商店街、灯りのついたパン屋の看板を遠くから、文字なし
 big#cl_v(left: 80px; top: 280px; width: 1120px; height: 60px) 店は、動いた

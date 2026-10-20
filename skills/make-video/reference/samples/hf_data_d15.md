@@ -97,7 +97,7 @@ def lg(t, v, p, c, ll, lw) = div(width: 587px; height: 34px; in: {x:-13, opacity
 
 # hook — 開幕: 夜の部屋で副業する人の全面の絵が引き、左上に「調査速報」と 2 行の題が字ごとに上がる →「4人に1人」で結論の札と人の形 4 つ
 section#hook(stagger: {each:0}; out: {x:-733, duration:.5, ease:'power3.inOut'})
-img#hero(inset: 0; subject: bottom 45%; room: top 50%; main: kb,1.12@50%,70%>1.0@50%,70%) 夜遅く、東京の小さなアパートの机で、ネクタイを緩めた白いシャツの30代前半の日本人の会社員がノートパソコンで副業をしている。暖かい琥珀色のデスクライトが顔と手を照らし、机にはマグカップとスマートフォン。背後の大きな窓には深い青の夜の街の高層ビルの灯り。落ち着いた集中した雰囲気。縦長の構図: 人物と机は画面の下 45% に収め、上半分は柔らかなグラデーションの暗い夜空だけの広い余白 (題を置く場所) にする
+img#hero(inset: 0; subject: bottom 45%; room: top 50%; main: kb {scale: [1.12, 1], focus: ['50% 70%', '50% 70%']}) 夜遅く、東京の小さなアパートの机で、ネクタイを緩めた白いシャツの30代前半の日本人の会社員がノートパソコンで副業をしている。暖かい琥珀色のデスクライトが顔と手を照らし、机にはマグカップとスマートフォン。背後の大きな窓には深い青の夜の街の高層ビルの灯り。落ち着いた集中した雰囲気。縦長の構図: 人物と机は画面の下 45% に収め、上半分は柔らかなグラデーションの暗い夜空だけの広い余白 (題を置く場所) にする
 div#shade(inset: 0; background: linear(#0B1322EB,#0B13228C@34%,#0B132200@52%,#0B132200@72%,#0B1322BF,180); in: none)
 p#stamp_chip(left: 48px; cy: 113px; font-size: 23px; color: $bg; background: $amber; border-radius: 5px; padding: 8px 13px 7px 13px; letter-spacing: .04em; line-height: 1; in: {x:-40, opacity:0, duration:.35, ease:'power3.out'}) 調査速報
 p#stamp_d(left: 181px; cy: 113px; font-size: 23px; font-family: n; color: $ink2; letter-spacing: .08em; in: {x:-40, opacity:0, duration:.35, ease:'power3.out'}) 2026.09
@@ -124,11 +124,11 @@ board#b2(k: "01"; t: "副業の状況"; n: "回答者 {nb}1,000{/}人")
   stat#st1(left: 29px; top: 96px; l: "いま副業をしている"; v: "[count:23.4 start=0 ms=750 delay=200]{pc}%{/}{pp} 234{/}{ps}人{/}"; c: $amber)
   stat#st2(left: 332px; top: 96px; l: "始めたいが、していない"; v: "[count:38.5 start=0 ms=750 delay=200]{pc}%{/}{pp} 385{/}{ps}人{/}"; c: $sky)
   p#waf_unit(right: 28px; cy: 256px; font-size: 15px; font-family: r; color: $muted; delay: 860; in: {opacity:0, duration:.3}) {dt}●{/} 1つ＝1人
-  svg#waf_base(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_base; delay: 410; in: wipe,right,900,ease=power2.inOut)
-  svg#waf_c1(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c1; in: wipe,right,640)
-  svg#waf_c2(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c2; in: wipe,right,500)
-  svg#waf_c3(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c3; in: wipe,right,680)
-  svg#waf_c4(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c4; in: wipe,right,520)
+  svg#waf_base(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_base; delay: 410; in: wipe {dir: 'right', duration: 0.9, ease: 'power2.inOut'})
+  svg#waf_c1(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c1; in: wipe {dir: 'right', duration: 0.64})
+  svg#waf_c2(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c2; in: wipe {dir: 'right', duration: 0.5})
+  svg#waf_c3(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c3; in: wipe {dir: 'right', duration: 0.68})
+  svg#waf_c4(left: 84px; top: 267px; width: 477px; height: 297px; part: waf_c4; in: wipe {dir: 'right', duration: 0.52})
   lg#lg(left: 29px; top: "571;609;647;685"; t: "いま副業をしている;過去にしていた;始めたいが、していない;関心なし"; v: "23.4%;9.2%;38.5%;28.9%"; p: "234人;92人;385人;289人"; c: "$amber;$sand;$sky;$slate"; ll: "206;168;244;111"; lw: "256;304;218;351") ×4
 
 # trend — 02 推移: 目盛りと「4人に1人 (25%)」の破線が出て、折れ線が左から引かれ点が順に弾む →「14.1%」で最初の点 →「9.3ポイント」で差の破線・括弧・札と上の大きな数字
@@ -146,7 +146,7 @@ board#b3(k: "02"; t: "副業をしている割合の推移"; n: "各年 {nb}1,00
   shape#ref(left: 90px; top: 331px; width: 513px; height: 2px; path: line_h; border: 2px solid #4FC3F7D9; dash: 6,5; delay: 410; in: {x:-20, opacity:0, duration:.4})
   p#reflbl(left: 96px; top: 304px; font-size: 16px; color: $sky; background: $board; padding: 0px 8px 0px 0px; delay: 410; in: {x:-20, opacity:0, duration:.4}) 4人に1人（25%）
   # 折れ線は 1 枚の svg を 1.5 秒で左から (hf の linebox の幅 92 → 880・ease none)・点と値は線が着く時刻に (目盛りの文字の下に敷く)
-  svg#line(left: 29px; top: 231px; width: 587px; height: 453px; part: trend; delay: 510; in: wipe,right,1500,ease=none)
+  svg#line(left: 29px; top: 231px; width: 587px; height: 453px; part: trend; delay: 510; in: wipe {dir: 'right', duration: 1.5, ease: 'none'})
   div#pt(z-index: front; left: "126;239;352;466"; top: "452;407;374;340"; width: 20px; height: 20px; border-radius: 99px; background: $amber; border: 4px solid $board; box-shadow: 0px 0px 0px 1.3px $amber; delay: "590;913;1237;1560"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
   p#pv(cx: "136;249;362;476"; top: "411;367;333;285"; font-size: "29;29;29;40"; font-family: n; delay: "640;963;1287;1610"; in: {y:11, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
   shape#g141(z-index: front; left: 136px; top: 462px; width: 380px; height: 2px; path: line_h; border: 2px solid #C3CCDD73; dash: 5,4; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'})
@@ -246,7 +246,7 @@ board#b8(k: "07"; t: "始めたいが、していない理由"; n: "{nb}385{/}�
   # 空色の枠: 地の輪 + 61% の弧 (draw) + 中央の数え上げ + 右の文
   div#dn(left: 29px; top: 526px; width: 587px; height: 171px; background: #4FC3F714; border: 1.3px solid #4FC3F78C; border-radius: 15px; in: {y:33, opacity:0, duration:.4, ease:'power3.out'})
     shape#ring.ellipse(left: 22px; top: 18px; width: 134px; height: 134px; background: none; border: 20px solid #FFFFFF1A)
-    shape#arc(path: "M 89 28.2 C 114.3 28.2 136.6 44.7 143.9 68.9 C 151.2 93.1 141.8 119.2 120.7 133.2 C 99.7 147.2 71.9 145.8 52.5 129.7"; background: none; border: 20px solid $sky; in: draw,900,ease=power2.out)
+    shape#arc(path: "M 89 28.2 C 114.3 28.2 136.6 44.7 143.9 68.9 C 151.2 93.1 141.8 119.2 120.7 133.2 C 99.7 147.2 71.9 145.8 52.5 129.7"; background: none; border: 20px solid $sky; in: draw {duration: 0.9, ease: 'power2.out'})
     p#num(cx: 89px; top: 58px; font-size: 44px; font-family: n; line-height: 1) [count:61 start=0 ms=900]%
     p#den(cx: 89px; top: 108px; font-size: 13px; font-family: r; color: $muted) 77／127人
     p#a(left: 179px; top: 16px; font-size: 18px; color: $ink2; white-space: nowrap) 「会社の規則」を理由に挙げた127人のうち
@@ -268,7 +268,7 @@ div#s8(left: 37px; top: 124px; width: 645px; height: 740px; in: {x:733, duration
     p#a(left: 88px; top: 20px; font-size: 25px; white-space: nowrap) 3年で {na}14.1%{/} → {na}23.4%{/};稼ぎは小さく、{na}6{/}割が月3万円未満;分かれ目は「時間」
     p#b(left: 88px; top: 62px; font-size: 17px; font-family: r; color: $ink2; white-space: nowrap) 副業をする会社員は、4人に1人に近づく;月の副業収入の中央値は約2万円;週20時間以上では47%が本業に悪影響
   div#cta(left: 0px; top: 410px; width: 645px; height: 280px; background: $cta; border: 1.3px solid #FFB21A99; border-radius: 17px; in: {y:40, scale:.96, opacity:0, duration:.5, ease:'power3.out'})
-    img#img(left: 0px; top: 0px; width: 280px; height: 280px; main: kb,1.15>1.0,ease=power1.out) 机の上で両手が分厚い会社の就業規則のバインダーを開いている。色つきのインデックスのタブ、開いたページに置かれた虫眼鏡、暖かい琥珀色のデスクライトの光、暗い紺の背景。正方形の構図でバインダーを中央に大きく
+    img#img(left: 0px; top: 0px; width: 280px; height: 280px; main: kb {scale: [1.15, 1], ease:'power1.out'}) 机の上で両手が分厚い会社の就業規則のバインダーを開いている。色つきのインデックスのタブ、開いたページに置かれた虫眼鏡、暖かい琥珀色のデスクライトの光、暗い紺の背景。正方形の構図でバインダーを中央に大きく
     div#fade(left: 167px; top: 0px; width: 113px; height: 280px; z-index: front; background: linear(#0E183000,$cta,90))
     p#a(left: 287px; top: 50px; font-size: 21px; color: $ink2; in: {x:20, opacity:0, duration:.35}) 始めるなら、まずは
     p#b(left: 287px; top: 84px; font-size: 51px; color: $amber; line-height: 1.18; white-space: nowrap; in: {x:20, opacity:0, duration:.35}) 就業規則を

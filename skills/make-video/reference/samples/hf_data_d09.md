@@ -157,7 +157,7 @@ panel#s2yoy(left: 793px; top: 350px; width: 423px; height: 247px; t: "前年比�
   div#g(left: 27px; top: "111;155;200"; width: 373px; height: 1.5px; background: $grid) ×3
   p#gl(left: 4px; top: "102;147;191"; width: 22px; text-align: right; font-size: 11px; font-family: n; color: $gl) ×3 10;8;6
   # 折れ線は 11.3% の語から 7.9% の語の後まで 1.95 秒で左から描き、点と値は線の到着に合わせて出る
-  shape#line(path: "M53.3 82.2 L133.3 88.9 L213.3 113.3 L293.3 148.8 L373.3 157.7"; background: none; border: 3.3px solid $red; in: draw,1950)
+  shape#line(path: "M53.3 82.2 L133.3 88.9 L213.3 113.3 L293.3 148.8 L373.3 157.7"; background: none; border: 3.3px solid $red; in: draw {duration: 1.95})
   shape#d.ellipse(left: "47.3;127.3;207.3;287.3;367.3"; top: "76.2;82.9;107.3;142.8;151.7"; width: 12px; height: 12px; background: #FFFFFF; border: 2.5px solid $red; in: {scale:0.82, opacity:0, duration:0.3, ease:'back.out(1.8)'}) ×5
   p#v(left: "13.3;93.3;173.3;253.3;333.3"; top: "50.2;56.9;81.3;116.8;125.7"; width: 80px; text-align: center; font-size: 15px; font-family: n; color: $ink2; in: {y:5, opacity:0, duration:0.3, ease:'power3.out'}) ×5 11.3%;11.0%;9.9%;8.3%;7.9%
   p#x(left: "13.3;93.3;173.3;253.3;333.3"; top: 212px; width: 80px; text-align: center; font-size: 14px; font-family: n; color: $mut) ×5 2022;2023;2024;2025;2026

@@ -51,11 +51,11 @@ div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; backgrou
 shape { out: leave }
 svg { out: leave }
 # 字幕: 下端中央の暗い札・句点で割り、句末の。は外す (声の 60 ms 前に出て 150 ms 後に消える)
-subtitle.hug(bottom: 27px; font-size: 22px; line-height: 1.4; letter-spacing: .02em; color: $fg; background: #050912BD; border-radius: 8px; padding: 7px 20px 8px 20px; unit: sentence; strip: 。; lead: 60; tail: 150; hold: off; in: fade,140; out: fade,120)
+subtitle.hug(bottom: 27px; font-size: 22px; line-height: 1.4; letter-spacing: .02em; color: $fg; background: #050912BD; border-radius: 8px; padding: 7px 20px 8px 20px; unit: sentence; strip: 。; lead: 60; tail: 150; hold: off; in: fade {duration: 0.14}; out: fade {duration: 0.12})
 bgm#music(fade: 1200,3200) 落ち着いたミニマルな電子音の下地、柔らかく脈打つアナログシンセのアルペジオと温かいパッド、軽いキックと控えめなハイハットと低いベース、100 BPM の一定のテンポで盛り上がりのない、データ報告の解説向けの曲
 
 # 全編の地 (根・z back): 点の格子の絵 (1.4 秒で明け、全編でゆっくり引く)・周辺減光
-img#bg_plate(inset: 0; z-index: back; main: kb,1.17@50%,50%>1.06@48%,50%; in: {opacity:0, duration:1.4, ease:'power2.out'}; out: none) [photo]データ分析の解説動画のための抽象的な背景。深い夜の紺から炭色へのグラデーション、遠くの地平へ遠近で消えていく小さな点の格子がかすかに並ぶ床、右下にとても柔らかい琥珀色の光、細かいフィルムの粒子、左の 3 分の 2 は静かな広い余白。文字・数字・ロゴ・人物・グラフは入れない
+img#bg_plate(inset: 0; z-index: back; main: kb {scale: [1.17, 1.06], focus: ['50% 50%', '48% 50%']}; in: {opacity:0, duration:1.4, ease:'power2.out'}; out: none) [photo]データ分析の解説動画のための抽象的な背景。深い夜の紺から炭色へのグラデーション、遠くの地平へ遠近で消えていく小さな点の格子がかすかに並ぶ床、右下にとても柔らかい琥珀色の光、細かいフィルムの粒子、左の 3 分の 2 は静かな広い余白。文字・数字・ロゴ・人物・グラフは入れない
 div#bg_vig(inset: 0; background: radial(#03060C00@55%,#03060CB3,45%,45%); z-index: back; in: none; out: none)
 
 # 目盛りの輪 (12 本の目盛り + 地の輪) と AI の輪の地
@@ -132,7 +132,7 @@ panel#fun(left: 53px; top: 146px; width: 1174px; height: 224px; delay: 200)
 panel#time(left: 53px; top: 387px; width: 374px; height: 245px)
   ptitle#t 回答にかかった時間{pn}　中央値{/}
   svg#dial(left: 22px; top: 68px; width: 127px; height: 127px; part: dial)
-  shape#arc(path: "M 86 86.3 C 111.2 86.3 131.7 106.8 131.7 132 C 131.7 141.7 128.6 151.1 123 158.9"; z-index: front; background: none; border: 9px solid $amber; in: draw,900,ease=power2.out)
+  shape#arc(path: "M 86 86.3 C 111.2 86.3 131.7 106.8 131.7 132 C 131.7 141.7 128.6 151.1 123 158.9"; z-index: front; background: none; border: 9px solid $amber; in: draw {duration: 0.9, ease: 'power2.out'})
   p#num(left: 169px; top: 92px; font-size: 69px; font-family: b; line-height: 1; in: {y:20, opacity:0, duration:.55, ease:'power3.out'}) [count:21 start=0 ms=900]{sec}秒{/}
   p#sub(left: 169px; top: 164px; font-size: 14px; color: $fg3) 目盛りは 1 分
 # 登録方法別の全部スキップ (横軸 0〜40%)
@@ -297,7 +297,7 @@ panel#ai(left: 741px; top: 146px; width: 486px; height: 486px; in: {x:27, opacit
   p#share(left: 136px; top: 98px; font-size: 15px; line-height: 1.45; color: $fg2; opacity: .35) 自己申告の流入経路に[br]占める割合
   div#ln1(left: 22px; top: 160px; width: 443px; height: 1px; background: $line)
   svg#ring(left: 22px; top: 172px; width: 120px; height: 120px; part: ring)
-  shape#arc(path: "M 82 185.5 C 107.7 185.5 128.5 206.3 128.5 232 C 128.5 257.7 107.7 278.5 82 278.5 C 56.3 278.5 35.5 257.7 35.5 232 C 35.5 223.2 38 214.5 42.7 207.1"; z-index: front; background: none; border: 12px solid $amber; in: draw,1000,ease=power2.out)
+  shape#arc(path: "M 82 185.5 C 107.7 185.5 128.5 206.3 128.5 232 C 128.5 257.7 107.7 278.5 82 278.5 C 56.3 278.5 35.5 257.7 35.5 232 C 35.5 223.2 38 214.5 42.7 207.1"; z-index: front; background: none; border: 12px solid $amber; in: draw {duration: 1, ease: 'power2.out'})
   p#num(left: 160px; top: 197px; font-size: 48px; font-family: b; line-height: 1.15; in: {y:9, opacity:0, duration:.4, ease:'power3.out'}) [count:84 start=0 ms=1000]{pc}%{/}
   p#lab1(left: 160px; top: 255px; font-size: 15px; color: $fg2; opacity: .35) 24時間以内の生成到達
   div#ln2(left: 22px; top: 310px; width: 443px; height: 1px; background: $line)

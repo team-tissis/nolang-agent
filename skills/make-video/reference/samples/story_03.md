@@ -37,7 +37,7 @@ bgm#music2(volume: 4dB) さらに激しく高揚する疾走感のあるロッ�
 sfx off
 
 section#hook
-img#hk_p(inset: 0; main: kb,1.0>1.08@50%,60%) 真夜中の暗い部屋、ベッドの上で光るスマートフォンの画面、青と赤のネオンの反射
+img#hk_p(inset: 0; main: kb {scale: [1, 1.08], focus: '50% 60%'}) 真夜中の暗い部屋、ベッドの上で光るスマートフォンの画面、青と赤のネオンの反射
 neon#hk_v
 shape#hk_ring(left: 380px; top: 70px; width: 300px; height: 300px; path: circle; background: none; border: 3px solid $b; opacity: 0.35; main: pulse)
 kick#hk_k(left: 40px; top: 88px) DEEP NIGHT
@@ -50,20 +50,20 @@ div#hk_n(left: 40px; top: 800px; width: 640px; height: 170px)
 p#hk_q(right: 40px; top: 1020px; font-size: 110px; color: $a; text-shadow: 0px 0px 22px #FF2E63CC; in: pop; transform: rotate(-6deg)) は？
 
 section#clash
-img#cs_p(inset: 0; main: kb,1.06@50%,50%>1.0) 夜の野外フェス会場を高い所から見下ろす、遠く離れた2つのステージがネオンに光る、広い芝生
+img#cs_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) 夜の野外フェス会場を高い所から見下ろす、遠く離れた2つのステージがネオンに光る、広い芝生
 neon#cs_v
 h1#cs_h(left: 40px; top: 90px) 推しAと推しB[br]{r}まさかの同時刻{/}
 div#cs_c(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 210px; gap: 24; padding: 0px; display: flex) ×2
   p#s(left: 24px; top: 20px; font-size: 26px; font-family: e; color: $b; letter-spacing: 0.15em) MAIN STAGE;SUB STAGE
   p#t(left: 24px; top: 58px; font-size: 72px; font-family: e; color: $ink) 18:30;18:30
   p#n(left: 24px; bottom: 18px; font-size: 32px; color: $mute) 推しA;推しB
-shape#cs_l(left: 40px; top: 1030px; width: 640px; height: 4px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,600)
+shape#cs_l(left: 40px; top: 1030px; width: 640px; height: 4px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.6})
 p#cs_s(right: 40px; top: 1060px; font-size: 48px; font-family: e; color: $paper; background: $a; border-radius: 12px; padding: 8px 22px; in: pop; transform: rotate(-4deg)) ⇄ 20 MIN
 
 section#heat
-img#ht_p(inset: 0; main: kb,1.0>1.07@60%,30%) 真夏の昼の野外フェス会場、照りつける太陽と強いレンズフレア、陽炎のゆらぐ芝生とステージ、空は青から赤へ
+img#ht_p(inset: 0; main: kb {scale: [1, 1.07], focus: '60% 30%'}) 真夏の昼の野外フェス会場、照りつける太陽と強いレンズフレア、陽炎のゆらぐ芝生とステージ、空は青から赤へ
 neon#ht_v
-shape#ht_sun(left: 330px; top: 50px; width: 360px; height: 360px; path: sunburst,n=16; background: #FF2E6326; border: none; main: spin,40000)
+shape#ht_sun(left: 330px; top: 50px; width: 360px; height: 360px; path: sunburst,n=16; background: #FF2E6326; border: none; main: spin {period: 40})
 p#ht_n(right: 40px; top: 70px; font-size: 210px; font-family: e; color: $ink; text-align: right; text-shadow: 0px 0px 26px #FF2E63CC; in: big) [count:36]{u}℃{/}
 p#ht_l(right: 44px; top: 320px; font-size: 32px; color: $mute; text-align: right; in: note) 当日の最高気温
 div#ht_r(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 250px; gap: 18; padding: 0px; display: flex; flex-direction: column) ×2
@@ -72,7 +72,7 @@ div#ht_r(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; heig
 p#ht_s(right: 40px; top: 1060px; font-size: 48px; color: $deep; background: $b; border-radius: 12px; padding: 8px 22px; in: pop; transform: rotate(4deg)) 最前死守
 
 section#climax
-img#cx_p(inset: 0; main: kb,1.0>1.1@50%,40%) 夜の野外フェスのメインステージ、強烈な赤と青のサーチライトとスモーク、宙を舞う紙吹雪、観客なし
+img#cx_p(inset: 0; main: kb {scale: [1, 1.1], focus: '50% 40%'}) 夜の野外フェスのメインステージ、強烈な赤と青のサーチライトとスモーク、宙を舞う紙吹雪、観客なし
 neon#cx_v
 h1#cx_h(left: 40px; top: 90px) イントロ一音目で[br]全部、飛んだ
 p#cx_w(left: 40px; top: 260px; font-size: 128px; color: $a; text-shadow: 0px 0px 30px #FF2E63; in: punch; transform: rotate(-5deg)) 完全勝利
@@ -83,7 +83,7 @@ confetti#cx_cf
 veil#cx_fl(color: #FFFFFF; opacity: 0.6; z: curtain; in: none)
 
 section#phil
-img#ph_p(inset: 0; main: kb,1.08@40%,50%>1.0) 暗い部屋の机の上に置かれたヘッドホンとスマートフォン、窓の外に遠く光るフェスのネオン
+img#ph_p(inset: 0; main: kb {scale: [1.08, 1], focus: '40% 50%'}) 暗い部屋の机の上に置かれたヘッドホンとスマートフォン、窓の外に遠く光るフェスのネオン
 neon#ph_v
 kick#ph_k(left: 40px; top: 88px) THEORY
 p#ph_a(left: 40px; top: 130px; font-size: 60px; color: $mute; in: title) 音源を聴くこと
@@ -92,7 +92,7 @@ p#ph_b(left: 40px; top: 370px; font-size: 60px; color: $ink; in: title) 現場�
 p#ph_s(left: 40px; top: 820px; width: 640px; font-size: 100px; text-align: center; color: $paper; background: $a; border-radius: 16px; padding: 12px 20px; box-shadow: 0px 0px 30px #FF2E63AA; in: punch; transform: rotate(-3deg)) 全くの別物
 
 section#close
-img#ed_p(inset: 0; main: kb,1.0>1.06@50%,35%) 夜の野外フェス会場の上に上がる大きな花火、青と赤の光、静かになった芝生、遠景
+img#ed_p(inset: 0; main: kb {scale: [1, 1.06], focus: '50% 35%'}) 夜の野外フェス会場の上に上がる大きな花火、青と赤の光、静かになった芝生、遠景
 neon#ed_v
 kick#ed_k(left: 40px; top: 88px) NEXT TIMETABLE
 p#ed_l(left: 40px; top: 130px; font-size: 34px; color: $mute; in: note) 来年のタイテ解禁まで、あと

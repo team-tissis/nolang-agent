@@ -118,13 +118,13 @@ def item(ix, c, f, b, s) = div(left: 64px; width: 1152px; height: 128px; border-
 div#bg_base(inset: 0; background: radial(#0F1724,#0A0F17@60%,#080C13,30%,20%); z-index: back; in: none)
 div#bg_grid.bleed(left: -53px; top: -53px; width: 1386px; height: 826px; pattern: grid,32,#94A3B814; z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-32 y=-16 ease=none),duration=106000)
 div#bg_vig(inset: 0; background: radial(#0A0F1700@40%,#0A0F17D9,50%,50%); z-index: back; in: none)
-div#bg_glow1.bleed(left: -253px; top: -347px; width: 733px; height: 733px; background: radial(#2EC4B621,#2EC4B600@65%,50%,50%); z-index: back; in: none; main: sine,x=23,freq_ms=18000)
-div#bg_glow2.bleed(left: 787px; top: 347px; width: 800px; height: 800px; background: radial(#F6C35B17,#F6C35B00@65%,50%,50%); z-index: back; in: none; main: sine,y=-20,freq_ms=22000)
+div#bg_glow1.bleed(left: -253px; top: -347px; width: 733px; height: 733px; background: radial(#2EC4B621,#2EC4B600@65%,50%,50%); z-index: back; in: none; main: sine {x: 23, period: 18})
+div#bg_glow2.bleed(left: 787px; top: 347px; width: 800px; height: 800px; background: radial(#F6C35B17,#F6C35B00@65%,50%,50%); z-index: back; in: none; main: sine {y: -20, period: 22})
 veil#bg_grain(grain: 0.05; color: #00000000; z-index: back; in: none)
 
 # a 題: 夜のサポート机の写真が 1.12 → 1 に引き、左の暗い余白に小札 → mask から上がる 2 行 → 副題。数字の語で 3 枚の札が弾み (4,128 は数える)、「分類」で 7 つの名札
 section#a(stagger: {each:0})
-img#a_img(inset: 0; subject: right 38%; room: left 60%; main: kb,1.12@70%,50%>1.0@70%,50%) [photo]夜のモダンなオフィスのカスタマーサポートの机の広角。キーボードの横にヘッドセットが置かれ、2 台のモニターに問い合わせの札の列と小さな棒グラフが読めない抽象的な形で柔らかく光る。深い紺と青緑の色調に琥珀色のかすかな差し色の明かり、浅い被写界深度、暗めの照明。机とモニターは画面の右 4 割に置き、画面の左 6 割は暗く何もない余白にする。文字・数字・ロゴなし
+img#a_img(inset: 0; subject: right 38%; room: left 60%; main: kb {scale: [1.12, 1], focus: ['70% 50%', '70% 50%']}) [photo]夜のモダンなオフィスのカスタマーサポートの机の広角。キーボードの横にヘッドセットが置かれ、2 台のモニターに問い合わせの札の列と小さな棒グラフが読めない抽象的な形で柔らかく光る。深い紺と青緑の色調に琥珀色のかすかな差し色の明かり、浅い被写界深度、暗めの照明。机とモニターは画面の右 4 割に置き、画面の左 6 割は暗く何もない余白にする。文字・数字・ロゴなし
 # 左から暗くする幕 (左 97% → 右 32%) と右の主体の周りの減光
 div#a_shade(inset: 0; background: linear(#0A0F17F7,#0A0F17ED@34%,#0A0F1799@58%,#0A0F1752,90))
 div#a_shade2(inset: 0; background: radial(#0A0F1700@40%,#0A0F17B3,75%,45%))
@@ -230,7 +230,7 @@ head#e_h(n: "04"; k: "初回解決率"; t: "初回で解決するのは {t}59%{/
 group#e_g(in: {scale:0.86, opacity:0, duration:0.6, ease:'power3.out'})
   shape#track.ellipse(left: 84px; top: 231px; width: 273px; height: 273px; background: none; border: 19px solid #1D2A3E)
   # 59% の弧 (12 時から時計回りに 212°・線の中心が地の輪の中心に乗る枠)
-  shape#arc(left: 93px; top: 240px; width: 254px; height: 254px; path: arc,start=0,to=212.4; background: none; border: 19px solid $teal2; in: draw,1200)
+  shape#arc(left: 93px; top: 240px; width: 254px; height: 254px; path: arc,start=0,to=212.4; background: none; border: 19px solid $teal2; in: draw {duration: 1.2})
   p#v(cx: 220px; cy: 352px; font-size: 100px; line-height: 0.95; font-family: n) [count:59 start=0 ms=1200]%
   p#l(cx: 220px; cy: 416px; font-size: 16px; color: $fg2; white-space: nowrap) 初回で解決（全体）
 p#e_cap(left: 64px; top: 532px; width: 313px; text-align: center; font-size: 15px; color: $muted; in: {y:7, opacity:0, duration:0.5, ease:'power2.out'}) {n21}2,442{/} 件 / {n21}4,128{/} 件
@@ -327,7 +327,7 @@ board#g_top(left: 633px; top: 195px; width: 583px; height: 451px; t: "時間を�
 section#h(stagger: {each:0})
 head#h_h(n: "07"; k: "ヘルプページで減らせる問い合わせ"; t: "{t}655 件（全体の 16%）{/}は、ヘルプページで答えられる内容だった")
 div#h_fr(left: 64px; top: 200px; width: 507px; height: 313px; border-radius: 11px; border: 1px solid $line2; box-shadow: 0px 20px 47px #00000080; delay: 150; in: {y:20, opacity:0, duration:0.7, ease:'power3.out'})
-  img#p(inset: 0; subject: center 70%; main: kb,1.0@55%,45%>1.08@55%,45%) [photo]夜の暗い木の机に置かれたノートパソコンを斜め前から。画面にはすっきりしたヘルプセンターのページが映り、上に検索欄、その下に整った FAQ の項目の列が光の線と角丸の塊で抽象的に並ぶ (読める文字はない)。項目の横に小さく光る鍵のアイコンがパスワード再設定をほのめかす。紺と青緑のほのかな光、柔らかな映画的な縁の光、落ち着いて整った雰囲気、周りは暗い。斜め前から寄った構図で、ノートパソコンの画面と本体が枠の横幅の 8 割を占めるほど大きく写り、机の奥の暗がりにぼけた観葉植物と街の灯り。余白を作らない。文字・数字・ロゴなし
+  img#p(inset: 0; subject: center 70%; main: kb {scale: [1, 1.08], focus: ['55% 45%', '55% 45%']}) [photo]夜の暗い木の机に置かれたノートパソコンを斜め前から。画面にはすっきりしたヘルプセンターのページが映り、上に検索欄、その下に整った FAQ の項目の列が光の線と角丸の塊で抽象的に並ぶ (読める文字はない)。項目の横に小さく光る鍵のアイコンがパスワード再設定をほのめかす。紺と青緑のほのかな光、柔らかな映画的な縁の光、落ち着いて整った雰囲気、周りは暗い。斜め前から寄った構図で、ノートパソコンの画面と本体が枠の横幅の 8 割を占めるほど大きく写り、机の奥の暗がりにぼけた観葉植物と街の灯り。余白を作らない。文字・数字・ロゴなし
   div#fx(inset: 0; background: linear(#0A0F1700@55%,#0A0F178C,180); z-index: front)
 div#h_cap(left: 64px; top: 531px; width: 507px; height: 50px; delay: 600; in: {y:7, opacity:0, duration:0.5, ease:'power2.out'})
   p#q(left: 0px; top: 2px; font-size: 12px; font-family: m; color: $teal2; border: 1px solid #7ADFD380; border-radius: 3px; padding: 0px 5px) 条件
@@ -366,7 +366,7 @@ goal#i_c3(left: 853px; ix: "03"; t: "3 日を超える案件"; g: "250"; u: "件
 # j まとめ: 引き継ぎの光の橋の絵 (1.08 → 1 に引く) を暗い幕の下に・3 行が語ごとに左から入り、3 行目の縁が珊瑚に光る → 行と見出しが上へ抜けて幕が明け、「NEXT ACTION」の題が出て暗転
 section#j(stagger: {each:0})
 # hf の作り: 引き継ぎの絵は濃い幕の下の地で、まとめの 3 行と締めの題は絵の主体の上に乗る (text_over_subject)
-img#j_img(inset: 0; subject: center 60%; room: top 30%; main: kb,1.08@50%,60%>1.0@50%,60%) [photo]深い紺の背景の上の、ミニマルな概念的 3D レンダー。暗い空間を挟んで向かい合う 2 つの光る作業机が光の橋でつながり、小さな長方形の札が橋の上を、青緑に光る左の机から温かい琥珀色に光る右の机へ渡っていく (サポートと開発のはっきりした引き継ぎ)。柔らかな立体の光、上品で落ち着いた雰囲気、2 つの机と橋は画面の中ほどから下に横いっぱいに置き、上の 3 割は暗い余白。人物なし、文字・数字・ロゴなし
+img#j_img(inset: 0; subject: center 60%; room: top 30%; main: kb {scale: [1.08, 1], focus: ['50% 60%', '50% 60%']}) [photo]深い紺の背景の上の、ミニマルな概念的 3D レンダー。暗い空間を挟んで向かい合う 2 つの光る作業机が光の橋でつながり、小さな長方形の札が橋の上を、青緑に光る左の机から温かい琥珀色に光る右の机へ渡っていく (サポートと開発のはっきりした引き継ぎ)。柔らかな立体の光、上品で落ち着いた雰囲気、2 つの机と橋は画面の中ほどから下に横いっぱいに置き、上の 3 割は暗い余白。人物なし、文字・数字・ロゴなし
 div#j_shade(inset: 0; background: linear(#0A0F17F0,#0A0F17DB@45%,#0A0F17C7,180))
 head#j_h(n: "09"; k: "まとめ"; t: "わかったことと、{a}次の一手{/}"; out: {opacity:0, duration:0.45, ease:'power2.in'})
 item#j_i1(top: 200px; ix: "1"; c: $amber; f: "43%{arr} → {/}75%"; b: "時間を食うのは、データ連携・不具合・請求の 3 つ"; s: "件数の 43% で、対応時間の 75%（件数が多いのはログインと操作方法）")

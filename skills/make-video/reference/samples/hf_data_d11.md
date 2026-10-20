@@ -90,7 +90,7 @@ veil#flash(color: #FFFFFF; opacity: 0; z-index: curtain; in: none)
 
 # s1 問い: 湾岸の橋を埋めるランナーの写真が 1.16 → 1.02 に引き、完走タイムの時計が数え上がる → 曲の山で題が叩きつけられ (閃光)、「何分」が 2.6 倍から落ちて揺れる
 section#s1(stagger: {each:0})
-img#s1_img(inset: 0; subject: bottom 60%; room: top 40%; main: kb,1.16>1.02,ease=power1.out) [photo]縦長 9:16 の写真。朝日の湾岸を走る大都市マラソン。広い湾の橋を何百人もの市民ランナーが川のように埋めて走る様子を、やや上の後方から見下ろす。地平線から低い金色の太陽がフレアを放ち、影は深い青緑、ハイライトは暖かい橙、動きと熱気。ランナーの群れは画面の下 6 割を埋め、上 4 割は落ち着いた朝の空で見出しの余白。
+img#s1_img(inset: 0; subject: bottom 60%; room: top 40%; main: kb {scale: [1.16, 1.02], ease:'power1.out'}) [photo]縦長 9:16 の写真。朝日の湾岸を走る大都市マラソン。広い湾の橋を何百人もの市民ランナーが川のように埋めて走る様子を、やや上の後方から見下ろす。地平線から低い金色の太陽がフレアを放ち、影は深い青緑、ハイライトは暖かい橙、動きと熱気。ランナーの群れは画面の下 6 割を埋め、上 4 割は落ち着いた朝の空で見出しの余白。
 veil#s1_shade(background: linear(#070B14DB,#070B1473@30%,#070B140D@46%,#070B1459@62%,#070B14EB,180); in: none)
 chipj#s1_kick(left: 40px; top: 157px; in: {x:-53, opacity:0, duration:0.3, ease:'power3.out'}) 完走者8,214人のデータで検証
 group#s1_title(left: 40px; top: 209px; width: 660px; height: 330px; in: none)
@@ -115,7 +115,7 @@ div#hdr.sticky(left: 0px; top: 0px; width: 720px; height: 120px; z-index: front;
   p#tl(cx: "40;116;192;268;343;419;495;571;647;680"; top: 102px; font-size: 13px; font-family: "n;n;n;n;n;n;n;n;n;j"; color: "#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;$lime") ×10 S;5;10;15;20;25;30;35;40;G
 # 進行: 黄緑の線が残りの全尺で伸び、光る点が線の先を走る
 progress#prog.sticky(left: 40px; top: 93px; width: 640px; height: 3px; background: $lime; border-radius: 2px; until: end; z-index: front; overlap: hdr)
-shape#runner.ellipse.sticky(left: 33px; top: 87px; width: 15px; height: 15px; background: $lime; box-shadow: 0px 0px 0px 4px #C6FF3D40; z-index: front; overlap: hdr; in: {opacity:0, duration:0.4}; main: ramp,x=640)
+shape#runner.ellipse.sticky(left: 33px; top: 87px; width: 15px; height: 15px; background: $lime; box-shadow: 0px 0px 0px 4px #C6FF3D40; z-index: front; overlap: hdr; in: {opacity:0, duration:0.4}; main: ramp {x: 640})
 board#b2(k: "DATA"; t: "調べたデータ"; s: "申込時の目標タイム × 実際の走り"; fn: "※架空の市民マラソン1大会分のデータ（作例）")
   p#name(left: 32px; top: 152px; font-size: 33px; line-height: 1.2; white-space: nowrap; delay: 180; in: {y:27, opacity:0, duration:0.4, ease:'power3.out'}) みなと湾岸シティマラソン
   p#tag(left: .name.right+9; top: 158px; font-size: 16px; font-family: m; color: #C9D2E0; background: #2A3345; border-radius: 7px; padding: 3px 9px 4px 9px; delay: 180; in: {y:27, opacity:0, duration:0.4, ease:'power3.out'}) 架空の大会
@@ -179,7 +179,7 @@ board#b3(k: "前半 vs 後半"; t: "後半の方が速かった人は？"; s: "�
 
 # s4 5km ごとのペース: 疲れたランナーの写真 (彩度を落として 0.55) の上の板に、6'00" 〜 7'00" の目盛り → 白の折れ線が 25-30 まで描かれ点と値が順に弾む → 30km からの赤い帯と破線 → 赤の線が描き継がれて +40秒 → 52% の札 → 「キロ +64秒」の札が叩きつけられ板が揺れる
 section#s4(stagger: {each:0})
-img#s4_img(inset: 0; opacity: 0.55; filter: sat:0.6; subject: center 50%; main: kb,1.12>1.0; in: {opacity:0, duration:7.85, ease:'none'}) [photo]縦長 9:16 のスポーツ写真。マラソン終盤で疲れ切った市民ランナー。脚が重く顔をゆがめ汗をかき、湾沿いの誰もいないアスファルトの道で失速している。低い位置からの望遠、霞んだ午後の強い光、ざらついた高コントラストの劇的な雰囲気、暗く彩度の低い色調。人物は画面の中央に置き、上下に余白。
+img#s4_img(inset: 0; opacity: 0.55; filter: sat:0.6; subject: center 50%; main: kb {scale: [1.12, 1]}; in: {opacity:0, duration:7.85, ease:'none'}) [photo]縦長 9:16 のスポーツ写真。マラソン終盤で疲れ切った市民ランナー。脚が重く顔をゆがめ汗をかき、湾沿いの誰もいないアスファルトの道で失速している。低い位置からの望遠、霞んだ午後の強い光、ざらついた高コントラストの劇的な雰囲気、暗く彩度の低い色調。人物は画面の中央に置き、上下に余白。
 div#s4_top(left: 0px; top: 0px; width: 720px; height: 213px; background: linear(#070B14F0,#070B14B3@45%,#070B1400,180); in: none)
 board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1kmあたり"; fn: "※各区間の1kmあたりペース（完走者の中央値）"; c: $fast; background: #0A0F1BDB)
   chip#k(color: #FFFFFF)
@@ -193,8 +193,8 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   div#zone(left: 432px; top: 160px; width: 181px; height: 347px; border-radius: 12px; background: linear(#FF4D2E47,#FF4D2E0F,180); in: {opacity:0, duration:0.3})
   shape#m30(left: 431px; top: 160px; width: 3px; height: 350px; path: line_v; border: 3px solid $fast; dash: 7,5; in: {opacity:0, duration:0.2})
   # 折れ線: 白の 0〜30km (1 秒で描く) と赤の 30km〜G (0.8 秒)
-  shape#la(path: "M93 205.7 L154.7 193.7 L216.3 201.7 L278 213.7 L339.7 233.7 L401.3 269.7"; background: none; border: 6px solid $ink; in: draw,1000,ease=power1.inOut)
-  shape#lb(path: "M401.3 269.7 L463 365.7 L524.7 461.7 L586.3 433.7"; background: none; border: 7px solid $fast; in: draw,800,ease=power2.in)
+  shape#la(path: "M93 205.7 L154.7 193.7 L216.3 201.7 L278 213.7 L339.7 233.7 L401.3 269.7"; background: none; border: 6px solid $ink; in: draw {duration: 1, ease: 'power1.inOut'})
+  shape#lb(path: "M401.3 269.7 L463 365.7 L524.7 461.7 L586.3 433.7"; background: none; border: 7px solid $fast; in: draw {duration: 0.8, ease: 'power2.in'})
   shape#pa.ellipse(left: "84;146;208;269;331;393"; top: "197;185;193;205;225;261"; width: 17px; height: 17px; background: $lime; border: 3px solid #0B1020; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.19}}) ×6
   p#va(cx: "93;155;216;278;340;401"; cy: "179;167;175;187;207;243"; font-size: 20px; font-family: n; font-style: italic; delay: 40; in: {y:5, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
   shape#pb.ellipse(left: "455;516;578"; top: "357;453;425"; width: 17px; height: 17px; background: $fast; border: 3px solid #0B1020; delay: 260; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
@@ -270,7 +270,7 @@ board#b7(k: "RESULT"; t: "飛ばすと、後半に崩れる"; s: "入り方の3�
 
 # s8 おすすめ: 海沿いを落ち着いて走るランナーの写真に閃光 → 上に金の札「BEST PACE」と問い → 下の板に「キロ 4〜7秒 ゆっくり」が叩きつけられ → 達成率の輪が 47% まで描かれ、4 群の横棒が並び、注記
 section#s8(stagger: {each:0})
-img#s8_img(inset: 0; subject: 25%,20%,50%,80%; face: 40%,25%,20%,9%; room: top 20%; main: kb,1.2>1.04,ease=power1.out) [photo]縦長 9:16 の写真。マラソン序盤、海沿いの遊歩道を他のランナーに混じってリラックスして走る、落ち着いて集中した市民ランナーを正面からやや引いて撮る。左手首の GPS スポーツウォッチにちらりと目をやる。柔らかい朝の光、涼しい青と青緑の色調、浅い被写界深度、時計の画面は抽象的な光だけ。主役は画面の左右の中央。画面の上 2 割は霞んだ空と遠くの山並みだけで人の頭を入れない (主役の頭のてっぺんは上から 2 割の高さ)。主役の顔は画面の上から 25〜32% の高さ、肩と胴と腕時計は画面の中ほど (上から 35〜60%)、下 4 割は走る脚と濡れた路面。背後のランナーも頭は上から 2 割より下。
+img#s8_img(inset: 0; subject: 25%,20%,50%,80%; face: 40%,25%,20%,9%; room: top 20%; main: kb {scale: [1.2, 1.04], ease:'power1.out'}) [photo]縦長 9:16 の写真。マラソン序盤、海沿いの遊歩道を他のランナーに混じってリラックスして走る、落ち着いて集中した市民ランナーを正面からやや引いて撮る。左手首の GPS スポーツウォッチにちらりと目をやる。柔らかい朝の光、涼しい青と青緑の色調、浅い被写界深度、時計の画面は抽象的な光だけ。主役は画面の左右の中央。画面の上 2 割は霞んだ空と遠くの山並みだけで人の頭を入れない (主役の頭のてっぺんは上から 2 割の高さ)。主役の顔は画面の上から 25〜32% の高さ、肩と胴と腕時計は画面の中ほど (上から 35〜60%)、下 4 割は走る脚と濡れた路面。背後のランナーも頭は上から 2 割より下。
 veil#s8_shade(background: linear(#070B14D9,#070B1440@16%,#070B1426@26%,#070B14BF@36%,#070B14F2,180); in: none)
 chip#s8_chip(cx: 360px; top: 157px; background: $gold; in: {y:-20, opacity:0, duration:0.3}) BEST PACE
 p#s8_q(cx: 360px; top: 201px; font-size: 40px; line-height: 1.2; stroke: #070B14,5; white-space: nowrap; in: {scale:1.3, opacity:0, duration:0.35, ease:'power3.out'}) いちばん目標を達成したのは？
@@ -281,7 +281,7 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
   # 達成率の輪 (紺の輪の上に金の弧が 0 → 47% を 0.8 秒で描く)
   div#donut(left: 29px; top: 279px; width: 153px; height: 153px; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     shape#ring.ellipse(left: 15px; top: 15px; width: 122px; height: 122px; background: none; border: 19px solid #263047)
-    shape#arc(path: "M76.5 15.5 L91.4 17.3 L105.3 22.7 L117.6 31.4 L127.3 42.7 L134 56.1 L137.2 70.8 L136.8 85.7 L132.7 100.1 L125.3 113.1 L114.9 123.9 L102.2 131.8 L87.9 136.4"; background: none; border: 19px solid $gold; in: draw,800,ease=power2.out)
+    shape#arc(path: "M76.5 15.5 L91.4 17.3 L105.3 22.7 L117.6 31.4 L127.3 42.7 L134 56.1 L137.2 70.8 L136.8 85.7 L132.7 100.1 L125.3 113.1 L114.9 123.9 L102.2 131.8 L87.9 136.4"; background: none; border: 19px solid $gold; in: draw {duration: 0.8, ease: 'power2.out'})
     p#c(cx: 50%; top: 45px; font-size: 57px; line-height: 1; font-family: n; font-style: italic; color: $gold; white-space: nowrap) [count:47 start=0 ms=800]%
     p#cl(cx: 50%; top: 104px; font-size: 15px; white-space: nowrap) 目標達成率
   hrow#r(left: 200px; width: 413px; height: 31px; top: "285;321;357;393"; k: "少し遅め;設定どおり;抑えめ;飛ばし"; bw: "163;132;101;73"; v: "47%{s} 382人{/};38%;29%;21%"; c: "$gold;$even;$slow;$fast"; o: "1;0.8;0.8;0.8"; in: {opacity:0, duration:0.15, stagger:{each:0.12}}) ×4
@@ -292,7 +292,7 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
 
 # s9 まとめ: ゴールで両手を挙げる後ろ姿の逆光の写真に、まとめの札 3 枚が左から順に入る → 「前半は」とゴールテープが張られ → 「「少し遅い」が正解。」が叩きつけられ (閃光) テープが左右に切れて飛ぶ
 section#s9(stagger: {each:0})
-img#s9_img(inset: 0; subject: bottom 55%; room: top 45%; main: kb,1.14>1.02,ease=power1.out) [photo]縦長 9:16 の写真。両手を高く挙げてゴールに飛び込む市民マラソンランナーを後ろから見た姿。湾岸の街のスカイラインの上の金色の太陽に逆光で照らされたシルエット、ゴールのアーチの影。祝福と感動の雰囲気、暖かい橙と深い紺の色調。人物は画面の下半分の中央、上半分は広い空。
+img#s9_img(inset: 0; subject: bottom 55%; room: top 45%; main: kb {scale: [1.14, 1.02], ease:'power1.out'}) [photo]縦長 9:16 の写真。両手を高く挙げてゴールに飛び込む市民マラソンランナーを後ろから見た姿。湾岸の街のスカイラインの上の金色の太陽に逆光で照らされたシルエット、ゴールのアーチの影。祝福と感動の雰囲気、暖かい橙と深い紺の色調。人物は画面の下半分の中央、上半分は広い空。
 veil#s9_shade(background: linear(#070B14E0,#070B14B3@40%,#070B148C@62%,#070B14E6,180); in: none)
 div#s9_head(left: 40px; top: 155px; width: 640px; height: 40px; delay: 80; in: {x:-40, opacity:0, duration:0.35, ease:'power3.out'})
   chipj#k(left: 0px; cy: 50%) まとめ

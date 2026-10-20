@@ -5,6 +5,18 @@
   },
   "plugins": [
     {
+      "name": "nolang-dev",
+      "source": {
+        "source": "local",
+        "path": "./plugins/nolang-dev"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "nolang-local",
       "source": {
         "source": "local",

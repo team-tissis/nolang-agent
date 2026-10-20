@@ -29,12 +29,12 @@ sfx off
 subtitle.hug(font-size: 32px; font-family: s; bottom: 56px; background: #2A2622E6; color: $paper; border-radius: 10px; padding: 10px 22px; line-height: 1.35)
 bgm#music(volume: 4dB) 静かなピアノと柔らかい弦、郷愁のある素朴な旋律、自然ドキュメンタリーの語り向け
 bgm#music2(volume: 4dB) 余韻の長いピアノの独奏、まばらな音、喪失と追憶の静かな曲
-def kick(t) = p(font-size: 22px; font-family: e; color: $a; letter-spacing: 0.2em; in: fade,700; content: {t})
+def kick(t) = p(font-size: 22px; font-family: e; color: $a; letter-spacing: 0.2em; in: fade {duration: 0.7}; content: {t})
 def h1(t) = p(font-size: 52px; line-height: 1.3; color: $ink; in: title; content: {t})
-def rule = shape(width: 96px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe,right,700)
+def rule = shape(width: 96px; height: 3px; path: line_h; background: $a; border: 3px solid $a; in: wipe {dir: 'right', duration: 0.7})
 
 section#hook
-img#hk_p(inset: 0; main: kb,1.0@50%,65%>1.12@50%,62%) [ref:@otter]澄んだ川面から顔を出してこちらを見つめるニホンカワウソの顔の寄り、水滴、木漏れ日の光、画面の下半分に顔
+img#hk_p(inset: 0; main: kb {scale: [1, 1.12], focus: ['50% 65%', '50% 62%']}) [ref:@otter]澄んだ川面から顔を出してこちらを見つめるニホンカワウソの顔の寄り、水滴、木漏れ日の光、画面の下半分に顔
 veil#hk_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.5)
 kick#hk_k(left: 48px; top: 88px) SHOWA ERA — JAPAN
 rule#hk_r(left: 48px; top: 128px)
@@ -50,21 +50,21 @@ div#nm_c(left: 584px; top: 72px; width: 96px; height: 560px; background: #F4EEE2
 p#nm_s(left: 48px; top: 160px; width: 480px; font-size: 36px; line-height: 1.5; color: $ink; in: rise) 川を泳ぎ、[br]魚を追いかけ
 
 section#life
-img#lf_p(inset: 0; main: kb,1.08@50%,55%>1.0) 昭和の田舎の小川、石段で野菜を洗う着物姿の女性と、すぐそばの岩の上で魚をくわえたニホンカワウソ、夏の午後の光、茅葺きの家
+img#lf_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 55%'}) 昭和の田舎の小川、石段で野菜を洗う着物姿の女性と、すぐそばの岩の上で魚をくわえたニホンカワウソ、夏の午後の光、茅葺きの家
 veil#lf_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.45)
 kick#lf_k(left: 48px; top: 88px) NEIGHBORS
 rule#lf_r(left: 48px; top: 128px)
 h1#lf_h(left: 48px; top: 156px) 日本人の[br]{a}すぐそば{/}で
 
 section#vanish
-img#vn_p(inset: 0; main: kb,1.0>1.06@40%,50%) 夕暮れの誰もいない川岸、葦と濡れた岩、水面に長い影、寂しい空気
+img#vn_p(inset: 0; main: kb {scale: [1, 1.06], focus: '40% 50%'}) 夕暮れの誰もいない川岸、葦と濡れた岩、水面に長い影、寂しい空気
 veil#vn_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.45)
 kick#vn_k(left: 48px; top: 88px) FADING
 rule#vn_r(left: 48px; top: 128px)
 h1#vn_h(left: 48px; top: 156px; font-size: 46px) その姿は[br]少しずつ{b}消えて{/}いく
 
 section#causes
-img#cz_p(inset: 0; main: kb,1.0@50%,60%>1.08) コンクリートの護岸で固められた濁った川、遠くに工場の煙突と重機、灰色の空、生き物の気配のない水面
+img#cz_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}) コンクリートの護岸で固められた濁った川、遠くに工場の煙突と重機、灰色の空、生き物の気配のない水面
 veil#cz_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.55)
 kick#cz_k(left: 48px; top: 88px) WHY THEY VANISHED
 rule#cz_r(left: 48px; top: 128px)
@@ -73,7 +73,7 @@ div#cz(left: 48px; top: 160px; width: 440px; height: 344px; gap: 12; background:
   p#t(left: 72px; cy: 50%; font-size: 32px; font-family: s; color: $ink) 毛皮をとるために;川の開発;水の汚れ;餌の魚が減る
 
 section#last
-img#ls_p(inset: 0; main: kb,1.0>1.05@50%,45%) 夕暮れの高知の山あいの清流、青い山並みと赤く染まる空、静かな淵、誰もいない
+img#ls_p(inset: 0; main: kb {scale: [1, 1.05], focus: '50% 45%'}) 夕暮れの高知の山あいの清流、青い山並みと赤く染まる空、静かな淵、誰もいない
 veil#ls_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.5)
 kick#ls_k(left: 48px; top: 88px) KOCHI PREFECTURE
 rule#ls_r(left: 48px; top: 128px)
@@ -81,15 +81,15 @@ p#ls_n(left: 40px; top: 140px; font-size: 150px; font-family: e; color: $ink; le
 p#ls_t(left: 48px; top: 330px; font-size: 34px; font-family: s; color: $ink; in: rise) 高知県で{b}最後{/}の確認
 
 section#memory
-img#mm_p(inset: 0; main: kb,1.06>1.0) [ref:@otter]色褪せた古い写真のような、岩の上でこちらを振り返るニホンカワウソ、セピア色、白い縁、時間の経った紙のしみ
+img#mm_p(inset: 0; main: kb {scale: [1.06, 1]}) [ref:@otter]色褪せた古い写真のような、岩の上でこちらを振り返るニホンカワウソ、セピア色、白い縁、時間の経った紙のしみ
 veil#mm_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.5)
 kick#mm_k(left: 48px; top: 88px) ONLY IN MEMORY
 rule#mm_r(left: 48px; top: 128px)
-p#mm_s(left: 48px; top: 156px; font-size: 32px; font-family: s; color: $mute; in: fade,700) たった数十年で
+p#mm_s(left: 48px; top: 156px; font-size: 32px; font-family: s; color: $mute; in: fade {duration: 0.7}) たった数十年で
 h1#mm_h(left: 48px; top: 212px; font-size: 50px) {b}記憶{/}の中だけの[br]存在に
 
 section#ending
-img#ed_p(inset: 0; main: kb,1.0@50%,60%>1.1@50%,55%) [ref:@otter]朝の光が差し込む澄んだ川を、背を向けて上流へ泳いでいくニホンカワウソ、水面のきらめき、緑の木々、希望のある静けさ
+img#ed_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['50% 60%', '50% 55%']}) [ref:@otter]朝の光が差し込む澄んだ川を、背を向けて上流へ泳いでいくニホンカワウソ、水面のきらめき、緑の木々、希望のある静けさ
 veil#ed_v(color: #F4EEE2; opacity: 0.85; to: top; start: 0.45)
 kick#ed_k(left: 48px; top: 88px) IF WE COULD RETURN
 rule#ed_r(left: 48px; top: 128px)

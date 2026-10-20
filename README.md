@@ -87,6 +87,8 @@ nolang check [dir]                    dir の design.txt / timeline.txt を検�
 nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]
 nolang status <video_id> [--wait] [--until playable|completed]
 nolang abort <video_id>
+nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
+nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画を自分の素材に送る → ref
 ```
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
@@ -167,5 +169,5 @@ npm run build
 
 - サーバーに 1 回で作る口 (`drafts/create`) を足し、CLI と MCP の `nolang_draft_create` を同じ関数で裏打ちする (今は CLI が手元で cut に分けて順に投入している)。
 - CLI 専用の固定の client ID (DCR は MCP の仕様で非推奨になった・後継は CIMD)・device flow のログイン。
-- 素材の持ち込み (`nolang assets upload`) と素材の検索 (`nolang assets search`)。backend 側で素材のアップロードを作業中。
+- 素材の検索・upload は backend の `claude-draft-src` の API (`v1/unstable/assets/…`) に合わせて CLI に入れた (MCP は検索だけ・upload は CLI)。dev / 本番に出たら実機で確かめる。
 - 辞書をサーバーから配り、写し (`reference/`) を無くす。

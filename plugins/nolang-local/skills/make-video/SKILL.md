@@ -1,6 +1,6 @@
 ---
 name: make-video
-description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う。台本と画面 (draft src) を書き、CLI (nolang) か MCP (nolang-local) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
+description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。台本と画面 (draft src) を書き、CLI (nolang) か MCP (nolang-local) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
 ---
 
 # NoLang の動画を作る (nolang-local)
@@ -21,7 +21,13 @@ CLI の呼び方: `nolang` が PATH にあればそれ、無ければ `node ../.
 
 1. **依頼から決める**: 伝えること 1 文・縦横 (`16:9` / `9:16`)・長さの目安 (既定 60 秒)・型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)。聞き返さず既定で進め、決めた値は最後にユーザーへ伝える。
 2. **骨組みを読む**: `reference/scaffolds/<型>_<16x9|9x16>/design.txt` と `timeline.txt`。動く完成例は `examples/explainer_16x9/` (7 cut・check 通過・描画済み)。最初の 1 本はこの 2 つで足りる。
-3. **書く**: 骨組みの根 (先頭から最初の `section#` の前まで) は配色と書体を題材に合わせる程度でほぼそのまま使い、cut を題材で書き直す。1 cut = design の `section#名` の block + timeline の `*** 名` の block (名は一致させる)。cut は 5〜8 個、1 cut に台詞 1〜3 文。`# TODO` の注記行は消す。CLI なら作業用の directory (例 `./nolang-videos/<英小文字の名>/`) に `design.txt` と `timeline.txt` として保存する。
+3. **決まった素材を使う時だけ** (依頼に「この写真・この動画」「この曲」「この声」がある・手元の file を渡された):
+   - 手元の file → `nolang assets upload <file>…` で自分の素材に送り、`ref` (`id=<uuid>`) を得る (動画は仕上げを待つので数十秒)。MCP は file の中身を運べないので、upload は CLI で。
+   - NoLang の素材から選ぶ → `nolang assets search <kind> "<説明か名前>"` (MCP なら `nolang_assets_search(kind, q)`)。自分が送った物は `--mine` (`scope="mine"`)。kind = `image` `footage` `bgm` `soundeffect` `speaker` `avatar` `font`。`preview_url` で中身を確かめられる。
+   - `ref` は応答の `usage` の位置に書く: 画像・動画素材 = 根に `image 名 = id=…`、置く所に `content: @名` (動画素材は `play: loop` も)・BGM = `bgm#名 id=…`・効果音 = `sound 名 = id=…` か台詞に `[♪id=…]`・話者 = `cast 名 = id=…`・立ち絵 = `cast 名 = "声の説明" avatar="名"`・書体 = `font "名 太さ"`。
+   - id は全桁の `id=<uuid>` だけ (8 桁の id と `file=名` はこの経路では使えない)。読めない id は check が `DEFECT:ASSET_UNREADABLE` で止める。
+   - 決まった素材が無い所は説明文で書く (絵は生成、声・BGM・効果音・書体は説明文でカタログから選ばれる)。
+4. **書く**: 骨組みの根 (先頭から最初の `section#` の前まで) は配色と書体を題材に合わせる程度でほぼそのまま使い、cut を題材で書き直す。1 cut = design の `section#名` の block + timeline の `*** 名` の block (名は一致させる)。cut は 5〜8 個、1 cut に台詞 1〜3 文。`# TODO` の注記行は消す。CLI なら作業用の directory (例 `./nolang-videos/<英小文字の名>/`) に `design.txt` と `timeline.txt` として保存する。
 
 ## A. CLI で作る (シェルがある時・推奨)
 
@@ -95,7 +101,7 @@ section#hook
 div#c1(left:48px; top:420px; width:300px; padding:16px; border-radius:16px; background:#0a0614e6; border:3px solid $a; box-shadow:0 0 24px $a; in:{y:60, scale:.7, opacity:0, duration:.5, ease:'back.out(1.7)'})
   p#l(font-size:22px; color:$mute; letter-spacing:.2em) STAGE A
   p#t(font-size:72px; color:#fff; text-shadow:0 0 24px $a) 18:30
-img#venue(inset: 0; main: kb,1.0>1.06) 夜の野外フェス会場、遠くに二つのステージ、青と赤のネオン、人物なし
+img#venue(inset: 0; main: kb {scale: [1, 1.06]}) 夜の野外フェス会場、遠くに二つのステージ、青と赤のネオン、人物なし
 ```
 
 ```
@@ -111,7 +117,7 @@ tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon s
 `#id` が名 (字下げの子は相対名・印では `#親.子`)、`.class` は flag (`.hug` 中身の幅・`.sticky` cut を跨ぐ) か変種の tag (全面は宣言 `inset: 0`)、文字の内容は行の残り。
 CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `transform:translate` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。表に無い名の宣言は DEFECT:KEY。`canvas 1920x1080` など短辺 720 以外の canvas は px ごと 720 に写す。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
 
-素材は説明文で書く: 話者 `cast n = "落ち着いた30代女性のナレーター" speed=110%`・BGM `bgm#m 静かなピアノと弦`・絵 `img#p(inset: 0) 夜の屋台の湯気、文字なし` (`alt` と同じ)・書体 `font "太い明朝体"`・効果音 `[♪"グラスに注ぐ音" -6dB]`。名や id で指定しない。
+素材は説明文で書く: 話者 `cast n = "落ち着いた30代女性のナレーター" speed=110%`・BGM `bgm#m 静かなピアノと弦`・絵 `img#p(inset: 0) 夜の屋台の湯気、文字なし` (`alt` と同じ)・書体 `font "太い明朝体"`・効果音 `[♪"グラスに注ぐ音" -6dB]`。名や id で指定しない (例外は依頼に決まった素材がある時だけ — §1 の 3)。
 依頼がキャラ (ずんだもん等) を名指ししたら、声は `cast z = character="ずんだもん"` (例外的に名で書く) で、画面にも立ち絵を出す: 最初の cut に `avatar#lay.sticky(left:900px; top:200px; width:360px; height:520px; cast:z; fit:contain)` (`.sticky` で cut を跨いで出続ける)・文字や図は立ち絵の場所を空けて置く・表情は台詞に `[!#lay expression,happy]`。
 読みは src の責務でない (後段の読み検査が差し替える)。全出現を強制する語だけ根に `read 3日 = みっか`、その場だけ `{3日|みっか}`。
 
@@ -129,8 +135,8 @@ CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transiti
 - 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:20, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
 - 変種: `#名.tag(宣言)` (静止の別の姿) → `[!#名 .tag]` (補間して移る。`points=` / `path=` の shape の変種は形ごと補間 = morph。書体 / style・画像・fit の種類・形の種類・blend・mask が違う変種は補間せず、その語で開き直す — 変種の `in=` が入場・無ければ切替)。部品: `def 名(引数) = tag(宣言) {引数}` → `名#x(…) 文字` (同じ形の 2 つ目も def に上げて実体を並べる)。
 - 文字の一部: `{t}語{/}` + `[!#名{t} recolor,$a]` / `highlight` / `marker` / `strike` (`[=#名{t}]` で戻す)。
-- 糖衣: 入場の名 `in:rise` (`fade rise drop slide,left zoom pop wipe,right` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`)・役 `title big div row note` (雛形の根の `motion 名 = …` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
-- 常時 `main: float|breathe|sway|pulse|spin,9000|kb,1.1@40%,60%>1.0`。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
+- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -30}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`)・役 `title big div row note` (雛形の根の `motion 名 = …` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
+- 常時 `main: float|breathe|sway|pulse`・`spin {period: 9}`・`kb {scale: [1.1, 1], focus: '40% 60%'}` (寄りながら動くなら `focus: ['40% 60%', '60% 50%']`)。2 本以上の tween は `,` で並べる (`in: fade {duration: .8}, typewriter {level: 3}`)。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
 - 字幕: 印だけの行 `[>#subtitle]` で以後の台詞が自動の字幕 (cut を跨いで続く・閉じるのは `[<#subtitle]` — cut 末の印だけの行ならその cut の終わり)。`subtitle(font-size:32px; …)`・テロップの間だけ消す `.hide_subtitle`。話者札は `cast a = "…" label="部下" label_fill=$a`。
 
 ### 書けない物 (runtime に無い・GSAP と違う例外)

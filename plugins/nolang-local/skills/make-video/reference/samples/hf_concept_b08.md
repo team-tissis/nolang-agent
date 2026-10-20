@@ -105,13 +105,13 @@ def pillar(n, ic, l1, k, l2) = div(left: 29px; width: 661px; height: 121px; back
 
 # 全編の層: 暗幕と周辺減光・grain・上端の進行線 (地 16% の白 + 赤→黄の棒)
 shade#shade
-veil#grain(grain: 0.08; mix-blend-mode: multiply; main: noise,x=4,y=4,freq_ms=83)
+veil#grain(grain: 0.08; mix-blend-mode: multiply; main: noise {x: 4, y: 4, period: 0.083})
 div#prog_track(left: 0px; top: 0px; width: 720px; height: 5px; background: #FFFFFF29; z-index: front; in: none; out: none)
 progress#prog(left: 0px; top: 0px; width: 720px; height: 5px; background: linear($red,$y,90); until: end; z-index: front; overlap: prog_track)
 
 # 開幕: 夜の街の俯瞰がグリッチで揺れて入り、走査線が上から下へ走る・題を 3 段に語ごとに組み「必要です」を判子で
 section#hook
-img#city(inset: 0; fit: cover,focus=50%,100%,zoom=200%; main: kb,1.0@50%,55%>1.1@50%,55%) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
+img#city(inset: 0; fit: cover,focus=50%,100%,zoom=200%; main: kb {scale: [1, 1.1], focus: ['50% 55%', '50% 55%']}) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 # グリッチの帯: 同じ絵を clip-path: inset() で 5 本の帯に切り、steps(1) で x を飛ばす (hf の .gs)
 img#gs1(inset: 0; fit: cover,focus=50%,100%,zoom=200%; clip-path: inset(8% 0 78% 0); opacity: 0; main: none; in: none; out: none) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 img#gs2(inset: 0; fit: cover,focus=50%,100%,zoom=200%; clip-path: inset(30% 0 58% 0); opacity: 0; main: none; in: none; out: none) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
@@ -125,22 +125,22 @@ key#t1c(cx: 360px; cy: 669px; width: 418px; text-align: center) 必要です
 
 # 便利な暮らし → 文の途中で「見えない」影の絵へグリッチで替わる・「増えています」で赤い上昇の矢印を描く
 section#life
-img#life_photo(inset: 0; fit: cover,focus=50%,100%,zoom=180%; main: kb,1.1@50%,45%>1.0@50%,45%) Close-up of a person's hands holding a smartphone in a bright, cozy living room in the morning. Translucent floating icons around the phone suggest online shopping, maps, messaging, video calls and cashless payment, but drawn only as simple symbols without any text. Convenient, comfortable modern digital life. Face not visible. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
+img#life_photo(inset: 0; fit: cover,focus=50%,100%,zoom=180%; main: kb {scale: [1.1, 1], focus: ['50% 45%', '50% 45%']}) Close-up of a person's hands holding a smartphone in a bright, cozy living room in the morning. Translucent floating icons around the phone suggest online shopping, maps, messaging, video calls and cashless payment, but drawn only as simple symbols without any text. Convenient, comfortable modern digital life. Face not visible. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
 # 文の中の絵替え (語で出す絵は全編の暗幕より上に乗るので暗幕を重ね直す)・影の絵はフードと伸びる爪と右下の小さな人 (狙われる側) を全部入れる範囲に寄せる
-img#shadow_photo(inset: 0; content: @shadow; fit: cover,focus=72%,100%,zoom=160%; main: kb,1.0@88%,100%>1.06@88%,100%; in: {opacity:0, duration:0.12, ease:'power1.inOut'})
+img#shadow_photo(inset: 0; content: @shadow; fit: cover,focus=72%,100%,zoom=160%; main: kb {scale: [1, 1.06], focus: ['88% 100%', '88% 100%']}; in: {opacity:0, duration:0.12, ease:'power1.inOut'})
 # 爪と小さな人は絵の下 (y 55〜86%) にいるので、この絵の暗幕は下を浅く (55% まで素通し・周辺減光も薄く) して見せる
 shade#life_shade(background: linear(#03050C9E,#03050C00@20%,#03050C00@55%,#03050C59@78%,#03050CB3@92%,#03050CD9,180); life_shade.v.opacity: 0.35)
-shape#up_line(path: "M542 779 L585 739 L613 754 L662 687"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw,600)
-shape#up_head(path: "M628 684 L665 684 L665 721"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw,600)
+shape#up_line(path: "M542 779 L585 739 L613 754 L662 687"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw {duration: 0.6})
+shape#up_head(path: "M628 684 L665 684 L665 721"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw {duration: 0.6})
 
 # 大きな壁: 霧の中にそびえる壁の絵・「大きな壁」の札を判子で
 section#wall
-img#wall_photo(inset: 0; fit: cover,focus=50%,85%,zoom=190%; main: kb,1.0@50%,85%>1.08@50%,85%) Low-angle shot of a small lone person seen from behind, standing in front of an enormous towering dark concrete wall that fills the whole frame and disappears into the fog above. Faint glowing circuit-board lines and cracks run across the wall surface. Overwhelming sense of scale and obstruction, cold mist on the ground. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
+img#wall_photo(inset: 0; fit: cover,focus=50%,85%,zoom=190%; main: kb {scale: [1, 1.08], focus: ['50% 85%', '50% 85%']}) Low-angle shot of a small lone person seen from behind, standing in front of an enormous towering dark concrete wall that fills the whole frame and disappears into the fog above. Faint glowing circuit-board lines and cracks run across the wall surface. Overwhelming sense of scale and obstruction, cold mist on the ground. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 key#wall_key(cx: 360px; cy: 498px; width: 452px; text-align: center; s: 93; in: {scale:2.2, opacity:0, duration:0.26, ease:'power4.in'}; out: {opacity:0, duration:0.35, ease:'power1.in'}) 大きな壁
 
 # 章扉 01: ぼかした孤独の絵に薄い巨大な「01」・回りながら出る虫眼鏡・判子の「問題点」・2 段の見出し (2 段目は赤枠の札)
 section#problem
-img#problem_photo(inset: 0; content: @alone; filter: blur(12px); main: kb,1.12>1.18)
+img#problem_photo(inset: 0; content: @alone; filter: blur(12px); main: kb {scale: [1.12, 1.18]})
 bignum#s4n 01
 svg#s4i(left: 284px; top: 337px; width: 153px; height: 153px; part: mag; overlap: s4n; delay: 50; in: {rotation:-25, scale:0.6, opacity:0, duration:0.9, ease:'back.out(1.6)'})
 key#s4l(cx: 360px; cy: 545px; s: 39; overlap: s4n; letter-spacing: 0.12em; border: 5px solid $red; border-radius: 8px; padding: 4px 20px 7px 20px; box-shadow: 0px 0px 15px #E6001273; in: {scale:1.7, opacity:0, duration:0.26, ease:'power4.in'}) 問題点
@@ -149,29 +149,29 @@ key#s4h2(cx: 360px; cy: 757px; width: 554px; text-align: center; s: 69; line-hei
 
 # 被害者の声: 膝を抱える人の絵に、囁きの吹き出しが 1 つずつぼけから浮かび前の囁きは沈む → 「そんな気持ち」で同じ絵の寄りへ溶けて替わる
 section#voices
-img#alone_photo(inset: 0; content: @alone; fit: cover,focus=50%,100%,zoom=150%; main: kb,1.0@52%,100%>1.12@54%,100%)
+img#alone_photo(inset: 0; content: @alone; fit: cover,focus=50%,100%,zoom=150%; main: kb {scale: [1, 1.12], focus: ['52% 100%', '54% 100%']})
 chap#ch1.sticky(n: "01"; ic: mag_b; t: "問題点"; w: 192; tw: 86)
 whisper#w1(left: 40px; top: 280px) 「恥ずかしい…」
 whisper#w2(left: 427px; top: 200px) 「怖い…」
 whisper#w3(left: 47px; top: 393px; s: 37) 「どう相談したら[br]いいのか分からない…」
-img#alone_zoom(inset: 0; content: @alone; fit: cover,focus=50%,100%,zoom=185%; main: kb,1.0@51%,100%>1.07@51%,100%; in: {opacity:0, duration:0.3, ease:'power1.inOut'})
+img#alone_zoom(inset: 0; content: @alone; fit: cover,focus=50%,100%,zoom=185%; main: kb {scale: [1, 1.07], focus: ['51% 100%', '51% 100%']}; in: {opacity:0, duration:0.3, ease:'power1.inOut'})
 shade#zoom_shade
 
 # デジタル空間: 画素のドームの絵がグリッチで入り、「周囲」で目の窓・「証拠」でフォルダの窓 (前の窓は沈む)
 section#digital
-img#digital_photo(inset: 0; fit: cover,focus=50%,100%,zoom=160%; main: kb,1.0@50%,45%>1.1@50%,45%) A person standing alone inside a translucent dome made of floating pixels and blurred chat bubbles, notification icons and broken file icons, cut off from the world. Outside the dome, blurred passers-by on a city street walk past without noticing anything. The harm is invisible from outside. Surreal, cold, quiet. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
+img#digital_photo(inset: 0; fit: cover,focus=50%,100%,zoom=160%; main: kb {scale: [1, 1.1], focus: ['50% 45%', '50% 45%']}) A person standing alone inside a translucent dome made of floating pixels and blurred chat bubbles, notification icons and broken file icons, cut off from the world. Outside the dome, blurred passers-by on a city street walk past without noticing anything. The harm is invisible from outside. Surreal, cold, quiet. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 orb#o1(left: 80px; ic: eye)
 orb#o2(left: 400px; ic: folder)
 
 # 長期化: 時計と舞う暦の絵・「長期化」で字幕の下に橙→赤の帯が伸びる
 section#longterm
-img#time_photo(inset: 0; main: kb,1.06@50%,40%>1.17@50%,43%) A dim room at night: torn pages of a wall calendar fly through the air, a large wall clock looms in the background, and on the desk a smartphone screen glows with many unread message bubbles shown only as shapes. Days passing while suffering continues. Gloomy blue light, slow and heavy atmosphere. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
+img#time_photo(inset: 0; main: kb {scale: [1.06, 1.17], focus: ['50% 40%', '50% 43%']}) A dim room at night: torn pages of a wall calendar fly through the air, a large wall clock looms in the background, and on the desk a smartphone screen glows with many unread message bubbles shown only as shapes. Days passing while suffering continues. Gloomy blue light, slow and heavy atmosphere. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 div#stretch(left: 107px; top: 928px; width: 507px; height: 11px; background: #FFFFFF24; border-radius: 5px; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.25})
   div#fill(left: 0px; top: 0px; width: 507px; height: 11px; background: linear(#FF9A00,$red,90); border-radius: 5px; box-shadow: 0px 0px 12px #FF3C00CC; delay: 100; in: {scaleX:0.02, duration:1.76, ease:'power1.inOut', pivot:'left'})
 
 # 章扉 02: 白い閃光 → ぼかした法の絵に「02」・盾の icon・「だからこそ、」と判子の「法律が必要です」
 section#law
-img#law_blur(inset: 0; content: @law; filter: blur(12px); main: kb,1.1>1.16)
+img#law_blur(inset: 0; content: @law; filter: blur(12px); main: kb {scale: [1.1, 1.16]})
 veil#flash(color: #FFFFFF; opacity: 0.6; z-index: curtain; in: {opacity:0, duration:0.08}; out: none)
 bignum#s8n 02
 svg#s8i(left: 277px; top: 373px; width: 167px; height: 167px; part: shield; overlap: s8n; in: {scale:0.5, opacity:0, duration:0.7, ease:'back.out(1.8)'})
@@ -180,11 +180,11 @@ key#s8k(cx: 360px; cy: 727px; width: 612px; text-align: center; s: 75; in: {scal
 
 # 3 つの柱: 文ごとに絵を替え (相談室 → 対応の現場 → 法の盾)、柱の札を右から 1 枚ずつ積む (前の札は沈み、言い終えて戻る)
 section#pillars
-img#consult_photo(inset: 0; content: @consult; main: kb,1.18@50%,28%>1.08@50%,26%)
+img#consult_photo(inset: 0; content: @consult; main: kb {scale: [1.18, 1.08], focus: ['50% 28%', '50% 26%']})
 chap#ch2.sticky(n: "02"; ic: shield_b; t: "法律が必要"; w: 246; tw: 140)
-img#team_photo(inset: 0; main: kb,1.08@50%,30%>1.18@50%,30%; in: {opacity:0, duration:0.4, ease:'power1.inOut'}) A team of specialists in a modern response center moving quickly and decisively: people seen from behind in front of large screens showing glowing network maps and connection lines, one person pointing, another talking on a headset. Urgent but organized. Cool blue light with warm highlights, sense of speed. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
+img#team_photo(inset: 0; main: kb {scale: [1.08, 1.18], focus: ['50% 30%', '50% 30%']}; in: {opacity:0, duration:0.4, ease:'power1.inOut'}) A team of specialists in a modern response center moving quickly and decisively: people seen from behind in front of large screens showing glowing network maps and connection lines, one person pointing, another talking on a headset. Urgent but organized. Cool blue light with warm highlights, sense of speed. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 shade#team_shade(team_shade.v.opacity: 0.7)
-img#law_photo(inset: 0; content: @law; fit: cover,focus=60%,100%,zoom=186%; main: kb,1.0@60%,100%>1.06@60%,100%; in: {opacity:0, duration:0.4, ease:'power1.inOut'})
+img#law_photo(inset: 0; content: @law; fit: cover,focus=60%,100%,zoom=186%; main: kb {scale: [1, 1.06], focus: ['60% 100%', '60% 100%']}; in: {opacity:0, duration:0.4, ease:'power1.inOut'})
 shade#law_shade(law_shade.v.opacity: 0.7)
 pillar#pl1(top: 593px; pl1.k.width: 216px; n: 1; ic: chat; l1: "被害者が"; k: "安心して相談"; l2: "できる仕組み")
 pillar#pl2(top: 728px; pl2.k.width: 216px; n: 2; ic: bolt; l1: "専門機関が"; k: "迅速に動ける"; l2: "ルール")
@@ -195,7 +195,7 @@ pillar#pl3(top: 863px; pl3.k.width: 278px; n: 3; ic: scales; l1: "匿名性を�
 
 # 見えない暴力: 影の絵を赤く染めてグリッチで入り、「見えない暴力」の札に赤と青緑の写しが左右にずれて消える
 section#violence
-img#violence_photo(inset: 0; content: @shadow; fit: cover,focus=48%,100%,zoom=185%; main: kb,1.0@40%,100%>1.06@40%,100%)
+img#violence_photo(inset: 0; content: @shadow; fit: cover,focus=48%,100%,zoom=185%; main: kb {scale: [1, 1.06], focus: ['40% 100%', '40% 100%']})
 div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: multiply; in: none)
 head#s10a(cx: 360px; cy: 496px) テクノロジー犯罪は
 group#vk(left: 0px; top: 520px; width: 720px; height: 226px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
@@ -205,12 +205,12 @@ group#vk(left: 0px; top: 520px; width: 720px; height: 226px; in: {scale:2, opaci
 
 # 社会全体で守る: 光の輪を囲む手の絵・「社会全体」で中央から金色の輪が 4 重に 3 回広がる
 section#society
-img#hands_photo(inset: 0; fit: cover,focus=50%,100%,zoom=180%; main: kb,1.0@50%,55%>1.1@50%,55%) Many hands of diverse people of different ages and skin tones reaching in from all sides to form a protective circle of warm light around a small glowing figure of a person in the center. The dark background is turning warm and golden where the light spreads. Solidarity, society protecting someone together. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
+img#hands_photo(inset: 0; fit: cover,focus=50%,100%,zoom=180%; main: kb {scale: [1, 1.1], focus: ['50% 55%', '50% 55%']}) Many hands of diverse people of different ages and skin tones reaching in from all sides to form a protective circle of warm light around a small glowing figure of a person in the center. The dark background is turning warm and golden where the light spreads. Solidarity, society protecting someone together. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
 shape#ring.ellipse(left: 293px; top: 640px; width: 134px; height: 134px; background: none; border: 4px solid #FFD68C66; mix-blend-mode: screen; in: {scale:0.4, opacity:0, duration:0.3})
 
 # 章扉 03: 夜明けの絵の芽に寄った構図・温かい縁の「03」・芽の icon・赤枠の「声を上げられる」と「社会へ」
 section#voice_up
-img#dawn_zoom(inset: 0; content: @dawn; fit: cover,focus=50%,100%,zoom=260%; main: kb,1.08@50%,100%>1.0@50%,100%)
+img#dawn_zoom(inset: 0; content: @dawn; fit: cover,focus=50%,100%,zoom=260%; main: kb {scale: [1.08, 1], focus: ['50% 100%', '50% 100%']})
 bignum#s12n(c: #FFD68C38) 03
 svg#s12i(left: 280px; top: 381px; width: 160px; height: 160px; part: sprout; overlap: s12n; delay: 180; in: {y:27, scale:0.6, opacity:0, duration:1.2, ease:'power3.out'})
 key#s12h1(cx: 360px; cy: 625px; s: 69; line-height: 1.22; border: 7px solid $red; border-radius: 8px; padding: 3px 20px 9px 20px; box-shadow: 0px 0px 15px #E6001273; in: {y:27, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げられる
@@ -218,7 +218,7 @@ head#s12h2(cx: 360px; cy: 740px) 社会へ
 
 # 二つの声: 相談室の絵に、白い吹き出し (相談していいんだ) と暗い金縁の吹き出し (あなたは ひとりじゃない) が弾んで出る
 section#bubbles
-img#bubbles_photo(inset: 0; content: @consult; main: kb,1.28@35%,45%>1.18@35%,45%)
+img#bubbles_photo(inset: 0; content: @consult; main: kb {scale: [1.28, 1.18], focus: ['35% 45%', '35% 45%']})
 chap#ch3.sticky(n: "03"; ic: sprout_b; t: "声を上げられる社会へ"; w: 384; tw: 278)
 p#b1(left: 43px; top: 260px; font-family: m; font-size: 44px; line-height: 1.32; color: #2B2018; background: #FFFAF0F2; border-radius: 29px; padding: 16px 27px 20px 27px; box-shadow: 0px 8px 27px #00000059; shape: speech-bubble; in: {scale:0.6, y:20, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'}) 「相談していいんだ」
 div#b2(left: 220px; top: 767px; width: 463px; height: 165px; background: #16100AD6; border: 2px solid $warm; border-radius: 29px; box-shadow: 0px 8px 27px #00000059; in: {scale:0.6, y:20, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'})
@@ -230,7 +230,7 @@ div#b2(left: 220px; top: 767px; width: 463px; height: 165px; background: #16100A
 
 # 結び: 夜明けの街の全景に、文を語ごとに 4 段で組み「欠かせません」を判子で・最後は黒へ落ちる
 section#closing
-img#dawn_photo(inset: 0; content: @dawn; fit: cover,focus=50%,100%,zoom=190%; main: kb,1.0@50%,100%>1.08@50%,100%)
+img#dawn_photo(inset: 0; content: @dawn; fit: cover,focus=50%,100%,zoom=190%; main: kb {scale: [1, 1.08], focus: ['50% 100%', '50% 100%']})
 head#t2a(cx: 360px; cy: 409px; s: 40; line-height: 1.3; letter-spacing: 0.02em) そう言える社会をつくるために、
 head#t2b(cx: 360px; cy: 491px; s: 64) テクノロジー犯罪を
 head#t2c(cx: 360px; cy: 579px; s: 64) 抑制する法律は

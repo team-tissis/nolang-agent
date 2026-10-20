@@ -136,16 +136,16 @@ shape#blob3.ellipse(left: 507px; top: -200px; width: 507px; height: 507px; backg
 
 # s01 題: 右に角丸の題の絵が寄りながら右から入り、左に小札 → mask から上がる 2 行 (800 が数え上がり、「800人の本音」に黄の下帯) → 罫と社名 → 語で補足と 3 つの数字の札・架空の注記
 section#s01(stagger: {each:0})
-img#s01_kv(left: 567px; top: 64px; width: 660px; height: 513px; border-radius: 24px; box-shadow: 0px 20px 53px #16233F29; fit: cover,focus=80%,50%; main: kb,1.12>1.0,ease=power1.out; delay: 50; in: {x:47, opacity:0, duration:1, ease:'power3.out'}; out: {x:27, opacity:0, duration:0.42, ease:'power2.in'}) 働き方調査の報告の横長のキービジュアル。左に明るいガラス張りのモダンなオフィスビルの断面があり、中の階で同僚 3 人がテーブルを囲んで談笑している。右には窓辺の在宅ワークの机 (ノートPC と観葉植物、オレンジのブランケットを掛けた白い椅子) を大きく描き、二つの場面を点線の道と小さな吹き出しや円グラフ・棒グラフの丸いアイコンがつなぐ。明るい水色の空と白い雲、遠くに淡いビル群と緑の木々。オフィスと在宅の机を画面いっぱいに大きく描いて余白を作らず、下端まで木々と床を描き切る (左下に数字の札が重なる)
+img#s01_kv(left: 567px; top: 64px; width: 660px; height: 513px; border-radius: 24px; box-shadow: 0px 20px 53px #16233F29; fit: cover,focus=80%,50%; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 50; in: {x:47, opacity:0, duration:1, ease:'power3.out'}; out: {x:27, opacity:0, duration:0.42, ease:'power2.in'}) 働き方調査の報告の横長のキービジュアル。左に明るいガラス張りのモダンなオフィスビルの断面があり、中の階で同僚 3 人がテーブルを囲んで談笑している。右には窓辺の在宅ワークの机 (ノートPC と観葉植物、オレンジのブランケットを掛けた白い椅子) を大きく描き、二つの場面を点線の道と小さな吹き出しや円グラフ・棒グラフの丸いアイコンがつなぐ。明るい水色の空と白い雲、遠くに淡いビル群と緑の木々。オフィスと在宅の机を画面いっぱいに大きく描いて余白を作らず、下端まで木々と床を描き切る (左下に数字の札が重なる)
 div#s01_kicker(left: 73px; top: 175px; width: 350px; height: 35px; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 3px 11px #16233F14; delay: 250; in: {y:16, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'})
   div#dot(left: 15px; cy: 50%; width: 7px; height: 7px; border-radius: 99px; background: linear(#2F80ED,#12B5A6,135))
   p#t(left: 29px; cy: 50%; font-size: 15px; color: $brand) 経営会議 報告 ｜ 人事部 働き方調査 2026
-p#s01_t1(left: 73px; cy: 271px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 400; in: mask_rise,800,ease=power4.out; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 出社とリモート、
+p#s01_t1(left: 73px; cy: 271px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 400; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 出社とリモート、
 # 「800人の本音」の黄の下帯 (文字の下の段・語で左から伸びる)
 div#s01_mark(left: 181px; top: 371px; width: 374px; height: 20px; border-radius: 4px; background: $mark; in: {scaleX:0, duration:0.5, ease:'power2.inOut', pivot:'left'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'})
-p#s01_t2a(left: 73px; cy: 360px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700; in: mask_rise,800,ease=power4.out; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 社員
-p#s01_t2n(left: 184px; cy: 356px; font-size: 80px; font-family: n; line-height: 1; color: $brand; letter-spacing: -0.02em; delay: 700; in: mask_rise,800,ease=power4.out; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) [count:800 start=0 ms=1300 delay=100]
-p#s01_t2b(left: s01_t2n.right+6; cy: 360px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700; in: mask_rise,800,ease=power4.out; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 人の本音
+p#s01_t2a(left: 73px; cy: 360px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 社員
+p#s01_t2n(left: 184px; cy: 356px; font-size: 80px; font-family: n; line-height: 1; color: $brand; letter-spacing: -0.02em; delay: 700; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) [count:800 start=0 ms=1300 delay=100]
+p#s01_t2b(left: s01_t2n.right+6; cy: 360px; font-size: 53px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 人の本音
 div#s01_rule(left: 73px; top: 422px; width: 48px; height: 4px; border-radius: 2px; background: linear(#2F80ED,#12B5A6,90); delay: 1150; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'})
 p#s01_ci1(left: 73px; cy: 456px; font-size: 20px; delay: 1250; in: {y:9, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 株式会社ソラリンク 全社員アンケート
 p#s01_ci2(left: 73px; cy: 490px; font-size: 16px; font-family: m; color: $ink2; in: {y:9, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'}) 来期の出社方針を決める前に、社員の本音を聞きました
@@ -172,7 +172,7 @@ chap#s02_chap(n: "01"; t: "調査の概要"; w: 157px)
 board#b2(no: "01"; t: "調査の概要"; m: "株式会社ソラリンク ｜ 人事部 実施"; f: "出典：株式会社ソラリンク 人事部「働き方調査」（2026年9月実施）")
   # 回答率の輪 (淡い輪の上に紺の弧が 12 時から時計回りに描かれ、中の数字が同じ尺で数える)
   svg#ring(left: 64px; top: 104px; width: 267px; height: 267px; part: ring; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'})
-  shape#arc(path: "M197.5 130.8 L206.0 131.1 L214.4 132.1 L222.7 133.8 L230.9 136.2 L238.8 139.1 L246.5 142.7 L253.9 146.9 L260.9 151.7 L267.6 157.0 L273.7 162.8 L279.4 169.1 L284.6 175.9 L289.2 183.0 L293.3 190.5 L296.7 198.2 L299.5 206.2 L301.7 214.4 L303.2 222.8 L304.0 231.2 L304.2 239.7 L303.7 248.2 L302.5 256.6 L300.6 264.9 L298.1 273.0 L295.0 280.9 L291.2 288.5 L286.9 295.8 L281.9 302.7 L276.5 309.2 L270.5 315.3 L264.1 320.8 L257.3 325.9 L250.1 330.3 L242.5 334.2 L234.7 337.5 L226.6 340.1 L218.4 342.1 L210.0 343.5 L201.5 344.1 L193.0 344.1 L184.6 343.4 L176.2 342.1 L167.9 340.0 L159.9 337.4 L152.1 334.0 L144.5 330.1 L137.3 325.6 L130.5 320.6 L124.1 315.0 L118.2 308.9 L112.8 302.4 L107.9 295.4 L103.6 288.1 L99.8 280.5 L96.7 272.6 L94.3 264.5 L92.4 256.2 L91.3 247.8 L90.8 239.3 L91.0 230.8"; background: none; border: 29px solid $brand; z-index: front; in: draw,2490)
+  shape#arc(path: "M197.5 130.8 L206.0 131.1 L214.4 132.1 L222.7 133.8 L230.9 136.2 L238.8 139.1 L246.5 142.7 L253.9 146.9 L260.9 151.7 L267.6 157.0 L273.7 162.8 L279.4 169.1 L284.6 175.9 L289.2 183.0 L293.3 190.5 L296.7 198.2 L299.5 206.2 L301.7 214.4 L303.2 222.8 L304.0 231.2 L304.2 239.7 L303.7 248.2 L302.5 256.6 L300.6 264.9 L298.1 273.0 L295.0 280.9 L291.2 288.5 L286.9 295.8 L281.9 302.7 L276.5 309.2 L270.5 315.3 L264.1 320.8 L257.3 325.9 L250.1 330.3 L242.5 334.2 L234.7 337.5 L226.6 340.1 L218.4 342.1 L210.0 343.5 L201.5 344.1 L193.0 344.1 L184.6 343.4 L176.2 342.1 L167.9 340.0 L159.9 337.4 L152.1 334.0 L144.5 330.1 L137.3 325.6 L130.5 320.6 L124.1 315.0 L118.2 308.9 L112.8 302.4 L107.9 295.4 L103.6 288.1 L99.8 280.5 L96.7 272.6 L94.3 264.5 L92.4 256.2 L91.3 247.8 L90.8 239.3 L91.0 230.8"; background: none; border: 29px solid $brand; z-index: front; in: draw {duration: 2.49})
   # 2 桁の数える数は語の count まで start の値 (0%) で止まる — 輪と一緒に「0%」で出し、弧を描く語で数える
   p#dv(cx: 197px; cy: 222px; font-size: 79px; font-family: n; line-height: 1; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'}) [count:76 start=0 ms=2490]{u46}%{/}
   p#dl(cx: 197px; cy: 277px; font-size: 17px; color: $ink2; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'}) 回答率
@@ -251,7 +251,7 @@ board#b4(no: "03"; t: "働き方への満足度"; m: "5段階で「4以上」と
     p#pv(left: 0px; cy: 25px; font-size: 35px; font-family: n; line-height: 1) [count:66 start=0 ms=800]{u54}%{/}
     p#pc(left: 0px; cy: 56px; font-size: 13px; font-family: m; color: $ink2) {nn}185{/} / {nn}280{/}人
   # 全体 64% の破線 (上から下へ伸びる) と札
-  shape#refl(path: "M898.7 128 L898.7 465"; background: none; border: 2px solid $ink; dash: 5,4; in: draw,600)
+  shape#refl(path: "M898.7 128 L898.7 465"; background: none; border: 2px solid $ink; dash: 5,4; in: draw {duration: 0.6})
   p#reft(cx: 899px; cy: 111px; font-size: 13px; in: {y:-7, opacity:0, duration:0.55, ease:'power3.out'}) 全体 {nn}64%{/}
   div#badge(left: 1041px; top: 290px; width: 85px; height: 29px; border-radius: 99px; background: #E2F4EE; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.7)'})
     div#d(left: 11px; cy: 50%; width: 7px; height: 7px; border-radius: 99px; background: $hyb)
@@ -362,7 +362,7 @@ board#b8(no: "07"; t: "職種別の希望出社日数"; m: "平均 ｜ 週あた
     p#n(left: 0px; cy: 51px; font-size: 13px; font-family: m; color: $ink3) n = 360人;n = 160人;n = 120人;n = 160人
   div#f(left: 237px; top: "135.7;219.7;303.7;387.7"; width: "260;340;380;520"; height: 40px; border-radius: 0px 4px 4px 0px; background: $neutral; delay: 450; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left', stagger:{each:0.12}}) ×4
   p#v(left: "507.7;587.7;627.7;767.7"; cy: "155.7;239.7;323.7;407.7"; font-size: 31px; font-family: n; line-height: 1; delay: 800; in: {y:7, opacity:0, duration:0.55, ease:'power3.out', stagger:{each:0.12}}) ×4 1.3{uj}日{/};1.7{uj}日{/};1.9{uj}日{/};2.6{uj}日{/}
-  shape#ref(path: "M576.3 122.3 L576.3 454.3"; background: none; border: 2px solid $ink; dash: 5,4; delay: 1050; in: draw,500)
+  shape#ref(path: "M576.3 122.3 L576.3 454.3"; background: none; border: 2px solid $ink; dash: 5,4; delay: 1050; in: draw {duration: 0.5})
   p#reft(left: 584px; cy: 111px; font-size: 13px; delay: 1250; in: {opacity:0, duration:0.3, ease:'power1.out'}) 全体の平均 {nn}1.7{/}日
   shape#brk(path: "M862.3 155.7 L878.3 155.7 L878.3 407.7 L862.3 407.7 M878.3 281.7 L893 281.7"; background: none; border: 2px solid $brand; in: {opacity:0, duration:0.3, ease:'power1.out'})
   div#call(left: 904px; top: 189px; width: 232px; height: 205px; delay: 100; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(1.7)'})

@@ -101,7 +101,7 @@ def card(n, t, s, cap, c, g) = div(top: 157px; width: 357px; height: 413px; bord
   p#cap(left: 21px; top: 373px; font-size: 13px; color: $ink3; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}; content: {cap})
 
 # 全編の地 (根): 紺の写真が 119 秒かけて 1.08 → 1.16 に寄る + 周辺減光 + grain
-img#plate(inset: 0; content: @plate; opacity: 0.95; z-index: back; main: kb,1.08@45%,50%>1.16@55%,50%; in: none)
+img#plate(inset: 0; content: @plate; opacity: 0.95; z-index: back; main: kb {scale: [1.08, 1.16], focus: ['45% 50%', '55% 50%']}; in: none)
 veil#vig(background: radial(#05080F00@55%,#03050A8C@100%,50%,45%); z-index: back; in: none)
 veil#grain(grain: 0.05; color: #00000000; z-index: back; in: none)
 
@@ -139,8 +139,8 @@ panel#p2a(left: 75px; top: 155px; width: 480px; height: 432px; t: "有料契約�
   p#na(left: 29px; top: 399px; font-size: 15px; color: $note; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) バーの長さ ＝ 人数（0 起点）
 # 流れ図: 3 つの枠を 0.32 で先に置き、語で 1 に点ける (点は矢印の上を 0.9 秒で流れ続ける)
 panel#p2b(left: 581px; top: 155px; width: 624px; height: 432px; t: "毎月の出入り"; s: "7〜9月"; tk: $amber; delay: 220)
-  shape#a1(left: 208px; top: 173px; width: 32px; height: 14px; path: arrow_r; background: $teal; border: 3px solid $teal; in: draw,500)
-  shape#a2(left: 381px; top: 173px; width: 44px; height: 14px; path: arrow_r; background: $coral; border: 3px solid $coral; in: draw,500)
+  shape#a1(left: 208px; top: 173px; width: 32px; height: 14px; path: arrow_r; background: $teal; border: 3px solid $teal; in: draw {duration: 0.5})
+  shape#a2(left: 381px; top: 173px; width: 44px; height: 14px; path: arrow_r; background: $coral; border: 3px solid $coral; in: draw {duration: 0.5})
   shape#fi.ellipse(left: "206;207;208"; top: "177;177;177"; width: 6px; height: 6px; background: #BFF5EA; in: {opacity:0, duration:0.3}) ×3
   shape#fo.ellipse(left: "380;381;382"; top: "177;177;177"; width: 6px; height: 6px; background: #FFD0D0; in: {opacity:0, duration:0.3}) ×3
   div#node_in(left: 20px; top: 113px; width: 184px; height: 133px; border-radius: 12px; background: #35D3B512; border: 2px solid #35D3B58C; opacity: 0.32; delay: 450; in: {y:9, opacity:0, duration:0.6, ease:'power3.out'})
@@ -211,8 +211,8 @@ panel#p4a(left: 75px; top: 155px; width: 707px; height: 432px; t: "週次の解�
   div#base(left: 73px; top: 365px; width: 613px; height: 2px; background: $line2)
   p#gl(left: "13;13;13;13"; top: "117;197;277;357"; width: 48px; text-align: right; font-size: 13px; color: $ink3; font-family: n) ×4 60;40;20;0
   # 線の下の面: hf は上 30% → 下 0% の縦グラデ。グラデの塗りの形は絵の段 (線・点・札の上) に上がるので、単色の 14% で塗る
-  shape#area(path: "M127 113 L300 173 L473 213 L647 261 L647 365 L127 365 Z"; background: #FF6B6B24; in: wipe,right,1890,ease=power1.inOut)
-  shape#line(path: "M127 113 L300 173 L473 213 L647 261"; background: none; border: 3px solid $coral; in: draw,1890)
+  shape#area(path: "M127 113 L300 173 L473 213 L647 261 L647 365 L127 365 Z"; background: #FF6B6B24; in: wipe {dir: 'right', duration: 1.89, ease: 'power1.inOut'})
+  shape#line(path: "M127 113 L300 173 L473 213 L647 261"; background: none; border: 3px solid $coral; in: draw {duration: 1.89})
   shape#dot.ellipse(left: "120;293;466;639"; top: "106;166;206;253"; width: "13;13;13;16"; height: "13;13;13;16"; background: $coral; border: 3px solid #131B33; in: {scale:0, duration:0.35, ease:'back.out(2.5)'}) ×4
   p#vl(left: "87;260;433;607"; top: "71;131;171;219"; width: 80px; text-align: center; font-size: 28px; line-height: 1.14; font-family: n; in: {y:7, opacity:0, duration:0.35, ease:'power3.out'}) ×4 63;48;38;26
   p#xl(left: "73;247;420;593"; top: "377;377;377;377"; width: 107px; text-align: center; font-size: 15px; color: $ink2; font-family: n; delay: 150; in: {opacity:0, duration:0.5, stagger:{each:0.08}}) ×4 8/31週;9/7週;9/14週;9/21週
@@ -251,7 +251,7 @@ panel#p5(left: 75px; top: 155px; width: 1131px; height: 432px; t: "在籍期間�
   shape#dv(left: 27px; top: 185px; width: 1077px; height: 2px; path: line_h; border: 2px solid #AABEE647; dash: 5,5; in: {opacity:0, duration:0.4})
   badge#tag_u(left: 968px; top: 100px; color: $coral; background: #FF6B6B1F; border: 1px solid #FF6B6B73; in: {x:8, opacity:0, duration:0.45, ease:'power3.out'}) 契約3か月未満
   badge#tag_o(left: 968px; top: 264px; color: $teal; background: #35D3B51A; border: 1px solid #35D3B573; in: {x:8, opacity:0, duration:0.45, ease:'power3.out'}) 3か月以上
-  shape#br(path: "M557 204 L568 204 L568 367 L557 367"; background: none; border: 2px solid $teal; in: draw,500)
+  shape#br(path: "M557 204 L568 204 L568 367 L557 367"; background: none; border: 2px solid $teal; in: draw {duration: 0.5})
   badge#hk(left: 587px; top: 261px; font-size: 17px; color: #04201A; background: $teal; in: {x:-7, scale:0.9, opacity:0, duration:0.45, ease:'back.out(2)'}) ひとケタ台
 
 # s06 最初の 3 か月: 左の板は母数と解約者の 2 本の帯 (3 か月未満の幅 25% → 53%) を破線の台形でつなぐ・右の板は 3 か月以上の折れ線が下がり、3 か月未満の赤い帯は 20〜23% に張り付く
@@ -281,7 +281,7 @@ panel#p6b(left: 648px; top: 155px; width: 557px; height: 432px; t: "解約率の
   p#gl(left: "9;9;9"; top: "138;245;351"; width: 47px; text-align: right; font-size: 13px; color: $ink3; font-family: n) ×3 20%;10%;0%
   div#band(left: 87px; top: 115px; width: 413px; height: 32px; border-radius: 5px; background: #FF6B6B33; border: 1px solid #FF6B6B8C; in: {scaleX:0, opacity:0, duration:0.8, ease:'power3.out', pivot:'left'})
   p#bandl(left: 88px; top: 84px; font-size: 16px; color: $coral; white-space: nowrap; in: {y:5, opacity:0, duration:0.4}) 3か月未満 {nn}20〜23%{/}
-  shape#line(path: "M120 260 L293 269 L467 289"; background: none; border: 3px solid $teal; in: draw,1000)
+  shape#line(path: "M120 260 L293 269 L467 289"; background: none; border: 3px solid $teal; in: draw {duration: 1})
   shape#dot.ellipse(left: "114;287;460"; top: "254;263;282"; width: "13;13;15"; height: "13;13;15"; background: $teal; border: 3px solid #131B33; in: {scale:0, duration:0.3, ease:'back.out(2.5)'}) ×3
   p#pl(left: "80;253;427"; top: "217;227;246"; width: 80px; text-align: center; font-size: 23px; font-family: n; color: $teal; in: {y:5, opacity:0, duration:0.3}) ×3 9.4%;8.5%;6.7%
   p#xl(left: "87;260;433"; top: "371;371;371"; width: 67px; text-align: center; font-size: 16px; color: $ink2; delay: 550; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×3 7月;8月;9月
@@ -364,7 +364,7 @@ card#card1(left: 75px; n: "1"; t: "解約率は11%前後で[br]横ばい"; s: "�
   p#s(delay: 250)
   p#cap(delay: 700)
   div#base(left: 21px; top: 350px; width: 315px; height: 2px; background: $line2)
-  shape#ml(path: "M41 240 L134 273 L228 295 L321 322"; background: none; border: 3px solid $coral; in: draw,1200)
+  shape#ml(path: "M41 240 L134 273 L228 295 L321 322"; background: none; border: 3px solid $coral; in: draw {duration: 1.2})
   shape#md.ellipse(left: "35;128;222;315"; top: "234;267;289;316"; width: "11;11;11;12"; height: "11;11;11;12"; background: $coral; border: 2px solid #141D37; in: {scale:0, duration:0.3, ease:'back.out(2.5)', stagger:{each:0.36}}) ×4
   p#m63(left: 26px; top: 201px; font-size: 23px; font-family: n; in: {opacity:0, duration:0.3}) 63
   p#m26(left: 304px; top: 279px; font-size: 23px; font-family: n; in: {opacity:0, duration:0.3}) 26
@@ -384,7 +384,7 @@ card#card3(left: 848px; n: "3"; t: "まず直す所"; s: "初回サイクルと�
 
 # outro 締めの題: 上端の帯を抜き、題の絵が溶けて戻り、小札 → 2 行 → 下線 → 注記を組んで暗転
 section#outro(stagger: {each:0})
-img#out_bg(inset: 0; content: @title_img; main: kb,1.0>1.04; in: {opacity:0, duration:1.6, ease:'power2.inOut'})
+img#out_bg(inset: 0; content: @title_img; main: kb {scale: [1, 1.04]}; in: {opacity:0, duration:1.6, ease:'power2.inOut'})
 div#ok(left: 100px; top: 237px; width: 600px; height: 25px; delay: 400; in: {x:-13, opacity:0, duration:0.6, ease:'power3.out'})
   div#ln(left: 0px; cy: 50%; width: 29px; height: 2px; background: $teal)
   p#t(left: 40px; cy: 50%; font-size: 16px; letter-spacing: 0.14em; color: $teal; white-space: nowrap) 解約分析レポート ｜ まとめ
