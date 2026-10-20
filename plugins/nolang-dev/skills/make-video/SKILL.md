@@ -1,6 +1,6 @@
 ---
 name: make-video
-description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。台本と画面 (draft src) を書き、CLI (nolang) か MCP (nolang-dev) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
+description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。「NoLang にログインして」・NoLang の素材を探す / 送る依頼にも使う。台本と画面 (draft src) を書き、CLI (nolang) か MCP (nolang-dev) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
 ---
 
 # NoLang の動画を作る (nolang-dev)
@@ -31,8 +31,10 @@ CLI の呼び方: `nolang` が PATH にあればそれ、無ければ `node ../.
 
 ## A. CLI で作る (シェルがある時・推奨)
 
-1. **ログイン**: `nolang auth status`。終了コード 3 (未ログイン) なら:
-   - ユーザーに端末で `nolang auth login` を実行してもらう (ブラウザが開くので NoLang にログインして許可)。Claude Code なら `! node <この skill の directory>/../../cli/nolang.mjs auth login` と案内する。
+1. **ログイン** (「NoLang にログインして」と頼まれた時も、作る前も): `nolang auth status`。終了コード 0 ならログイン済み。3 (未ログイン) なら、自分で始める:
+   - `nolang auth login --background` → 出力の `authorize_url` をユーザーに渡し、「ブラウザで NoLang にログインして『許可』を押してください」と伝える (同じ機械ならブラウザも開く)。コマンドはすぐ戻り、待ち受けは裏で続く。
+   - ユーザーが許可したら `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度 `nolang auth wait`。待ち受けは 5 分で切れるので、切れたら `--background` からやり直す。
+   - ブラウザに `ACCESS DENIED` (403) と出る → 接続元の IP が NoLang の許可リストに無い。同じブラウザで `https://<ログイン画面のホスト>/cdn-cgi/trace` を開き、`ip=` の値を管理者に伝えてもらう。
    - ブラウザが別の機械 (リモート・コンテナ) なら: `nolang auth login --no-browser` → 出た `authorize_url` をユーザーに開いてもらう → 許可後のページは接続エラーになるので、そのアドレスバーの URL を貼ってもらう → `nolang auth complete '<URL>'`。
    - 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (README.md の「つなぐ先の準備」)。
 2. **check**: `nolang check <dir>` を DEFECT 0 まで。DEFECT は stderr に `DEFECT:コード file:行 原因。直し方: …`。`findings` は `reference/rules.md` を見て直せる物は直す。

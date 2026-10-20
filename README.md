@@ -1,14 +1,75 @@
 # nolang-agent
 
-NoLang を AI エージェント (Claude Code / Codex など) から使うための配布物です。CLI・スキル・プラグインをまとめています。
-今は社内デモ用のプラグイン `nolang-local` だけで、公開はしていません。
+NoLang を AI エージェント (Claude Code / Codex など) から使うための配布物です。CLI・スキル・プラグインをまとめています (非公開)。
 
-入口は 2 つで、裏は同じ NoLang API・同じアカウントです (HyperFrames / Higgsfield と同じ形)。
+| プラグイン | 接続先 | 誰向け |
+|---|---|---|
+| **`nolang-dev`** | 社内の dev (`dev.no-lang.com`) | 社内の人 (下の「社内の人へ」) |
+| `nolang-local` | 手元のデモスタック (localhost) | 開発者 (下の「開発者向け」) |
+
+入口は 2 つで、裏は同じ NoLang API・同じアカウントです (HyperFrames / Higgsfield と同じ形)。スキルは CLI を優先し、使えない時は MCP で作ります。
 
 | 入口 | 向いている所 |
 |---|---|
 | **CLI `nolang`** (推奨) | Claude Code・Codex などシェルを持つエージェント。原稿を file のまま渡し、check → 開始 → cut の分割 → 順番の投入を 1 コマンドで |
-| **MCP `nolang-local`** | シェルの無い client。ツールを 1 つずつ呼ぶ |
+| **MCP** (`nolang-dev` / `nolang-local`) | シェルの無い client。ツールを 1 つずつ呼ぶ |
+
+## 社内の人へ: nolang-dev で動画を作る
+
+### 前提
+
+- `dev.no-lang.com` にログインできるアカウント。
+- 会社のネットワーク。在宅などで dev のログイン画面に `ACCESS DENIED` と出る人は、同じブラウザで https://dev.no-lang.com/cdn-cgi/trace を開き、`ip=` の値を管理者に伝えて許可リストに足してもらう。
+- Node.js 20 以上 (CLI を使うため)。GitHub の `team-tissis` の repo を clone できること (プラグインはこの repo から入る)。
+
+### 1. 入れる (1 回だけ)
+
+Claude Code:
+
+```
+/plugin marketplace add team-tissis/nolang-agent
+/plugin install nolang-dev@nolang
+```
+
+Codex:
+
+```
+codex plugin marketplace add team-tissis/nolang-agent
+codex plugin add nolang-dev@nolang
+```
+
+入れたら Claude Code / Codex を起動し直す。
+
+### 2. ログインする (1 回だけ)
+
+Claude Code / Codex に **「NoLang にログインして」** と頼む。許可の URL が出る (同じ機械ならブラウザも開く) ので、dev にログインして「許可」を押し、「許可した」と返す。
+ログインは 30 日使わなければ切れる。切れたらまた同じように頼めばよい。
+
+### 3. 頼む
+
+```
+NoLang の使い方を 60 秒で紹介する動画を作って
+この写真 (~/Desktop/product.png) を背景にして、新商品の紹介動画を縦長で作って
+落ち着いた女性の声とピアノの BGM で、在宅勤務のコツを解説する動画を作って
+```
+
+視聴 URL (`https://dev.no-lang.com/video/…`) が返り、生成中から再生できる。手元の写真・動画は自分の素材として送られ、NoLang の声・BGM・効果音・書体は説明文から選ばれる (決めたい時は「〇〇な声の候補を探して」と頼めば候補が出る)。
+
+### 更新する
+
+- Claude Code: `/plugin marketplace update nolang` → 起動し直す。
+- Codex: `codex plugin marketplace upgrade nolang` → `codex plugin remove nolang-dev@nolang` → `codex plugin add nolang-dev@nolang` → 起動し直す。
+
+### 困った時
+
+| 症状 | どうする |
+|---|---|
+| ブラウザに `ACCESS DENIED` | 接続元の IP が許可されていない。https://dev.no-lang.com/cdn-cgi/trace の `ip=` を管理者へ |
+| ログインの URL を開くのが遅れた | 待ち受けは 5 分。もう一度「NoLang にログインして」 |
+| つながらない・様子がおかしい | 「nolang doctor を実行して」と頼み、結果を管理者へ |
+| 生成が `failed` になる | 原稿ではなくサーバー側のことが多い。視聴 URL (video_id) を添えて管理者へ |
+
+MCP だけで使う時 (シェルが無い client など): Claude Code は「nolang-dev を認証して」、Codex は `codex mcp login nolang-dev` で同じ dev にログインする (CLI のログインとは別に保存される)。
 
 ## 構成
 
@@ -17,7 +78,8 @@ nolang-agent/
   packages/cli/                        # CLI @no-lang/cli の正本 (Node 20+・依存なし・テスト付き)
   skills/make-video/                   # スキルの正本 (CLI 優先・無ければ MCP)
     reference/                         # 辞書・規則・雛形・見本 (nolang-backend からの写し・SOURCE.json に元の commit)
-  plugins/nolang-local/                # 箱 (plugin)。cli/ と skills/ は npm run build が正本から作る — 直接直さない
+  plugins/nolang-dev/                  # 箱 (plugin)。cli/ と skills/ は npm run build が正本から作る — 直接直さない
+  plugins/nolang-local/                #   同上 (接続先だけが違う)
     .claude-plugin/plugin.json         #   Claude Code 用 (MCP の接続設定も中に書く)
     .codex-plugin/plugin.json          #   Codex 用
     .codex-plugin/mcp.json             #   Codex 用の MCP の接続設定
@@ -28,75 +90,16 @@ nolang-agent/
   .github/workflows/ci.yml             # npm run check と npm pack --dry-run
 ```
 
-## 試す人の手順
+## 開発者向け: 手元のデモスタック (nolang-local)
 
-まず **つなぐ先の準備** (下) を済ませる。
-
-### 1. プラグインを入れる
-
-Claude Code:
+手元 (や ubik) で動かしている NoLang のスタックにつなぐ。
 
 ```
-/plugin marketplace add <この repo のパス>
+/plugin marketplace add <この repo のパス か team-tissis/nolang-agent>
 /plugin install nolang-local@nolang
 ```
 
-Codex:
-
-```
-codex plugin marketplace add <この repo のパス>
-codex plugin add nolang-local@nolang
-```
-
-入れたら起動し直す。
-
-### 2. CLI でログインする (1 回だけ)
-
-```
-npx <この repo のパス>/packages/cli auth login
-```
-
-ブラウザが開くので NoLang にログインして許可する。トークンは `~/.config/nolang/credentials.json` (0600) に保存され、期限が切れても自動で更新される (30 日使わなければ再ログイン)。
-`nolang` を PATH に置きたければ `npm install -g <この repo のパス>/packages/cli`。
-
-ブラウザが別の機械 (ubik の上・コンテナの中) なら:
-
-```
-nolang auth login --no-browser          # 出た authorize_url を手元のブラウザで開いて許可
-nolang auth complete '<許可後のアドレスバーの URL>'   # 許可後のページは接続エラーになる。その URL を渡す
-```
-
-### 3. 頼む
-
-Claude Code / Codex で「〇〇の動画を作って」。スキルが CLI で `check` → `create` を回し、視聴 URL (`http://localhost:3000/video/…`) が返る。生成中から再生できる。
-
-### MCP で使う時 (シェルが無い client など)
-
-- Claude Code: 「nolang-local を認証して」と頼み、出た URL でログインする。
-- Codex: `codex mcp login nolang-local` (`codex mcp list` の Auth 欄は `Unsupported` と出るが login は通る)。
-
-MCP の認証と CLI の認証は別々に保存される (同じアカウントでよい)。
-
-## CLI
-
-```
-nolang auth login [--no-browser] | complete '<URL>' | status | logout
-nolang doctor                         接続先とログインを確かめる
-nolang templates [--aspect 16:9]
-nolang check [dir]                    dir の design.txt / timeline.txt を検査
-nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]
-nolang status <video_id> [--wait] [--until playable|completed]
-nolang abort <video_id>
-nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
-nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画を自分の素材に送る → ref
-```
-
-- 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
-- 接続先: `--api` → `NOLANG_API_URL` → 前回ログインした接続先 → `http://localhost:18000`。
-- CI など非対話: `NOLANG_TOKEN` に API key (`nlg-c-…`) か access token を入れる。
-- ログインは MCP と同じ認可サーバー (OAuth 2.1・PKCE・`127.0.0.1` で受ける)。client はログインごとに自動登録 (DCR)。
-
-## つなぐ先の準備
+(Codex は `codex plugin marketplace add …` → `codex plugin add nolang-local@nolang`。プラグインを直しながら試す時は、この repo のパスで棚を登録する)
 
 Claude Code / Codex が動いている機械の localhost で、次の 3 つが NoLang のスタックに届いている必要があります。
 
@@ -123,8 +126,28 @@ Host ubik-nolang
 
 注意:
 - 転送は「Claude Code / Codex が動いている機械」に要ります。手元の PC の LocalForward は、ubik の上で動く Claude Code には効きません。
-- NoLang のスタックにログインできるアカウントが要ります (デモの管理者に発行してもらう)。
+- NoLang のスタックにログインできるアカウントが要ります。
 - `claude mcp add … nolang-local …` で手で登録していた人は、プラグインを入れたら `claude mcp remove nolang-local -s user` で外す (同じ接続が 2 つ並ぶ)。
+
+## CLI
+
+```
+nolang auth login [--background | --no-browser] | wait | complete '<URL>' | status | logout
+nolang doctor                         接続先とログインを確かめる
+nolang templates [--aspect 16:9]
+nolang check [dir]                    dir の design.txt / timeline.txt を検査
+nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]
+nolang status <video_id> [--wait] [--until playable|completed]
+nolang abort <video_id>
+nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
+nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画を自分の素材に送る → ref
+```
+
+- 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
+- 接続先: `--api` → `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 前回ログインした接続先 → `http://localhost:18000`。
+- ログイン: 人が打つなら `nolang auth login` (ブラウザで許可するまで待つ)。エージェントは `--background` で URL を受け取ってすぐ戻り、`nolang auth wait` で完了を確かめる。ブラウザが別の機械なら `--no-browser` → `complete`。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
+- CI など非対話: `NOLANG_TOKEN` に API key (`nlg-c-…`) か access token を入れる。
+- ログインは MCP と同じ認可サーバー (OAuth 2.1・PKCE・`127.0.0.1` で受ける)。client はログインごとに自動登録 (DCR)。
 
 ## 開発
 

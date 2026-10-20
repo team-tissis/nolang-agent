@@ -31,6 +31,9 @@ const PACKAGED_API = (() => {
 const CONFIG_DIR = process.env.NOLANG_CONFIG_DIR || join(homedir(), ".config", "nolang");
 const CRED_FILE = join(CONFIG_DIR, "credentials.json");
 const PENDING_FILE = join(CONFIG_DIR, "pending-login.json");
+// --background のログイン: 待ち受けは切り離した子が持ち、状態 (waiting / done / failed) をここに書く
+const LOGIN_STATUS_FILE = join(CONFIG_DIR, "login-status.json");
+const LOGIN_LOG_FILE = join(CONFIG_DIR, "login.log");
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
 
 const log = (...args) => console.error(...args);
@@ -300,8 +303,56 @@ async function waitStatus(api, videoId, until, timeoutS) {
 
 // ---- commands ----
 
+async function readLoginStatus() {
+  try {
+    return JSON.parse(await readFile(LOGIN_STATUS_FILE, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+// エージェント向け: 待ち受けを切り離した子に任せ、許可の URL が出たらすぐ戻る (長く待つコマンドを打ち切るエージェントでも使える)。
+// 完了は `nolang auth wait` で確かめる
+async function startBackgroundLogin(api) {
+  await mkdir(CONFIG_DIR, { recursive: true, mode: 0o700 });
+  await rm(LOGIN_STATUS_FILE, { force: true });
+  const logFile = await open(LOGIN_LOG_FILE, "w", 0o600);
+  const child = spawn(process.execPath, [process.argv[1], "auth", "login", "--detached-child", "--api", api], {
+    detached: true,
+    stdio: ["ignore", logFile.fd, logFile.fd],
+  });
+  child.unref();
+  await logFile.close();
+  for (let i = 0; i < 150; i++) {
+    const status = await readLoginStatus();
+    if (status?.state === "failed") throw new CliError(`ログインを始められなかった: ${status.error}`, { exit: EXIT.AUTH, data: status });
+    if (status?.authorize_url) {
+      log("ブラウザで NoLang にログインして許可してください (同じ機械ならブラウザが開いています)。許可したら `nolang auth wait`。");
+      out({ ok: true, api, waiting: true, authorize_url: status.authorize_url, next: "ユーザーが許可したら nolang auth wait" });
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  throw new CliError(`ログインを始められなかった (30 秒で URL が出ない)。様子は ${LOGIN_LOG_FILE}`, { exit: EXIT.NETWORK });
+}
+
 async function cmdAuthLogin(flags) {
   const api = await resolveApi(flags);
+  if (flags.background) return startBackgroundLogin(api);
+  if (!flags["detached-child"]) return loginInBrowser(api, flags);
+  // 切り離した子: 結果を状態 file に残す (前の CLI はもう居ないので、stdout ではなく file で伝える)
+  try {
+    await loginInBrowser(api, flags, {
+      onUrl: (url) => writePrivate(LOGIN_STATUS_FILE, { state: "waiting", api, authorize_url: url, pid: process.pid, started_at: new Date().toISOString() }),
+      onDone: (profile) => writePrivate(LOGIN_STATUS_FILE, { state: "done", api, access_expires_at: new Date(profile.expires_at).toISOString() }),
+    });
+  } catch (error) {
+    await writePrivate(LOGIN_STATUS_FILE, { state: "failed", api, error: error.message });
+    throw error;
+  }
+}
+
+async function loginInBrowser(api, flags, hooks = {}) {
   const { resource, as } = await discover(api);
   const verifier = b64url(randomBytes(32));
   const challenge = b64url(createHash("sha256").update(verifier).digest());
@@ -336,6 +387,7 @@ async function cmdAuthLogin(flags) {
     const url = authorizeUrl(as, { clientId, redirectUri, challenge, state, resource });
     log("ブラウザで NoLang にログインして許可してください。開かなければこの URL を開いてください:");
     log(url);
+    await hooks.onUrl?.(url);
     if (process.stdin.isTTY) log("(ブラウザが別の機械なら、許可後のアドレスバーの URL をここに貼って Enter)");
     openBrowser(url);
     const timeout = new Promise((_, reject) =>
@@ -343,11 +395,33 @@ async function cmdAuthLogin(flags) {
     );
     const got = await Promise.race([code, pastedCallback().then((line) => codeFromCallback(line, state)), timeout]);
     const profile = await exchangeCode(api, { client_id: clientId, redirect_uri: redirectUri, token_endpoint: as.token_endpoint, resource, verifier }, got);
+    await hooks.onDone?.(profile);
     out({ ok: true, api, logged_in: true, expires_at: new Date(profile.expires_at).toISOString() });
   } finally {
     server.close();
   }
   process.exit(EXIT.OK); // 貼り付け待ちの stdin を閉じる
+}
+
+// --background で始めたログインの結果を待つ (既定 120 秒・エージェントの 1 回のコマンドに収まる長さ)
+async function cmdAuthWait(flags) {
+  const deadline = Date.now() + Number(flags.timeout || 120) * 1000;
+  for (;;) {
+    const status = await readLoginStatus();
+    if (status?.state === "done") return out({ ok: true, api: status.api, logged_in: true, access_expires_at: status.access_expires_at });
+    if (status?.state === "failed") throw new CliError(`ログインできなかった: ${status.error}`, { exit: EXIT.AUTH, data: status });
+    if (!status) {
+      const api = await resolveApi(flags);
+      if ((await loadStore()).profiles[api]) return out({ ok: true, api, logged_in: true });
+      throw new CliError("始めたログインが無い。先に `nolang auth login --background`", { exit: EXIT.AUTH });
+    }
+    if (Date.now() > deadline) {
+      out({ ok: false, waiting: true, api: status.api, authorize_url: status.authorize_url, next: "ユーザーが許可したら、もう一度 nolang auth wait (待ち受けは開始から 5 分)" });
+      process.exitCode = EXIT.AUTH;
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+  }
 }
 
 async function cmdAuthComplete(positionals) {
@@ -608,6 +682,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 
 使い方:
   nolang auth login [--no-browser]      ブラウザで NoLang にログイン (--no-browser は URL を出して終わる 2 段)
+  nolang auth login --background        エージェント向け: 待ち受けを裏に回し、許可の URL を出してすぐ戻る
+  nolang auth wait [--timeout 120]      --background のログインが許可されるのを待つ (終了コード 0 でログイン済み)
   nolang auth complete '<URL>'          --no-browser の続き: 許可後のアドレスバーの URL を渡す
   nolang auth status | logout
   nolang doctor                         接続先とログインを確かめる
@@ -630,6 +706,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 const OPTIONS = {
   api: { type: "string" },
   "no-browser": { type: "boolean" },
+  background: { type: "boolean" },
+  "detached-child": { type: "boolean" },
   aspect: { type: "string" },
   title: { type: "string" },
   seconds: { type: "string" },
@@ -661,10 +739,11 @@ async function main() {
     case "auth": {
       const [sub, ...args] = rest;
       if (sub === "login") return cmdAuthLogin(flags);
+      if (sub === "wait") return cmdAuthWait(flags);
       if (sub === "complete") return cmdAuthComplete(args);
       if (sub === "status") return cmdAuthStatus(flags);
       if (sub === "logout") return cmdAuthLogout(flags);
-      throw new CliError(`auth の後は login | complete | status | logout\n\n${HELP}`, { exit: EXIT.USAGE });
+      throw new CliError(`auth の後は login | wait | complete | status | logout\n\n${HELP}`, { exit: EXIT.USAGE });
     }
     case "doctor":
       return cmdDoctor(flags);
