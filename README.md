@@ -21,7 +21,7 @@ nolang-agent/
     .claude-plugin/plugin.json         #   Claude Code 用 (MCP の接続設定も中に書く)
     .codex-plugin/plugin.json          #   Codex 用
     .codex-plugin/mcp.json             #   Codex 用の MCP の接続設定
-  .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang-demo)
+  .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang)
   .agents/plugins/marketplace.json     # Codex 用の棚
   scripts/build-plugins.mjs            # 正本 → plugins/ (--check はずれの検査)
   scripts/sync-reference.mjs           # nolang-backend → skills/make-video/reference/
@@ -38,14 +38,14 @@ Claude Code:
 
 ```
 /plugin marketplace add <この repo のパス>
-/plugin install nolang-local@nolang-demo
+/plugin install nolang-local@nolang
 ```
 
 Codex:
 
 ```
 codex plugin marketplace add <この repo のパス>
-codex plugin add nolang-local@nolang-demo
+codex plugin add nolang-local@nolang
 ```
 
 入れたら起動し直す。
@@ -137,7 +137,7 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 ```
 
 - 版番号は `packages/cli/package.json` の 1 か所。build が 2 つの `plugin.json` に写し、CLI は実行時に `package.json` から読む。
-- 反映: Claude Code はこの repo を直接読むので、次のセッション開始か `/reload-plugins`。Codex は入れた時に `~/.codex/plugins/cache/` へ写すので、入れ直す (`codex plugin remove nolang-local@nolang-demo` → `codex plugin add nolang-local@nolang-demo`)。
+- 反映: Claude Code はこの repo を直接読むので、次のセッション開始か `/reload-plugins`。Codex は入れた時に `~/.codex/plugins/cache/` へ写すので、入れ直す (`codex plugin remove nolang-local@nolang` → `codex plugin add nolang-local@nolang`)。
 
 置き方の決まり (Claude Code と Codex の両方で動かすため):
 - 箱は棚の下の sub directory に置く。棚と同じ directory (`./`) に箱を置くと、Claude Code は読むが Codex は棚ごと無視する。
