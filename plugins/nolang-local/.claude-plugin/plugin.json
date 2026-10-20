@@ -1,0 +1,14 @@
+{
+  "name": "nolang-local",
+  "version": "0.1.0",
+  "description": "デモ用の NoLang (localhost:18000) に MCP でつなぎ、Claude Code から動画を作る。",
+  "author": {
+    "name": "mvrx"
+  },
+  "mcpServers": {
+    "nolang-local": {
+      "type": "http",
+      "url": "http://localhost:18000/mcp"
+    }
+  }
+}

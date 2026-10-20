@@ -1,0 +1,16 @@
+{
+  "from": "nolang-backend/.agents/skills/nolang-draft-studio",
+  "ref": "claude-draft-src",
+  "commit": "34bb77bba72068a66fcd2d6b81831f3b18af9167",
+  "dirty": null,
+  "synced_at": "2026-10-20T08:34:30.948Z",
+  "files": [
+    "authoring.md",
+    "capabilities.md",
+    "looks.md",
+    "sounds.md",
+    "scaffolds/",
+    "samples/",
+    "rules.md (SKILL.md から生成)"
+  ]
+}

@@ -1,0 +1,74 @@
+#v2
+canvas 720x1280 bg=#0B1220
+theme dark
+palette a=#EE6A1F b=#22B8A7
+font "ZEN角ゴシックNew Bold"
+# 数字の書体 (`font-family: n`)。細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える
+fonts n="太い幾何学的なサンセリフの欧文、数字がくっきり"
+
+# 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
+motion title = in=y=-40,scale=0.94,opacity=0,duration=550 ease=back(1.6) out=y=-16,opacity=0,duration=240
+motion big = in=scale=0.6,opacity=0,duration=450 ease=back(2.2) out=fade,220
+motion div = in=y=24,opacity=0,duration=450 ease=power3.out out=fade,220
+motion row = in=x=-60,opacity=0,duration=400 ease=power2.out out=fade,200
+motion note = in=y=14,opacity=0,duration=350 ease=power2.out out=fade,200
+div { in: div }
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
+cut { stagger: sentence }
+# 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
+def h1(t) = p(font-size: 64px; line-height: 1.15; in: title; content: {t})
+def num(t) = p(font-size: 88px; color: $a; in: big; content: {t})
+def big(t) = p(font-size: 72px; text-align: center; in: big; content: {t})
+def sub(t) = p(font-size: 34px; color: $mute; in: note; content: {t})
+def body(t) = p(font-size: 38px; in: row; content: {t})
+def note(t) = p(font-size: 28px; color: $mute; in: note; content: {t})
+# 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
+def stat(v, u, l) = div(width: 624px; height: 202px; background: none; border: none; box-shadow: 0; padding: 0px)
+  p#l(left: 0px; top: 0px; font-size: 34px; color: $mute; content: {l})
+  p#v(left: 0px; top: 50px; font-size: 144px; font-family: n; color: $a; line-height: 1; content: {v})
+  p#u(left: .v.right+12; top: 122px; font-size: 64px; line-height: 1; content: {u})
+# 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
+def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>名.i[k] check]` で語ごとに
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+  p#t(left: 0px; top: 0px; font-size: 56px; content: {t})
+  div#i(left: 0px; top: 186px; width: 100%; height: 330px; gap: 16px; display: flex; flex-direction: column) ×3
+    icon#ic(left: 0px; cy: 50%; font-size: 64px; name: {icons}; color: $b)
+    p#t(left: 88px; cy: 50%; font-size: 44px; content: {items})
+  p#cta(left: 0px; bottom: 0px; font-size: 44px; color: $a; content: {cta})
+image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
+# 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
+backdrop#bd(look: glow; vignette: 0.15)
+bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセパッドと軽いビート、解説動画向け
+bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
+subtitle.hug(font-size: 32px; width: 640px; height: 150px; unit: phrase)
+# 比べる 2 列の板: 絵 + 名・値・判定 (×2 を stack で左右 / 上下に等分)
+def side(t, v, i, c, j) = div(background: $panel; border-radius: 16px; padding: 32px)
+  icon#i(left: 0px; top: 0px; font-size: 72px; name: {i}; color: {c})
+  p#t(left: 96px; top: 8px; font-size: 44px; content: {t})
+  p#v(left: 0px; top: 110px; font-size: 36px; content: {v})
+  p#w(left: 0px; bottom: 0px; font-size: 40px; color: {c}; content: {j})
+
+section#title
+img#t_bg(inset: 0; content: @bg)
+h1#t_h(left: 48px; top: 288px; width: 624px; height: 297px) 朝型か、夜型か
+sub#t_m(left: 48px; top: 609px; width: 624px; height: 136px) 集中できる時間の長さで比べる
+
+section#axis1
+# 比較の板の cut にも絵: 全面の写真 + scrim の上に左右の板
+img#c1_bg(inset: 0; scrim: 0.6) [photo]朝の光が入る静かな作業机、湯気の立つカップ、文字なし
+side#c1(left: 48px; top: 128px; width: 624px; height: 938px; gap: 32px; t: "朝;夜"; v: "90 分 続く;40 分 で切れる"; i: "sun;moon"; c: "$ok;$bad"; j: "勝ち;負け"; display: flex; flex-direction: column) ×2
+
+section#axis2
+img#c2_bg(inset: 0; scrim: 0.6) [photo]夜の机に灯るデスクライトとノート PC、暗い部屋、文字なし
+side#c2(left: 48px; top: 128px; width: 624px; height: 938px; gap: 32px; t: "朝;夜"; v: "支度に 30 分;そのまま座れる"; i: "sun;moon"; c: "$bad;$ok"; j: "負け;勝ち"; display: flex; flex-direction: column) ×2
+
+section#verdict
+img#vd_p(inset: 0; scrim: 0.5) [photo]朝日の差し込む静かな机、湯気の立つマグカップ、文字なし
+big#vd_v(left: 48px; top: 288px; width: 624px; height: 297px; in: big) 深く考える日は、朝
+sub#vd_s(left: 48px; top: 609px; width: 624px; height: 136px; text-align: center) 夜は、手を動かす
+
+section#close
+img#cl_bg(inset: 0; scrim: 0.6) [photo]夜明けの空と街のシルエット、東の空が白む、文字なし
+wrap#cl(left: 48px; top: 128px; width: 624px; height: 938px; t: "朝型か、夜型か"; items: "仕事の種類;続く長さ;始めやすさ"; icons: "brain;timer;door-open"; cta: "明日の朝の 90 分を決める")

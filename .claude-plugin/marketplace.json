@@ -1,0 +1,14 @@
+{
+  "name": "nolang-demo",
+  "owner": {
+    "name": "mvrx"
+  },
+  "description": "社内デモ用の NoLang プラグインの棚 (非公開)。",
+  "plugins": [
+    {
+      "name": "nolang-local",
+      "source": "./plugins/nolang-local",
+      "description": "デモ用の NoLang (localhost:18000) に MCP でつなぎ、Claude Code から動画を作る。"
+    }
+  ]
+}

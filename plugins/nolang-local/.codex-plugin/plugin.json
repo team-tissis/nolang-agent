@@ -1,0 +1,14 @@
+{
+  "name": "nolang-local",
+  "version": "0.1.0",
+  "description": "デモ用の NoLang (localhost:18000) に MCP でつなぎ、Codex から動画を作る。",
+  "author": {
+    "name": "mvrx"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.codex-plugin/mcp.json",
+  "interface": {
+    "displayName": "NoLang (local demo)",
+    "shortDescription": "デモ用の NoLang で動画を作る"
+  }
+}

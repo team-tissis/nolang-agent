@@ -1,0 +1,5 @@
+node_modules/
+*.tgz
+.DS_Store
+# 作例・作業中の原稿の出力
+out/
