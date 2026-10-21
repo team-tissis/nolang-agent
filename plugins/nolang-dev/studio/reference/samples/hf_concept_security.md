@@ -299,7 +299,7 @@ mcard#ms_c3(left: 856px; n: 3; t: "二段階認証を[br]有効にする"; f: "�
     div#f2(left: 175px; top: 33px; width: 137px; height: 64px; border-radius: 11px; background: #FFFFFF; border: 1px solid $tile)
       icon#i(left: 9px; cy: 50%; font-size: 20px; name: device-mobile; color: $blue)
       p#t(left: 35px; cy: 50%; font-size: 14px) スマホで確認
-    img#att(left: 47px; top: 100px; width: 43px; height: 43px; border-radius: 99px; border: 2px solid $red; background: #FFFFFF; content: @attacker; object-fit: cover,focus=50%,15%,zoom=230%; in: {opacity:0, duration:0.3})
+    img#att(left: 47px; top: 100px; width: 43px; height: 43px; border-radius: 99px; border: 2px solid $red; background: #FFFFFF; content: @attacker; object-fit: cover; object-position: 50% 15%; zoom: 230%; in: {opacity:0, duration:0.3})
     icon#x(left: 225px; top: 15px; font-size: 21px; name: x; weight: bold; color: #FFFFFF; background: $red; padding: 8px; in: {scale:0.4, opacity:0, duration:0.45, ease:'power3.out'})
     p#blk(left: 200px; top: 104px; font-size: 12px; color: $red_t; background: $red_l; border-radius: 99px; padding: 3px 8px; in: {scale:0.7, opacity:0, duration:0.45, ease:'power3.out'}) ここで止まる
 #ms_c3.v.f2.on(background: $blue_l; border: 1px solid $blue)

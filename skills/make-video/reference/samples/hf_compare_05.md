@@ -122,9 +122,9 @@ node#s2_n1(left: 434px; top: 217px; t: "アイデア"; c: $blue)
 node#s2_n2(left: 700px; top: 217px; t: "形（3Dモデル）"; c: $blue)
   icon#i(cx: 50%; top: 25px; font-size: 51px; name: cube; color: $blue)
 node#s2_n3(left: 967px; top: 217px; t: "製品"; c: $blue)
-  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover,focus=30%,60%; content: @product; main: none)
+  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover; object-position: 30% 60%; content: @product; main: none)
 node#s2_n4(left: 967px; top: 430px; t: "実物"; c: $orange)
-  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover,focus=45%,50%,zoom=160%; content: @old; main: none)
+  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover; object-position: 45% 50%; zoom: 160%; content: @old; main: none)
 node#s2_n5(left: 700px; top: 430px; t: "測る"; c: $orange)
   icon#i(cx: 50%; top: 25px; font-size: 51px; name: scan; color: $orange)
 node#s2_n6(left: 434px; top: 430px; t: "設計データ"; c: $orange)
@@ -279,7 +279,7 @@ card#u1(left: 87px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:
   p#a(left: 29px; top: 311px; font-size: 27px; line-height: 1.3) 新しい製品を[br]一から考える
   pill#pl(left: 29px; bottom: 27px; t: "通常のCADモデリング"; c: $blue)
 card#u2(left: 660px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:0, duration:.7, ease:'power3.out'})
-  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; object-fit: cover,focus=50%,50%; main: kb {scale: [1.1, 1], ease:'power1.out'})
+  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; object-fit: cover; object-position: center; main: kb {scale: [1.1, 1], ease:'power1.out'})
   img#p2(left: 268px; top: 0px; width: 265px; height: 267px; main: kb {scale: [1.1, 1], ease:'power1.out'}) [photo]手で削り出した工業デザインのクレイモデル、コンパクトで現代的な車、なめらかな艶消しの暖かい灰色の粘土の面、明るいデザインスタジオの白い机の上、そばにクレイ用のヘラが数本、柔らかく均一なスタジオの光、ミニマルで清潔な背景
   p#c1(left: 9px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 図面のない部品
   p#c2(left: 277px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 手作りの試作品
@@ -289,7 +289,7 @@ card#u2(left: 660px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity
 card#combo(left: 173px; top: 200px; width: 933px; height: 313px; overlap: u1,u2; in: {y:20, scale:.97, opacity:0, duration:.55, ease:'power3.out'})
   p#t(left: 33px; top: 24px; font-size: 25px) 組み合わせて使うことも多い
   div#n1(left: 40px; top: 80px; width: 153px; height: 127px; border-radius: 15px; background: $orange_tt; in: popin)
-    img#p(cx: 50%; top: 20px; width: 80px; height: 60px; border-radius: 8px; content: @old; object-fit: cover,focus=50%,50%; main: none)
+    img#p(cx: 50%; top: 20px; width: 80px; height: 60px; border-radius: 8px; content: @old; object-fit: cover; object-position: center; main: none)
     p#t(cx: 50%; top: 89px; font-size: 20px; color: $orange_d) 実物
   div#n2(left: 390px; top: 80px; width: 153px; height: 127px; border-radius: 15px; background: $orange_tt; in: popin)
     icon#i(cx: 50%; top: 22px; font-size: 43px; name: file-text; color: $orange)

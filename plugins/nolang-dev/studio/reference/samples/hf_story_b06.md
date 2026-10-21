@@ -218,7 +218,7 @@ ol#ono2(left: 280px; top: 887px; s: 69; f: b; stroke: $sumi,6; in: {scale:0.6, o
 
 # 其の四 暴走: 暴走する客車の絵を暗く沈め、紫の「ゴ」が 4 つ震え・「本当の地獄は」→ 朱の「下り坂」を叩きつけ画面ごと揺れる
 section#omen
-img#omen_bg(inset: 0; content: @down; filter: bright:0.55,sat:0.6; main: kb {scale: [1.06, 1.18]})
+img#omen_bg(inset: 0; content: @down; filter: brightness(0.55) saturate(0.6); main: kb {scale: [1.06, 1.18]})
 shade#omen_shade
 div#dark(inset: 0; background: radial(#3C000059,#140000D9,50%,50%); in: none)
 chapter#ch4.sticky(no: "其の四"; t: "暴走")

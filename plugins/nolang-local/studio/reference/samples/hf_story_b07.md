@@ -146,7 +146,7 @@ div#gv(left: 0px; top: 280px; width: 720px; height: 210px; background: none; in:
   p#x(left: 0px; top: 61px; width: 720px; text-align: center; font-size: 153px; line-height: .95; color: $pink; stroke: $ink,14; text-shadow: 8px 8px 0px $ink; content: "×10")
 # 足元の寄りの丸窓 (同じ絵を 3.2 倍に寄せて鉄球の足元だけ・黄の縁 + 黒の外縁・3° 傾けて弾む)。絵は縁の内側に置く (inset: 0 だと縁を覆う)
 div#ins.bleed(left: 427px; top: 341px; width: 267px; height: 253px; border-radius: 16px; background: #222222; border: 5px solid $y; box-shadow: 0px 0px 0px 4px $ink; transform: rotate(3deg); in: {scale:.3, rotation:-11, opacity:0, duration:.2, ease:'back.out(2.2)'})
-  img#p(left: 5px; top: 5px; width: 257px; height: 243px; border-radius: 11px; content: @walk; object-fit: cover,focus=65%,76%,zoom=324%; main: none)
+  img#p(left: 5px; top: 5px; width: 257px; height: 243px; border-radius: 11px; content: @walk; object-fit: cover; object-position: 65% 76%; zoom: 324%; main: none)
 ono#zu1(left: 373px; top: 587px; w: 250; t: ズシッ; s: 75; stroke: $ink,11; transform: rotate(-8deg); in: {y:-40, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
 ono#zu2(left: 60px; top: 620px; w: 250; overlap: hl4; t: ズシッ; s: 75; stroke: $ink,11; transform: rotate(7deg); in: {y:-40, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
 
@@ -154,7 +154,7 @@ ono#zu2(left: 60px; top: 620px; w: 250; overlap: hl4; t: ズシッ; s: 75; strok
 section#five
 scene#p5.bleed(main: kb {scale: [1, 1.08], focus: ['48% 22%', '48% 22%']}) [ref:@tsukio]月曜の朝のオフィスの自分のデスク。紺色のスーツの彼が椅子に座り、卓上カレンダーを前に指を折って何かを数えながら白目になり、口から白い魂がふわっと抜け出しかけている（漫画的な表現）。蛍光灯の白っぽい無機質な光、背景の同僚たちはぼかしたシルエット。
 # 絶望の幕 3 枚 (絵の直上・見出しと札より下): 彩度を抜く・紺を乗算・上から降りる暗い縦縞
-veil#desat(filter: sat:0.1; in: {opacity:0, duration:.5, ease:'power1.out'})
+veil#desat(filter: saturate(0.1); in: {opacity:0, duration:.5, ease:'power1.out'})
 div#tint(left: 0px; top: 220px; width: 720px; height: 1060px; background: #1B2350; mix-blend-mode: multiply; opacity: .55; in: {opacity:0, duration:.5, ease:'power1.out'})
 div#gloom5(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#08081E9E,21,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .95; in: {scaleY:.1, opacity:0, duration:.45, ease:'power2.out', pivot:'top'})
 stamp#st5(n: 5)

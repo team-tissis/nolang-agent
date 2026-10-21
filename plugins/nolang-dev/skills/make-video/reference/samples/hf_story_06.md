@@ -60,7 +60,7 @@ def shade_b() = div(left: 0px; top: 773px; width: 720px; height: 507px; backgrou
 def shade_t() = div(left: 0px; top: 0px; width: 720px; height: 427px; background: linear(#060807B8,#06080759@50%,#06080700,bottom); in: none)
 # 消えた理由の札: 写真 (ゆっくり寄る・左からの暗幕 scrim) + 金の番号 + 太いゴシックの題。右から滑り込む
 def card(n, t, pic) = div(left: 47px; width: 627px; height: 193px; border-radius: 12px; background: $dark; border: 1px solid #FFFFFF1F; box-shadow: 0px 12px 27px #00000080; in: {x:93, opacity:0, duration:0.5, ease:'power3.out'})
-  img#ph(inset: 0; content: {pic}; filter: sat:0.85,bright:1.18,contrast:1.05; scrim: left,0.86; main: kb {scale: [1, 1.12]})
+  img#ph(inset: 0; content: {pic}; filter: saturate(0.85) brightness(1.18) contrast(1.05); scrim: left,0.86; main: kb {scale: [1, 1.12]})
   p#num(left: 27px; top: 20px; font-size: 61px; font-family: mb; color: $gold; line-height: 1; palt: off; content: {n})
   p#lab(left: 29px; bottom: 27px; font-size: 35px; font-family: gh; letter-spacing: 0.04em; white-space: nowrap; content: {t})
 # 全編の質感: 周辺減光 (中央 55% は素通し) + grain (最前面)
@@ -109,7 +109,7 @@ card#card3(top: 672px; n: "03"; t: "水質汚染"; pic: "[photo]1970s Japan: a p
 # 1979: ほぼ黒の地に居ない川の写真を 2 割で敷き、「そして」→ 1920 から回って 1979 に止まる年 (着地で締まる) → 金の「年」→ 昭和54年
 section#year
 div#y_bg(inset: 0; background: $night; in: none)
-img#y_photo(inset: 0; content: @kochi_empty; opacity: 0.2; filter: look:sepia,bright:0.7; main: kb {scale: [1.18, 1.08]})
+img#y_photo(inset: 0; content: @kochi_empty; opacity: 0.2; filter: sepia(1) brightness(0.7); main: kb {scale: [1.18, 1.08]})
 p#soshite(cx: 360px; top: 427px; font-size: 39px; letter-spacing: 0.3em; color: $bone; in: {y:9, opacity:0, duration:0.45, ease:'power2.out'}) そして
 p#year(left: 66px; top: 507px; font-size: 200px; font-family: mb; line-height: 1; palt: off; text-shadow: 0px 7px 33px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0,0,1380,1460 laps=0,0,0,4 delay=320 ease=ease_in_out]
 p#nen(left: year.right+12; top: 603px; font-size: 80px; line-height: 1.3; color: $gold; in: {x:-11, opacity:0, duration:0.35, ease:'power2.out'}) 年
@@ -134,7 +134,7 @@ veil#flash(color: $white; opacity: 0.85; z-index: curtain; in: none)
 section#grid
 div#g_bg(inset: 0; background: $dark; in: none)
 group#grid(main: keys(at=0 scale=1 | at=1 scale=1.05 ease=none),window=0,4470,forwards)
-  img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 188px; height: 188px; border-radius: 9px; box-shadow: 0px 7px 17px #00000080; main: none; object-fit: "cover,focus=50%,40%,zoom=140%;cover,focus=52%,45%,zoom=170%;cover,focus=60%,52%,zoom=150%;cover,focus=42%,30%,zoom=150%;cover,focus=8%,74%,zoom=300%;cover,focus=52%,58%,zoom=220%;cover,focus=47%,50%,zoom=300%;cover,focus=50%,46%,zoom=230%;cover,focus=72%,58%,zoom=230%;cover,focus=52%,58%,zoom=210%;cover,focus=50%,30%,zoom=260%;cover,focus=34%,28%,zoom=230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
+  img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 188px; height: 188px; border-radius: 9px; box-shadow: 0px 7px 17px #00000080; main: none; object-fit: cover; object-position: "50% 40%;52% 45%;60% 52%;42% 30%;8% 74%;52% 58%;47% 50%;50% 46%;72% 58%;52% 58%;50% 30%;34% 28%"; zoom: "140%;170%;150%;150%;300%;220%;300%;230%;230%;210%;260%;230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
 img#memory(inset: 0; content: @memory; main: kb {scale: [1, 1.13], focus: ['52% 59%', '52% 59%'], ease:'sine.inOut'}; in: {opacity:0, duration:0.5})
 # 塵 16 粒 (粒ごとの位置・大きさ・濃さ・同じ向きにゆっくり上へ漂う)
 shape#dust.ellipse(left: "389;613;481;405;144;447;350;500;441;245;303;434;532;357;295;100"; top: "924;651;463;763;638;886;991;777;376;743;634;493;391;709;851;381"; width: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; height: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; background: $mote; box-shadow: 0px 0px 3px 1px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 20, y: -93}) ×16

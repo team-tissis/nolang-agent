@@ -285,7 +285,7 @@ telop#t_relief_c
 section#cta
 img#c_bg(inset: 0; content: @sleep; filter: blur(24px) brightness(.6); main: none)
 div#c_card(left: 73px; top: 507px; width: 573px; height: 313px; border-radius: 27px; background: #0A0E1CDB; border: 2px solid #FFFFFF2E; box-shadow: 0px 13px 40px #00000099; delay: 100; in: {y:60, opacity:0, duration:.5, ease:'back.out(1.6)'})
-  img#avatar(left: 40px; top: 40px; width: 127px; height: 127px; border-radius: 50%; border: 4px solid $chip; content: @blackhole; object-fit: cover,focus=49%,39%,zoom=250%)
+  img#avatar(left: 40px; top: 40px; width: 127px; height: 127px; border-radius: 50%; border: 4px solid $chip; content: @blackhole; object-fit: cover; object-position: 49% 39%; zoom: 250%)
   p#name(left: 193px; top: 61px; width: 360px; font-size: 36px; white-space: nowrap) 宇宙の思考実験ラボ
   p#handle(left: 195px; top: 113px; width: 340px; font-size: 24px; color: #AAB4C8; white-space: nowrap) @uchu_shiko_lab
   p#follow(left: 40px; top: 207px; width: 493px; font-size: 35px; line-height: 1.35; text-align: center; padding: 13px 0px; border-radius: 99px; background: linear(#FF4560,#E0002A,180); box-shadow: 0px 7px 17px #FF285073; out: {opacity:0, duration:.15}) フォローする

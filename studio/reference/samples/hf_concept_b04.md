@@ -131,7 +131,7 @@ img#in_conf(left: 907px; top: 200px; width: 347px; height: 347px; content: @newb
 # 6 役の札 (丸い顔 = 人物の絵の上 1/3・略称・正式名)
 div#in_rc(left: "73;260;447;633;820;1007"; top: 167px; width: 167px; height: 253px; background: none; in: {y:40, opacity:0, duration:.5, ease:'back.out(1.5)', stagger:{each:.12}}) ×6
   div#bg(inset: 0; background: #FFFFFF; border-radius: 16px; border: 1px solid $line; box-shadow: 0px 8px 23px #1E2A4A1A)
-  img#ph(cx: 50%; top: 17px; width: 131px; height: 131px; border-radius: 999px; background: #FFFFFF; border: "$pdm,5;$pm,5;$po,5;$bo,5;$eng,5;$des,5"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover,focus=50%,0%,zoom=200%)
+  img#ph(cx: 50%; top: 17px; width: 131px; height: 131px; border-radius: 999px; background: #FFFFFF; border: "$pdm,5;$pm,5;$po,5;$bo,5;$eng,5;$des,5"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover; object-position: top; zoom: 200%)
   p#ac(cx: 50%; top: "160;160;160;160;165;165"; font-size: "35;35;35;35;27;27"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
   p#jn(cx: 50%; top: 204px; font-size: 13px; color: $sub; white-space: nowrap) プロダクトマネージャー;プロジェクトマネージャー;プロダクトオーナー;ビジネスオーナー;Engineer;Designer
 div#in_goal(left: 227px; top: 467px; width: 825px; height: 63px; border-radius: 12px; background: $ink; in: {y:20, opacity:0, duration:.5, ease:'power3.out'})
@@ -178,7 +178,7 @@ group#pm_a(out: {x:-40, opacity:0, duration:.35, ease:'power1.in'})
 p#pm_vs_title(cx: 640px; top: 84px; font-size: 40px; font-family: h; in: {y:-16, opacity:0, duration:.45, ease:'power3.out'}) {kpdm}PdM{/} と {kpm}PM{/} の違い
 def vcard(img, a, b, c, t, kw) = div(top: 153px; width: 520px; height: 313px; background: #FFFFFF; border-radius: 16px; border: 1px solid $line; box-shadow: 0px 8px 23px #1E2A4A1A)
   div#band(left: 0px; top: 0px; width: 520px; height: 88px; border-radius: 16,16,0,0; background: {c})
-  img#av(left: 23px; top: 13px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid #FFFFFF; box-shadow: 0px 4px 11px #0000001F; content: @{img}; object-fit: cover,focus=50%,0%,zoom=200%)
+  img#av(left: 23px; top: 13px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid #FFFFFF; box-shadow: 0px 4px 11px #0000001F; content: @{img}; object-fit: cover; object-position: top; zoom: 200%)
   p#a(left: 143px; top: 13px; font-size: 36px; font-family: h; line-height: 1.05; color: #FFFFFF; transform-origin: left; content: {a})
   p#b(left: 143px; top: 53px; font-size: 17px; color: #FFFFFFEB; content: {b})
   p#q(left: 33px; top: 131px; font-size: 43px; font-family: h; line-height: 1.25; white-space: nowrap)
@@ -331,10 +331,10 @@ group#da(out: {y:-27, opacity:0, duration:.35, ease:'power1.in'})
     chip#p1(left: 79px; background: $pdm) PdM
     p#plus(left: 161px; top: 80px; font-size: 27px; font-family: h; color: $sub; in: {scale:.4, opacity:0, duration:.4, ease:'back.out(1.7)'}) ＋
     chip#p2(left: 195px; background: $po) PO
-    img#av(left: 117px; top: 136px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid $ink; content: @pdm; object-fit: cover,focus=50%,0%,zoom=200%; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'})
+    img#av(left: 117px; top: 136px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid $ink; content: @pdm; object-fit: cover; object-position: top; zoom: 200%; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'})
     p#cl PdM が PO を兼ねる
   ccard#b(left: 473px; t: B社)
-    img#av(left: 117px; top: 136px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid $ink; content: @eng; object-fit: cover,focus=50%,0%,zoom=200%; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'})
+    img#av(left: 117px; top: 136px; width: 100px; height: 100px; border-radius: 999px; background: #FFFFFF; border: 4px solid $ink; content: @eng; object-fit: cover; object-position: top; zoom: 200%; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'})
     chip#p1(left: 29px; background: $pm) PM
     chip#p2(left: 101px; background: $po) PO
     chip#p3(left: 172px; background: $eng) エンジニア
@@ -362,7 +362,7 @@ group#rc_head(delay: 550; in: {y:-20, opacity:0, duration:.5, ease:'power3.out'}
   p#s(cx: 640px; top: 85px; font-size: 17px; font-family: h; letter-spacing: .3em; color: $sub) REVIEW
   p#t(cx: 640px; top: 105px; font-size: 43px; font-family: h) おさらい
 div#rc(left: "100;467;833;100;467;833"; top: "187;187;187;381;381;381"; width: 347px; height: 175px; background: #FFFFFF; border-radius: 16px; border: 1px solid $line; box-shadow: 0px 8px 23px #1E2A4A1A; opacity: .35; in: {y:27, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6
-  img#rp(left: 17px; cy: 50%; width: 111px; height: 111px; border-radius: 999px; background: #FFFFFF; border: "$pdm,5;$pm,5;$po,5;$bo,5;$eng,5;$des,5"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover,focus=50%,0%,zoom=200%)
+  img#rp(left: 17px; cy: 50%; width: 111px; height: 111px; border-radius: 999px; background: #FFFFFF; border: "$pdm,5;$pm,5;$po,5;$bo,5;$eng,5;$des,5"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover; object-position: top; zoom: 200%)
   p#ra(left: 143px; top: "31;31;31;31;35;35"; font-size: "31;31;31;31;25;25"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
   p#rk(left: 143px; top: 66px; font-size: 29px; font-family: h; line-height: 1.2; white-space: nowrap) 方向性;計画;優先順位;事業の成果;技術;使いやすさ
   p#rs(left: 143px; top: 106px; font-size: 13px; line-height: 1.4; color: $sub) プロダクトの価値と[br]方向性を考える人;計画通りにプロジェクトを[br]進める人;何から先につくるかを[br]決める人;事業の成果に[br]責任を持つ人;技術でプロダクトを[br]形にする人;使いやすさと体験を[br]設計する人

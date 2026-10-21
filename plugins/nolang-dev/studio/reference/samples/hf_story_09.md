@@ -91,7 +91,7 @@ img#title_photo(inset: 0; main: kb {scale: [1.16, 1.02], focus: '58% 47%', ease:
 veil#title_dim(opacity: 0.52; color: #000000; in: fade {duration: 0.5, ease: 'power2.out'})
 # 題字: 朱に染めた筆の帯が左から拭われ、1 字ずつ拡大とぼかしから着地 (GSAP の stagger:.07 を 1 字ずつ 70 ms で)
 group#logo(left: 0px; top: 0px; width: 1280px; height: 720px)
-  img#brush(left: 120px; top: 151px; width: 1040px; height: 390px; content: @brush; filter: look:#B3261E; in: wipe {dir: 'right', duration: 0.45, ease: 'power2.inOut'}; out: fade {duration: 0.5})
+  img#brush(left: 120px; top: 151px; width: 1040px; height: 390px; content: @brush; look: #B3261E; in: wipe {dir: 'right', duration: 0.45, ease: 'power2.inOut'}; out: fade {duration: 0.5})
   p#jp(cx: 640px; cy: 314px; font-size: 157px; font-family: y; letter-spacing: 0.06em; text-shadow: 0px 4px 20px #00000073; in: {scale: 1.5, blur: 8, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.22, stagger: 0.07, unit: 'grapheme'}; out: fade {duration: 0.5}) 相馬野馬追
   p#en(cx: 640px; cy: 432px; font-size: 23px; font-family: k; letter-spacing: 0.62em; in: {letter_spacing:0.48, opacity:0, duration:1, ease:'power2.out', delay:0.67}; out: fade {duration: 0.5}) SOMA NOMAOI
 p#region(cx: 640px; cy: 472px; font-size: 27px; font-family: sm; color: $cream; letter-spacing: 0.3em; in: {y:9, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.5}) 福島県・相馬地方
@@ -122,7 +122,7 @@ div#seal(left: 80px; top: 73px; width: 540px; height: 127px; background: #B3261E
 
 # 3 日間: 和紙の地の中央に見出しが出て定位置へ縮み、金の罫が伸びて 1〜3 日目の札が語ごとに出る・切替の前に揃って消える
 section#schedule
-img#schedule_washi(inset: 0; filter: bright:0.78; main: kb {scale: [1.04, 1.1], focus: ['', '66% 50%']}) [photo]Flat top-down macro photograph of handmade Japanese washi paper dyed deep charcoal black with a subtle indigo tint, visible long kozo fibers and soft uneven texture, evenly lit, no objects, no text, no folds, seamless full-frame texture.
+img#schedule_washi(inset: 0; filter: brightness(0.78); main: kb {scale: [1.04, 1.1], focus: ['', '66% 50%']}) [photo]Flat top-down macro photograph of handmade Japanese washi paper dyed deep charcoal black with a subtle indigo tint, visible long kozo fibers and soft uneven texture, evenly lit, no objects, no text, no folds, seamless full-frame texture.
 # 見出しは 1.5 倍で中央に出て、1 枚目の札の前に左上の定位置へ縮む
 group#schedule_head(left: 253px; top: 243px; width: 900px; height: 165px; in: {opacity:0, scale:1.03, duration:0.8, ease:'power2.out'})
   p#kick(left: 0px; top: 0px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) 開催時期
@@ -169,7 +169,7 @@ scene_label#noma_label(when: "3日目（最終日）"; what: "野馬懸"; where:
 
 # 観覧の心得: ぼかした行列の上の暗い板に、2 つの決まりが語ごとに左から入り、板と中身が揃って消える
 section#manners
-img#manners_blur(inset: 0; content: @procession; filter: blur:16; main: kb {scale: [1.05, 1.1]})
+img#manners_blur(inset: 0; content: @procession; filter: blur(16px); main: kb {scale: [1.05, 1.1]})
 veil#manners_dim(opacity: 0.42; color: #000000; in: none)
 div#manners_board(left: 200px; top: 113px; width: 880px; height: 400px; border-radius: 0px; padding: 0px; background: #0C0A09C7; border: 1px solid #D8B26A80; box-shadow: none; in: {y:20, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.4})
   p#kick(left: 53px; top: 43px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) お行列を見るときは
@@ -184,7 +184,7 @@ img#finale_photo(inset: 0; main: kb {scale: [1, 1.1], focus: '71% 63%'}) [photo]
 # エンドカード: 中央を残す暗幕 + 題字 (帯・1 字ずつ・字間が締まる英字)
 veil#end_dim(background: radial(#00000059@0%,#000000C7@100%,50%,45%); in: fade {duration: 0.9, ease: 'power1.inOut'})
 group#end_logo(left: 0px; top: 0px; width: 1280px; height: 720px)
-  img#brush(left: 167px; top: 100px; width: 947px; height: 355px; content: @brush; filter: look:#B3261E; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.inOut'})
+  img#brush(left: 167px; top: 100px; width: 947px; height: 355px; content: @brush; look: #B3261E; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.inOut'})
   p#jp(cx: 640px; cy: 270px; font-size: 143px; font-family: y; letter-spacing: 0.06em; text-shadow: 0px 4px 20px #00000073; in: {scale: 1.45, blur: 8, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.2, stagger: 0.07, unit: 'grapheme'}) 相馬野馬追
   p#en(cx: 640px; cy: 411px; font-size: 23px; font-family: k; letter-spacing: 0.62em; in: {letter_spacing:0.48, opacity:0, duration:1, ease:'power2.out', delay:0.75}) SOMA NOMAOI
 group#end_info(left: 0px; top: 467px; width: 1280px; height: 40px; in: {y:11, opacity:0, duration:0.6, ease:'power2.out'})

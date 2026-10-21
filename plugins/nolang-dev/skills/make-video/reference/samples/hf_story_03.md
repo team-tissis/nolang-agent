@@ -151,15 +151,15 @@ group#digits(left: 53px; top: 888px; width: 613px; height: 153px)
   p#colon(left: 226px; top: 0px; font-size: 153px; font-family: dot; line-height: 1; color: #BFF8FF; text-shadow: 0px 0px 20px #3FF5FF) :
   p#m(left: 309px; top: 0px; font-size: 153px; font-family: dot; line-height: 1; color: #BFF8FF; text-shadow: 0px 0px 20px #3FF5FF) 00
 p#hayakuchi(overlap: c1; left: 47px; top: 603px; font-size: 27px; color: $navy; background: $y; border-radius: 99px; padding: 5px 15px; box-shadow: 0px 0px 0px 3px #120A3A; transform: rotate(-8deg); in: {scale:.5, rotation:-12, opacity:0, duration:.2, ease:'back.out(1.7)'}) （早口）
-veil#desat1(filter: sat:0; z-index: front; in: {opacity:0, duration:.05}; out: {opacity:0, duration:.05})
+veil#desat1(filter: saturate(0); z-index: front; in: {opacity:0, duration:.05}; out: {opacity:0, duration:.05})
 # 「待て」3 つ (字幕と同じ見た目・左上 / 中下 / 右上に傾けて積む)
 capword#wait(overlap: hayakuchi,c1,notif,ampm,digits; cx: "167;360;553"; cy: "663;745;683"; s: "93;107;122"; rotation: "-10;6;-6"; t: 待て; in: {scale:2.4, rotation:-15, opacity:0, duration:.16, ease:'power4.out'}) ×3
 flash#fl_w(o: .28) ×3
 
 # 絶望: 会場の写真に東西のピンと点線 (徒歩25分)・下のタイムテーブルで推し 2 つが同じ段に光り、黄の枠 SAME TIME → 判子「被り確定」・分身の色ずれのカード
 section#clash
-img#gl(left: 13px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; filter: look:#000000/#00E5FF; mix-blend-mode: screen; opacity: .55; in: {x:40, opacity:0, duration:.5, ease:'power2.out'})
-img#gr(left: 93px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; filter: look:#000000/#FF2BD6; mix-blend-mode: screen; opacity: .55; in: {x:-40, opacity:0, duration:.5, ease:'power2.out'})
+img#gl(left: 13px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; look: #000000/#00E5FF; mix-blend-mode: screen; opacity: .55; in: {x:40, opacity:0, duration:.5, ease:'power2.out'})
+img#gr(left: 93px; top: 167px; width: 613px; height: 533px; border-radius: 29px; content: @grounds; look: #000000/#FF2BD6; mix-blend-mode: screen; opacity: .55; in: {x:-40, opacity:0, duration:.5, ease:'power2.out'})
 card#c2(p: "@grounds")
   img#p(main: kb {scale: [1.12, 1], focus: ['47% 50%', '52% 50%'], ease:'sine.inOut'})
   shape#dash(z-index: front; left: 107px; top: 249px; width: 400px; height: 5px; path: line_h; border: 5px solid #FFFFFF; dash: 17,12; in: {scaleX:0, duration:.45, ease:'power2.inOut', pivot:'left'})
@@ -216,7 +216,7 @@ group#shoe(left: 373px; top: 220px; width: 267px; height: 313px; rotation: 8; in
   p#cap(cx: 133px; top: 275px; font-size: 23px; color: #222222) 膝、ガクガク
 p#full(cx: 360px; top: 533px; font-size: 43px; font-family: d; color: #062A2A; background: linear(#3FFFB0,#3FF5FF,90); border-radius: 99px; padding: 7px 24px; box-shadow: 0px 0px 27px #3FFFB0; in: {scale:.3, opacity:0, duration:.25, ease:'back.out(1.7)'}; out: {opacity:0, duration:.15}) FULL RECOVERY!!
 veil#vig(background: radial(#00000000@30%,#000000EB@85%,50%,46%); in: {opacity:0, duration:.25})
-veil#desat2(filter: sat:0.1; z-index: front; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.05})
+veil#desat2(filter: saturate(0.1); z-index: front; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.05})
 flash#fl_voice(o: .25)
 flash#fl_knee(o: .25)
 flash#fl_revive(o: .6)

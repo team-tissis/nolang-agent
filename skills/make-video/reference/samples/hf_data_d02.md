@@ -156,7 +156,7 @@ def card(no, t1, t2, fig, sub, n1, n2) = div(top: 171px; width: 360px; height: 4
   icon#ck(left: 302px; top: 30px; font-size: 28px; name: check; weight: bold; color: $terra_d; in: draw {duration: 0.35})
 
 # 全編の地 (根): 紙の写真・左上から 93 秒かけて右下へ漂う暖色の光・周辺の陰
-img#paper(inset: 0; content: @paper; main: none; filter: look:#CDB996/#F6EBD8; z-index: back; in: none)
+img#paper(inset: 0; content: @paper; main: none; look: #CDB996/#F6EBD8; z-index: back; in: none)
 div#glow(left: -133px; top: -280px; width: 733px; height: 733px; border-radius: 367px; background: radial(#FFD6A059,#FFD6A000@65%,50%,50%); z-index: back; in: none; main: keys(at=0 x=0 y=0 scale=1 | at=1 x=600 y=253 scale=1.25 ease=sine.inOut),duration=93200)
 veil#vig(background: radial(#FFFAF000@55%,#7A522C29@100%,50%,46%); z-index: back; in: none)
 
@@ -362,7 +362,7 @@ board#b7(left: 407px; top: 175px; width: 800px; height: 436px; t: "図5　最高
   p#s24(left: 504px; top: 69px; font-size: 14px; color: $rain_d; white-space: nowrap; in: {x:-11, opacity:0, duration:0.6, ease:'power3.out'}) 雨の日の逆転点
   p#note(left: 27px; bottom: 15px; font-size: 14px; color: $rain_d; white-space: nowrap; in: {y:7, opacity:0, duration:0.6, ease:'power3.out'}) ※ 雨の日は同じ気温でも冷たい飲み物が出にくく、境目が24℃に上がる
 # 紙が右から横切る切替 (sc7 の終わりに右から覆い、sc8 の頭で左へ抜ける・前後に柔らかい影)
-img#sheet1.sticky(inset: 0; content: @paper; main: none; filter: look:#CDB996/#F6EBD8; box-shadow: 0px 0px 33px #50321447; z-index: front; in: {x:1327, duration:0.5, ease:'power2.in'}; out: {x:-1327, duration:0.6, ease:'power2.out'})
+img#sheet1.sticky(inset: 0; content: @paper; main: none; look: #CDB996/#F6EBD8; box-shadow: 0px 0px 33px #50321447; z-index: front; in: {x:1327, duration:0.5, ease:'power2.in'}; out: {x:-1327, duration:0.6, ease:'power2.out'})
 
 # sc8 予報で仕込み: 試行のルールの板 (仕込みの絵・ルールの 2 行・3 店の札・56 日のマス) → 廃棄率の前後の点の比較 4 行 (点が左へ動き帯が伸びる) → 廃棄額の札 (−46 万円の判子) → 品切れの札 (9 個の点が 2 個を残して薄れる)
 section#sc8(stagger: {each:0})
@@ -398,7 +398,7 @@ div#stock(left: 803px; top: 492px; width: 404px; height: 119px; background: $car
   p#l(left: 19px; top: 15px; font-size: 15px; color: $ink2; white-space: nowrap) 駅直結・雨の日夕方の品切れ
   p#v(left: 19px; top: 41px; font-size: 19px; white-space: nowrap) {tn}9{/}回 → {ta}2{/}回
   div#sd(left: "267;287;307;327;347;267;287;307;327"; top: "56;56;56;56;56;76;76;76;76"; width: 12px; height: 12px; border-radius: 99px; background: $rain; in: {scale:0, opacity:0, duration:0.25, ease:'back.out(2)', stagger: {each: 0.05}}) ×9
-img#sheet2.sticky(inset: 0; content: @paper; main: none; filter: look:#CDB996/#F6EBD8; box-shadow: 0px 0px 33px #50321447; z-index: front; in: {x:1327, duration:0.5, ease:'power2.in'}; out: {x:-1327, duration:0.6, ease:'power2.out'})
+img#sheet2.sticky(inset: 0; content: @paper; main: none; look: #CDB996/#F6EBD8; box-shadow: 0px 0px 33px #50321447; z-index: front; in: {x:1327, duration:0.5, ease:'power2.in'}; out: {x:-1327, duration:0.6, ease:'power2.out'})
 
 # sc9 まとめ: 3 枚の札が文の頭で下から入り、右上の丸に ✓ が描かれる・最後に社名と題の署名・終わりの 0.85 秒で全部が消えて紙だけが残る
 section#sc9(stagger: {each:0})

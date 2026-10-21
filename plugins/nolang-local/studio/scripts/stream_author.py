@@ -6,6 +6,7 @@
   low は書き始めるまで数秒で、書く速さ (約 180 字/s・1 cut 約 3.5 s) が再生より速いので、cut を分けて並行に書かせる理由が無い。質は cut ごとの
   担当 (medium) が運ぶ (docs/draft_src_v2/stream-evidence-261013.md s9 / s10)。1 人が全 cut を書くので、cut を跨ぐ名の衝突・型のばらつきも出ない。
 直し (low) は stream_run.py が cut ごとに頼む (`fix` subcommand: block + check の指摘 → 直した block)。
+担当・直し役の system prompt (見本込み) は著者の call と並んで 1 回だけ温める (`warmup`・author.jsonl の `warmup` event)。
 
 usage (repo root から):
   python stream_author.py run  <project>   [--effort low] [--samples a.md,b.md]
@@ -26,6 +27,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import time
 import unicodedata
 from pathlib import Path
@@ -204,6 +206,8 @@ section#名(…)            ← この cut の design の行 (字下げ 0。字�
 === end ===
 
 書き方: 依頼の台本・テロップの文言はそのまま使う (途中で切れていれば依頼の構成に沿って残りを書く)。尺は合わせない (依頼の長さは目安)。素材は説明文で書く。
+絵の説明文: 時代・形・数の段階・前後の違い (「1950 年代の四角い窓」「乗客がまばら」) は写真に担わせず図か文字で言い、写真は場の雰囲気に (生成は時代や形を守らない)。
+1 枚に 1 場面 (「A と、B」の 2 場面は上下 2 枚の合成になる)。物語で同じ物 (人物・器・時計) が 2 枚以上に出るなら根に `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。
 各 cut の design は要素が全部出た時の位置と大きさ、timeline は台詞と語の印 (`[>#名]` 出す・`[!#名 …]` 変える・`[<#名]` 消す)。cut の切替は前の cut の
 timeline の最後の行に `transition …`。
 要素の名は cut の名を頭に (`hook` の cut なら `hook_t`・`hook_img`)。根の物を除き、cut を跨いで同じ名を使わない。
@@ -223,7 +227,8 @@ STAFF_VIEW = """1. 同期: 要素がその語の瞬間に出るか (先に全部
    stat / big の段 (根に無ければ大きな文字) に上げ、物 (道具・画面・通知) は icon か絵を画面の中ほどに大きく
 4. 読みやすさ: 写真の上に直接置いた細い文字・小さな札は沈む。大きく太い字でも、絵の主な色と同じ系統の色なら沈む (全面の閃光の直後も同じ)
    — 文字の側に幕 (veil の `to:`・image の `scrim:` の向き) か板を敷く・絵を窓にして文字は地に置く (縁取りは最後の手段で blur の影)
-5. 図と変化: 内容に合った図か、同じ絵を長く使い回していないか、状態の変化 (色・数字・位置) が見えるか。比べる 2 つや前後の値は
+5. 図と変化: 内容に合った図か、同じ絵を長く使い回していないか、状態の変化 (色・数字・位置) が見えるか。絵の説明文は 1 枚 1 場面・時代 / 形 / 数の段階は
+   写真でなく図か文字に・根の `image 名 =` にある物を描く絵は `[ref:@名]` で派生 (別物になる)。比べる 2 つや前後の値は
    片方ずつ語で出し、差は最後に大きく見せる (板を先に完成させない)。位置の小さなずれや揺れだけでは変化に見えない — 伸びる・数える・色が変わる・現れて消える
 6. so what と締め: 場面の結論の一言は、その cut で一番大きな字で (縦 72px・横 64px 以上。pill・札・板の中の小さな字にしない)。
    最後の cut は結論か問いを画面の主役に (台詞が問いなら問いの文を見せる)。締めの無音の間にも 1 つ変化を (色を落とす・判子・名の札)
@@ -266,7 +271,10 @@ def staff_prompt(
 変えてよい事: 要素の追加と削除 (絵・図・板・札・判子・締めの 1 文)、大きさ・色・位置・下地、印の位置と動き、絵の説明文、`lint off=規則` (意図した先出しなど)。
 絵の説明文を書き換えるのはこの段だけ — この後の直し役は変えない (絵はこの版から作り始める)。
 箱の書き方: 板は div (子は字下げで親の内側から置く・親の内側は border と padding の分だけ狭く、kb の絵は箱を越え、長い文字は折れる — 字数は check の目安を見る)。{persistent}
-key は types の表にある物だけ (無い key は DEFECT で cut が落ちる)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層にだけ付ける (他の cut の層は不可)。
+key は types の表にある物だけ (無い key は DEFECT)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層にだけ付ける (他の cut の層は不可)。
+返す前に見直す 4 つ (DEFECT の常連): `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
+`名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` (例 `[!#a to,{{scale:1.1}} +300]`) /
+`filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ (`sepia(.45)` は DEFECT)。
 check の指摘 (参考。消す事が目的ではない。判定で損をする物だけ直す):
 {findings or "(なし)"}
 
@@ -323,9 +331,9 @@ def fix_prompt(
 @ 行番号
 …
 === end ===
-{where}。行番号は下の `N|` の物 (指摘の file:行 は 根 + cut の順に並べた design.txt / timeline.txt の行で、別物)。`N|` は番号で、行の中身ではない。
+{where}。block の末尾に行を足すなら `@ 最後の行番号+1`。行番号は下の `N|` の物 (指摘の file:行 は 根 + cut の順に並べた design.txt / timeline.txt の行で、別物)。`N|` は番号で、行の中身ではない。
 直しが新しい欠陥を作らないために: 印で使う変種 (`[!#名 .tag]`) は design にその `#名.tag(…)` の行がある物だけ・`size=` は文字と icon だけ (箱は w= h=)・
-1 行 1 要素のまま (要素の行を途中で割らない・字下げの子は親の直後)・同じ語で同じ要素を 2 回更新しない (2 回目は `+N` を前より大きく)。
+1 行 1 要素のまま (要素の行を途中で割らない・字下げの子は親の直後)。
 check の指摘 (file:行 と直し方つき):
 {findings}
 
@@ -464,39 +472,44 @@ def touched_fixed(before: str, after: str) -> tuple[int, int]:
     return sum(a != b for a, b in zip(sb, sa)) + abs(len(sb) - len(sa)), sum(p not in pb for p in pa)
 
 
-def parse_edits(text: str, blocks: dict[str, str]) -> dict[str, dict[int, list[str]]] | None:
-    """直し役の `=== edits ===` を block ごと (`@ 行番号` = cut・`@ root_design 行番号` …) の行番号 → 新しい中身に読む。edits が無い・
-    知らない block・行番号が block の外なら None。"""
+def parse_edits(text: str, blocks: dict[str, str]) -> tuple[dict[str, dict[int, list[str]]] | None, list[str]]:
+    """直し役の `=== edits ===` を block ごと (`@ 行番号` = cut・`@ root_design 行番号` …) の行番号 → 新しい中身に読む
+    → (edits, 捨てた `@` の行)。`@ 行数+1` は block の末尾に足す edit (nt10 hook の transition 行)。知らない block・それより外の行番号の
+    edit はその 1 つだけ捨てて残りを当てる (1 つの範囲外で正しい edit まで捨てない)。edits が無い・当てる edit が 1 つも無ければ None。"""
     m = re.search(r"===\s*edits\s*===\s*\n(.*?)(?:\n===\s*end\s*===|\Z)", text, re.S)
     if m is None:
-        return None
+        return None, []
     sizes = {name: len(body.rstrip("\n").split("\n")) for name, body in blocks.items()}
     edits: dict[str, dict[int, list[str]]] = {name: {} for name in blocks}
+    dropped: list[str] = []
     current: list[str] | None = None
     for raw in m.group(1).split("\n"):
         head = re.match(r"^@\s*(?:([A-Za-z_]+)\s+)?(\d+)\s*$", raw)
         if head:
             target = head.group(1) or "cut"
             n = int(head.group(2))
-            if target not in sizes or not 1 <= n <= sizes[target]:
-                return None
+            if target not in sizes or not 1 <= n <= sizes[target] + 1:
+                dropped.append(raw.strip())
+                current = None  # 捨てた edit の中身の行も読み飛ばす
+                continue
             current = edits[target].setdefault(n, [])
             continue
         if current is not None:
             current.append(re.sub(r"^\d+\|\s?", "", raw))  # 番号を写してしまった行は剥がす
-    return edits if any(edits.values()) else None
+    return (edits if any(edits.values()) else None), dropped
 
 
 def apply_line_edits(body: str, edits: dict[int, list[str]]) -> str:
+    """行番号 → 新しい中身 (空 = 行を消す) を当てる。行数+1 の edit は末尾に足す。"""
     lines = body.rstrip("\n").split("\n")
     out: list[str] = []
-    for k, line in enumerate(lines, start=1):
+    for k, line in enumerate([*lines, None], start=1):
         if k in edits:
             new = edits[k]
             while new and new[-1] == "":
                 new = new[:-1]
             out.extend(new)
-        else:
+        elif line is not None:
             out.append(line)
     return "\n".join(out) + "\n"
 
@@ -610,7 +623,9 @@ def claude_args(system_prompt: Path, *, effort: str) -> list[str]:
     ]
 
 
-def stream_claude(st: Path, prompt: str, on_text, *, system_prompt: Path, effort: str, tag: str) -> dict[str, object]:
+def stream_claude(
+    st: Path, prompt: str, on_text, *, system_prompt: Path, effort: str, tag: str, cache_ttl: str | None = None
+) -> dict[str, object]:
     """claude -p を stream-json で回し、text delta を on_text に流す。最初の thinking / text の時刻と費用を記録する。
     text delta が 1 つも来ずに終わった応答 (長い思考の後、本文が最後の assistant message にだけ乗る — now7_10 の担当 hook・246 s で
     delta 0) は、最後の assistant message の text の block を本文として流す (`text_from_message`)。"""
@@ -624,6 +639,8 @@ def stream_claude(st: Path, prompt: str, on_text, *, system_prompt: Path, effort
     # あると subscription でなくその key で呼ばれ、枠が無ければ 0 token の応答 + exit 1 で著者が黙って死ぬ (cut 0 になる)
     drop = ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT", "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")
     env = {k: v for k, v in os.environ.items() if k not in drop}
+    if cache_ttl is not None:
+        env["CLAUDE_CODE_PROMPT_CACHE_TTL"] = cache_ttl
     for attempt in range(3):  # shim が自動更新の瞬間に消える → 2 秒おいて実体を引き直す
         try:
             p = subprocess.Popen(
@@ -700,6 +717,34 @@ def stream_claude(st: Path, prompt: str, on_text, *, system_prompt: Path, effort
     return result
 
 
+def warmup(st: Path, system_prompt: Path) -> None:
+    """担当・直し役の system prompt (見本込み・84〜105k token) を著者の call と並んで 1 回だけ cache に書く。担当は cut が出始めると
+    数秒差で 2 本以上起動し、まだ書けていないとそれぞれが全量を書く (nt03 は 2 本で $1.71 / nt04・nt10 も同じ)。著者が書いている間に
+    prefill が終わるので、最初の担当から読める。失敗しても run は止めない (担当が自分で書くだけ)。"""
+    t0 = time.time()
+    try:
+        result = stream_claude(
+            st,
+            "準備の呼び出しです。「ok」とだけ返してください。",
+            lambda _t: None,
+            system_prompt=system_prompt,
+            effort="low",
+            tag="warmup",
+        )
+    except OSError as e:
+        log(st, event="warmup_failed", s=round(time.time() - t0, 1), error=repr(e)[:200])
+        return
+    usage = result.get("usage")
+    log(
+        st,
+        event="warmup",
+        s=round(time.time() - t0, 1),
+        cost=result.get("total_cost_usd"),
+        cache_write=usage.get("cache_creation_input_tokens") if isinstance(usage, dict) else None,
+        cache_read=usage.get("cache_read_input_tokens") if isinstance(usage, dict) else None,
+    )
+
+
 def plan_names(plan_text: str) -> list[tuple[str, float]]:
     out: list[tuple[str, float]] = []
     for l in plan_text.splitlines():
@@ -723,7 +768,11 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         skipped = []
         if same := [n for n in samples if same_topic(n, request)]:
             log(st, event="samples_same_topic", samples=same)
-    build_system_prompt(st / "system_prompt.md", samples)  # 担当・直し役の system prompt (見本込み・従来どおり)
+    # 担当・直し役の system prompt (見本込み — 同じ見本の run どうしで cache を共有する)。著者の call と並んで 1 回だけ温める
+    warm = threading.Thread(
+        target=warmup, args=(st, build_system_prompt(st / "system_prompt.md", samples)), daemon=True
+    )
+    warm.start()
     # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
     # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
     sp = build_system_prompt(st / "system_prompt_author.md", None)
@@ -746,6 +795,7 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     stream_claude(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     sp0.finish()
     (st / "src.done").touch()
+    warm.join(timeout=30)  # warmup の記録を残してから終わる (著者の call の方が長いので普通は終わっている)
     if not all((proj / f).exists() for f in ("order.txt", "root_design.txt", "root_timeline.txt")):
         log(st, event="root_failed", have=sorted(p.name for p in proj.iterdir()))
         return 1
@@ -805,10 +855,15 @@ def fix(project: Path, name: str, findings_file: Path, *, own_root: bool = False
         system_prompt=sp,
         effort="low",
         tag=f"fix_{name}",
+        # 直し役の prompt は system prompt (担当と同じ file・担当が 1 時間の cache に書いた物を読む) の後ろが毎回変わる (cut・指摘)。
+        # その末尾も cache に書かれ 2 度と読まれないので、書き込みを 1 時間 (入力の 2 倍) でなく 5 分 (1.25 倍) にする
+        cache_ttl="5m",
     )
     text = "".join(out)
     blocks = {"cut": block, **({"root_design": root_d, "root_timeline": root_t} if own_root else {})}
-    edits = parse_edits(text, blocks)
+    edits, dropped = parse_edits(text, blocks)
+    if dropped:
+        log(st, event="fix_edits_dropped", cut=name, edits=dropped)
     if edits is not None:
         edited = apply_line_edits(block, edits["cut"]) if edits["cut"] else block
         if "---timeline---" not in edited:

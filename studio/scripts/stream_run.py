@@ -5,6 +5,7 @@
 cut ごとの段 (全部 thread・cut ごとに並列):
   受け (前の cut が使う定義はそちらへ移す) → 著者版 check → 担当 (Opus medium) → check + 直し (2 回まで・担当の直後と最初の DEFECT 0 の
   check で warm を起こす) → staged (ready) → 投入検査 (DEFECT は直し役を 1 回・別枠) → 投入 (構成の順・受理は watch_acks が記録する)。
+  直しきれない DEFECT は捨てる前に最後の手段 (著者版に差し替え → DEFECT の印を落として台詞を残す・last_resort) を掛ける。
 根の規則: 名のある定義 (def・motion・run・svg・sound・cue) は初めて使う cut の block に書き、その cut だけが直す。根 (設定・cast・字幕と
 BGM の開き・常設の層) の持ち主は最初の live な cut — その直し役だけが根を直し、根はその cut が受理された時に凍る。壊れた cut の定義は
 次の live な cut の block へ移る。
@@ -17,7 +18,9 @@ usage (repo root から): python stream_run.py <project> [--staff medium]
     = 素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/` の 1 行・既定は server の空のテンプレ)。
   --staff = 担当 (Opus・判定役の 8 観点で cut を書き直す) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   直し役に回す規則は台帳 (`studio_rules.fixed_rules`)。最後の cut 以外の doc は OPEN_ENDED (後に cut が続く prefix) で check する。
-記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4。
+記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4 と、流した doc を
+studio/ (design.txt・timeline.txt・src.json) に書き戻した物。solo/ の cut は著者の版 author_cut_<名>・担当の版 staff_cut_<名>・最終
+cut_<名>。
 """
 
 from __future__ import annotations
@@ -36,7 +39,7 @@ import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 from uuid import NAMESPACE_URL, uuid5
@@ -89,6 +92,14 @@ def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None
             out[j1:j2] = b_lines[i1:i2]
             hit = True
     return "\n".join(out) if hit else None
+
+
+def edit_lines(now: str, fixed: str) -> str:
+    """戻した直し役の edit の本文 (now = 戻した後の cut の text・fixed = 直し役の出力) — `+` は直し役が書いた行・`-` は今の行。"""
+    import difflib  # noqa: PLC0415
+
+    diff = difflib.unified_diff(now.split("\n"), fixed.split("\n"), lineterm="", n=0)
+    return "\n".join(l for l in diff if l[:1] in "+-" and not l.startswith(("---", "+++")))
 
 
 _SE = re.compile(r'\[♪"([^"]+)"')  # 台詞の効果音の説明 (warm の鍵)
@@ -187,7 +198,8 @@ class Run:
         self.project = project
         # remote = NoLang API (nolang-api consumer) の base URL。著者・担当・直しはこの機械の claude -p のまま、確定した cut の stream の
         # text を `unstable/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server (製品の draft stream) に任せる。None = この機械の
-        # `studio.py stream` (同じ製品の DraftStreamRun) に流す。どちらも根は最初に受理される cut と一緒に流れ、以後凍る
+        # `studio.py stream` (同じ製品の DraftStreamRun) に流す。根は最初に受理される cut と一緒に流れ、以後凍る (remote は根が閉じた
+        # 時点で根だけを先に流す — `submit_root`)
         self.remote = remote.rstrip("/") if remote else None
         self.token = token
         self.remote_template = template  # 素材台帳のテンプレ (drafts/templates/ の 1 行)。None = server の空のテンプレ
@@ -226,6 +238,7 @@ class Run:
         self.stream_proc: subprocess.Popen[bytes] | None = None
         self.t0 = time.time()
         self.order: list[str] = []
+        self.cut_estimate: dict[str, float] = {}  # cut → check が測った見込み秒 (字数 × 話速 + 間・実尺 cache 込み)
 
     # ---- 記録 ----
     def log(self, **kw: object) -> None:
@@ -388,10 +401,12 @@ class Run:
         """壊れた cut (直しで通らなかった物) は後の doc から外す — 1 cut 欠けても残りは描ける方を取る。"""
         return [c for c in cuts if not self.broken.get(c) or c == cuts[-1]]
 
-    def cut_line_ranges(self, cuts: list[str]) -> dict[str, tuple[tuple[int, int], tuple[int, int]]]:
-        """doc (根 + cuts) の中で cut ごとの design / timeline の行の範囲 [a, b] (1 始まり)。"""
+    def cut_line_ranges(
+        self, cuts: list[str], *, root_extra: str = ""
+    ) -> dict[str, tuple[tuple[int, int], tuple[int, int]]]:
+        """doc (根 + root_extra + cuts) の中で cut ごとの design / timeline の行の範囲 [a, b] (1 始まり)。"""
         rd, rt = self.root()
-        d_at, t_at = rd.count("\n"), rt.count("\n")
+        d_at, t_at = (rd + root_extra).count("\n"), rt.count("\n")
         out: dict[str, tuple[tuple[int, int], tuple[int, int]]] = {}
         for c in cuts:
             blk = self.cut_block(c)
@@ -482,24 +497,65 @@ class Run:
         return str(value or "ja")
 
     def plan_seconds(self) -> dict[str, float]:
-        """plan の cut ごとの見込み秒 (期限の材料)。無ければ空。"""
+        """plan の cut ごとの見込み秒 (著者の目分量・記録用)。無ければ空。"""
         from stream_author import plan_names  # noqa: PLC0415 — scripts dir を sys.path に足している
 
         plan = self.solo / "plan.txt"
         return dict(plan_names(plan.read_text())) if plan.exists() else {}
 
+    def note_cut_estimates(self, dd: Path) -> None:
+        """check が書いた cut の時刻 (out/check_cuts.json・字数 × 話速 + 間・実尺 cache 込み) を cut ごとの見込み秒に写す。
+        著者の plan の秒は目分量で実尺の 1.4 倍にもなる (10-21 の監査) ので、期限・進行線の全長は check の値で数える。"""
+        f = dd / "out/check_cuts.json"
+        if not f.exists():
+            return
+        try:
+            rows = json.loads(f.read_text()).get("cuts", [])
+        except (OSError, ValueError):
+            return
+        for row in rows:
+            if isinstance(row, dict) and isinstance(row.get("cut"), str):
+                self.cut_estimate[row["cut"]] = (
+                    max(float(row.get("end_ms", 0)) - float(row.get("start_ms", 0)), 0.0) / 1000
+                )
+
+    def estimated_seconds(self) -> dict[str, float]:
+        """cut ごとの見込み秒 = check が測った値 (あれば) → 著者の plan の秒 → 10 s。"""
+        plan = self.plan_seconds()
+        return {c: self.cut_estimate.get(c, plan.get(c, 10.0)) for c in dict.fromkeys([*plan, *self.order])}
+
     def deadline(self, c: str) -> float:
-        """cut c の期限 = run の起点 + plan で c より前の cut の見込み秒の和 (見る人がその cut に着く時刻の見込み)。plan が無ければ
-        cut 1 つ 10 s と見る。"""
-        secs = self.plan_seconds()
+        """cut c の期限 = run の起点 + c より前の cut の見込み秒の和 (見る人がその cut に着く時刻の見込み)。"""
+        secs = self.estimated_seconds()
         before = self.order[: self.order.index(c)] if c in self.order else []
         return self.t0 + sum(secs.get(x, 10.0) for x in before)
 
     def planned_total_ms(self) -> int | None:
-        """plan の見込み秒の合計 (ms)。`until: end` の進行線の全長に使う — stream では動画の全長が最後の cut まで決まらないので、
-        どの prefix の doc でも同じ値で伸ばす (最終の尺とは plan の誤差の分だけ違う)。"""
-        total = sum(self.plan_seconds().values())
+        """見込み秒の合計 (ms)。`until: end` の進行線の全長に使う — stream では動画の全長が最後の cut まで決まらないので、
+        どの prefix の doc でも同じ値で伸ばす (根は最初の cut の受理で凍るので、その時点の見込み)。"""
+        total = sum(self.estimated_seconds().values())
         return int(total * 1000) if total > 0 else None
+
+    def length_gap(self) -> dict[str, float | None]:
+        """依頼の目安の秒・著者の plan の和・check の見込みの和・実尺 (製品の stream_done の duration_s) — 記録だけ (著者に尺合わせは
+        させない・10-06 / 10-21 の裁定)。"""
+        try:
+            requested: float | None = float((self.project / "params.txt").read_text().split()[2])
+        except (OSError, IndexError, ValueError):
+            requested = None
+        actual: float | None = None
+        with contextlib.suppress(OSError, ValueError):
+            for line in (self.st / "run.jsonl").read_text().splitlines():
+                e = json.loads(line)
+                if e.get("event") == "stream_done" and isinstance(e.get("duration_s"), (int, float)):
+                    actual = float(e["duration_s"])
+        plan = self.plan_seconds()
+        return {
+            "requested_s": requested,
+            "plan_s": round(sum(plan.values()), 1) if plan else None,
+            "estimate_s": round(sum(self.estimated_seconds().values()), 1) if self.order else None,
+            "actual_s": actual,
+        }
 
     def root(self) -> tuple[str, str]:
         rd = (self.solo / "root_design.txt").read_text().rstrip("\n") + "\n"
@@ -600,6 +656,7 @@ class Run:
             "check", str(dd), "--no-warm", "--no-def-probe"
         )  # ended は doc の OPEN_ENDED marker が運ぶ
         defects = [d for d in self.read_defects(dd) if d.level == "DEFECT"]
+        self.note_cut_estimates(dd)
         lint = []
         p = dd / "out/lint_check.json"
         if p.exists():
@@ -638,7 +695,7 @@ class Run:
         return f.get("severity") in ("severe", "warn") and f.get("rule") in self.fixed
 
     def attribute_unlocated(
-        self, c: str, cuts: list[str], unlocated: list[Defect]
+        self, c: str, cuts: list[str], unlocated: list[Defect], *, root_extra: str = ""
     ) -> tuple[list[Defect], list[Defect]]:
         """行の無い DEFECT の持ち主: c を除いた doc (根 + その doc の前の cut) でも出るなら c の物ではない (前の cut か根の物)。
         c が最初の live な cut なら、除いた doc は根だけ — 出れば根の物 (c の DEFECT として返し、持ち主を ROOT で覚える)。
@@ -646,7 +703,7 @@ class Run:
         確かめないと、前の cut の空の text 1 つが後の cut 全部の check に出て、どの cut の直しでも消えずに全部が壊れる (s8 の 16)。
         持ち主は sig で覚える (unlocated_owner) — 後の cut の check で同じ DEFECT が出たら、その cut を除いて lint を取れる (stage)。"""
         prev = [x for x in cuts if x != c and not self.broken.get(x) and self.cut_block(x)]
-        base = self.doc_dir(f"{c}.base", prev)
+        base = self.doc_dir(f"{c}.base", prev, root_extra=root_extra)
         _out, base_defects, _lint = self.check(base, ended=False)
         there = {d.text for d in base_defects}
         mine = [d for d in unlocated if d.text not in there]
@@ -660,16 +717,17 @@ class Run:
         return mine, foreign
 
     def check_cut(
-        self, c: str, cuts: list[str], rnd: int | str, *, name: str | None = None
+        self, c: str, cuts: list[str], rnd: int | str, *, name: str | None = None, root_extra: str = ""
     ) -> tuple[Path, str, list[Defect], list[dict], set[str]]:
         """doc (根 + cuts・c を含む) を check し、cut c (か根) の DEFECT と c の lint を返す → (doc, 出力, DEFECT, lint, blockers)。
         blockers = check を止めた前の cut の DEFECT の持ち主 (行の無い DEFECT で持ち主が分からなければ "?")。blockers があればその
-        doc の lint は c の物も含めて出ていない。name = doc の dir の名 (既定は c)。"""
-        dd = self.doc_dir(name or c, cuts)
+        doc の lint は c の物も含めて出ていない。name = doc の dir の名 (既定は c)。root_extra = 根の design の後ろに足す行 (除いた
+        cut の定義 — check_without)。その行の DEFECT は根の物と数える。"""
+        dd = self.doc_dir(name or c, cuts, root_extra=root_extra)
         out, all_defects, lint = self.check(dd, ended=cuts[-1] == self.order[-1])
-        ranges = self.cut_line_ranges(cuts)
+        ranges = self.cut_line_ranges(cuts, root_extra=root_extra)
         rd, rt = self.root()
-        root_n = (rd.count("\n"), rt.count("\n"))
+        root_n = ((rd + root_extra).count("\n"), rt.count("\n"))
         defects: list[Defect] = []
         unlocated: list[Defect] = []
         blockers: set[str] = set()
@@ -691,7 +749,7 @@ class Run:
             else:
                 blockers.add(owner)
         if unlocated:
-            mine_u, foreign = self.attribute_unlocated(c, cuts, unlocated)
+            mine_u, foreign = self.attribute_unlocated(c, cuts, unlocated, root_extra=root_extra)
             defects += mine_u
             if foreign:
                 # 持ち主の cut が自分の物とした sig なら名で (stage がその cut を除いて lint を取る)・根かまだ分からなければ "?"
@@ -709,8 +767,50 @@ class Run:
                 return
             time.sleep(0.3)
 
+    def check_without(
+        self, c: str, cuts: list[str], skip: frozenset[str], rnd: int | str
+    ) -> tuple[Path, str, list[Defect], list[dict], set[str]]:
+        """skip の cut を除いた doc で c を check する。除いた cut の名のある定義は根の後ろに写す (warm_doc と同じ形) — c が使う名が
+        除いた cut の block にあると、除いただけの doc では c の行に誤った DEFECT が出る (nt06 gold: hook の `motion title` を失って
+        著者版が unclean になり、revert_author が効かずに落ちた)。"""
+        extra = "".join(
+            text
+            for x in cuts
+            if x in skip and (blk := self.cut_block(x)) is not None
+            for _kind, _name, text in self.named_defs(blk[0])
+        )
+        return self.check_cut(c, [x for x in cuts if x not in skip], rnd, root_extra=extra)
+
+    def check_settled(self, c: str, i: int, rnd: int | str) -> tuple[Path, str, list[Defect], list[dict], set[str]]:
+        """doc (根 + live な cut 0..i) で c を check する。前の cut (か根) の DEFECT で check が止まると c の DEFECT も lint も見えない
+        (dt_18: phone の `none` の色で後の 4 cut が lint なしのまま staged になった)。持ち主の分かる cut はその cut を除いた doc で取り
+        (前の cut の直しと c の直しが並列に進む)、持ち主の分からない DEFECT (根・まだ check していない cut) か、除くと c に DEFECT が出る
+        (除いた cut の sticky を指す) 時は、持ち主が ready になるまで待って掛け直す。掛け直しの check を止めた新しい持ち主もまた待つ —
+        掛け直しの blockers を捨てると隠れた c の DEFECT を 0 と数えて staged にした (nt03 rain: 待った後は rules の DEFECT で止まって
+        いた)。待った持ち主が ready なのにまだ止める時だけ打ち切る (見える範囲で進む・残りは投入検査が拾う)。"""
+        waited: set[str] = set()
+        while True:
+            cuts = self.live_cuts(self.order[: i + 1])
+            res = self.check_cut(c, cuts, rnd)
+            defects, blockers = res[2], res[4]
+            if defects or not blockers:
+                return res
+            skip = frozenset(blockers - {"?", ROOT})
+            if skip and not (blockers & {"?", ROOT}):
+                skipped = self.check_without(c, cuts, skip, rnd)
+                if not skipped[2] and not skipped[4]:
+                    self.log(cut=c, event="lint_skip", round=rnd, skip=sorted(skip))
+                    return skipped
+            if blockers <= waited:
+                self.log(cut=c, event="lint_blocked", round=rnd, owners=sorted(blockers), stuck=True)
+                return res
+            self.log(cut=c, event="lint_blocked", round=rnd, owners=sorted(blockers))
+            self.wait_owners(c, blockers)
+            waited |= blockers
+
     def owns_root(self, c: str) -> bool:
-        """cut c が根の持ち主か = 動画の最初の live な cut で、根がまだ流れていない (根は最初に受理される cut と一緒に流れて凍る)。"""
+        """cut c が根の持ち主か = 動画の最初の live な cut で、根がまだ流れていない (根は最初に受理される cut と一緒に流れて凍る・
+        remote は根が閉じた時点で先に流れる)。"""
         return c == self.first_live() and not self.root_submitted
 
     def run_fixer(self, c: str, ff: Path) -> tuple[bool, str]:
@@ -769,25 +869,12 @@ class Run:
         before_fix: str | None = None  # 直し役を掛ける直前の cut の text (直し役が作った DEFECT の行を戻す元)
         settled = False  # 直し役の壊した行を戻した — DEFECT が消えれば残りの指摘で直し役をもう呼ばない
         prev_findings: str | None = None
+        reverted_fixes: list[str] = []  # 戻した直し役の出力 (cut の text) — 同じ edit が返ったら当てずに戻す
+        failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
         for rnd in itertools.count():
             t = time.time()
+            dd, out, defects, lint, _blockers = self.check_settled(c, i, rnd)
             cuts = self.live_cuts(self.order[: i + 1])
-            dd, out, defects, lint, blockers = self.check_cut(c, cuts, rnd)
-            if blockers and not defects:
-                # 前の cut (か根) の DEFECT で check が止まると、この cut の lint は 1 件も出ない (dt_18: phone の `none` の色で後の
-                # 4 cut が lint なしのまま staged になり、画面外・重なりが直し役に届かなかった)。持ち主の分かる cut はその cut を除いた
-                # doc で c の lint を取る (前の cut の直しと c の直しが並列に進む)。持ち主の分からない DEFECT (根・まだ check して
-                # いない cut) か、除くと c に DEFECT が出る (除いた cut の sticky を指す) 時だけ、持ち主が ready になるまで待って掛け直す
-                skip = frozenset(blockers - {"?", ROOT})
-                if skip and not (blockers & {"?", ROOT}):
-                    skipped = self.check_cut(c, [x for x in cuts if x not in skip], rnd)
-                    if not skipped[2] and not skipped[4]:
-                        self.log(cut=c, event="lint_skip", round=rnd, skip=sorted(skip))
-                        dd, out, defects, lint, blockers = skipped
-                if blockers:
-                    self.log(cut=c, event="lint_blocked", round=rnd, owners=sorted(blockers))
-                    self.wait_owners(c, blockers)
-                    dd, out, defects, lint, _ = self.check_cut(c, self.live_cuts(self.order[: i + 1]), rnd)
             mine = [f for f in lint if f.get("cut") == c]
             fixes = [f for f in mine if self.to_fix(f)]
             self.log(
@@ -806,9 +893,12 @@ class Run:
                 # lint の直しが残っていても素材は作り始める (直し役は台詞も絵の説明文も変えない約束)
                 self.start_prewarm(c)
             if defects and before_fix is not None:
+                fixed_text = (self.solo / f"cut_{c}.txt").read_text()
                 reverted = self.revert_fixer_damage(c, cuts, before_fix, defects)
                 before_fix = None
                 if reverted:
+                    reverted_fixes.append(fixed_text)
+                    failed_edits = edit_lines((self.solo / f"cut_{c}.txt").read_text(), fixed_text)
                     self.log(cut=c, event="fix_reverted", round=rnd, n=reverted, defect=len(defects))
                     settled = True
                     continue
@@ -817,9 +907,9 @@ class Run:
                 break
             if fix_calls >= 2:
                 # 捨てるのは描けない cut (DEFECT・文法と実行) だけ — 2 回直しても残る severe (配置の重なり・はみ出し …) は受け入れて
-                # 描く (判断 16・描画は best effort で続く: 字の床まで縮める・そのまま描く — layout/report.py)。落とすと cut が
-                # 台詞ごと動画から消える
-                if defects:
+                # 描く (判断 16・描画は best effort で続く: 字の床まで縮める・そのまま描く — layout/report.py)。DEFECT も捨てる前に
+                # 最後の手段 (著者版・DEFECT の印を落とす) を掛ける — 落とすと cut が台詞ごと動画から消える
+                if defects and not self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "DEFECT after 2 fixes")
                 break
             findings = "\n".join(d.text for d in defects[:40])
@@ -828,6 +918,12 @@ class Run:
             ]  # 直し役にはその cut の severe / warn も全部見せる
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
+            if failed_edits and defects:
+                # 直し役は前の round と同じ edit を返しがち (nt06 gold: 戻した edit を 1 文字も違わずにもう 1 回)。効かなかった edit を見せる
+                findings += (
+                    "\n\n前の直しの edit は DEFECT を消さなかったので戻した (`+` = 前の直し役が書いた行・`-` = 今の行)。"
+                    f"同じ edit は返さず、別の直し方にする:\n{failed_edits}"
+                )
             if findings == prev_findings and not defects:
                 # 直しても指摘が 1 つも変わらない — もう 1 回頼んでも同じ答え (直し役が触れない層・直し方の無い指摘)。打ち切る。
                 # DEFECT が残る時は打ち切らない: 2 回目 (か著者版への差し替え) で通る事があり、落とすと cut が台詞ごと消える
@@ -838,23 +934,25 @@ class Run:
             ff = dd / f"out/findings_{rnd}.txt"
             ff.write_text(findings)
             t = time.time()
-            if fix_calls and defects and c in self.author_clean:
+            if fix_calls and defects and c in self.author_clean and self.revert_to_author(c):
                 # 直しても DEFECT が残る — 担当が触る前の著者の版 (check で DEFECT 0) に差し替えて掛け直す (2 回目の直しの
-                # 代わり・通らなければ今どおり落とす)。落ちた cut は台詞ごと消えるので、文字や効果音の少ない著者の版を取る
-                author = (self.solo / f"author_cut_{c}.txt").read_text()
-                if author != (self.solo / f"cut_{c}.txt").read_text():
-                    (self.solo / f"cut_{c}.txt").write_text(author)
-                    fix_calls += 1
-                    self.log(cut=c, event="revert_author", round=rnd, defect=len(defects))
-                    continue
+                # 代わり・通らなければ最後の手段へ)。落ちた cut は台詞ごと消えるので、文字や効果音の少ない著者の版を取る
+                fix_calls += 1
+                self.log(cut=c, event="revert_author", round=rnd, defect=len(defects))
+                continue
             before_fix = (self.solo / f"cut_{c}.txt").read_text()
             ok, tail = self.run_fixer(c, ff)
             if ok:
                 fix_calls += 1
                 self.log(cut=c, event="fix", round=rnd, s=round(time.time() - t, 1), chars=len(tail))
+                if (self.solo / f"cut_{c}.txt").read_text() in reverted_fixes:
+                    # 戻した edit をそのまま返した — 当てても同じ DEFECT で戻すだけなので当てない (次の round は 2 回の上限で最後の手段へ)
+                    (self.solo / f"cut_{c}.txt").write_text(before_fix)
+                    before_fix = None
+                    self.log(cut=c, event="fix_same_edits", round=rnd)
             else:
                 self.log(cut=c, event="fix_failed", round=rnd, s=round(time.time() - t, 1), tail=tail)
-                if defects:
+                if defects and not self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "fix call failed")
                 break
 
@@ -888,6 +986,58 @@ class Run:
         (self.solo / f"cut_{c}.txt").write_text(new_text)
         return len(defects) if whole else len(bad)
 
+    def revert_to_author(self, c: str) -> bool:
+        """cut c を著者の版 (担当が触る前・solo/author_cut_<c>.txt) に差し替える。著者の版に無い名のある定義で後の cut が使う物 (後の
+        cut の thread が移した定義・壊れた cut から移った定義) は残す。著者の版が無いか、差し替えても今と同じなら何もしない → 差し替えたか。"""
+        keep, src = self.solo / f"author_cut_{c}.txt", self.solo / f"cut_{c}.txt"
+        if not keep.exists():
+            return False
+        with self.name_lock:
+            now, author = src.read_text(), keep.read_text()
+            src.write_text(author)
+            had = {(k, n) for k, n, _t in self.named_defs(author.split("---timeline---", 1)[0])}
+            for kind, name, text in self.named_defs(now.split("---timeline---", 1)[0]):
+                if (kind, name) not in had and self.used_later(c, name):
+                    self.add_defs(c, text)
+            return src.read_text() != now
+
+    def last_resort(self, c: str, cuts: list[str], rnd: int | str, passes: Callable[[], bool]) -> bool:
+        """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順)。(a) 著者の版に差し替えて passes() で通れば
+        取る (`revert_author`)。(b) doc (根 + cuts・c が最後) の check で c の block の行を指す DEFECT を doc から落とし (warm の
+        drop_defect_lines と同じ — 台詞は残して印だけ落とす) c の block を書き戻す → passes() で通れば取る (`defect_lines_dropped`)。
+        どちらも通らなければ元の text に戻して False (捨てるのは呼び手)。"""
+        src = self.solo / f"cut_{c}.txt"
+        current = src.read_text()
+        if self.revert_to_author(c):
+            if passes():
+                self.log(cut=c, event="revert_author", round=rnd, last_resort=True)
+                return True
+            src.write_text(current)
+        dropped = 0
+        for _attempt in range(4):
+            dd = self.doc_dir(f"{c}.drop", cuts)
+            self.check(dd, ended=cuts[-1] == self.order[-1])
+            n = self.drop_defect_lines(dd, c)
+            block = self.block_in_doc(dd, c)
+            if n == 0 or block is None:
+                break
+            dropped += n
+            src.write_text(block)
+            if passes():
+                self.log(cut=c, event="defect_lines_dropped", round=rnd, n=dropped)
+                return True
+        src.write_text(current)
+        return False
+
+    def rescue_stage(self, i: int, c: str, rnd: int | str) -> bool:
+        """stage の最後の手段 — 通ったか = doc (根 + live な cut 0..i) の check で c の DEFECT も止める持ち主も無い。"""
+
+        def passes() -> bool:
+            res = self.check_settled(c, i, rnd)
+            return not res[2] and not res[4]
+
+        return self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes)
+
     def staff(self, i: int, c: str) -> None:
         """担当 (Opus・8 観点) が著者の cut を見直して書き直す。前の cut は著者の版を渡すので cut ごとに並列に走る。
         著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当が台詞の文字を変えていたら著者の版の文字に
@@ -915,6 +1065,8 @@ class Run:
             # 戻す基準は書き戻す直前の file — 担当の裏で前方から移された定義 (move_forward_defs) も含める (担当開始時の text だと
             # その定義が担当の出力に無いまま上書きされて消える)
             text, restored = restore_speech(keep.read_text(), r.stdout)
+            # 担当の版を分けて残す (cut_<名>.txt は直し役が上書きする最終の版)
+            (self.solo / f"staff_cut_{c}.txt").write_text(text)
             with self.name_lock:
                 latest = src.read_text()
                 src.write_text(text)
@@ -1088,17 +1240,56 @@ class Run:
 
     def start_prewarm(self, c: str) -> None:
         """cut c の warm を staged を待たずに起こす (直しと並ぶ): 担当の直後と、check で DEFECT 0 を見た時点 (直後の warm が DEFECT で
-        落ちていれば起こし直す)。走っている / 通った prewarm があれば起こし直さない。remote (素材は server が解く) は起こさない。"""
+        落ちていれば起こし直す)。走っている / 通った prewarm があれば起こし直さない。remote は server に先行解決を頼む
+        (`remote_warm` — 素材は server が解く)。通った頼みでも直しで素材を決める物 (asset_key) が変わっていれば頼み直す。"""
         w = self.warms[c]
-        if self.remote is not None or (w.thread is not None and (w.thread.is_alive() or w.ok)):
+        if w.thread is not None and w.thread.is_alive():
+            return
+        if self.remote is not None:
+            f = self.solo / f"cut_{c}.txt"
+            if c in self.submitted or not f.exists() or (w.ok and w.key == self.asset_key(f.read_text())):
+                return
+            w.thread = threading.Thread(target=self.remote_warm, args=(c,), daemon=True)
+            w.thread.start()
+            return
+        if w.thread is not None and w.ok:
             return
         w.thread = threading.Thread(target=self.image_prewarm, args=(c,), daemon=True)
         w.thread.start()
 
+    def remote_warm(self, c: str) -> None:
+        """server に cut c の素材 (絵・声) を先に作らせる (`drafts/{id}/warm/` — 動画には入らない)。text = 根 (まだ流れていなければ)
+        + 構成の順で c までの未投入の cut。投入と同じ検査で弾かれた頼み (前の cut が直しの途中) は記録だけして、次の契機に頼み直す。"""
+        w = self.warms[c]
+        w.key = self.asset_key((self.solo / f"cut_{c}.txt").read_text())
+        parts: list[str] = []
+        for x in self.order[: self.order.index(c) + 1]:
+            if x in self.submitted or self.broken.get(x):
+                continue
+            blk = self.cut_block(x)
+            if blk is None:
+                continue
+            parts.append(blk[0].rstrip("\n") + "\n" + blk[1].rstrip("\n") + "\n")
+        text = "".join(parts)
+        if not self.root_submitted:
+            rd, rt = self.root()
+            text = rd.rstrip("\n") + "\n" + "\n".join(l for l in rt.splitlines() if l.strip() != "#v2") + "\n" + text
+        t = time.time()
+        try:
+            self.remote_post(f"/v1/unstable/drafts/{self.remote_video_id}/warm/", {"text": text})
+        except RuntimeError as e:
+            w.ok = False
+            self.log(cut=c, event="remote_warm", ok=False, s=round(time.time() - t, 1), error=str(e)[:300])
+            return
+        w.ok = True
+        self.log(cut=c, event="remote_warm", ok=True, s=round(time.time() - t, 1), cuts=len(parts))
+
     @contextlib.contextmanager
-    def machine_warm_slot(self, c: str) -> Iterator[None]:
+    def machine_warm_slot(self, c: str) -> Iterator[float]:
         """機械全体の warm の枠 (flock の file・`tmp/studio/.warm_slots/<k>`)。空いた枠は期限 (見る人がその cut に着く時刻の見込み) の
-        近い待ち手から取る — 待ち手は期限を名にした札を置き、自分より期限の近い札の数が空いた枠の数より少ない時だけ枠を取りに行く。"""
+        近い待ち手から取る — 待ち手は期限を名にした札を置き、自分より期限の近い札の数が空いた枠の数より少ない時だけ枠を取りに行く。
+        枠を取るまで待った秒を渡す (warm の event の `warm_slot_wait` — warm の s と枠待ちを分けて読む)。"""
+        t = time.time()
         d = (REPO or HERE.parent) / "tmp/studio/.warm_slots"
         (d / "queue").mkdir(parents=True, exist_ok=True)
         ticket = d / "queue" / f"{int(self.deadline(c) * 1000):016d}_{os.getpid()}_{c}"
@@ -1124,7 +1315,7 @@ class Run:
                 if held is None:
                     time.sleep(0.3)
             ticket.unlink(missing_ok=True)
-            yield
+            yield time.time() - t
         finally:
             ticket.unlink(missing_ok=True)
             if held is not None:
@@ -1158,13 +1349,17 @@ class Run:
         書き戻しが間に入って鍵と doc が食い違う)。"""
         w = self.warms[c]
         self.wait_root_for((self.solo / f"cut_{c}.txt").read_text())
-        with self.machine_warm_slot(c):
+        with self.machine_warm_slot(c) as waited:
             w.key = self.asset_key((self.solo / f"cut_{c}.txt").read_text())
             dd = self.warm_doc(c)
             t = time.time()
             dropped = 0
             out = ""
             for _attempt in range(4):
+                if self.broken.get(c):
+                    # 壊れた cut は流れない — 試行を止めて枠を返す (nt06 gold: broken の後も 22 s 枠を握り、次の cut の warm が待った)
+                    out = "BROKEN"
+                    break
                 try:
                     out = self.studio_cmd("warm", str(dd), timeout=150)
                 except subprocess.TimeoutExpired:
@@ -1179,7 +1374,15 @@ class Run:
                 dropped += n
             (dd / "out/warm.txt").write_text(out)
             w.ok = "OK warm" in out and dropped == 0
-            self.log(cut=c, event="image_prewarm", s=round(time.time() - t, 1), ok="OK warm" in out, dropped=dropped)
+            self.log(
+                cut=c,
+                event="image_prewarm",
+                s=round(time.time() - t, 1),
+                warm_slot_wait=round(waited, 1),
+                ok="OK warm" in out,
+                dropped=dropped,
+                **({"broken": True} if out == "BROKEN" else {}),
+            )
 
     @staticmethod
     def drop_defect_lines(dd: Path, c: str) -> int:
@@ -1190,21 +1393,14 @@ class Run:
         defects = Run.read_defects(dd)
         if not defects:
             return 0
-        heads = {
-            "design": re.compile(rf"^section#{re.escape(c)}\b"),
-            "timeline": re.compile(rf"^\*\*\* {re.escape(c)}\s*$"),
-        }
-        nexts = {"design": re.compile(r"^section#"), "timeline": re.compile(r"^\*\*\* ")}
         total = 0
         for which in ("design", "timeline"):
             path = dd / f"{which}.txt"
             lines = path.read_text().split("\n")
-            start = next((k for k, line in enumerate(lines, start=1) if heads[which].match(line)), None)
-            if start is None:
+            span = Run.block_span(lines, which, c)
+            if span is None:
                 continue
-            end = next(
-                (k for k, line in enumerate(lines[start:], start=start + 1) if nexts[which].match(line)), len(lines) + 1
-            )
+            start, end = span
             kill: set[int] = set()
             stripped: dict[int, str] = {}
             for d in defects:
@@ -1231,6 +1427,33 @@ class Run:
                 )
         return total
 
+    @staticmethod
+    def block_span(lines: list[str], which: str, c: str) -> tuple[int, int] | None:
+        """doc の design / timeline の行の中で cut c の block の [頭の行, 次の cut の頭の行) (1 始まり)。`section#c` / `*** c` から次の
+        cut の頭まで。無ければ None。"""
+        head, nxt = (
+            (re.compile(rf"^section#{re.escape(c)}\b"), re.compile(r"^section#"))
+            if which == "design"
+            else (re.compile(rf"^\*\*\* {re.escape(c)}\s*$"), re.compile(r"^\*\*\* "))
+        )
+        start = next((k for k, line in enumerate(lines, start=1) if head.match(line)), None)
+        if start is None:
+            return None
+        end = next((k for k, line in enumerate(lines[start:], start=start + 1) if nxt.match(line)), len(lines) + 1)
+        return start, end
+
+    @staticmethod
+    def block_in_doc(dd: Path, c: str) -> str | None:
+        """doc (dd) の中の cut c の block を cut の file の形 (design + `---timeline---` + timeline) で。"""
+        parts: list[str] = []
+        for which in ("design", "timeline"):
+            lines = (dd / f"{which}.txt").read_text().split("\n")
+            span = Run.block_span(lines, which, c)
+            if span is None:
+                return None
+            parts.append("\n".join(lines[span[0] - 1 : span[1] - 1]).strip("\n") + "\n")
+        return parts[0] + "---timeline---\n" + parts[1]
+
     def author_check(self, i: int, c: str) -> Path:
         """著者の版 (担当が触る前) を check し、DEFECT 0 なら author_clean に (revert_author の元)。指摘の file を返す (担当へ)。"""
         t = time.time()
@@ -1238,9 +1461,10 @@ class Run:
         dd, _out, defects, lint, blockers = self.check_cut(c, cuts, "author")
         clean = not defects and not blockers  # 止まった check では c の実行の DEFECT が見えない
         if blockers - {"?", ROOT}:
-            # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut を除いた doc で c の lint を取る
-            skip = blockers - {"?", ROOT}
-            dd, _out, skipped, lint, rest = self.check_cut(c, [x for x in cuts if x not in skip], "author")
+            # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut を除いた doc で c の lint を取る (除いた cut の
+            # 定義は根の後ろに写す — c が使う名を失った誤った DEFECT で unclean にしない)。判定は c の行に落ちる DEFECT で数える
+            skip = frozenset(blockers - {"?", ROOT})
+            dd, _out, skipped, lint, rest = self.check_without(c, cuts, skip, "author")
             clean = not defects and not skipped and not rest
         if clean:
             self.author_clean.add(c)
@@ -1252,6 +1476,13 @@ class Run:
         ff = dd / "out/findings_author.txt"
         ff.write_text(findings)
         self.log(cut=c, event="check", round="author", s=round(time.time() - t, 1), defect=len(defects), warn=len(mine))
+        if c in self.cut_estimate:
+            self.log(
+                cut=c,
+                event="plan_estimate",
+                plan_s=self.plan_seconds().get(c),
+                estimate_s=round(self.cut_estimate[c], 1),
+            )
         return ff
 
     def root_prefetch(self) -> None:
@@ -1322,13 +1553,15 @@ class Run:
                 if w.ok and w.key == key:
                     self.log(cut=c, event="warm", s=round(time.time() - t, 1), ok=True, reused="prewarm")
                     return
-            with self.machine_warm_slot(c):
+            with self.machine_warm_slot(c) as waited:
                 dd = self.warm_doc(c)
                 out = ""
                 for attempt in (
                     0,
                     1,
                 ):  # TTS の応答待ちで止まる事がある → 150 s で切って 1 回やり直す (済んだ scene は cache)
+                    if self.broken.get(c):  # 壊れた cut は流れない — 枠を返す
+                        break
                     try:
                         out = self.studio_cmd("warm", str(dd), timeout=150)
                     except subprocess.TimeoutExpired:
@@ -1338,7 +1571,13 @@ class Run:
                     break
                 (dd / "out/warm.txt").write_text(out)
                 # warm が落ちても壊れ扱いにしない — 製品の organizer が足りない素材を自分で作る
-                self.log(cut=c, event="warm", s=round(time.time() - t, 1), ok="OK warm" in out)
+                self.log(
+                    cut=c,
+                    event="warm",
+                    s=round(time.time() - t, 1),
+                    warm_slot_wait=round(waited, 1),
+                    ok="OK warm" in out,
+                )
         finally:
             w.done = True
 
@@ -1425,6 +1664,8 @@ class Run:
                 print(f"PLAYABLE {self.remote_watch_url}", flush=True)
             st = str(r.get("status"))
             if st in ("completed", "failed", "expired"):
+                if st == "completed":
+                    self.write_back()
                 self.log(
                     event="final_ready" if st == "completed" else "final_failed",
                     since_launch=round(time.time() - self.t0, 1),
@@ -1533,15 +1774,39 @@ class Run:
             text = rd.rstrip("\n") + "\n" + "\n".join(l for l in rt.splitlines() if l.strip() != "#v2") + "\n" + text
         return text
 
+    def submit_root(self) -> str:
+        """remote: 根が閉じた時点で根だけを先に流す (server は cut を待たずに cast の素材の解決と cut の先行解決を始める)。根は
+        ここで凍る (cut 0 の直し役は根を直さない)。server の投入検査で弾かれた根は最初の cut と一緒に流す (従来の形)。返り値 = 流した
+        text ("" = 流さなかった)。"""
+        while not ((self.solo / "root_design.txt").exists() and (self.solo / "root_timeline.txt").exists()):
+            if (self.st / "src.done").exists():
+                return ""
+            time.sleep(0.3)
+        time.sleep(0.2)  # 書きかけを読まない (著者は section が閉じてから置く)
+        with self.name_lock:
+            self.normalize_root()
+            rd, rt = self.root()
+        text = rd.rstrip("\n") + "\n" + "\n".join(l for l in rt.splitlines() if l.strip() != "#v2") + "\n"
+        t = time.time()
+        ack = self.submit(None, text, end=False, pins={})
+        if ack is None or "rejected" in ack:
+            self.log(event="root_submit_rejected", reason=str((ack or {}).get("rejected"))[:300])
+            return ""
+        self.root_submitted = True
+        self.log(event="root_submitted", s=round(time.time() - t, 1))
+        return text
+
     def feed(self) -> None:
         """staged かつ warm 済みの cut を構成の順に流す。根は最初に受理される cut と一緒に (以後凍結)。各 cut は投入検査 (prefix との
         compile・出し済みの item が変わらない事・composer の乾いた実行) を通してから流す。投入検査の DEFECT は、落とす前にその cut の
         直し役を 1 回だけ呼び (DEFECT の文と、流した前の cut の定義 `defs_before` を渡す)、直した text で掛け直す (`fix` の
         `round: "intake"`)。この 1 回は stage の直し (2 回まで・`fix_calls`) とは別枠 — stage は staged で終わっていて、投入検査の DEFECT は
         stage の check に出なかった物 (前の cut の担当 / 直しが後から定義を変えた・流した prefix との食い違い) だから。それでも DEFECT なら
-        落とす (`intake_rejected`)。local の stream は受理を待たずに次へ (seal は organizer が順に処理する・拒否は `watch_acks` が記録して
+        stage と同じ最後の手段 (last_resort: 著者版 → DEFECT の印を落とす) を掛け、通らなければ落とす (`intake_rejected`)。local の stream は受理を待たずに次へ (seal は organizer が順に処理する・拒否は `watch_acks` が記録して
         壊れ扱い)。最後の cut は end と一緒に。"""
         prefix = ""  # 流した stream の text (根 + cut)
+        if self.remote is not None:
+            prefix = self.submit_root()
         for i, c in enumerate(self.order):
             while not (self.staged.get(c) and self.warms[c].done):
                 if not self.stream_alive():
@@ -1577,6 +1842,13 @@ class Run:
                 if fixed is not None:
                     text = fixed
                     defects = self.intake_check(prefix, text, ended=last)
+            if defects and self.last_resort(
+                c,
+                [x for x in self.order if x in self.submitted] + [c],
+                "intake",
+                lambda: not self.intake_check(prefix, self.feed_text(c) or "", ended=last),
+            ):
+                text, defects = self.feed_text(c) or text, []
             if defects:
                 self.mark_broken(c, "intake: " + defects[0][:160])
                 self.log(
@@ -1614,6 +1886,17 @@ class Run:
             self.log(event="end_rejected", ack=ack)
             if self.remote is not None:
                 self.remote_abort("end rejected")
+
+    def write_back(self) -> None:
+        """流した最終の doc (根 + 流した cut・構成の順) を studio/ に書き戻す — studio/ に `new` の骨組みが残り、動画と doc が食い違って
+        いた (nt01〜10 全部)。src.json は全部の doc の pin を写した物。"""
+        cuts = [c for c in self.order if c in self.submitted]
+        design, timeline = self.doc_texts(cuts)
+        src = self.merged_pins(cuts)
+        (self.studio / "design.txt").write_text(design)
+        (self.studio / "timeline.txt").write_text(timeline)
+        (self.studio / "src.json").write_text(json.dumps(src, ensure_ascii=False, indent=1))
+        self.log(event="written_back", cuts=cuts)
 
     def run(self) -> int:
         self.log(event="orchestrator_start")
@@ -1657,8 +1940,10 @@ class Run:
             self.stream_proc.kill()
             code = -9
         if code == 0 and (self.studio / "out/video.mp4").exists():
+            self.write_back()
             (self.studio / "DONE").touch()
             self.log(event="final_ready", since_launch=round(time.time() - self.t0, 1), broken=self.broken)
+            self.log(event="length_gap", **self.length_gap())
             return 0
         # 製品の stream が完走しなかった (seal 後の worker の失敗など) — 製品の失敗はそのまま失敗にする (solo の render で描き直す
         # fallback は製品の bug を 2 件隠し、視聴者が見た HLS とも別物だった)

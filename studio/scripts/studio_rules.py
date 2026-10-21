@@ -63,7 +63,9 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "empty_board",
         "warn",
         "fix",
-        "板が 1 秒以上空 (小札だけも空) → 板の出現の印 `[>#板]` を中身の最初の句へ寄せる (板と中身を同じ語で出す) か、板の頭に中身の 1 つ目を置く",
+        "板が 1 秒以上空 (小札だけも空・icon は中身) → 中身 (3 字以上の文字・絵・icon) を板と一緒に出す — 著者が書いた `[>#板]` は"
+        "消す (印の無い板は最初の中身の語で出る) か中身の最初の句へ寄せる・compile が書いた板の印なら先に出る子の印を中身の語へ・"
+        "または板の頭に中身の 1 つ目を置く",
     ),
     _rule("no_closer", "warn", "fix", "最後の cut に大きな締めの一言が無い"),
     _rule(
@@ -106,8 +108,9 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "overlap",
         "warn",
         "record",
-        "文字どうしが重なる (`overlap:` を宣言しても文字と文字は warn) → 判子・札を相手の文字から外す",
+        "同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す",
     ),
+    _rule("text_gap", "warn", "fix", "同じ行の文字の隙間が 8 px 未満 → `left: 相手.right+16` で並べる"),
     _rule(
         "covered_text",
         "warn",
@@ -148,7 +151,12 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
     _rule("flash_text", "warn", "record", "出す印を早める / 閉じる印を遅らせる / 文言を短くする"),
     _rule("offset_window", "severe", "fix", "ずれ (+N / -N) を小さく・印を前後の語へ移す", mutable=False),
     _rule("pause_in_sentence", "warn", "record", "間を置くなら文を切る (。)・絵は前の語から出す"),
-    _rule("caption_gap", "warn", "record", '`subtitle "…"` の上書きの後に `[>#subtitle]` を開き直す'),
+    _rule(
+        "caption_gap",
+        "warn",
+        "record",
+        "字幕 lane が閉じた台詞の前に `[>#subtitle]` を開き直す (台詞を札に出すなら札に `hide_subtitle`)",
+    ),
     _rule("entrance_in_fadeout", "warn", "fix", "切替や fade out の 0.8 秒前より後に出す → 語を前へ"),
     _rule("entrance_in_transition", "warn", "record", "最初の台詞の頭に `[silence:+0.4s]` を足して語を窓の後へ出す"),
     _rule("transition_over_speech", "warn", "fix", "切替が台詞に掛かる"),

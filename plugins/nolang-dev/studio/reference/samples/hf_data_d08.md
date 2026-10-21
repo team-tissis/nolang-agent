@@ -124,7 +124,7 @@ p#l3(cx: 360px; top: 460px; font-size: 100px; line-height: 1; in: {y:33, opacity
 # 丸窓の札 (白い円 + 色の輪 + 透過の絵 + 色の名札)・半分の濃さで灰色に置き、語で濃く色づく
 def badge(t, c, lc, im) = div(width: 184px; height: 244px; opacity: .5; in: {y:33, opacity:0, duration:.5, ease:'power3.out', stagger: {each: .1}})
   div#ring(left: 0px; top: 0px; width: 184px; height: 184px; border-radius: 99px; background: #FFFFFF; border: 5px solid {c}; box-shadow: 0px 9px 20px #8C5A282E)
-  img#img(cx: 92px; cy: 92px; width: 151px; height: 151px; object-fit: contain; filter: sat:0; main: none; content: {im})
+  img#img(cx: 92px; cy: 92px; width: 151px; height: 151px; object-fit: contain; filter: saturate(0); main: none; content: {im})
   p#lb(cx: 92px; top: 196px; font-size: 31px; color: #FFFFFF; background: {lc}; border-radius: 99px; padding: 4px 19px 7px 19px; content: {t})
 badge#bd(left: "47;268;489"; top: 620px; t: "惣菜;青果;パン"; c: "$souzai;$seika;$pan"; lc: "#B9560B;#2B7D45;#9A6A12"; im: "@souzai;@seika;@pan") ×3
 

@@ -19,7 +19,7 @@
 - `palette_drift` palette 外の色が多い
 - `low_contrast` 文字と地の差が小さい (沈めた `dim` / focus の兄弟
 - `recolor` の後も) → 沈める濃さを上げる
-- `overlap` 文字どうしが重なる (`overlap:` を宣言しても文字と文字は warn) → 判子・札を相手の文字から外す
+- `overlap` 同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す
 - `title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)
 - `leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (根の要素は engine が既定の fade で揃える — 残るのは子・写し・自分で閉じた層) → cut 末に `[<#名 fade]`
 - `orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく

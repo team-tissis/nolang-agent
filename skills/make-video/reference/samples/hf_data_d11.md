@@ -179,7 +179,7 @@ board#b3(k: "前半 vs 後半"; t: "後半の方が速かった人は？"; s: "�
 
 # s4 5km ごとのペース: 疲れたランナーの写真 (彩度を落として 0.55) の上の板に、6'00" 〜 7'00" の目盛り → 白の折れ線が 25-30 まで描かれ点と値が順に弾む → 30km からの赤い帯と破線 → 赤の線が描き継がれて +40秒 → 52% の札 → 「キロ +64秒」の札が叩きつけられ板が揺れる
 section#s4(stagger: {each:0})
-img#s4_img(inset: 0; opacity: 0.55; filter: sat:0.6; subject: center 50%; main: kb {scale: [1.12, 1]}; in: {opacity:0, duration:7.85, ease:'none'}) [photo]縦長 9:16 のスポーツ写真。マラソン終盤で疲れ切った市民ランナー。脚が重く顔をゆがめ汗をかき、湾沿いの誰もいないアスファルトの道で失速している。低い位置からの望遠、霞んだ午後の強い光、ざらついた高コントラストの劇的な雰囲気、暗く彩度の低い色調。人物は画面の中央に置き、上下に余白。
+img#s4_img(inset: 0; opacity: 0.55; filter: saturate(0.6); subject: center 50%; main: kb {scale: [1.12, 1]}; in: {opacity:0, duration:7.85, ease:'none'}) [photo]縦長 9:16 のスポーツ写真。マラソン終盤で疲れ切った市民ランナー。脚が重く顔をゆがめ汗をかき、湾沿いの誰もいないアスファルトの道で失速している。低い位置からの望遠、霞んだ午後の強い光、ざらついた高コントラストの劇的な雰囲気、暗く彩度の低い色調。人物は画面の中央に置き、上下に余白。
 div#s4_top(left: 0px; top: 0px; width: 720px; height: 213px; background: linear(#070B14F0,#070B14B3@45%,#070B1400,180); in: none)
 board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1kmあたり"; fn: "※各区間の1kmあたりペース（完走者の中央値）"; c: $fast; background: #0A0F1BDB)
   chip#k(color: #FFFFFF)

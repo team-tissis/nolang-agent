@@ -149,9 +149,9 @@ p#l3b(left: 367px; top: 657px; width: 333px; font-size: 36px; font-family: m; li
 section#means
 # 資源の札 (白い角丸の札 + 2×2 の絵の象限 + 色つきの名)・語ごとに弾み、語で一斉に縮んで消える
 def tile(t, c, f) = div(width: 273px; height: 273px; border-radius: 35px; background: #FFFFFF; box-shadow: 0px 16px 31px #785A3C24; in: {scale:.3, rotation:-10, opacity:0, duration:.5, ease:'back.out(2.2)'}; out: {y:-27, scale:.6, opacity:0, duration:.22, ease:'power2.in'})
-  img#i(cx: 50%; top: 15px; width: 193px; height: 193px; border-radius: 20px; content: @icons; object-fit: cover,focus={f},zoom=200%; main: none)
+  img#i(cx: 50%; top: 15px; width: 193px; height: 193px; border-radius: 20px; content: @icons; object-fit: cover; object-position: {f}; zoom: 200%; main: none)
   p#t(cx: 50%; top: 212px; font-size: 36px; font-family: m; line-height: 1; color: {c}; content: {t})
-tile#tl(left: "73;373;73;373"; top: "200;200;500;500"; height: 273px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0%,0%;100%,0%;0%,100%;100%,100%") ×4
+tile#tl(left: "73;373;73;373"; top: "200;200;500;500"; height: 273px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0% 0%;100% 0%;0% 100%;100% 100%") ×4
 card#c4(src: "[ref:@hero]The young woman takes a small first step onto the first of a row of round pastel stepping stones that lead into the distance, with a tiny sprout growing beside her foot and small flowers along the path; she looks determined and happy."; in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'})
   img#img(main: kb {scale: [1, 1.08]})
 tag#tag4(n: "原則①"; t: "手中の鳥"; e: "Bird in Hand"; w: 345)
@@ -191,7 +191,7 @@ sticker#st6b(t: "行動しながら未来をつくる"; c: $mint; overlap: c6b)
 # now — 言い換え: 机で頭を抱えるカード (少し色褪せ) に灰紫の札と × → 右へ払われ、走るカードが左から飛び込んで跳ねる・地が淡い緑に
 section#now
 card#c7a(src: "@stuck"; in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {x:733, rotation:15.2, opacity:0, duration:.4, ease:'power3.in'})
-  img#img(filter: sat:0.75; main: none)
+  img#img(filter: saturate(0.75); main: none)
   ngx#ng(w: 267; h: 43)
 card#c7b(src: "[ref:@hero]The young woman runs forward energetically with a small backpack, a book, a wrench and a sprout peeking out of the backpack, soft motion lines behind her, bright and joyful, moving from left to right."; in: {x:-733, rotation:-6.8, opacity:0, duration:.45, ease:'power4.out'})
   img#img(main: kb {scale: [1, 1.08]})

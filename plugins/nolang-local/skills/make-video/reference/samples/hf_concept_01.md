@@ -108,7 +108,7 @@ def plan_page() = div(border-radius: 0px; width: 507px; height: 459px)
     p#v(left: 16px; top: 27px; font-size: 17px; font-family: b) スタンダードプラン;安心サポートパック;クレジットカード（**** 1234）;2027年3月31日
 # 画面に差す部品: 通話中の側板 (スタッフの映像・名の帯・通話の釦 3 つ)・操作の案内・form の上に開くプランの一覧・スタッフのメッセージ
 def call_panel() = div(border-radius: 0px; width: 256px; height: 330px)
-  img#fd(left: 19px; top: 19px; width: 219px; height: 157px; border-radius: 9px; content: @staff; object-fit: cover,focus=50%,30%)
+  img#fd(left: 19px; top: 19px; width: 219px; height: 157px; border-radius: 9px; content: @staff; object-fit: cover; object-position: 50% 30%)
   p#lv(left: 27px; top: 27px; font-size: 9px; color: #FFFFFF; background: #0E2A478C; border-radius: 99px; padding: 4px 8px) {gn}●{/} 通話中
   p#nm(left: 19px; top: 150px; width: 219px; padding: 6px 9px 6px 9px; font-size: 10px; color: #FFFFFF; letter-spacing: 0.05em; background: #0E2A4773; border-radius: 9px) 高橋（サポート担当）
   div#b(left: 55px; top: 188px; width: 150px; height: 35px; display: flex; gap: 0px) ×3
@@ -137,7 +137,7 @@ def staff_msg() = div(width: 219px; height: 118px; border-radius: 9px; backgroun
 def share_badge() = p(cx: 50%; top: 24px; font-size: 11px; font-family: b; color: #FFFFFF; letter-spacing: 0.08em; background: $a; border-radius: 99px; padding: 6px 16px; in: {scale:0.8, opacity:0, duration:0.4, ease:'back.out(2)'}) ●  画面共有中
 def focus_box(w, h) = div(width: {w}; height: {h}; border-radius: 9px; border: 2px solid $a; box-shadow: 0px 0px 0px 5px #1F6FE029; in: {scale:1.04, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration: 0.3})
 def bubble(t, w) = div(width: {w}; height: 35px; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 8px 19px #0E2A472E; z-index: front; in: {y:7, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration: 0.3})
-  img#f(left: 5px; cy: 50%; width: 27px; height: 27px; border-radius: 99px; content: @staff_face; object-fit: cover,focus=50%,35%)
+  img#f(left: 5px; cy: 50%; width: 27px; height: 27px; border-radius: 99px; content: @staff_face; object-fit: cover; object-position: 50% 35%)
   p#t(left: 40px; cy: 50%; font-size: 13px; content: {t})
 def cursor() = shape(width: 27px; height: 27px; path: cursor; background: $a; border: 1px solid #FFFFFF; z-index: front)
 def cursor_tag() = p(font-size: 9px; font-family: b; color: #FFFFFF; background: $a; border-radius: 99px; padding: 5px 8px; z-index: front) スタッフ
@@ -154,7 +154,7 @@ telop#in_tel オンラインで{bb}完結する{/}時代
 # 問い: 戸惑う顔の寄り → ぼかした写真の上にタブレット (指が迷い、プランの一覧が開いて閉じる)
 section#confused
 img#cf_p(inset: 0; content: @conf; main: kb {scale: [1, 1.09], focus: '67% 29%'})
-img#cf_b(inset: 0; content: @conf; filter: blur:6; delay: 3500; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
+img#cf_b(inset: 0; content: @conf; filter: blur(6px); delay: 3500; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
 tablet#tc(left: 286px; top: 91px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
   form_page#p1(left: 11px; top: 57px; scale: 0.9)
   help_panel#hp(left: 484px; top: 81px; scale: 0.9)
@@ -170,8 +170,8 @@ soft_bg#cn_bg(delay: 2300; in: fade {duration: 0.6})
 rings#cn_r(x1: 173; x2: 507; top: -40px; d: 600; delay: 2300; in: fade {duration: 0.6})
 shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid #1F6FE073; dash: 1,9; delay: 2600; in: fade {duration: 0.4})
 shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 3px solid $a; delay: 2750; in: draw {duration: 0.8})
-img#av1(left: 207px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @cust; object-fit: cover,focus=55%,28%,zoom=190%; delay: 2450; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
-img#av2(left: 773px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @staff; object-fit: cover,focus=50%,28%,zoom=190%; delay: 2650; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
+img#av1(left: 207px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @cust; object-fit: cover; object-position: 55% 28%; zoom: 190%; delay: 2450; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
+img#av2(left: 773px; top: 200px; width: 200px; height: 200px; border-radius: 100px; border: 5px solid #FFFFFF; box-shadow: 0px 13px 33px #0E2A4729; content: @staff; object-fit: cover; object-position: 50% 28%; zoom: 190%; delay: 2650; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 p#wh1(cx: 307px; top: 427px; font-size: 20px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750; in: {y:8, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
 p#wh2(cx: 873px; top: 427px; font-size: 20px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2950; in: {y:8, opacity:0, duration:0.5, ease:'power2.out'}) {k2}STAFF{/}[br]スタッフ
 shape#cd.ellipse(left: 501px; top: 294px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade {duration: 0.15}; out: fade {duration: 0.2})
@@ -187,9 +187,9 @@ p#ti_t(cx: 640px; top: 404px; font-size: 28px; letter-spacing: 0.1em; color: $in
 
 # 今の不便: チャットの写真が左半分に寄り、右から電話の写真が入る (写真の左下に札)
 section#chat_phone
-img#pn_c(inset: 0; object-fit: cover,focus=58%,50%; filter: sat:0.8; main: kb {scale: [1.04, 1.1], focus: ['', '60% 50%']}) [ref:@cust]Medium shot of the same woman at a white dining table at home, typing on the white tablet with a slightly troubled thoughtful expression, as if struggling to explain her problem in a text chat; the screen shows abstract gray and blue chat bubbles
+img#pn_c(inset: 0; object-fit: cover; object-position: 58% 50%; filter: saturate(0.8); main: kb {scale: [1.04, 1.1], focus: ['', '60% 50%']}) [ref:@cust]Medium shot of the same woman at a white dining table at home, typing on the white tablet with a slightly troubled thoughtful expression, as if struggling to explain her problem in a text chat; the screen shows abstract gray and blue chat bubbles
 photo_tag#lb_c(left: 43px; top: 560px; ic: chat-circle-dots; t: "チャットだけでは[br]伝えにくい")
-img#pn_p(left: 640px; top: 0px; width: 640px; height: 720px; object-fit: cover,focus=52%,50%; filter: sat:0.8; main: kb {scale: [1.06, 1.12], focus: ['', '41% 50%']}; in: {x:640, duration:0.75, ease:'power3.inOut'}) [ref:@cust]Medium shot of the same woman at home holding a smartphone to her ear while looking down at a white tablet on the table with a confused expression, trying to follow spoken instructions about a screen the other person cannot see
+img#pn_p(left: 640px; top: 0px; width: 640px; height: 720px; object-fit: cover; object-position: 52% 50%; filter: saturate(0.8); main: kb {scale: [1.06, 1.12], focus: ['', '41% 50%']}; in: {x:640, duration:0.75, ease:'power3.inOut'}) [ref:@cust]Medium shot of the same woman at home holding a smartphone to her ear while looking down at a white tablet on the table with a confused expression, trying to follow spoken instructions about a screen the other person cannot see
 shape#pn_d.bleed(left: 640px; top: 0px; width: 4px; height: 720px; path: rect; background: #FFFFFF; in: {x:640, duration:0.75, ease:'power3.inOut'})
 photo_tag#lb_p(left: 683px; top: 560px; ic: phone; t: "電話だけでは[br]確認しにくい")
 
@@ -203,7 +203,7 @@ telop#fc_tel {bb}顔を見ながら{/}、状況に合わせてサポート
 # STEP 02: スタッフの写真 + 共有中のタブレット。カーソルが動き、画面に寄って強調枠と吹き出しで案内
 section#share_screen
 div#sc_bg(inset: 0; background: $paper)
-img#pn_s(left: 0px; top: 0px; width: 573px; height: 720px; object-fit: cover,focus=47%,50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
+img#pn_s(left: 0px; top: 0px; width: 573px; height: 720px; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
 tablet#ts(left: 612px; top: 147px; scale: 0.8; delay: 200; in: {x:293, duration:0.9, ease:'power3.out'})
   form_page#p1(left: 10px; top: 50px; scale: 0.8)
   call_panel#cp(left: 415px; top: 50px; scale: 0.8)
@@ -224,7 +224,7 @@ telop#rl_tel 迷いを、{bb}その場で解消{/}
 
 # STEP 03: スタッフのメッセージ → カーソルがリンクを押し、確認の page へ送る
 section#navigate
-img#nv_b(inset: 0; content: @tabtbl; filter: blur:6; main: kb {scale: [1, 1.05]})
+img#nv_b(inset: 0; content: @tabtbl; filter: blur(6px); main: kb {scale: [1, 1.05]})
 tablet#tn(left: 286px; top: 127px; scale: 0.9)
   form_page#p1(left: 11px; top: 57px; scale: 0.9; out: {x:-30, opacity:0, duration:0.45, ease:'power3.in'})
   plan_page#p2(left: 11px; top: 57px; scale: 0.9; in: {x:30, opacity:0, duration:0.6, ease:'power3.out'})
@@ -260,7 +260,7 @@ div#fl(left: 701px; top: 80px; width: 520px; height: 560px; border-radius: 15px;
   p#h(left: 32px; top: 29px; font-size: 21px; font-family: b; letter-spacing: 0.06em) お手続きの進行状況
   p#sub(left: 32px; top: 63px; font-size: 13px; color: $gray) ご契約内容の変更 ・ 4 ステップ
   div#sup(left: 32px; top: 100px; width: 456px; height: 85px; border-radius: 11px; background: $paper; border: 1px solid $rule)
-    img#f(left: 11px; top: 11px; width: 85px; height: 64px; border-radius: 7px; content: @staff; object-fit: cover,focus=50%,30%)
+    img#f(left: 11px; top: 11px; width: 85px; height: 64px; border-radius: 7px; content: @staff; object-fit: cover; object-position: 50% 30%)
     p#a(left: 112px; top: 17px; font-size: 16px; font-family: b) スタッフがサポート中
     p#b(left: 112px; top: 47px; font-size: 12px; color: $gray) {gn}●{/} Live Assist で通話中
   div#vl(left: 48px; top: 248px; width: 2px; height: 200px; background: $rule)
@@ -313,8 +313,8 @@ p#hm2(left: 829px; top: 333px; font-size: 112px; letter-spacing: 0.06em; in: {y:
 
 # 結び: 2 人の写真を左右に、境目を点が降りる + 中央の札
 section#together
-img#tg1(left: 0px; top: 0px; width: 640px; height: 720px; content: @cust; object-fit: cover,focus=47%,50%; main: kb {scale: [1.08, 1], focus: '24% 50%'})
-img#tg2(left: 640px; top: 0px; width: 640px; height: 720px; content: @staff; object-fit: cover,focus=50%,50%; main: kb {scale: [1.08, 1], focus: '76% 50%'})
+img#tg1(left: 0px; top: 0px; width: 640px; height: 720px; content: @cust; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1.08, 1], focus: '24% 50%'})
+img#tg2(left: 640px; top: 0px; width: 640px; height: 720px; content: @staff; object-fit: cover; object-position: center; main: kb {scale: [1.08, 1], focus: '76% 50%'})
 shape#tg_d.bleed(left: 638px; top: 0px; width: 4px; height: 720px; path: rect; background: #FFFFFF)
 shape#tg_p.ellipse(left: 634px; top: 87px; width: 12px; height: 12px; background: $a; box-shadow: 0px 0px 0px 5px #1F6FE02E; in: fade {duration: 0.2}; out: fade {duration: 0.3})
 p#tg_t(cx: 640px; top: 582px; font-size: 31px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 7px; padding: 16px 35px 17px 35px; box-shadow: 0px 9px 27px #0E2A4724; in: {y:9, opacity:0, duration:0.6, ease:'power2.out'}) デジタルと、人の接客を、{bb}もっと自然に。{/}

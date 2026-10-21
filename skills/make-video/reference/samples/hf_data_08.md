@@ -54,7 +54,7 @@ subtitle.hug(font-size: 31px; bottom: 36px; background: #111F34CC; color: #FFFFF
 bgm#music(volume: 6dB; duck: -8; fade: 1200,3400; keys: "0:0") 明るく穏やかで爽やかな日常のポップ、ピアノとアコースティックギターと高い弦、軽い打楽器、希望のある普通の速さ
 # 丸い札 (地と字の色を渡す)・段組の半分 (紙の板 573 px / 写真の枠 707 px・全高)
 def chip(t, fill_color=$navy, text_color=#FFFFFF) = p(content: {t}; font-size: 24px; line-height: 1; background: {fill_color}; color: {text_color}; border-radius: 99px; padding: 9px 19px; letter-spacing: 0.04em)
-def half_photo(src, focus_x=50%) = img(top: 0px; width: 707px; height: 720px; content: {src}; object-fit: cover,focus={focus_x},50%; in: none)
+def half_photo(src, focus_x=50%) = img(top: 0px; width: 707px; height: 720px; content: {src}; object-fit: cover; object-position: {focus_x} 50%; in: none)
 def half_paper = div(top: 0px; width: 573px; height: 720px; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
 # 時計の文字盤 (円の板 + 目盛り 4 + 針 2 本): 針は上半分だけ塗った細い板を中心で回した物 — 印 `[!#盤.mh to,{rotation:…}]` で針が回る
 def dial(c) = div(width: 77px; height: 77px; border-radius: 39px; border: 5px solid {c})
@@ -74,7 +74,7 @@ shape#title_rule(left: 87px; top: 440px; width: 547px; height: 8px; path: rect,r
 
 # change — 前 → 後: ぼかした窓口の写真に「これまで」の板 → 左へ寄せて「変更後」の板と矢印 → 針が回って時刻が出て判子
 section#change(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
-img#change_photo(inset: 0; content: @counter; filter: blur:5,sat:0.9; main: kb {scale: [1.08, 1.16]})
+img#change_photo(inset: 0; content: @counter; filter: blur(5px) saturate(0.9); main: kb {scale: [1.08, 1.16]})
 div#change_veil(inset: 0; background: #F6F1E6DB; in: none)
 # 常設の帯: 紺の丸札に glyph + 題 + 縦線 + 副題 (sticky で closing の頭まで残る)
 div#banner.sticky(left: 37px; top: 27px; width: 473px; height: 40px; border-radius: 99px; background: $navy; box-shadow: 0px 5px 15px #142A472E; delay: 500; in: {y:-16, opacity:0, duration:0.5, ease:'power3.out'}; out: {y:-16, opacity:0, duration:0.4, ease:'power2.in'})
