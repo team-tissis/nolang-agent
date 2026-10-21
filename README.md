@@ -14,22 +14,28 @@ NoLang を AI エージェント (Claude Code / Codex など) から使うため
 | **CLI `nolang`** (推奨) | Claude Code・Codex などシェルを持つエージェント。原稿を file のまま渡し、check → 開始 → cut の分割 → 順番の投入を 1 コマンドで |
 | **MCP** (`nolang-dev` / `nolang-local`) | シェルの無い client。ツールを 1 つずつ呼ぶ |
 
-## 社内の人へ: nolang-dev で動画を作る
+## 社内の人へ: nolang-dev で動画を作る (デモ)
+
+Claude Code に「〇〇の動画を作って」と頼むと、NoLang が台本・画面・声・BGM まで作り、**1〜2 分で再生できるリンク**が返ります (続きは見ている間に伸びていき、数分で完成)。
+社内の dev 環境 (`dev.no-lang.com`) で動くデモです。
 
 ### 前提
 
 - `dev.no-lang.com` にログインできるアカウント。
 - 会社のネットワーク。在宅などで dev のログイン画面に `ACCESS DENIED` と出る人は、同じブラウザで https://dev.no-lang.com/cdn-cgi/trace を開き、`ip=` の値を管理者に伝えて許可リストに足してもらう。
-- Node.js 20 以上 (CLI を使うため)。GitHub の `team-tissis` の repo を clone できること (プラグインはこの repo から入る)。
+- GitHub の `team-tissis` の repo を読めること (プラグインはこの repo から入る)。
+- **Claude Code** (ログイン済み)・**Node.js 20 以上**・**python3** (macOS 標準の 3.9 で動く)。
+  台本は手元の Claude Code (`claude -p`・Opus) が書くので、Claude の利用量を使います (1 本で API 換算 約 1〜3 ドル)。
+- Codex でも使えますが、`claude` が無いと台本をエージェント自身が書く遅い経路になり、リンクの通知 (下の 3) も出ません。
 
-### 1. 入れる (1 回だけ)
-
-Claude Code:
+### 1. 入れる (1 回だけ・端末で)
 
 ```
-/plugin marketplace add team-tissis/nolang-agent
-/plugin install nolang-dev@nolang
+claude plugin marketplace add team-tissis/nolang-agent
+claude plugin install nolang-dev@nolang
 ```
+
+入れたら Claude Code を起動し直す (Claude Code の中なら `/plugin marketplace add …` と `/plugin install …` でも同じ)。
 
 Codex:
 
@@ -38,27 +44,43 @@ codex plugin marketplace add team-tissis/nolang-agent
 codex plugin add nolang-dev@nolang
 ```
 
-入れたら Claude Code / Codex を起動し直す。
-
 ### 2. ログインする (1 回だけ)
 
-Claude Code / Codex に **「NoLang にログインして」** と頼む。許可の URL が出る (同じ機械ならブラウザも開く) ので、dev にログインして「許可」を押し、「許可した」と返す。
+Claude Code に **「NoLang にログインして」** と頼む (頼まなくても、初めて動画を頼んだ時に聞かれます)。許可の URL が出る (同じ機械ならブラウザも開く) ので、dev にログインして「許可」を押し、「許可した」と返す。
 ログインは 30 日使わなければ切れる。切れたらまた同じように頼めばよい。
 
 ### 3. 頼む
 
 ```
-NoLang の使い方を 60 秒で紹介する動画を作って
+ハンドドリップでおいしいコーヒーを淹れるコツを 60 秒で解説する動画を作って
 この写真 (~/Desktop/product.png) を背景にして、新商品の紹介動画を縦長で作って
 落ち着いた女性の声とピアノの BGM で、在宅勤務のコツを解説する動画を作って
 ```
 
-視聴 URL (`https://dev.no-lang.com/video/…`) が返り、生成中から再生できる。手元の写真・動画は自分の素材として送られ、NoLang の声・BGM・効果音・書体は説明文から選ばれる (決めたい時は「〇〇な声の候補を探して」と頼めば候補が出る)。
+- 1〜2 分で視聴 URL (`https://dev.no-lang.com/video/…`) が出る。Claude Code では、エージェントの返事より先に `PostToolUse:Bash says:` で始まる通知にもリンクが出る。生成中から再生でき、続きは見ている間に伸びる。
+- 縦長・長さ・型 (解説 / 数字 / 比較 / 物語 / 映像寄り) は言えばその通りに、言わなければ 16:9・60 秒前後で作る。
+- 手元の写真・動画は自分の素材として送られて動画に入る。声・BGM・効果音・書体は説明文から選ばれる (決めたい時は「〇〇な声の候補を探して」)。
+- 完成した mp4 が欲しい時は「完成したら mp4 のリンクをちょうだい」。
+
+### デモの注意
+
+- dev 環境なので、止まっていたり、作った動画やデータが消えたりすることがあります。
+- 送った写真・動画は dev のサーバーに保存されます。社外秘・個人情報を含む素材は使わないでください。
+- 同時にたくさん作ると、描画の順番待ちで遅くなります。
 
 ### 更新する
 
-- Claude Code: `/plugin marketplace update nolang` → 起動し直す。
-- Codex: `codex plugin marketplace upgrade nolang` → `codex plugin remove nolang-dev@nolang` → `codex plugin add nolang-dev@nolang` → 起動し直す。
+デモの間は版 (0.1.0) を上げずに中身だけを更新するので、`update` では新しくなりません。入れ直します (端末で):
+
+```
+claude plugin marketplace update nolang
+claude plugin uninstall nolang-dev@nolang
+rm -rf ~/.claude/plugins/cache/nolang/nolang-dev
+claude plugin install nolang-dev@nolang
+```
+
+入れ直したら Claude Code を起動し直す。ログインは残ります。
+Codex: `codex plugin marketplace upgrade nolang` → `codex plugin remove nolang-dev@nolang` → `codex plugin add nolang-dev@nolang` → 起動し直す。
 
 ### 困った時
 
@@ -66,8 +88,9 @@ NoLang の使い方を 60 秒で紹介する動画を作って
 |---|---|
 | ブラウザに `ACCESS DENIED` | 接続元の IP が許可されていない。https://dev.no-lang.com/cdn-cgi/trace の `ip=` を管理者へ |
 | ログインの URL を開くのが遅れた | 待ち受けは 15 分。過ぎたらもう一度「NoLang にログインして」 |
+| 「python3 / claude が無い」と言われる | 入れれば標準の作り方 (速い) になる。無いままでもエージェントが台本を書いて作る (遅い) |
 | つながらない・様子がおかしい | 「nolang doctor を実行して」と頼み、結果を管理者へ |
-| 生成が `failed` になる | 原稿ではなくサーバー側のことが多い。視聴 URL (video_id) を添えて管理者へ |
+| 生成が `failed` になる・声が出ない | 原稿ではなくサーバー側のことが多い。視聴 URL (video_id) を添えて管理者へ |
 
 MCP だけで使う時 (シェルが無い client など): Claude Code は「nolang-dev を認証して」、Codex は `codex mcp login nolang-dev` で同じ dev にログインする (CLI のログインとは別に保存される)。
 
