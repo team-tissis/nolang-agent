@@ -1,6 +1,6 @@
 {
   "name": "nolang-local",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "デモ用の NoLang (localhost:18000) に MCP でつなぎ、Codex から動画を作る。",
   "author": {
     "name": "mvrx"
