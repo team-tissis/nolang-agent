@@ -31,7 +31,7 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 
 ## 接続先
 
-`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → `http://localhost:18000` の順で決まります。
+`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → `dev` (`https://api-dev.no-lang.com`) の順で決まります。手元のスタックで試す時は `nolang use local` に切り替えます。
 どれも名前か URL で書けます: `local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`。
 `nolang use stg` で切り替え、`nolang use` で今の接続先、`nolang use default` で選びを外します。ログインは接続先ごとに保存され、切り替えても前のログインは残ります。
 CI など対話できない環境では `NOLANG_TOKEN` に API key を入れます。

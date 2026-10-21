@@ -15,7 +15,7 @@ import { parseArgs } from "node:util";
 
 import { ASSET_KINDS, mimeOf, uploadKind } from "./lib/assets.mjs";
 import { codeFromCallback } from "./lib/callback.mjs";
-import { TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
+import { FALLBACK_API, TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
 import { aspectOf, pendingCuts, splitCuts } from "./lib/src.mjs";
 
@@ -976,7 +976,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang assets upload <file>… [--name 表示名]
                                         手元の画像 / 動画 (mp4・webm・mov) を自分の素材に送る → ref (id=<uuid>)
 
-共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → http://localhost:18000)
+共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → ${FALLBACK_API})
 接続先の名前: ${Object.entries(TARGETS).map(([name, url]) => `${name} = ${url}`).join("・")}
 環境変数: NOLANG_TOKEN (API key か access token。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
 出力: 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 欠陥・失敗 / 2 使い方 / 3 未ログイン / 4 接続`;

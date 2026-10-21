@@ -1,5 +1,5 @@
 // 接続先 (NoLang API の URL) の決め方。`--api` / NOLANG_API_URL / `nolang use` は名前 (TARGETS) か URL を受ける。
-// 順は --api → NOLANG_API_URL → `nolang use` で選んだ接続先 → プラグインの接続先 (`defaults.json`) → localhost。
+// 順は --api → NOLANG_API_URL → `nolang use` で選んだ接続先 → プラグインの接続先 (`defaults.json`) → dev。
 // ログインは接続先を選ばない (前にログインした接続先へ勝手に行かない — 選ぶのは `nolang use` だけ)。
 import { CliError, EXIT } from "./errors.mjs";
 
@@ -9,7 +9,8 @@ export const TARGETS = {
   stg: "https://api-stg.no-lang.com",
   prod: "https://api.no-lang.com",
 };
-export const FALLBACK_API = TARGETS.local;
+// 既定は社内の dev (stg / prod は外部の著者の経路がまだ出ていない)。手元のスタックで試す時は `nolang use local`
+export const FALLBACK_API = TARGETS.dev;
 
 // 名前か URL → 末尾の / を落とした URL
 export function apiUrl(value) {

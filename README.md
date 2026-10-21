@@ -151,7 +151,7 @@ nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
-- 接続先: `--api` → `NOLANG_API_URL` → `nolang use` で選んだ接続先 → プラグインの接続先 (`cli/defaults.json`) → `http://localhost:18000`。どれも名前 (`local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`) か URL で書ける。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインごとに固定 (切り替えられるのは CLI だけ)。
+- 接続先: `--api` → `NOLANG_API_URL` → `nolang use` で選んだ接続先 → プラグインの接続先 (`cli/defaults.json`) → `dev` (`https://api-dev.no-lang.com`)。手元のスタックで試す時は `nolang use local`。どれも名前 (`local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`) か URL で書ける。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインごとに固定 (切り替えられるのは CLI だけ)。
 - ログイン: 人が打つなら `nolang auth login` (ブラウザで許可するまで待つ)。エージェントは `--background` で URL を受け取ってすぐ戻り、`nolang auth wait` で完了を確かめる。ブラウザが別の機械なら `--no-browser` → `complete`。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
 - CI など非対話: `NOLANG_TOKEN` に API key (`nlg-c-…`) か access token を入れる。
 - ログインは MCP と同じ認可サーバー (OAuth 2.1・PKCE・`127.0.0.1` で受ける)。client はログインごとに自動登録 (DCR)。
