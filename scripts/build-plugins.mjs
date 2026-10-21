@@ -31,7 +31,7 @@ const PLUGINS = {
   },
 };
 const MANIFESTS = [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"];
-const IGNORED = new Set([".DS_Store"]);
+const IGNORED = new Set([".DS_Store", "__pycache__"]); // python の cache (studio の script を試しに import すると出来る) は箱に入れない
 const SKILL_DOCS = ["SKILL.md", "write-yourself.md"];
 
 async function buildInto(pluginDir, plugin) {
