@@ -32,23 +32,31 @@ const PLUGINS = {
 };
 const MANIFESTS = [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"];
 const IGNORED = new Set([".DS_Store"]);
+const SKILL_DOCS = ["SKILL.md", "write-yourself.md"];
 
 async function buildInto(pluginDir, plugin) {
   const version = JSON.parse(await readFile(join(ROOT, "packages/cli/package.json"), "utf8")).version;
   await rm(join(pluginDir, "cli"), { recursive: true, force: true });
   for (const name of CLI_FILES) await cp(join(ROOT, "packages/cli", name), join(pluginDir, "cli", name), { recursive: true });
   await writeFile(join(pluginDir, "cli/defaults.json"), JSON.stringify({ api: plugin.api }, null, 2) + "\n");
+  // studio の一式 (nolang make が動かす)。skills/ の外に置く — 中の SKILL.md を別の skill として拾わせない
+  await rm(join(pluginDir, "studio"), { recursive: true, force: true });
+  await cp(join(ROOT, "studio"), join(pluginDir, "studio"), { recursive: true, filter: (src) => !IGNORED.has(src.split("/").pop()) });
+  // Claude Code の hook (tell_user を通知で出す)。plugin の hooks/hooks.json は有効にした時に読まれる
+  await rm(join(pluginDir, "hooks"), { recursive: true, force: true });
+  await cp(join(ROOT, "hooks"), join(pluginDir, "hooks"), { recursive: true, filter: (src) => !IGNORED.has(src.split("/").pop()) });
   await rm(join(pluginDir, "skills"), { recursive: true, force: true });
   await cp(join(ROOT, "skills"), join(pluginDir, "skills"), { recursive: true, filter: (src) => !IGNORED.has(src.split("/").pop()) });
   for (const skill of await readdir(join(pluginDir, "skills"))) {
-    const path = join(pluginDir, "skills", skill, "SKILL.md");
-    let text = await readFile(path, "utf8");
+    // 置き換えは skill の手順の文書 (SKILL.md と、自分で書く経路の write-yourself.md) に掛ける
+    const paths = SKILL_DOCS.map((name) => join(pluginDir, "skills", skill, name));
+    const texts = await Promise.all(paths.map((path) => readFile(path, "utf8").catch(() => null)));
     for (const [from, to] of plugin.replace) {
       // 正本の文言が変わって置き換えが空振りしたら止める (dev 用のスキルに localhost の手当てが残らないように)
-      if (!text.includes(from)) throw new Error(`${path}: 置き換える文言が見つからない: ${from.slice(0, 60)}…`);
-      text = text.replaceAll(from, to);
+      if (!texts.some((text) => text?.includes(from))) throw new Error(`skills/${skill}: 置き換える文言が見つからない: ${from.slice(0, 60)}…`);
+      texts.forEach((text, i) => (texts[i] = text?.replaceAll(from, to) ?? null));
     }
-    await writeFile(path, text);
+    await Promise.all(paths.map((path, i) => texts[i] !== null && writeFile(path, texts[i])));
   }
   for (const manifest of MANIFESTS) {
     const path = join(pluginDir, manifest);
