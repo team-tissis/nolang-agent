@@ -2,6 +2,7 @@
 // 見本 2 本を選ぶ — nolang-backend の studio (`.agents/skills/nolang-draft-studio/scripts/stream_author.py` の pick_samples) と同じ規則:
 // NoLang の src (`<型>_NN.md`) 1 本 + hf の写し (`hf_<型>_*.md`) 1 本。両側とも、70 KB 以下の自分の型の見本から (後ろに近い型の見本を足す)・
 // 依頼と同じ題材の物を外し・依頼と同じ向きの物を先に・その中は file 名順。片側に 1 本も無ければもう片側の 2 本目を取る。
+// 自分の型の NoLang の見本に依頼と同じ向きの物が無ければ、NoLang 側を使わず hf の写し 2 本 (同じ向きを先に) にする。
 //
 //   node scripts/pick_samples.mjs --type concept --aspect 16:9 --request "<依頼文>"
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -65,8 +66,12 @@ export function pickSamples(type, aspect, request) {
       skipped.push(...same);
       return names.filter((n) => !same.includes(n)).sort((a, b) => Number(portrait(a) !== wantPortrait) - Number(portrait(b) !== wantPortrait));
     });
-  const nolang = ranked((t) => new RegExp(`^${t}_\\d+\\.md$`));
-  const hf = ranked((t) => new RegExp(`^hf_${t}_.+\\.md$`));
+  let nolang = ranked((t) => new RegExp(`^${t}_\\d+\\.md$`));
+  let hf = ranked((t) => new RegExp(`^hf_${t}_.+\\.md$`));
+  if (!nolang.some((n) => n.startsWith(`${type}_`) && portrait(n) === wantPortrait)) {
+    nolang = [];
+    hf = [...hf].sort((a, b) => Number(portrait(a) !== wantPortrait) - Number(portrait(b) !== wantPortrait));
+  }
   const picked = [...nolang.slice(0, 1), ...hf.slice(0, 1)];
   picked.push(...[...nolang.slice(1), ...hf.slice(1)].slice(0, 2 - picked.length));
   if (picked.length < 2) throw new Error(`${type} (${NEAR_TYPE[type]}) の見本が 2 本無い: ${picked.join(", ")}`);

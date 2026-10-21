@@ -15,8 +15,7 @@ usage (repo root から): python stream_run.py <project> [--staff medium]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。--template <video_id>
     = 素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/` の 1 行・既定は server の空のテンプレ)。
-  --staff = 担当 (Opus・判定役の 8 観点で cut を書き直す) を cut ごとに並列に (前の cut は著者の版を参考に渡す)。最初の cut は担当を
-    飛ばして著者の版のまま check → 投入する (担当の 25〜50 秒がそのまま再生までの待ちに乗るため)。`--staff-first` で最初の cut にも掛ける。
+  --staff = 担当 (Opus・判定役の 8 観点で cut を書き直す) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   直し役に回す規則は台帳 (`studio_rules.fixed_rules`)。最後の cut 以外の doc は OPEN_ENDED (後に cut が続く prefix) で check する。
 記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4。
 """
@@ -99,6 +98,12 @@ _MARK_NOT_SE = re.compile(
 # cut の block に書ける名のある定義 (grammar の CUT_DEFINITION_ROOTS) — 持ち主はその block の cut。字下げの子の行も定義の一部
 _NAMED_DEF = re.compile(r"^(def|svg|sound|motion|run|cue)\s+([A-Za-z_][\w-]*)\b")
 ROOT = ""  # 行の無い DEFECT の持ち主が根 (Run.unlocated_owner の値)
+_DEF_CHILD = re.compile(r"^[ \t]+[A-Za-z_][\w-]*#([A-Za-z_][\w-]*)", re.M)  # 定義の字下げの子の行 `  icon#i(…` → 子の名
+
+
+def def_children(text: str) -> set[str]:
+    """名のある定義 (見出しの行 + 字下げの子) の子の名 — 後の cut は実体の子を `実体.子` で参照する。"""
+    return set(_DEF_CHILD.findall(text))
 
 
 @dataclass(frozen=True)
@@ -175,7 +180,6 @@ class Run:
         project: Path,
         *,
         staff: str | None = None,
-        staff_first: bool = False,
         remote: str | None = None,
         token: str | None = None,
         template: str | None = None,
@@ -192,7 +196,6 @@ class Run:
         self.root_submitted = False
         self.fixed = fixed_rules()  # 直し役に回す規則 = 台帳の直しの列
         self.staff_effort = staff  # 担当 (8 観点で cut を書き直す) の effort。None = 担当なし
-        self.staff_first = staff_first  # 最初の cut にも担当を掛けるか (既定は飛ばす — 再生までの待ちを縮める)
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
         self.weave = project / "weave"
         self.weave.mkdir(parents=True, exist_ok=True)
@@ -730,15 +733,12 @@ class Run:
                 continue
             break
         if r.returncode == 0 and "---timeline---" in r.stdout:
-            # 直し役が走る間に後の cut の thread が c の block へ定義を移す事がある (move_forward_defs) — 担当の書き戻しと同じ形で、
-            # 書き戻す直前の file に増えた定義を出力に足す (lock の中で読んで書く)
+            # 担当の書き戻しと同じ門: 基準は書き戻す直前の file (直し役が走る間に後の cut の thread が c の block へ移した定義
+            # — move_forward_defs — も含む)。直し役が消した定義・後の cut が使う定義の形を変えた物を戻す
             with self.name_lock:
                 latest = src.read_text()
                 src.write_text(r.stdout)
-                was = {(k, n) for k, n, _t in self.named_defs(before.split("---timeline---", 1)[0])}
-                for kind, name, text in self.named_defs(latest.split("---timeline---", 1)[0]):
-                    if (kind, name) not in was:
-                        self.add_defs(c, text)
+            self.restore_defs(c, latest if "---timeline---" in latest else before, who="fixer")
             return True, r.stdout
         return False, (r.stdout + r.stderr)[-200:]
 
@@ -761,10 +761,8 @@ class Run:
             time.sleep(0.3)
         self.log(cut=c, event="cut_seen")
         self.move_forward_defs(c)
-        if self.staff_effort and (i > 0 or self.staff_first):
+        if self.staff_effort:
             self.staff(i, c)
-        elif self.staff_effort:
-            self.log(cut=c, event="staff_skipped", reason="first_cut")
         # 絵と声は担当が書き終えた瞬間に作り始める (check と直しに並ぶ・DEFECT の行は落として残りを作り、直しの後に差分だけ作る)
         self.start_prewarm(c)
         fix_calls = 0  # 直し役を呼んだ回数 (著者版への差し戻しも 1 回と数える)・2 回まで
@@ -923,38 +921,50 @@ class Run:
             self.log(cut=c, event="staff", s=round(time.time() - t, 1), chars=len(r.stdout))
             if restored:
                 self.log(cut=c, event="speech_restored", n=len(restored), lines=restored)
-            self.restore_defs(c, latest if "---timeline---" in latest else before)
+            self.restore_defs(c, latest if "---timeline---" in latest else before, who="staff")
         else:
             self.log(cut=c, event="staff_failed", s=round(time.time() - t, 1), tail=(r.stdout + r.stderr)[-200:])
 
-    def restore_defs(self, c: str, before: str) -> None:
-        """担当が書き戻した cut c の block の名のある定義 (def・motion・run・svg・sound・cue) を、担当の前の text (before) と比べて直す。
-        - 消した定義は戻す (`reason: missing`)。後の cut はその名を使っていて (並列に書き直すので担当は知らない)、消えると後の cut だけが
+    def restore_defs(self, c: str, before: str, *, who: str) -> None:
+        """担当か直し役 (who) が書き戻した cut c の block の名のある定義 (def・motion・run・svg・sound・cue) を、書き戻す前の text
+        (before) と比べて直す。担当・stage の直し役・投入検査の直し役の 3 つの出口が全部この門を通る (直し役も定義の形を変える —
+        直し役だけ素通りだと、投入検査の直し役 1 回が後の cut の安全網になっていた)。
+        - 消した定義は戻す (`reason: missing`・前の cut も同じ種と名で定義していれば重複の直しなので戻さない)。後の cut はその名を使っていて (並列に書き直すので担当は知らない)、消えると後の cut だけが
           DEFECT:KEY を食って直し役を 1〜2 回払っていた (担当後の DEFECT 率 cut 0 6% vs 後の cut 12〜19%・code の 27/37 が KEY・o6_03 の
           `def kw`)。戻した定義が使われなければ無害 (未使用の def)。
-        - 後の cut が使う定義の引数の形 (`def_signature`) を変えていたら、元の定義 (字下げの子ごと) に戻す (`reason: signature`)。後の
-          cut は著者の版の形で書かれている — now7_05 の normal の担当が `def node(i, t, c=$a)` を `node(p, t, n)` に書き換え、先に staged
-          の reverse が投入検査の DEFECT:ARG で落ちて台詞ごと消えた。担当の版の `def` は `名_<cut>` に改名してこの block の使い方ごと
-          残す (担当の絵は変えない)。def 以外の種は元に戻すだけ (この cut の使い方が新しい形なら check の DEFECT で直し役に回る)。
-        同じ名・同じ引数の形のまま中身 (見た目) を変えた定義は触らない。"""
+        - 後の cut が使う定義の形 (`def_shape`) を変えていたら、元の定義 (字下げの子ごと) に戻す (`reason: shape`)。形 = 引数の並び
+          (`def_signature`) と、後の cut が `実体.子` で参照する子の名 (`children_used_later`)。後の cut は著者の版の形で書かれている —
+          now7_05 の normal の担当が `def node(i, t, c=$a)` を `node(p, t, n)` に書き換え、先に staged の reverse が投入検査の
+          DEFECT:ARG で落ちて台詞ごと消えた。子の名 (`icon#i` → `img#p`) だけを変えても後の cut の `[!#rv_f[1].i …]` が DEFECT:KEY に
+          なる。変えた側の版の `def` は `名_<cut>` に改名してこの block の使い方ごと残す (担当・直し役の絵は変えない)。def 以外の種は
+          元に戻すだけ (この cut の使い方が新しい形なら check の DEFECT で直し役に回る)。
+        同じ名・同じ形のまま中身 (見た目) を変えた定義は触らない。戻した時は `defs_restored` に `who` を記録する。"""
         blk = self.cut_block(c)
         if blk is None or "---timeline---" not in before:
             return
         # 種ごとに見る — 名だけで見ると、雛形の `motion note` が残っているだけで担当が消した `def note` を「残っている」と誤り、後の cut の
         # `note#…` が投入検査の DEFECT:KEY で落ちた (o20_18 power・88 本で 3 件・全部 note)
         now = {(kind, name): text for kind, name, text in self.named_defs(blk[0])}
+        # 前の cut が同じ種と名で定義していれば消したのは重複の直し (直し役が DEFECT:NAME を消した) — 戻さない
+        earlier = {(kind, name) for kind, name, _t in self.named_defs(self.defs_before(c))}
         missing: list[tuple[str, str]] = []
         reshaped: list[tuple[str, str, str, str]] = []
+        lost: dict[str, list[str]] = {}  # 名 → 後の cut が参照するのに消えた子の名
         for kind, name, text in self.named_defs(before.split("---timeline---", 1)[0]):
             cur = now.get((kind, name))
             if cur is None:
-                missing.append((name, text))
-            elif self.def_signature(cur) != self.def_signature(text) and self.used_later(c, name):
+                if (kind, name) not in earlier:
+                    missing.append((name, text))
+                continue
+            gone = sorted(self.children_used_later(c, name, def_children(text)) - def_children(cur))
+            if (self.def_signature(cur) != self.def_signature(text) or gone) and self.used_later(c, name):
                 reshaped.append((kind, name, cur, text))
+                if gone:
+                    lost[name] = gone
         for _name, text in missing:
             self.add_defs(c, text)
         if missing:
-            self.log(cut=c, event="defs_restored", reason="missing", names=[name for name, _ in missing])
+            self.log(cut=c, event="defs_restored", who=who, reason="missing", names=[name for name, _ in missing])
         if not reshaped:
             return
         f = self.solo / f"cut_{c}.txt"
@@ -968,7 +978,7 @@ class Run:
             new = f"{name}_{re.sub(r'[^a-z0-9]', '', c.lower())[:8] or 'c'}"
             while new in taken:
                 new += "x"
-            # 担当の def の見出し・この block の要素の型 (`名#…`)・他の def の土台 (`= 名(`) を新しい名に。元の定義はその後ろに戻す
+            # 変えた側の def の見出し・この block の要素の型 (`名#…`)・他の def の土台 (`= 名(`) を新しい名に。元の定義はその後ろに戻す
             uses = re.compile(rf"(?<![\w#.$-]){re.escape(name)}(?=[#(])")
             design = uses.sub(new, design).replace(uses.sub(new, cur), uses.sub(new, cur) + text, 1)
             kept[name] = new
@@ -976,10 +986,12 @@ class Run:
         self.log(
             cut=c,
             event="defs_restored",
-            reason="signature",
+            who=who,
+            reason="shape",
             names=[name for _k, name, _c, _t in reshaped],
             was=[self.def_signature(text) for _k, _n, _c, text in reshaped],
-            staff=[self.def_signature(cur) for _k, _n, cur, _t in reshaped],
+            now=[self.def_signature(cur) for _k, _n, cur, _t in reshaped],
+            lost_children=lost,
             kept_as=kept,
         )
 
@@ -1006,6 +1018,25 @@ class Run:
                 if f.exists() and pattern.search(f.read_text()):
                     return True
         return False
+
+    def children_used_later(self, c: str, name: str, children: set[str]) -> set[str]:
+        """定義 name の子の名 (children) のうち、c より後の cut (著者の版か今の版) が `実体.子` / `実体[k].子` で参照する物。実体 =
+        その cut の block の `name#実体(` の行。著者がまだ書き終えていなければ後の cut が分からない — 全部を参照すると見る (`used_later`)。"""
+        if not children:
+            return set()
+        if not (self.st / "src.done").exists():
+            return set(children)
+        instance = re.compile(rf"(?<![\w#.$-]){re.escape(name)}#([A-Za-z_][\w-]*)")
+        used: set[str] = set()
+        for x in self.order[self.order.index(c) + 1 :]:
+            for f in (self.solo / f"cut_{x}.txt", self.solo / f"author_cut_{x}.txt"):
+                if not f.exists():
+                    continue
+                text = f.read_text()
+                for inst in set(instance.findall(text)):
+                    refs = re.findall(rf"(?<![\w-]){re.escape(inst)}(?:\[[^\]]*\])?\.([A-Za-z_][\w-]*)", text)
+                    used |= children & set(refs)
+        return used
 
     # ---- warm ----
     # svg に焼く箱の行で、焼く絵を変えない宣言 (位置・動き・重なり) — これだけの直しは warm を掛け直さない
@@ -1646,7 +1677,7 @@ def main(argv: list[str]) -> int:
     if token is None and remote is not None:
         token = claude_mcp_token(remote)
     template = argv[argv.index("--template") + 1] if "--template" in argv else None
-    run = Run(project, staff=staff, staff_first="--staff-first" in argv, remote=remote, token=token, template=template)
+    run = Run(project, staff=staff, remote=remote, token=token, template=template)
     launch = project / "stream/author.jsonl"
     if launch.exists():
         for l in launch.read_text().splitlines():

@@ -63,7 +63,7 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "empty_board",
         "warn",
         "fix",
-        "板の `[>#板]` を消す (印の無い板は最初の中身の語で出る) か、中身を板と一緒に出す",
+        "板が 1 秒以上空 (小札だけも空) → 板の出現の印 `[>#板]` を中身の最初の句へ寄せる (板と中身を同じ語で出す) か、板の頭に中身の 1 つ目を置く",
     ),
     _rule("no_closer", "warn", "fix", "最後の cut に大きな締めの一言が無い"),
     _rule(
@@ -91,12 +91,6 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "record",
         "全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側)"
         " か、幕を 0.6 までにして文字の下にだけ帯 / 板",
-    ),
-    _rule(
-        "text_over_subject",
-        "warn",
-        "record",
-        "文字を主体の外 (room= の側) へ動かす。subject= は絵の中身で決まっているので書き換えない (書き換えると測った箱とずれて文字が主体に沈む)",
     ),
     _rule("mouth_provisional", "info", "record", "warm の後の check で実測の点に替わる"),
     _rule("aspect_mismatch", "info", "record", "切り抜き・人物は fit=contain。全面に敷く絵は枠の比率の絵にする"),
@@ -191,7 +185,7 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
 )
 
 # 製品の規則のうち studio の直し役に回す物 (直しの列)。2 回直しても残れば severe のまま受け入れて描く (判断 16)
-PRODUCT_RULES_FIXED: frozenset[str] = frozenset({"overflow", "occluded", "shrunk"})
+PRODUCT_RULES_FIXED: frozenset[str] = frozenset({"overflow", "occluded", "shrunk", "text_over_subject"})
 
 # SKILL.md の「規則の名と直し方」に載せる規則 (この順)
 SKILL_RULES: tuple[str, ...] = (

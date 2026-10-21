@@ -7,7 +7,7 @@
 ## 1. 原稿を書く (§A と §B 共通・この順で・寄り道しない)
 
 1. **依頼から決める**: 伝えること 1 文・縦横 (`16:9` / `9:16`)・長さの目安 (既定 60 秒)・型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)。聞き返さず既定で進め、決めた値は最後にユーザーへ伝える。
-2. **見本 2 本を読む** (NoLang の studio と同じ選び方): `node scripts/pick_samples.mjs --type <型> --aspect <縦横> --request "<依頼文>"` が `reference/samples/` から 2 本を選ぶ: NoLang の src (`<型>_NN.md`・字幕と cut の組み方の手本) 1 本と、hf の写し (`hf_<型>_*.md`・絵と動きの作り込みの手本) 1 本 (同じ題材の見本を外し、同じ向きを先に)。出た 2 本を全文読む (1 行目の題・`見せる作り:` の要約・design.txt と timeline.txt の全量)。シェルが無い時は同じ規則で自分で選ぶ。骨組み `reference/scaffolds/` は文法の形を確かめる時だけ見る。
+2. **見本 2 本を読む** (NoLang の studio と同じ選び方): `node scripts/pick_samples.mjs --type <型> --aspect <縦横> --request "<依頼文>"` が `reference/samples/` から 2 本を選ぶ: NoLang の src (`<型>_NN.md`・字幕と cut の組み方の手本) 1 本と、hf の写し (`hf_<型>_*.md`・絵と動きの作り込みの手本) 1 本 (同じ題材の見本を外し、同じ向きを先に。同じ向きの NoLang の src が無い型は hf の写しを 2 本)。出た 2 本を全文読む (1 行目の題・`見せる作り:` の要約・design.txt と timeline.txt の全量)。シェルが無い時は同じ規則で自分で選ぶ。骨組み `reference/scaffolds/` は文法の形を確かめる時だけ見る。
 3. **決まった素材を使う時だけ**: `SKILL.md` の §M で `ref` を得て、応答の `usage` の位置に書く。
 4. **書く** (design system が先・書いた cut から流す):
    - **書く前に構成を決める**: cut の名と中身 (1 cut 1 行) を先に決める。cut は書いた端から投入し、投入した cut は直せないので、書きながら前の cut に戻らない。

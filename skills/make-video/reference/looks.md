@@ -20,7 +20,7 @@
 
 組を決めたら、根に `palette` `font` `fonts` `motion` `transition` を書き、以後の cut はその差分だけ。 数字 / 強調の書体 (`fonts`) も組ごとに違える — 骨組みの値を写さない。欧文 (数字・英字) の記述なら欧文専用の書体も候補になる (和文の字は代わりの書体が描く)。切替は 1 本 1 種が基本 (章の境目だけ別の 1 種)。dissolve は 300 ms 以下 + `overlap=` 同じ尺が無難 — 窓が境界の前に掛かると退場中の文字が次の絵に重なり、400 ms を超える溶けは前の絵が残像に見える。`motion` は雛形の 5 行 (題 title・主役の語 big・箱 div・本文 row・注記 note — 締まる / 行き過ぎない) の値を気分に合わせて書き換える (弾む動きは見本 story_03 の根)。組は例で、題材に合わせて自分で作ってよい (名 → 色 2〜3 → 書体 2 → 動き → 切替 → しない事 2 つ)。前後の値は両方とも読める濃さで (前を灰で沈めるなら字は太く大きく)。
 
-## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の著者には hf の写し 2 本を同梱する。story → story_*・concept → concept_*・data / compare → data_* と compare_*。題材が同じ見本は読まない)
+## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の著者には NoLang の src 1 本 + hf の写し 1 本を同梱する (自分の type の src に依頼と同じ向きの物が無ければ hf の写し 2 本)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
 
 - `samples/story_03.md` — story・夏フェスのオタク語り (縦・構文風の一人語り)・720x1280・44.5s・139 行・文法: count・×N・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/story_06.md` — story・ニホンカワウソ (縦・台本そのまま・絵本調)・720x1280・57.8s・145 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
@@ -29,6 +29,7 @@
 - `samples/concept_16.md` — concept・麻辣湯の解説 (縦・章立て 13 cut・写真 + 板)・720x1280・125.0s・231 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/concept_17.md` — concept・和風きのこパスタ (縦・手順 + コツ)・720x1280・72.3s・153 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/compare_05.md` — compare・通常 CAD とリバース (横・比較 + 流れ図)・1280x720・170.2s・256 行・文法: 流れ図の札 (def node ×N + 位置の式の矢印)・比べる 2 列 (div の段 ×N)・count・×N・stack・manner・se・sticky・def・run・bgm 切替
+- `samples/cinematic_05.md` — cinematic・奥多摩の渓流の朝 (横・実写調・台詞 5 文の観光 PR)・1280x720・33.0s・99 行・文法: 常設の質感 (根の veil の周辺減光と grain)・絵の置き場 (subject / room)・同じ cut で絵を重ねて替える・count・recolor・filter・hide_subtitle・read・場の音・bgm
 - `samples/data_18.md` — data・家計の固定費 (横・前後の数字 + 棒グラフ)・1280x720・74.3s・180 行・文法: 横棒の段の def (hbar・幅は %)・count・×N・focus・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/hf_compare_04.md` — compare・care-transfer・1280x720・230 行・hf (全力版) の全量の写しを見本の形に: 常設の章札と進行 3 本・色の板で払う章の区切り・話者札つきの字幕・svg 部品の図
 - `samples/hf_concept_01.md` — concept・b2b-support・1280x720・392 行・hf (全力版) の全量の写しを見本の形に: 写真が主役の場面ごとの絵替え・左下のテロップ札と STEP 章札・def の部品で組むタブレットの画面 (カーソル・強調枠・吹き出し・page 送り)・cue で段を送る進行の板・1 字ずつ上がるロゴ

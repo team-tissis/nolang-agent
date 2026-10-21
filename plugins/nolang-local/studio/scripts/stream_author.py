@@ -100,7 +100,8 @@ def pick_samples(typ: str, aspect: str, request: str) -> tuple[tuple[str, ...], 
     """reference/samples/ から 2 本 = NoLang の src (`<type>_NN.md`) 1 本 + hf max の写し (`hf_<type>_*.md`) 1 本 → ((NoLang, hf), 外した見本)。
     両側とも規則は同じ 3 つ: SAMPLE_MAX_BYTES 以下の自分の type の見本から (後ろに NEAR_TYPE の見本を足す)・依頼と同じ題材の物を外す・
     依頼と同じ向き (canvas の縦横) の物を先に。その中の順番は file 名順 (大きさ順だと見本を 1 行直すたびに選ばれる物が替わる)。
-    片側に 1 本も無ければもう片側の 2 本目を取る。NoLang の src は製品の文法で勝った書き方 (字幕・cut の組み方)、hf の写しは
+    片側に 1 本も無ければもう片側の 2 本目を取る。自分の type の NoLang の見本に依頼と同じ向きの物が無ければ NoLang 側を使わず、hf の
+    写し 2 本 (同じ向きを先に) にする。NoLang の src は製品の文法で勝った書き方 (字幕・cut の組み方)、hf の写しは
     絵と動きの作り込みの見本 — 10-16 の bs7 はこの混合で回していた。
     著者は見本を逐語で写す (s1 で 50〜68%・pv で台詞と印ごと) ので、同じ題材の見本は既定でも渡さない。"""
     portrait = aspect == "9:16"
@@ -120,6 +121,10 @@ def pick_samples(typ: str, aspect: str, request: str) -> tuple[tuple[str, ...], 
         return out
 
     nolang, hf = ranked(r"{t}_\d+\.md"), ranked(r"hf_{t}_.+\.md")
+    if not any(n.startswith(f"{typ}_") and sample_portrait(n) == portrait for n in nolang):
+        # 自分の type の NoLang の見本に依頼と同じ向きの物が無い — 向き違いの src は字幕・cut の組み方ごと写される (16:9 の concept に
+        # 縦の見本が付き、縦の配置で書いた) ので NoLang 側を諦め、hf の写し 2 本を同じ向き優先で取る
+        nolang, hf = [], sorted(hf, key=lambda n: sample_portrait(n) != portrait)
     picked = nolang[:1] + hf[:1]
     picked += (nolang[1:] + hf[1:])[: 2 - len(picked)]
     if len(picked) < 2:

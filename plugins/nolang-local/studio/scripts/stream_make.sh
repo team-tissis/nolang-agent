@@ -2,7 +2,7 @@
 # 依頼文 1 つから stream (製品と同じ段取り: 著者 low 1 call → cut ごとの担当 medium → check / 直し → 素材 → 確定 → 投入 → 製品の DraftStreamRun が描く) で動画を作る。
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
-#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60] [--effort low] [--staff medium|low] [--no-staff] [--staff-first]
+#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60] [--effort low] [--staff medium|low] [--no-staff]
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の <type>_NN 1 本 + hf_<type>_* 1 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
@@ -24,7 +24,6 @@ while [ $# -gt 0 ]; do
     --effort) EFFORT=$2; shift 2;;
     --staff) STAFF=$2; shift 2;;
     --no-staff) STAFF=""; shift;;
-    --staff-first) STAFF_FIRST=1; shift;;
     --request) REQ_FILE=$2; shift 2;;
     --request-text) REQ_TEXT=$2; shift 2;;
     --samples) SAMPLES=$2; shift 2;;
@@ -49,7 +48,7 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$S/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_FIRST:+ --staff-first}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}${TEMPLATE:+ --template $TEMPLATE}"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}${TEMPLATE:+ --template $TEMPLATE}"
 echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
