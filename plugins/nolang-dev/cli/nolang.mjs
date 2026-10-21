@@ -15,7 +15,7 @@ import { parseArgs } from "node:util";
 
 import { ASSET_KINDS, mimeOf, uploadKind } from "./lib/assets.mjs";
 import { codeFromCallback } from "./lib/callback.mjs";
-import { pickApi } from "./lib/config.mjs";
+import { TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
 import { aspectOf, pendingCuts, splitCuts } from "./lib/src.mjs";
 
@@ -54,7 +54,7 @@ async function loadStore() {
   try {
     return JSON.parse(await readFile(CRED_FILE, "utf8"));
   } catch {
-    return { default_api: null, profiles: {} };
+    return { selected_api: null, profiles: {} };
   }
 }
 
@@ -66,8 +66,12 @@ async function writePrivate(path, obj) {
 
 const saveStore = (store) => writePrivate(CRED_FILE, store);
 
+async function chosenApi(flags) {
+  return chooseApi({ flag: flags.api, env: process.env.NOLANG_API_URL, selected: (await loadStore()).selected_api, packaged: PACKAGED_API });
+}
+
 async function resolveApi(flags) {
-  return pickApi({ flag: flags.api, env: process.env.NOLANG_API_URL, packaged: PACKAGED_API, stored: (await loadStore()).default_api });
+  return (await chosenApi(flags)).api;
 }
 
 // ---- HTTP ----
@@ -212,7 +216,6 @@ async function saveTokens(api, base, tokens) {
     scope: tokens.scope || base.scope,
     updated_at: new Date().toISOString(),
   };
-  store.default_api = api;
   await saveStore(store);
   return store.profiles[api];
 }
@@ -495,9 +498,29 @@ async function cmdAuthLogout(flags) {
   const store = await loadStore();
   const had = Boolean(store.profiles[api]);
   delete store.profiles[api];
-  if (store.default_api === api) store.default_api = Object.keys(store.profiles)[0] || null;
   await saveStore(store);
   out({ ok: true, api, removed: had });
+}
+
+// 接続先を選ぶ (名前か URL・`default` で選びを外してプラグインの接続先に戻す)。引数なしは今の接続先を見せる。ログインは接続先ごと
+async function cmdUse(positionals, flags) {
+  const [target] = positionals;
+  const store = await loadStore();
+  if (target) {
+    store.selected_api = target === "default" ? null : apiUrl(target);
+    await saveStore(store);
+  }
+  const { api, source } = await chosenApi(flags);
+  const loggedIn = Boolean(process.env.NOLANG_TOKEN || store.profiles[api]);
+  out({
+    ok: true,
+    api,
+    target: targetName(api),
+    source,
+    logged_in: loggedIn,
+    ...(loggedIn ? {} : { next: "この接続先は未ログイン — nolang auth login --background (エージェント) / nolang auth login (人)" }),
+    targets: TARGETS,
+  });
 }
 
 async function cmdDoctor(flags) {
@@ -755,7 +778,8 @@ async function cmdStart(positionals, flags) {
   };
   const api = await resolveApi(flags);
   const started = await callApi(api, "POST", "/v1/unstable/drafts/", params);
-  const state = { video_id: started.video_id, watch_url: started.watch_url, title: params.title, started_at: Date.now(), last_submit_at: Date.now(), submitted: [] };
+  // 接続先も残す — 途中で nolang use を切り替えても、この動画の続きは開始したサーバーへ投入する
+  const state = { api, video_id: started.video_id, watch_url: started.watch_url, title: params.title, started_at: Date.now(), last_submit_at: Date.now(), submitted: [] };
   await writeFile(join(root, STREAM_FILE), JSON.stringify(state, null, 2) + "\n");
   log(`開始: ${started.video_id} — ${IDLE_LIMIT_S} 秒以内に最初の cut を nolang submit ${root}`);
   out({ ok: true, video_id: started.video_id, watch_url: started.watch_url, next: `${IDLE_LIMIT_S} 秒以内に nolang submit で最初の cut (根 + cut 1) を投入する` });
@@ -769,7 +793,7 @@ async function cmdSubmit(positionals, flags) {
   if (!pending.length && !flags.end) throw new CliError("まだ投入していない cut が無い (design.txt と timeline.txt に次の cut を書き足す)", { exit: EXIT.USAGE });
   const idle = Math.round((Date.now() - state.last_submit_at) / 1000);
   if (idle > IDLE_LIMIT_S) log(`注意: 前の投入から ${idle} 秒 — ${IDLE_LIMIT_S} 秒を超えるとサーバーが生成を失敗にしている事がある`);
-  const api = await resolveApi(flags);
+  const api = flags.api ? apiUrl(flags.api) : state.api || (await resolveApi(flags));
   const wasFirst = state.submitted.length === 0;
   const sent = [];
   const save = () => writeFile(join(root, STREAM_FILE), JSON.stringify(state, null, 2) + "\n");
@@ -932,6 +956,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang auth complete '<URL>'          --no-browser の続き: 許可後のアドレスバーの URL を渡す
   nolang auth status | logout
   nolang auth env                       他のスクリプトへ接続先とトークンを渡す (eval "$(nolang auth env)" で使う・画面に出さない)
+  nolang use [local|dev|stg|prod|<URL>|default]
+                                        接続先を選ぶ (default = プラグインの接続先に戻す・引数なしは今の接続先)。ログインは接続先ごと
   nolang doctor                         接続先とログインを確かめる
   nolang check [dir]                    dir の design.txt / timeline.txt を検査 (DEFECT があれば終了コード 1)
   nolang create [dir] --title "…"       check → 開始 → cut を順に投入 → 再生できるまで待つ → watch_url
@@ -950,7 +976,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang assets upload <file>… [--name 表示名]
                                         手元の画像 / 動画 (mp4・webm・mov) を自分の素材に送る → ref (id=<uuid>)
 
-共通: --api <URL> (無ければ NOLANG_API_URL → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → 前回ログインした接続先 → http://localhost:18000)
+共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → http://localhost:18000)
+接続先の名前: ${Object.entries(TARGETS).map(([name, url]) => `${name} = ${url}`).join("・")}
 環境変数: NOLANG_TOKEN (API key か access token。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
 出力: 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 欠陥・失敗 / 2 使い方 / 3 未ログイン / 4 接続`;
 
@@ -1004,6 +1031,8 @@ async function main() {
       if (sub === "env") return cmdAuthEnv(flags);
       throw new CliError(`auth の後は login | wait | complete | status | logout | env\n\n${HELP}`, { exit: EXIT.USAGE });
     }
+    case "use":
+      return cmdUse(rest, flags);
     case "doctor":
       return cmdDoctor(flags);
     case "check":

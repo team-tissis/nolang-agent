@@ -18,6 +18,7 @@ Node.js 20 以上が要ります。依存パッケージはありません。
 ```
 nolang auth login                     ブラウザで NoLang にログイン (1 回だけ)
 nolang doctor                         接続先とログインを確かめる
+nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
 nolang make <dir> --type concept --request-text "…"   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
 nolang check <dir>                    dir の design.txt / timeline.txt を検査
 nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)
@@ -30,7 +31,9 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 
 ## 接続先
 
-`--api` → 環境変数 `NOLANG_API_URL` → 前回ログインした接続先 → `http://localhost:18000` の順で決まります。
+`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → `http://localhost:18000` の順で決まります。
+どれも名前か URL で書けます: `local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`。
+`nolang use stg` で切り替え、`nolang use` で今の接続先、`nolang use default` で選びを外します。ログインは接続先ごとに保存され、切り替えても前のログインは残ります。
 CI など対話できない環境では `NOLANG_TOKEN` に API key を入れます。
 
 ログイン情報は `~/.config/nolang/credentials.json` (権限 0600) に保存され、期限が切れても自動で更新されます。

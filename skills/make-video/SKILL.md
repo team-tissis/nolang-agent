@@ -23,6 +23,7 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 - `python3` か `claude` が無い・`nolang make` が使えないと言う時は、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
+- **接続先を変える** (「stg で作って」「本番につないで」「localhost で」と頼まれた時だけ): `nolang use <local|dev|stg|prod>` (URL も可・`nolang use` で今の接続先・`default` で戻す)。ログインは接続先ごとなので、切り替えた先が未ログインなら上と同じくログインする。MCP の接続先はプラグインごとに固定で、切り替えられるのは CLI だけ。
 
 ## S. studio で作る (標準)
 

@@ -136,6 +136,7 @@ Host ubik-nolang
 ```
 nolang auth login [--background | --no-browser] | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
+nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
 nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff]
                                       NoLang の studio と同じ段取りで作る (著者と担当は claude -p)。再生できたら URL を返す (スキルの標準)
 nolang check [dir]                    dir の design.txt / timeline.txt を検査
@@ -150,7 +151,7 @@ nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
-- 接続先: `--api` → `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 前回ログインした接続先 → `http://localhost:18000`。
+- 接続先: `--api` → `NOLANG_API_URL` → `nolang use` で選んだ接続先 → プラグインの接続先 (`cli/defaults.json`) → `http://localhost:18000`。どれも名前 (`local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`) か URL で書ける。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインごとに固定 (切り替えられるのは CLI だけ)。
 - ログイン: 人が打つなら `nolang auth login` (ブラウザで許可するまで待つ)。エージェントは `--background` で URL を受け取ってすぐ戻り、`nolang auth wait` で完了を確かめる。ブラウザが別の機械なら `--no-browser` → `complete`。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
 - CI など非対話: `NOLANG_TOKEN` に API key (`nlg-c-…`) か access token を入れる。
 - ログインは MCP と同じ認可サーバー (OAuth 2.1・PKCE・`127.0.0.1` で受ける)。client はログインごとに自動登録 (DCR)。
