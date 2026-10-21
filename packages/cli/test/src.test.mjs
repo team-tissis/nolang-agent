@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
 import { EXIT } from "../lib/errors.mjs";
-import { aspectOf, splitCuts } from "../lib/src.mjs";
+import { aspectOf, pendingCuts, splitCuts } from "../lib/src.mjs";
 
 const DESIGN = `#v2
 canvas 1280x720 bg=#0B1220
@@ -80,7 +80,7 @@ test("timeline に cut が無ければ使い方の誤り", () => {
 });
 
 test("作例はサーバーが受理した行数と同じに分かれる (7 cut)", () => {
-  const dir = new URL("../../../skills/make-video/examples/explainer_16x9/", import.meta.url);
+  const dir = new URL("./fixtures/explainer_16x9/", import.meta.url);
   const cuts = splitCuts(readFileSync(new URL("design.txt", dir), "utf8"), readFileSync(new URL("timeline.txt", dir), "utf8"));
   assert.deepEqual(
     cuts.map((c) => c.name),
@@ -98,4 +98,14 @@ test("縦横は canvas から", () => {
   assert.equal(aspectOf("#v2\ncanvas 1280x720 bg=#000\n"), "16:9");
   assert.equal(aspectOf("#v2\ncanvas 720x1280 bg=#000\n"), "9:16");
   assert.equal(aspectOf("#v2\n"), "16:9");
+});
+
+test("cut ごとの投入: 投入済みの後ろの cut だけが次に出る・投入済みの cut の手元の変更は知らせる", () => {
+  const cuts = splitCuts(DESIGN, TIMELINE);
+  assert.deepEqual(pendingCuts(cuts, []).pending.map((c) => c.name), ["a", "b"]);
+  const afterA = pendingCuts(cuts, [{ name: "a", text: cuts[0].text }]);
+  assert.deepEqual([afterA.pending.map((c) => c.name), afterA.changed], [["b"], []]);
+  const edited = pendingCuts(cuts, [{ name: "a", text: "前の版" }]);
+  assert.deepEqual(edited.changed, ["a"]);
+  assert.throws(() => pendingCuts(cuts, [{ name: "b", text: "x" }]), (error) => error.exit === EXIT.USAGE);
 });
