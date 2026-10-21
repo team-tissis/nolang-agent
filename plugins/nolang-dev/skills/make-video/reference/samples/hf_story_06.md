@@ -18,7 +18,7 @@ sfx off
 # hf の作り: 場面の間に黒 55% の幕 (理由 → 1979) と暖色の幕 (記憶 → あの日の川) を挟む
 # hf の作り: 格子は同じ写真を別の切り出しで 2 度使う・塵は字幕帯の上も漂う・題の場面は 1.9 秒で学名と罫が出てすぐ去る・格子と字幕は切替の溶けの中で出始める
 lint off=dip_black_frame,duplicate_media,caption_collision,entrance_in_transition,entrance_in_fadeout,flash_text
-run g = color=$hl font=mb
+run g { color: $hl; font-family: mb }
 p { color: $ink; out: none }
 div { border: none; box-shadow: none; padding: 0px; out: none }
 img { out: none }
@@ -134,7 +134,7 @@ veil#flash(color: $white; opacity: 0.85; z-index: curtain; in: none)
 section#grid
 div#g_bg(inset: 0; background: $dark; in: none)
 group#grid(main: keys(at=0 scale=1 | at=1 scale=1.05 ease=none),window=0,4470,forwards)
-  img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 188px; height: 188px; border-radius: 9px; box-shadow: 0px 7px 17px #00000080; main: none; fit: "cover,focus=50%,40%,zoom=140%;cover,focus=52%,45%,zoom=170%;cover,focus=60%,52%,zoom=150%;cover,focus=42%,30%,zoom=150%;cover,focus=8%,74%,zoom=300%;cover,focus=52%,58%,zoom=220%;cover,focus=47%,50%,zoom=300%;cover,focus=50%,46%,zoom=230%;cover,focus=72%,58%,zoom=230%;cover,focus=52%,58%,zoom=210%;cover,focus=50%,30%,zoom=260%;cover,focus=34%,28%,zoom=230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
+  img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 188px; height: 188px; border-radius: 9px; box-shadow: 0px 7px 17px #00000080; main: none; object-fit: "cover,focus=50%,40%,zoom=140%;cover,focus=52%,45%,zoom=170%;cover,focus=60%,52%,zoom=150%;cover,focus=42%,30%,zoom=150%;cover,focus=8%,74%,zoom=300%;cover,focus=52%,58%,zoom=220%;cover,focus=47%,50%,zoom=300%;cover,focus=50%,46%,zoom=230%;cover,focus=72%,58%,zoom=230%;cover,focus=52%,58%,zoom=210%;cover,focus=50%,30%,zoom=260%;cover,focus=34%,28%,zoom=230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
 img#memory(inset: 0; content: @memory; main: kb {scale: [1, 1.13], focus: ['52% 59%', '52% 59%'], ease:'sine.inOut'}; in: {opacity:0, duration:0.5})
 # 塵 16 粒 (粒ごとの位置・大きさ・濃さ・同じ向きにゆっくり上へ漂う)
 shape#dust.ellipse(left: "389;613;481;405;144;447;350;500;441;245;303;434;532;357;295;100"; top: "924;651;463;763;638;886;991;777;376;743;634;493;391;709;851;381"; width: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; height: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; background: $mote; box-shadow: 0px 0px 3px 1px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 20, y: -93}) ×16

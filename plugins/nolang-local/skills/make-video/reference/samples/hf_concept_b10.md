@@ -37,8 +37,8 @@ sound correct = "鉄琴の明るい正解音、ピンポロンと上がる"
 sound xylo = "木琴がコロコロと駆け上がる上昇音"
 sound click = "マウスのカチッという短いクリック音"
 # 字幕の語の印: 前向きの語はバターの帯・打ち消す語はラベンダーの帯 (hf は語の下 38% の帯が語で伸びる — 字幕の run は字の高さいっぱいの地になる)
-run hl = marker=$butter,37% radius=9 padding=4
-run ng = marker=#DDD5FB,37% radius=9 padding=4
+run hl { marker: $butter,37%; border-radius: 9px; padding: 4px }
+run ng { marker: #DDD5FB,37%; border-radius: 9px; padding: 4px }
 p { color: $ink; out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 div { border: none; box-shadow: none; padding: 0px; out: {y:-47, scale:.9, rotation:1.5, opacity:0, duration:.22, ease:'power2.in'} }
 shape { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
@@ -107,7 +107,7 @@ gem#t_gems(left: "73;613;100;600"; top: "467;507;887;860"; width: 22px; height: 
 section#start
 p#header.sticky(cx: 360px; top: 72px; font-size: 21px; font-family: r; line-height: 1; background: #FFFFFF; border-radius: 99px; padding: 8px 20px 9px 40px; box-shadow: 0px 4px 0px #4A3B3314; in: {y:-20, opacity:0, duration:.5, ease:'back.out(2)'}; out: none) 1分でわかる {c}エフェクチュエーション{/}
   div#dot(left: 20px; cy: 50%; width: 12px; height: 12px; border-radius: 99px; background: $coralsoft)
-run c = color=$coral
+run c { color: $coral }
 card#c1a(src: "[ref:@hero]The young woman stands in front of a slightly open pastel-colored door with warm light and sparkles spilling out of the gap, leaning forward with excited shining eyes and clasped hands, eager to start something new. Small stars and confetti float around."; transform: rotate(-1.5deg); in: {y:73, scale:.82, rotation:-6.5, opacity:0, duration:.6, ease:'back.out(1.5)'}; out: {x:-700, rotation:-10.5, opacity:0, duration:.45, ease:'power3.in'})
 card#c1b(src: "@stuck"; transform: rotate(1.5deg); in: {x:667, rotation:8.5, opacity:0, duration:.55, ease:'back.out(1.3)'})
   img#img(main: kb {scale: [1, 1.06]})
@@ -119,7 +119,7 @@ card#c2(src: "@hero"; in: {y:73, scale:.6, rotation:6.8, opacity:0, duration:.6,
 div#term(left: 40px; top: 673px; width: 640px; height: 130px; border-radius: 29px; background: #FFFFFF; border: 5px solid $butter; box-shadow: 0px 8px 0px #4A3B331A; overlap: c2; in: {y:20, scale:.3, opacity:0, duration:.55, ease:'back.out(2)'}; out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'})
   p#main(cx: 50%; top: 13px; font-size: 51px; font-family: m; line-height: 1.1; color: $coral; white-space: nowrap) エフェクチュエーション
   p#sub(cx: 50%; top: 77px; font-size: 21px; font-family: r; line-height: 1; letter-spacing: .04em; white-space: nowrap) {e}EFFECTUATION{/}｜熟達した起業家の思考法
-run e = color=$lavd
+run e { color: $lavd }
 group#b2(in: {opacity:0, duration:.05, stagger:.03}; out: none)
   burst#p1(left: 105px; top: 703px; c: $butter; in: {x:-25, y:-10, scale:0, rotation:-90, opacity:0, duration:.35, ease:'back.out(2)'}; out: {x:30, y:13, scale:.17, rotation:90, opacity:0, duration:.5, ease:'power1.in'})
   burst#p2(left: 611px; top: 714px; c: $mint; in: {x:2, y:-27, scale:0, rotation:-90, opacity:0, duration:.35, ease:'back.out(2)'}; out: {x:-3, y:33, scale:.17, rotation:90, opacity:0, duration:.5, ease:'power1.in'})
@@ -149,7 +149,7 @@ p#l3b(left: 367px; top: 657px; width: 333px; font-size: 36px; font-family: m; li
 section#means
 # 資源の札 (白い角丸の札 + 2×2 の絵の象限 + 色つきの名)・語ごとに弾み、語で一斉に縮んで消える
 def tile(t, c, f) = div(width: 273px; height: 273px; border-radius: 35px; background: #FFFFFF; box-shadow: 0px 16px 31px #785A3C24; in: {scale:.3, rotation:-10, opacity:0, duration:.5, ease:'back.out(2.2)'}; out: {y:-27, scale:.6, opacity:0, duration:.22, ease:'power2.in'})
-  img#i(cx: 50%; top: 15px; width: 193px; height: 193px; border-radius: 20px; content: @icons; fit: cover,focus={f},zoom=200%; main: none)
+  img#i(cx: 50%; top: 15px; width: 193px; height: 193px; border-radius: 20px; content: @icons; object-fit: cover,focus={f},zoom=200%; main: none)
   p#t(cx: 50%; top: 212px; font-size: 36px; font-family: m; line-height: 1; color: {c}; content: {t})
 tile#tl(left: "73;373;73;373"; top: "200;200;500;500"; height: 273px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0%,0%;100%,0%;0%,100%;100%,100%") ×4
 card#c4(src: "[ref:@hero]The young woman takes a small first step onto the first of a row of round pastel stepping stones that lead into the distance, with a tiny sprout growing beside her foot and small flowers along the path; she looks determined and happy."; in: {y:73, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'})

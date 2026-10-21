@@ -21,8 +21,8 @@ master lufs=-15
 # hf の作り: 章札・板の題・図の札は台詞より先に置く (spoiler)・「この順番、逆かもしれません。」と最後の問いは字幕を出さず大きな明朝の文字だけで見せる (caption_gap)
 # hf の作り: 結論の場面は絵を置かず条件の板 1 枚 (text_only_cut)・出典と肩書の注記は 1080 換算 24 px の小さな字 (small_text)
 lint off=spoiler,caption_gap,text_only_cut,small_text
-run m = marker=$sand,36%
-run q = color=$accent
+run m { marker: $sand,36% }
+run q { color: $accent }
 p { color: $ink }
 div { border: none; box-shadow: none; padding: 0px }
 # 場面の要素は一斉に左へ抜ける (hf の leave: x -26 px・0.4 s)・頭の組み上がりは一斉
@@ -47,7 +47,7 @@ div#frame(left: 24px; top: 24px; width: 672px; height: 1232px; background: none;
 # 上端の章札 (煉瓦色の字 + 両脇の短い線)・場面の頭に右から
 def label(t) = p(cx: 360px; top: 131px; font-size: 20px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100; in: {x:20, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
 # 中央の線画 (透過・枠の中に収める)・右から入ってゆっくり寄る
-def illus = img(fit: contain; in: {x:24, opacity:0, duration:.8, ease:'power2.out'}; delay: 50)
+def illus = img(object-fit: contain; in: {x:24, opacity:0, duration:.8, ease:'power2.out'}; delay: 50)
 # 文字の段: 前置き (標準の明朝・灰)・主文 (太い明朝)・注記 (小さな角ゴシック・灰)
 def lead(t) = p(cx: 360px; font-family: sr; color: $sub; letter-spacing: .03em; in: {y:11, opacity:0, duration:.55, ease:'power2.out'}; content: {t})
 def tel(t) = p(cx: 360px; font-family: s; line-height: 1.3; letter-spacing: .03em; in: {y:13, opacity:0, duration:.65, ease:'power2.out'}; content: {t})
@@ -69,13 +69,13 @@ def card = div(left: 107px; width: 567px; height: 200px; background: $card; bord
 section#order
 label#lab1 順番
 card#card_a(top: 313px)
-  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; fit: contain) [transparent]少し傾けた虫眼鏡が小さなきらめきをのぞいている
+  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; object-fit: contain) [transparent]少し傾けた虫眼鏡が小さなきらめきをのぞいている
   p#s(cx: 355px; top: 43px; font-family: s; font-size: 33px; color: $sub) やりたいことが
   p#t(cx: 355px; top: 84px; font-family: s; font-size: 57px) 見つかる
 badge#b1(left: 41px; top: 392px; n: "1"; delay: 330)
 shape#arr1(left: 374px; top: 523px; width: 32px; height: 75px; path: arrow_d,head=line; background: $accent; border: 3px solid $accent; in: draw {duration: 0.45})
 card#card_b(top: 607px)
-  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; fit: contain) [transparent]テーブルに扇形に広げた 3 枚のカードから片手が 1 枚を選び取っている
+  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; object-fit: contain) [transparent]テーブルに扇形に広げた 3 枚のカードから片手が 1 枚を選び取っている
   p#t(cx: 355px; cy: 50%; font-family: s; font-size: 69px) 選ぶ
 #card_b.hot(border: 2px solid $accent)
 badge#b2(left: 41px; top: 685px; n: "2")
@@ -122,7 +122,7 @@ box#r2b(left: 447px; top: 767px) 行動
 section#study
 label#lab4 ある研究
 # 明滅して点く絵 (0 → 0.28 で止まり → 1)
-img#im5(left: 47px; top: 235px; width: 627px; height: 393px; fit: contain; aspect: 16:10; main: kb {scale: [1, 1.06]}; in: keys(at=0 opacity=0 | at=0.6 opacity=0.28 | at=0.71 opacity=0.28 | at=1),duration=420) [transparent]左の懐中電灯がとても細い光の筋で小さな本を 1 冊だけ照らしている、周りにギター・鉢植え・カメラ・絵筆・地球儀・サッカーボールが光の外に塗りなしの細い線だけで置かれている
+img#im5(left: 47px; top: 235px; width: 627px; height: 393px; object-fit: contain; aspect: 16:10; main: kb {scale: [1, 1.06]}; in: keys(at=0 opacity=0 | at=0.6 opacity=0.28 | at=0.71 opacity=0.28 | at=1),duration=420) [transparent]左の懐中電灯がとても細い光の筋で小さな本を 1 冊だけ照らしている、周りにギター・鉢植え・カメラ・絵筆・地球儀・サッカーボールが光の外に塗りなしの細い線だけで置かれている
 p#cite6(right: 80px; top: 669px; font-size: 16px; color: $sub; italic: true; letter-spacing: .02em; in: {y:5, opacity:0, duration:.6, ease:'power2.out'}) O’Keefe, Dweck & Walton (2018)
 tel#t6a(top: 701px; font-size: 47px; in: {y:12, opacity:0, duration:.7, ease:'power2.out'}) {q}「{/}興味は見つけるもの{q}」{/}
 lead#t6b(top: 772px; font-size: 29px) と考える人ほど

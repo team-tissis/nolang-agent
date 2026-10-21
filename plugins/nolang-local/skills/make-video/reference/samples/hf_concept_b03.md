@@ -43,7 +43,7 @@ sound drum = "ドラムロールの後にシンバルが鳴る結果発表の音
 sound sparkle = "キラリンと光る高い音"
 sound fanfare = "短く華やかなファンファーレ"
 sound cheer = "イェーイという歓声と拍手"
-run y = color=$yellow
+run y { color: $yellow }
 cut { stagger: 0 }
 p { color: #FFFFFF; white-space: nowrap; palt: off; out: none }
 div { padding: 0px; border: none; box-shadow: none; out: none }
@@ -86,7 +86,7 @@ def plate = p(width: 184px; font-size: 56px; text-align: center; color: $navy; b
 # 下準備の行: 黄の光 (語で点ける) + アイテムの絵 + 小見出し + 本文 + チェックの枠と描かれる ✓
 def prep_row(s, b, pic) = div(width: 457px; height: 93px; background: none; in: {x:40, opacity:0, duration:0.3, ease:'power2.out'})
   div#hl(left: 7px; top: 4px; width: 443px; height: 85px; border-radius: 13px; background: $hl; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.2})
-  img#icon(left: 17px; cy: 50%; width: 75px; height: 75px; fit: contain; main: none; content: {pic})
+  img#icon(left: 17px; cy: 50%; width: 75px; height: 75px; object-fit: contain; main: none; content: {pic})
   p#s(left: 105px; top: 13px; font-size: 19px; color: $pink_deep; content: {s})
   p#b(left: 105px; top: 35px; font-size: 33px; line-height: 1.15; color: $navy; content: {b})
   div#box(right: 17px; cy: 50%; width: 49px; height: 49px; border-radius: 12px; background: #FFFFFF; border: 4px solid $navy)

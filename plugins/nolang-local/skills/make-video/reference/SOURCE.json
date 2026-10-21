@@ -1,9 +1,9 @@
 {
   "from": "nolang-backend/.agents/skills/nolang-draft-studio",
   "ref": "claude-draft-src",
-  "commit": "e0b08011a531aa3806653da9537c361785505197",
-  "dirty": null,
-  "synced_at": "2026-10-20T12:43:38.004Z",
+  "commit": "0060823fdc245146be00c007da1eac4e374e44dc",
+  "dirty": true,
+  "synced_at": "2026-10-21T10:25:39.430Z",
   "files": [
     "authoring.md",
     "capabilities.md",
@@ -11,6 +11,8 @@
     "sounds.md",
     "scaffolds/",
     "samples/",
-    "rules.md (SKILL.md から生成)"
-  ]
+    "rules.md (SKILL.md から生成)",
+    "../../../studio/ (skill 一式)"
+  ],
+  "note": "dev の作業ツリーの未コミットの変更を含む: stream_run.py / stream_make.sh (最初の cut は担当を飛ばす・--staff-first)"
 }

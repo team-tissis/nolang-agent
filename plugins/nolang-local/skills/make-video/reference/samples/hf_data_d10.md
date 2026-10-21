@@ -31,24 +31,24 @@ lint off=flash_text,entrance_in_fadeout
 lint off=still_stretch,photo_hidden,same_picture
 # hf の作り: 台詞の「7月から9月」「3か月」は hf の台詞のまま (読みは後段の読み検査に任せる)
 lint off=month_reading
-run t = color=$teal2
-run a = color=$amber
-run c = color=$coral
-run b = color=$fg
-run mu = color=$muted font=r size=12
-run sp = color=#7E8796
-run sc = color=$muted font=r
-run big = color=$amber font=n size=79
-run nf = color=$fg font=n size=35
-run ar = color=$teal2 size=23
-run n21 = color=$fg font=n size=21
-run n19 = color=$teal2 font=n size=19
-run n16 = color=$fg2 font=n size=16
-run an = color=$fg font=n size=21
-run ab = color=$amber
-run arr = color=$fg2 size=43
-run u21 = color=$fg font=g size=21
-run cb = color=$coral
+run t { color: $teal2 }
+run a { color: $amber }
+run c { color: $coral }
+run b { color: $fg }
+run mu { color: $muted; font-family: r; font-size: 12px }
+run sp { color: #7E8796 }
+run sc { color: $muted; font-family: r }
+run big { color: $amber; font-family: n; font-size: 79px }
+run nf { color: $fg; font-family: n; font-size: 35px }
+run ar { color: $teal2; font-size: 23px }
+run n21 { color: $fg; font-family: n; font-size: 21px }
+run n19 { color: $teal2; font-family: n; font-size: 19px }
+run n16 { color: $fg2; font-family: n; font-size: 16px }
+run an { color: $fg; font-family: n; font-size: 21px }
+run ab { color: $amber }
+run arr { color: $fg2; font-size: 43px }
+run u21 { color: $fg; font-family: g; font-size: 21px }
+run cb { color: $coral }
 sound telop = "電子的なテロップの出現音、短いデジタルのきらめき"
 sound pop = "柔らかく短いポップ音"
 sound blip = "柔らかい短い電子のブリップ音"
@@ -63,7 +63,7 @@ sound shimmer = "低めのきらめくシマー音、余韻が残る"
 svg mark = """<svg viewBox="0 0 30 30"><rect x="1" y="1" width="28" height="28" rx="7" fill="#152030" stroke="#7adfd3" stroke-width="1.5"/><path d="M8 11h14M8 15.5h10M8 20h7" stroke="#7adfd3" stroke-width="2" stroke-linecap="round"/></svg>"""
 svg arrow = """<svg viewBox="0 0 64 24"><path d="M2 12h54" stroke="#3d5373" stroke-width="3" stroke-linecap="round"/><path d="M48 4l10 8-10 8" fill="none" stroke="#7adfd3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>"""
 # 上端の帯の点: 今の場面を青緑で 1.3 倍に、前の場面を暗い青緑に戻す
-cue step(x, p) = [!x to,scale=1.3,duration=50][!x recolor,#2EC4B6,duration=50][!p to,scale=1,duration=50][!p recolor,#3F6B78,duration=50]
+cue step(x, p) = [!#x to,scale=1.3,duration=50][!#x recolor,#2EC4B6,duration=50][!#p to,scale=1,duration=50][!#p recolor,#3F6B78,duration=50]
 p { color: $fg; line-height: 1.2; out: none }
 div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none; out: none }
 img { out: none }
@@ -206,7 +206,7 @@ board#c_bd(left: 467px; top: 195px; width: 749px; height: 451px; t: "月別の�
 section#d(stagger: {each:0})
 head#d_h(n: "03"; k: "カテゴリ別の件数"; t: "件数が多いのは {t}ログイン・アカウント{/} と {t}操作方法{/}")
 board#d_bd(left: 64px; top: 195px; width: 1152px; height: 451px; t: "カテゴリ別の件数と構成比"; u: "N = 4,128 件"; delay: 120)
-  div#seg(left: "21;265;498;687;853;975;1075"; top: 64px; width: "242;231;187;164;120;98;56"; height: 39px; radius: "5,0,0,5;0;0;0;0;0;0,5,5,0"; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: 450; in: {scaleX:0, opacity:0, duration:0.45, ease:'power2.out', pivot:'left', stagger:{each:0.07}}) ×7
+  div#seg(left: "21;265;498;687;853;975;1075"; top: 64px; width: "242;231;187;164;120;98;56"; height: 39px; border-radius: "5,0,0,5;0;0;0;0;0;0,5,5,0"; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: 450; in: {scaleX:0, opacity:0, duration:0.45, ease:'power2.out', pivot:'left', stagger:{each:0.07}}) ×7
     p#t(cx: 50%; cy: 50%; font-size: 19px; font-family: n; color: "#0A0F17;#0A0F17;#0A0F17;#0A0F17;#0A0F17;#0A0F17;$fg") 22%;21%;17%;15%;11%;9%;5%
   div#r(left: 12px; top: "124;160;196;232;268;304;340"; width: 1127px; height: 36px; in: none) ×7
     # 行の枠 (語で点く 2 行だけ・他の行の枠は透明)

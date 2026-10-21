@@ -30,16 +30,16 @@ lint off=same_picture
 lint off=empty_board
 # hf の作り: 締めの注記は暗転の 2 秒前に出る
 lint off=flash_text
-run a = color=$amber
-run b = color=$cap font=n
-run nn = font=n
-run an = color=$amber font=n
-run lb = color=$ink3
-run u = color=$ink3 size=0.45em
-run un = color=$ink3 size=0.41em
-run cr = color=$coral
-run ar = color=$coral size=0.76em
-run dai = size=0.37em
+run a { color: $amber }
+run b { color: $cap; font-family: n }
+run nn { font-family: n }
+run an { color: $amber; font-family: n }
+run lb { color: $ink3 }
+run u { color: $ink3; font-size: 0.45em }
+run un { color: $ink3; font-size: 0.41em }
+run cr { color: $coral }
+run ar { color: $coral; font-size: 0.76em }
+run dai { font-size: 0.37em }
 sound air = "空気が長く流れる柔らかい風切りの音、2 秒ほどで消える"
 sound swoosh = "中低域の丸みのある短い電子のスウィッシュ、場面の切り替わり"
 sound sub = "低域が響く 1 秒ほどの重いシネマティックなサブベースの一打"

@@ -1,0 +1,11 @@
+{
+  "description": "nolang の出力の tell_user (動画・ログインの URL) を、モデルを通さずに通知として画面に出す",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/tell-user.mjs\"", "timeout": 10 }]
+      }
+    ]
+  }
+}

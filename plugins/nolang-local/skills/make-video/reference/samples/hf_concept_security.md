@@ -21,12 +21,12 @@ sfx off
 # check の見えない所: 帯の STEP 札の白字は青い札の上 (low_contrast は地の色で測る)
 # hf の作り: まとめの札は沈めた被害の 3 枚の上に重ね、漏れた札は一覧の板の下へ流れ込む (covered_text)
 lint off=spoiler,text_only_cut,small_text,child_overflow,empty_board,se_dense,flash_text,low_contrast,covered_text
-run em = color=$blue
-run u = color=$red_t marker=#E9A23B66,30%
-run sm = size=19 color=$sub
-run a = size=17 color=$sub
-run b = color=$green_t
-run s = size=21 color=$sub
+run em { color: $blue }
+run u { color: $red_t; marker: #E9A23B66,30% }
+run sm { font-size: 19px; color: $sub }
+run a { font-size: 17px; color: $sub }
+run b { color: $green_t }
+run s { font-size: 21px; color: $sub }
 p { color: $ink }
 div { border: none; box-shadow: none; padding: 0px }
 img { main: none }
@@ -53,8 +53,8 @@ bgm#music(fade: 800,2400) 落ち着いて明るく安心感のある企業研修
 subtitle.hug(bottom: 25px; font-size: 25px; line-height: 1.5; letter-spacing: .03em; text-align: center; color: $ink; background: #FFFFFFF2; border-radius: 12px; padding: 8px 27px 9px 27px; border: 1px solid #1E2B3C12; box-shadow: 0px 5px 17px #1E2B3C1F; unit: sentence; lead: 50; tail: 200; hold: off; in: {y:5, opacity:0, duration:0.18, ease:'power2.out'}; out: {opacity:0, duration:0.1})
 
 # 帯の STEP 札の状態: 今の段 (青の地・白字・白い番号) → 済み (淡い青の地・青字・番号の上に ✓)
-cue step_on(x) = [!x .on][!x.t recolor,#FFFFFF][!x.n fill,#FFFFFF][!x.n.v recolor,$blue]
-cue step_done(x) = [!x .done][!x.t recolor,$blue][>x.ck]
+cue step_on(x) = [!#x .on][!#x.t recolor,#FFFFFF][!#x.n fill,#FFFFFF][!#x.n.v recolor,$blue]
+cue step_done(x) = [!#x .done][!#x.t recolor,$blue][>#x.ck]
 
 # 白い札 (角丸 16・薄い縁・柔らかい影)
 def card = div(background: #FFFFFF; border-radius: 16px; border: 1px solid #1E2B3C0F; box-shadow: 0px 9px 23px #1E2B3C17; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
@@ -113,7 +113,7 @@ div#bg_dots(inset: 0; background: none; pattern: dots,24,#1E2B3C11; z-index: bac
 # hook — 問い: 机の新入社員 → いつものパスワードを打って伏せ字に → 3 つのサービスの札 → 線で結んで鍵 → 「危険」で線と鍵が赤く・札に「使い回し」
 section#hook(out: {scale:0.97, opacity:0, duration:0.4, ease:'power2.in'})
 # 絵の枠は hf より大きく取る (生成の絵は余白が広い — 見える人物の大きさを hf に合わせた)
-img#hk_emp(left: 25px; top: 51px; width: 441px; height: 598px; content: @employee; fit: contain; delay: 150; in: {x:-27, opacity:0, duration:0.9, ease:'power3.out'})
+img#hk_emp(left: 25px; top: 51px; width: 441px; height: 598px; content: @employee; object-fit: contain; delay: 150; in: {x:-27, opacity:0, duration:0.9, ease:'power3.out'})
 shape#hk_l1(path: "M840 249 C840 307 623 313 623 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
 shape#hk_l2(path: "M840 249 L840 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
 shape#hk_l3(path: "M840 249 C840 307 1057 313 1057 368"; background: none; border: 3px solid $amber; in: draw {duration: 0.6})
@@ -209,7 +209,7 @@ card#at_list(left: 64px; top: 220px; width: 267px; height: 220px; in: {x:-27, op
   div#r(left: 12px; top: "52;89;125;162"; width: 243px; height: 31px; border-radius: 8px; background: "$amber_l;$field;$field;$field"; border: "$amber,1;#F7F9FC00,1;#F7F9FC00,1;#F7F9FC00,1") ×4
     p#e(left: 9px; cy: 50%; font-size: 12px; font-family: m) taro.s@example.com;hanako.k@example.com;yamada88@example.com;s.suzuki@example.com
     p#pw(right: 9px; cy: 50%; font-size: 12px; font-family: m; color: $red_t) taro0401;hana1234;yamada88;suzu0715
-img#at_att(left: 414px; top: 200px; width: 150px; height: 220px; content: @attacker; fit: contain; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
+img#at_att(left: 414px; top: 200px; width: 150px; height: 220px; content: @attacker; object-fit: contain; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
   p#l(cx: 50%; cy: 242px; font-size: 20px) 攻撃者
   p#s(cx: 50%; cy: 274px; font-size: 13px; color: $red_t; background: $red_l; border-radius: 99px; padding: 4px 9px; white-space: nowrap) 自動で次々にログインを試す
 shape#at_a0(path: "M337 330 L383 330 M367 315 L384 330 L367 345"; background: none; border: 3px solid $red; in: draw {duration: 0.4})
@@ -316,7 +316,7 @@ card#ms_strip(left: 64px; top: 467px; width: 1152px; height: 100px)
 
 # outro — 締め: 立った社員 + 「今日から、この3つ」の薄い 3 行を語ごとに濃くして ✓ を緑に → 青い帯の結び → 地の色へ溶ける
 section#outro
-img#ot_emp(left: 220px; top: 113px; width: 159px; height: 467px; fit: contain; in: {x:-27, opacity:0, duration:0.8, ease:'power3.out'}) [transparent][ref:@employee]同じ若い社員 (同じ顔・髪・紺のスーツ・白いシャツ) が背筋を伸ばして立ち、自信のある笑顔で片手にスマートフォンを持つ、安心したくつろいだ姿勢、全身、机なし
+img#ot_emp(left: 220px; top: 113px; width: 159px; height: 467px; object-fit: contain; in: {x:-27, opacity:0, duration:0.8, ease:'power3.out'}) [transparent][ref:@employee]同じ若い社員 (同じ顔・髪・紺のスーツ・白いシャツ) が背筋を伸ばして立ち、自信のある笑顔で片手にスマートフォンを持つ、安心したくつろいだ姿勢、全身、机なし
 card#ot_card(left: 493px; top: 143px; width: 693px; height: 293px; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
   p#h(left: 32px; top: 23px; font-size: 20px; color: $sub) 今日から、この3つ
   div#i(left: 32px; top: "68;141;214"; width: 629px; height: 56px; background: none; opacity: 0.18) ×3

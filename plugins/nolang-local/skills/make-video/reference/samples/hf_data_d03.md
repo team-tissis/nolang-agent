@@ -41,34 +41,34 @@ sound graph = "グラフが伸びていく上昇のシンセの効果音"
 sound shwip = "短く鋭いシュッと線を引く電子の効果音"
 sound bell = "明るいベルのような電子チャイムの単音"
 # 文字の一部: 数字は欧文の極太 (nn)・大きな数字の横の単位は小さく (u43〜u63 = 数字の比)・凡例の色の札 (■ ● ━ を色で)
-run nn = font=n
-run nk = font=n color=$ink
-run n24 = font=n size=1.44em
-run n17 = font=n size=1.24em
-run uj = size=0.5em font=b
-run u43 = size=0.43em
-run u46 = size=0.46em
-run u48 = size=0.48em
-run u54 = size=0.54em
-run u50 = size=0.5em
-run u53 = size=0.53em
-run u55 = size=0.55em
-run u63 = size=0.63em
-run fs = size=0.55em font=m color=$ink2
-run s12 = size=0.7em font=m color=$ink3
-run bai = size=0.61em font=h
-run ar = color=$brand
-run cf = color=$full
-run ch = color=$hyb
-run cr = color=$rem
-run cb = color=$brand
-run cm = color=$mid
-run cn = color=$neutral
-run cg = color=$age_hi
-run ce = color=$env
-run ci = color=$ink
-run cd = color=$down
-run cl = color=$flat
+run nn { font-family: n }
+run nk { font-family: n; color: $ink }
+run n24 { font-family: n; font-size: 1.44em }
+run n17 { font-family: n; font-size: 1.24em }
+run uj { font-size: 0.5em; font-family: b }
+run u43 { font-size: 0.43em }
+run u46 { font-size: 0.46em }
+run u48 { font-size: 0.48em }
+run u54 { font-size: 0.54em }
+run u50 { font-size: 0.5em }
+run u53 { font-size: 0.53em }
+run u55 { font-size: 0.55em }
+run u63 { font-size: 0.63em }
+run fs { font-size: 0.55em; font-family: m; color: $ink2 }
+run s12 { font-size: 0.7em; font-family: m; color: $ink3 }
+run bai { font-size: 0.61em; font-family: h }
+run ar { color: $brand }
+run cf { color: $full }
+run ch { color: $hyb }
+run cr { color: $rem }
+run cb { color: $brand }
+run cm { color: $mid }
+run cn { color: $neutral }
+run cg { color: $age_hi }
+run ce { color: $env }
+run ci { color: $ink }
+run cd { color: $down }
+run cl { color: $flat }
 # 施策の札の中身を語でまとめて出す
 cue card(x) = [>#x.bg][>#x.pic][>#x.no][>#x.tag][>#x.t][>#x.d]
 svg logo = """<svg viewBox="0 0 46 46"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f80ed"/><stop offset="1" stop-color="#12b5a6"/></linearGradient></defs><rect width="46" height="46" rx="13" fill="url(#g)"/><path d="M14.5 31h17.5a6 6 0 0 0 .6-12 8.2 8.2 0 0 0-15.6 2.4A4.9 4.9 0 0 0 14.5 31z" fill="#fff"/></svg>"""
@@ -102,7 +102,7 @@ def chap(n, t, w) = div(right: 53px; top: 21px; width: {w}; height: 33px; border
 def pcard(no, t, d, b) = div(top: 101px; width: 347px; height: 393px)
   shape#fr(left: 0px; top: 0px; width: 347px; height: 393px; path: rect,r=0.05; background: none; border: 1px solid #CFD8E6; dash: 5,4; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'})
   div#bg(left: 0px; top: 0px; width: 347px; height: 393px; border-radius: 16px; background: $tint; in: {opacity:0, duration:0.35, ease:'power1.out'})
-  img#pic(left: 93px; top: 9px; width: 160px; height: 143px; fit: contain; delay: 50; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'})
+  img#pic(left: 93px; top: 9px; width: 160px; height: 143px; object-fit: contain; delay: 50; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'})
   p#no(left: 23px; cy: 171px; font-size: 23px; font-family: n; color: $brand; delay: 150; in: {y:9, opacity:0, duration:0.55, ease:'power3.out'}; content: {no})
   p#tag(left: .no.right+7; cy: 173px; font-size: 12px; color: $ink3; letter-spacing: 0.1em; delay: 150; in: {y:9, opacity:0, duration:0.55, ease:'power3.out'}) 施策
   p#t(left: 23px; top: 187px; width: 310px; font-size: 21px; font-family: h; line-height: 1.3; delay: 230; in: {y:9, opacity:0, duration:0.55, ease:'power3.out'}; content: {t})
@@ -136,7 +136,7 @@ shape#blob3.ellipse(left: 507px; top: -200px; width: 507px; height: 507px; backg
 
 # s01 題: 右に角丸の題の絵が寄りながら右から入り、左に小札 → mask から上がる 2 行 (800 が数え上がり、「800人の本音」に黄の下帯) → 罫と社名 → 語で補足と 3 つの数字の札・架空の注記
 section#s01(stagger: {each:0})
-img#s01_kv(left: 567px; top: 64px; width: 660px; height: 513px; border-radius: 24px; box-shadow: 0px 20px 53px #16233F29; fit: cover,focus=80%,50%; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 50; in: {x:47, opacity:0, duration:1, ease:'power3.out'}; out: {x:27, opacity:0, duration:0.42, ease:'power2.in'}) 働き方調査の報告の横長のキービジュアル。左に明るいガラス張りのモダンなオフィスビルの断面があり、中の階で同僚 3 人がテーブルを囲んで談笑している。右には窓辺の在宅ワークの机 (ノートPC と観葉植物、オレンジのブランケットを掛けた白い椅子) を大きく描き、二つの場面を点線の道と小さな吹き出しや円グラフ・棒グラフの丸いアイコンがつなぐ。明るい水色の空と白い雲、遠くに淡いビル群と緑の木々。オフィスと在宅の机を画面いっぱいに大きく描いて余白を作らず、下端まで木々と床を描き切る (左下に数字の札が重なる)
+img#s01_kv(left: 567px; top: 64px; width: 660px; height: 513px; border-radius: 24px; box-shadow: 0px 20px 53px #16233F29; object-fit: cover,focus=80%,50%; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 50; in: {x:47, opacity:0, duration:1, ease:'power3.out'}; out: {x:27, opacity:0, duration:0.42, ease:'power2.in'}) 働き方調査の報告の横長のキービジュアル。左に明るいガラス張りのモダンなオフィスビルの断面があり、中の階で同僚 3 人がテーブルを囲んで談笑している。右には窓辺の在宅ワークの机 (ノートPC と観葉植物、オレンジのブランケットを掛けた白い椅子) を大きく描き、二つの場面を点線の道と小さな吹き出しや円グラフ・棒グラフの丸いアイコンがつなぐ。明るい水色の空と白い雲、遠くに淡いビル群と緑の木々。オフィスと在宅の机を画面いっぱいに大きく描いて余白を作らず、下端まで木々と床を描き切る (左下に数字の札が重なる)
 div#s01_kicker(left: 73px; top: 175px; width: 350px; height: 35px; border-radius: 99px; background: #FFFFFF; box-shadow: 0px 3px 11px #16233F14; delay: 250; in: {y:16, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-17, opacity:0, duration:0.42, ease:'power2.in'})
   div#dot(left: 15px; cy: 50%; width: 7px; height: 7px; border-radius: 99px; background: linear(#2F80ED,#12B5A6,135))
   p#t(left: 29px; cy: 50%; font-size: 15px; color: $brand) 経営会議 報告 ｜ 人事部 働き方調査 2026
@@ -182,7 +182,7 @@ board#b2(no: "01"; t: "調査の概要"; m: "株式会社ソラリンク ｜ 人
     div#ln(left: 0px; top: 87px; width: 373px; height: 1px; background: $line)
     p#l(left: 0px; cy: 25px; font-size: 13px; color: $ink3; letter-spacing: 0.12em) 実施;時期;対象;回答
     p#v(left: 0px; cy: 57px; font-size: 29px; font-family: h; line-height: 1.2) 人事部{fs}　全社員を対象に{/};{nn}2026{/}年{nn}9{/}月;社員 {nn}1,050{/}人{fs}　IT企業{/};{nn}800{/}人{fs}　回答率 76%{/}
-  img#pic(left: 870px; top: 101px; width: 220px; height: 220px; fit: contain; delay: 450; in: {scale:0.86, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]大きなクリップボードにチェックボックスと空欄の線が並ぶアンケート用紙、ペン、簡単な質問票を表示したスマートフォン、小さな円グラフと棒グラフのアイコンが浮かぶ。ひとまとまりの物を中央に、枠いっぱいに大きく描く
+  img#pic(left: 870px; top: 101px; width: 220px; height: 220px; object-fit: contain; delay: 450; in: {scale:0.86, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]大きなクリップボードにチェックボックスと空欄の線が並ぶアンケート用紙、ペン、簡単な質問票を表示したスマートフォン、小さな円グラフと棒グラフのアイコンが浮かぶ。ひとまとまりの物を中央に、枠いっぱいに大きく描く
   p#ql(left: 824px; cy: 342px; font-size: 13px; color: $ink3; letter-spacing: 0.12em; in: {y:8, opacity:0, duration:0.55, ease:'power3.out'}) 調べたこと（働き方ごとに比較）
   div#chip(left: "824;985;824;985"; top: "357;357;427;427"; width: 152px; height: 61px; border-radius: 12px; background: $tint; in: {scale:0.84, opacity:0, duration:0.5, ease:'back.out(1.7)', stagger:{each:0.12}}) ×4
     icon#i(left: 12px; cy: 50%; font-size: 23px; name: "smiley;trend-up;user;calendar-blank"; color: $brand)
@@ -292,7 +292,7 @@ board#b6(no: "05"; t: "孤独を感じることがある"; m: "回答者 800人"
     p#l(left: 0px; cy: 15px; font-size: 20px; font-family: h) 全体
     p#v(left: 0px; cy: 87px; font-size: 93px; font-family: n; line-height: 1) [count:26 start=0 ms=900]{u43}%{/}
     p#s(left: 0px; cy: 151px; font-size: 17px; color: $ink2) {nk}206{/}人 ／ {nk}800{/}人
-  img#pic(left: 60px; top: 268px; width: 224px; height: 224px; fit: contain; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]20代の若い会社員が自宅の小さな机で一人ノートPC に向かい、画面には誰も映っていないビデオ会議の格子、頬杖をついて少し寂しげな表情。マグカップ、窓、観葉植物。やさしく共感的な柔らかい光、明るいパステル調のまま。ひとまとまりの場面を中央に、枠いっぱいに大きく描く
+  img#pic(left: 60px; top: 268px; width: 224px; height: 224px; object-fit: contain; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]20代の若い会社員が自宅の小さな机で一人ノートPC に向かい、画面には誰も映っていないビデオ会議の格子、頬杖をついて少し寂しげな表情。マグカップ、窓、観葉植物。やさしく共感的な柔らかい光、明るいパステル調のまま。ひとまとまりの場面を中央に、枠いっぱいに大きく描く
   div#vd(left: "328;728"; top: 108px; width: 1px; height: 380px; background: $line) ×2
   # 働き方別 (縦棒の高さ = 値 × 8 px)
   p#ct1(left: 350px; cy: 114px; font-size: 20px; font-family: h; in: {opacity:0, duration:0.4, ease:'power1.out'}) 働き方別
@@ -382,7 +382,7 @@ board#b9(no: "08"; t: "自由記述の頻出語"; m: "記入 412人（回答者�
   # 棒 (幅 = 件数 × 2.51 px)
   div#f(left: 217px; top: "119;183;247;311;375;439"; width: "346.7;241.3;178.7;160.7;146;130.7"; height: 31px; border-radius: 0px 4px 4px 0px; background: $neutral; delay: 400; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left', stagger:{each:0.1}}) ×6
   p#c(left: "573;467.7;405;387;372.3;357"; cy: "134.4;198.4;262.4;326.4;390.4;454.4"; font-size: 25px; font-family: n; line-height: 1; delay: 700; in: {y:5, opacity:0, duration:0.55, ease:'power3.out', stagger:{each:0.1}}) ×6 138{uj}件{/};96{uj}件{/};71{uj}件{/};64{uj}件{/};58{uj}件{/};52{uj}件{/}
-  img#pic(left: 706px; top: 101px; width: 413px; height: 275px; fit: contain; delay: 550; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]1 枚の中で左右に分けた横長の構図。左は混み合う通勤電車でつり革を持つ疲れた会社員たち、右は明るいオフィスのラウンジのコーヒーマシンのそばで気軽に雑談して笑う同僚たち。両側を同じ画風で横に並べ、枠いっぱいに大きく描く
+  img#pic(left: 706px; top: 101px; width: 413px; height: 275px; object-fit: contain; delay: 550; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]1 枚の中で左右に分けた横長の構図。左は混み合う通勤電車でつり革を持つ疲れた会社員たち、右は明るいオフィスのラウンジのコーヒーマシンのそばで気軽に雑談して笑う同僚たち。両側を同じ画風で横に並べ、枠いっぱいに大きく描く
   div#vc(left: 690px; top: "383.7;422.3;461"; width: 445px; height: 32px; border-radius: 8px; background: $tint; in: {y:8, opacity:0, duration:0.55, ease:'power3.out'}) ×3
     div#i(left: 12px; cy: 50%; width: 5px; height: 19px; border-radius: 3px; background: "$rem;$full;$env")
     p#b(left: 25px; cy: 50%; font-size: 14px) リモートを望む声;出社の場を望む声;「会議室」

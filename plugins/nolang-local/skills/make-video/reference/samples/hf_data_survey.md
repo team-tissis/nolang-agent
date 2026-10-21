@@ -18,22 +18,22 @@ sfx off
 # hf の作り: 見出し・副題・板の骨組みは場面の頭に出して台詞が後から読む (spoiler・all_at_once)・行の札は薄く先出しして棒は語で伸ばす (empty_board)
 # hf の作り: 全編 1 枚の点の格子の絵を地にして場面は図で替える (same_picture)・場面の頭の帯は切替の窓の中で伸び始める (entrance_in_transition)・結論の帯は場面の終わり際に出る (flash_text・entrance_in_fadeout)
 lint off=small_text,spoiler,all_at_once,empty_board,same_picture,entrance_in_transition,flash_text,entrance_in_fadeout
-run a = color=$amber
-run ab = color=$amber font=b
-run hi = color=$amber_hi
-run w = color=$fg font=b
-run s = color=$steel
-run pn = size=13 color=$fg3 font=r
-run pc = size=0.54em
-run pcs = size=0.4em color=$steel
-run pca = size=0.4em color=$amber
-run vs = size=20 color=$fg3
-run sec = size=0.38em color=$fg2
-run v19 = size=19 color=$fg font=b
-run v21 = size=21 color=$fg font=b
-run n27 = size=27 color=$fg font=b
-run n27a = size=27 color=$amber font=b
-run sl = color=$slate2
+run a { color: $amber }
+run ab { color: $amber; font-family: b }
+run hi { color: $amber_hi }
+run w { color: $fg; font-family: b }
+run s { color: $steel }
+run pn { font-size: 13px; color: $fg3; font-family: r }
+run pc { font-size: 0.54em }
+run pcs { font-size: 0.4em; color: $steel }
+run pca { font-size: 0.4em; color: $amber }
+run vs { font-size: 20px; color: $fg3 }
+run sec { font-size: 0.38em; color: $fg2 }
+run v19 { font-size: 19px; color: $fg; font-family: b }
+run v21 { font-size: 21px; color: $fg; font-family: b }
+run n27 { font-size: 27px; color: $fg; font-family: b }
+run n27a { font-size: 27px; color: $amber; font-family: b }
+run sl { color: $slate2 }
 sound hit = "抑えた深く柔らかい低音のドーンに空気感のある余韻、題が出る瞬間の控えめな映画風の音"
 sound swipe = "札が滑り込む軽く速いスワイプの音"
 sound whoosh = "短く滑らかな風切りのシュッという場面転換の音"
@@ -45,7 +45,7 @@ sound chime = "穏やかなマリンバの 2 音の明るい通知のチャイ�
 cue bar(r) = [>#r.b][>#r.v]
 cue lit(r) = [!#r.l to,opacity=1,duration=300 -100][>#r.b][>#r.v]
 # 場面の要素は一斉に上へ抜ける (hf の leave: y -18・scale .985・opacity 0・0.32 s)
-motion leave = out=y=-12,scale=0.985,opacity=0,duration=320,ease=power2.in
+motion leave { out: {y:-12, scale:0.985, opacity:0, duration:0.32, ease:'power2.in'} }
 p { color: $fg; out: leave }
 div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; out: leave }
 shape { out: leave }

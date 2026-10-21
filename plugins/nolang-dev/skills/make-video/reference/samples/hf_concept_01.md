@@ -12,14 +12,14 @@ theme light
 palette a=#1F6FE0 b2=#5AA2F5 ink=#0E2A47 ink2=#23384F sky=#EAF2FD line=#D9E4F1 rule=#E3EAF3 gray=#5B6B7E mute=#8796A8 paper=#F5F8FC ok=#3EC27A red=#E5484D bg=#FFFFFF
 font "ZEN角ゴシックNew Medium"
 fonts b="ZEN角ゴシックNew Bold" r="ZEN角ゴシックNew Regular" e="Manrope Bold"
-run a = color=$a
-run bb = color=$a font=b
-run nv = color=$ink
-run gn = color=#3ED37F
-run k = font=e size=13 color=$a
-run k2 = font=e size=10 color=$a
-run l = color=$line
-run ph = color=#8492A2
+run a { color: $a }
+run bb { color: $a; font-family: b }
+run nv { color: $ink }
+run gn { color: #3ED37F }
+run k { font-family: e; font-size: 13px; color: $a }
+run k2 { font-family: e; font-size: 10px; color: $a }
+run l { color: $line }
+run ph { color: #8492A2 }
 prompt_tail "Photorealistic still from a high-end Japanese corporate commercial film, full-frame cinema camera, natural soft daylight, clean white interior with subtle calm blue accents, refined trustworthy warm mood, realistic skin, gentle shallow depth of field, bright airy neutral whites and soft blues. Absolutely no text, letters, numbers, logos or watermark; any screen shows only soft abstract UI shapes or a video call without readable text."
 image cust = "[photo]Medium close-up portrait of a Japanese woman in her early 30s on a light linen sofa in a bright modern apartment living room, holding a white tablet on her lap, soft natural smile, shoulder-length wavy dark brown hair, cream-white knit sweater, small pearl stud earrings" aspect=16:9
 image staff = "[photo]Medium close-up portrait of a Japanese female customer-support staff member in her late 20s at a clean white desk in a bright modern support office, slim single-ear headset with boom microphone, warm professional gentle smile, black hair neatly tied in a low bun, navy blazer over white blouse" aspect=16:9

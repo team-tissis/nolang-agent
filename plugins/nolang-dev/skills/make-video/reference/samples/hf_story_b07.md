@@ -24,10 +24,10 @@ prompt_tail "日本のテレビアニメ調のセル塗りイラスト、太く�
 image tsukio = "日本のテレビアニメ調のキャラクター設定画。25歳の日本人男性会社員。ぼさっとした黒髪の短髪、眠そうなタレ目、目の下にうっすらクマ、細身で猫背気味。グレーのパーカーに黒いスウェットパンツ。正面向きの膝上までの立ち姿、少し疲れたニュートラルな表情。背景は真っ白の無地。"
 # 4 つ目の絵は全面と寄りの丸窓の 2 か所に出すので根に 1 枚
 image walk = "[ref:@tsukio]月曜の朝、どんよりした灰色の曇り空の下の住宅街の歩道。紺色のスーツにリュックを背負った彼が、遠くに見える駅へ向かって前かがみで一歩一歩足を引きずるように歩いている。両足首には鎖でつながった重そうな黒い鉄球（コミカルな比喩表現）、踏みしめたアスファルトにひび、背中から黒いどんよりしたオーラが立ち上る。周囲は彩度の低い灰色で、彼だけ色がはっきりしている。" aspect=9:16
-run y = color=$y
-run five = color=$pink size=115
-run l2 = size=64
-run l2r = size=64 color=$red
+run y { color: $y }
+run five { color: $pink; font-size: 115px }
+run l2 { font-size: 64px }
+run l2r { font-size: 64px; color: $red }
 sound gaan = "ガーンという漫画的なショックの衝撃音"
 sound jan = "ジャン！という短く鋭い驚きのアクセント音"
 sound whoosh = "ヒュッと短く鋭い風切り音"
@@ -146,7 +146,7 @@ div#gv(left: 0px; top: 280px; width: 720px; height: 210px; background: none; in:
   p#x(left: 0px; top: 61px; width: 720px; text-align: center; font-size: 153px; line-height: .95; color: $pink; stroke: $ink,14; text-shadow: 8px 8px 0px $ink; content: "×10")
 # 足元の寄りの丸窓 (同じ絵を 3.2 倍に寄せて鉄球の足元だけ・黄の縁 + 黒の外縁・3° 傾けて弾む)。絵は縁の内側に置く (inset: 0 だと縁を覆う)
 div#ins.bleed(left: 427px; top: 341px; width: 267px; height: 253px; border-radius: 16px; background: #222222; border: 5px solid $y; box-shadow: 0px 0px 0px 4px $ink; transform: rotate(3deg); in: {scale:.3, rotation:-11, opacity:0, duration:.2, ease:'back.out(2.2)'})
-  img#p(left: 5px; top: 5px; width: 257px; height: 243px; border-radius: 11px; content: @walk; fit: cover,focus=65%,76%,zoom=324%; main: none)
+  img#p(left: 5px; top: 5px; width: 257px; height: 243px; border-radius: 11px; content: @walk; object-fit: cover,focus=65%,76%,zoom=324%; main: none)
 ono#zu1(left: 373px; top: 587px; w: 250; t: ズシッ; s: 75; stroke: $ink,11; transform: rotate(-8deg); in: {y:-40, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
 ono#zu2(left: 60px; top: 620px; w: 250; overlap: hl4; t: ズシッ; s: 75; stroke: $ink,11; transform: rotate(7deg); in: {y:-40, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
 

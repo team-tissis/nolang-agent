@@ -20,17 +20,17 @@ sfx off
 lint off=spoiler,duplicate_text,flash_text,se_dense,transition_over_speech,entrance_in_transition,entrance_in_fadeout,caption_collision,stacked_labels,low_contrast,palette_drift
 prompt_tail "文字・ロゴは一切無し。人物なし。"
 # 字幕の語の色 (句の型ごと)・通知の題の黄の下帯・章札の番号
-run y = color=$y
-run r = color=#FF3B6B
-run red = color=$red
-run o = color=#FF8A1F
-run cy = color=$c
-run dmg = color=#FF3B5C
-run cl = color=#7FE3FF
-run hot = color=#FF4FA8
-run gold = color=#FFD84A
-run m = marker=$y,45%
-run no = color=$c font=dot
+run y { color: $y }
+run r { color: #FF3B6B }
+run red { color: $red }
+run o { color: #FF8A1F }
+run cy { color: $c }
+run dmg { color: #FF3B5C }
+run cl { color: #7FE3FF }
+run hot { color: #FF4FA8 }
+run gold { color: #FFD84A }
+run m { marker: $y,45% }
+run no { color: $c; font-family: dot }
 cut { stagger: 0 }
 p { color: #FFFFFF; out: none }
 div { border-radius: 0px; border: none; box-shadow: none; padding: 0px; out: none }
@@ -73,7 +73,7 @@ bgm#music_a(volume: 2dB; lowpass: 650; fade: 400,60) 疾走感のあるアップ
 bgm#music_b(volume: 5dB; fade: 0,50) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 bgm#music_c(volume: 6dB; fade: 0,40) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 # 字幕: 画面中央に 1 句ずつ、極太の丸ゴシック・紺の太い縁・マゼンタの光・ポンと弾んで出て次の句まで残る
-subtitle.hug(left: 0px; top: 640px; width: 720px; height: 167px; padding: 0px; font-size: 100px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: #0B0730,9; text-shadow: 0px 0px 15px #FF28C8E6; background: none; text-align: center; unit: phrase; min_phrase: 0; strip: 、。; lead: 0; tail: 0; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
+subtitle.hug(bottom: 473px; padding: 0px; font-size: 100px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: #0B0730,9; text-shadow: 0px 0px 15px #FF28C8E6; background: none; text-align: center; unit: phrase; min_phrase: 0; strip: 、。; lead: 0; tail: 0; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
 # 句の型 (札の頭の [card:型]): 小さい前置き・決め語 (傾いて弾む)・驚き・判子・色ずれの分身・熱・突進・被弾・復活・沈む・勝利の金・冷たい音源・熱いフェス
 subtitle.small(font-size: 75px; in: {scale:.7, opacity:0, duration:.16, ease:'back.out(1.7)'})
 subtitle.big85(font-size: 85px)
@@ -116,7 +116,7 @@ div#blob1(left: -253px; top: -173px; width: 600px; height: 600px; background: ra
 div#blob2(left: 413px; top: 347px; width: 547px; height: 547px; background: radial(#FF2BD6,#FF2BD600@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -80, y: -53, period: 36}; bleed)
 div#blob3(left: -200px; top: 833px; width: 733px; height: 733px; background: radial(#FF2A3A,#FF2A3A00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: 67, period: 24}; bleed)
 div#blob4(left: 427px; top: -133px; width: 507px; height: 507px; background: radial(#2A4BFF,#2A4BFF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -60, y: 73, period: 36}; bleed)
-div#beam(left: "53;220;427;587"; top: -120px; width: 87px; height: 1533px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: "sine,rotation=21,freq_ms=4800,pivot=bottom;sine,rotation=-17,freq_ms=5800,pivot=bottom;sine,rotation=19,freq_ms=6800,pivot=bottom;sine,rotation=-23,freq_ms=7800,pivot=bottom"; z-index: back; in: none; bleed) ×4
+div#beam(left: "53;220;427;587"; top: -120px; width: 87px; height: 1533px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: sine {rotation: '21;-17;19;-23', period: '4.8;5.8;6.8;7.8', pivot: 'bottom'}; z-index: back; in: none; bleed) ×4
 div#floor_h(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,0,#00F0FFBF,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_v(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,90,#FF46D2A6,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_fade(left: 0px; top: 920px; width: 720px; height: 133px; background: linear(#5A14AAE6,#5A14AA00,180); z-index: back; in: none)

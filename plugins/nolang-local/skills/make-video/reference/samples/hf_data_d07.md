@@ -22,16 +22,16 @@ sfx off
 # hf の作り: 結論の絵は締めの 19 秒そのまま (same_picture)・場面の頭と数字の語ごとに紙・付箋・ペンの音を重ねる (se_dense)
 # hf の作り: 機会の札は 3 枚を先に並べ、題と中身は文の頭で 1 枚ずつ (empty_board)・場面の終わり際に丸・下線・凡例・最後の発言を出す (entrance_in_fadeout・flash_text)
 lint off=small_text,script_font_digits,spoiler,text_only_cut,same_picture,se_dense,empty_board,entrance_in_fadeout,flash_text
-run hl = marker=#FFD633BF,42%
-run dr = color=$dred
-run cu = size=0.57em
-run ku = size=0.56em
-run nu = size=0.43em
-run sm = size=15 color=$ink2
-run x2 = color=$ink2
-run cn = font=m color=$ink
+run hl { marker: #FFD633BF,42% }
+run dr { color: $dred }
+run cu { font-size: 0.57em }
+run ku { font-size: 0.56em }
+run nu { font-size: 0.43em }
+run sm { font-size: 15px; color: $ink2 }
+run x2 { color: $ink2 }
+run cn { font-family: m; color: $ink }
 # 場面の退場 (左へ 93 px 抜けて消える・hf の leave): def の根と群は section の out を継がないので根に付ける
-motion leave = out=x=-93,opacity=0,duration=360,ease=power2.in
+motion leave { out: {x:-93, opacity:0, duration:0.36, ease:'power2.in'} }
 sound page = "紙のページをめくる軽い音"
 sound swish = "短く柔らかい風切りのシュッという音"
 sound tape = "マスキングテープを引き出して貼る音"
@@ -61,7 +61,7 @@ def btitle(n, t, s="") = div(out: leave; left: 60px; top: 68px; width: 1100px; h
   p#t(left: 62px; cy: 50%; font-size: 44px; font-family: m; line-height: 1; white-space: nowrap; delay: 340; in: wipe {dir: 'right', duration: 0.55}; content: "{hl}{t}{/}")
   p#s(left: .t.right+19; top: 26px; font-size: 19px; color: $ink2; white-space: nowrap; delay: 750; in: {y:8, opacity:0, duration:.45, ease:'power3.out'}; content: {s})
 # 赤い手書きの丸 (数字を囲む)
-def loop(d=550) = shape(path: circle_hand; background: none; border: 5px solid $red; in: draw,{d})
+def loop(d=.55) = shape(path: circle_hand; background: none; border: 5px solid $red; in: draw {duration: {d}})
 # 1〜12 人の札 (付箋の小さな四角)
 def sq(c) = div(out: leave; width: 61px; height: 61px; border-radius: 1px 1px 7px 1px; background: {c}; box-shadow: 0px 4px 5px #503C1440)
 # 比べる値 (大きな値 + 下に小さな割合)
@@ -72,7 +72,7 @@ def cval(v, s="") = div(out: leave; width: 150px; height: 60px; in: {scale:.5, o
 def pcard(c, img, nm, n, pct, ds, who, q, qr) = div(out: leave; top: 131px; width: 269px; height: 453px; border-radius: 2px 2px 12px 2px; background: {c}; box-shadow: 0px 9px 12px #503C1440; in: {y:-23, scale:1.14, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
   div#sheen(inset: 0; border-radius: 2px 2px 12px 2px; background: linear(#FFFFFF80,#FFFFFF00@30%,#5A3C0000@60%,#5A3C000F,172))
   div#curl(right: 0px; bottom: 0px; width: 31px; height: 31px; border-radius: 0px 0px 12px 0px; background: linear(#00000000@45%,#0000001A@50%,#FFFFFFA6@57%,#FFFFFF00@78%,315))
-  img#img(left: 13px; top: 9px; width: 243px; height: 145px; fit: contain; main: none; content: {img})
+  img#img(left: 13px; top: 9px; width: 243px; height: 145px; object-fit: contain; main: none; content: {img})
   p#nm(left: 0px; top: 164px; width: 269px; font-size: 33px; font-family: m; line-height: 1; text-align: center; content: {nm})
   div#ct(left: 0px; top: 205px; width: 269px; height: 61px; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(2.2)'})
     p#n(left: 55px; top: 0px; font-size: 61px; font-family: m; line-height: 1; content: {n})
@@ -121,7 +121,7 @@ div#vig(inset: 0; background: radial(#FBF7EE00@55%,#785F3221,50%,45%); z-index: 
 
 # title — 黄の付箋が叩きつけられ、題を 1 行ずつ拭き出す (12 は赤で弾み、赤い丸で囲む)・右に座り込む人の絵・「ポケットノート」で桃の付箋
 section#title(stagger: {each:0}; out: {x:-93, opacity:0, duration:.36, ease:'power2.in'})
-img#cover(left: 767px; top: 112px; width: 467px; height: 311px; fit: contain; main: none; delay: 350; in: {scale:.92, y:13, opacity:0, duration:.9, ease:'power3.out'}) [transparent]床にあぐらをかいて座る若い人が、スマートフォンをゆるく持ち、退屈そうに小さくため息をついて横を向いている。まわりにくしゃくしゃのレシート、数枚の硬貨、閉じた小さなノートが散らばる。人物と小物を枠いっぱいに収め、余白を作らない
+img#cover(left: 767px; top: 112px; width: 467px; height: 311px; object-fit: contain; main: none; delay: 350; in: {scale:.92, y:13, opacity:0, duration:.9, ease:'power3.out'}) [transparent]床にあぐらをかいて座る若い人が、スマートフォンをゆるく持ち、退屈そうに小さくため息をついて横を向いている。まわりにくしゃくしゃのレシート、数枚の硬貨、閉じた小さなノートが散らばる。人物と小物を枠いっぱいに収め、余白を作らない
 note#t_note(left: 87px; top: 127px; width: 673px; height: 433px; c: $yel; transform: rotate(-2deg); delay: 80; in: {y:-47, scale:1.14, rotation:-8, opacity:0, duration:.6, ease:'back.out(1.6)'})
   tape#tp(left: 280px; top: -13px; transform: rotate(2deg))
   p#kick(left: 52px; top: 43px; font-size: 23px; color: $ink2; letter-spacing: .06em; line-height: 1; delay: 320; in: {y:7, opacity:0, duration:.5, ease:'power3.out'}) 定性調査レポート ｜ ユーザーインタビュー
@@ -130,7 +130,7 @@ note#t_note(left: 87px; top: 127px; width: 673px; height: 433px; c: $yel; transf
   p#n12(left: 261px; top: 164px; font-size: 141px; font-family: m; line-height: 1; letter-spacing: -.02em; color: $red; delay: 770; in: {scale:.1, opacity:0, duration:.5, ease:'back.out(2.4)'}) 12
   p#l2b(left: 397px; top: 222px; font-size: 75px; font-family: m; line-height: 1; delay: 920; in: wipe {dir: 'right', duration: 0.25}) 人に
   p#l3(left: 52px; top: 308px; font-size: 75px; font-family: m; line-height: 1; delay: 1070; in: wipe {dir: 'right', duration: 0.3}) 聞いた
-  loop#ring(left: 245px; top: 186px; width: 186px; height: 113px; d: 650; delay: 1040; overlap: t_note.n12)
+  loop#ring(left: 245px; top: 186px; width: 186px; height: 113px; d: .65; delay: 1040; overlap: t_note.n12)
   shape#u3(left: 48px; top: 372px; width: 238px; height: 8px; path: line_h; border: 6px solid $red; in: draw {duration: 0.45})
 note#t_sub(left: 440px; top: 490px; width: 407px; height: 133px; c: $pnk; transform: rotate(3deg); overlap: t_note; in: {y:-20, scale:1.14, rotation:8, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#a(left: 27px; top: 20px; font-size: 20px; color: $ink2) 架空の家計簿アプリ
@@ -153,7 +153,7 @@ note#m_a(left: 67px; top: 193px; width: 320px; height: 313px; c: $blu; transform
   p#d(left: 29px; top: 194px; font-size: 23px; line-height: 1.32) 記録が{dr}30日以上{/}[br]止まった人
 shape#m_arrow(path: "M400 353 Q454 355 488 313"; background: none; border: 4px solid $ink; in: draw {duration: 0.35})
 shape#m_arrow_h(path: "M487 329 L488 313 L472 317"; background: none; border: 4px solid $ink; in: draw {duration: 0.35})
-img#m_img(left: 490px; top: 152px; width: 347px; height: 231px; fit: contain; main: none; in: {scale:.9, opacity:0, duration:.6, ease:'power3.out'}) [transparent]小さな丸テーブルで向かい合う 2 人の和やかな 1 対 1 のインタビュー。1 人はクリップボードとペンでメモを取り、もう 1 人は手を開いて話している。テーブルにコーヒーカップが 2 つ、頭上に白紙の付箋が数枚ふわりと浮かぶ。人物とテーブルを枠いっぱいに収め、余白を作らない
+img#m_img(left: 490px; top: 152px; width: 347px; height: 231px; object-fit: contain; main: none; in: {scale:.9, opacity:0, duration:.6, ease:'power3.out'}) [transparent]小さな丸テーブルで向かい合う 2 人の和やかな 1 対 1 のインタビュー。1 人はクリップボードとペンでメモを取り、もう 1 人は手を開いて話している。テーブルにコーヒーカップが 2 つ、頭上に白紙の付箋が数枚ふわりと浮かぶ。人物とテーブルを枠いっぱいに収め、余白を作らない
 note#m_b(left: 513px; top: 433px; width: 313px; height: 172px; c: $yel; transform: rotate(1.8deg); overlap: m_img)
   p#lbl(left: 27px; top: 20px; font-size: 21px; color: $ink2) インタビュー
   p#n12(left: 27px; top: 53px; font-size: 69px; font-family: m; line-height: 1) 12
@@ -351,7 +351,7 @@ shape#o_x2(path: "M1080 284 L1164 311"; background: none; border: 5px solid $red
 # concl — 3 枚の帯の付箋を文の頭で 1 枚ずつ (題を拭き出し・要の語に赤い下線)・要の語で右端に赤いチェック・右にチームの絵・最後に桃の付箋の署名
 section#concl(stagger: {each:0})
 btitle#bt8(n: "07"; t: "結論"; s: "デザインで直すべきところ")
-img#e_team(left: 960px; top: 200px; width: 280px; height: 187px; fit: contain; main: none; delay: 500; in: {scale:.9, y:11, opacity:0, duration:.8, ease:'power3.out'}) [transparent]壁の前に立つ 3 人の小さなプロダクトデザインチームが、色とりどりの白紙の付箋を貼り、マーカーで付箋の間に矢印を描いている。協力的で楽しげ。人物と付箋を枠いっぱいに収め、余白を作らない
+img#e_team(left: 960px; top: 200px; width: 280px; height: 187px; object-fit: contain; main: none; delay: 500; in: {scale:.9, y:11, opacity:0, duration:.8, ease:'power3.out'}) [transparent]壁の前に立つ 3 人の小さなプロダクトデザインチームが、色とりどりの白紙の付箋を貼り、マーカーで付箋の間に矢印を描いている。協力的で楽しげ。人物と付箋を枠いっぱいに収め、余白を作らない
 ccard#cs1(top: 148px; c: $org; transform: rotate(-.6deg); n: "1"; h: "やめる人の半分以上は、最初の1か月"; s: "2週目から記録が減り始める（1週目 5.8日 → 4週目 1.3日）")
   shape#u(left: 531px; top: 66px; width: 200px; height: 6px; path: line_h; border: 5px solid #D93F45D9; in: draw {duration: 0.5})
 ccard#cs2(top: 308px; c: $yel; transform: rotate(.5deg); n: "2"; h: "離脱の11/12は、2つの瞬間に集まる"; s: "→ 機能より「ためた後の再開」「初めての予算超過」の体験を直す")

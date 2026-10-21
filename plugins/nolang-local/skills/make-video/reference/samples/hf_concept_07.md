@@ -17,13 +17,13 @@ master lufs=-13.7
 # hf の作り: 小札は場面の題を台詞より先に見せる (spoiler)・「つまり」の小札は台詞の接続詞をそのまま札にする (duplicate_text)
 lint off=spoiler,duplicate_text
 prompt_tail "Photorealistic, cinematic color grading with deep blacks and warm highlights. Absolutely no text, no letters, no logos, no brand names, no watermark."
-run y = color=$y
+run y { color: $y }
 p { color: #FFFFFF; out: none }
 div { border: none; box-shadow: none; padding: 0px; out: none }
 group { out: none }
 shape { out: none }
 svg { out: none }
-motion mask_up = in=mask_rise,320,ease=power3.out
+motion mask_up { in: mask_rise {duration:0.32, ease:'power3.out'} }
 sound whoosh = "カメラの動きのような乾いたシュッという風切り音"
 sound impact = "重く響く低音のドンという衝撃音"
 sound question = "コミカルなはてなの電子音、短く跳ねて上がる"
@@ -40,7 +40,7 @@ svg sun = """<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="#0B0
 svg check = """<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0B0B0C"/><path d="m6.8 12.4 3.4 3.4 7-7.4" fill="none" stroke="#FFD21F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>"""
 bgm#music(keys: "0:+4.5|550ms:0|end-1.7s:0|end-1.3s:+4"; fade: 0,850) 明るく爽やかで軽快なアコースティックギターとドラムのポップ、四拍子、豆知識のショート動画向け
 # 字幕: 白文字 + 黒の太い縁 + 落ち影・句末の約物は外す・語の色は台詞の {y}
-subtitle(left: 33px; top: 845px; width: 653px; height: 160px; padding: 0px; font-size: 48px; line-height: 1.3; letter-spacing: 0.01em; color: #FFFFFF; stroke: #000000,6; text-shadow: 0px 4px 7px #00000073; background: none; unit: sentence; strip: 、。; lead: 0; in: {y:12, scale:0.96, opacity:0, duration:0.16, ease:'back.out(2)'})
+subtitle.hug(left: 33px; bottom: 275px; width: 653px; padding: 0px; font-size: 48px; line-height: 1.3; letter-spacing: 0.01em; color: #FFFFFF; stroke: #000000,6; text-shadow: 0px 4px 7px #00000073; background: none; unit: sentence; strip: 、。; lead: 0; in: {y:12, scale:0.96, opacity:0, duration:0.16, ease:'back.out(2)'})
 # 左上の小札 (黄の縦棒 + 黄文字)・場面の頭に印なしで置き、絵と一緒に出る
 def kicker(t) = div(left: 48px; top: 133px; width: 624px; height: 48px; background: none; in: {x:-16, opacity:0, duration:0.25, ease:'power1.out'})
   div#bar(left: 0px; cy: 50%; width: 8px; height: 33px; background: $y; border-radius: 2px)

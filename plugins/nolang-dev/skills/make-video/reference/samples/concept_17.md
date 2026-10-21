@@ -13,17 +13,17 @@ font "太い丸ゴシック体、やさしい印象"
 fonts f="太い筆文字の毛筆体、和風の見出し" e="極太の丸ゴシック体、数字が力強い"
 photo_style "実写の料理写真、自然光、木のテーブル、温かい色調、浅い被写界深度、和の器"
 prompt_tail "文字なし、ロゴなし、手元だけで顔は映さない"
-motion title = in=scale=0.5,opacity=0,duration=450 ease=back(2.0) out=scale=0.9,opacity=0,duration=200
-motion big = in=scale=0.4,opacity=0,duration=420 ease=back(2.6) out=scale=0.8,opacity=0,duration=180
-motion div = in=scale=0.85,y=30,opacity=0,duration=450 ease=back(1.8) out=fade,200
-motion row = in=x=-80,opacity=0,duration=380 ease=back(1.4) out=fade,180
-motion note = in=y=20,opacity=0,duration=350 ease=back(1.4) out=fade,180
+motion title { in: {scale:0.5, opacity:0, duration:0.45, ease:'back.out(2.0)'}; out: {scale:0.9, opacity:0, duration:0.2} }
+motion big { in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.6)'}; out: {scale:0.8, opacity:0, duration:0.18} }
+motion div { in: {scale:0.85, y:30, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
+motion row { in: {x:-80, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+motion note { in: {y:20, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
 div { in: div; border-radius: 24px; border: 3px solid $ink; box-shadow: 6px 6px 0px $ink; background: $paper }
 img { scrim: vignette,0.25 }
 cut { stagger: sentence }
-run r = color=$a
-run g = color=$b
-run m = marker=$c
+run r { color: $a }
+run g { color: $b }
+run m { marker: $c }
 image dish = "[photo]和風きのこパスタ、しめじとえのきとバター醤油のスパゲッティ、上に刻みのりと青ねぎ、和食器の深皿、木のテーブル、真上より少し斜め"
 def num(t) = p(font-size: 72px; font-family: e; color: $a; in: big; content: {t})
 def ttl(t) = p(font-size: 40px; color: $ink; line-height: 1.25; in: row; content: {t})

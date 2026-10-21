@@ -18,8 +18,11 @@ Node.js 20 以上が要ります。依存パッケージはありません。
 ```
 nolang auth login                     ブラウザで NoLang にログイン (1 回だけ)
 nolang doctor                         接続先とログインを確かめる
+nolang make <dir> --type concept --request-text "…"   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
 nolang check <dir>                    dir の design.txt / timeline.txt を検査
-nolang create <dir> --title "…"       検査 → 生成開始 → 視聴 URL (生成中から再生できる)
+nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)
+nolang submit <dir> [--end]           書き足した cut を投入 (最後は --end)
+nolang create <dir> --title "…"       全 cut を一度に: 検査 → 生成開始 → 再生できたら視聴 URL
 nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 ```
 

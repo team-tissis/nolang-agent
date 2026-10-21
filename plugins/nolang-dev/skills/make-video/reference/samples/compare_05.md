@@ -14,15 +14,15 @@ font "太い角ゴシック体、すっきりした現代的な印象"
 fonts e="太い等幅のモノスペース体、数字がそろう" m="細い角ゴシック体、本文向き"
 photo_style "製品の3DCGレンダー、マットな質感、柔らかいスタジオ照明、暗いグラファイトの背景、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、人物なし"
-motion title = in=y=-40,scale=0.94,opacity=0,duration=550 ease=back(1.6) out=y=-16,opacity=0,duration=240
-motion big = in=scale=0.6,opacity=0,duration=450 ease=back(2.2) out=fade,220
-motion div = in=y=24,opacity=0,duration=450 ease=power3.out out=fade,220
-motion row = in=x=-60,opacity=0,duration=400 ease=power2.out out=fade,200
-motion note = in=y=14,opacity=0,duration=350 ease=power2.out out=fade,200
+motion title { in: {y:-40, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-16, opacity:0, duration:0.24} }
+motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; out: fade {duration:0.22} }
+motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
+motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
+motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
 div { in: div; border-radius: 14px; box-shadow: none; border: 1px solid $line; background: $panel }
 cut { stagger: sentence }
-run a = color=$a
-run b = color=$b
+run a { color: $a }
+run b { color: $b }
 def h1(t) = p(font-size: 56px; line-height: 1.15; color: $ink; in: title; content: {t})
 def num(t) = p(font-size: 24px; font-family: e; color: $a; letter-spacing: 0.2em; in: note; content: {t})
 def sub(t) = p(font-size: 30px; font-family: m; color: $mute; in: note; content: {t})

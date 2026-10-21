@@ -44,6 +44,20 @@ export function splitCuts(design, timeline) {
   });
 }
 
+// cut ごとの投入 (start → submit): 投入済みの cut ({name, text}) と今の原稿の cut を突き合わせ、まだ投入していない cut と、
+// 投入した後に手元で変わった cut (サーバーには送り直せない) を返す
+export function pendingCuts(cuts, submitted) {
+  const changed = [];
+  for (const [index, done] of submitted.entries()) {
+    const now = cuts[index];
+    if (!now || now.name !== done.name) {
+      throw new CliError(`投入済みの cut ${done.name} が原稿の ${index + 1} 番目に無い (投入した cut の順と名は変えられない)`, { exit: EXIT.USAGE });
+    }
+    if (now.text !== done.text) changed.push(done.name);
+  }
+  return { pending: cuts.slice(submitted.length), changed };
+}
+
 // design の `canvas WxH` から縦横 (無ければ 16:9)
 export function aspectOf(design) {
   const m = design.match(/^canvas\s+(\d+)x(\d+)/m);

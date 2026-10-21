@@ -22,22 +22,22 @@ lint off=spoiler,small_text
 lint off=text_only_cut,duplicate_text,entrance_in_fadeout,flash_text
 # hf の作り: 板の入れ替えは前の声の最後の 0.3 秒に掛かって始まる (transition_over_speech)
 lint off=transition_over_speech
-run a = color=$amber
-run s = color=$sky
-run c = color=$coral
-run w = color=$ink
-run nb = size=19 color=$ink2 font=n
-run sm = size=15 color=$muted font=r
-run pc = size=40
-run pp = size=23 color=$muted font=n
-run ps = size=16 color=$muted font=r
-run num = size=100 color=$amber font=n
-run na = size=29 color=$amber font=n
-run big = size=43 color=$coral font=n
-run dt = size=11 color=$ink2
-run nw = size=27 color=$ink font=n
-run na2 = size=27 color=$amber font=n
-run h = color=$sky
+run a { color: $amber }
+run s { color: $sky }
+run c { color: $coral }
+run w { color: $ink }
+run nb { font-size: 19px; color: $ink2; font-family: n }
+run sm { font-size: 15px; color: $muted; font-family: r }
+run pc { font-size: 40px }
+run pp { font-size: 23px; color: $muted; font-family: n }
+run ps { font-size: 16px; color: $muted; font-family: r }
+run num { font-size: 100px; color: $amber; font-family: n }
+run na { font-size: 29px; color: $amber; font-family: n }
+run big { font-size: 43px; color: $coral; font-family: n }
+run dt { font-size: 11px; color: $ink2 }
+run nw { font-size: 27px; color: $ink; font-family: n }
+run na2 { font-size: 27px; color: $amber; font-family: n }
+run h { color: $sky }
 p { color: $ink; out: none }
 div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; out: none }
 shape { out: none }
@@ -71,8 +71,8 @@ div#grid.bleed(left: -40px; top: -40px; width: 800px; height: 1360px; pattern: g
 progress#prog(left: 0px; top: 0px; width: 720px; height: 5px; background: $amber; until: end; z-index: front)
 bgm#music(fade: 150,1400) 明るく軽快なピアノのリズム、124 BPM、前向きでポップな情報番組の調査速報向けの曲
 # 字幕: 暗い札の太字・数字は台詞の {a} で琥珀・句末の。は外す・場面 1 は下に寄せた変種
-subtitle.hug(left: 27px; top: 875px; width: 667px; height: 113px; font-size: 32px; line-height: 1.32; letter-spacing: .01em; color: #FFFFFF; background: #040912C7; border-radius: 12px; padding: 9px 20px 11px 20px; text-align: center; unit: sentence; strip: 。; wrap: comma,24; lead: 60; in: {y:12, opacity:0, duration:.16, ease:'power2.out'})
-subtitle.low(top: 1042px)
+subtitle.hug(left: 27px; bottom: 292px; width: 667px; font-size: 32px; line-height: 1.32; letter-spacing: .01em; color: #FFFFFF; background: #040912C7; border-radius: 12px; padding: 9px 20px 11px 20px; text-align: center; unit: sentence; strip: 。; wrap: comma,24; lead: 60; in: {y:12, opacity:0, duration:.16, ease:'power2.out'})
+subtitle.low(bottom: 125px)
 
 # 板の骨組み: 番号の札 + 見出し + 右の母数 + 罫・板は右から入り左へ抜ける (hf の boardIn / boardOut・x 1100 px の 2/3)
 def board(k, t, n) = div(left: 37px; top: 124px; width: 645px; height: 733px; background: $board; border: 1.3px solid $bline; border-radius: 20px; box-shadow: 0px 27px 60px #00000059; in: {x:733, duration:.5, ease:'power3.inOut'}; out: {x:-733, duration:.5, ease:'power3.inOut'})
@@ -159,7 +159,7 @@ chap#c3(no: "03"; delay: 60)
 board#b4(k: "03"; t: "副業の種類"; n: "している {nb}234{/}人・複数回答")
   div#k4(left: 29px; top: "100;193;287;380;473;567"; width: 587px; height: 79px; border-radius: 12px; delay: 310; in: {x:-27, opacity:0, duration:.35, ease:'power3.out', stagger: {each: .09}}) ×6
     div#ic(left: 4px; cy: 50%; width: 59px; height: 59px; border-radius: 15px; background: #FFFFFF0D)
-      img#img(cx: 50%; cy: 50%; width: 47px; height: 47px; fit: contain; main: none) [transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 開いたノートパソコンと大きな万年筆のペン先と文書のページ;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 値札の下がった段ボールの配送箱;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 再生ボタンとタイムラインの帯とペンツールのある動画編集の窓;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 四角い保温の配達バッグを積んだ配達の自転車;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 人物のビデオ通話と吹き出しが映るノートパソコン;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 山括弧とスラッシュの記号が並ぶコードエディタの窓
+      img#img(cx: 50%; cy: 50%; width: 47px; height: 47px; object-fit: contain; main: none) [transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 開いたノートパソコンと大きな万年筆のペン先と文書のページ;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 値札の下がった段ボールの配送箱;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 再生ボタンとタイムラインの帯とペンツールのある動画編集の窓;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 四角い保温の配達バッグを積んだ配達の自転車;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 人物のビデオ通話と吹き出しが映るノートパソコン;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 山括弧とスラッシュの記号が並ぶコードエディタの窓
     p#lb(left: 79px; cy: 50%; font-size: 21px; line-height: 1.25) Webライター・[br]ブログ;せどり・物販;デザイン・[br]動画編集;配達・軽作業;オンライン[br]講師・相談;プログラミング
     div#b(left: 288px; cy: 50%; width: "168;135;116;97;77;64"; height: 31px; border-radius: 0,7,7,0; background: "$amber;$bar;$bar;$bar;$bar;$bar"; delay: 100; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
     p#v(left: .b.right+11; cy: 50%; font-size: 31px; font-family: n; white-space: nowrap; delay: 450; in: {opacity:0, duration:.3}) 26%{sm}61人{/};21%{sm}49人{/};18%{sm}42人{/};15%{sm}35人{/};12%{sm}28人{/};10%{sm}23人{/}
@@ -193,8 +193,8 @@ chap#c5(no: "05"; delay: 60)
 board#b6(k: "05"; t: "副業にかける時間（週）"; n: "している {nb}234{/}人")
   p#kick6(left: 29px; top: 105px; font-size: 43px; line-height: 1.2; delay: 260; in: {y:20, opacity:0, duration:.4, ease:'power3.out'}) 分かれ目は、{a}時間{/}。
   # 帯 (hf の clip-path の 0.8 秒の塗りを、帯ごとの wipe の遅れに割った)
-  div#sg(left: "29;252;445;570"; top: 184px; width: "220;191;122;46"; height: 64px; border-radius: "9,0,0,9;0;0;0,9,9,0"; background: "$seg1;$seg2;$seg3;$amber"; delay: "560;860;1130;1300"; in: "wipe,right,300,ease=none;wipe,right,270,ease=none;wipe,right,170,ease=none;wipe,right,60,ease=none") ×4
-  p#sgt(left: "29;252;445;570"; cy: 216px; width: "220;191;122;46"; font-size: 25px; font-family: n; color: "$ink;$ink;$bg;$bg"; text-align: center; overlap: b6.sg; delay: "560;860;1130;1300"; in: "wipe,right,300,ease=none;wipe,right,270,ease=none;wipe,right,170,ease=none;wipe,right,60,ease=none") ×4 38%;33%;21%;8%
+  div#sg(left: "29;252;445;570"; top: 184px; width: "220;191;122;46"; height: 64px; border-radius: "9,0,0,9;0;0;0,9,9,0"; background: "$seg1;$seg2;$seg3;$amber"; delay: "560;860;1130;1300"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4
+  p#sgt(left: "29;252;445;570"; cy: 216px; width: "220;191;122;46"; font-size: 25px; font-family: n; color: "$ink;$ink;$bg;$bg"; text-align: center; overlap: b6.sg; delay: "560;860;1130;1300"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4 38%;33%;21%;8%
   p#sl(left: "29;252;445;446"; top: 256px; width: "200;180;120;170"; font-size: 15px; color: $ink2; line-height: 1.35; text-align: "left;left;left;right"; delay: 860; in: {y:8, opacity:0, duration:.3, stagger: {each: .12}}) ×4 5時間未満[br]{sm}89人{/};5〜10時間[br]{sm}77人{/};10〜20時間[br]{sm}49人{/};20時間以上[br]{sm}19人{/}
   # 琥珀の枠: 題 → 数える 63 + % + 2 行の文 → メーター (63%) → 人数
   div#call(left: 29px; top: 345px; width: 587px; height: 244px; background: #FFB21A14; border: 1.3px solid #FFB21A99; border-radius: 16px; in: {y:33, opacity:0, duration:.4, ease:'power3.out'})
@@ -210,8 +210,8 @@ board#b6(k: "05"; t: "副業にかける時間（週）"; n: "している {nb}2
 section#impact(stagger: {each:0})
 chap#c6(no: "06"; delay: 60)
 board#b7(k: "06"; t: "本業への影響（自己評価）"; n: "している {nb}234{/}人")
-  div#sb(left: "29;230;495"; top: 101px; width: "198;262;122"; height: 64px; border-radius: "9,0,0,9;0;0,9,9,0"; background: "$teal;$gray6;$coral"; delay: "410;710;1100"; in: "wipe,right,300,ease=none;wipe,right,390,ease=none;wipe,right,180,ease=none") ×3
-  p#sbt(left: "29;230;495"; cy: 133px; width: "198;262;122"; font-size: 25px; font-family: n; color: "$bg;$ink;$bg"; text-align: center; overlap: b7.sb; delay: "410;710;1100"; in: "wipe,right,300,ease=none;wipe,right,390,ease=none;wipe,right,180,ease=none") ×3 34%;45%;21%
+  div#sb(left: "29;230;495"; top: 101px; width: "198;262;122"; height: 64px; border-radius: "9,0,0,9;0;0,9,9,0"; background: "$teal;$gray6;$coral"; delay: "410;710;1100"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3
+  p#sbt(left: "29;230;495"; cy: 133px; width: "198;262;122"; font-size: 25px; font-family: n; color: "$bg;$ink;$bg"; text-align: center; overlap: b7.sb; delay: "410;710;1100"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3 34%;45%;21%
   div#il(left: "29;187;349"; top: 178px; width: 150px; height: 26px; delay: 610; in: {y:7, opacity:0, duration:.3, stagger: {each: .1}}) ×3
     div#sq(left: 0px; cy: 50%; width: 17px; height: 17px; border-radius: 5px; background: "$teal;$gray6;$coral")
     p#t(left: 26px; cy: 50%; font-size: 17px; color: $ink2; white-space: nowrap) 良い影響 {sm}80人{/};影響なし {sm}105人{/};悪い影響 {sm}49人{/}

@@ -30,10 +30,10 @@ sound check = "チェックを付ける軽いポップな確認音"
 sound correct = "明るいチャイムの正解音"
 sound warn = "短く低いブーという不正解のブザー"
 sound kira = "キラリンと輝く高い音"
-run k = color=$kw
-run r = color=$red
-run o = color=$orange
-run p = color=$ok
+run k { color: $kw }
+run r { color: $red }
+run o { color: $orange }
+run p { color: $ok }
 cue turn_chair(a, d, e=power2.inOut) = [!#top_view.chair to,rotation={a},duration={d},ease={e},pivot=97.14%,5.88%][!#top_view.axis to,rotation={a},duration={d},ease={e},pivot=97.14%,5.88%]
 cue tick(x) = [>#x.box_fill][>#x.mark +80]
 cue bumper_in(b) = [>#b.s][>#b.t][>#b.u]
@@ -168,7 +168,7 @@ div#top_view(left: 633px; top: 91px; width: 609px; height: 451px; border-radius:
   svg#axis(left: 151px; top: 236px; width: 233px; height: 113px; part: top_axis; in: fade {duration: 0.35})
   svg#chair(left: 151px; top: 236px; width: 233px; height: 113px; part: top_chair; delay: 300; in: {x:173, opacity:0, duration:0.65, ease:'power3.out'})
   top_part#chair_label(pt: top_chair_label; delay: 750; in: fade {duration: 0.4})
-  top_part#callout(pt: top_callout; in: pop,0.6,500,ease=back(2),pivot=13.4%,68.5%)
+  top_part#callout(pt: top_callout; in: pop {scale: 0.6, duration: 0.5, ease: 'back(2)', pivot: '13.4%,68.5%'})
 bumper_back#bumper3_back.sticky(c: $mint_l)
 bumper#bumper3.sticky(s: "POINT"; t: "まとめ"; u: "移乗介助のポイント")
 

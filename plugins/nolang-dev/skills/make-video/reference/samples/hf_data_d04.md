@@ -21,19 +21,19 @@ sfx off
 lint off=spoiler,all_at_once,small_text,same_picture,palette_drift,se_dense,script_font_digits,flash_text,duplicate_text,child_overflow,stacked_labels,caption_gap,caption_collision
 art "モダンでポップなフラットイラスト、日本の SNS 解説動画向け。きれいなベクターの形、やわらかいグラデーションと控えめな粒子の質感、丸みのある親しみやすい形、くっきりした輪郭。夜の配色: 深い藍色、青紫、ラベンダーに、ピンク・ミント・月の黄色の小さなネオンのアクセント。10 代向けでかわいくおしゃれ、子どもっぽくない"
 prompt_tail "文字・数字・ロゴ・透かしは一切入れない"
-run y = color=$yellow
-run b = font=p size=27 color=$yellow
-run sb = size=17 color=$ink2
-run sn = size=16 color=$ink3 font=m
-run e = size=17 color=$ink3 font=m
-run ks = size=15 color=$ink3 font=m
-run as = size=20 font=r
-run pn = font=p size=31 color=$ink
-run pm = font=p size=31 color=$mint
-run b8 = font=p size=29 color=$yellow
-run s33 = size=33
-run wsm = size=20 color=$ink2
-run u = size=20 font=r
+run y { color: $yellow }
+run b { font-family: p; font-size: 27px; color: $yellow }
+run sb { font-size: 17px; color: $ink2 }
+run sn { font-size: 16px; color: $ink3; font-family: m }
+run e { font-size: 17px; color: $ink3; font-family: m }
+run ks { font-size: 15px; color: $ink3; font-family: m }
+run as { font-size: 20px; font-family: r }
+run pn { font-family: p; font-size: 31px; color: $ink }
+run pm { font-family: p; font-size: 31px; color: $mint }
+run b8 { font-family: p; font-size: 29px; color: $yellow }
+run s33 { font-size: 33px }
+run wsm { font-size: 20px; color: $ink2 }
+run u { font-size: 20px; font-family: r }
 p { color: #FFFFFF; in: none; out: none }
 div { background: none; border: none; box-shadow: none; padding: 0px; border-radius: 0px; in: none; out: none }
 img { out: none }
@@ -216,7 +216,7 @@ board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
   div#step(left: 29px; top: 641px; width: 272px; height: 45px; border-radius: 21px; background: #FFD23F24; border: 2px solid $yellow; in: {scale:0.5, y:7, opacity:0, duration:0.45, ease:'back.out(2.2)'})
     svg#i(left: 16px; cy: 50%; width: 23px; height: 23px; part: trend)
     p#t(left: 46px; cy: 50%; font-size: 20px) 遅いほど 段階的に増加
-  img#sleepy(left: 477px; top: 612px; width: 160px; height: 160px; fit: contain; delay: 600; in: {scale:0.5, y:27, rotation:8, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent][ref:@girl]授業中に机で居眠りする同じ少女 (紺のブレザーにピンクのリボンの制服): 開いたノートと鉛筆の上で組んだ腕に頭をのせ、目を閉じ、鼻から小さな丸い鼻ちょうちん。机ごと全体が入る斜め 3/4 の見下ろし、細い白のふちどりのステッカー、枠いっぱいに大きく
+  img#sleepy(left: 477px; top: 612px; width: 160px; height: 160px; object-fit: contain; delay: 600; in: {scale:0.5, y:27, rotation:8, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent][ref:@girl]授業中に机で居眠りする同じ少女 (紺のブレザーにピンクのリボンの制服): 開いたノートと鉛筆の上で組んだ腕に頭をのせ、目を閉じ、鼻から小さな丸い鼻ちょうちん。机ごと全体が入る斜め 3/4 の見下ろし、細い白のふちどりのステッカー、枠いっぱいに大きく
   note#note(top: 708px; delay: 800; in: {opacity:0, duration:0.4}) ※スマホを手から離す時刻別・自己申告
 
 # 04 2 週間の実験: 2 部屋の絵 → ルールの札 (22:30 が弾む) → 札 2 枚 → 参加の帯 → 文の頭で前半が上へ抜け、結果の 4 行 (前 → 後) が組み上がる
@@ -263,7 +263,7 @@ board#b6(n: "05"; t: "続けるコツ")
   div#rsn(left: "27;341"; top: 193px; width: 288px; height: 167px; border-radius: 23px; background: "#FF5C9E1F;#FFFFFF12"; border: "#FF5C9EB3,1;#FFFFFF24,1"; delay: "500;650"; in: {scale:0.6, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
     svg#ic(cx: 50%; top: 12%; width: 73px; height: 73px; part: "rsn_alarm;rsn_chat")
     p#t(cx: 50%; top: 107px; font-size: 27px) 目覚ましがスマホ;友だちへの返信
-  img#alarm(left: 20px; top: 419px; width: 287px; height: 287px; fit: contain; in: {scale:0.3, y:40, rotation:-20, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent]かわいいレトロな双子ベルの目覚まし時計: 月の黄色の本体、ピンクのベルとハンマー、目盛りだけの丸い白い文字盤 (数字なし)、短い針 2 本、鳴っていることを示すベルのまわりの小さな曲線。細い白のふちどりのステッカー、枠いっぱいに大きく
+  img#alarm(left: 20px; top: 419px; width: 287px; height: 287px; object-fit: contain; in: {scale:0.3, y:40, rotation:-20, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent]かわいいレトロな双子ベルの目覚まし時計: 月の黄色の本体、ピンクのベルとハンマー、目盛りだけの丸い白い文字盤 (数字なし)、短い針 2 本、鳴っていることを示すベルのまわりの小さな曲線。細い白のふちどりのステッカー、枠いっぱいに大きく
   p#tip(left: 304px; top: 455px; font-size: 41px; font-family: p; line-height: 1.35; in: {scale:0.8, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'}) {y}目覚まし時計{/}を[br]{s33}用意するのが{/}[br]続けるコツ！
   div#tipline(left: 308px; top: 631px; width: 313px; height: 8px; border-radius: 4px; background: $yellow; in: {scaleX:0, duration:0.45, ease:'power3.out', pivot:'left'})
 svg#fx6(left: -18px; top: 506px; width: 427px; height: 427px; part: burst6; overlap: b6; in: {scale:0.690, opacity:0, duration:0.55, ease:'power2.out'}; out: {opacity:0, duration:0.3, ease:'power1.in'}; bleed)
@@ -285,7 +285,7 @@ board#b7(n: "まとめ"; nw: 93)
 section#end(stagger: {each:0})
 p#ea(cx: 360px; cy: 256px; font-size: 56px; font-family: p; line-height: 1.3; in: {scale:0.6, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'}) 今夜は、
 p#eb(cx: 360px; cy: 336px; font-size: 67px; font-family: p; line-height: 1.3; in: {scale:0.5, y:20, opacity:0, duration:0.5, ease:'back.out(2.4)'}) スマホを{y}別の部屋{/}へ。
-img#morning(left: 153px; top: 460px; width: 413px; height: 413px; fit: contain; in: {scale:0.4, y:53, opacity:0, duration:0.6, ease:'back.out(1.8)'}) [transparent][ref:@girl]同じ少女 (紺のブレザーにピンクのリボンの制服) が目覚めた直後に両腕を上に伸ばして嬉しそうに伸びをする、すっきりした明るい笑顔、まわりに小さなきらめき。上半身から膝まで、細い白のふちどりのステッカー、枠いっぱいに大きく
+img#morning(left: 153px; top: 460px; width: 413px; height: 413px; object-fit: contain; in: {scale:0.4, y:53, opacity:0, duration:0.6, ease:'back.out(1.8)'}) [transparent][ref:@girl]同じ少女 (紺のブレザーにピンクのリボンの制服) が目覚めた直後に両腕を上に伸ばして嬉しそうに伸びをする、すっきりした明るい笑顔、まわりに小さなきらめき。上半身から膝まで、細い白のふちどりのステッカー、枠いっぱいに大きく
 p#src(cx: 360px; top: 917px; font-size: 17px; line-height: 1.5; text-align: center; color: $ink2; font-family: m; in: {opacity:0, duration:0.5}) 調査：よふかしラボ（架空の教育NPO）[br]全国の高校1〜3年生 1,236人・オンライン・自己申告
 svg#fx8(left: 73px; top: 380px; width: 573px; height: 573px; part: burst8; overlap: morning; in: {scale:0.750, opacity:0, duration:0.55, ease:'power2.out'}; out: {opacity:0, duration:0.3, ease:'power1.in'}; bleed)
 ```

@@ -15,16 +15,16 @@ art "明治時代の錦絵風のコミカルなイラスト、太い墨の輪郭
 prompt_tail "文字を描かない、ロゴなし"
 image car = "明治時代の碓氷峠の馬車鉄道、茶色い馬一頭が小さな木造の客車を細いレールの上で引く、客車は箱形で窓が四つ、錦絵風のコミカルなイラスト、文字なし"
 image ogai = "明治の文豪風の男性、口ひげ、丸刈り、黒い詰襟の軍服風の上着、知的で気難しい顔、錦絵風のコミカルなイラスト、上半身、文字なし"
-motion title = in=scale=0.5,opacity=0,duration=450 ease=back(2.0) out=scale=0.9,opacity=0,duration=200
-motion big = in=scale=0.4,opacity=0,duration=420 ease=back(2.6) out=scale=0.8,opacity=0,duration=180
-motion div = in=scale=0.85,y=30,opacity=0,duration=450 ease=back(1.8) out=fade,200
-motion row = in=x=-80,opacity=0,duration=380 ease=back(1.4) out=fade,180
-motion note = in=y=20,opacity=0,duration=350 ease=back(1.4) out=fade,180
+motion title { in: {scale:0.5, opacity:0, duration:0.45, ease:'back.out(2.0)'}; out: {scale:0.9, opacity:0, duration:0.2} }
+motion big { in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.6)'}; out: {scale:0.8, opacity:0, duration:0.18} }
+motion div { in: {scale:0.85, y:30, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
+motion row { in: {x:-80, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+motion note { in: {y:20, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
 div { border-radius: 16px; border: 4px solid $ink; box-shadow: 7px 7px 0px $ink; background: $paper }
 img { scrim: 0.2 }
 cut { stagger: sentence }
-run a = color=$a
-run g = color=$gold
+run a { color: $a }
+run g { color: $gold }
 # 文字の段: telop 60 / 名 64 / kick 26 / 札 34
 def tel(t) = p(font-size: 60px; font-family: f; color: $ink; background: $paper; border-radius: 10px; padding: 10px 26px; border: 4px solid $ink; box-shadow: 7px 7px 0px $ink; in: pop; content: {t})
 def kick(t) = p(font-size: 26px; color: $paper; background: $a; border-radius: 99px; padding: 6px 20px; in: {x:-30, opacity:0, duration:0.4, ease:'power3.out'}; content: {t})
@@ -62,7 +62,7 @@ section#rage
 img#rg_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 40%'}) [ref:@ogai]ガタガタ揺れる客車の中で鼻をつまみ顔を真っ赤にして怒る文豪の男性、帽子がずり落ちる、誇張された表情、車内が傾く、窓の外に馬の尻
 veil#rg_v(color: #2A1E17; opacity: 0.5; to: top; start: 0.45)
 tel#rg_t(left: 48px; top: 120px) 臭いと揺れが{a}最悪{/}
-div#rg_k(left: 48px; top: 780px; width: 624px; height: 200px; gap: 24; padding: 0px; in: rise {y: 30, duration: 0.45, stagger: 150}; display: flex) ×2
+div#rg_k(left: 48px; top: 780px; width: 624px; height: 200px; gap: 24; padding: 0px; in: rise {y: 30, duration: 0.45, stagger: 0.15}; display: flex) ×2
   icon#i(cx: 50%; cy: 34%; font-size: 72px; name: "wind;wave-sine"; color: "$b;$a")
   p#t(cx: 50%; cy: 76%; font-size: 34px; color: $ink) 馬の臭い;大揺れ
 tag#rg_s(left: 430px; top: 300px; font-size: 48px) 激怒

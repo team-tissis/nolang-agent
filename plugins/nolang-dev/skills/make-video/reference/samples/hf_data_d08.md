@@ -35,29 +35,29 @@ lint off=all_at_once
 lint off=empty_board
 prompt_tail "Flat vector illustration with soft rounded shapes and clean simple shading, warm friendly palette (cream, leaf green, tomato red, wheat yellow), cheerful and appetizing. No text, no letters, no numbers, no logos, no labels, no price tags."
 # 字幕の強調 (語の色) と図の文字の一部 (単位を小さく・語の色・下の帯)
-run e = color=$ai
-run r = color=$a
-run mk = marker=$mk,36%
-run sm = size=0.69em
-run ku = size=0.45em
-run yu = size=0.54em
-run k2 = size=0.48em
-run u = size=0.5em
-run u2 = size=0.55em
-run p2 = size=0.55em color=$ink2 font=e
-run k3 = size=0.54em color=$ink2
-run k5 = size=0.62em
-run pu = size=0.48em
-run yn = size=0.5em
-run t9 = size=0.45em
-run g = color=#2E8A4B
-run nr = color=#C23A62
-run ra = color=$a
-run sw1 = color=#D9D0C4
-run sw2 = color=$a
-run hb = color=$good size=1.35em
-run s21 = size=0.59em font=e
-run ea = color=$ai font=e
+run e { color: $ai }
+run r { color: $a }
+run mk { marker: $mk,36% }
+run sm { font-size: 0.69em }
+run ku { font-size: 0.45em }
+run yu { font-size: 0.54em }
+run k2 { font-size: 0.48em }
+run u { font-size: 0.5em }
+run u2 { font-size: 0.55em }
+run p2 { font-size: 0.55em; color: $ink2; font-family: e }
+run k3 { font-size: 0.54em; color: $ink2 }
+run k5 { font-size: 0.62em }
+run pu { font-size: 0.48em }
+run yn { font-size: 0.5em }
+run t9 { font-size: 0.45em }
+run g { color: #2E8A4B }
+run nr { color: #C23A62 }
+run ra { color: $a }
+run sw1 { color: #D9D0C4 }
+run sw2 { color: $a }
+run hb { color: $good; font-size: 1.35em }
+run s21 { font-size: 0.59em; font-family: e }
+run ea { color: $ai; font-family: e }
 sound swoosh = "軽く短いシュッという風切り音"
 sound scene = "場面が切り替わる柔らかいシュワッという短い遷移音"
 sound pop = "軽くかわいいポンという短い音"
@@ -89,7 +89,7 @@ div { border-radius: 0px; background: none; padding: 0px; border: none; box-shad
 # 曲: 頭の 0.3 秒と締めの余韻だけ前に出す
 bgm#music(keys: "0:+7|320ms:+7|620ms:0|end-1.6s:0|end-1.1s:+6"; fade: 0,1600) 明るく軽やかなアコースティックのポップ、木琴とウクレレと手拍子、暮らしの情報やキッチンの解説向け、主旋律は控えめ
 # 字幕: 下の帯の中央に白い札 (黒の縁 + 下に硬い影)・強調の語は朱 (台詞の {e})・札は文 (句は [|] で切り、文を跨ぐ札は [||])
-subtitle.hug(left: 20px; top: 901px; width: 680px; wrap: comma,30; height: 131px; font-size: 28px; font-family: e; line-height: 1.38; color: $ink; background: #FFFFFF; border: 2px solid $ink; border-radius: 17px; box-shadow: 0px 4px 0px $ink; padding: 11px 19px 12px 19px; unit: sentence; lead: 0; in: {y:9, opacity:0, duration:.16, ease:'power2.out'})
+subtitle.hug(left: 20px; bottom: 248px; width: 680px; wrap: comma,30; font-size: 28px; font-family: e; line-height: 1.38; color: $ink; background: #FFFFFF; border: 2px solid $ink; border-radius: 17px; box-shadow: 0px 4px 0px $ink; padding: 11px 19px 12px 19px; unit: sentence; lead: 0; in: {y:9, opacity:0, duration:.16, ease:'power2.out'})
 
 # 全編の地: 縦グラデ・点の格子 (全編で 27 px 上へ流れる)・3 色のぼけ (全編でゆっくり漂う)
 div#bg_base(inset: 0; background: linear(#FFF9EF,#FFF1DC,180); z-index: back; in: none)
@@ -124,7 +124,7 @@ p#l3(cx: 360px; top: 460px; font-size: 100px; line-height: 1; in: {y:33, opacity
 # 丸窓の札 (白い円 + 色の輪 + 透過の絵 + 色の名札)・半分の濃さで灰色に置き、語で濃く色づく
 def badge(t, c, lc, im) = div(width: 184px; height: 244px; opacity: .5; in: {y:33, opacity:0, duration:.5, ease:'power3.out', stagger: {each: .1}})
   div#ring(left: 0px; top: 0px; width: 184px; height: 184px; border-radius: 99px; background: #FFFFFF; border: 5px solid {c}; box-shadow: 0px 9px 20px #8C5A282E)
-  img#img(cx: 92px; cy: 92px; width: 151px; height: 151px; fit: contain; filter: sat:0; main: none; content: {im})
+  img#img(cx: 92px; cy: 92px; width: 151px; height: 151px; object-fit: contain; filter: sat:0; main: none; content: {im})
   p#lb(cx: 92px; top: 196px; font-size: 31px; color: #FFFFFF; background: {lc}; border-radius: 99px; padding: 4px 19px 7px 19px; content: {t})
 badge#bd(left: "47;268;489"; top: 620px; t: "惣菜;青果;パン"; c: "$souzai;$seika;$pan"; lc: "#B9560B;#2B7D45;#9A6A12"; im: "@souzai;@seika;@pan") ×3
 
@@ -145,7 +145,7 @@ board#st(n: "01"; t: "調査の舞台")
       p#v(left: 15px; top: 46px; font-size: 37px; line-height: 1.15; white-space: nowrap) 1,200{u}m²{/};約2,100{u}人{/};28{u}日（4週間）{/}
     p#note(left: 27px; top: 652px; font-size: 17px; font-family: d; color: $ink2; in: {opacity:0, duration:.4}) ※棚ごとに毎日、はかりで廃棄の重さを記録
   div#b(inset: 0; in: {x:40, opacity:0, duration:.4, ease:'power3.out'})
-    img#scale(left: 17px; top: 97px; width: 260px; height: 260px; fit: contain; main: none; in: {y:20, scale:.9, opacity:0, duration:.6, ease:'back.out(1.6)'}) [transparent]A white digital platform scale with a clear plastic crate on it, the crate filled with unsold food: wrapped deli bento packs, bread rolls, a cabbage and tomatoes. The scale display is blank. Isolated object, centered, filling the frame.
+    img#scale(left: 17px; top: 97px; width: 260px; height: 260px; object-fit: contain; main: none; in: {y:20, scale:.9, opacity:0, duration:.6, ease:'back.out(1.6)'}) [transparent]A white digital platform scale with a clear plastic crate on it, the crate filled with unsold food: wrapped deli bento packs, bread rolls, a cabbage and tomatoes. The scale display is blank. Isolated object, centered, filling the frame.
     p#lbl(left: 293px; top: 112px; font-size: 20px; font-family: e; color: $ink2) 廃棄の合計（28日間）
     # 合計は 0 で出て、語で 1,840 まで数える
     p#total(left: 288px; top: 146px; font-size: 88px; line-height: 1; letter-spacing: -.02em; white-space: nowrap) [count:1,840 start=0 ms=1000 ease=cubic_out]{ku}kg{/}
@@ -263,7 +263,7 @@ board#ex(n: "04"; t: "実験：値引きを2時間早く")
     p#early(left: 320px; top: 313px; font-size: 21px; background: $mk; border-radius: 9px; padding: 4px 11px 5px 11px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2)'}) 2時間 早く！
     # 商品の札 ×2 (絵 + 名)・右上に半額シールを判子で
     div#it(left: "27;350"; top: 393px; width: 280px; height: 280px; border-radius: 20px; background: $card; border: 2px solid $cardline; in: {y:40, opacity:0, duration:.45, ease:'back.out(1.6)', stagger: {each: .15}}) ×2
-      img#img(left: 40px; top: 20px; width: 200px; height: 200px; fit: contain; main: none; content: "@souzai;@pan")
+      img#img(left: 40px; top: 20px; width: 200px; height: 200px; object-fit: contain; main: none; content: "@souzai;@pan")
       p#t(cx: 50%; bottom: 15px; font-size: 29px) 惣菜;パン
       div#st(left: 179px; top: 13px; width: 100px; height: 100px; border-radius: 99px; background: #FFD84D; border: 4px solid $a; box-shadow: 0px 4px 0px #0000001F; transform: rotate(-12deg); in: {scale:2.4, rotation:42, opacity:0, duration:.22, ease:'power4.in'})
         p#t(cx: 50%; cy: 50%; font-size: 33px; line-height: 1; color: $ai) 半額
@@ -335,7 +335,7 @@ board#hm(n: "05"; t: "家庭でできる1つの工夫")
   # 工夫の札 (緑の縁・左に冷蔵庫を撮る絵が上へはみ出す)
   div#tip(left: 16px; top: 571px; width: 624px; height: 148px; border-radius: 20px; background: #E8F6EC; border: 3px solid $good; in: {y:173, opacity:0, duration:.5, ease:'power3.out'})
     # hf の作り: 絵は札の上へ 9 px はみ出す (child_overflow)
-    img#img(left: 15px; top: -9px; width: 167px; height: 167px; fit: contain; main: none; transform-origin: 50% 80%; content: @fridge)
+    img#img(left: 15px; top: -9px; width: 167px; height: 167px; object-fit: contain; main: none; transform-origin: 50% 80%; content: @fridge)
     p#s(left: 200px; top: 15px; font-size: 19px; font-family: e; color: $ink2) 出かける前に
     p#b(left: 200px; top: 44px; font-size: 37px; line-height: 1.15; white-space: nowrap) 冷蔵庫をスマホで1枚
     p#p(left: 200px; top: 92px; font-size: 20px; font-family: e; white-space: nowrap) 二重買いは {hb}半分以下{/} になりうる
@@ -351,7 +351,7 @@ board#sm(n: "まとめ"; t: "今日のポイント")
     p#a(left: 83px; top: 16px; font-size: 21px; font-family: e) ロスの半分は
     p#b(left: 83px; top: 46px; font-size: 36px; line-height: 1.2; white-space: nowrap) 惣菜・青果・パン{s21} の3つの棚から{/}
     p#p(left: 83px; top: 96px; font-size: 18px; font-family: e; line-height: 1.4; color: $ink2) 山は{ea}日曜{/}（火曜の約1.8倍）
-    img#pic(left: "373;449;525"; top: 113px; width: 75px; height: 75px; fit: contain; main: none; content: "@souzai;@seika;@pan") ×3
+    img#pic(left: "373;449;525"; top: 113px; width: 75px; height: 75px; object-fit: contain; main: none; content: "@souzai;@seika;@pan") ×3
   div#c2(left: 21px; top: 305px; width: 613px; height: 197px; border-radius: 21px; background: #FFF8EE; border: 2px solid #F1E0C6; in: {x:53, opacity:0, duration:.45, ease:'back.out(1.4)'})
     div#no(left: 17px; top: 17px; width: 49px; height: 49px; border-radius: 99px; background: $a; in: {scale:0, duration:.35, ease:'back.out(2.4)'})
       p#t(cx: 50%; cy: 50%; font-size: 29px; color: #FFFFFF) 2
@@ -367,7 +367,7 @@ board#sm(n: "まとめ"; t: "今日のポイント")
     p#a(left: 83px; top: 16px; font-size: 21px; font-family: e) 家では、買う前に
     p#b(left: 83px; top: 46px; font-size: 36px; line-height: 1.2) 冷蔵庫を1枚
     p#p(left: 83px; top: 96px; font-size: 18px; font-family: e; line-height: 1.4; color: $ink2) 二重買いの経験 {ea}40% → 17%{/} の水準へ
-    img#pic(left: 467px; top: 55px; width: 133px; height: 133px; fit: contain; main: none; content: @fridge)
+    img#pic(left: 467px; top: 55px; width: 133px; height: 133px; object-fit: contain; main: none; content: @fridge)
 ```
 
 ```timeline.txt

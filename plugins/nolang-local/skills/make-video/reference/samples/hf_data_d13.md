@@ -40,16 +40,16 @@ sound pop = "短く明るい電子のチャイムの単音、控えめで軽い�
 sound chime = "高く澄んだ金属のベルの単音、ピーンと響く"
 sound soft = "ゆっくり立ち上がる柔らかなサイン波の短い音"
 sound low = "低く温かな 2 音のシンセのベル"
-run em = color=$green_d
-run uem = color=$green_d marker=#0E9F6E38,22%
-run mi = color=$mint
-run u = size=0.65em
-run nn = font=n
-run pc = size=0.56em
-run s = size=0.67em font=m
-run s2 = size=0.63em font=m
-run s3 = size=0.48em font=m color=$ink2
-run s4 = size=0.61em font=m color=#D9E2F5
+run em { color: $green_d }
+run uem { color: $green_d; marker: #0E9F6E38,22% }
+run mi { color: $mint }
+run u { font-size: 0.65em }
+run nn { font-family: n }
+run pc { font-size: 0.56em }
+run s { font-size: 0.67em; font-family: m }
+run s2 { font-size: 0.63em; font-family: m }
+run s3 { font-size: 0.48em; font-family: m; color: $ink2 }
+run s4 { font-size: 0.61em; font-family: m; color: #D9E2F5 }
 # 章の札の切替: 緑の指示子が次の章札へ滑って章札の幅に伸び、前の章の文字を灰に・新しい章の文字を白に
 cue chap(a, b, l, w) = [!#chap.ind to,left={l},w={w},duration=500,ease=power3.inOut][!#a recolor,$muted,duration=300 +50][!#b recolor,#FFFFFF,duration=300 +200]
 svg leaf = """<svg viewBox="0 0 24 24"><path d="M20 4C11 4 5 8.5 5 15c0 1.6.4 3 1 4.2C8 14 12 10.5 16 9c-3.5 2.5-6.6 6-8.3 10.6C9 20.5 10.5 21 12 21c6 0 8.5-6.5 8-17z" fill="#FFFFFF"/></svg>"""
@@ -82,7 +82,7 @@ progress#prog(left: 0px; top: 716px; width: 1280px; height: 4px; background: $gr
 section#s1(stagger: {each:0}; out: {y:-20, opacity:0, duration:0.3, ease:'power2.in'})
 div#s1_b1(left: 673px; top: 100px; width: 547px; height: 547px; border-radius: 999px; background: radial(#0E9F6E29,#0E9F6E00@68%); in: none)
 div#s1_b2(left: 827px; top: 60px; width: 347px; height: 347px; border-radius: 999px; background: radial(#2FA4E724,#2FA4E700@68%); in: none)
-img#s1_hero(left: 620px; top: 153px; width: 640px; height: 427px; fit: contain; main: kb {scale: [1, 1.05]}; delay: 100; in: {y:40, scale:0.96, opacity:0, duration:1, ease:'power3.out'}) [transparent]明るい現代的なオープンオフィスの 1 フロアを斜め上 30 度から見下ろした等角図の切り抜き。白い机が並びモニターとノートPC、天井の LED 照明パネル、壁掛けのエアコン、複合機、小さなサーバーラック、観葉植物、昼の光が入る大きな窓。顔のない小さな人が働いている。宙に浮いた 1 枚のフロアのブロックで、枠いっぱいに大きく描く。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
+img#s1_hero(left: 620px; top: 153px; width: 640px; height: 427px; object-fit: contain; main: kb {scale: [1, 1.05]}; delay: 100; in: {y:40, scale:0.96, opacity:0, duration:1, ease:'power3.out'}) [transparent]明るい現代的なオープンオフィスの 1 フロアを斜め上 30 度から見下ろした等角図の切り抜き。白い机が並びモニターとノートPC、天井の LED 照明パネル、壁掛けのエアコン、複合機、小さなサーバーラック、観葉植物、昼の光が入る大きな窓。顔のない小さな人が働いている。宙に浮いた 1 枚のフロアのブロックで、枠いっぱいに大きく描く。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
 div#s1_kicker(left: 80px; top: 167px; width: 240px; height: 31px; border-radius: 99px; background: $green_l; delay: 150; in: {y:13, opacity:0, duration:0.6, ease:'power3.out'})
   icon#i(left: 9px; cy: 50%; font-size: 19px; name: lightning; weight: fill; color: $green_d)
   p#t(left: 33px; cy: 50%; font-size: 17px; letter-spacing: 0.06em; color: $green_d) 社内向け 電力データ分析
@@ -109,7 +109,7 @@ div#chap.sticky(left: 593px; top: 23px; width: 607px; height: 33px; border-radiu
 sec#s2_sec(n: "01"; l: "分析の概要")
 title#s2_title 1年分の30分値で、電気の行き先を追う
 card#s2_method(left: 80px; top: 179px; width: 413px; height: 421px; delay: 160)
-  img#pic(left: 127px; top: 15px; width: 160px; height: 160px; fit: contain; main: sine {y: -5, period: 3.4}) [transparent]白い四角いスマートメーターの箱 1 台、小さな空の液晶と無線の印、その横に抽象的な棒グラフを挟んだクリップボード。斜め前から見た 3/4 の構図、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
+  img#pic(left: 127px; top: 15px; width: 160px; height: 160px; object-fit: contain; main: sine {y: -5, period: 3.4}) [transparent]白い四角いスマートメーターの箱 1 台、小さな空の液晶と無線の印、その横に抽象的な棒グラフを挟んだクリップボード。斜め前から見た 3/4 の構図、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#row(left: 27px; top: "187;259;331"; width: 360px; height: 72px; delay: 800; in: {y:11, opacity:0, duration:0.6, ease:'power3.out', stagger:{each:0.18}}) ×3
     div#ln(left: 0px; top: 0px; width: 360px; height: 1px; background: $line)
     p#k(left: 0px; cy: 27px; font-size: 15px; color: $green_d) データ;突き合わせ;対象
@@ -231,7 +231,7 @@ div#s6_glow(inset: 0; background: radial(#506EDC47,#506EDC00@45%,20%,30%); in: c
 sec#s6_sec(n: "05"; l: "誰もいない時間の電気"; c: $mint; nc: $navy; delay: 400)
 title#s6_ta(c: #FFFFFF; delay: 500) 夜と休日も、電気は{mi}ゼロにならない{/}
 title#s6_tb(c: #FFFFFF; delay: 0) そのうち{mi}59%{/}は、止められる電気
-img#s6_img(left: 40px; top: 175px; width: 640px; height: 427px; fit: contain; main: kb {scale: [1, 1.06]}; delay: 400; in: {x:-27, opacity:0, duration:0.9, ease:'power3.out'}) [transparent]夜の現代的なオープンオフィスの 1 フロアを斜め上 30 度から見下ろした等角図の切り抜き。人は誰もいない。深い紺と藍の夜の色調。待機中でかすかに光るモニターがいくつか、小さな待機ランプの灯る複合機、小さな緑のランプが点滅するサーバーラック、冷蔵庫、消し忘れで暖かい光を落とす天井の照明 1 列、動いたままのエアコン。宙に浮いた 1 枚のフロアのブロックで、枠いっぱいに大きく描く。静かで清潔
+img#s6_img(left: 40px; top: 175px; width: 640px; height: 427px; object-fit: contain; main: kb {scale: [1, 1.06]}; delay: 400; in: {x:-27, opacity:0, duration:0.9, ease:'power3.out'}) [transparent]夜の現代的なオープンオフィスの 1 フロアを斜め上 30 度から見下ろした等角図の切り抜き。人は誰もいない。深い紺と藍の夜の色調。待機中でかすかに光るモニターがいくつか、小さな待機ランプの灯る複合機、小さな緑のランプが点滅するサーバーラック、冷蔵庫、消し忘れで暖かい光を落とす天井の照明 1 列、動いたままのエアコン。宙に浮いた 1 枚のフロアのブロックで、枠いっぱいに大きく描く。静かで清潔
 # ガラスの板 (白 7% の地 + 白 16% の細い縁)
 def glass = div(left: 707px; width: 493px; border-radius: 15px; background: #FFFFFF12; border: 1px solid #FFFFFF29; in: {y:16, opacity:0, duration:0.6, ease:'power3.out'}; out: {y:-8, opacity:0, duration:0.35, ease:'power2.in'})
 def glab(t) = p(left: 21px; cy: 28px; font-size: 16px; color: #C9D4EE; content: {t})
@@ -286,15 +286,15 @@ def mcard(no, tg, tgc, tgf, h, res, kwh) = div(top: 175px; width: 355px; height:
     p#u(left: .v.right+5; cy: 44px; font-size: 20px; color: $green_d) 万円
   p#kwh(left: 23px; cy: 401px; font-size: 15px; color: $muted; font-family: m; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}; content: {kwh})
 mcard#s8_c1(left: 80px; no: "01"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "空調の設定温度を1℃見直し"; res: "[count:51.5 start=0 ms=900 delay=100]"; kwh: "16,900 kWh／年")
-  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]白くすっきりした壁掛けのオフィス用エアコン 1 台からやわらかな風の線が流れ、その横に空の液晶の白いリモコンが浮かぶ。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
+  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; object-fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]白くすっきりした壁掛けのオフィス用エアコン 1 台からやわらかな風の線が流れ、その横に空の液晶の白いリモコンが浮かぶ。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 23px; top: "225;249"; width: 5px; height: 5px; border-radius: 99px; background: $green) ×2
   p#li(left: 36px; cy: "228;251"; font-size: 15px; color: $ink2; font-family: m) ×2 夏 26℃→27℃／冬 22℃→21℃;空調の電力を10%削減
 mcard#s8_c2(left: 462px; no: "02"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "待機電力・消し忘れ対策"; res: "[count:142.8 start=0 ms=900 delay=100]"; kwh: "46,800 kWh／年")
-  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]デスクトップのモニター 1 台と、プラグを抜いて電源を切る電源タップ、丸い時計のタイマーの印と小さな三日月の印。省エネの考え方、単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
+  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; object-fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]デスクトップのモニター 1 台と、プラグを抜いて電源を切る電源タップ、丸い時計のタイマーの印と小さな三日月の印。省エネの考え方、単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 23px; top: "225;249;272"; width: 5px; height: 5px; border-radius: 99px; background: $green) ×3
   p#li(left: 36px; cy: "228;251;275"; font-size: 15px; color: $ink2; font-family: m) ×3 OA機器の自動電源オフ;照明・空調のタイマー;止められる分の3分の2を削減
 mcard#s8_c3(left: 845px; no: "03"; tg: "工事あり　960万円"; tgc: #8A5300; tgf: #FFF3DF; h: "照明のLED化"; res: "[count:148.2 start=0 ms=900 delay=100]"; kwh: "48,600 kWh／年")
-  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]白い清潔な光でやわらかく輝く、現代的な薄い正方形の LED 天井照明パネル 1 枚を少し下から斜めに見上げた形、省エネを表す小さな葉の印。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
+  img#pic(left: 100px; top: 17px; width: 173px; height: 153px; object-fit: contain; main: sine {y: -5, period: 3.2}; delay: 150; in: {scale:0.85, y:7, duration:0.8, ease:'back.out(1.8)'}) [transparent]白い清潔な光でやわらかく輝く、現代的な薄い正方形の LED 天井照明パネル 1 枚を少し下から斜めに見上げた形、省エネを表す小さな葉の印。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 23px; top: "225;249"; width: 5px; height: 5px; border-radius: 99px; background: $green) ×2
   p#li(left: 36px; cy: "228;251"; font-size: 15px; color: $ink2; font-family: m) ×2 蛍光灯→LED（照明の電力55%減）;工事費は約6.5年で回収
 

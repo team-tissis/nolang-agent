@@ -1,0 +1,134 @@
+---
+name: nolang-draft-studio
+description: NoLang の動画を draft src (HTML / CSS / GSAP の圧縮形) で 0 から書き、check と render で仕上げる。
+---
+
+# NoLang Draft Studio
+
+あなたは HTML + CSS + GSAP で動画を作る制作者です (scene の DOM を書き、class で見た目を揃え、GSAP の timeline で要素ごとの入場・状態変化・退場を打つ、いつもの作り方)。
+draft src はその動画の圧縮形で、書く物は同じです。圧縮の規則は 4 つだけ:
+
+1. **閉じタグは字下げ**。1 行 1 要素 `tag#id.class(css 宣言) 内容`。字下げ 2 空白 = 子。
+2. **style は要素の行**。`(…)` の中に CSS の宣言をそのまま (`left:48px; top:120px; font-size:32px; color:#fff; border:3px solid $a; box-shadow:0 0 24px $a`)。共通の見た目は `def` (= class) に 1 回・型ごとの既定は `tag { 宣言 }` (= CSS の要素の rule)。
+3. **gsap.from / to は object のまま**。入場 `in:{y:30, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。
+4. **時刻は秒ではなく台詞の語**。timeline.txt は台本で、tween はその語の前に置く: `[>#id]` 出す・`[!#id to,{…}]` 変える・`[<#id]` 消す。`tl.to(el, {…}, 2.3)` の 2.3 を書く場所は無く、声の実尺が時刻を決める。
+
+```
+#v2
+canvas 1280x720 bg=#0A0614
+palette a=#FF2D55 mute=#9A93B5
+section#hook
+div#c1(left:48px; top:420px; width:300px; padding:16px; border-radius:16px; background:#0a0614e6; border:3px solid $a; box-shadow:0 0 24px $a; in:{y:60, scale:.7, opacity:0, duration:.5, ease:'back.out(1.7)'})
+  p#l(font-size:22px; color:$mute; letter-spacing:.2em) STAGE A
+  p#t(font-size:72px; color:#fff; text-shadow:0 0 24px $a) 18:30
+img#venue(inset: 0; main: kb {scale: [1, 1.06]}) 夜の野外フェス会場、遠くに二つのステージ、青と赤のネオン、人物なし
+```
+
+```
+#v2
+cast n = "落ち着いた30代女性のナレーター"
+*** hook
+[>#subtitle]
+@n: 推しと推しが、[>#c1]同じ[!#c1 to,{scale:1.08, duration:.25} +300][!#c1 to,{scale:1, duration:.4, ease:'back.out'} >]時間。[<#c1 +600]
+```
+
+台本 (timeline.txt) と画面 (design.txt) を書き、check で欠陥と尺と配置を検査し、render で 1 回だけ描く。
+tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。
+`#id` が名 (字下げの子は相対名・印では `#親.子`)、`.class` は flag (`.hug` 中身の幅・`.sticky` cut を跨ぐ) か変種の tag (全面は宣言 `inset: 0`)、文字の内容は行の残り。
+CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。表に無い名の宣言は DEFECT:KEY。`canvas 1920x1080` など短辺 720 以外の canvas は px ごと 720 に写す。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
+
+```bash
+S=.agents/skills/nolang-draft-studio/scripts/studio.py; P="env PYTHONPATH=$PWD /opt/venv/bin/python"   # repo root から
+$P .agents/skills/nolang-draft-studio/scripts/studio_server.py start   # 常駐 server (stop / status)・`export STUDIO_SERVER_SOCK=$PWD/tmp/studio/.server/sock`
+$P $S new    tmp/studio/<name> --type data|concept|compare|story|cinematic [--aspect 9:16] [--seconds 90]   # 雛形 (根 + cut の TODO・target_s は目安)
+$P $S check  tmp/studio/<name>            # 5〜10 秒: DEFECT (file:行・原因・直し方)・尺・配置・出る時刻・lint。通ると裏で素材と TTS を作る
+$P $S render tmp/studio/<name>            # 1〜2 分: out/video.mp4 + render_frames/ + render_report.md (実時刻の frame 一覧・音量)
+$P $S icons  lock shield                  # icon の名を探す (Phosphor 1,512 種)
+```
+
+project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材の pin は check が書く) / `out/`。両 file の 1 行目は `#v2`。
+素材は説明文で書く: 話者 `cast n = "落ち着いた30代女性のナレーター" speed=110%`・BGM `bgm#m 静かなピアノと弦`・絵 `img#p(inset: 0) 夜の屋台の湯気、文字なし` (`alt` と同じ)・書体 `font "太い明朝体"`・効果音 `[♪"グラスに注ぐ音" -6dB]`。名や id で指定しない。
+依頼がキャラ (ずんだもん等) を名指ししたら、声は `cast z = character="ずんだもん"` (例外的に名で書く) で、画面にも立ち絵を出す: 最初の cut に `avatar#lay.sticky(left:900px; top:200px; width:360px; height:520px; cast:z; object-fit:contain)` (`.sticky` で cut を跨いで出続ける)・文字や図は立ち絵の場所を空けて置く・表情は台詞に `[!#lay expression,happy]`。
+読みは src の責務でない (後段の読み検査が差し替える)。全出現を強制する語だけ根に `read 3日 = みっか`、その場だけ `{3日|みっか}`。
+
+## 前提 (環境)
+
+- 製品を local で動かす dev container と同じ物: `/opt/venv` の python・Django と LOCAL DB (`.env`)・資材カタログ (書体・話者・BGM・効果音・立ち絵) を `manage.py seed` で入れた状態。
+- resource-service (svg / html の描画・別 repo `nolang-resource-service`・`PORT=9500 npx tsx bin/server.ts`・到達先は `RESOURCE_SERVICE_URL` か localhost:9500)。落ちていると render が 1 行の案内で止まる。
+- gpulibs の native build (`docker_setup/build_gpulibs.sh`)。render の encoder と HLS は CUDA を使うので GPU が要る (check は GPU なし)。
+- worktree で回すなら `.env`・`static/credentials`・`build_gpulibs` を main checkout から symlink。skill を Claude Code に見せるのは `make link-skills` (clone / worktree ごと)。
+- 常駐 server (`studio_server.py start`) は任意。無ければ各 command が自分で Django を起動する (1 回 7 秒ほど遅い)。
+- stream (下) は著者と担当を `claude -p` で呼ぶので、その機械で claude CLI に login している事 (subscription の枠で動く・1 本 $0.7〜2.7 相当)。環境の `ANTHROPIC_API_KEY` / `ANTHROPIC_AUTH_TOKEN` は login より優先されるので著者は外して呼ぶ (外さないと 0 token の応答で `author exit 1`・`cut 0`・理由は `stream/claude_author.err`)。
+
+## 工程 (project の状態から入る)
+
+- `brief.md` が無い → 依頼文を読んで brief を書く (書式は `reference/formats.md` §brief)。依頼に台本があれば brief に写し、以後そのまま使う。
+- `storyboard.md` が無い → brief から storyboard を書く (§storyboard)。frame = cut。frame ごとに「画面のいちばん見える瞬間」「台詞」「語に結ぶ変化」「尺」を決める。この段では文法を書かない。
+- `studio/` が無い → `reference/samples/` の自分の type の見本 2 本 (NoLang の勝ち src 1 本 + hf の作りを写した `hf_*` 1 本) を読む → `new` で骨組みを作る → **design system を根に 1 回** (`palette` `font` `fonts` `motion` `art` と、見出し・本文・札・箱 (札の行・横棒・流れ図の札) の `def` = class) → storyboard の frame を 1 つずつ `section#名` と `*** 名` に写す (§build)。
+- `out/video.mp4` が無い → `check` を DEFECT 0・severe 0 まで (warn は読んで直せる物は直す) → `render` 1 回。
+- 全部ある → 報告 (§report)。render の後に frame を見て直す往復はしない。
+
+## 工程の規則
+
+- **brief が正**: message 1 文・audience・arc・format・look の語 3 つ・voice・must / avoid。以後の判断は brief に戻って決める。
+- **storyboard は構造の設計で、見た目の設計ではない**: 各 frame に「この frame で分かること」が 1 つ。frame の尺は台詞の長さから出る (4〜25 秒)。
+- **design system が先**: hf と同じく、色・書体・文字の段・札と箱の class を根に決めてから frame を書く。frame の要素は class を当てて差分だけ書く。
+- **build は frame 単位**: 1 frame = `section#名` の design + `*** 名` の台詞。frame の「いちばん見える瞬間」を design に書き (要素は全部出た時の位置と大きさ・絶対配置でよい)、入場はそこへ来る道・語の印はその瞬間の変化。
+- **review は check の出力で**: 「出る時刻」の表で frame ごとに、見出し → 本文 → 変化 の順が台詞と合っているかを読む。render 後の frame は報告にだけ使う。
+
+## 違い (CSS / GSAP に無い物・5 つ)
+
+1. **時刻は語**: 印 `[動詞 #名 やり方 拍]` を台詞の語の直前に。動詞は `>` 出す・`!` 変える・`<` 消す・`=` 戻す。拍は `+300` / `-300` (語から ms)・`>` (直前の印の終わり)・`cut-400` (cut 末の 400 ms 前・`<` だけ)。cut 末の印だけの行 `[<#名]` は cut 末の拍。同じ語の印は同時。印の無い要素: 絵・箱・図形は cut 頭、文字と ×N は `cut { stagger: sentence }` (雛形にある) で 1 つ目が頭・2 つ目から文ごと。
+2. **scene = cut**: 退場は cut 境界で終わる (退場を次の cut の入りに重ねるのは混ぜない切替 `transition none,370` = 次の cut は退場が終わる 370 ms 前に始まる・旧場面ごと残すのは `overlap=`・最後の cut は退場せず最後の frame まで残る — `fade out` は頼まれた時だけ・全面の不透明な板 (`transition flash` / `dip` の板・不透明な全面の単色板) の下で閉じる層の out は engine が外す (見えない退場は描かない))。cut の切替は timeline の前の cut の最後の行に `transition dissolve,400` (`wipe,700,dir=left` `slide,260` `dip,400`・境目の音は `,se="…"`)。cut を跨ぐ要素は `.sticky`。
+3. **尺は TTS**: 依頼の長さは目安。合わせるために話速・無音・台詞を変えない。`@n: 文[印]文…` (2 行目から `@: …`)・`[silence:0.6s]`・`{表記|読み}`・`[br]`。話し方は cast の `manner=` が基本 (台詞ごとの `[manner:…]` は Fish Audio の声だけに効き、他の声では無視されて cast の `manner=` で読む)。
+4. **素材は説明文**: 絵は `img#名 説明` (根の `image 名 = "…"` を `[ref:@名]説明` で基準画像に — 同じ料理・場所・物・人物を 2 枚以上の絵に描くなら、中身を具体に書いた基準画像を 1 枚置いて各絵を派生させるとよい。別々に注文すると絵ごとに別物になる: 和風パスタが途中でクリームに・碓氷峠に富士山)、声は `cast`、BGM は `bgm#名 説明` (音量は engine の既定 = hf の大きさ・`volume:` は書かない)、効果音は語に `[♪"説明" -6dB]`・cut 頭の場の音 `se "…" -8dB to=尺 fade=300,1500`、書体は `font "説明"` / `fonts m="説明"` (`font-family: m`)。根の `art` は画風 (筆致・質感・色調) だけ — 時間帯・天気・光は絵ごとの説明に (art の「夜」と絵の「真昼」がぶつかると上下 2 枚の絵になる)。palette の強調色 `a` は絵の主な色と変える (同じ系統だと絵の上の `a` の字が沈む)。
+5. **出す前に触れない**: 出ていない要素への `!` `<` `=` は DEFECT:NOT_OPEN。`>` は要素ごとに 1 回。出した語と同じ拍の `to` は出た 1 frame 後から移る (出た見た目を変えるなら `[>#名 .tag]`)。
+
+## 書き方の対応 (迷った時だけ)
+
+- 位置: 絶対 `left top width height` (中心 `cx cy`・全面 `inset: 0`)、子は親の内側から。`x y` は GSAP の移動量 (`in: {x: -40}`・`to,{y: 20}`) だけ。flex は `display:flex; gap:24px` (`flex-direction:column` で縦)、`display:grid` で 2×2。重なりは書いた順 (後が上)・`z-index:front`・意図の重なり `overlap:相手`。
+- 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:20, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
+- 変種: `#名.tag(宣言)` (静止の別の姿) → `[!#名 .tag]` (補間して移る。`points=` / `path=` の shape の変種は形ごと補間 = morph。書体 / style・画像・fit の種類・形の種類・blend・mask が違う変種は補間せず、その語で開き直す — 変種の `in=` が入場・無ければ切替)。部品: `def 名(引数) = tag(宣言) {引数}` → `名#x(…) 文字` (同じ形の 2 つ目も def に上げて実体を並べる)。
+- 文字の一部: `{t}語{/}` + `[!#名{t} recolor,$a]` / `highlight` / `marker` / `strike` (`[=#名{t}]` で戻す)。
+- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -30}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`)・役 `title big div row note` (雛形の根の `motion 名 { in: …; out: … }` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
+- 常時 `main: float|breathe|sway|pulse`・`spin {period: 9}`・`kb {scale: [1.1, 1], focus: '40% 60%'}` (寄りながら動くなら `focus: ['40% 60%', '60% 50%']`)。2 本以上の tween は `,` で並べる (`in: fade {duration: .8}, typewriter {level: 3}`)。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
+- 字幕: 印だけの行 `[>#subtitle]` で以後の台詞が自動の字幕 (cut を跨いで続く・閉じるのは `[<#subtitle]` — cut 末の印だけの行ならその cut の終わり・hold の字幕札が cut 境界を跨ぐ時は engine が次の cut の lane と 1 枚に繋ぐ (帯は cut で入り直さない))。`subtitle(font-size:32px; …)`・テロップの間だけ消す `.hide_subtitle`。話者札は `cast a = "…" label="部下" label_fill=$a`。
+
+## 書けない物 (runtime に無い・GSAP と違う例外)
+
+- 文字・図形への `filter` (彩度・色行列)・`to` の motion blur・画像の radial mask・chroma key・音のピッチ変更は無い。`mix-blend-mode` は `multiply screen add overlay soft-light` だけ。
+- 文字の一部 (run) の拡大を保つ・run への glow・layer 単位の glow / tint・子ごと傾く要素 (子を持つ要素の skew・3D・filter・blend・glow は DEFECT — 入退場の blur は子ごと掛かる)・語を囲む手描きの丸 (rough-notation) は無い (代用は `reference/capabilities.md` 末尾)。
+- `yoyo` の `repeat` は奇数 (偶数は頂点で終わり跳ねる)。1 層に `in` は 1 つ。強調中の文字の一部に別の強調は重ねない。係数つきの ease は `back.out(1.7)` だけで、効くのは `in` / `out` / `main` (`to` では係数を落として warn)。`elastic` / `bounce` / `circ` に係数は無い (`elastic.out(1,0.5)` は DEFECT — `elastic.out`)。
+- 繰り返す tween (`repeat`) に書けるのは `x y scale rotation opacity`。
+
+## ループ (render 1 回)
+
+1. 工程 (上) の順に書く → `check` を DEFECT 0 まで。
+2. check の読み方: DEFECT = 文法の誤り (file:行と直し方つき・描けない)・severe = 描けるが崩れる (直す)・warn = 直す・info = 参考。`出る時刻` の表 = 要素が語に結べているか。`展開表` = def の実体と ×N の子の名・箱・字の size (印と位置の式 `名.right+8` の宛先はこの名)。`css` の warn = 落とした宣言 (無い物として描く)。
+3. `render` 1 回。見た目の指摘を報告に書くときは、その frame (`out/render_frames/`) を Read して秒数と一緒に書く。
+4. 通しの批評が要るときは `tmp/critic/make_sheets.sh out/video.mp4 <dir>` の一覧を subagent `video-compare-opus-medium` に (reference/compare.md)。
+5. 音は `listen` (render の後・`--apply` で描き直しまで): cut ごとの音を Gemini 3.8 Flash に 2 回聴かせ、場面に合わない音 (2 回一致の drop) と同じ音の連打 (repeat) を `listen.json` に記録し、次の render がそれを外す。音量は聴かせない (床と anchor は engine が測る)。詳細 reference/sounds.md。
+
+規則の名と直し方 (2 つの台帳 `scripts/studio_rules.py` と製品の `quality_rules.py` から生成・型に合わない規則は根の `lint off=規則,…`): `empty_cut` 絵か札を置く・`shrunk` 幅か size を変える (枠を広げる / w= を外して文字幅にする / 文言を短く)・`offcanvas` (severe) 位置を内側に・`duplicate_text` 字幕と同文の札は `.hide_subtitle`・`spoiler` 見出しが台詞の語を先に見せる → 語の印で出す・`still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す・`long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印・`cut_head_gap` cut 頭が 1.2 秒以上空く → 頭の要素は印なしで置く・`entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ・`no_closer` 最後の cut に大きな締めの一言が無い・`same_picture` 同じ絵が 15 秒以上 → 場面ごとに絵を替える・`blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を・`dip_black_frame` dip は黒 frame → dissolve か wipe・`sparse_cut` 4 秒以上で要素が少ない → 絵か札を足す・`palette_drift` palette 外の色が多い・`low_contrast` 文字と地の差が小さい (沈めた `dim` / focus の兄弟・`recolor` の後も) → 沈める濃さを上げる・`overlap` 文字どうしが重なる (`overlap:` を宣言しても文字と文字は warn) → 判子・札を相手の文字から外す・`title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)・`leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (根の要素は engine が既定の fade で揃える — 残るのは子・写し・自分で閉じた層) → cut 末に `[<#名 fade]`・`orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく・`[br]` で切る・`overridden` engine が書いた値を変えた (cause つき) — subject_clear: 文字を絵の主体の外に置く / icon_square と late_admission: engine の揃え (直さなくてよい)・`transition_over_speech` 切替が台詞に掛かる・`se_dense` 効果音が密 (`sfx off`)・`running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す・`month_reading` 月日に読み `{9月5日|くがついつか}`・`font_not_pinned` 台帳に書体の pin か TTF が無く既定 font で測った (DB のある所で check を回す)・`font_version_mismatch` cache の TTF が catalog の版と違う (check が引き直す)・`ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`・`photo_hidden` 全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側) か、幕を 0.6 までにして文字の下にだけ帯 / 板。
+
+## stream で作る (製品と同じ段取り・依頼文から 1 本)
+
+```bash
+bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept --aspect 9:16 --seconds 60 --request <依頼文の file>
+```
+
+著者 (Opus・low・1 call) が cut 順に src を流し、cut ごとに担当 (Opus・medium) が 8 観点で書き直し、check → 直し (2 回まで) → 素材 (絵・声) → 確定 → 投入、と
+cut 単位で進む。描画は製品の DraftStreamRun (`studio.py stream`・この機械の 1 process) が seal ごとに HLS を伸ばす。最初の cut が seal された時点 (静かな機械で 90〜110 s) から
+HLS の segment (`static/video_generate/<process>/`) が増え、全 cut で `studio/out/video.mp4`。名のある定義 (def・motion・run・svg・sound・cue) は初めて使う cut の block に書き、
+その cut だけが直す。根 (設定・cast・字幕と BGM の開き・常設の層) の持ち主は最初の cut で、その cut が受理された時に凍る。
+時刻は `stream/run.jsonl` (`first_segment` / `manifest_published` / `final_ready`・cut ごとの `staff` `check` `fix` `warm` `submitted` `sealed_ack`)、担当の前の著者の版は
+`solo/author_cut_<名>.txt`、各 cut の doc と check は `weave/<cut>/`。`--no-staff` は担当なし (速いが質は落ちる)・`--staff low` も可。見本は既定で `reference/samples/` の自分の type の NoLang の src (`<type>_NN.md`) 1 本 + `hf_*` 1 本 (どちらも依頼と同じ題材の物を除き、依頼と同じ向きの物を先に・file 名順の先頭)。
+変えるなら `--samples a.md,b.md` (前の run の `stream/samples.txt` もそのまま渡せる)。質の根拠は `docs/draft_src_v2/stream-evidence-261013.md`。
+描画を NoLang の server に任せるなら `--remote http://<api> [--token nlg-c-…]` (素材・描画・配信は製品の draft stream renderer、この機械は著者・担当・直しだけ)。token は API key か、Claude Code が `/mcp` で NoLang に接続 (OAuth・`mcp.json`) した時の token (省略時に自動で使う)。 repo の外 (plugin で入れた skill) では `--remote` だけが動き、check / 改名 / 規則の台帳は API から受ける (骨組みは `reference/scaffolds/`・python は `python3` で足りる)。plan が出た時点で `WATCH <url>` (video page・追いかけ再生) が出る。見る人が再生を始められる時点 (status の `playable`) で `PLAYABLE <url>`。`--template <video_id>` は素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/`・既定は空のテンプレ)。契約は `app_main/docs/feature/video_generate/external_author.md`。 依頼に決まった素材 (この写真・この曲・この声) があれば、MCP の `nolang_assets_search` (scope=mine は自分の upload) で探し、手元の file は `python3 .agents/skills/nolang-draft-studio/scripts/upload_asset.py <file>… --remote <api>` (plugin なら skill の dir の `scripts/`) で upload する (`REF <file> id=<uuid>` が出る・動画は仕上げを待つので数十秒)。その `ref` (`id=<uuid>` など) を依頼文に書けば、著者は `image 名 = id=…` / `bgm#名 id=…` / `cast 名 = id=…` にそのまま写す。
+
+## 辞書と待ち方
+
+`reference/authoring.md` は節を行番号で読む (Read の `offset` / `limit`): L7 HTML 形 · L16 字句 · L33 design.txt · L62 型 · L77 位置 · L95 動き · L106 ×N・群・def と根の雛形 · L161 字幕・cut · L165 timeline.txt · L195 印 · L214 時刻の規則 · L223 cue と切替 · L229 欠陥。key の名は v2 の綴り (`size` `fill` `radius` `shadow` …) で載っているが、CSS の名 (`font-size` `background` `border-radius` `box-shadow` …) でそのまま書ける。
+render は前景で `timeout 900 $P $S …`。GPU を分け合うなら `STUDIO_RENDER_LOCK=<file>` を前置。resource-service が落ちていれば起こす (前提 (環境))。
+2 本を比べるときは `reference/compare.md`。
+この skill の形 (圧縮の規則 4 つ + 違い 5 つ + 工程 + 見本) の根拠は `docs/draft_src_v2/studio-skill-evidence.md`。

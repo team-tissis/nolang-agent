@@ -13,15 +13,15 @@ font "太い角ゴシック体、端正で引き締まったビジネス文書�
 fonts e="細いサンセリフの欧文、数字が揃う端正な書体" m="細い角ゴシック体、本文向き"
 photo_style "実写の写真、日本の明るい住まい、柔らかな自然光、落ち着いた中間色、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、画面に文字を表示しない"
-motion title = in=y=-24,opacity=0,duration=700 ease=power3.out out=fade,300
-motion big = in=scale=0.92,opacity=0,duration=600 ease=power3.out out=fade,300
-motion div = in=y=18,opacity=0,duration=600 ease=power3.out out=fade,260
-motion row = in=x=-30,opacity=0,duration=500 ease=power3.out out=fade,240
-motion note = in=opacity=0,duration=450 ease=power2.out out=fade,240
+motion title { in: {y:-24, opacity:0, duration:0.7, ease:'power3.out'}; out: fade {duration:0.3} }
+motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.3} }
+motion div { in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
+motion row { in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
+motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
 div { in: div; border-radius: 12px; background: $card; border: 1px solid $line; box-shadow: none }
 cut { stagger: sentence }
-run u = color=$a
-run y = size=0.6em color=$mute font=m
+run u { color: $a }
+run y { font-size: 0.6em; color: $mute; font-family: m }
 def h1(t) = p(font-size: 60px; line-height: 1.2; color: $ink; in: title; content: {t})
 def num(t) = p(font-size: 64px; font-family: e; color: $a; in: big; content: {t})
 def sub(t) = p(font-size: 26px; color: $mute; font-family: m; in: note; content: {t})
