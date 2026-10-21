@@ -1,6 +1,6 @@
 {
   "name": "nolang-dev",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "社内 dev の NoLang (dev.no-lang.com) に MCP / CLI でつなぎ、Codex から動画を作る。",
   "author": {
     "name": "mvrx"
