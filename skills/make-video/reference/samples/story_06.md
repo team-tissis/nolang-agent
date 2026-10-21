@@ -15,16 +15,16 @@ fonts s="太い角ゴシック体、読みやすい" e="端正なセリフ体の
 art "やわらかい水彩画の絵本のイラスト、和紙の質感、淡くにじむ色、繊細な鉛筆の線、郷愁のある光"
 prompt_tail "文字を描かない、ロゴなし"
 image otter = "ニホンカワウソ、こげ茶色の短く濡れた毛、白っぽい喉、丸い小さな耳、長いひげ、つぶらな黒い目、可愛らしい表情"
-motion title = in=y=-24,opacity=0,duration=700 ease=power3.out out=fade,300
-motion big = in=scale=0.92,opacity=0,duration=600 ease=power3.out out=fade,300
-motion div = in=y=18,opacity=0,duration=600 ease=power3.out out=fade,260
-motion row = in=x=-30,opacity=0,duration=500 ease=power3.out out=fade,240
-motion note = in=opacity=0,duration=450 ease=power2.out out=fade,240
+motion title { in: {y:-24, opacity:0, duration:0.7, ease:'power3.out'}; out: fade {duration:0.3} }
+motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.3} }
+motion div { in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
+motion row { in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
+motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
 lint off=duplicate_text
 cut { stagger: sentence }
-img { main: kb,1.0>1.06 }
-run a = color=$a
-run b = color=$b
+img { main: kb {scale: [1, 1.06]} }
+run a { color: $a }
+run b { color: $b }
 sfx off
 subtitle.hug(font-size: 32px; font-family: s; bottom: 56px; background: #2A2622E6; color: $paper; border-radius: 10px; padding: 10px 22px; line-height: 1.35)
 bgm#music(volume: 4dB) 静かなピアノと柔らかい弦、郷愁のある素朴な旋律、自然ドキュメンタリーの語り向け

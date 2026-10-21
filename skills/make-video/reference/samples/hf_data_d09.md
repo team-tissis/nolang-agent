@@ -28,31 +28,31 @@ image dog = "[transparent]A single dog (friendly mixed breed, sitting, three-qua
 image cat = "[transparent]A single cat (sitting upright, three-quarter view, tail curled around paws) as a minimal flat vector icon. Warm orange (#E8833A) body with deep navy (#1E3A5F) details and a little cream white. The cat fills the frame from top to bottom, centered, no margin."
 image young = "[transparent]A small puppy and a small kitten (both clearly babies, under one year old) sitting close together, curious and cute but not cartoonish. Slate blue, warm orange, deep navy and cream white. The pair fills the frame, centered."
 # 文字の一部の run: 題の強調 (o 橙 / b 青の極太)・升の単位 (u / uw / uc = 0.5em)・欧文の数字 (nn hn an …)・語で伸びる下帯 (hl 題 / mk 結論)
-run o = color=$catd font=h
-run b = color=$dog font=h
-run u = color=$mut size=0.5em font=g
-run uw = color=#FFFFFFD9 size=0.5em font=g
-run uc = size=0.5em font=g
-run nn = font=n
-run hn = color=$ink font=n size=1.36em
-run hw = color=#FFFFFF font=n size=1.36em
-run an = font=n size=1.27em
-run pc = size=0.38em
-run pc2 = size=0.44em
-run sm = color=$mut size=0.6em font=m
-run sm2 = size=0.79em font=m
-run bk = color=$ink font=h
-run b9 = color=$ink font=n size=1.24em
-run b7 = font=n size=1.33em
-run bu = size=0.4em
-run cg = font=n size=1.18em
-run pb = color=$ink
-run em = color=$mut size=0.91em
+run o { color: $catd; font-family: h }
+run b { color: $dog; font-family: h }
+run u { color: $mut; font-size: 0.5em; font-family: g }
+run uw { color: #FFFFFFD9; font-size: 0.5em; font-family: g }
+run uc { font-size: 0.5em; font-family: g }
+run nn { font-family: n }
+run hn { color: $ink; font-family: n; font-size: 1.36em }
+run hw { color: #FFFFFF; font-family: n; font-size: 1.36em }
+run an { font-family: n; font-size: 1.27em }
+run pc { font-size: 0.38em }
+run pc2 { font-size: 0.44em }
+run sm { color: $mut; font-size: 0.6em; font-family: m }
+run sm2 { font-size: 0.79em; font-family: m }
+run bk { color: $ink; font-family: h }
+run b9 { color: $ink; font-family: n; font-size: 1.24em }
+run b7 { font-family: n; font-size: 1.33em }
+run bu { font-size: 0.4em }
+run cg { font-family: n; font-size: 1.18em }
+run pb { color: $ink }
+run em { color: $mut; font-size: 0.91em }
 # hf の作り: 題の帯 (s1-hl) は字の下 1/7 の細い帯だが、run の地の形 (marker の比) は 1 式 (字幕が全 run を持つ) なので結論の mk と同じ 42% にする
-run hl = color=$catd marker=#E8833A47,42%
-run mk = color=$ink font=h marker=#E8833A52,42%
-run nr = color=$red font=h
-run ao = color=$catd font=n size=1.36em
+run hl { color: $catd; marker: #E8833A47,42% }
+run mk { color: $ink; font-family: h; marker: #E8833A52,42% }
+run nr { color: $red; font-family: h }
+run ao { color: $catd; font-family: n; font-size: 1.36em }
 # 効果音はビジネス系の電子音 7 種を語に結んで 41 回 (自動の音は止める)
 sound swoosh = "高域の空気感のある短いデジタルのシュッという音、深い残響、場面の切り替わり"
 sound title = "シンセの和音と明るい高域のノイズスイープが重なる力強いタイトルの効果音"
@@ -61,7 +61,7 @@ sound tick = "明るく短い電子のチャイム、わずかなディレイ、
 sound hit = "クリーンな通知のビープに低域のしっかりしたアタックが重なる中音域のビジネスのアクセント"
 sound pop = "泡がはじけるような明るい電子のチャイム、上がる音程、要点の強調"
 sound bell = "ゆっくり立ち上がる中音域の柔らかく温かいシンセのベルの和音、上品な締め"
-motion pp = in=scale=0.82,opacity=0,duration=450 ease=back(1.8)
+motion pp { in: {scale:0.82, opacity:0, duration:0.45, ease:'back.out(1.8)'} }
 p { color: $ink }
 div { padding: 0px; background: none; border: none; box-shadow: none; border-radius: 0px }
 # 字幕: 下端中央の白い札 (細い縁・薄い影)・1 行で折らない・札 = 句 (2 文を 1 枚にする所は台詞の [||])
@@ -108,7 +108,7 @@ def concl(n, h, c, big, s, b) = div(width: 373px; height: 460px; border-radius: 
 section#s1(stagger: {each:0}; out: {x:-32, opacity:0, duration:0.3, ease:'power2.in'})
 div#s1_circle(left: 667px; top: 60px; width: 587px; height: 587px; border-radius: 999px; background: #EEF3F9; in: {scale:0.72, opacity:0, duration:1.1, ease:'power3.out'})
 shape#s1_ring(left: 640px; top: 33px; width: 640px; height: 640px; path: arc,start=0,to=360; background: none; border: 1.5px solid #C9D6E6; dash: 5,5; delay: 200; in: {scale:0.9, opacity:0, rotation:-20, duration:1.4, ease:'power2.out'})
-img#s1_hero(left: 693px; top: 127px; width: 520px; height: 445px; fit: contain; subject: center 90%; delay: 700; in: {y:31, scale:0.95, opacity:0, duration:1.0, ease:'power3.out'}) [transparent]A friendly medium-sized dog and a cat sitting side by side, facing slightly toward the viewer, calm and dignified. Both animals fill the frame from top to bottom, the dog on the left a little taller than the cat on the right.
+img#s1_hero(left: 693px; top: 127px; width: 520px; height: 445px; object-fit: contain; subject: center 90%; delay: 700; in: {y:31, scale:0.95, opacity:0, duration:1.0, ease:'power3.out'}) [transparent]A friendly medium-sized dog and a cat sitting side by side, facing slightly toward the viewer, calm and dignified. Both animals fill the frame from top to bottom, the dog on the left a little taller than the cat on the right.
 p#s1_tag(left: 80px; top: 151px; font-size: 16px; background: #FFFFFF; border: 1.5px solid $ink; border-radius: 99px; padding: 5px 16px; white-space: nowrap; delay: 150; in: {x:-16, opacity:0, duration:0.5, ease:'power3.out'}) 国内ペット保険市場｜2036年までの市場推計
 p#s1_t1(left: 80px; top: 195px; font-size: 64px; line-height: 1.3; letter-spacing: 0.01em; font-family: h; white-space: nowrap; delay: 300; in: {y:87, duration:0.75, ease:'power4.out', clip:true}) ペット保険の市場、
 p#s1_t2(left: 80px; top: 273px; font-size: 64px; line-height: 1.3; letter-spacing: 0.01em; font-family: h; white-space: nowrap; delay: 480; in: {y:87, duration:0.75, ease:'power4.out', clip:true}) あと{hl}何倍{/}伸びる？
@@ -168,12 +168,12 @@ panel#s2yoy(left: 793px; top: 350px; width: 423px; height: 247px; t: "前年比�
 section#s3(stagger: {each:0}; out: {x:-32, opacity:0, duration:0.3, ease:'power2.in'})
 header#h3(n: "02"; k: "市場の分解（2026年）"; t: "猫は犬より220万頭多いのに、市場は{o}犬の半分{/}"; f: "出典：みなとリサーチ（架空の調査会社）による国内ペット保険市場の推計（2026年）。加入率＝加入頭数÷飼育頭数。"; pg: "{pb}03{/} / 08")
 p#s3h(left: "210.7;394.7;552;736;920;1106.7"; top: 139px; width: "146.7;120;146.7;146.7;173.3;109.3"; text-align: center; font-size: 15px; color: $mut; in: {y:7, opacity:0, duration:0.4, ease:'power3.out'}) ×6 飼育頭数;加入率;加入頭数;年間保険料;保険料収入;構成比
-img#s3dogi(left: 66px; top: 172px; width: 59px; height: 59px; content: @dog; fit: contain; in: {scale:0.8, opacity:0, duration:0.45, ease:'power3.out'})
+img#s3dogi(left: 66px; top: 172px; width: 59px; height: 59px; content: @dog; object-fit: contain; in: {scale:0.8, opacity:0, duration:0.45, ease:'power3.out'})
 p#s3dogl(left: 133px; cy: 201px; font-size: 25px; font-family: h; in: {x:-8, opacity:0, duration:0.4, ease:'power3.out'}) 犬
 cell#s3dog(left: "210.7;394.7;552;736;920;1106.7"; top: 166.7px; width: "146.7;120;146.7;146.7;173.3;109.3"; v: "680{u}万頭{/};19{u}%{/};129.2{u}万頭{/};52,000{u}円{/};672{uw}億円{/};66{uc}%{/}"; c: "$pale;$pale;$pale;$pale;$dog;#FFFFFF"; tc: "$ink;$ink;$ink;$ink;#FFFFFF;$dog"; bd: "#FFFFFF00;#FFFFFF00;#FFFFFF00;#FFFFFF00;#FFFFFF00;$hair") ×6
   p#t(font-size: "29;29;29;29;32;29")
 p#s3dop(left: "357.3;514.7;698.7;882.7"; cy: 201px; width: 37px; text-align: center; font-size: 25px; color: $gl; in: {opacity:0, duration:0.3, ease:'power3.out'}) ×4 ×;＝;×;＝
-img#s3cati(left: 70px; top: 251px; width: 59px; height: 59px; content: @cat; fit: contain; in: {scale:0.8, opacity:0, duration:0.45, ease:'power3.out'})
+img#s3cati(left: 70px; top: 251px; width: 59px; height: 59px; content: @cat; object-fit: contain; in: {scale:0.8, opacity:0, duration:0.45, ease:'power3.out'})
 p#s3catl(left: 133px; cy: 280px; font-size: 25px; font-family: h; in: {x:-8, opacity:0, duration:0.4, ease:'power3.out'}) 猫
 cell#s3cat(left: "210.7;394.7;552;736;920;1106.7"; top: 245.3px; width: "146.7;120;146.7;146.7;173.3;109.3"; v: "900{u}万頭{/};10{u}%{/};90{u}万頭{/};38,000{u}円{/};342{uw}億円{/};34{uc}%{/}"; c: "$pale;$pale;$pale;$pale;$catd;#FFFFFF"; tc: "$ink;$ink;$ink;$ink;#FFFFFF;$catd"; bd: "#FFFFFF00;#FFFFFF00;#FFFFFF00;#FFFFFF00;#FFFFFF00;$hair") ×6
   p#t(font-size: "29;29;29;29;32;29")
@@ -227,7 +227,7 @@ panel#s4pl(left: 64px; top: 137px; width: 740px; height: 460px; t: "犬・猫の
   shape#arw(left: 694px; top: 230px; width: 26px; height: 110px; path: arrow_d; background: $cat; border: 3px solid $cat; in: {y:-9, opacity:0, duration:0.35, ease:'power3.out'})
   p#third(left: 507px; top: 181px; font-size: 17px; color: #FFFFFF; background: $catd; border-radius: 99px; padding: 5px 15px; white-space: nowrap; in: pp) 北欧の {nn}3分の1{/}
 card#s4card(left: 827px; top: 137px; width: 389px; height: 460px)
-  img#cat(left: 125px; top: 23px; width: 140px; height: 140px; content: @cat; fit: contain)
+  img#cat(left: 125px; top: 23px; width: 140px; height: 140px; content: @cat; object-fit: contain)
   p#l(left: 0px; top: 172px; width: 389px; text-align: center; font-size: 17px; color: $mut) 国内の猫の加入率
   p#n(left: 0px; top: 212px; width: 389px; text-align: center; font-size: 113px; line-height: 1; letter-spacing: -0.03em; font-family: n; color: $catd) 10{pc}%{/}
   p#s(left: 0px; top: 337px; width: 389px; text-align: center; font-size: 17px; font-family: m; color: $ink2) 北欧の先行市場（{nn}31%{/}）の
@@ -253,7 +253,7 @@ card#s5ca(left: 687px; top: 137px; width: 529px; height: 143px)
   div#bd(left: 107px; top: 87px; width: 42px; height: 27px; border-radius: 0px 4px 4px 0px; background: $dog; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
   p#vc(left: 292px; cy: 61px; font-size: 20px; font-family: n; color: $catd; in: {opacity:0, duration:0.3, ease:'power3.out'}) 38%
   p#vd(left: 157px; cy: 100px; font-size: 20px; font-family: n; color: $dog; in: {opacity:0, duration:0.3, ease:'power3.out'}) 9%
-  img#ic(left: 365px; top: 20px; width: 151px; height: 103px; fit: contain) [transparent]A relaxed cat lying on a cushion beside a simple window frame and a small potted plant, cozy indoor feeling. Warm orange cat, deep navy and light gray window and cushion, a touch of muted green for the plant. Isolated objects that fill the frame, no wall or floor.
+  img#ic(left: 365px; top: 20px; width: 151px; height: 103px; object-fit: contain) [transparent]A relaxed cat lying on a cushion beside a simple window frame and a small potted plant, cozy indoor feeling. Warm orange cat, deep navy and light gray window and cushion, a touch of muted green for the plant. Isolated objects that fill the frame, no wall or floor.
 card#s5cb(left: 687px; top: 295px; width: 529px; height: 143px)
   p#t(left: 17px; top: 12px; font-size: 16px; white-space: nowrap) 月2,000円以下なら加入を検討
   p#n(left: 15px; top: 43px; font-size: 67px; line-height: 1; letter-spacing: -0.02em; font-family: n) 47{pc2}%{/}
@@ -273,7 +273,7 @@ card#s5cc(left: 687px; top: 454px; width: 529px; height: 143px)
   p#n(left: 15px; top: 43px; font-size: 67px; line-height: 1; letter-spacing: -0.02em; font-family: n) 68{pc2}%{/}
   p#c1(left: 157px; top: 52px; font-size: 17px; line-height: 1.4; font-family: m; color: $ink2; white-space: nowrap) の加入者は[br]{bk}1歳未満{/}で加入
   p#c2(left: 17px; top: 113px; font-size: 14px; font-family: m; color: $mut; white-space: nowrap; in: {y:5, opacity:0, duration:0.4, ease:'power3.out'}) 3歳を過ぎてからの新規加入は {b9}9%{/}
-  img#yp(left: 385px; top: 15px; width: 142px; height: 119px; content: @young; fit: contain)
+  img#yp(left: 385px; top: 15px; width: 142px; height: 119px; content: @young; object-fit: contain)
 #s5cc.n.cnt(content: "[count:68 start=0 ms=800]{pc2}%{/}")
 
 # s6 3 つのシナリオ: 上の帯に共通の前提 (犬猫の icon + 頭数)・4 本の縦棒をシナリオの語で伸ばし金額を数え上げ倍率の札 (中位だけ橙)・下の 2 行の表・右の板で高位と北欧の加入率を横棒で並べ「まだ届かない」
@@ -282,9 +282,9 @@ header#h6(n: "05"; k: "2036年の3つのシナリオ"; t: "2036年の市場は1.
 # hf の作り: 前提の帯の犬猫の icon は右の板の icon と同じ絵 (warn duplicate_media)
 div#s6asm(left: 64px; top: 133px; width: 1152px; height: 44px; border-radius: 9px; background: $pale; border: 1px solid $line2; in: {y:9, opacity:0, duration:0.5, ease:'power3.out'})
   p#l(left: 19px; cy: 50%; font-size: 15px; white-space: nowrap) 共通の前提｜2036年の飼育頭数
-  img#di(left: 267px; cy: 50%; width: 31px; height: 31px; content: @dog; fit: contain)
+  img#di(left: 267px; cy: 50%; width: 31px; height: 31px; content: @dog; object-fit: contain)
   p#dt(left: .di.right+7; cy: 50%; font-size: 15px; font-family: m; color: $ink2; white-space: nowrap) 犬 {hn}610{/}万頭{em}（減少）{/}
-  img#ci(left: 466px; cy: 50%; width: 31px; height: 31px; content: @cat; fit: contain)
+  img#ci(left: 466px; cy: 50%; width: 31px; height: 31px; content: @cat; object-fit: contain)
   p#ct(left: .ci.right+7; cy: 50%; font-size: 15px; font-family: m; color: $ink2; white-space: nowrap) 猫 {hn}930{/}万頭{em}（微増）{/}
 panel#s6pl(left: 64px; top: 191px; width: 773px; height: 407px; t: "保険料収入"; u: "（億円）")
   div#b(left: "150;310;470;630"; top: "226.4;214.4;175.3;112"; width: 100px; height: "58.9;70.9;110;173.3"; border-radius: 4px 4px 0px 0px; background: "$gray;$low;$dog;$high"; in: {scaleY:0, duration:0.75, ease:'power3.out', pivot:'bottom'}) ×4
@@ -298,9 +298,9 @@ panel#s6pl(left: 64px; top: 191px; width: 773px; height: 407px; t: "保険料収
   p#tr1(left: 16px; top: 339px; width: 113px; font-size: 13px; color: $mut; white-space: nowrap) 加入率 {sm2}犬／猫{/}
   p#tr2(left: 16px; top: 371px; width: 113px; font-size: 13px; color: $mut; white-space: nowrap) 年間保険料
 panel#s6cmp(left: 860px; top: 191px; width: 356px; height: 407px; t: "高位シナリオの加入率"; u: "（%）")
-  img#di(left: 8px; top: 65px; width: 64px; height: 64px; content: @dog; fit: contain)
+  img#di(left: 8px; top: 65px; width: 64px; height: 64px; content: @dog; object-fit: contain)
   p#dn(left: 17px; top: 133px; width: 53px; text-align: center; font-size: 17px; font-family: h) 犬
-  img#ci(left: 3px; top: 192px; width: 64px; height: 64px; content: @cat; fit: contain)
+  img#ci(left: 3px; top: 192px; width: 64px; height: 64px; content: @cat; object-fit: contain)
   p#cn(left: 17px; top: 260px; width: 53px; text-align: center; font-size: 17px; font-family: h) 猫
   p#l(left: 80px; top: "64;114.7;190.7;241.3"; font-size: 12px; color: $mut; white-space: nowrap) ×4 2036年 高位;北欧の先行市場;2036年 高位;北欧の先行市場
   div#da(left: 80px; top: 84px; width: 180px; height: 23px; border-radius: 0px 4px 4px 0px; background: $dog; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
@@ -353,9 +353,9 @@ concl#c8a(left: 64px; top: 137px; n: "1"; h: "市場は10年で[br]1.2〜2.9倍"
   div#mb(left: "38.7;117.3;196;274.7"; top: "386.3;380.8;362.8;333.7"; width: 53px; height: "27;32.5;50.5;79.6"; border-radius: 4px 4px 0px 0px; background: "$gray;$low;$dog;$high"; in: {scaleY:0, duration:0.5, ease:'power3.out', pivot:'bottom', stagger:{each:0.12}}) ×4
   p#ml(left: "25.3;104;182.7;261.3"; top: 419px; width: 80px; text-align: center; font-size: 11px; color: $mut) ×4 2026;低位;中位;高位
 concl#c8b(left: 453px; top: 137px; n: "2"; h: "最大の伸びしろは[br]猫"; c: $catd; big: "10{bu}%{/}"; s: "国内の猫の加入率。北欧の3分の1"; b: "頭数は最多。「室内飼いだから不要」という{mk}思い込みを崩せるか{/}。")
-  img#ic(left: 120px; top: 313px; width: 127px; height: 127px; content: @cat; fit: contain)
+  img#ic(left: 120px; top: 313px; width: 127px; height: 127px; content: @cat; object-fit: contain)
 concl#c8c(left: 843px; top: 137px; n: "3"; h: "加入は[br]1歳未満で決まる"; c: $ink; big: "68{bu}%{/}"; s: "加入者のうち1歳未満で加入した割合"; b: "若いうちに{mk}月2,000円台{/}で入れる商品が、[br]加入率と単価の両立の鍵。")
-  img#ic(left: 114px; top: 319px; width: 145px; height: 121px; content: @young; fit: contain)
+  img#ic(left: 114px; top: 319px; width: 145px; height: 121px; content: @young; object-fit: contain)
 ```
 
 ```timeline.txt

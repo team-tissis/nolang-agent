@@ -21,10 +21,10 @@ lint off=spoiler,duplicate_text,text_only_cut
 # hf の作り: スケッチの寸法は押し出しの 0.75 秒前に消える・点群やメッシュの札は次の文の頭で替わる (flash_text)・開幕の矢印は最後の語で出て溶ける (entrance_in_fadeout / ghost_dissolve)
 # hf の作り: 組み合わせの図を出す語で使い分けの 2 枚を 0.16 まで沈める (low_contrast)・同じ古い部品の写真を板と流れ図に 2 度使う (duplicate_media)・使い分けの 2 枚は 6 秒動かない (still_stretch)
 prompt_tail "文字なし、ラベルなし、ロゴなし、人物なし、手なし"
-run m = color=$ink marker=$mark,38%
-run bn = color=$blue font=e
-run bl = color=$blue
-run sm = size=15 color=$sub font=m
+run m { color: $ink; marker: $mark,38% }
+run bn { color: $blue; font-family: e }
+run bl { color: $blue }
+run sm { font-size: 15px; color: $sub; font-family: m }
 p { color: $ink; line-height: 1.2; out: none }
 div { border: none; box-shadow: none; padding: 0px; out: none }
 img { out: none }
@@ -32,8 +32,8 @@ icon { out: none }
 shape { out: none }
 group { out: none }
 # 入場の型 (hf の inn / pop: 下から 26px・0.55 s・power3.out / 0.55 倍から back.out)
-motion up = in=y=17,opacity=0,duration=550 ease=power3.out
-motion popin = in=scale=0.55,opacity=0,duration=500 ease=back(1.9)
+motion up { in: {y:17, opacity:0, duration:0.55, ease:'power3.out'} }
+motion popin { in: {scale:0.55, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
 image old = "[photo]使い込まれた古い鋳鉄のL字の機械用ブラケット、丸いボルト穴が2つ、くすんだ濃い灰色の金属に傷と小さな欠けと角の丸い摩耗と錆の点、明るい木の作業台の中央に1つだけ置かれている、明るい工房、柔らかい自然光、背景の工具棚はぼけている" aspect=16:9
 image product = "[photo]新しく削り出したアルミのL字ブラケット（穴が2つ）が何個も同じ向きでステンレスの作業台に一列に並ぶ、明るい現代的な工場、奥にCNCフライス盤がぼけて見える、冷たく澄んだ昼の光、整然として精密" aspect=16:9
 sound title = "力強いシンセの和音に明るい高域のノイズが重なる、タイトルが出るシャキーン"
@@ -122,9 +122,9 @@ node#s2_n1(left: 434px; top: 217px; t: "アイデア"; c: $blue)
 node#s2_n2(left: 700px; top: 217px; t: "形（3Dモデル）"; c: $blue)
   icon#i(cx: 50%; top: 25px; font-size: 51px; name: cube; color: $blue)
 node#s2_n3(left: 967px; top: 217px; t: "製品"; c: $blue)
-  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; fit: cover,focus=30%,60%; content: @product; main: none)
+  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover,focus=30%,60%; content: @product; main: none)
 node#s2_n4(left: 967px; top: 430px; t: "実物"; c: $orange)
-  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; fit: cover,focus=45%,50%,zoom=160%; content: @old; main: none)
+  img#p(cx: 50%; top: 3px; width: 94px; height: 94px; border-radius: 99px; object-fit: cover,focus=45%,50%,zoom=160%; content: @old; main: none)
 node#s2_n5(left: 700px; top: 430px; t: "測る"; c: $orange)
   icon#i(cx: 50%; top: 25px; font-size: 51px; name: scan; color: $orange)
 node#s2_n6(left: 434px; top: 430px; t: "設計データ"; c: $orange)
@@ -279,7 +279,7 @@ card#u1(left: 87px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:
   p#a(left: 29px; top: 311px; font-size: 27px; line-height: 1.3) 新しい製品を[br]一から考える
   pill#pl(left: 29px; bottom: 27px; t: "通常のCADモデリング"; c: $blue)
 card#u2(left: 660px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity:0, duration:.7, ease:'power3.out'})
-  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; fit: cover,focus=50%,50%; main: kb {scale: [1.1, 1], ease:'power1.out'})
+  img#p1(left: 0px; top: 0px; width: 265px; height: 267px; content: @old; object-fit: cover,focus=50%,50%; main: kb {scale: [1.1, 1], ease:'power1.out'})
   img#p2(left: 268px; top: 0px; width: 265px; height: 267px; main: kb {scale: [1.1, 1], ease:'power1.out'}) [photo]手で削り出した工業デザインのクレイモデル、コンパクトで現代的な車、なめらかな艶消しの暖かい灰色の粘土の面、明るいデザインスタジオの白い机の上、そばにクレイ用のヘラが数本、柔らかく均一なスタジオの光、ミニマルで清潔な背景
   p#c1(left: 9px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 図面のない部品
   p#c2(left: 277px; top: 233px; font-size: 16px; color: #FFFFFF; background: #14213DC7; border-radius: 7px; padding: 4px 11px) 手作りの試作品
@@ -289,7 +289,7 @@ card#u2(left: 660px; top: 131px; width: 533px; height: 460px; in: {y:27, opacity
 card#combo(left: 173px; top: 200px; width: 933px; height: 313px; overlap: u1,u2; in: {y:20, scale:.97, opacity:0, duration:.55, ease:'power3.out'})
   p#t(left: 33px; top: 24px; font-size: 25px) 組み合わせて使うことも多い
   div#n1(left: 40px; top: 80px; width: 153px; height: 127px; border-radius: 15px; background: $orange_tt; in: popin)
-    img#p(cx: 50%; top: 20px; width: 80px; height: 60px; border-radius: 8px; content: @old; fit: cover,focus=50%,50%; main: none)
+    img#p(cx: 50%; top: 20px; width: 80px; height: 60px; border-radius: 8px; content: @old; object-fit: cover,focus=50%,50%; main: none)
     p#t(cx: 50%; top: 89px; font-size: 20px; color: $orange_d) 実物
   div#n2(left: 390px; top: 80px; width: 153px; height: 127px; border-radius: 15px; background: $orange_tt; in: popin)
     icon#i(cx: 50%; top: 22px; font-size: 43px; name: file-text; color: $orange)

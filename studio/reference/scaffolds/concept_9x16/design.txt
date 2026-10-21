@@ -1,0 +1,84 @@
+#v2
+canvas 720x1280 bg=#0B1220
+theme dark
+palette a=#EE6A1F b=#22B8A7
+# 本文の書体 (`font`) と数字の書体 (`fonts n` = `font-family: n`) は style の組 (looks.md) で題材に合わせて決める — 下は骨組みの仮の値で、写さない。数字は太く字形のはっきりした物 (細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える)
+font "太めの角ゴシック体、現代的な和文"
+fonts n="幾何学的な欧文サンセリフ、数字がくっきり"
+
+# 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
+motion title { in: {y:-40, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-16, opacity:0, duration:0.24} }
+motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; out: fade {duration:0.22} }
+motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
+motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
+motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
+div { in: div }
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
+cut { stagger: sentence }
+# 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
+def h1(t) = p(font-size: 64px; line-height: 1.15; in: title; content: {t})
+def num(t) = p(font-size: 88px; color: $a; in: big; content: {t})
+def big(t) = p(font-size: 72px; text-align: center; in: big; content: {t})
+def sub(t) = p(font-size: 34px; color: $mute; in: note; content: {t})
+def body(t) = p(font-size: 38px; in: row; content: {t})
+def note(t) = p(font-size: 28px; color: $mute; in: note; content: {t})
+# 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
+def stat(v, u, l) = div(width: 624px; height: 202px; background: none; border: none; box-shadow: 0; padding: 0px)
+  p#l(left: 0px; top: 0px; font-size: 34px; color: $mute; content: {l})
+  p#v(left: 0px; top: 50px; font-size: 144px; font-family: n; color: $a; line-height: 1; content: {v})
+  p#u(left: .v.right+12; top: 122px; font-size: 64px; line-height: 1; content: {u})
+# 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
+def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+  p#t(left: 0px; top: 0px; font-size: 56px; content: {t})
+  div#i(left: 0px; top: 186px; width: 100%; height: 330px; gap: 16px; display: flex; flex-direction: column) ×3
+    icon#ic(left: 0px; cy: 50%; font-size: 64px; name: {icons}; color: $b)
+    p#t(left: 88px; cy: 50%; font-size: 44px; content: {items})
+  p#cta(left: 0px; bottom: 0px; font-size: 44px; color: $a; content: {cta})
+image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
+# 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
+backdrop#bd(look: glow; vignette: 0.15)
+bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセパッドと軽いビート、解説動画向け
+bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
+subtitle.hug(font-size: 32px; width: 640px; height: 150px; unit: phrase)
+# 流れの札: 絵 + 名 (×N で並べ、枠は stack で等分)。札の名は本文より大きく
+def node(t, i) = div(background: $panel; border-radius: 16px; padding: 0px)
+  icon#i(cx: 50%; top: 24px; font-size: 64px; name: {i}; color: $b)
+  p#t(left: 0px; cy: 60%; width: 100%; font-size: 40px; text-align: center; content: {t})
+
+section#title
+img#t_bg(inset: 0; content: @bg)
+h1#t_h(left: 48px; top: 288px; width: 624px; height: 297px) エフェクチュ[br]エーション
+sub#t_m(left: 48px; top: 609px; width: 624px; height: 136px) 起業家が実際に使っている考え方
+
+section#parts
+# 板の cut にも絵: 全面の写真 + scrim の上に板 (文字と板だけの cut は lint text_only_cut)
+img#pa_bg(inset: 0; scrim: 0.6) [photo]作業台に並べた手持ちの道具と材料を上から、落ち着いた木の色、文字なし
+div#pa(left: 48px; top: 128px; width: 624px; height: 617px; gap: 24px; background: $panel; border-radius: 16px; padding: 24px; display: flex; flex-direction: column) ×3
+  icon#ic(left: 0px; top: 0px; font-size: 150px; name: "hand;shield-check;shuffle"; color: $b)
+  body#t(left: 170px; top: 20px) 手段から始める;許せる損失で動く;偶然を味方にする
+  note#s(left: 170px; top: 80px) 今あるもので始める;失っていい分だけ賭ける;予想外を取り込む
+big#pa_h(left: 48px; top: 769px; width: 624px; height: 297px) 共通するのは「手元から」
+
+section#flow
+img#fl_bg(inset: 0; scrim: 0.6) [photo]白い壁に貼った付箋とメモを指さす手、斜めの自然光、文字なし
+node#fl(left: 48px; top: 128px; width: 624px; height: 938px; gap: 24px; t: "持っている物を数える;小さく試す;反応を見て学ぶ;次の一歩を決める"; i: "list-checks;flask;eye;signpost"; display: flex; flex-direction: column) ×4
+
+section#example
+# 主役の絵 + 例の数字 (stat) + 板 1 枚 (縦は上から順に・横は絵の右に数字と板)
+img#ex_p(left: 48px; top: 128px; width: 624px; height: 360px) [photo]冷蔵庫を開けて中をのぞく料理人の後ろ姿、台所の暖かい光、文字なし
+stat#ex_st(left: 48px; top: 512px; v: "[count:127]"; u: "通り"; l: "7 つの材料の組み合わせ")
+div#ex_c(left: 48px; top: 738px; width: 624px; height: 328px; background: $panel; border-radius: 16px; padding: 32px)
+  body#t(left: 0px; top: 0px; width: 100%) 冷蔵庫にある材料で、今夜の一皿を決める
+  sub#s(left: 0px; bottom: 0px; width: 100%) 手元の材料から今夜の一皿を組み立てる
+
+section#wrap
+img#wr_p(inset: 0; scrim: 0.5) [photo]朝の港を出ていく小さな漁船、霧の中の逆光、文字なし
+big#wr_v(left: 48px; top: 288px; width: 624px; height: 297px) 手元から、始める
+sub#wr_s(left: 48px; top: 609px; width: 624px; height: 136px; text-align: center) 目的から逆算しない
+
+section#close
+img#cl_bg(inset: 0; scrim: 0.6) [photo]朝の机に広げたノートと湯気の立つコーヒー、窓からの光、文字なし
+wrap#cl(left: 48px; top: 128px; width: 624px; height: 938px; t: "エフェクチュエーション"; items: "手段;損失;偶然"; icons: "hand;shield-check;shuffle"; cta: "明日の一歩は、手元の物を数える")

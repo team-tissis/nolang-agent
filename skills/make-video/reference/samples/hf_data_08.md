@@ -38,12 +38,12 @@ sound stamp = "判子を紙に押す乾いた短い音"
 sound down = "明るい電子音が下がる短い合図 (ピロン)"
 sound up = "明るい電子音が上がる短い合図 (ピロリン)"
 sound ting = "高く明るい金属のベルの単音 (ティン)"
-run o = color=$orange
-run tilde_o = color=$orange size=0.66em
-run tilde = color=$slate size=0.7em
-run r = color=$red
-run num = color=$navy size=37
-run num_o = color=$orange size=37
+run o { color: $orange }
+run tilde_o { color: $orange; font-size: 0.66em }
+run tilde { color: $slate; font-size: 0.7em }
+run r { color: $red }
+run num { color: $navy; font-size: 37px }
+run num_o { color: $orange; font-size: 37px }
 p { out: none }
 div { border-radius: 0px; background: #FFFFFF; padding: 0px; border: none; box-shadow: none; out: none }
 img { main: none; out: none }
@@ -56,7 +56,7 @@ bgm#music(volume: 6dB; duck: -8; fade: 1200,3400; keys: "0:0") 明るく穏や�
 def chip(t, fill_color=$navy, text_color=#FFFFFF) = p(content: {t}; font-size: 24px; line-height: 1; background: {fill_color}; color: {text_color}; border-radius: 99px; padding: 9px 19px; letter-spacing: 0.04em)
 def half_photo(src, focus_x=50%) = img(top: 0px; width: 707px; height: 720px; content: {src}; object-fit: cover,focus={focus_x},50%; in: none)
 def half_paper = div(top: 0px; width: 573px; height: 720px; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
-# 時計の文字盤 (円の板 + 目盛り 4 + 針 2 本): 針は上半分だけ塗った細い板を中心で回した物 — 印 `[!盤.mh to,{rotation:…}]` で針が回る
+# 時計の文字盤 (円の板 + 目盛り 4 + 針 2 本): 針は上半分だけ塗った細い板を中心で回した物 — 印 `[!#盤.mh to,{rotation:…}]` で針が回る
 def dial(c) = div(width: 77px; height: 77px; border-radius: 39px; border: 5px solid {c})
   shape#tk(left: 0px; top: 0px; width: 100%; height: 100%; path: ticks,n=4,len=0.18; background: {c}; border: 2px solid {c})
   div#hh(cx: 50%; cy: 50%; width: 5px; height: 34px; border-radius: 3px; background: linear($navy,$navy@50%,#1F3A5F00@50%,180); transform: rotate(248deg))
@@ -109,7 +109,7 @@ group#hanko(left: 1128px; top: 410px; width: 119px; height: 119px; transform: ro
 
 # gaps — 差を図にする: 紙の地に目盛りと棒 2 本 → 差の枠と吹き出し → 斜線と × → 注意の帯 (図ごとゆっくり寄る)
 section#gaps(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
-div#bg_gaps(inset: 0; background: $paper; border-radius: 0; border: none; box-shadow: 0; padding: 0; in: none; out: none; z: back)
+div#bg_gaps(inset: 0; background: $paper; border-radius: 0; border: none; box-shadow: 0; padding: 0; in: none; out: none; z-index: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
 group#chart(main: ramp {scale: 0.035, window: '700,20830', pivot: '50%,45%'})
 shape#chart.head_bar(left: 87px; top: 91px; width: 8px; height: 40px; path: rect; background: $orange; delay: 350; in: {y:13, opacity:0, duration:0.55, ease:'power3.out'})
@@ -175,7 +175,7 @@ p#tips_note(left: 774px; top: 337px; font-size: 25px; color: $gray; line-height:
 shape#mini_bar(left: 774px; top: 516px; width: 440px; height: 43px; path: rect,r=0.19; background: $orange; in: {scaleX:0, duration:0.7, ease:'power3.inOut', pivot:'left'})
 div#mini_end(left: 1158px; top: 516px; width: 56px; height: 43px; border-radius: 0,8,8,0; background: #FFFFFFB8; pattern: hatch,45,#D2463A8C,11,5; border: 2px solid $red; in: fade {duration: 0.3})
 p#mini_label(right: 66px; top: 460px; font-size: 21px; color: $red; pointer: below; in: {y:8, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 終了間際は避けて
-p#mini_tick(left: "774;994"; top: 565px; width: 220px; font-size: 20px; color: $navy; text-align: "left;right"; in: fade {duration: 0.3, stagger: 100}) ×2 9:00;16:00 受付終了
+p#mini_tick(left: "774;994"; top: 565px; width: 220px; font-size: 20px; color: $navy; text-align: "left;right"; in: fade {duration: 0.3, stagger: 0.1}) ×2 9:00;16:00 受付終了
 
 # closing — 締めの 1 枚: 夕方の市役所 + 左から cream の幕・白い板 (札・新しい時刻・罫・お願い・足)・帯を閉じる
 section#closing(stagger: {each:0})

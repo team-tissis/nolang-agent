@@ -20,24 +20,24 @@ sfx off
 # hf の作り: A/B/C の色札が縦に 3 枚並ぶ行の札 (stacked_labels)・C の模型と帯は枠を先に置き、語で中身を入れる (empty_board)・注記は場面の末尾 1〜2 秒だけ (flash_text)
 # hf の作り: 図の色 (グラデの端・半透明の地・薄い線) は場面ごとに直書き (palette_drift)・結論の 1 場面は 17 秒 1 枚の絵 (same_picture)・頭の 5 秒に効果音が 9 回 (se_dense)
 lint off=small_text,spoiler,text_only_cut,stacked_labels,empty_board,flash_text,palette_drift,same_picture,se_dense
-run cy = color=$cyan
-run ro = color=$rose
-run am = color=$amber
-run bl = color=$blue
-run va = color=$va
-run w = color=$tx font=m
-run u = size=20 color=$tx2 font=c
-run s15 = size=15 color=$tx2
-run s14 = size=14 color=$tx2
-run s13 = size=13 color=$tx3
-run pt = size=29 color=$tx2 font=m
-run pt16 = size=16
-run pb = size=27 color=$tx font=b
-run b17 = size=17 color=$tx font=b
-run yn = size=12 font=m
-run mb = size=19 font=b
-run ar27 = size=27 color=$tx3
-run u17 = size=17 color=$tx2
+run cy { color: $cyan }
+run ro { color: $rose }
+run am { color: $amber }
+run bl { color: $blue }
+run va { color: $va }
+run w { color: $tx; font-family: m }
+run u { font-size: 20px; color: $tx2; font-family: c }
+run s15 { font-size: 15px; color: $tx2 }
+run s14 { font-size: 14px; color: $tx2 }
+run s13 { font-size: 13px; color: $tx3 }
+run pt { font-size: 29px; color: $tx2; font-family: m }
+run pt16 { font-size: 16px }
+run pb { font-size: 27px; color: $tx; font-family: b }
+run b17 { font-size: 17px; color: $tx; font-family: b }
+run yn { font-size: 12px; font-family: m }
+run mb { font-size: 19px; font-family: b }
+run ar27 { font-size: 27px; color: $tx3 }
+run u17 { font-size: 17px; color: $tx2 }
 sound whoosh = "短く鋭いエフェクトのかかったビジネス系のシュッという風切り音、動画の頭"
 sound whoosh2 = "短いビジネス系のシュッという風切り音、場面の切り替わり"
 sound pop = "ポコッという軽く丸い短い音"
@@ -53,7 +53,7 @@ svg dots = """<svg viewBox="0 0 34 22"><circle cx="4" cy="17" r="3" fill="#f5b54
 p { color: $tx; line-height: 1.2 }
 div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
 # 字幕: 下端中央に地なしの白い字 + 濃い影 (下の暗い帯の上)・句末の約物は外す・声の 0.08 秒前に出て声と同時に消える
-subtitle(left: 93px; top: 638px; width: 1093px; height: 50px; font-size: 22px; font-family: m; line-height: 1.2; letter-spacing: 0.03em; color: #E6EDF4; text-shadow: 0px 1px 9px #000000E6; background: none; border: none; box-shadow: none; text-align: center; align-items: center; unit: sentence; strip: 、。; lead: 80; tail: 0; hold: off; in: {y:7, opacity:0, duration:0.2, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
+subtitle.hug(left: 93px; bottom: 44px; width: 1093px; font-size: 22px; font-family: m; line-height: 1.2; letter-spacing: 0.03em; color: #E6EDF4; text-shadow: 0px 1px 9px #000000E6; background: none; border: none; box-shadow: none; text-align: center; unit: sentence; strip: 、。; lead: 80; tail: 0; hold: off; in: {y:7, opacity:0, duration:0.2, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
 # 曲: 最後の 2.7 秒だけ前に出してから消える (hf は同じ曲の末尾を大きめの音量で重ねる)
 bgm#music(fade: 1200,2200; keys: "end-2.7s:0|end-1.8s:+4") 知的で落ち着いたサイエンス系のシンセとピアノの曲、軽いビートと柔らかいパッド、データや研究の解説向け、主旋律は控えめ
 
@@ -274,7 +274,7 @@ board#wk(left: 64px; top: 93px; width: 1152px; height: 513px; k: "{cy}03{/} ／ 
   shape#rb(path: "M313 460 L313 469 L660 469 L660 460"; background: none; border: 1px solid #3DD9EBB3; in: {scaleX:0.2, opacity:0, duration:0.5, ease:'power2.out'})
   p#rl(cx: 487px; top: 475px; font-size: 14px; color: $cyan; white-space: nowrap; in: {opacity:0, duration:0.5}) 2 週目以降の差は 0.1〜0.2pt
   callout#co(left: 767px; top: 23px; width: 360px; height: 467px)
-    img#ic(left: 220px; top: 17px; width: 120px; height: 120px; fit: contain; box-shadow: 0px 18px 30px #00000080; main: none; in: {scale:0.4, rotation:-20, opacity:0, duration:0.7, ease:'back.out(2.2)'}) [transparent]琥珀の金色に柔らかく光る、艶のある小さな 4 つの角の星形のきらめきと、その横の小さな 2 つのきらめき。クリーンでモダンな 3D の icon の質感、柔らかなスタジオの光、中央に 1 つだけ置く。文字なし
+    img#ic(left: 220px; top: 17px; width: 120px; height: 120px; object-fit: contain; box-shadow: 0px 18px 30px #00000080; main: none; in: {scale:0.4, rotation:-20, opacity:0, duration:0.7, ease:'back.out(2.2)'}) [transparent]琥珀の金色に柔らかく光る、艶のある小さな 4 つの角の星形のきらめきと、その横の小さな 2 つのきらめき。クリーンでモダンな 3D の icon の質感、柔らかなスタジオの光、中央に 1 つだけ置く。文字なし
     kick#k(left: 24px; top: 36px) 考えられること
     p#t(left: 24px; top: 64px; font-size: 27px; font-family: b; white-space: nowrap) 物珍しさの効果？
     p#b1(left: 24px; top: 157px; width: 320px; font-size: 17px; line-height: 1.6; color: $tx2) B の差は {w}1 週目が +0.88pt{/} と大きく、[br]{w}2 週目以降は 0.1〜0.2pt{/} に縮む。
@@ -348,7 +348,7 @@ board#rv(left: 64px; top: 93px; width: 1152px; height: 513px; k: "{cy}05{/} ／ 
 section#side(stagger: {each:0}; out: {y:-9, opacity:0, duration:0.32, ease:'power2.in'})
 sec#sec7 {ro}06{/} 副作用
 board#sl(left: 64px; top: 93px; width: 568px; height: 493px; k: "{ro}06{/} ／ 副作用"; t: "料金の問い合わせ"; s: "訪問 1,000 人あたり")
-  img#ic(left: 440px; top: 5px; width: 100px; height: 100px; fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]2 つの重なった吹き出しの艶のある 3D の icon。手前の吹き出しに大きな疑問符が 1 つ。柔らかな珊瑚のピンクと冷たい青みの灰色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。疑問符の他に文字なし
+  img#ic(left: 440px; top: 5px; width: 100px; height: 100px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]2 つの重なった吹き出しの艶のある 3D の icon。手前の吹き出しに大きな疑問符が 1 つ。柔らかな珊瑚のピンクと冷たい青みの灰色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。疑問符の他に文字なし
   p#c(left: 29px; top: "124;191;257"; width: 31px; font-size: 17px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 8px; padding: 7px 0px) ×3 A;B;C
   div#b(left: 80px; top: "124;191;257"; width: "147;249;191"; height: 31px; border-radius: 5px; background: "linear(#6F7E93,#A6B3C4,90);linear(#D94A62,#FF8597,90);linear(#4A5870,#71819A,90)"; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
   p#la(left: 241px; cy: 140px; font-size: 24px; font-family: b; white-space: nowrap; in: {opacity:0, duration:0.5}) 4.0{s13} 件（計 52 件）{/}
@@ -361,7 +361,7 @@ board#sl(left: 64px; top: 93px; width: 568px; height: 493px; k: "{ro}06{/} ／ �
     p#b1(left: 19px; top: 15px; font-size: 14px; color: $tx2; white-space: nowrap) B で増えた問い合わせの多くは
     p#b2(left: 19px; top: 37px; font-size: 21px; font-family: b; color: #FFD5DC; white-space: nowrap) 「年額の途中解約・返金はできるか」
 board#sr(left: 648px; top: 93px; width: 568px; height: 493px; k: "{ro}06{/} ／ 副作用"; t: "年額の返金申請"; s: "14 日以内"; delay: 320)
-  img#ic(left: 440px; top: 5px; width: 100px; height: 100px; fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]紙のレシートと、1 枚の金色の硬貨を回り込む曲がった戻りの矢印の、艶のある 3D の icon。柔らかな珊瑚のピンクと琥珀の色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。文字・数字なし
+  img#ic(left: 440px; top: 5px; width: 100px; height: 100px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]紙のレシートと、1 枚の金色の硬貨を回り込む曲がった戻りの矢印の、艶のある 3D の icon。柔らかな珊瑚のピンクと琥珀の色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。文字・数字なし
   p#c(left: 29px; top: "131;211;291"; width: 31px; font-size: 17px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 8px; padding: 7px 0px) ×3 A;B;C
   div#pa(left: "80;102;124"; top: 136px; width: 17px; height: 17px; border-radius: 4px; background: #8B99AD; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×3
   div#pb(left: "80;102;124;146;168;190;212;234;256;278;300"; top: 216px; width: 17px; height: 17px; border-radius: 4px; background: $rose; box-shadow: 0px 0px 8px #FF6B8159; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×11

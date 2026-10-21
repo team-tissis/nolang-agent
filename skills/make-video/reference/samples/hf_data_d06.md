@@ -26,27 +26,27 @@ lint off=small_text,spoiler,duplicate_text
 # hf の作り: まとめは夜の写真 1 枚で 20 秒 (same_picture)・要点の 2 と 3 の間は 6 秒動かない (still_stretch の warn は残す)・出典の札は声の後の 3.4 秒だけ (flash_text)
 lint off=text_only_cut,all_at_once,entrance_in_fadeout,same_picture,flash_text
 prompt_tail "Photorealistic, natural cinematic color grading, high detail. Absolutely no text, no letters, no signs with writing, no logos, no watermark."
-run nv = font=m
-run em = color=$lt10
-run fg = font=m size=17 color=$shu
-run tt = font=b color=$ink
-run n = font=m size=25 color=$ink
-run n27 = font=m size=27 color=$ink
-run n27s = font=m size=27 color=$shu
-run n20 = font=m size=20 color=$ink
-run s40 = size=40
-run s51 = size=51
-run s29 = size=29
-run s35 = size=35
-run s20 = size=20
-run yk = font=b size=20 color=$ink2
-run yu = size=33
-run k = font=b color=$ink
-run bk = font=b color=$ink
-run ar = font=b size=20 color=$shu
-run sm = font=b size=13 color=$ink2
-run qn = font=m color=$shu
-run mk = marker=#B23C273D,45%
+run nv { font-family: m }
+run em { color: $lt10 }
+run fg { font-family: m; font-size: 17px; color: $shu }
+run tt { font-family: b; color: $ink }
+run n { font-family: m; font-size: 25px; color: $ink }
+run n27 { font-family: m; font-size: 27px; color: $ink }
+run n27s { font-family: m; font-size: 27px; color: $shu }
+run n20 { font-family: m; font-size: 20px; color: $ink }
+run s40 { font-size: 40px }
+run s51 { font-size: 51px }
+run s29 { font-size: 29px }
+run s35 { font-size: 35px }
+run s20 { font-size: 20px }
+run yk { font-family: b; font-size: 20px; color: $ink2 }
+run yu { font-size: 33px }
+run k { font-family: b; color: $ink }
+run bk { font-family: b; color: $ink }
+run ar { font-family: b; font-size: 20px; color: $shu }
+run sm { font-family: b; font-size: 13px; color: $ink2 }
+run qn { font-family: m; color: $shu }
+run mk { marker: #B23C273D,45% }
 p { color: $ink; out: none }
 div { padding: 0px; border: none; box-shadow: none; background: none; border-radius: 0px; out: none }
 img { out: none }
@@ -107,7 +107,7 @@ img#t_photo(inset: 0; subject: "60%,10%,40%,55%"; room: left 45%; main: kb {scal
 div#t_shade(inset: 0; background: linear(#100C09D6,#100C09A8@34%,#100C092E@62%,#100C0900@78%,90); in: {opacity:0, duration:1, ease:'power1.out'})
 div#t_shade_b(left: 0px; top: 440px; width: 1280px; height: 280px; background: linear(#100C09B8,#100C0900,0); in: none)
 # 湯気 8 つ (右端の 2 つは hf より 13 px 内へ寄せた・放射の白い斑が 5.6 秒の周期で上下しながら濃くなり薄れる・位相は粒ごと)
-shape#t_steam.ellipse(left: "787;947;867;1027;720;973;827;1080"; top: "347;400;280;313;407;253;427;373"; width: "280;240;200;253;227;187;267;200"; height: "280;240;200;253;227;187;267;200"; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: "sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=0;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.245;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.489;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.734;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.979;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.241;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.486;sine,y=-50,opacity=.45,freq_ms=5600,phase_offset=.73") ×8
+shape#t_steam.ellipse(left: "787;947;867;1027;720;973;827;1080"; top: "347;400;280;313;407;253;427;373"; width: "280;240;200;253;227;187;267;200"; height: "280;240;200;253;227;187;267;200"; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: sine {y: -50, opacity: .45, period: 5.6, phase_offset: '0;.245;.489;.734;.979;.241;.486;.73'}) ×8
 div#t_grain(inset: 0; grain: 0.06; in: none)
 div#t_kick(left: 80px; top: 133px; height: 25px; display: flex; gap: 12px; align-items: center; delay: 250; in: {y:11, opacity:0, duration:.7, ease:'power2.out'})
   p#a(font-size: 17px; letter-spacing: .22em; color: $lt1) 湯ノ瀬町 観光課

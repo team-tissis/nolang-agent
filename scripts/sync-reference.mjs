@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// nolang-backend のスキル `nolang-draft-studio` から、このスキルの辞書 (skills/make-video/reference/) を写す。
+// nolang-backend のスキル `nolang-draft-studio` から、このスキルの辞書 (skills/make-video/reference/) と、studio の一式 (studio/ —
+// `nolang make` が --remote で動かす著者・担当・投入の段取り) を写す。
 // 正本は backend (文法とサーバーは一緒に変わる)。ここには写しと、写した元の commit (reference/SOURCE.json) だけを置く。
 //
 //   node scripts/sync-reference.mjs <nolang-draft-studio の directory> [--commit <sha>] [--ref <branch>]
@@ -16,6 +17,15 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const DEST = join(ROOT, "skills/make-video/reference");
 const DOCS = ["authoring.md", "capabilities.md", "looks.md", "sounds.md"];
 const DIRS = ["scaffolds", "samples"];
+const STUDIO_DEST = join(ROOT, "studio");
+const STUDIO_SKIP = new Set(["__pycache__", ".DS_Store"]);
+// `nolang make` (stream_make.sh --remote) が読む物だけ — 著者の system prompt の文書 (SKILL.md と reference の 4 つ)・見本・骨組みと、
+// remote の段取りの script。check / 素材 / 描画はサーバーがするので、backend の repo の中でだけ動く script (studio.py・studio_lint.py …) は要らない
+const STUDIO_FILES = [
+  "SKILL.md",
+  ...["authoring.md", "capabilities.md", "looks.md", "sounds.md", "samples", "scaffolds"].map((name) => `reference/${name}`),
+  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_run.py", "studio_rules.py", "studio_new.py"].map((name) => `scripts/${name}`),
+];
 
 const args = process.argv.slice(2);
 const src = args.find((a, i) => !a.startsWith("--") && !["--commit", "--ref"].includes(args[i - 1]));
@@ -58,6 +68,10 @@ for (const name of DIRS) {
   await cp(join(from, "reference", name), join(DEST, name), { recursive: true });
 }
 await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, "SKILL.md"), "utf8")));
+await rm(STUDIO_DEST, { recursive: true, force: true });
+for (const rel of STUDIO_FILES) {
+  await cp(join(from, rel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
+}
 
 const git = gitCommit(from);
 const source = {
@@ -66,7 +80,7 @@ const source = {
   commit: flag("--commit") || git?.sha || null,
   dirty: git?.dirty ?? null,
   synced_at: new Date().toISOString(),
-  files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (SKILL.md から生成)"],
+  files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (SKILL.md から生成)", "../../../studio/ (skill 一式)"],
 };
 await writeFile(join(DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");
 console.error(`reference/ を写した (commit ${source.commit || "不明"})。npm run build でプラグインにも反映する`);

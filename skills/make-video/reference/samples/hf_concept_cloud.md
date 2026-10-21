@@ -21,14 +21,14 @@ lint off=spoiler,text_only_cut,empty_board,small_text,flash_text,low_contrast,st
 art "教育用の解説動画のフラットなベクターイラスト。清潔でミニマル、親しみやすい現代の日本のエディトリアル調。明るい地 (淡い青灰から白)、紺の線と髪、青と暖かい橙のアクセント、淡い灰色。単純な形と柔らかい影"
 prompt_tail "画像の中に文字・数字・ロゴ・透かしは一切入れない"
 image worker = "日本人の若い男性会社員。短い黒髪、紺のスーツに白いシャツと青いネクタイ、穏やかな表情"
-run b = color=$blue
-run o = color=$orange
-run t = color=$teal
-run v = color=$violet
-run bd = color=$blue_d
-run kb = color=$blue_d
-run ko = color=$orange_d
-run ne = color=#FFD5A8 size=43 font=e
+run b { color: $blue }
+run o { color: $orange }
+run t { color: $teal }
+run v { color: $violet }
+run bd { color: $blue_d }
+run kb { color: $blue_d }
+run ko { color: $orange_d }
+run ne { color: #FFD5A8; font-size: 43px; font-family: e }
 p { color: $ink; line-height: 1.2; out: {opacity:0, duration:.35, ease:'power2.in'} }
 div { border: none; box-shadow: none; padding: 0px; out: {opacity:0, duration:.35, ease:'power2.in'} }
 svg { out: {opacity:0, duration:.35, ease:'power2.in'} }
@@ -36,16 +36,16 @@ shape { out: {opacity:0, duration:.35, ease:'power2.in'} }
 img { main: none; out: {opacity:0, duration:.35, ease:'power2.in'} }
 group { in: none; out: {opacity:0, duration:.35, ease:'power2.in'} }
 # hf の小さな演出の型 (pop = 縮んだ所から back.out(1.9)・rise = 下から 17px・slideIn = 左から 27px・板 = 0.92 倍から power3.out)
-motion pin7 = in=scale=0.7,opacity=0,duration=500 ease=back(1.9)
-motion pin6 = in=scale=0.6,opacity=0,duration=500 ease=back(1.9)
-motion pin5 = in=scale=0.5,opacity=0,duration=500 ease=back(1.9)
-motion pin4 = in=scale=0.4,opacity=0,duration=500 ease=back(1.9)
-motion pin3 = in=scale=0.3,opacity=0,duration=500 ease=back(1.9)
-motion up = in=y=17,opacity=0,duration=500 ease=power3.out
-motion slx = in=x=-27,opacity=0,duration=550 ease=power3.out
-motion boxin = in=scale=0.92,opacity=0,duration=600 ease=power3.out
+motion pin7 { in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
+motion pin6 { in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
+motion pin5 { in: {scale:0.5, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
+motion pin4 { in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
+motion pin3 { in: {scale:0.3, opacity:0, duration:0.5, ease:'back.out(1.9)'} }
+motion up { in: {y:17, opacity:0, duration:0.5, ease:'power3.out'} }
+motion slx { in: {x:-27, opacity:0, duration:0.55, ease:'power3.out'} }
+motion boxin { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'} }
 # 動くファイルの退場 (着いたら縮んで消える)
-motion gone = out=scale=0.5,opacity=0,duration=220 ease=power2.in
+motion gone { out: {scale:0.5, opacity:0, duration:0.22}; ease: power2.in }
 sound whoosh = "短く軽い風切りのシュッという音、場面の切り替わり"
 sound pop = "紙の筒で鳴らした乾いた軽いポンという音"
 sound pop2 = "高く短いかわいいポコッという UI の出現音"
@@ -219,7 +219,7 @@ group#ex_l(left: 60px; top: 131px; width: 427px; height: 448px; in: {x:-40, opac
   zone#zone(left: 0px; top: 0px; width: 427px; height: 448px; c: $orange_m; in: none)
   chip#chip(left: 24px; top: -19px; t: "パソコンで用意"; c: $orange; padding: 9px 16px 9px 50px; in: none)
     svg#i(left: 15px; cy: 50%; width: 27px; height: 27px; part: office)
-  img#img(left: 17px; top: 32px; width: 392px; height: 220px; border-radius: 15px; fit: cover) [ref:@worker]明るいオフィスの整った机でノートパソコンに向かい、研修用のスライド資料を作っている。画面には四角と小さな棒グラフの形だけ (文字なし)。鉢植えの観葉植物と窓の街並み。横長の構図で人物は中央
+  img#img(left: 17px; top: 32px; width: 392px; height: 220px; border-radius: 15px; object-fit: cover) [ref:@worker]明るいオフィスの整った机でノートパソコンに向かい、研修用のスライド資料を作っている。画面には四角と小さな棒グラフの形だけ (文字なし)。鉢植えの観葉植物と窓の街並み。横長の構図で人物は中央
   svg#pc(left: 47px; top: 280px; width: 200px; height: 140px; part: laptop; in: pin6)
   svg#deck(left: 273px; top: 269px; width: 80px; height: 99px; part: deck; in: pin3)
   lbl#decklb(cx: 313px; top: 377px; t: "研修資料"; c: $orange_d)
@@ -227,7 +227,7 @@ group#ex_r(left: 793px; top: 131px; width: 427px; height: 448px; in: {x:40, opac
   zone#zone(left: 0px; top: 0px; width: 427px; height: 448px; c: $blue_m; in: none)
   chip#chip(left: 24px; top: -19px; t: "移動先で確認"; c: $blue; padding: 9px 16px 9px 50px; in: none)
     svg#i(left: 15px; cy: 50%; width: 27px; height: 27px; part: train)
-  img#img(left: 17px; top: 32px; width: 392px; height: 220px; border-radius: 15px; fit: cover) [ref:@worker]通勤電車の中でつり革を持って立ち、スマートフォンで同じスライド資料 (四角と小さな棒グラフの形だけ・文字なし) を確認している。窓の外に柔らかい街の景色。横長の構図で人物は中央
+  img#img(left: 17px; top: 32px; width: 392px; height: 220px; border-radius: 15px; object-fit: cover) [ref:@worker]通勤電車の中でつり革を持って立ち、スマートフォンで同じスライド資料 (四角と小さな棒グラフの形だけ・文字なし) を確認している。窓の外に柔らかい街の景色。横長の構図で人物は中央
   svg#sp(left: 80px; top: 267px; width: 88px; height: 149px; part: phone; in: pin6)
   svg#spdeck(left: 100px; top: 299px; width: 48px; height: 59px; part: deck; in: pin3)
   svg#ok(left: 152px; top: 261px; width: 41px; height: 41px; part: check; in: pin3)

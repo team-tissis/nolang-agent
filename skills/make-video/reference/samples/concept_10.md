@@ -14,15 +14,15 @@ fonts m="細い角ゴシック体、静かで読みやすい本文向き"
 art "シンプルで簡単な線画イラスト、細い墨色の線、生成りの紙の地、色は煉瓦色と淡い砂色を少しだけ、余白が多い、静かで知的"
 prompt_tail "文字を描かない、ロゴなし"
 image yo = "白いシャツに紺のズボンの20代の若者、短い黒髪、穏やかな表情、シンプルな線画"
-motion title = in=y=-24,opacity=0,duration=700 ease=power3.out out=fade,300
-motion big = in=scale=0.92,opacity=0,duration=600 ease=power3.out out=fade,300
-motion div = in=y=18,opacity=0,duration=600 ease=power3.out out=fade,260
-motion row = in=x=-30,opacity=0,duration=500 ease=power3.out out=fade,240
-motion note = in=opacity=0,duration=450 ease=power2.out out=fade,240
+motion title { in: {y:-24, opacity:0, duration:0.7, ease:'power3.out'}; out: fade {duration:0.3} }
+motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.3} }
+motion div { in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
+motion row { in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
+motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
 div { border-radius: 14px; box-shadow: none; border: 2px solid $line; background: #FBF8F2; in: div }
 cut { stagger: sentence }
-run a = color=$a
-run m = marker=#B5523B40
+run a { color: $a }
+run m { marker: #B5523B40 }
 def kick(t) = p(font-size: 24px; font-family: m; color: $a; letter-spacing: 0.2em; in: note; content: {t})
 def h1(t) = p(font-size: 58px; line-height: 1.25; color: $ink; in: title; content: {t})
 def body(t) = p(font-size: 36px; font-family: m; color: $ink; in: row; content: {t})

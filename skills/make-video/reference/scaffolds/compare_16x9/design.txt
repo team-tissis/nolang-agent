@@ -2,16 +2,16 @@
 canvas 1280x720 bg=#0B1220
 theme dark
 palette a=#EE6A1F b=#22B8A7
-font "ZEN角ゴシックNew Bold"
-# 数字の書体 (`font-family: n`)。細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える
-fonts n="太い幾何学的なサンセリフの欧文、数字がくっきり"
+# 本文の書体 (`font`) と数字の書体 (`fonts n` = `font-family: n`) は style の組 (looks.md) で題材に合わせて決める — 下は骨組みの仮の値で、写さない。数字は太く字形のはっきりした物 (細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える)
+font "極太の角ゴシック体"
+fonts n="極太の欧文グロテスク、数字が大きくはっきり"
 
 # 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
-motion title = in=y=-40,scale=0.94,opacity=0,duration=550 ease=back(1.6) out=y=-16,opacity=0,duration=240
-motion big = in=scale=0.6,opacity=0,duration=450 ease=back(2.2) out=fade,220
-motion div = in=y=24,opacity=0,duration=450 ease=power3.out out=fade,220
-motion row = in=x=-60,opacity=0,duration=400 ease=power2.out out=fade,200
-motion note = in=y=14,opacity=0,duration=350 ease=power2.out out=fade,200
+motion title { in: {y:-40, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-16, opacity:0, duration:0.24} }
+motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; out: fade {duration:0.22} }
+motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
+motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
+motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
 div { in: div }
 # 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
 # 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
@@ -30,7 +30,7 @@ def stat(v, u, l) = div(width: 560px; height: 166px; background: none; border: n
   p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
 def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
-# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>名.i[k] check]` で語ごとに
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
 def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
   p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
   div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column) ×3

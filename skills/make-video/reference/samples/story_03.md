@@ -14,17 +14,17 @@ font "極太の角ゴシック体、力強くポスター風の印象"
 fonts e="太い幾何学的なサンセリフの欧文、ポスター風、数字がくっきり"
 photo_style "夜の野外音楽フェスの実写、青と赤のネオンの強い光、高いコントラスト、スモークと光の筋、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、人物なし"
-motion title = in=scale=0.5,opacity=0,duration=450 ease=back(2.0) out=scale=0.9,opacity=0,duration=200
-motion big = in=scale=0.4,opacity=0,duration=420 ease=back(2.6) out=scale=0.8,opacity=0,duration=180
-motion div = in=scale=0.85,y=30,opacity=0,duration=450 ease=back(1.8) out=fade,200
-motion row = in=x=-80,opacity=0,duration=380 ease=back(1.4) out=fade,180
-motion note = in=y=20,opacity=0,duration=350 ease=back(1.4) out=fade,180
+motion title { in: {scale:0.5, opacity:0, duration:0.45, ease:'back.out(2.0)'}; out: {scale:0.9, opacity:0, duration:0.2} }
+motion big { in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.6)'}; out: {scale:0.8, opacity:0, duration:0.18} }
+motion div { in: {scale:0.85, y:30, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
+motion row { in: {x:-80, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+motion note { in: {y:20, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
 div { in: div; background: $card; border: 2px solid $b; border-radius: 18px; box-shadow: 0px 0px 24px #2EE8FF55 }
 img { scrim: 0.35 }
 cut { stagger: sentence }
-run r = color=$a
-run c = color=$b
-run u = size=72 color=$a
+run r { color: $a }
+run c { color: $b }
+run u { font-size: 72px; color: $a }
 # 全 cut の絵に掛ける青〜赤のネオン勾配の幕
 def neon = veil(background: linear(#1F2BFF99,#0A061420@50%,#FF1E5A99,160))
 # 文字の段 30 / 60 / 96 / 160
@@ -80,7 +80,7 @@ div#cx_r(in: {stagger: {each: 0.12}}; left: 40px; top: 790px; width: 640px; heig
   p#l(cx: 50%; top: 24px; font-size: 30px; color: $mute) 体力;声;足
   p#v(cx: 50%; bottom: 30px; font-size: 52px; color: $ink) ゼロ;ガラガラ;棒
 confetti#cx_cf
-veil#cx_fl(color: #FFFFFF; opacity: 0.6; z: curtain; in: none)
+veil#cx_fl(color: #FFFFFF; opacity: 0.6; z-index: curtain; in: none)
 
 section#phil
 img#ph_p(inset: 0; main: kb {scale: [1.08, 1], focus: '40% 50%'}) 暗い部屋の机の上に置かれたヘッドホンとスマートフォン、窓の外に遠く光るフェスのネオン

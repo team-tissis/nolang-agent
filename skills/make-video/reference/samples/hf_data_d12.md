@@ -23,19 +23,19 @@ prompt_tail "文字・数字・ロゴ・看板の文字は入れない"
 # hf の作り: 試行の場面は 20 秒同じ夜の写真・冒頭の出演者の札と字幕の帯に同じ顔・夜の場面へは夜の色の幕で暗転・まとめは章札・結論の札・番号の札が縦に並ぶ (same_picture・duplicate_media・dip_black_frame・stacked_labels)
 # hf の作り: 冒頭の出演者の札 2 枚は絵の右の図書館の上に重ねる (warn text_over_subject はそのまま)
 lint off=spoiler,empty_board,small_text,child_overflow,transition_over_speech,ghost_dissolve,entrance_in_fadeout,entrance_in_transition,flash_text,same_picture,duplicate_media,dip_black_frame,stacked_labels
-run b = color=$ink
-run pc = size=0.48em
-run un = size=0.43em color=$ink2 font=b
-run pw = size=0.45em
-run hu = size=0.54em font=b
-run pn = size=16 color=$ink2 font=b
-run bx = size=0.5em
-run sm = size=15 color=$ink2
-run t = color=$terra
-run lp = color=$lamp
-run lo = size=35 color=$terra font=s
-run hi = size=35 color=$teal font=s
-run mid = size=27 color=$gold font=s
+run b { color: $ink }
+run pc { font-size: 0.48em }
+run un { font-size: 0.43em; color: $ink2; font-family: b }
+run pw { font-size: 0.45em }
+run hu { font-size: 0.54em; font-family: b }
+run pn { font-size: 16px; color: $ink2; font-family: b }
+run bx { font-size: 0.5em }
+run sm { font-size: 15px; color: $ink2 }
+run t { color: $terra }
+run lp { color: $lamp }
+run lo { font-size: 35px; color: $terra; font-family: s }
+run hi { font-size: 35px; color: $teal; font-family: s }
+run mid { font-size: 27px; color: $gold; font-family: s }
 sound riffle = "厚い辞書の薄いページを指で素早くパラパラとめくる軽い紙の音"
 sound page = "紙のページを 1 枚さっとめくる乾いた短い音"
 sound pop = "紙の筒で鳴らした乾いた軽いポンという音"
@@ -58,7 +58,7 @@ icon { in: none; out: none }
 # 字幕: 帯 (下の白い板) の中に、話者の名札 (色の字) と台詞の 1 行。札は hf の句の割り方 ([|]) どおり
 # 字幕の名札 (top_left) は字幕の枠の上辺の 34px 上・枠の左 +9px — 台詞は枠の上端に寄せ、hf の名札 (字面 628〜639) と台詞 (656〜681)・左端 210 に合わせる
 # 字幕の 」。 は約物の連続として詰まる (engine の約物詰めは書体を問わない)
-subtitle(left: 200px; top: 655px; width: 930px; height: 45px; padding: 0px 26px 0px 8px; font-size: 28px; line-height: 1; letter-spacing: .03em; color: $ink; text-align: left; vertical-align: top; background: none; label: top_left; unit: sentence; lead: 0; tail: 150; hold: next,500; in: {y:7, opacity:0, duration:.18, ease:'power1.out'}; out: {opacity:0, duration:.1})
+subtitle.hug(left: 200px; bottom: 20px; width: 930px; padding: 0px 26px 0px 8px; font-size: 28px; line-height: 1; letter-spacing: .03em; color: $ink; text-align: left; background: none; label: top_left; unit: sentence; lead: 0; tail: 150; hold: next,500; in: {y:7, opacity:0, duration:.18, ease:'power1.out'}; out: {opacity:0, duration:.1})
 bgm#music(fade: 1400,900) 明るく温かく穏やかな、懐かしさと希望のあるピアノとアコースティックギターと弦の日常系のポップ、四拍子の普通の速さ、やさしい調査報告の解説向け
 # 全編の地: 生成りの紙 (中央がわずかに明るい)・最前面に薄い grain
 div#paper(inset: 0; background: radial(#FAF5EC,#F5EEE2@60%,#ECE2D2,50%,40%); z-index: back)
@@ -73,7 +73,7 @@ def chap(n, t) = p(left: 47px; top: 20px; font-size: 19px; line-height: 1.2; let
 def card = div(background: $paper2; border-radius: 17px; box-shadow: 0px 12px 28px #5C3E1E21)
 # 冒頭の出演者の札 (丸い顔 + 名 + 読み + 肩書)
 def cast_card(n, k, r, c) = div(left: 860px; width: 373px; height: 100px; background: $paper2; border-radius: 17px; box-shadow: 0px 12px 28px #5C3E1E21; in: {x:53, opacity:0, duration:.6, ease:'back.out(1.5)'})
-  img#p(left: 11px; cy: 50%; width: 80px; height: 80px; border-radius: 99px; box-shadow: 0px 0px 0px 3px {c}; fit: cover,focus=50%,25%; main: none)
+  img#p(left: 11px; cy: 50%; width: 80px; height: 80px; border-radius: 99px; box-shadow: 0px 0px 0px 3px {c}; object-fit: cover,focus=50%,25%; main: none)
   p#n(left: 108px; top: 12px; font-size: 33px; font-family: s; line-height: 1.1; content: {n})
   p#k(left: .n.right+7; top: 24px; font-size: 16px; color: $ink2; content: {k})
   p#r(left: 108px; top: 57px; font-size: 17px; color: {c}; content: {r})
@@ -108,8 +108,8 @@ cast_card#cast_takagi(top: 383px; n: "高木"; k: "たかぎ"; r: "みなと野�
   img#p(content: @takagi)
 # 字幕の帯 (sticky・締めの前まで): 白い板 + 話者の顔の丸窓 2 つ (話者が替わる語で cue spk が入れ替える)
 div#subbar.sticky(left: 127px; top: 620px; width: 1027px; height: 80px; background: #FFFBF3F5; border-radius: 20px; box-shadow: 0px 9px 23px #32201033; z-index: front; in: {y:27, opacity:0, duration:.5, ease:'power3.out'}; out: {y:20, opacity:0, duration:.35, ease:'power2.in'})
-  img#av_mori(left: 9px; cy: 50%; width: 57px; height: 57px; border-radius: 99px; box-shadow: 0px 0px 0px 3px $mori; content: @mori; fit: cover,focus=50%,25%; opacity: 0; main: none)
-  img#av_takagi(left: 9px; cy: 50%; width: 57px; height: 57px; border-radius: 99px; box-shadow: 0px 0px 0px 3px $takagi; content: @takagi; fit: cover,focus=50%,25%; opacity: 0; main: none)
+  img#av_mori(left: 9px; cy: 50%; width: 57px; height: 57px; border-radius: 99px; box-shadow: 0px 0px 0px 3px $mori; content: @mori; object-fit: cover,focus=50%,25%; opacity: 0; main: none)
+  img#av_takagi(left: 9px; cy: 50%; width: 57px; height: 57px; border-radius: 99px; box-shadow: 0px 0px 0px 3px $takagi; content: @takagi; object-fit: cover,focus=50%,25%; opacity: 0; main: none)
 
 # survey — 01 調査のあらまし: 常設の上端 (章札・進行) が入り、傾いた写真の札と事実の行 3 本 → 板の「4,000人」「2,000人」を数え、回収率の輪の弧を半周描く
 section#survey(stagger: {each:0})
@@ -191,13 +191,13 @@ board#d_hi(left: 913px; top: 216px; width: 313px; height: 144px; border: 2px sol
   p#h(left: 17px; top: 15px; font-size: 16px; letter-spacing: .04em; color: $ink2) よく来ている
   p#p(left: 17px; top: 40px; font-size: 23px; line-height: 1.3) 10代 {hi}52%{/}[br]70歳以上 {hi}49%{/}
 board#d_40(left: 913px; top: 376px; width: 313px; height: 129px; border: 2px solid $amber; border-radius: 15px; in: {x:27, opacity:0, duration:.55, ease:'back.out(1.5)'})
-  img#thumb(left: 17px; top: 14px; width: 100px; height: 100px; border-radius: 11px; fit: cover,focus=62%,50%; main: none) 40代の日本人の親と 5 歳くらいの子どもが、公立図書館の児童コーナーの低いクッションのベンチに並んで座り、色とりどりの絵本を一緒に選んでいる。午後の温かい光、やさしい笑顔。親子を画面の中央に大きく置き、余白を作らない
+  img#thumb(left: 17px; top: 14px; width: 100px; height: 100px; border-radius: 11px; object-fit: cover,focus=62%,50%; main: none) 40代の日本人の親と 5 歳くらいの子どもが、公立図書館の児童コーナーの低いクッションのベンチに並んで座り、色とりどりの絵本を一緒に選んでいる。午後の温かい光、やさしい笑顔。親子を画面の中央に大きく置き、余白を作らない
   p#t(left: 131px; top: 16px; width: 170px; font-size: 18px; line-height: 1.45) 40代 {mid}41%{/}[br]子どもの絵本を[br]借りに来る親が多い
 
 # reasons — 04 使わない理由: 右半分に閉まった図書館の前に立つ人の絵 (左の縁は紙へ溶ける)・板に理由の横棒 4 本を先に伸ばし「1位は…？」→ 1 位の行を語で伸ばして 41%・本の理由 2 行を薄め、時計の icon を回す
 section#reasons(stagger: {each:0})
 chap#ch4.sticky(n: "04"; t: "使わない理由")
-img#e_img(left: 640px; top: 0px; width: 640px; height: 720px; fit: cover,focus=16%,50%; main: kb {scale: [1.1, 1], ease:'sine.out'}) 夜、公立図書館の閉まったガラスの入口扉の前に立つ、20 代の疲れた日本人の会社員の男性。スーツに肩掛けのかばん、うつむきぎみに扉を見つめる。館内は暗く本棚がかすかに見え、入口近くの小さな壁掛け時計は 7 時過ぎを指す。街灯が歩道を温かく照らす。静かで少しさみしいがやさしい雰囲気。男性を画面の中央に大きく置く
+img#e_img(left: 640px; top: 0px; width: 640px; height: 720px; object-fit: cover,focus=16%,50%; main: kb {scale: [1.1, 1], ease:'sine.out'}) 夜、公立図書館の閉まったガラスの入口扉の前に立つ、20 代の疲れた日本人の会社員の男性。スーツに肩掛けのかばん、うつむきぎみに扉を見つめる。館内は暗く本棚がかすかに見え、入口近くの小さな壁掛け時計は 7 時過ぎを指す。街灯が歩道を温かく照らす。静かで少しさみしいがやさしい雰囲気。男性を画面の中央に大きく置く
 div#e_fade(left: 640px; top: 0px; width: 147px; height: 720px; background: linear($fade,#F4EDE100,90))
 p#e_tag(left: 947px; top: 513px; font-size: 20px; color: $cream; background: #1B2440E0; border-radius: 11px; padding: 9px 17px 9px 47px; delay: 1150; in: {y:13, opacity:0, duration:.5, ease:'power2.out'}) 平日は 19時に閉館
   icon#i(left: 15px; cy: 50%; font-size: 26px; name: clock; color: $lamp)
@@ -228,7 +228,7 @@ board#e_board(left: 53px; top: 107px; width: 640px; height: 467px; delay: 450; i
 section#wants(stagger: {each:0})
 chap#ch5.sticky(n: "05"; t: "来ない人が欲しいもの")
 card#f_photo(left: 53px; top: 107px; width: 507px; height: 467px; transform: rotate(1.2deg); delay: 250; in: {y:27, rotation:3.8, opacity:0, duration:.8, ease:'power3.out'})
-  img#img(left: 11px; top: 11px; width: 485px; height: 445px; border-radius: 11px; fit: cover,focus=30%,50%; main: kb {scale: [1.12, 1], ease:'sine.out'}) 夕方の明るく居心地のよい日本の公立図書館の館内。卓上ランプの並ぶ長い学習机で大人がノートパソコンやノートに向かい、隅には小さなカフェのカウンターとコーヒーマシンと丸いテーブル、やわらかい肘掛け椅子でタブレットの電子書籍を読む人、背の高い木の本棚。温かいランプの光でくつろいだ雰囲気。机と人を画面いっぱいに置いて余白を作らない
+  img#img(left: 11px; top: 11px; width: 485px; height: 445px; border-radius: 11px; object-fit: cover,focus=30%,50%; main: kb {scale: [1.12, 1], ease:'sine.out'}) 夕方の明るく居心地のよい日本の公立図書館の館内。卓上ランプの並ぶ長い学習机で大人がノートパソコンやノートに向かい、隅には小さなカフェのカウンターとコーヒーマシンと丸いテーブル、やわらかい肘掛け椅子でタブレットの電子書籍を読む人、背の高い木の本棚。温かいランプの光でくつろいだ雰囲気。机と人を画面いっぱいに置いて余白を作らない
 board#f_board(left: 600px; top: 107px; width: 627px; height: 467px; delay: 400; in: {x:27, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 来ない人が欲しいサービス（非利用者・複数回答）
   div#s(left: 27px; top: "47;147;247;347"; width: 573px; height: 89px; border-radius: 15px; border: 2px solid #FFFBF300; delay: 200; in: {y:16, opacity:0, duration:.45, ease:'power2.out', stagger: {each: .13}}) ×4
@@ -363,8 +363,8 @@ p#end_l1(left: 93px; top: 180px; font-size: 64px; font-family: s; line-height: 1
 p#end_l2(left: 93px; top: 263px; font-size: 64px; font-family: s; line-height: 1.3; color: $lamp; delay: 1450; in: {y:20, opacity:0, duration:.8, ease:'power3.out'}) お待ちしています。
 div#end_rule(left: 93px; top: 366px; width: 280px; height: 3px; border-radius: 2px; background: $lamp; delay: 2200; in: {scaleX:0, duration:.8, ease:'power2.inOut', pivot:'left'})
 p#end_org(left: 93px; top: 387px; font-size: 20px; letter-spacing: .05em; color: $org; delay: 2500; in: {opacity:0, duration:.6, ease:'none'}) みなと野市立図書館 ｜ みなと野学園大学 研究室
-img#end_mori(left: 93px; top: 436px; width: 56px; height: 56px; border-radius: 99px; box-shadow: 0px 0px 0px 2px #FFF4DFCC; content: @mori; fit: cover,focus=50%,25%; main: none; delay: 2700; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(2)'})
-img#end_takagi(left: 164px; top: 436px; width: 56px; height: 56px; border-radius: 99px; box-shadow: 0px 0px 0px 2px #FFF4DFCC; content: @takagi; fit: cover,focus=50%,25%; main: none; delay: 2850; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(2)'})
+img#end_mori(left: 93px; top: 436px; width: 56px; height: 56px; border-radius: 99px; box-shadow: 0px 0px 0px 2px #FFF4DFCC; content: @mori; object-fit: cover,focus=50%,25%; main: none; delay: 2700; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(2)'})
+img#end_takagi(left: 164px; top: 436px; width: 56px; height: 56px; border-radius: 99px; box-shadow: 0px 0px 0px 2px #FFF4DFCC; content: @takagi; object-fit: cover,focus=50%,25%; main: none; delay: 2850; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(2)'})
 p#end_foot(left: 93px; top: 659px; font-size: 14px; color: $foot; delay: 3000; in: {opacity:0, duration:.6, ease:'none'}) ※ みなと野市・みなと野学園大学は架空の名称です。数値は市民調査（回答者 2,000人）より。
 veil#fade_out(color: $deep; opacity: 1; z-index: curtain; in: {opacity:0, duration:.9, ease:'power1.in'})
 ```

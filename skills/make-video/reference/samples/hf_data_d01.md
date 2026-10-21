@@ -19,28 +19,28 @@ sfx off
 # hf の作り: 板の中の題・軸・凡例・注記は 1080 で 17〜24 px の小さな字 (small_text)・場面の頭の見出しと結論の行は台詞より先に出る (spoiler)・図だけの場面 (text_only_cut)
 # hf の作り: 題の札は 3.6 秒の場面で順に出る・最後の注記は場面の末尾 2〜3 秒だけ (flash_text)・結論の行は台詞と同文・A/B の流れ図は同じ段名が 2 列 (duplicate_text)・離脱の斜線は件数より先に出る (empty_board)
 lint off=small_text,spoiler,text_only_cut,flash_text,duplicate_text,empty_board
-run sm = font=c size=11 color=$ink3
-run nb = font=n color=$ink
-run n16 = font=n size=16 color=$ink
-run n23 = font=n size=23 color=$ink
-run pc = size=0.49em
-run yen = size=0.47em
-run u = size=0.46em color=$ink2 font=m
-run s12 = size=12 color=$ink3 font=m
-run s13 = size=13 color=$ink3 font=m
-run g27 = size=27 color=$ink
-run g33 = size=33 color=$ink3
-run k17 = size=17
-run vs = size=27 color=$ink3
-run am = color=$amber
-run co = color=$coral
-run cn = color=$coral font=n
-run te = color=$teal
-run or = color=$orange
-run bl = color=$blue
-run sl = color=$slate
-run i2 = color=$ink2
-run k = color=$ink
+run sm { font-family: c; font-size: 11px; color: $ink3 }
+run nb { font-family: n; color: $ink }
+run n16 { font-family: n; font-size: 16px; color: $ink }
+run n23 { font-family: n; font-size: 23px; color: $ink }
+run pc { font-size: 0.49em }
+run yen { font-size: 0.47em }
+run u { font-size: 0.46em; color: $ink2; font-family: m }
+run s12 { font-size: 12px; color: $ink3; font-family: m }
+run s13 { font-size: 13px; color: $ink3; font-family: m }
+run g27 { font-size: 27px; color: $ink }
+run g33 { font-size: 33px; color: $ink3 }
+run k17 { font-size: 17px }
+run vs { font-size: 27px; color: $ink3 }
+run am { color: $amber }
+run co { color: $coral }
+run cn { color: $coral; font-family: n }
+run te { color: $teal }
+run or { color: $orange }
+run bl { color: $blue }
+run sl { color: $slate }
+run i2 { color: $ink2 }
+run k { color: $ink }
 sound whoosh = "短いノイズのスイープ、シュッと流れる場面転換の音"
 sound swoosh = "柔らかく流れて締まる短いブリッジの効果音、最後の場面への転換"
 sound title = "低めの落ち着いたビジネス系の電子音の一打、題が出る瞬間"
@@ -148,7 +148,7 @@ panel#ov_waf(left: 805px; top: 276px; width: 411px; height: 204px)
 # 送料の板: 箱の絵 (板の上へはみ出す) + 送料 550 円 + カート → 配送先入力 → 支払い → 完了 の流れ図 + 「初めて」の札と細い茎
 panel#ov_fee(left: 64px; top: 501px; width: 1152px; height: 112px; in: {y:20, opacity:0, duration:0.6, ease:'power3.out'})
   # hf の作り: 箱の絵は板の上へはみ出す (child_overflow)
-  img#parcel(left: 5px; top: -20px; width: 147px; height: 147px; content: @parcel; fit: contain; main: none; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
+  img#parcel(left: 5px; top: -20px; width: 147px; height: 147px; content: @parcel; object-fit: contain; main: none; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
   div#fl(left: 155px; top: 17px; width: 180px; height: 82px; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.6)'})
     p#t(left: 0px; top: 0px; font-size: 15px; font-family: m; color: $ink2) 送料
     p#v(left: 0px; top: 19px; font-size: 43px; line-height: 1.05; font-family: n; color: $amber) 550{yen}円{/}
@@ -237,7 +237,7 @@ panel#dl(left: 64px; top: 153px; width: 347px; height: 460px; delay: 200)
   div#pc(left: 234px; top: 143px; width: 91px; height: 27px; border-radius: 0px 4px 4px 0px; background: $blue; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
   p#sl1(left: 21px; top: 179px; font-size: 13px; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) スマホ {n16}5,040{/}
   p#sl2(left: 200px; top: 179px; font-size: 13px; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) PC {n16}2,160{/}
-  img#phone(left: 27px; top: 200px; width: 293px; height: 253px; content: @phone; fit: contain; main: none; in: {y:20, opacity:0, duration:0.8, ease:'power3.out'})
+  img#phone(left: 27px; top: 200px; width: 293px; height: 253px; content: @phone; object-fit: contain; main: none; in: {y:20, opacity:0, duration:0.8, ease:'power3.out'})
 panel#dr(left: 432px; top: 153px; width: 784px; height: 460px; delay: 350)
   p#pt(left: 21px; top: 15px; font-size: 15px; font-family: m; color: $ink2) 段ごとの通過率{sm}　前の段から{/}
   p#lg(right: 21px; top: 16px; font-size: 13px; font-family: m; color: $ink2) {or}■{/} スマホ　{bl}■{/} PC
@@ -285,7 +285,7 @@ panel#vc(left: 64px; top: 153px; width: 800px; height: 460px; delay: 200)
     div#r(left: 425px; top: 0px; width: 2px; height: 12px; background: #B6C0CDB3)
   p#bkl(cx: 291px; top: 157px; font-size: 16px; in: {y:7, opacity:0, duration:0.45, ease:'power3.out'}) 送料がかかる帯：{i2}どこも{/} 3割前後
 panel#vr(left: 885px; top: 153px; width: 331px; height: 460px; delay: 350)
-  img#parcel(left: 100px; top: 16px; width: 153px; height: 153px; content: @parcel; fit: contain; main: none; delay: 250; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
+  img#parcel(left: 100px; top: 16px; width: 153px; height: 153px; content: @parcel; object-fit: contain; main: none; delay: 250; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
   p#l1(left: 21px; top: 193px; font-size: 17px; line-height: 1.45; delay: 450; in: {y:9, opacity:0, duration:0.6, ease:'power3.out'}) 送料 550円[br]{s13}5,000円以上で無料{/}
   p#l2(left: 21px; top: 273px; font-size: 17px; line-height: 1.45; in: {y:9, opacity:0, duration:0.6, ease:'power3.out'}) 送料がかかる帯は[br]どこも 3割前後
   p#l3(left: 21px; top: 360px; font-size: 17px; line-height: 1.45; color: $amber_l; in: {y:9, opacity:0, duration:0.6, ease:'power3.out'}) 無料になる帯だけ[br]購入率が倍近い
@@ -339,7 +339,7 @@ kicker#sv_k 07 — SURVEY
 stitle#sv_t 離脱した人に聞いた理由
 prog#sv_p(t: "07 / 09"; c: "#FFB54773;#FFB54773;#FFB54773;#FFB54773;#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29")
 panel#svl(left: 64px; top: 153px; width: 333px; height: 460px; delay: 200)
-  img#clip(left: 47px; top: 20px; width: 240px; height: 240px; fit: contain; main: none; delay: 300; in: {rotation:-4, y:13, opacity:0, duration:0.8, ease:'power3.out'}) [transparent]A clipboard holding a short questionnaire sheet with six rows of blank checkbox options (plain lines instead of words, no readable text), one checkbox ticked in amber, and a pen resting diagonally on it. Minimal clean 3D render, soft lighting, the clipboard fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
+  img#clip(left: 47px; top: 20px; width: 240px; height: 240px; object-fit: contain; main: none; delay: 300; in: {rotation:-4, y:13, opacity:0, duration:0.8, ease:'power3.out'}) [transparent]A clipboard holding a short questionnaire sheet with six rows of blank checkbox options (plain lines instead of words, no readable text), one checkbox ticked in amber, and a pen resting diagonally on it. Minimal clean 3D render, soft lighting, the clipboard fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
   # 対象と回答 (小さな題 + 23 px の値・題と値は別の文字にして行の高さを分ける)
   p#m1l(left: 24px; top: 280px; font-size: 15px; color: $ink2; delay: 600; in: {opacity:0, duration:0.5}) 対象
   p#m1v(left: 24px; top: 301px; width: 305px; font-size: 23px; line-height: 1.45; delay: 600; in: {opacity:0, duration:0.5}) カートに入れて買わなかった[br]会員
@@ -370,7 +370,7 @@ act#a1(left: 64px; no: 1; st: "STEP 1 ｜ まず"; hd: "送料をカートで表
     p#msg(left: 16px; top: 109px; width: 288px; font-size: 14px; color: #FFE1B0; background: #FFB5471F; border: 1px solid #FFB54773; border-radius: 7px; padding: 8px 11px; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.6)'}) あと ◯◯円で送料無料
   chip#ch(left: "21;176;21"; top: "363;363;397"; color: "$amber_l;$amber_l;$ink2"; background: "#FFB54721;#FFB54721;#FFFFFF0F"; border: "#FFB5478C,1;#FFB5478C,1;#FFFFFF24,1"; t: "比較で効果を確認済み;実装が軽い;+2.5pt ／ 4週で約180件") ×3
 act#a2(left: 459px; no: 2; st: "STEP 2 ｜ 次に"; hd: "スマホの配送先入力を[br]短くする")
-  img#phone(left: 13px; top: 127px; width: 173px; height: 200px; content: @phone; fit: contain; main: none; in: {y:16, opacity:0, duration:0.7, ease:'power3.out'})
+  img#phone(left: 13px; top: 127px; width: 173px; height: 200px; content: @phone; object-fit: contain; main: none; in: {y:16, opacity:0, duration:0.7, ease:'power3.out'})
   p#k(left: 180px; top: 153px; font-size: 13px; line-height: 1.4; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) 郵便番号から[br]住所を自動入力
   p#big(left: 180px; top: 201px; font-size: 43px; line-height: 1; font-family: n; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) {g33}11{/} → {six}6{/}{k17}項目{/}
   chip#ch(left: 21px; top: 397px) 「入力が面倒」17%・大半はスマホ
@@ -398,7 +398,7 @@ crow#e3(top: 451px; no: 3; c: $amber; m: "まず{em}送料をカートで{/}見�
 # endcard — 締め: 暗い幕が溶けて籠の絵が 0.85 → 1 に・題の再掲と副題と琥珀の短い線
 section#endcard(stagger: {each:0})
 div#endbg(inset: 0; background: #080B10F0; delay: 150; in: {opacity:0, duration:0.7, ease:'power2.out'})
-img#basket(left: 547px; top: 153px; width: 187px; height: 187px; fit: contain; main: none; in: {scale:0.85, y:11, opacity:0, duration:1.0, ease:'power3.out'}) [transparent]A small woven shopping basket holding a ceramic mug, a rolled linen towel and a tiny potted plant, minimal clean 3D render with soft warm lighting and gentle shadow, three-quarter view, the basket fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
+img#basket(left: 547px; top: 153px; width: 187px; height: 187px; object-fit: contain; main: none; in: {scale:0.85, y:11, opacity:0, duration:1.0, ease:'power3.out'}) [transparent]A small woven shopping basket holding a ceramic mug, a rolled linen towel and a tiny potted plant, minimal clean 3D render with soft warm lighting and gentle shadow, three-quarter view, the basket fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
 p#end_t(cx: 640px; top: 365px; font-size: 37px; delay: 150; in: {y:9, opacity:0, duration:0.8, ease:'power3.out'}) カゴ落ち、どこで起きている？
 p#end_s(cx: 640px; top: 421px; font-size: 16px; font-family: m; color: $ink2; delay: 270; in: {y:9, opacity:0, duration:0.8, ease:'power3.out'}) こもれび雑貨店 ｜ 購入ファネル分析（直近4週間）
 div#end_r(left: 608px; top: 463px; width: 64px; height: 3px; border-radius: 2px; background: $amber; delay: 150; in: {opacity:0, duration:0.7})

@@ -33,22 +33,22 @@ sound swell = "ヒュンと滑らかに上昇するサイン波の短い音"
 sound tense = "ポーンと響く緊張感のあるシンセの単音、余韻が長い"
 sound pop = "ピコンという短いシステム音風の電子音"
 svg person = """<svg viewBox="0 0 150 230"><circle cx="75" cy="58" r="40" fill="#2fdcaa"/><path d="M8 226 C 8 150, 40 118, 75 118 C 110 118, 142 150, 142 226 Z" fill="#2fdcaa"/></svg>"""
-run f = color=$flash
-run l = color=$lite
-run fd = color=$flash font=i
-run ld = color=$lite font=i
-run d = font=i
-run b = color=$t2
-run w = color=$t1
-run s = size=0.77em
-run a6 = color=$amber font=n size=1.75em
+run f { color: $flash }
+run l { color: $lite }
+run fd { color: $flash; font-family: i }
+run ld { color: $lite; font-family: i }
+run d { font-family: i }
+run b { color: $t2 }
+run w { color: $t1 }
+run s { font-size: 0.77em }
+run a6 { color: $amber; font-family: n; font-size: 1.75em }
 p { color: $t1 }
 div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none }
-motion fup = in=y=15,opacity=0,duration=550 ease=power3.out
-motion fups = in=y=7,opacity=0,duration=550 ease=power3.out
-motion fin = in=opacity=0,duration=450 ease=power1.out
-motion bpop = in=scale=0.6,opacity=0,duration=450 ease=back(2.2)
-motion brd = in=y=20,scale=0.985,opacity=0,duration=700 ease=power3.out
+motion fup { in: {y:15, opacity:0, duration:0.55, ease:'power3.out'} }
+motion fups { in: {y:7, opacity:0, duration:0.55, ease:'power3.out'} }
+motion fin { in: {opacity:0, duration:0.45, ease:'power1.out'} }
+motion bpop { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'} }
+motion brd { in: {y:20, scale:0.985, opacity:0, duration:0.7, ease:'power3.out'} }
 cue chap(p, c) = [!#p recolor,#98A3B5,duration=350][!#c recolor,#EEF2F8,duration=350]
 bgm#music(fade: 250,3600; duck: -6.5) 知的で落ち着いたミニマルなシンセの曲、浮遊感のあるパッドと静かなシンセベルのフレーズ、淡々とした控えめなビート、暗いデータ解説向け
 

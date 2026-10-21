@@ -13,15 +13,15 @@ font "太い丸ゴシック体、親しみやすく元気な印象"
 fonts h="極太の筆文字の毛筆体、力強い中華料理店の看板風" e="太い幾何学的なサンセリフの欧文、ポスター風"
 photo_style "実写の料理写真、明るい自然光、立ちのぼる湯気、鮮やかな赤と緑、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、看板の文字なし"
-motion title = in=scale=0.5,opacity=0,duration=450 ease=back(2.0) out=scale=0.9,opacity=0,duration=200
-motion big = in=scale=0.4,opacity=0,duration=420 ease=back(2.6) out=scale=0.8,opacity=0,duration=180
-motion div = in=scale=0.85,y=30,opacity=0,duration=450 ease=back(1.8) out=fade,200
-motion row = in=x=-80,opacity=0,duration=380 ease=back(1.4) out=fade,180
-motion note = in=y=20,opacity=0,duration=350 ease=back(1.4) out=fade,180
+motion title { in: {scale:0.5, opacity:0, duration:0.45, ease:'back.out(2.0)'}; out: {scale:0.9, opacity:0, duration:0.2} }
+motion big { in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.6)'}; out: {scale:0.8, opacity:0, duration:0.18} }
+motion div { in: {scale:0.85, y:30, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
+motion row { in: {x:-80, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+motion note { in: {y:20, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
 cut { stagger: sentence }
 div { in: div; border-radius: 22px; background: $paper; border: 3px solid $ink; box-shadow: 6px 6px 0px $ink }
-run g = color=$gold
-run r = color=$a
+run g { color: $gold }
+run r { color: $a }
 # 章の見出しの板: 番号つきの段 (赤い札) + 題
 def head(n="", t="") = div(left: 36px; top: 56px; width: 648px; height: 150px; padding: 0px; in: title)
   p#n(left: 24px; top: 20px; font-size: 24px; color: $paper; background: $a; border-radius: 99px; padding: 4px 16px; content: {n})

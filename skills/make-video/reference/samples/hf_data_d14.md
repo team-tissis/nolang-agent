@@ -45,17 +45,17 @@ sound pencil = "シャープペンで紙にまっすぐ線を引くサッとい�
 sound glock = "小さな鉄琴を一回鳴らすピーンという澄んだ単音"
 sound bell = "低めの二音のシンセベル、ティロンと上品に鳴る提示の音"
 sound check = "フェルトペンでチェックを付けるキュッという短い音"
-run nb = color=$ink font=b
-run c = color=$ink3 font=m
-run cn = color=$ochre font=n
-run tb = color=$teal font=b
-run sb = color=#56606C font=b
-run tl = color=$ink2 size=0.6em
-run m = marker=#C4832F61,42%
+run nb { color: $ink; font-family: b }
+run c { color: $ink3; font-family: m }
+run cn { color: $ochre; font-family: n }
+run tb { color: $teal; font-family: b }
+run sb { color: #56606C; font-family: b }
+run tl { color: $ink2; font-size: 0.6em }
+run m { marker: #C4832F61,42% }
 # 2 つの山の分布 (viewBox は hf の svg と同じ 1180x520・平均 480・山の高さ 300)
 svg curve_ct = """<svg viewBox="0 0 1180 520"><defs><linearGradient id="gct" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8794" stop-opacity="0.34"/><stop offset="1" stop-color="#7d8794" stop-opacity="0.06"/></linearGradient></defs><path d="M0 436.7 L20 435.2 L40 433.2 L60 430.4 L80 426.8 L100 422.1 L120 416.1 L140 408.6 L160 399.4 L180 388.3 L200 375.1 L220 359.9 L240 342.6 L260 323.4 L280 302.6 L300 280.7 L320 258.0 L340 235.4 L360 213.5 L380 193.2 L400 175.3 L420 160.4 L440 149.2 L460 142.3 L480 140.0 L500 142.3 L520 149.2 L540 160.4 L560 175.3 L580 193.2 L600 213.5 L620 235.4 L640 258.0 L660 280.7 L680 302.6 L700 323.4 L720 342.6 L740 359.9 L760 375.1 L780 388.3 L800 399.4 L820 408.6 L840 416.1 L860 422.1 L880 426.8 L900 430.4 L920 433.2 L940 435.2 L960 436.7 Z" fill="url(#gct)" stroke="#7d8794" stroke-width="3"/><line x1="480" y1="140" x2="480" y2="440" stroke="#7d8794" stroke-width="2" stroke-dasharray="6 6"/></svg>"""
 svg curve_ex = """<svg viewBox="0 0 1180 520"><defs><linearGradient id="gex" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24727a" stop-opacity="0.38"/><stop offset="1" stop-color="#24727a" stop-opacity="0.08"/></linearGradient></defs><path d="M0 436.7 L20 435.2 L40 433.2 L60 430.4 L80 426.8 L100 422.1 L120 416.1 L140 408.6 L160 399.4 L180 388.3 L200 375.1 L220 359.9 L240 342.6 L260 323.4 L280 302.6 L300 280.7 L320 258.0 L340 235.4 L360 213.5 L380 193.2 L400 175.3 L420 160.4 L440 149.2 L460 142.3 L480 140.0 L500 142.3 L520 149.2 L540 160.4 L560 175.3 L580 193.2 L600 213.5 L620 235.4 L640 258.0 L660 280.7 L680 302.6 L700 323.4 L720 342.6 L740 359.9 L760 375.1 L780 388.3 L800 399.4 L820 408.6 L840 416.1 L860 422.1 L880 426.8 L900 430.4 L920 433.2 L940 435.2 L960 436.7 Z" fill="url(#gex)" stroke="#24727a" stroke-width="3.5"/><line x1="480" y1="140" x2="480" y2="440" stroke="#24727a" stroke-width="2.5" stroke-dasharray="6 6"/></svg>"""
-motion up = in=y=17,opacity=0,duration=700 ease=power3.out
+motion up { in: {y:17, opacity:0, duration:0.7, ease:'power3.out'} }
 p { color: $ink }
 div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none }
 # 字幕: 下端中央の生成りの札 (細い縁 + 薄い影)・句ごとに 1 枚 (札 = 文、[|] で句に切る)・句末の。は外す
@@ -80,7 +80,7 @@ def dbox(t, s, bc="#1E2B3C2E", fl=$card, tc=$ink) = div(height: 87px; background
 # 研究の札: 左に絵 (生成りのグラデの地)・右に文字の丸 + 題 + 種類の札・人数・3 行の内訳・期間の棒 (語で伸びる)
 def card(k, tag, n, g, who, ex, test, fw, pv, tg=$teal_l, tc=#1A5F66) = div(width: 373px; height: 212px; background: $card; border: 1px solid #1E2B3C1F; border-radius: 9px; box-shadow: 0px 8px 20px #3C321E1A; in: {y:23, scale:0.97, opacity:0, duration:0.7, ease:'power3.out'})
   div#ci(left: 0px; top: 0px; width: 143px; height: 212px; border-radius: 9px 0px 0px 9px; background: linear(#EFE7D6,#E6DCC6,180))
-  img#im(left: 4px; top: 16px; width: 135px; height: 192px; fit: contain; main: none)
+  img#im(left: 4px; top: 16px; width: 135px; height: 192px; object-fit: contain; main: none)
   p#lc(left: 157px; top: 13px; width: 31px; text-align: center; font-size: 17px; font-family: n; color: #FFFFFF; background: $ink; border-radius: 99px; padding: 4px 0px; content: {k})
   p#nm(left: 196px; cy: 29px; font-size: 13px; content: 研究 {k})
   p#tag(left: .nm.right+8; cy: 29px; font-size: 11px; color: {tc}; background: {tg}; border-radius: 4px; padding: 2px 7px; content: {tag})
@@ -404,7 +404,7 @@ shape#trend(path: "M220 270 L460 410"; background: none; border: 2px solid $ochr
 p#trend_l(left: 365px; top: 292px; font-size: 13px; line-height: 1.35; color: $ochre; in: {opacity:0, duration:0.4}) 小さい研究ほど[br]効果が大きい
 shape#gh(left: "172;200;225"; top: "463;508;450"; width: 15px; height: 15px; path: rect,r=0.5; background: none; border: 1.5px solid $brick; dash: 1,5; in: {scale:0.4, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.15}}) ×3
 p#gh_l(left: 131px; top: 429px; font-size: 12px; line-height: 1.3; color: $brick; in: {opacity:0, duration:0.4}) ここにあるはずの研究が[br]見えていない？
-img#drawer(left: 527px; top: 400px; width: 113px; height: 133px; fit: contain; main: none; in: {y:20, opacity:0, duration:0.7, ease:'power3.out'}) [transparent]上の引き出しが開いた濃い紺の金属の書類棚。公表されなかった研究論文とマニラフォルダーが詰め込まれ、紙が数枚はみ出している。単体で全体が入り周りに少し余白、背景・地面・床の影なし
+img#drawer(left: 527px; top: 400px; width: 113px; height: 133px; object-fit: contain; main: none; in: {y:20, opacity:0, duration:0.7, ease:'power3.out'}) [transparent]上の引き出しが開いた濃い紺の金属の書類棚。公表されなかった研究論文とマニラフォルダーが詰め込まれ、紙が数枚はみ出している。単体で全体が入り周りに少し余白、背景・地面・床の影なし
 p#drawer_l(left: 507px; top: 541px; width: 153px; text-align: center; font-size: 11px; line-height: 1.4; color: $ink2; in: {opacity:0, duration:0.4}) 結果の出なかった研究は[br]引き出しの中？
 lcard#lc1(top: 167px; no: "1"; hd: "効果が大きい 2 本は、参加者がいちばん少ない 2 本"; d: "D 0.92（48 人）・B 0.68（64 人）。結果の出なかった研究が公表されていない可能性")
 lcard#lc2(top: 277px; no: "2"; hd: "D は 1 回だけの運動の直後に測った結果"; d: "長く続けたときの効果とは別物")

@@ -38,39 +38,39 @@ lint off=flash_text
 lint off=stacked_labels,duplicate_text
 # hf の作り: 章札は前の札が上へ抜けた直後に同じ場所へ下から入る (時刻は重ならない)・写真の札のテープ 2 枚は台紙の角からはみ出して貼る
 lint off=overlap,child_overflow
-run t = color=$terra_d
-run r = color=$rain_d
-run up = marker=#EFB79FE6,30%
-run dn = marker=#B9CFDEF2,30%
-run b = color=$ink font=k
-run cn = color=$terra_d font=n size=1.08em
-run u = font=h size=0.36em
-run n2 = color=#8A5C34 font=n size=2.4em
-run pn = font=n size=1.67em
-run hv = font=n size=2em
-run pc = size=0.58em
-run pp = size=0.5em
-run vn = font=n size=1.55em
-run bn = font=n size=1.69em
-run gn = font=n size=1.25em
-run sp = size=0.5em
-run sn = font=n size=1.29em
-run ip = size=0.7em
-run mu = font=k size=0.62em
-run dd = color=$rain_d font=n size=1.67em
-run pb = font=n size=1.27em
-run dv = font=n size=1.42em
-run tn = font=n size=2.36em
-run ta = color=$terra_d font=n size=2.36em
-run tb = font=n size=1.46em
-run ft = color=$terra_d
-run fr = color=$rain_d
-run ftp = color=$terra_d size=0.53em
-run frp = color=$rain_d size=0.53em
-run fp = size=0.53em
-run sl = color=$ink2 font=k size=0.66em
-run lb = color=$rain_d font=k size=0.34em
-run av = font=h size=1.15em
+run t { color: $terra_d }
+run r { color: $rain_d }
+run up { marker: #EFB79FE6,30% }
+run dn { marker: #B9CFDEF2,30% }
+run b { color: $ink; font-family: k }
+run cn { color: $terra_d; font-family: n; font-size: 1.08em }
+run u { font-family: h; font-size: 0.36em }
+run n2 { color: #8A5C34; font-family: n; font-size: 2.4em }
+run pn { font-family: n; font-size: 1.67em }
+run hv { font-family: n; font-size: 2em }
+run pc { font-size: 0.58em }
+run pp { font-size: 0.5em }
+run vn { font-family: n; font-size: 1.55em }
+run bn { font-family: n; font-size: 1.69em }
+run gn { font-family: n; font-size: 1.25em }
+run sp { font-size: 0.5em }
+run sn { font-family: n; font-size: 1.29em }
+run ip { font-size: 0.7em }
+run mu { font-family: k; font-size: 0.62em }
+run dd { color: $rain_d; font-family: n; font-size: 1.67em }
+run pb { font-family: n; font-size: 1.27em }
+run dv { font-family: n; font-size: 1.42em }
+run tn { font-family: n; font-size: 2.36em }
+run ta { color: $terra_d; font-family: n; font-size: 2.36em }
+run tb { font-family: n; font-size: 1.46em }
+run ft { color: $terra_d }
+run fr { color: $rain_d }
+run ftp { color: $terra_d; font-size: 0.53em }
+run frp { color: $rain_d; font-size: 0.53em }
+run fp { font-size: 0.53em }
+run sl { color: $ink2; font-family: k; font-size: 0.66em }
+run lb { color: $rain_d; font-family: k; font-size: 0.34em }
+run av { font-family: h; font-size: 1.15em }
 sound rain = "弱い雨がしとしと降る音とかすかな風の音"
 sound paper = "紙を一枚手に取る乾いたカサッという音"
 sound pageflip = "紙のページをめくる乾いた音"
@@ -103,7 +103,7 @@ subtitle.hug(bottom: 32px; font-size: 24px; line-height: 1.3; letter-spacing: 0.
 bgm#music(fade: 2000,2600) 明るく温かいボサノバ調のポップ、ピアノとアコースティックギターとやさしいドラム、雨の日のカフェの日常、店長会議の解説向け
 
 # 上端の帯の部品の入退場 (上から降りる・終わりに溶ける)
-motion tbar = in=y=-13,opacity=0,duration=600 ease=power2.out out=opacity=0,duration=700,ease=power1.in
+motion tbar { in: {y:-13, opacity:0, duration:0.6, ease:'power2.out'}; out: {opacity:0, duration:0.7, ease:'power1.in'} }
 
 # 見出し 3 語 (丸ゴシックの最も太い 40 px・語ごとに下から 90 ms おきに上がる・強調は run t / r)
 def hl(a, b, c, d1=400, d2=490, d3=580) = div(left: 73px; top: 79px; width: 1133px; height: 48px)
@@ -171,7 +171,7 @@ p#sub(left: 80px; top: 507px; font-size: 20px; font-family: m; color: $ink2; whi
 div#photo(left: 673px; top: 112px; width: 533px; height: 431px; background: $card; border-radius: 7px; box-shadow: 0px 16px 33px #50321438; transform: rotate(-2deg); delay: 150; in: {y:-40, rotation:-5, opacity:0, duration:0.9, ease:'back.out(1.3)'})
   group#inner(left: 12px; top: 12px; width: 509px; height: 407px; clip: 3,photo.inner.hero)
     img#hero(inset: 0; main: kb {scale: [1.04, 1.13], focus: ['50% 50%', '53% 50%']}) 雨の日の日本の小さな町の角のカフェ。テラコッタ色の縞模様の日よけの下の大きな窓から暖かい金色の灯りがもれ、戸口に鉢植え。カフェの店先は画面の右半分。左半分には濡れた歩道を傘をさして歩く 2 人の後ろ姿、その奥に海辺の町並みと山並み、上には灰青の雨空と斜めの細い雨。路面に柔らかな映り込み。絵は画面の端から端まで描き込み、白い余白や紙の地だけの所を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。明るく穏やかで居心地のよい雰囲気。文字・数字・ロゴ・看板の文字は一切入れない
-    div#streak(left: "27;63;100;140;175;212;247;287;325;360;397;433;468;490;47;120;200;303;407;460"; top: -40px; width: 2px; height: 31px; border-radius: 1px; background: #4E78968C; transform: rotate(14deg); main: "sawtooth,y=480,freq_ms=950,phase_offset=0;sawtooth,y=480,freq_ms=950,phase_offset=0.326;sawtooth,y=480,freq_ms=950,phase_offset=0.653;sawtooth,y=480,freq_ms=950,phase_offset=0.179;sawtooth,y=480,freq_ms=950,phase_offset=0.505;sawtooth,y=480,freq_ms=950,phase_offset=0.832;sawtooth,y=480,freq_ms=950,phase_offset=0.095;sawtooth,y=480,freq_ms=950,phase_offset=0.421;sawtooth,y=480,freq_ms=950,phase_offset=0.747;sawtooth,y=480,freq_ms=950,phase_offset=0.253;sawtooth,y=480,freq_ms=950,phase_offset=0.579;sawtooth,y=480,freq_ms=950,phase_offset=0.905;sawtooth,y=480,freq_ms=950,phase_offset=0.137;sawtooth,y=480,freq_ms=950,phase_offset=0.463;sawtooth,y=480,freq_ms=950,phase_offset=0.789;sawtooth,y=480,freq_ms=950,phase_offset=0.295;sawtooth,y=480,freq_ms=950,phase_offset=0.621;sawtooth,y=480,freq_ms=950,phase_offset=0.053;sawtooth,y=480,freq_ms=950,phase_offset=0.379;sawtooth,y=480,freq_ms=950,phase_offset=0.705") ×20
+    div#streak(left: "27;63;100;140;175;212;247;287;325;360;397;433;468;490;47;120;200;303;407;460"; top: -40px; width: 2px; height: 31px; border-radius: 1px; background: #4E78968C; transform: rotate(14deg); main: sawtooth {y: 480, period: 0.95, phase_offset: '0;0.326;0.653;0.179;0.505;0.832;0.095;0.421;0.747;0.253;0.579;0.905;0.137;0.463;0.789;0.295;0.621;0.053;0.379;0.705'}) ×20
   div#tape1(left: -27px; top: -9px; width: 100px; height: 28px; border-radius: 2px; background: #E0A13A8C; transform: rotate(-24deg); delay: 550; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2)'})
   div#tape2(left: 461px; top: -7px; width: 100px; height: 28px; border-radius: 2px; background: #E0A13A8C; transform: rotate(21deg); delay: 670; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2)'})
 

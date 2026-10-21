@@ -24,16 +24,16 @@ sfx off
 # hf の作り: 切替の板は声の終わりの 0.05 秒前から払い始める (transition_over_speech)・字幕は払いの窓の中で出る (entrance_in_transition)・締めの札は場面の終わり際に出る (entrance_in_fadeout・flash_text)
 # hf の作り: 写真の主役の胴に時計・板を重ねる (text_over_subject — s8 の顔は札・問いと板の間の空きに出し、上端の帯は顔に掛けない)・灰の段の色は直書き (palette_drift)
 lint off=small_text,spoiler,stacked_labels,text_only_cut,duplicate_text,transition_over_speech,entrance_in_transition,entrance_in_fadeout,flash_text,text_over_subject,palette_drift
-run hl = color=$lime
-run fs = color=#FF7B64
-run r = color=$coral
-run g = color=$gold
-run nb = color=$ink font=n size=1.43em
-run lb = color=$sub font=m size=0.8em
-run s = color=$sub font=m size=0.4em
-run big = font=n size=2.48em
-run so = size=1.22em
-run gd = color=$gold font=n size=2.6em
+run hl { color: $lime }
+run fs { color: #FF7B64 }
+run r { color: $coral }
+run g { color: $gold }
+run nb { color: $ink; font-family: n; font-size: 1.43em }
+run lb { color: $sub; font-family: m; font-size: 0.8em }
+run s { color: $sub; font-family: m; font-size: 0.4em }
+run big { font-family: n; font-size: 2.48em }
+run so { font-size: 1.22em }
+run gd { color: $gold; font-family: n; font-size: 2.6em }
 prompt_tail "No text, no letters, no numbers, no logos, no watermark, no readable race bibs."
 p { color: $ink; out: none }
 div { border: none; box-shadow: none; padding: 0px; background: none; border-radius: 0px; out: none }
@@ -55,7 +55,7 @@ svg target = """<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="
 cue flash(o) = [!#flash to,opacity={o},duration=30][!#flash to,opacity=0,duration=220 >]
 bgm#music スポーティでテンポの速いエレクトロ・ロックのビート、力強いドラムと歪んだシンセ、競技の高揚感、ランニングのデータ解説の縦型動画向け
 # 字幕: 下の帯の中央に白の極太 + 紺の太い縁 (地なし)・数字は黄緑 (台詞の {hl})・句末の約物は外す
-subtitle(font-family: sb; left: 27px; top: 932px; width: 667px; height: 113px; padding: 0px; font-size: 33px; line-height: 1.28; letter-spacing: 0.01em; color: #FFFFFF; stroke: #070B14,8; background: none; unit: sentence; strip: 、。; lead: 60; tail: 350; hold: off; in: {y:12, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.08})
+subtitle.hug(font-family: sb; left: 27px; bottom: 235px; width: 667px; padding: 0px; font-size: 33px; line-height: 1.28; letter-spacing: 0.01em; color: #FFFFFF; stroke: #070B14,8; background: none; unit: sentence; strip: 、。; lead: 60; tail: 350; hold: off; in: {y:12, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.08})
 # 札 (欧文の斜体・黄緑の地・斜めに傾く)。和文の札は chipj
 def chip(t) = p(font-size: 20px; line-height: 1.2; font-family: n; font-style: italic; letter-spacing: 0.04em; color: #0A0E17; background: $lime; border-radius: 3px; padding: 4px 12px 5px 12px; transform: skewX(-10deg); content: {t})
 def chipj(t) = p(font-size: 18px; line-height: 1.3; letter-spacing: 0.02em; color: #0A0E17; background: $lime; border-radius: 3px; padding: 4px 12px 5px 12px; transform: skewX(-10deg); content: {t})
@@ -85,7 +85,7 @@ veil#glow_a(background: radial(#C6FF3D1A,#C6FF3D00@60%,0%,0%); z-index: back; in
 veil#glow_b(background: radial(#FF4D2E1F,#FF4D2E00@60%,100%,100%); z-index: back; in: none)
 div#grid(inset: 0; pattern: grid,40,#FFFFFF09; opacity: 0.6; z-index: back; in: none)
 div#speed.bleed(inset: 0; z-index: back; in: none)
-  div#l(left: 0px; top: "107;244;381;517;654;791;927;1064;1201"; width: "173;253;333;173;253;333;173;253;333"; height: 3px; border-radius: 3px; background: linear(#C6FF3D00,#C6FF3D59,#C6FF3D00,90); transform: rotate(-14deg); in: none; main: "sawtooth,x=1467,freq_ms=1100;sawtooth,x=1467,freq_ms=1330,phase_offset=0.28;sawtooth,x=1467,freq_ms=1560,phase_offset=0.47;sawtooth,x=1467,freq_ms=1790,phase_offset=0.62;sawtooth,x=1467,freq_ms=1100,phase_offset=0.35;sawtooth,x=1467,freq_ms=1330,phase_offset=0.39;sawtooth,x=1467,freq_ms=1560,phase_offset=0.42;sawtooth,x=1467,freq_ms=1790,phase_offset=0.45;sawtooth,x=1467,freq_ms=1100,phase_offset=0.69") ×9
+  div#l(left: 0px; top: "107;244;381;517;654;791;927;1064;1201"; width: "173;253;333;173;253;333;173;253;333"; height: 3px; border-radius: 3px; background: linear(#C6FF3D00,#C6FF3D59,#C6FF3D00,90); transform: rotate(-14deg); in: none; main: sawtooth {x: 1467, period: '1.1;1.33;1.56;1.79;1.1;1.33;1.56;1.79;1.1', phase_offset: '0;0.28;0.47;0.62;0.35;0.39;0.42;0.45;0.69'}) ×9
 veil#flash(color: #FFFFFF; opacity: 0; z-index: curtain; in: none)
 
 # s1 問い: 湾岸の橋を埋めるランナーの写真が 1.16 → 1.02 に引き、完走タイムの時計が数え上がる → 曲の山で題が叩きつけられ (閃光)、「何分」が 2.6 倍から落ちて揺れる

@@ -20,15 +20,15 @@ lint off=spoiler,duplicate_text
 # hf の作り: 効果音は素材を切らずに最後まで鳴らす (se_long)・テロップの炎のグラデと札の赤は palette 外の直書き (palette_drift)
 prompt_tail "No text, no letters, no logos, no watermark."
 # 字幕の強調 (黄)・テロップの語の色 (質量 = 橙・距離 = 水色・恐怖 = 赤・光 = 黄・氷 = 水色)・札の太字 (黄 / 緑)
-run y = color=$ye
-run m = color=$mass
-run d = color=$cyan
-run r = color=$red
-run s = color=$sunc
-run i = color=$ice
-run b = color=$chip
-run g = color=$ok
-run nb = size=1.4em
+run y { color: $ye }
+run m { color: $mass }
+run d { color: $cyan }
+run r { color: $red }
+run s { color: $sunc }
+run i { color: $ice }
+run b { color: $chip }
+run g { color: $ok }
+run nb { font-size: 1.4em }
 p { color: #FFFFFF; line-height: 1.45; out: none }
 div { border: none; box-shadow: none; padding: 0px; out: none }
 img { out: none }
@@ -67,7 +67,7 @@ image sleep = "[photo]Photorealistic cinematic photo of a young Japanese adult s
 bgm#music 冷たく暗く緊張感のあるシネマティックなアンビエント、シンセパッドと合唱と遠い打楽器、遅い四拍子、宇宙の静かな恐怖
 bgm#piano 静かで穏やかなソロピアノ、ゆっくりした安心させる目覚めの曲
 # 字幕: 白の極太 + 黒の太い縁 + 落ち影・句ごとの札 (句は台詞の [|])・強調の語は黄 {y}
-subtitle(left: 0px; top: 873px; width: 720px; height: 160px; padding: 12px 0px; font-size: 41px; line-height: 1.28; text-align: center; align-items: flex-end; color: #FFFFFF; stroke: #05060B,13; text-shadow: 0px 7px 17px #000000A6; background: none; unit: sentence; lead: 0; in: {y:12, scale:.94, opacity:0, duration:.14, ease:'power2.out'})
+subtitle.hug(bottom: 247px; padding: 12px 0px; font-size: 41px; line-height: 1.28; text-align: center; color: #FFFFFF; stroke: #05060B,13; text-shadow: 0px 7px 17px #000000A6; background: none; unit: sentence; lead: 0; in: {y:12, scale:.94, opacity:0, duration:.14, ease:'power2.out'})
 # 画面中央上部のテロップ (群): 場面の頭に 1.45 倍から弾んで出る・行は tl の段 (極太の見出し書体 + 黒の太い縁取り)
 def telop = group(left: 20px; top: 119px; width: 680px; height: 340px; transform-origin: 50% 40%; in: {scale:1.45, opacity:0, duration:.24, ease:'back.out(2.4)'})
 def tl(t, s, w) = p(left: 0px; width: 680px; text-align: center; color: #FFFFFF; font-family: d; font-size: {s}; line-height: 1.35; white-space: nowrap; stroke: #05060B,{w}; text-shadow: 0px 7px 17px #000000A6; content: {t})
@@ -90,9 +90,9 @@ img#h_space(inset: 0; content: @space; main: none)
 # 太陽 (光の輪 + 円盤 + 縮むときに白く光る芯) を 1 つの群で縮める・中心はブラックホールと同じ点 (360,753)・円盤は hf と同じく画面の左右の端に届く (約 710 px)
 group#h_sun.bleed(left: 0px; top: 320px; width: 720px; height: 867px; transform-origin: 50% 50%; in: none)
   div#glow.bleed(left: -136px; top: -62px; width: 992px; height: 992px; border-radius: 50%; background: radial(#FFBE5A00@38%,#FF962859@47%,#FF781400@70%,50%,50%); in: none)
-  img#img.bleed(left: -72px; top: 1px; width: 864px; height: 864px; content: @sun; fit: contain; in: none)
+  img#img.bleed(left: -72px; top: 1px; width: 864px; height: 864px; content: @sun; object-fit: contain; in: none)
   div#core(z-index: front; left: 253px; top: 327px; width: 213px; height: 213px; border-radius: 50%; background: radial(#FFFFFF,#FFF0C8F2@25%,#FFB45080@55%,#FF781400@72%,50%,50%); opacity: 0; in: none)
-img#h_bh(left: 152px; top: 545px; width: 416px; height: 416px; content: @bh_disc; fit: contain; in: {scale:.32, opacity:0, duration:.75, ease:'expo.out'})
+img#h_bh(left: 152px; top: 545px; width: 416px; height: 416px; content: @bh_disc; object-fit: contain; in: {scale:.32, opacity:0, duration:.75, ease:'expo.out'})
 # 衝撃波の輪 (0.2 倍から 6.5 倍へ広がって消える)
 shape#h_ring.ellipse(left: 260px; top: 653px; width: 200px; height: 200px; background: none; border: 7px solid #FFE1AAF2; box-shadow: 0px 0px 27px #FFBE6EE6; in: {scale:.2, duration:.05, ease:'none'})
 # 半径の札 (引き出し線 + 2 行)
@@ -101,7 +101,7 @@ group#h_label(left: 343px; top: 800px; width: 377px; height: 90px; in: {x:27, op
   p#txt(left: 64px; top: -3px; width: 300px; font-size: 39px; line-height: 1.3; white-space: nowrap; text-shadow: 0px 3px 9px #000000E6) 半径 わずか3km
   p#small(left: 64px; top: 46px; width: 260px; font-size: 25px; color: $pale; white-space: nowrap; text-shadow: 0px 3px 9px #000000E6) 太陽の約23万分の1
 # 吸い込まれる地球 (静止 = 渦の外側の始点・語で 5 区間の to を続けて中心へ)
-img#h_earth.bleed(left: 615px; top: 811px; width: 127px; height: 127px; content: @earth; fit: contain; in: {opacity:0, duration:.05})
+img#h_earth.bleed(left: 615px; top: 811px; width: 127px; height: 127px; content: @earth; object-fit: contain; in: {opacity:0, duration:.05})
 p#h_q(left: 413px; top: 527px; width: 200px; font-family: d; font-size: 200px; line-height: 1; text-align: center; color: $red; stroke: #05060B,17; text-shadow: 0px 7px 17px #000000A6; transform: rotate(12deg); in: {scale:.2, rotation:-32, opacity:0, duration:.38, ease:'back.out(2.6)'}; out: {opacity:0, duration:.15}) ？
 # 巻き戻しの走査線 + 札
 div#h_rew(inset: 0; pattern: hatch,90,#FFFFFF12,5,1; in: {opacity:0, duration:.08})
@@ -120,18 +120,18 @@ img#s_space(inset: 0; content: @space; main: none)
 # 地球の奥の半周 (円盤の下の写し — 前の半周は見えない)
 group#s_orb_b(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine {x: 267, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy_b(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 93, period: 4.804, phase_offset: 0.024})
-    img#earth_b(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
-img#s_bh(left: 184px; top: 497px; width: 352px; height: 352px; content: @bh_disc; fit: contain; in: {y:80, scale:1.18, duration:.9, ease:'power3.out'})
+    img#earth_b(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; object-fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
+img#s_bh(left: 184px; top: 497px; width: 352px; height: 352px; content: @bh_disc; object-fit: contain; in: {y:80, scale:1.18, duration:.9, ease:'power3.out'})
 shape#s_orbit.ellipse(left: 93px; top: 580px; width: 533px; height: 187px; background: none; border: 3px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
 #s_orbit.bold(border: 5px solid #BFF0FFE6)
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
-group#s_tr(left: 0px; top: 0px; stack: z; width: 720px; height: 1280px; delay: 350; main: "sine,x=267,freq_ms=4804,phase_offset=0.260;sine,x=267,freq_ms=4804,phase_offset=0.233;sine,x=267,freq_ms=4804,phase_offset=0.206;sine,x=267,freq_ms=4804,phase_offset=0.179;sine,x=267,freq_ms=4804,phase_offset=0.152;sine,x=267,freq_ms=4804,phase_offset=0.125;sine,x=267,freq_ms=4804,phase_offset=0.098"; in: {opacity:0, duration:.3}) ×7
-  group#ty(left: 0px; top: 0px; width: 720px; height: 1280px; main: "sine,y=93,freq_ms=4804,phase_offset=0.010;sine,y=93,freq_ms=4804,phase_offset=0.983;sine,y=93,freq_ms=4804,phase_offset=0.956;sine,y=93,freq_ms=4804,phase_offset=0.929;sine,y=93,freq_ms=4804,phase_offset=0.902;sine,y=93,freq_ms=4804,phase_offset=0.875;sine,y=93,freq_ms=4804,phase_offset=0.848")
+group#s_tr(left: 0px; top: 0px; stack: z; width: 720px; height: 1280px; delay: 350; main: sine {x: 267, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
+  group#ty(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 93, period: 4.804, phase_offset: '0.010;0.983;0.956;0.929;0.902;0.875;0.848'})
     shape#d.ellipse(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)
 group#s_orb(left: 0px; top: 0px; width: 720px; height: 1280px; delay: 350; main: sine {x: 267, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 93, period: 4.804, phase_offset: 0.024})
-    img#earth(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
+    img#earth(left: 312px; top: 625px; width: 97px; height: 97px; content: @earth; object-fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 chip#s_c1(left: 61px; width: 225px; text-align: center) 質量 {b}＝ 同じ{/}
 chip#s_c2(left: 363px; width: 290px; text-align: center) 重力 {b}＝ そのまま{/}
 chip#s_c3(left: 47px; width: 305px; text-align: center; border: 2px solid $ok) {g}✓{/} 吸い込まれない
@@ -152,14 +152,14 @@ p#w_formula(left: 60px; top: 347px; width: 600px; font-size: 49px; line-height: 
 group#w_diag(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   lab#name(left: 27px; top: 508px; width: 307px; delay: 550) 太陽
   lab#name2(left: 27px; top: 508px; width: 307px; color: $lilac; in: {opacity:0, duration:.2}) ブラックホール
-  img#sun(left: 47px; top: 587px; width: 240px; height: 240px; content: @sun; fit: contain; delay: 450; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
+  img#sun(left: 47px; top: 587px; width: 240px; height: 240px; content: @sun; object-fit: contain; delay: 450; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
   div#bh(z-index: front; left: 130px; top: 670px; width: 75px; height: 75px; border-radius: 50%; background: #000000; border: 3px solid #FFECC8F2; box-shadow: 0px 0px 17px 5px #FFC882BF; in: {scale:.2, opacity:0, duration:.35, ease:'back.out(2)'})
   p#radius(left: 7px; top: 805px; width: 347px; font-size: 32px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180 delay=450]{/} km
   shape#dline(points: "227,673 527,673"; background: none; border: 3px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
   lab#dlab(left: 227px; top: 613px; width: 300px; color: $cyan; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.15}) 距離
   div#line(left: 227px; top: 671px; width: 300px; height: 5px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 9px #5FE0FFCC; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
   p#dist(left: 200px; top: 607px; width: 360px; font-size: 41px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250]万 km
-  img#earth(left: 530px; top: 617px; width: 113px; height: 113px; content: @earth; fit: contain; delay: 750; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
+  img#earth(left: 530px; top: 617px; width: 113px; height: 113px; content: @earth; object-fit: contain; delay: 750; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
   p#pull(left: 233px; top: 693px; width: 307px; font-size: 36px; text-align: center; white-space: nowrap; in: {x:27, opacity:0, duration:.35, ease:'power2.out'}) ◀── 引力
 # hf の作り: 判子は薄めた図の上に重ねる (overlap)
 stamp#w_stamp(overlap: w_diag.dist,w_diag.pull; left: 160px; top: 635px; width: 400px; font-size: 61px; c: $ok; bg: #001A12F0; transform: rotate(-8deg); in: {scale:2.2, rotation:-6, opacity:0, duration:.28, ease:'back.out(2.6)'}) 変わらない！
@@ -233,11 +233,11 @@ group#f_c(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, dur
   div#void(inset: 0; background: #000000)
   img#space(inset: 0; content: @space; opacity: .55; main: none)
   group#cam(left: 0px; top: 0px; width: 720px; height: 1280px; transform-origin: 50% 53.7%; in: {scale:1.35, duration:4.63, ease:'power1.out'})
-    img#bh(left: 248px; top: 575px; width: 224px; height: 224px; content: @bh_disc; fit: contain; opacity: .9)
+    img#bh(left: 248px; top: 575px; width: 224px; height: 224px; content: @bh_disc; object-fit: contain; opacity: .9)
     shape#orbit.ellipse(left: 107px; top: 600px; width: 507px; height: 173px; background: none; border: 2px solid #A0D7FF47)
     group#ox(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {x: 253, period: 6.17, phase_offset: 0.441})
       group#oy(left: 0px; top: 0px; width: 720px; height: 1280px; main: sine {y: 87, period: 6.17, phase_offset: 0.191})
-        img#earth(left: 308px; top: 635px; width: 104px; height: 104px; content: @earth_ice; fit: contain; main: sine {scale: 0.17, period: 6.17, phase_offset: 0.191})
+        img#earth(left: 308px; top: 635px; width: 104px; height: 104px; content: @earth_ice; object-fit: contain; main: sine {scale: 0.17, period: 6.17, phase_offset: 0.191})
   topshade#shade(z-index: front)
 # 気温のテロップ: 上の札を語で差し替え、数字を数え下ろして弾ませる
 # hf の作り: 凍った街の写真は 2 回使う (duplicate_media)・消灯した街の写真を凍った街に重ねて溶かす (photo_hidden)
@@ -261,7 +261,7 @@ group#r_a(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   topshade#shade(z-index: front)
 group#r_b(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, duration:.2})
   div#star(left: 327px; top: 513px; width: 307px; height: 307px; border-radius: 50%; background: radial(#FFFFFF,#DFF3FF@22%,#8FD0FF@50%,#3C7DFF@74%,#285AFF00,42%,40%); box-shadow: 0px 0px 53px 13px #78BEFF73; in: {scale:0, duration:.5, ease:'back.out(1.6)'})
-  img#sun(left: 130px; top: 630px; width: 127px; height: 127px; content: @sun; fit: contain; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
+  img#sun(left: 130px; top: 630px; width: 127px; height: 127px; content: @sun; object-fit: contain; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
   lab#l1(left: 73px; top: 761px; width: 240px; font-size: 35px) 太陽
   lab#l2(left: 47px; top: 812px; width: 293px; font-size: 31px; color: #FF4F63) 質量が足りない
   lab#l3(left: 290px; top: 827px; width: 380px; font-size: 31px) ブラックホールになる星
@@ -285,7 +285,7 @@ telop#t_relief_c
 section#cta
 img#c_bg(inset: 0; content: @sleep; filter: blur(24px) brightness(.6); main: none)
 div#c_card(left: 73px; top: 507px; width: 573px; height: 313px; border-radius: 27px; background: #0A0E1CDB; border: 2px solid #FFFFFF2E; box-shadow: 0px 13px 40px #00000099; delay: 100; in: {y:60, opacity:0, duration:.5, ease:'back.out(1.6)'})
-  img#avatar(left: 40px; top: 40px; width: 127px; height: 127px; border-radius: 50%; border: 4px solid $chip; content: @blackhole; fit: cover,focus=49%,39%,zoom=250%)
+  img#avatar(left: 40px; top: 40px; width: 127px; height: 127px; border-radius: 50%; border: 4px solid $chip; content: @blackhole; object-fit: cover,focus=49%,39%,zoom=250%)
   p#name(left: 193px; top: 61px; width: 360px; font-size: 36px; white-space: nowrap) 宇宙の思考実験ラボ
   p#handle(left: 195px; top: 113px; width: 340px; font-size: 24px; color: #AAB4C8; white-space: nowrap) @uchu_shiko_lab
   p#follow(left: 40px; top: 207px; width: 493px; font-size: 35px; line-height: 1.35; text-align: center; padding: 13px 0px; border-radius: 99px; background: linear(#FF4560,#E0002A,180); box-shadow: 0px 7px 17px #FF285073; out: {opacity:0, duration:.15}) フォローする

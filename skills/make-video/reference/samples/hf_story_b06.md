@@ -37,9 +37,9 @@ sound hooves = "馬の蹄がパカパカと鳴る足音"
 sound whistle = "汽車のポーッという汽笛の音"
 sound impact = "ドーンと響く衝撃のオノマトペの音"
 sound jan = "ジャン！という驚きの効果音"
-run k = color=$kin font=d size=44
-run wa = color=$sumi font=z size=73
-run r = color=$shu
+run k { color: $kin; font-family: d; font-size: 44px }
+run wa { color: $sumi; font-family: z; font-size: 73px }
+run r { color: $shu }
 p { out: none }
 div { border: none; box-shadow: none; padding: 0px; border-radius: 0px; out: none }
 img { out: none }
