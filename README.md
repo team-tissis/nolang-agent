@@ -78,7 +78,9 @@ nolang-agent/
   packages/cli/                        # CLI @no-lang/cli の正本 (Node 20+・依存なし・テスト付き)
   skills/make-video/                   # スキルの正本 (CLI 優先・無ければ MCP)
     reference/                         # 辞書・規則・雛形・見本 (nolang-backend からの写し・SOURCE.json に元の commit)
-  plugins/nolang-dev/                  # 箱 (plugin)。cli/ と skills/ は npm run build が正本から作る — 直接直さない
+  studio/                              # nolang make が動かす studio (nolang-backend の nolang-draft-studio の写し・remote で使う物だけ)
+  hooks/                               # Claude Code の hook: nolang の出力の tell_user (動画・ログインの URL) を通知で画面に出す
+  plugins/nolang-dev/                  # 箱 (plugin)。cli/・skills/・studio/・hooks/ は npm run build が正本から作る — 直接直さない
   plugins/nolang-local/                #   同上 (接続先だけが違う)
     .claude-plugin/plugin.json         #   Claude Code 用 (MCP の接続設定も中に書く)
     .codex-plugin/plugin.json          #   Codex 用
@@ -86,7 +88,7 @@ nolang-agent/
   .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang)
   .agents/plugins/marketplace.json     # Codex 用の棚
   scripts/build-plugins.mjs            # 正本 → plugins/ (--check はずれの検査)
-  scripts/sync-reference.mjs           # nolang-backend → skills/make-video/reference/
+  scripts/sync-reference.mjs           # nolang-backend → skills/make-video/reference/ と studio/
   .github/workflows/ci.yml             # npm run check と npm pack --dry-run
 ```
 
@@ -134,9 +136,12 @@ Host ubik-nolang
 ```
 nolang auth login [--background | --no-browser] | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
-nolang templates [--aspect 16:9]
+nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff]
+                                      NoLang の studio と同じ段取りで作る (著者と担当は claude -p)。再生できたら URL を返す (スキルの標準)
 nolang check [dir]                    dir の design.txt / timeline.txt を検査
-nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]
+nolang start [dir] --title "…" [--seconds N]   cut ごとに流す: 開始だけ (dir に stream.json)
+nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
+nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
 nolang status <video_id> [--wait] [--until playable|completed]
 nolang abort <video_id>
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
@@ -144,6 +149,7 @@ nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画
 ```
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
+- リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
 - 接続先: `--api` → `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 前回ログインした接続先 → `http://localhost:18000`。
 - ログイン: 人が打つなら `nolang auth login` (ブラウザで許可するまで待つ)。エージェントは `--background` で URL を受け取ってすぐ戻り、`nolang auth wait` で完了を確かめる。ブラウザが別の機械なら `--no-browser` → `complete`。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
 - CI など非対話: `NOLANG_TOKEN` に API key (`nlg-c-…`) か access token を入れる。
@@ -180,7 +186,7 @@ npm run build
 ```
 
 デモのスタックに合わせる時はスタックが動いている branch から、本番向けは backend の `main` から写す。
-`SKILL.md` の「0・1・A・B」(作る手順) はこの repo で書いた物、「2」(書き方の要点) は backend の SKILL.md からの抜き出し。
+`SKILL.md` (studio で作る標準の手順・ログイン・素材) と `write-yourself.md` の「1・A・B」(自分で書く経路) はこの repo で書いた物、`write-yourself.md` の「2」(書き方の要点) は backend の SKILL.md からの抜き出し。
 
 ## 公開 (まだしていない)
 
