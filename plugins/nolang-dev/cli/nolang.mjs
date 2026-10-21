@@ -35,6 +35,11 @@ const PENDING_FILE = join(CONFIG_DIR, "pending-login.json");
 const LOGIN_STATUS_FILE = join(CONFIG_DIR, "login-status.json");
 const LOGIN_LOG_FILE = join(CONFIG_DIR, "login.log");
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
+// --background は裏で待つだけなので長めに (エージェントが原稿を書く間も切れないように)
+const BACKGROUND_LOGIN_TIMEOUT_MS = 15 * 60 * 1000;
+// 未ログインの時の案内。エージェントがユーザーにコマンドを打たせず、自分でログインを始めるように書く
+const LOGIN_HINT = (api, what) =>
+  `${what} (${api})。エージェントは \`nolang auth login --background\` で許可の URL をユーザーに渡し、許可されたら \`nolang auth wait\`。人が打つなら \`nolang auth login\``;
 
 const log = (...args) => console.error(...args);
 const out = (obj) => process.stdout.write(JSON.stringify(obj, null, 2) + "\n");
@@ -221,7 +226,7 @@ async function exchangeCode(api, pending, code) {
 }
 
 async function refreshTokens(api, profile) {
-  if (!profile.refresh_token) throw new CliError(`ログインが切れた (${api})。\`nolang auth login\` をやり直してください`, { exit: EXIT.AUTH });
+  if (!profile.refresh_token) throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
   try {
     const tokens = await postForm(profile.token_endpoint, {
       grant_type: "refresh_token",
@@ -231,14 +236,14 @@ async function refreshTokens(api, profile) {
     return await saveTokens(api, profile, tokens);
   } catch (error) {
     if (error.exit === EXIT.NETWORK) throw error;
-    throw new CliError(`ログインが切れた (${api})。\`nolang auth login\` をやり直してください`, { exit: EXIT.AUTH });
+    throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
   }
 }
 
 async function accessToken(api, { forceRefresh = false } = {}) {
   if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // API key (nlg-c-…) か access token — CI 向け
   const profile = (await loadStore()).profiles[api];
-  if (!profile) throw new CliError(`未ログイン (${api})。\`nolang auth login\` を実行してください`, { exit: EXIT.AUTH });
+  if (!profile) throw new CliError(LOGIN_HINT(api, "未ログイン"), { exit: EXIT.AUTH });
   if (forceRefresh || Date.now() > profile.expires_at - 60_000) return (await refreshTokens(api, profile)).access_token;
   return profile.access_token;
 }
@@ -328,7 +333,15 @@ async function startBackgroundLogin(api) {
     if (status?.state === "failed") throw new CliError(`ログインを始められなかった: ${status.error}`, { exit: EXIT.AUTH, data: status });
     if (status?.authorize_url) {
       log("ブラウザで NoLang にログインして許可してください (同じ機械ならブラウザが開いています)。許可したら `nolang auth wait`。");
-      out({ ok: true, api, waiting: true, authorize_url: status.authorize_url, next: "ユーザーが許可したら nolang auth wait" });
+      out({
+        ok: true,
+        api,
+        waiting: true,
+        authorize_url: status.authorize_url,
+        // エージェントがそのままユーザーに伝える文 (コマンドの出力はユーザーに見えないことがあるので、URL ごと本文に書く)
+        tell_user: `NoLang へのログインが必要です。次の URL をブラウザで開き、ログインして「許可」を押してください (15 分有効):\n${status.authorize_url}`,
+        next: "tell_user をユーザーに伝える → 許可されたら nolang auth wait",
+      });
       return;
     }
     await new Promise((r) => setTimeout(r, 200));
@@ -343,6 +356,7 @@ async function cmdAuthLogin(flags) {
   // 切り離した子: 結果を状態 file に残す (前の CLI はもう居ないので、stdout ではなく file で伝える)
   try {
     await loginInBrowser(api, flags, {
+      timeoutMs: BACKGROUND_LOGIN_TIMEOUT_MS,
       onUrl: (url) => writePrivate(LOGIN_STATUS_FILE, { state: "waiting", api, authorize_url: url, pid: process.pid, started_at: new Date().toISOString() }),
       onDone: (profile) => writePrivate(LOGIN_STATUS_FILE, { state: "done", api, access_expires_at: new Date(profile.expires_at).toISOString() }),
     });
@@ -390,8 +404,9 @@ async function loginInBrowser(api, flags, hooks = {}) {
     await hooks.onUrl?.(url);
     if (process.stdin.isTTY) log("(ブラウザが別の機械なら、許可後のアドレスバーの URL をここに貼って Enter)");
     openBrowser(url);
+    const waitMs = hooks.timeoutMs ?? LOGIN_TIMEOUT_MS;
     const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new CliError("ログインの待ち時間 (5 分) を過ぎた", { exit: EXIT.AUTH })), LOGIN_TIMEOUT_MS).unref(),
+      setTimeout(() => reject(new CliError(`ログインの待ち時間 (${waitMs / 60000} 分) を過ぎた`, { exit: EXIT.AUTH })), waitMs).unref(),
     );
     const got = await Promise.race([code, pastedCallback().then((line) => codeFromCallback(line, state)), timeout]);
     const profile = await exchangeCode(api, { client_id: clientId, redirect_uri: redirectUri, token_endpoint: as.token_endpoint, resource, verifier }, got);
@@ -416,7 +431,14 @@ async function cmdAuthWait(flags) {
       throw new CliError("始めたログインが無い。先に `nolang auth login --background`", { exit: EXIT.AUTH });
     }
     if (Date.now() > deadline) {
-      out({ ok: false, waiting: true, api: status.api, authorize_url: status.authorize_url, next: "ユーザーが許可したら、もう一度 nolang auth wait (待ち受けは開始から 5 分)" });
+      out({
+        ok: false,
+        waiting: true,
+        api: status.api,
+        authorize_url: status.authorize_url,
+        tell_user: `まだログインの許可が確認できていません。次の URL をブラウザで開き、ログインして「許可」を押してから教えてください:\n${status.authorize_url}`,
+        next: "tell_user をユーザーに伝えて止まる → 許可されたら、もう一度 nolang auth wait (待ち受けは開始から 15 分)",
+      });
       process.exitCode = EXIT.AUTH;
       return;
     }
@@ -444,7 +466,7 @@ async function cmdAuthStatus(flags) {
   if (process.env.NOLANG_TOKEN) return out({ api, logged_in: true, source: "NOLANG_TOKEN" });
   const profile = (await loadStore()).profiles[api];
   if (!profile) {
-    out({ api, logged_in: false, next: "nolang auth login" });
+    out({ api, logged_in: false, next: "nolang auth login --background (エージェント) / nolang auth login (人)" });
     process.exitCode = EXIT.AUTH;
     return;
   }
@@ -682,7 +704,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 
 使い方:
   nolang auth login [--no-browser]      ブラウザで NoLang にログイン (--no-browser は URL を出して終わる 2 段)
-  nolang auth login --background        エージェント向け: 待ち受けを裏に回し、許可の URL を出してすぐ戻る
+  nolang auth login --background        エージェント向け: 待ち受けを裏に回し (15 分)、許可の URL を出してすぐ戻る
   nolang auth wait [--timeout 120]      --background のログインが許可されるのを待つ (終了コード 0 でログイン済み)
   nolang auth complete '<URL>'          --no-browser の続き: 許可後のアドレスバーの URL を渡す
   nolang auth status | logout

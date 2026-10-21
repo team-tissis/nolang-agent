@@ -13,6 +13,7 @@ description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。
 - **シェルが使え、`node` (20 以上) があれば CLI** (§A)。原稿を file のまま渡せ、check → 開始 → cut の分割 → 順番の投入を `nolang create` が 1 回でやる (並列の投入・待ち時間切れの失敗が起きない)。
 - **シェルが無い (Web 版など)・CLI が動かない時は MCP** (§B)。
 - 原稿の書き方 (§1・§2) はどちらも同じ。
+- **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、原稿を書く前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §A の 1 (MCP は §B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 
 CLI の呼び方: `nolang` が PATH にあればそれ、無ければ `node ../../cli/nolang.mjs` (この skill の directory から。以下 `nolang` と書く)。
 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
@@ -32,8 +33,8 @@ CLI の呼び方: `nolang` が PATH にあればそれ、無ければ `node ../.
 ## A. CLI で作る (シェルがある時・推奨)
 
 1. **ログイン** (「NoLang にログインして」と頼まれた時も、作る前も): `nolang auth status`。終了コード 0 ならログイン済み。3 (未ログイン) なら、自分で始める:
-   - `nolang auth login --background` → 出力の `authorize_url` をユーザーに渡し、「ブラウザで NoLang にログインして『許可』を押してください」と伝える (同じ機械ならブラウザも開く)。コマンドはすぐ戻り、待ち受けは裏で続く。
-   - ユーザーが許可したら `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度 `nolang auth wait`。待ち受けは 5 分で切れるので、切れたら `--background` からやり直す。
+   - `nolang auth login --background` (すぐ戻り、待ち受けは裏で 15 分続く)。**次のメッセージで真っ先に**出力の `tell_user` (URL 入りの案内文) を**自分のメッセージの本文に**そのまま書き (コマンドの出力はユーザーには見えないことがある)、「ブラウザで NoLang にログインして『許可』を押してください (同じ機械ならブラウザが開いています)」と伝える。伝えたら、待つ間に原稿を書き進めてよい。
+   - check や素材のコマンドの前に `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度。まだ許可されていない・切れていた (`failed` なら `--background` をやり直す) 時は、そこで止まって (ターンを終えて) ユーザーの「許可した」を待つ — 止まる時のメッセージにも `authorize_url` をもう一度本文に書く (「上の URL」と書かない)。
    - ブラウザに `ACCESS DENIED` (403) と出る → 接続元の IP が NoLang の許可リストに無い。同じブラウザで `https://<ログイン画面のホスト>/cdn-cgi/trace` を開き、`ip=` の値を管理者に伝えてもらう。
    - ブラウザが別の機械 (リモート・コンテナ) なら: `nolang auth login --no-browser` → 出た `authorize_url` をユーザーに開いてもらう → 許可後のページは接続エラーになるので、そのアドレスバーの URL を貼ってもらう → `nolang auth complete '<URL>'`。
    - 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (README.md の「つなぐ先の準備」)。
