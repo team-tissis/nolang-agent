@@ -7,21 +7,21 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | field | 書き方 | 備考 |
 |---|---|---|
-| frame_layout x y w h | 根 `left top width height` / `inset: 0` · 子 `left top right bottom width height` (親の内側から) · 表 = 容器の `display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px` + 字下げの ×N 1 つ (CSS の grid: 各 instance が cell いっぱい・gap 既定 0・×N の行の `display: grid,3` と同じ) | 語で動かす = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
+| frame_layout x y w h | 根 `left top width height` / `inset: 0` · 子 `left top right bottom width height` (親の内側から) · 表 = 容器の `display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px` + 字下げの ×N 1 つ (CSS の grid: 各 instance が cell いっぱい・gap 既定 0・×N の行の `display: grid,3` と同じ) | 語で動かす = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
 | frame_layout rot | `transform: rotate(-8deg)` · `[!#名 to,rotation=-15,pivot=100%,0%]` · `[!#名 to,rotation=720]` (上限なし = 2 周) | `transform-origin` (印では `pivot=`) は回転・倍率の原点 (中心は原点のまわりの弧を辿る) |
-| frame_layout rx ry perspective (静止の 3D の傾き) | `transform: rotateX(30deg); depth: 0.8` · `[!#名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main: constant {rotationX: 70, depth: 4, pivot: 'top'}`)・子は一緒に傾かない。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 520px → 高さ 440px・`depth: 0.85` = 440/520) |
+| frame_layout rx ry perspective (静止の 3D の傾き) | `transform: rotateX(30deg); depth: 0.8` · `[!#名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main: constant {rotationX: 70, depth: 4, pivot: 'top'}`)・子は一緒に傾かない。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 780px → 高さ 660px・`depth: 0.85` = 440/520) |
 | frame_layout skx sky (静止の skew) | `transform: skewX(-12deg)` · `[!#名 to,skewX=12]` (補間) | CSS の skewX と同じ向き・±80°・素材も塗りも文字も枠ごと傾く (子を持つ要素には書けない — 子ごと 1 枚の群は平面) |
 | media_layout (cover の切り抜き) | `object-fit: cover; object-position: 60% 0%; zoom: 130%` · `main: kb {scale: [1.1, 1], focus: '40% 60%'}` · `[!#名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!#名 to,w=640]` (切り抜きごと補間) | zoom_media は枠が動かず素材だけ寄る (cover の絵だけ — 箱の中の絵は `[!#箱.子 zoom_media]`) |
 | media_layout x_flip y_flip | `img#名(flip: x\|y)` (写真・生成画像・svg の鏡像) · `icon#名(flip: x\|y)` (svg を焼き直す) · `avatar#名(flip: x)` | |
 | visual_filter opacity contrast brightness saturation | `filter: saturate(.3) brightness(1.2) contrast(1.1)` · `[!#名 filter,duration=600,sat:0]` / `[!#名 sat,0.3]` / `[!#名 gray]` | 素材 (絵・写真・svg) にだけ効く — 文字・図形の地には効かない・子を持つ div には書けない (中の絵に)・子を持つ絵は絵の素材だけ |
-| visual_filter blur (静止のぼかし px) | `filter: blur(4px)` · `[!#名 to,blur=8,duration=600]` (補間) | 層の raster 全体 (文字・板・絵) — 群と子を持つ要素には書けない |
+| visual_filter blur (静止のぼかし px) | `filter: blur(6px)` · `[!#名 to,blur=8,duration=600]` (補間) | 層の raster 全体 (文字・板・絵) — 群と子を持つ要素には書けない |
 | visual_filter color_matrix | `filter: sepia(1)` / `grayscale(1)` / `invert(1)` · CSS に無い look は `look: cool\|warm\|faded\|polaroid\|kodachrome\|technicolor\|browni\|vintage` · 単色化 `look: #暗/#明` (duotone) · `look: #色` (絵の形 (alpha) だけ残して 1 色で塗る = CSS の `mask-image` + 単色) | **✕** 生の行列 |
 | (画面全体の色調) | `veil#名(filter: saturate(0))` (か `filter: grayscale(1)` / `look: #000000/#3366FF`) を `[>#名]` … `[<#名]` | 開いている間、下の層 (後から出る物も) を色調の変種へ — 文字と図形は look の行列と彩度を掛けた色の変種で写す |
 | alpha | `opacity: .5` · `[!#名 dim,0.3,duration=900]` · `[!#名 to,opacity=0.5]` | 子孫にも掛かる |
 | (画面全体の閃光・暗転・揺れ) | 全面の `veil#fl(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)` を `[>#fl][!#fl to,{opacity:0, duration:.4}]` (閃光) / `[>#名]` … `[<#名]` (暗転)・揺れは出ている要素ごとの `[!#名 shake,6,duration=2200]` を同じ語に | 幕は veil・揺れは層ごとの一回きりの shake (画面全体を指す印は無い — CameraLayer は viewport だけで揺れの channel が無い) |
 | (写真の暗幕) | `img#名(scrim: right,0.45)` (`vignette,0.6` / 一様 `0.4`) | 絵の子の veil が絵の直上で一緒に出入り |
-| pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 1.1px, transparent 1.6px); background-size: 32px` も同じ) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
-| border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (箱・形・文字の札・楕円) · `border-radius:` (角ごと `border-radius: 0 22px 22px 0` は svg に焼く) | 破線 / 点線は Chromium と同じ模様 (dashed: 幅 3 以上は線 2W・間 W・細い線は 3W / 2W、dotted: 幅 3 より太いと直径 W の丸い点を中心間 2W)・周に整数回で収まるよう間を詰める・線種は変種で切り替えられない・`double` / `groove` / `ridge` / `inset` / `outset` は DEFECT:CSS・辺の線 (`border-left:`) と吹き出しの形・字幕の帯は実線だけ |
+| pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` も同じ) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
+| border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (箱・形・文字の札・楕円) · `border-radius:` (角ごと `border-radius: 0 33px 33px 0` は svg に焼く) | 破線 / 点線は Chromium と同じ模様 (dashed: 幅 3 以上は線 2W・間 W・細い線は 3W / 2W、dotted: 幅 3 より太いと直径 W の丸い点を中心間 2W)・周に整数回で収まるよう間を詰める・線種は変種で切り替えられない・`double` / `groove` / `ridge` / `inset` / `outset` は DEFECT:CSS・辺の線 (`border-left:`) と吹き出しの形・字幕の帯は実線だけ |
 | border shape (形 70 種) path dash cap | `shape#名(path: arrow_r)` (形の名前 48 種) / `.ellipse` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (既定 round) · 文字の板・絵の mask 形は `p#名(shape: star)` / `img#名(shape: star)` | 形の変形 (morph): `points:` / `path:` の shape (単色の塗り) の変種 `#名.tag(path: …)` へ `[!#名 .tag]` で頂点を補間 (状態 key の `border_path`)。形の種類の違う変種は開き直し (切替) |
 | start_offset end_offset | `delay: 320` · 印の `+N` / `cut-N` (印の `+N` が `delay:` に勝つ) | |
 | motion_in / motion_out / motion_main | `in:` `out:` `main:` (下の「Motion」) | 1 位相 3 本まで (後の語の一回きりの効果と `window=` を書いた `[!#名 main,…]` は同じ層の anchor 窓の main で別枠)・1 本の keyframe (`keys(at=…)`) は 24 個まで (at=1 は数えない) |
@@ -29,14 +29,14 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | bg_color | `background: #色` (div の地は書いた時だけ — 既定は透明) · `[!#名 fill,$色]` / `to,fill=` (400 ms で補間 — glass・角ごとの角丸・尻尾・点列の板も単色の地は層の塗り) | グラデの地は svg に焼く (印の fill は DEFECT:ARG) |
 | blend | `mix-blend-mode: screen\|multiply\|add\|overlay\|soft-light` | 印の変種なし |
 | mask_media_id | `mask: "[transparent]筆で払った線、文字なし"` / `mask: @名` (+ `background: $色` で筆の形の単色塗り) | 画像の alpha を素材と塗り地に掛ける (文字は対象外・縁を書くと枠の中が縁の色になる) |
-| shadow color dx dy blur spread | `box-shadow: 1..5` / `box-shadow: dx dy blur [spread] #色` (`0 0 0 14px #E8743B` = 外側の太い縁) · `glow: $色[,blur[,spread]]` · `[!#名 glow,blur=18,spread=10,$色]` | |
+| shadow color dx dy blur spread | `box-shadow: 1..5` / `box-shadow: dx dy blur [spread] #色` (`0 0 0 21px #E8743B` = 外側の太い縁) · `glow: $色[,blur[,spread]]` · `[!#名 glow,blur=18,spread=10,$色]` | |
 
 ## 文字 (TextLayer・TextStyle・ParagraphStyle)
 
 | field | 書き方 | 備考 |
 |---|---|---|
 | font_id | `font-family: "family 太さ"` / 根の `font` `fonts` の短い名 `font-family: m` / `style: "書体の説明"` (意味検索) | `font-weight` は無い (落として warn・太さは family か説明文で) |
-| font_size | `font-size: 48px` (`hero h1 h2 body label note` も) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
+| font_size | `font-size: 72px` (`hero h1 h2 body label note` も) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
 | color | `color:` · `[!#名 fill,$色]` (補間) · `[!#名 recolor,$色]` (文字・図形・icon は補間) | |
 | color_gradient | `color: linear(#FFE58A,#F5A623@60%,#C2410C,180)` / `radial(#…,#…,30%,60%[,72%,62%])` | 角度は CSS と同じ・`@N%` は止まり位置・radial の後ろは中心 (と楕円の半径) の箱の比 |
 | stroke_color stroke_width | `stroke: #色,幅` (文字の px) | |
@@ -57,7 +57,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | channel | 書き方 | 備考 |
 |---|---|---|
-| dx dy rot sx sy alpha blur | `in: {x: -30, opacity: 0, duration: .6}` / `in: keys(at=0 … \| at=0.6 …),duration=900` (時間は ms) / `main: sine {y: 12}` | 動きの `x y` は px (層の寸法で換算しない)・`scale scaleX scaleY` は倍率・`rotation` は deg |
+| dx dy rot sx sy alpha blur | `in: {x: -45, opacity: 0, duration: .6}` / `in: keys(at=0 … \| at=0.6 …),duration=900` (時間は ms) / `main: sine {y: 18}` | 動きの `x y` は px (層の寸法で換算しない)・`scale scaleX scaleY` は倍率・`rotation` は deg |
 | skx sky | 同じ (`in: {skewX: -20, opacity: 0, duration: .5}`) | 静止の傾きは層の `transform: skewX(-12deg)` (上の frame_layout) |
 | rx ry perspective (+ `depth`) | 同じ (`main: constant {rotationX: 35, depth: 0.8, pivot: 'bottom'}`) | layer の単位だけ |
 | color (描画色) | `in: {color: '#FF0000', …}` | 文字の単位だけ (書けば unit=paragraph) |
@@ -74,7 +74,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | 軸 | 書き方 | 備考 |
 |---|---|---|
-| unit | `in: rise {y: 20, duration: .4, stagger: .04}` (1 字ずつの間隔 — stagger の無い `in: rise` は文字も層ごと) · range (`[!#名{t} punch]` が作る) | 文字だけ |
+| unit | `in: rise {y: 30, duration: .4, stagger: .04}` (1 字ずつの間隔 — stagger の無い `in: rise` は文字も層ごと) · range (`[!#名{t} punch]` が作る) | 文字だけ |
 | order seed | `in: fade_stagger {from: 'random', seed: 3}` · ×N の入場 `in: {stagger: {each: .06, from: 'center'}}` / 退場 `out: {opacity: 0, stagger: {each: .06, from: 'end'}}` (`[<#名[*]]` と cut 末の自動 close で同じ) · 項目 `[>#名[*] from=center]` `[<#名[*] from=random +110]` | reverse / center_out / random |
 | step duration delay | 入場の tween の `stagger: .04` (= step) · `in: pop {duration: .5}` · `delay: 320` / 印の `+N` | duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定 |
 | easing (bezier spring steps) | `ease: 'back.out(1.7)'` / `back(2.2)` / `bezier(.2/.8/.2/1)` / `spring(10/240)` / `steps(4)` · 名は GSAP の綴り (lowering が EffectEasing に写す: power1 = ease_* · power2 = cubic_* · power3 / circ = quart_* · power4 / expo = strong_ease_*) · keys の区間ごと `at=… ease=bezier(.33/1/.68/1)` (main の keys も・at=1 は静止へ戻る最後の区間) | 係数つきは preset の入場と keys の key だけ |
@@ -118,8 +118,8 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | alpha | `[!#g dim]` / `to,opacity=` |
 | 子を持つ要素 (div・絵・文字 … 型を問わず) | 子ごと 1 枚 (CSS の stacking context): `opacity:` `transform: rotate()`・入退場・`[!#名 to,x= scale= rotation=]` / `move` / `scale` / `dim`・一回きりの効果は群 (子ごと・原点は描いた箱の中心)・塗り / 縁 / 影 / 印の glow / tint / frame・絵の Ken Burns / 色調 / 素材の寄り・文字の 1 字ずつの入場は要素自身 (子には掛からない) |
 | clip (角丸の窓) | `group#g(clip: 24,g.bg)` / `clip: true` (窓は箱の枠線の外周まで・def の中 / 箱の子の群にも) · 要素の `clip-path: inset(8% 0 78% 0)` (要素を群 + 本体にして箱の内側の矩形で切る — 動きは切り口ごと) |
-| motion_in / out / main | 群に `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out: {y: -9, blur: 5, opacity: 0, duration: .32}`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
-| camera viewport | `[!#名 zoom,1.4,duration=700]` / `[=#名]` · `camera#cam(left: 0px; top: 0px; zoom: 1)` + `#cam.tight(left: 200px; top: 100px; zoom: 1.4; move: 700)` + `[>#cam]` `[!#cam .tight]` |
+| motion_in / out / main | 群に `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out: {y: -14, blur: 8, opacity: 0, duration: .32}`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
+| camera viewport | `[!#名 zoom,1.4,duration=700]` / `[=#名]` · `camera#cam(left: 0px; top: 0px; zoom: 1)` + `#cam.tight(left: 300px; top: 150px; zoom: 1.4; move: 700)` + `[>#cam]` `[!#cam .tight]` |
 
 ## 音 (BgmLayer・SoundEffectFire・MasterLoudness)
 
@@ -142,7 +142,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 - **拡大したまま保つ文字の一部 (run の scale)**: run の印は一回きり (punch / settle / shake / pop) と色・下帯だけ — 保つ拡大は別の文字に分けて `[!#t2 scale]`。
 - **子ごと傾く要素**: 子を持つ要素 (型を問わず) は子ごと 1 枚 (CSS の stacking context) で平面 — `rotateX` / `skewX` / `depth`・`filter:` / `mix-blend-mode:` / `glow:`・`to,skewX= blur=`・入退場の wipe は DEFECT。傾けるのは子の無い要素 (兄弟に重ねた板) か子の各要素 (回転 `transform: rotate()` と拡縮・移動・不透明度・入退場の `blur` は子ごと)。
 - **layer 単位の glow / tint**: 字形の channel は文字だけ (箱・絵の発光は `glow:` の影)。
-- **語を囲む手描きの丸・括弧** (rough-notation の Circle / Bracket / Box): 語の印は `highlight underline strike marker` (文字) と `frame` (要素の縁) だけ — 囲むなら文字の上に `shape#o(left: …; top: …; width: …; height: …; path: circle_hand; border: 4px solid $a; background: none; in: draw {duration: .5})` (`bracket` `brace` `corners` も) を重ねて `[>#o]`。
-- **motion blur** (移動の残像): 入退場の `blur` channel で代用 (`in: {x: -240, blur: 12, opacity: 0, duration: .45, ease: 'power3.out'}`)。印の `to,blur=` は静止のぼかしへ移る (移動の残像ではない)。
+- **語を囲む手描きの丸・括弧** (rough-notation の Circle / Bracket / Box): 語の印は `highlight underline strike marker` (文字) と `frame` (要素の縁) だけ — 囲むなら文字の上に `shape#o(left: …; top: …; width: …; height: …; path: circle_hand; border: 6px solid $a; background: none; in: draw {duration: .5})` (`bracket` `brace` `corners` も) を重ねて `[>#o]`。
+- **motion blur** (移動の残像): 入退場の `blur` channel で代用 (`in: {x: -360, blur: 18, opacity: 0, duration: .45, ease: 'power3.out'}`)。印の `to,blur=` は静止のぼかしへ移る (移動の残像ではない)。
 - **音のピッチ変更** (Remotion の toneFrequency): BGM / SE / 声とも無い — 別の素材を探す (`se` の説明文で高さを書く)。
 - **画像の mask-image** (絵の mask は画像の alpha `mask:` だけ — 透過の絵か svg で。板 (div / shape) の `mask-image: linear-gradient(…)` / `radial-gradient(…)` は svg に焼く)・**chroma key** (draft の語彙に無い)。

@@ -1,4 +1,4 @@
-# concept · 和風きのこパスタ (縦・手順 + コツ) — canvas 720x1280・72.3s・視聴者 90.0 (Gemini・vs hf)
+# concept · 和風きのこパスタ (縦・手順 + コツ) — canvas 1080x1920・72.3s・視聴者 90.0 (Gemini・vs hf)
 
 見せる文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
 
@@ -6,7 +6,7 @@
 #v2
 # 計画: 民藝の色 (食・暮らし) — 生成りの紙の地・主色 朱 (醤油と火)・差し色 ねぎの緑 / バターの黄・墨の縁 + ずらした硬い影
 # 絵は全面の料理写真 (上 6 割に主役)・下に手順の札 (番号 + 一文)・字幕は墨の札。書体 太い丸ゴシック (本文) + 筆の見出し (題だけ・数字は本文の書体)
-canvas 720x1280 bg=#FBF5EA
+canvas 1080x1920 bg=#FBF5EA
 theme light
 palette a=#C8452C b=#3E7A3A c=#E8A820 ink=#2B2118 paper=#FFFBF2 mute=#6E5E4C cream=#FBF5EA
 font "太い丸ゴシック体、やさしい印象"
@@ -15,95 +15,95 @@ photo_style "実写の料理写真、自然光、木のテーブル、温かい�
 prompt_tail "文字なし、ロゴなし、手元だけで顔は映さない"
 motion title { in: {scale:0.5, opacity:0, duration:0.45, ease:'back.out(2.0)'}; out: {scale:0.9, opacity:0, duration:0.2} }
 motion big { in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.6)'}; out: {scale:0.8, opacity:0, duration:0.18} }
-motion div { in: {scale:0.85, y:30, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
-motion row { in: {x:-80, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
-motion note { in: {y:20, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
-div { in: div; border-radius: 24px; border: 3px solid $ink; box-shadow: 6px 6px 0px $ink; background: $paper }
+motion div { in: {scale:0.85, y:45, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: fade {duration:0.2} }
+motion row { in: {x:-120, opacity:0, duration:0.38, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+motion note { in: {y:30, opacity:0, duration:0.35, ease:'back.out(1.4)'}; out: fade {duration:0.18} }
+div { in: div; border-radius: 36px; border: 4px solid $ink; box-shadow: 9px 9px 0px $ink; background: $paper }
 img { scrim: vignette,0.25 }
 cut { stagger: sentence }
 run r { color: $a }
 run g { color: $b }
 run m { marker: $c }
 image dish = "[photo]和風きのこパスタ、しめじとえのきとバター醤油のスパゲッティ、上に刻みのりと青ねぎ、和食器の深皿、木のテーブル、真上より少し斜め"
-def num(t) = p(font-size: 72px; font-family: e; color: $a; in: big; content: {t})
-def ttl(t) = p(font-size: 40px; color: $ink; line-height: 1.25; in: row; content: {t})
-def chip(t) = p(font-size: 30px; color: $paper; background: $a; border-radius: 99px; padding: 6px 20px; border: 3px solid $ink; in: pop; content: {t})
-subtitle.hug(font-size: 32px; bottom: 48px; background: #2B2118E8; color: #FFFBF2; border-radius: 14px; padding: 10px 24px; line-height: 1.35)
+def num(t) = p(font-size: 108px; font-family: e; color: $a; in: big; content: {t})
+def ttl(t) = p(font-size: 60px; color: $ink; line-height: 1.25; in: row; content: {t})
+def chip(t) = p(font-size: 45px; color: $paper; background: $a; border-radius: 148px; padding: 9px 30px; border: 4px solid $ink; in: pop; content: {t})
+subtitle.hug(font-size: 48px; bottom: 72px; background: #2B2118E8; color: #FFFBF2; border-radius: 21px; padding: 15px 36px; line-height: 1.35)
 bgm#music 軽やかなアコースティックギターと木琴の明るいBGM、和やかな料理動画向け、ほのぼの
 bgm#music2(volume: 1dB) 同じ系統で少し弾むアコースティックポップ、手拍子とウクレレ、料理の仕上げ向け
 
 section#open
 img#op_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 40%', '50% 38%']}) [ref:@dish]湯気の立つ和風きのこパスタ、真上より少し斜め、皿は画面の上半分に大きく
 veil#op_v(color: #FBF5EA; opacity: 0.92; to: bottom; start: 0.5)
-p#op_k(left: 40px; top: 72px; font-size: 30px; color: $paper; background: $a; border-radius: 99px; padding: 6px 22px; border: 3px solid $ink; in: pop) 調理 10分
-p#op_t(left: 40px; top: 760px; width: 640px; font-size: 84px; font-family: f; color: $ink; line-height: 1.15; in: title) 和風[br]きのこパスタ
-shape#op_r(left: 40px; top: 980px; width: 300px; height: 6px; path: line_h; background: $a; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.6})
-p#op_s(left: 40px; top: 1006px; font-size: 34px; color: $mute; in: note) しめじ × えのき × バター醤油
-p#op_n(right: 40px; top: 72px; font-size: 30px; color: $ink; background: $paper; border: 3px solid $ink; border-radius: 99px; padding: 6px 22px; in: pop; transform: rotate(6deg)) 2人分
+p#op_k(left: 60px; top: 108px; font-size: 45px; color: $paper; background: $a; border-radius: 148px; padding: 9px 33px; border: 4px solid $ink; in: pop) 調理 10分
+p#op_t(left: 60px; top: 1140px; width: 960px; font-size: 126px; font-family: f; color: $ink; line-height: 1.15; in: title) 和風[br]きのこパスタ
+shape#op_r(left: 60px; top: 1470px; width: 450px; height: 9px; path: line_h; background: $a; border: 9px solid $a; in: wipe {dir: 'right', duration: 0.6})
+p#op_s(left: 60px; top: 1509px; font-size: 51px; color: $mute; in: note) しめじ × えのき × バター醤油
+p#op_n(right: 60px; top: 108px; font-size: 45px; color: $ink; background: $paper; border: 4px solid $ink; border-radius: 148px; padding: 9px 33px; in: pop; transform: rotate(6deg)) 2人分
 
 section#ing
 img#ig_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) [photo]木のテーブルの上に並べたパスタの材料を真上から、乾麺のスパゲッティ、しめじ、えのき、バター、醤油の小瓶、にんにく、刻みのり、青ねぎ
 veil#ig_v(color: #2B2118; opacity: 0.35)
-p#ig_h(left: 40px; top: 64px; font-size: 40px; color: $paper; background: $a; border-radius: 99px; padding: 8px 24px; border: 3px solid $ink; in: pop) 材料（2人分）
-div#ig_c(left: 40px; top: 150px; width: 640px; height: 860px)
-p#ig_i(left: 72px; top: 180px; width: 576px; height: 800px; overlap: ig_c; gap: 14; font-size: 36px; color: $ink; in: {x:-24, opacity:0, duration:0.4, ease:'power3.out'}; display: flex; flex-direction: column) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
+p#ig_h(left: 60px; top: 96px; font-size: 60px; color: $paper; background: $a; border-radius: 148px; padding: 12px 36px; border: 4px solid $ink; in: pop) 材料（2人分）
+div#ig_c(left: 60px; top: 225px; width: 960px; height: 1290px)
+p#ig_i(left: 108px; top: 270px; width: 864px; height: 1200px; overlap: ig_c; gap: 14; font-size: 54px; color: $ink; in: {x:-36, opacity:0, duration:0.4, ease:'power3.out'}; display: flex; flex-direction: column) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
 
 section#s1
 img#s1_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 35%', '50% 30%']}) [photo]大きな鍋で沸騰した湯の中にスパゲッティを放射状に入れる手元、湯気、ガスの火
-num#s1_n(left: 40px; top: 64px) 01
-div#s1_c(left: 32px; top: 760px; width: 656px; height: 250px)
-  ttl#t1(left: 32px; top: 28px; right: 32px) 塩を入れた湯で茹でる
-  ttl#t2(left: 32px; top: 84px; right: 32px) 袋の表示より{m}1分短く{/}
-  p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) あとでフライパンで仕上げるから
-p#s1_st(left: 470px; top: 640px; font-size: 48px; font-family: e; color: $paper; background: $a; border-radius: 20px; padding: 10px 24px; border: 4px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-8deg)) −1分
+num#s1_n(left: 60px; top: 96px) 01
+div#s1_c(left: 48px; top: 1140px; width: 984px; height: 375px)
+  ttl#t1(left: 48px; top: 42px; right: 48px) 塩を入れた湯で茹でる
+  ttl#t2(left: 48px; top: 126px; right: 48px) 袋の表示より{m}1分短く{/}
+  p#q(left: 48px; bottom: 42px; font-size: 42px; color: $mute) あとでフライパンで仕上げるから
+p#s1_st(left: 705px; top: 960px; font-size: 72px; font-family: e; color: $paper; background: $a; border-radius: 30px; padding: 15px 36px; border: 6px solid $ink; box-shadow: 9px 9px 0px $ink; in: pop; transform: rotate(-8deg)) −1分
 
 section#s2
 img#s2_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}) [photo]鉄のフライパンでバターが溶けて刻んだにんにくが泡立ち、しめじとえのきを炒めている手元、木べら、湯気
-num#s2_n(left: 40px; top: 64px) 02
-p#s2_h(right: 40px; top: 80px; font-size: 40px; color: $paper; background: $b; border-radius: 99px; padding: 8px 26px; border: 3px solid $ink; in: pop) 弱火
+num#s2_n(left: 60px; top: 96px) 02
+p#s2_h(right: 60px; top: 120px; font-size: 60px; color: $paper; background: $b; border-radius: 148px; padding: 12px 39px; border: 4px solid $ink; in: pop) 弱火
 #s2_h.hot(background: $a) 強火
-div#s2_c(left: 32px; top: 760px; width: 656px; height: 250px)
-  ttl#t1(left: 32px; top: 28px; right: 32px) バター＋にんにくで香り
-  ttl#t2(left: 32px; top: 84px; right: 32px) きのこを{r}強火{/}で炒める
-  p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) バター 20g・にんにく 1片
+div#s2_c(left: 48px; top: 1140px; width: 984px; height: 375px)
+  ttl#t1(left: 48px; top: 42px; right: 48px) バター＋にんにくで香り
+  ttl#t2(left: 48px; top: 126px; right: 48px) きのこを{r}強火{/}で炒める
+  p#q(left: 48px; bottom: 42px; font-size: 42px; color: $mute) バター 20g・にんにく 1片
 
 section#tip
 img#tp_p(inset: 0; main: kb {scale: [1, 1.12], focus: ['50% 45%', '50% 45%']}) [photo]フライパンの中で焼き色が付いたしめじとえのきのクローズアップ、こんがりときつね色、湯気
 veil#tp_v(color: #2B2118; opacity: 0.75; to: bottom; start: 0.45)
-p#tp_k(left: 40px; top: 72px; font-size: 34px; color: $ink; background: $c; border-radius: 99px; padding: 6px 22px; border: 3px solid $ink; in: pop) コツ
-p#tp_t(left: 40px; top: 760px; width: 640px; font-size: 60px; font-family: f; color: $paper; line-height: 1.25; in: title) 触らずに[br]焼き付ける
-p#tp_s(left: 40px; top: 940px; font-size: 36px; color: $paper; in: note) 1分待てば、{m}香ばしさ{/}が段違い
-p#tp_st(left: 440px; top: 620px; font-size: 44px; color: $ink; background: $c; border-radius: 20px; padding: 10px 22px; border: 4px solid $ink; box-shadow: 6px 6px 0px $ink; in: pop; transform: rotate(-6deg)) こんがり
+p#tp_k(left: 60px; top: 108px; font-size: 51px; color: $ink; background: $c; border-radius: 148px; padding: 9px 33px; border: 4px solid $ink; in: pop) コツ
+p#tp_t(left: 60px; top: 1140px; width: 960px; font-size: 90px; font-family: f; color: $paper; line-height: 1.25; in: title) 触らずに[br]焼き付ける
+p#tp_s(left: 60px; top: 1410px; font-size: 54px; color: $paper; in: note) 1分待てば、{m}香ばしさ{/}が段違い
+p#tp_st(left: 660px; top: 930px; font-size: 66px; color: $ink; background: $c; border-radius: 30px; padding: 15px 33px; border: 6px solid $ink; box-shadow: 9px 9px 0px $ink; in: pop; transform: rotate(-6deg)) こんがり
 
 section#s3
 img#s3_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 40%', '50% 35%']}) [photo]フライパンのきのこにお玉でパスタの茹で汁を注ぎ、醤油を回しかける手元、湯気が立つ
-num#s3_n(left: 40px; top: 64px) 03
-div#s3_c(left: 32px; top: 760px; width: 656px; height: 250px)
-  ttl#t1(left: 32px; top: 28px; right: 32px) 茹で汁＋醤油を回しかけ
-  ttl#t2(left: 32px; top: 84px; right: 32px) よく混ぜて{m}乳化{/}させる
-  p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) 醤油 大さじ1.5 を回しかける
-p#s3_a(left: 40px; top: 650px; font-size: 34px; color: $ink; background: $paper; border: 3px solid $ink; border-radius: 99px; padding: 6px 20px; in: pop) お玉1杯
-p#s3_b(left: 260px; top: 650px; font-size: 34px; color: $paper; background: $a; border: 3px solid $ink; border-radius: 99px; padding: 6px 20px; in: pop) 大さじ1.5
+num#s3_n(left: 60px; top: 96px) 03
+div#s3_c(left: 48px; top: 1140px; width: 984px; height: 375px)
+  ttl#t1(left: 48px; top: 42px; right: 48px) 茹で汁＋醤油を回しかけ
+  ttl#t2(left: 48px; top: 126px; right: 48px) よく混ぜて{m}乳化{/}させる
+  p#q(left: 48px; bottom: 42px; font-size: 42px; color: $mute) 醤油 大さじ1.5 を回しかける
+p#s3_a(left: 60px; top: 975px; font-size: 51px; color: $ink; background: $paper; border: 4px solid $ink; border-radius: 148px; padding: 9px 30px; in: pop) お玉1杯
+p#s3_b(left: 390px; top: 975px; font-size: 51px; color: $paper; background: $a; border: 4px solid $ink; border-radius: 148px; padding: 9px 30px; in: pop) 大さじ1.5
 
 section#s4
 img#s4_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 40%'}) [photo]フライパンでスパゲッティときのこをトングで和えている手元、ソースが絡んでつやつや、湯気
-num#s4_n(left: 40px; top: 64px) 04
-div#s4_c(left: 32px; top: 760px; width: 656px; height: 250px)
-  ttl#t1(left: 32px; top: 28px; right: 32px) パスタを和える
-  ttl#t2(left: 32px; top: 84px; right: 32px) のりと青ねぎをのせる
-  p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) さっと和えたら火を止める
-chip#s4_a(left: 40px; top: 650px) 刻みのり
+num#s4_n(left: 60px; top: 96px) 04
+div#s4_c(left: 48px; top: 1140px; width: 984px; height: 375px)
+  ttl#t1(left: 48px; top: 42px; right: 48px) パスタを和える
+  ttl#t2(left: 48px; top: 126px; right: 48px) のりと青ねぎをのせる
+  p#q(left: 48px; bottom: 42px; font-size: 42px; color: $mute) さっと和えたら火を止める
+chip#s4_a(left: 60px; top: 975px) 刻みのり
 #s4_a.done(background: $ink)
-chip#s4_b(left: 250px; top: 650px) 青ねぎ
+chip#s4_b(left: 375px; top: 975px) 青ねぎ
 #s4_b.done(background: $b)
 
 section#close
 img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['50% 40%', '50% 42%']}) [ref:@dish]食卓に置かれた二皿の和風きのこパスタとお箸、夕方の温かい灯り、湯気
 veil#cl_v(color: #FBF5EA; opacity: 0.92; to: bottom; start: 0.5)
-p#cl_t(left: 40px; top: 770px; width: 640px; font-size: 72px; font-family: f; color: $ink; line-height: 1.2; in: title) 今日の晩ごはんに[br]どうぞ
-p#cl_a(left: 40px; top: 990px; font-size: 30px; color: $paper; background: $a; border-radius: 99px; padding: 6px 20px; border: 3px solid $ink; in: pop) 10分
-p#cl_b(left: 170px; top: 990px; font-size: 30px; color: $ink; background: $c; border-radius: 99px; padding: 6px 20px; border: 3px solid $ink; in: pop) フライパン1つ
-p#cl_c(left: 440px; top: 990px; font-size: 30px; color: $paper; background: $b; border-radius: 99px; padding: 6px 20px; border: 3px solid $ink; in: pop) 2人分
+p#cl_t(left: 60px; top: 1155px; width: 960px; font-size: 108px; font-family: f; color: $ink; line-height: 1.2; in: title) 今日の晩ごはんに[br]どうぞ
+p#cl_a(left: 60px; top: 1485px; font-size: 45px; color: $paper; background: $a; border-radius: 148px; padding: 9px 30px; border: 4px solid $ink; in: pop) 10分
+p#cl_b(left: 255px; top: 1485px; font-size: 45px; color: $ink; background: $c; border-radius: 148px; padding: 9px 30px; border: 4px solid $ink; in: pop) フライパン1つ
+p#cl_c(left: 660px; top: 1485px; font-size: 45px; color: $paper; background: $b; border-radius: 148px; padding: 9px 30px; border: 4px solid $ink; in: pop) 2人分
 ```
 
 ```timeline.txt

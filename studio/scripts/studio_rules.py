@@ -115,7 +115,7 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "record",
         "同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す",
     ),
-    _rule("text_gap", "warn", "fix", "同じ行の文字の隙間が 8 px 未満 → `left: 相手.right+16` で並べる"),
+    _rule("text_gap", "warn", "fix", "同じ行の文字の隙間が 12 px 未満 → `left: 相手.right+24` で並べる"),
     _rule(
         "covered_text",
         "warn",

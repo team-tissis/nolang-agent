@@ -1,4 +1,4 @@
-# cinematic · classroom-morning (hf 全力版の全量の写し — 爽やかな朝の高校の教室・一問一答クイズの途中に流れる気まずくも甘酸っぱい沈黙・語りの無い 5 人の掛け合いを 13 ショットの実写ドラマで) — canvas 1280x720
+# cinematic · classroom-morning (hf 全力版の全量の写し — 爽やかな朝の高校の教室・一問一答クイズの途中に流れる気まずくも甘酸っぱい沈黙・語りの無い 5 人の掛け合いを 13 ショットの実写ドラマで) — canvas 1920x1080
 
 見せる作り: 語りの無い 5 人の掛け合い (役ごとの cast と台詞ごとの話し方)・13 ショットを 6 cut に畳む硬い切替と、cut の中で語 / 無音の間に替える絵・全編の映画の質感 (上下の黒帯・窓明かりの漏れ・暖色と寒色の色の幕・漂う塵・周辺減光・grain)・下の黒帯の中の字幕・基準画像 2 枚から派生させて揃える人物と教室・ショットごとの寄りとパン (kb)・立ち上がりの持ち上がりと揺れ・凍る沈黙で止まる曲と秒針・音の層 (スズメの場の音 + 足音・椅子・秒針・紙・チャイム)・黒から明けて黒へ
 
@@ -9,7 +9,7 @@
 # 全編の映画の質感は常設の層 (z-index: front): 窓明かりの漏れ (screen で呼吸)・上が暖かく下が冷たい色の幕・漂う塵・周辺減光・動く grain・上下の黒帯 (シネスコ)。字幕は下の黒帯の中に細い角ゴシックで
 # 人物と教室は基準画像 (4 人の席の組 seats・戻ってくるえり eri — 立つルキ stand・えりの寄り eri_face・5 人の再開 five もここから) から [ref:@名] で派生させて揃える。音は台詞 + 曲 (凍る沈黙で止めて別の箇所から再開) + 場の音 (スズメ) + 動作の foley
 # hf b02 classroom-morning (全力版) の全量の写し。座標は hf の 1920x1080 × 2/3
-canvas 1280x720 bg=#000000
+canvas 1920x1080 bg=#000000
 theme dark
 palette a=#FFD096 sub=#F3EFE6 mote=#FFF6E4
 font "すっきりした細めの角ゴシック体、映画の字幕向け"
@@ -31,19 +31,19 @@ bgm#music(duck: -7; fade: 1400,160) 温かく穏やかで少し切ない、ゆ�
 # 凍る沈黙の後に同じ曲を別の箇所 (句の終わり) から入れ直す
 bgm#music_b(duck: -7; fade: 1000,1100) 温かく穏やかで少し切ない、ゆっくりしたピアノソロのポップ、68 BPM、青春の日常や回想の場面向け
 # 字幕: 下の黒帯の中央に細い角ゴシックの生成り色・黒の柔らかい影・板なし・札は文ごとに 0.12 秒で出入り
-subtitle.hug(bottom: 19px; font-size: 24px; letter-spacing: 0.08em; color: $sub; background: none; text-align: center; text-shadow: 0px 0px 5px #000000CC; unit: sentence; lead: 0; tail: 0; hold: off; in: {opacity:0, duration:0.12, ease:'none'}; out: {opacity:0, duration:0.12, ease:'none'})
+subtitle.hug(bottom: 28px; font-size: 36px; letter-spacing: 0.08em; color: $sub; background: none; text-align: center; text-shadow: 0px 0px 8px #000000CC; unit: sentence; lead: 0; tail: 0; hold: off; in: {opacity:0, duration:0.12, ease:'none'}; out: {opacity:0, duration:0.12, ease:'none'})
 # 全編の質感 (常設・最前面の段・書いた順に重なる)
 # 窓明かりの漏れ: 右上の暖色の光を screen で重ねてゆっくり呼吸させる (hf はショットごとに 0.55 → 0.85 → 0.6)
 div#leak_r(inset: 0; background: radial(#FFD0968C,#FFD09633@45%,#FFD09600@100%,82%,18%); mix-blend-mode: screen; opacity: 0.7; z-index: front; in: none; main: sine {opacity: 0.15, period: 4.4})
 # 色の幕: 上が暖かく下が冷たい (soft-light で重ねる)
 div#grade(inset: 0; background: linear(#FFD2A038,#FFECD20F@45%,#1E3C5A29,180); mix-blend-mode: soft-light; z-index: front; in: none)
 # 窓の光の中を漂う塵 22 粒 (黒帯の内側・ゆっくり右上へ)
-particles#motes(left: 0px; top: 93px; width: 1280px; height: 534px; n: 22; dot: 3-8; color: $mote; opacity: 0.3; drift: random,dx=-40..60,dy=-80..-20; speed: 3; seed: 5; z-index: front)
+particles#motes(left: 0px; top: 140px; width: 1920px; height: 801px; n: 22; dot: 3-8; color: $mote; opacity: 0.3; drift: random,dx=-40..60,dy=-80..-20; speed: 3; seed: 5; z-index: front)
 veil#vignette(background: radial(#00000000@55%,#00000066@100%,50%,50%); z-index: front; in: none)
-veil#grain(grain: 0.075; color: #00000000; mix-blend-mode: overlay; z-index: front; in: none; main: noise {x: 4, y: 4, period: 0.083})
+veil#grain(grain: 0.075; color: #00000000; mix-blend-mode: overlay; z-index: front; in: none; main: noise {x: 6, y: 6, period: 0.083})
 # 上下の黒帯 (シネスコ・hf の 104 px)
-div#bar_top.bleed(left: -4px; top: -4px; width: 1288px; height: 73px; background: #000000; z-index: front; in: none)
-div#bar_bottom.bleed(left: -4px; top: 651px; width: 1288px; height: 73px; background: #000000; z-index: front; in: none)
+div#bar_top.bleed(left: -6px; top: -6px; width: 1932px; height: 110px; background: #000000; z-index: front; in: none)
+div#bar_bottom.bleed(left: -6px; top: 976px; width: 1932px; height: 110px; background: #000000; z-index: front; in: none)
 
 # 出題: 揺れるカーテンの差し込み → 0.25 秒で溶けて教室の全景 (この 1 枚だけ漏れの光が左) → 「細胞」でルキの寄り
 section#quiz

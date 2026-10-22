@@ -1,4 +1,4 @@
-# concept · find-interest (hf 全力版の全量の写し — やりたいことが見つかってから選ぶ順番は逆かもしれない、サルトルと興味の研究・8 場面の線画イラストと語で組む図解) — canvas 720x1280
+# concept · find-interest (hf 全力版の全量の写し — やりたいことが見つかってから選ぶ順番は逆かもしれない、サルトルと興味の研究・8 場面の線画イラストと語で組む図解) — canvas 1080x1920
 
 見せる作り: 生成りの紙の地 (点の地紋・周辺の明るみ・細い枠) と上端の章札・場面ごとの中央の線画 1 枚 (右から入って寄る)・切替なしで要素が一斉に左へ抜ける場面替え + 紙をめくる音・3 段の文字 (灰の明朝の前置き → 太い明朝の主文 + 砂色の下線 → 小さな注記)・番号つきの 2 枚の札の入れ替え・「逆」を囲む手描きの丸・語ごとの 2 段の矢印図 (× と灰)・縮む寸法線・条件の板の取り消し線・入れ替わる札と引き直す矢印・字幕を出さない文 2 つ・最後は地の色へ溶ける・音の層 (BGM + 語に結んだ鉛筆と鈴の音 16)
 
@@ -9,7 +9,7 @@
 # 説明の図は 1 場面に 1 つ: 番号つきの 2 枚の札が入れ替わる・語ごとの 2 段の矢印図 (× で打ち消して灰に)・寸法線が縮む・条件の板に取り消し線・2 つの札が入れ替わって矢印が引き直される
 # 場面の替わりは切替なし: 前の場面の要素が一斉に左へ抜け (cut の out)、次の要素が右から入る・境目ごとに紙をめくる音
 # hf 10 find-interest (全力版) の全量の写し。座標は hf の 1080x1920 × 2/3
-canvas 720x1280 bg=#F3EDE3
+canvas 1080x1920 bg=#F3EDE3
 theme light
 palette paper=#F3EDE3 ink=#1F2A3D sub=#5B6577 accent=#C2643F sand=#EAD8B8 card=#FBF8F2 cardline=#D9CCB6 gray=#7D8696 grayline=#B9B2A6
 font "太めの標準的な角ゴシック体"
@@ -25,7 +25,7 @@ run m { marker: $sand,36% }
 run q { color: $accent }
 p { color: $ink }
 # 場面の要素は一斉に左へ抜ける (hf の leave: x -26 px・0.4 s)・頭の組み上がりは一斉
-cut { stagger: 0; out: {x:-17, opacity:0, duration:.4, ease:'power1.in'} }
+cut { stagger: 0; out: {x:-26, opacity:0, duration:.4, ease:'power1.in'} }
 sound page = "紙のページを1枚めくる乾いた短いペラッという音"
 sound sweep = "中域の柔らかいノイズが滑らかに上がっていくスゥーッという音"
 sound airy = "空気感のある短い風のようなノイズのシュッという音、回想に入る瞬間の"
@@ -37,135 +37,135 @@ sound accent2 = "空間的な響きの柔らかいシンセのベルが上がる
 # hf の作り: 曲は声より 11.5 LU 下 (engine の既定 = 台詞中 11 LU 下のまま・gap は書かない)
 bgm#music(fade: 800,3200) 静かでゆっくりしたアンビエント、繊細なソロピアノに温かいシンセパッドと柔らかなチェロ、内省的で穏やかに広がる
 # 字幕: 板なし・墨色の細い角ゴシック・画面の下 1/4 の位置・0.14 s の fade だけ
-subtitle(left: 20px; top: 964px; width: 680px; font-size: 31px; line-height: 1.58; letter-spacing: .02em; text-align: center; color: $ink; font-family: r; background: none; border: none; box-shadow: none; padding: 0px; unit: sentence; lead: 0; tail: 110; hold: off; in: {opacity:0, duration:.14}; out: {opacity:0, duration:.14})
+subtitle(left: 30px; top: 1446px; width: 1020px; font-size: 46px; line-height: 1.58; letter-spacing: .02em; text-align: center; color: $ink; font-family: r; background: none; border: none; box-shadow: none; padding: 0px; unit: sentence; lead: 0; tail: 110; hold: off; in: {opacity:0, duration:.14}; out: {opacity:0, duration:.14})
 # 地: 点の地紋 + 中央が明るく縁がくすむ周辺の明るみ + 内側 24 px の細い枠 (全編・最背面)
-div#grain(inset: 0; pattern: dots,5,#7864460A; z-index: back; border-radius: 16px; in: none; out: none)
-div#vignette(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@60%,#785F3C1A,50%,45%); z-index: back; border-radius: 16px; in: none; out: none)
-div#frame(left: 24px; top: 24px; width: 672px; height: 1232px; border: 1px solid #A08C6E47; border-radius: 4px; z-index: back; in: none; out: none)
+div#grain(inset: 0; pattern: dots,5,#7864460A; z-index: back; border-radius: 24px; in: none; out: none)
+div#vignette(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@60%,#785F3C1A,50%,45%); z-index: back; border-radius: 24px; in: none; out: none)
+div#frame(left: 36px; top: 36px; width: 1008px; height: 1848px; border: 2px solid #A08C6E47; border-radius: 6px; z-index: back; in: none; out: none)
 
 # 上端の章札 (煉瓦色の字 + 両脇の短い線)・場面の頭に右から
-def label(t) = p(cx: 360px; top: 131px; font-size: 20px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100; in: {x:20, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
+def label(t) = p(cx: 540px; top: 196px; font-size: 30px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100; in: {x:30, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
 # 中央の線画 (透過・枠の中に収める)・右から入ってゆっくり寄る
-def illus = img(object-fit: contain; in: {x:24, opacity:0, duration:.8, ease:'power2.out'}; delay: 50)
+def illus = img(object-fit: contain; in: {x:36, opacity:0, duration:.8, ease:'power2.out'}; delay: 50)
 # 文字の段: 前置き (標準の明朝・灰)・主文 (太い明朝)・注記 (小さな角ゴシック・灰)
-def lead(t) = p(cx: 360px; font-family: sr; color: $sub; letter-spacing: .03em; in: {y:11, opacity:0, duration:.55, ease:'power2.out'}; content: {t})
-def tel(t) = p(cx: 360px; font-family: s; line-height: 1.3; letter-spacing: .03em; in: {y:13, opacity:0, duration:.65, ease:'power2.out'}; content: {t})
-def cap(t) = p(cx: 360px; font-size: 19px; letter-spacing: .12em; color: $sub; font-family: r; in: {y:8, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
+def lead(t) = p(cx: 540px; font-family: sr; color: $sub; letter-spacing: .03em; in: {y:16, opacity:0, duration:.55, ease:'power2.out'}; content: {t})
+def tel(t) = p(cx: 540px; font-family: s; line-height: 1.3; letter-spacing: .03em; in: {y:20, opacity:0, duration:.65, ease:'power2.out'}; content: {t})
+def cap(t) = p(cx: 540px; font-size: 28px; letter-spacing: .12em; color: $sub; font-family: r; in: {y:12, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
 # 図の札 (墨の縁の角丸の箱 + 太い明朝の語)・語で下から
-def box(t, w=173) = div(width: {w}; height: 73px; background: $card; border: 2px solid $ink; border-radius: 13px; in: {y:11, opacity:0, duration:.55, ease:'power2.out'})
-  p#t(cx: 50%; cy: 50%; font-family: s; font-size: 39px; content: {t})
+def box(t, w=173) = div(width: {w}; height: 110px; background: $card; border: 3px solid $ink; border-radius: 20px; in: {y:16, opacity:0, duration:.55, ease:'power2.out'})
+  p#t(cx: 50%; cy: 50%; font-family: s; font-size: 58px; content: {t})
 # 矢印 (線の矢じり・線で描く)・矢印の上の小さな札
-def arrow(c=$accent) = shape(height: 29px; path: arrow_r,head=line; background: {c}; border: 3px solid {c}; in: draw {duration: 0.6})
-def alabel(t, c=$accent) = p(cx: 360px; font-size: 20px; letter-spacing: .12em; color: {c}; in: {y:7, opacity:0, duration:.5, ease:'power2.out'}; content: {t})
+def arrow(c=$accent) = shape(height: 44px; path: arrow_r,head=line; background: {c}; border: 4px solid {c}; in: draw {duration: 0.6})
+def alabel(t, c=$accent) = p(cx: 540px; font-size: 30px; letter-spacing: .12em; color: {c}; in: {y:10, opacity:0, duration:.5, ease:'power2.out'}; content: {t})
 # 打ち消しの × (線で描く)
-def cross = shape(width: 34px; height: 34px; path: cross; background: none; border: 5px solid $accent; in: draw {duration: 0.45})
+def cross = shape(width: 51px; height: 51px; path: cross; background: none; border: 8px solid $accent; in: draw {duration: 0.45})
 # 番号の丸札・番号つきの札 (絵 + 文)
-def badge(n) = div(width: 43px; height: 43px; border-radius: 99px; background: $card; border: 2px solid $accent; in: {opacity:0, duration:.5, ease:'power2.out'})
-  p#n(cx: 50%; cy: 50%; font-family: s; font-size: 23px; color: $accent; content: {n})
-def card = div(left: 107px; width: 567px; height: 200px; background: $card; border: 2px solid $cardline; border-radius: 19px; box-shadow: 0px 12px 27px #5A46281A; in: {y:20, opacity:0, duration:.7, ease:'power2.out'})
+def badge(n) = div(width: 64px; height: 64px; border-radius: 148px; background: $card; border: 3px solid $accent; in: {opacity:0, duration:.5, ease:'power2.out'})
+  p#n(cx: 50%; cy: 50%; font-family: s; font-size: 34px; color: $accent; content: {n})
+def card = div(left: 160px; width: 850px; height: 300px; background: $card; border: 3px solid $cardline; border-radius: 28px; box-shadow: 0px 18px 40px #5A46281A; in: {y:30, opacity:0, duration:.7, ease:'power2.out'})
 
 # order — 問い: 「見つかる → 選ぶ」の 2 枚の札を語で積み、「順番」で札が入れ替わり、「逆」に手描きの丸
 section#order
 label#lab1 順番
-card#card_a(top: 313px)
-  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; object-fit: contain) [transparent]少し傾けた虫眼鏡が小さなきらめきをのぞいている
-  p#s(cx: 355px; top: 43px; font-family: s; font-size: 33px; color: $sub) やりたいことが
-  p#t(cx: 355px; top: 84px; font-family: s; font-size: 57px) 見つかる
-badge#b1(left: 41px; top: 392px; n: "1"; delay: 330)
-shape#arr1(left: 374px; top: 523px; width: 32px; height: 75px; path: arrow_d,head=line; background: $accent; border: 3px solid $accent; in: draw {duration: 0.45})
-card#card_b(top: 607px)
-  img#i(left: 17px; cy: 50%; width: 153px; height: 153px; object-fit: contain) [transparent]テーブルに扇形に広げた 3 枚のカードから片手が 1 枚を選び取っている
-  p#t(cx: 355px; cy: 50%; font-family: s; font-size: 69px) 選ぶ
-#card_b.hot(border: 2px solid $accent)
-badge#b2(left: 41px; top: 685px; n: "2")
-lead#t2a(top: 824px; font-size: 36px) この順番、
-tel#t2b(top: 871px; font-size: 61px; in: {y:13, opacity:0, duration:.6, ease:'power2.out'}) {q}逆{/}かもしれません。
+card#card_a(top: 470px)
+  img#i(left: 26px; cy: 50%; width: 230px; height: 230px; object-fit: contain) [transparent]少し傾けた虫眼鏡が小さなきらめきをのぞいている
+  p#s(cx: 532px; top: 64px; font-family: s; font-size: 50px; color: $sub) やりたいことが
+  p#t(cx: 532px; top: 126px; font-family: s; font-size: 86px) 見つかる
+badge#b1(left: 62px; top: 588px; n: "1"; delay: 330)
+shape#arr1(left: 561px; top: 784px; width: 48px; height: 112px; path: arrow_d,head=line; background: $accent; border: 4px solid $accent; in: draw {duration: 0.45})
+card#card_b(top: 910px)
+  img#i(left: 26px; cy: 50%; width: 230px; height: 230px; object-fit: contain) [transparent]テーブルに扇形に広げた 3 枚のカードから片手が 1 枚を選び取っている
+  p#t(cx: 532px; cy: 50%; font-family: s; font-size: 104px) 選ぶ
+#card_b.hot(border: 3px solid $accent)
+badge#b2(left: 62px; top: 1028px; n: "2")
+lead#t2a(top: 1236px; font-size: 54px) この順番、
+tel#t2b(top: 1306px; font-size: 92px; in: {y:20, opacity:0, duration:.6, ease:'power2.out'}) {q}逆{/}かもしれません。
 # 「逆」を囲む手描きの丸 (文字の後ろに描いていく)
-shape#circ2(left: 61px; top: 858px; width: 96px; height: 104px; path: circle_hand; background: none; border: 3px solid $accent; overlap: t2b; in: draw {duration: 0.6})
+shape#circ2(left: 92px; top: 1287px; width: 144px; height: 156px; path: circle_hand; background: none; border: 4px solid $accent; overlap: t2b; in: draw {duration: 0.6})
 
 # lost — 迷い: 分かれ道の人の線画に、前置き → 「就職で迷う」が語で出て下線が伸びる
 section#lost
 label#lab2 迷い
-illus#im2(left: 160px; top: 193px; width: 400px; height: 497px; aspect: 4:5; main: kb {scale: [1, 1.06]}) [transparent]地味なスーツの若い人の後ろ姿、一本の道が四方向に分かれる所に立ち止まる、分岐に何も書いていない四枚の矢印板の木の道標、頭の上に小さな疑問符の落書きが三つ
-lead#t3a(top: 720px; font-size: 35px) やりたいことがないまま、
-tel#t3b(top: 768px; font-size: 77px) {m}就職で迷う{/}
+illus#im2(left: 240px; top: 290px; width: 600px; height: 746px; aspect: 4:5; main: kb {scale: [1, 1.06]}) [transparent]地味なスーツの若い人の後ろ姿、一本の道が四方向に分かれる所に立ち止まる、分岐に何も書いていない四枚の矢印板の木の道標、頭の上に小さな疑問符の落書きが三つ
+lead#t3a(top: 1080px; font-size: 52px) やりたいことがないまま、
+tel#t3b(top: 1152px; font-size: 116px) {m}就職で迷う{/}
 
 # sartre — 人物の紹介: 向かい合う 2 つのカップのカフェの卓に、名 → 肩書 → 札つきの引用 → 出典 (章札は次の場面へ跨ぐ)
 section#sartre
 label#lab3.sticky サルトル
-illus#im3(left: 67px; top: 212px; width: 587px; height: 407px; aspect: 3:2; main: kb {scale: [1, 1.05]}) [transparent]パリの小さな丸いカフェのテーブル、向かい合わせに置いた 2 つのコーヒーカップ、間に開いたノートとペン、曲げ木の椅子が 2 脚、人物なし、先生と教え子の静かな会話を思わせる
-tel#nm(top: 632px; font-size: 36px; in: {y:12, opacity:0, duration:.7, ease:'power2.out'}) ジャン＝ポール・サルトル
-cap#nm2(top: 687px) フランスの哲学者（1905–1980）
+illus#im3(left: 100px; top: 318px; width: 880px; height: 610px; aspect: 3:2; main: kb {scale: [1, 1.05]}) [transparent]パリの小さな丸いカフェのテーブル、向かい合わせに置いた 2 つのコーヒーカップ、間に開いたノートとペン、曲げ木の椅子が 2 脚、人物なし、先生と教え子の静かな会話を思わせる
+tel#nm(top: 948px; font-size: 54px; in: {y:18, opacity:0, duration:.7, ease:'power2.out'}) ジャン＝ポール・サルトル
+cap#nm2(top: 1030px) フランスの哲学者（1905–1980）
 # 引用の組: 灰の丸札「教え子」+ 煉瓦色の鉤括弧の引用 (札と文を 1 つの組で出す)
-group#q3(in: {y:15, opacity:0, duration:.7, ease:'power2.out'})
-  p#tag(left: 63px; cy: 773px; font-size: 20px; letter-spacing: .1em; color: $card; background: $sub; border-radius: 99px; padding: 4px 15px) 教え子
-  p#text(left: 174px; top: 739px; font-family: s; font-size: 52px; line-height: 1.3) {q}「{/}気持ちで決める{q}」{/}
-cap#src3(top: 845px; font-size: 16px; letter-spacing: .02em; in: {y:5, opacity:0, duration:.6, ease:'power2.out'}) サルトル『実存主義とは何か』より
+group#q3(in: {y:22, opacity:0, duration:.7, ease:'power2.out'})
+  p#tag(left: 94px; cy: 1160px; font-size: 30px; letter-spacing: .1em; color: $card; background: $sub; border-radius: 148px; padding: 6px 22px) 教え子
+  p#text(left: 261px; top: 1108px; font-family: s; font-size: 78px; line-height: 1.3) {q}「{/}気持ちで決める{q}」{/}
+cap#src3(top: 1268px; font-size: 24px; letter-spacing: .02em; in: {y:8, opacity:0, duration:.6, ease:'power2.out'}) サルトル『実存主義とは何か』より
 
 # clay — 要約: 粘土の壺を形づくる手の線画に、2 段の矢印図を語ごとに組み、下段に × を描いて灰に沈める
 section#clay
-illus#im4(left: 187px; top: 191px; width: 347px; height: 373px; main: kb {scale: [1, 1.05]}) [transparent]ろくろの上で粘土の壺を両手でそっと形づくる、横から見た手元
-box#r1a(left: 100px; top: 615px) 行動
-alabel#r1l(top: 592px) 形づくる
-arrow#r1arr(left: 279px; top: 637px; width: 163px)
-box#r1b(left: 447px; top: 615px) 気持ち
-box#r2a(left: 100px; top: 767px) 気持ち
-#r2a.off(border: 2px solid $grayline)
-alabel#r2l(top: 744px; c: $sub) 手引き
-arrow#r2arr(left: 279px; top: 789px; width: 163px; c: $sub; in: draw {duration: 0.5})
-cross#x5(left: 343px; top: 787px)
-box#r2b(left: 447px; top: 767px) 行動
-#r2b.off(border: 2px solid $grayline)
+illus#im4(left: 280px; top: 286px; width: 520px; height: 560px; main: kb {scale: [1, 1.05]}) [transparent]ろくろの上で粘土の壺を両手でそっと形づくる、横から見た手元
+box#r1a(left: 150px; top: 922px) 行動
+alabel#r1l(top: 888px) 形づくる
+arrow#r1arr(left: 418px; top: 956px; width: 244px)
+box#r1b(left: 670px; top: 922px) 気持ち
+box#r2a(left: 150px; top: 1150px) 気持ち
+#r2a.off(border: 3px solid $grayline)
+alabel#r2l(top: 1116px; c: $sub) 手引き
+arrow#r2arr(left: 418px; top: 1184px; width: 244px; c: $sub; in: draw {duration: 0.5})
+cross#x5(left: 514px; top: 1180px)
+box#r2b(left: 670px; top: 1150px) 行動
+#r2b.off(border: 3px solid $grayline)
 
 # study — ある研究: 懐中電灯が 1 冊だけ照らす線画が明滅して点き、引用 → 「興味の幅」の寸法線が縮んで「狭い」
 section#study
 label#lab4 ある研究
 # 明滅して点く絵 (0 → 0.28 で止まり → 1)
-img#im5(left: 47px; top: 235px; width: 627px; height: 393px; object-fit: contain; aspect: 16:10; main: kb {scale: [1, 1.06]}; in: keys(at=0 opacity=0 | at=0.6 opacity=0.28 | at=0.71 opacity=0.28 | at=1),duration=420) [transparent]左の懐中電灯がとても細い光の筋で小さな本を 1 冊だけ照らしている、周りにギター・鉢植え・カメラ・絵筆・地球儀・サッカーボールが光の外に塗りなしの細い線だけで置かれている
-p#cite6(right: 80px; top: 669px; font-size: 16px; color: $sub; italic: true; letter-spacing: .02em; in: {y:5, opacity:0, duration:.6, ease:'power2.out'}) O’Keefe, Dweck & Walton (2018)
-tel#t6a(top: 701px; font-size: 47px; in: {y:12, opacity:0, duration:.7, ease:'power2.out'}) {q}「{/}興味は見つけるもの{q}」{/}
-lead#t6b(top: 772px; font-size: 29px) と考える人ほど
+img#im5(left: 70px; top: 352px; width: 940px; height: 590px; object-fit: contain; aspect: 16:10; main: kb {scale: [1, 1.06]}; in: keys(at=0 opacity=0 | at=0.6 opacity=0.28 | at=0.71 opacity=0.28 | at=1),duration=420) [transparent]左の懐中電灯がとても細い光の筋で小さな本を 1 冊だけ照らしている、周りにギター・鉢植え・カメラ・絵筆・地球儀・サッカーボールが光の外に塗りなしの細い線だけで置かれている
+p#cite6(right: 120px; top: 1004px; font-size: 24px; color: $sub; italic: true; letter-spacing: .02em; in: {y:8, opacity:0, duration:.6, ease:'power2.out'}) O’Keefe, Dweck & Walton (2018)
+tel#t6a(top: 1052px; font-size: 70px; in: {y:18, opacity:0, duration:.7, ease:'power2.out'}) {q}「{/}興味は見つけるもの{q}」{/}
+lead#t6b(top: 1158px; font-size: 44px) と考える人ほど
 # 興味の幅: 札 + 寸法線 (|—|) — 線は中心へ scaleX で縮み、両端の縦棒は x で寄り、札も中央へ寄る (寸法線の shape は幅を補間しないので 3 本の群に分ける)
-p#wlab(left: 75px; cy: 872px; font-family: s; font-size: 36px; in: {y:9, opacity:0, duration:.55, ease:'power2.out'}) 興味の幅
-group#wbar(in: {y:9, opacity:0, duration:.55, ease:'power2.out'})
-  div#line(left: 242px; cy: 872px; width: 293px; height: 3px; background: $ink)
-  div#tl(left: 242px; cy: 872px; width: 3px; height: 24px; background: $ink)
-  div#tr(left: 532px; cy: 872px; width: 3px; height: 24px; background: $ink)
-p#wn(left: 439px; cy: 872px; font-family: s; font-size: 44px; color: $accent; in: {x:-11, opacity:0, duration:.5, ease:'power2.out'}) 狭い
+p#wlab(left: 112px; cy: 1308px; font-family: s; font-size: 54px; in: {y:14, opacity:0, duration:.55, ease:'power2.out'}) 興味の幅
+group#wbar(in: {y:14, opacity:0, duration:.55, ease:'power2.out'})
+  div#line(left: 363px; cy: 1308px; width: 440px; height: 4px; background: $ink)
+  div#tl(left: 363px; cy: 1308px; width: 4px; height: 36px; background: $ink)
+  div#tr(left: 798px; cy: 1308px; width: 4px; height: 36px; background: $ink)
+p#wn(left: 658px; cy: 1308px; font-family: s; font-size: 66px; color: $accent; in: {x:-16, opacity:0, duration:.5, ease:'power2.out'}) 狭い
 
 # conclusion — 結論: 「選ぶ前の条件」の板に □ やりたいこと → 語で題が煉瓦色・取り消し線・× と灰・下に「できない」+ 下線 (章札は次の場面へ跨ぐ)
 section#conclusion
 label#lab5.sticky 結論
-div#cc7(left: 87px; top: 267px; width: 547px; height: 347px; background: $card; border: 2px solid $cardline; border-radius: 20px; box-shadow: 0px 12px 27px #5A46281A; delay: 100; in: {y:20, opacity:0, duration:.8, ease:'power2.out'})
-  p#head(cx: 50%; top: 41px; font-family: s; font-size: 41px; letter-spacing: .06em) 選ぶ前の条件
-  div#rule(left: 60px; top: 115px; width: 427px; height: 1px; background: $cardline)
-  div#item(left: 0px; top: 167px; width: 547px; height: 107px; in: {y:8, opacity:0, duration:.55, ease:'power2.out'})
-    div#box(left: 66px; cy: 50%; width: 56px; height: 56px; border: 3px solid $ink; border-radius: 9px)
-    shape#x(left: 80px; cy: 50%; width: 29px; height: 29px; path: cross; background: none; border: 5px solid $accent; in: draw {duration: 0.4})
-    p#t(left: 145px; cy: 50%; font-family: s; font-size: 56px) やりたいこと
-    shape#st(left: 137px; cy: 52%; width: 352px; height: 29px; path: strike; background: none; border: 5px solid $accent; overlap: cc7.item.t; in: draw {duration: 0.55})
-lead#t7a(top: 697px; font-size: 41px) 選ぶ前の条件には
-tel#t7b(top: 753px; font-size: 80px; in: {y:13, opacity:0, duration:.6, ease:'power2.out'}) {m}できない{/}
+div#cc7(left: 130px; top: 400px; width: 820px; height: 520px; background: $card; border: 3px solid $cardline; border-radius: 30px; box-shadow: 0px 18px 40px #5A46281A; delay: 100; in: {y:30, opacity:0, duration:.8, ease:'power2.out'})
+  p#head(cx: 50%; top: 62px; font-family: s; font-size: 62px; letter-spacing: .06em) 選ぶ前の条件
+  div#rule(left: 90px; top: 172px; width: 640px; height: 2px; background: $cardline)
+  div#item(left: 0px; top: 250px; width: 820px; height: 160px; in: {y:12, opacity:0, duration:.55, ease:'power2.out'})
+    div#box(left: 99px; cy: 50%; width: 84px; height: 84px; border: 4px solid $ink; border-radius: 14px)
+    shape#x(left: 120px; cy: 50%; width: 44px; height: 44px; path: cross; background: none; border: 8px solid $accent; in: draw {duration: 0.4})
+    p#t(left: 218px; cy: 50%; font-family: s; font-size: 84px) やりたいこと
+    shape#st(left: 206px; cy: 52%; width: 528px; height: 44px; path: strike; background: none; border: 8px solid $accent; overlap: cc7.item.t; in: draw {duration: 0.55})
+lead#t7a(top: 1046px; font-size: 62px) 選ぶ前の条件には
+tel#t7b(top: 1130px; font-size: 120px; in: {y:20, opacity:0, duration:.6, ease:'power2.out'}) {m}できない{/}
 
 # reverse — 言い換え: 水やりで芽が出る線画に「意識が向く → 関わる」と × → 2 つの札が弧を描いて入れ替わり、煉瓦色の矢印が引き直される
 section#reverse
-illus#im6(left: 203px; top: 200px; width: 313px; height: 387px; aspect: 4:5; main: kb {scale: [1, 1.04]}) [transparent]小さなじょうろを持つ手が、土の小山から出た双葉の小さな芽に水をやっている
-box#r8a(left: 60px; top: 640px; w: 240) 意識が向く
-#r8a.hot(border: 2px solid $accent)
-arrow#arr8(left: 304px; top: 662px; width: 112px; c: $ink; in: draw {duration: 0.45}; out: {opacity:0, duration:.2})
-cross#x8(left: 343px; top: 660px; in: draw {duration: 0.4}; out: {opacity:0, duration:.25})
-box#r8b(left: 420px; top: 640px; w: 240) 関わる
-#r8b.hot(border: 2px solid $accent)
-arrow#arr8b(left: 304px; top: 662px; width: 112px; in: draw {duration: 0.4})
-tel#t8(top: 780px; font-size: 43px; in: {y:11, opacity:0, duration:.6, ease:'power2.out'}) {m}関わるから{/}意識が向く。
+illus#im6(left: 304px; top: 300px; width: 470px; height: 580px; aspect: 4:5; main: kb {scale: [1, 1.04]}) [transparent]小さなじょうろを持つ手が、土の小山から出た双葉の小さな芽に水をやっている
+box#r8a(left: 90px; top: 960px; w: 240) 意識が向く
+#r8a.hot(border: 3px solid $accent)
+arrow#arr8(left: 456px; top: 993px; width: 168px; c: $ink; in: draw {duration: 0.45}; out: {opacity:0, duration:.2})
+cross#x8(left: 514px; top: 990px; in: draw {duration: 0.4}; out: {opacity:0, duration:.25})
+box#r8b(left: 630px; top: 960px; w: 240) 関わる
+#r8b.hot(border: 3px solid $accent)
+arrow#arr8b(left: 456px; top: 993px; width: 168px; in: draw {duration: 0.4})
+tel#t8(top: 1170px; font-size: 64px; in: {y:16, opacity:0, duration:.6, ease:'power2.out'}) {m}関わるから{/}意識が向く。
 
 # question — 問いかけ: 少し開いた扉の線画に、前置き → 「止めているものは / ありますか。」を 2 行で語ごとに・下線 (字幕なし・最後は地の色へ溶ける)
 section#question
 label#lab6 問いかけ
-illus#im7(left: 240px; top: 188px; width: 240px; height: 457px; aspect: 9:16; main: kb {scale: [1, 1.08]}; in: {x:24, opacity:0, duration:.9, ease:'power2.out'}) [transparent]少しだけ開いた扉が 1 枚立ち、隙間から暖かい光が床にこぼれている、扉の手前に小さな足跡がひとつ
-lead#t9a(top: 667px; font-size: 40px) 見つかったら選ぶ、で
-tel#t9b(top: 727px; font-size: 64px; in: {y:12, opacity:0, duration:.7, ease:'power2.out'}) {m}止めているもの{/}は
-tel#t9c(top: 819px; font-size: 64px; in: {y:12, opacity:0, duration:.7, ease:'power2.out'}) ありますか。
+illus#im7(left: 360px; top: 282px; width: 360px; height: 686px; aspect: 9:16; main: kb {scale: [1, 1.08]}; in: {x:36, opacity:0, duration:.9, ease:'power2.out'}) [transparent]少しだけ開いた扉が 1 枚立ち、隙間から暖かい光が床にこぼれている、扉の手前に小さな足跡がひとつ
+lead#t9a(top: 1000px; font-size: 60px) 見つかったら選ぶ、で
+tel#t9b(top: 1090px; font-size: 96px; in: {y:18, opacity:0, duration:.7, ease:'power2.out'}) {m}止めているもの{/}は
+tel#t9c(top: 1228px; font-size: 96px; in: {y:18, opacity:0, duration:.7, ease:'power2.out'}) ありますか。
 ```
 
 ```timeline.txt
@@ -178,7 +178,7 @@ silence head=0 tail=0
 bgm music start=13.7s
 @n: [silence:0.7s]やりたいことが見つかって[>#arr1 -100]から[>#card_b -200][>#b2]選ぶ。[silence:0.5s]
 [<#subtitle]
-@: [>#t2a -50]この[!#b1 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}][!#b2 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}]順番[!#card_a to,{y:293, arc:.1, duration:.95, ease:'power2.inOut'} +220][!#card_b to,{y:-293, arc:.1, duration:.95, ease:'power2.inOut'} +220][♪sweep -2dB +180]、[>#t2b -100]逆[>#circ2 +350][♪circle -3dB +300]かもし[!#card_b .hot]れません。[silence:1.15s]
+@: [>#t2a -50]この[!#b1 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}][!#b2 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}]順番[!#card_a to,{y:440, arc:.1, duration:.95, ease:'power2.inOut'} +220][!#card_b to,{y:-440, arc:.1, duration:.95, ease:'power2.inOut'} +220][♪sweep -2dB +180]、[>#t2b -100]逆[>#circ2 +350][♪circle -3dB +300]かもし[!#card_b .hot]れません。[silence:1.15s]
 
 *** lost
 se page -2.5dB
@@ -196,14 +196,14 @@ se page -2.5dB
 *** study
 se page -2.5dB
 se switch +330 -3dB
-@n: [silence:0.6s][>#cite6 +300]ある研究では、[br][>#t6a -100]興味は見つけるものと[>#t6b -100]考える[>#wlab -200][>#wbar -200]人ほど、[|]興味の幅[♪airy -3dB +120][!#wbar.line to,{scaleX:.191, duration:.85, ease:'power3.inOut'} +170][!#wbar.tl to,{x:118, duration:.85, ease:'power3.inOut'} +170][!#wbar.tr to,{x:-119, duration:.85, ease:'power3.inOut'} +170][!#wlab to,{x:118, duration:.85, ease:'power3.inOut'} +170]が[>#wn +200]狭い傾向がありました。[silence:1.3s]
+@n: [silence:0.6s][>#cite6 +300]ある研究では、[br][>#t6a -100]興味は見つけるものと[>#t6b -100]考える[>#wlab -200][>#wbar -200]人ほど、[|]興味の幅[♪airy -3dB +120][!#wbar.line to,{scaleX:.191, duration:.85, ease:'power3.inOut'} +170][!#wbar.tl to,{x:177, duration:.85, ease:'power3.inOut'} +170][!#wbar.tr to,{x:-178, duration:.85, ease:'power3.inOut'} +170][!#wlab to,{x:177, duration:.85, ease:'power3.inOut'} +170]が[>#wn +200]狭い傾向がありました。[silence:1.3s]
 
 *** conclusion
 se page -2.5dB
 @n: [silence:0.6s]結論は、[>#cc7.item -150]やりたいことを、[br]選ぶ前の[!#cc7.head recolor,$accent -100][>#t7a -100]条件に[>#cc7.item.st][♪pencil -1dB]は[>#t7b -50]で[>#cc7.item.x]き[!#cc7.item.t recolor,$gray][♪accent -2dB][!#t7b{m} marker +50]ない、ということ。[silence:0.65s]
 
 *** reverse
-@n: [silence:0.45s][>#r8a -50]意識が[>#arr8 -100]向いてから[>#r8b -100]関わる[>#x8][♪pencil -1dB]のではなく、[<#x8 -250][<#arr8 -250][!#r8a to,{x:360, arc:.15, duration:.9, ease:'power2.inOut'} -250][!#r8b to,{x:-360, arc:.15, duration:.9, ease:'power2.inOut'} -250][♪sweep -3dB -340]関わるか[>#arr8b -60][!#r8a .hot -60][!#r8b .hot -60][>#t8 -80]ら[!#im6 to,{y:-5, duration:1.2, ease:'sine.inOut'}][♪accent2 -2.5dB +150][!#t8{m} marker +200]意識が向く。[silence:1.25s]
+@n: [silence:0.45s][>#r8a -50]意識が[>#arr8 -100]向いてから[>#r8b -100]関わる[>#x8][♪pencil -1dB]のではなく、[<#x8 -250][<#arr8 -250][!#r8a to,{x:540, arc:.15, duration:.9, ease:'power2.inOut'} -250][!#r8b to,{x:-540, arc:.15, duration:.9, ease:'power2.inOut'} -250][♪sweep -3dB -340]関わるか[>#arr8b -60][!#r8a .hot -60][!#r8b .hot -60][>#t8 -80]ら[!#im6 to,{y:-8, duration:1.2, ease:'sine.inOut'}][♪accent2 -2.5dB +150][!#t8{m} marker +200]意識が向く。[silence:1.25s]
 [<#lab5]
 
 *** question

@@ -1,4 +1,4 @@
-# story · office-comedy (hf の全力版を draft src に全量で写した物 — 部下が上司をにこやかに褒め殺す 2 人の職場コメディ) — canvas 720x1280・6 cut
+# story · office-comedy (hf の全力版を draft src に全量で写した物 — 部下が上司をにこやかに褒め殺す 2 人の職場コメディ) — canvas 1080x1920・6 cut
 
 見せる作り: 常設の層 (上下の暗いグラデ・題の帯の決め語が語で弾む)・冒頭だけの組織図 (svg の部品を def で組む・語で × を叩きつけ、資格証を脈打たせる)・台詞ごとの全面の絵替え 17 枚 (寄り / 引き / 横流れ / 打ち込みの kb・cut の中は重ねて替える)・右から被さる切替 + 風切り音・cut ごとの 2 段テロップ (def 1 つ・落ちの 2 行目を語で落として揺らす)・話者札つき字幕・締めの 1 枚 (真顔の寄り + 周辺減光 + 太鼓で絵とテロップが揺れる)・語に結んだ効果音 10
 
@@ -8,9 +8,9 @@
 # 台詞ごとの全面の絵替え (寄り / 引き / 横流れ / 打ち込みの kb・cut 頭は右から被さる切替)・cut ごとの 2 段テロップ (def 1 つ — 前置きを先に置き、落ちの 2 行目を語で落として揺らす)
 # 話者札つき字幕・締めの 1 枚 (笑顔を真顔の寄りに替え、周辺減光 + 太鼓で絵とテロップを揺らす)
 # 座標は hf の 1080x1920 × 2/3。地は濃紺・書体は テロップと帯 = Dela・字幕 = 源真ゴシック・絵は全部 [ref:@sheet] (2 人の設定画) で顔と服を揃え、2 度使う絵は根の image に 1 回
-canvas 720x1280 bg=#0B0F1A
+canvas 1080x1920 bg=#0B0F1A
 palette y=#FFD43B punch=#FFE14D ink=#111111 navy=#10182D sub=#1F5FBF boss=#9B2335 bg=#0B0F1A
-run big { color: $y; font-size: 41px }
+run big { color: $y; font-size: 62px }
 font "源真ゴシック Heavy"
 fonts d="デラゴシック Regular" m="源真ゴシック Medium"
 prompt_tail "【上司】55歳くらいの日本人男性の部長。少しふくよかな体型、後ろになでつけた白髪まじりのグレーの髪、太い眉、丸顔、ひげなし。濃紺のスリーピーススーツ、えんじ色のネクタイ、金のネクタイピン、左胸に金の社章バッジ。余裕たっぷりで偉そうな雰囲気。【部下】27歳くらいの日本人男性社員。細身、短く整えた黒髪、細い銀縁の四角いメガネ、白いワイシャツにライトグレーのスーツ、紺色の細いネクタイ、首から青いストラップの社員証 (カード面は無地)。礼儀正しく、にこやかな表情。日本のテレビアニメ風の2Dイラスト。セル塗り、くっきりした主線、やわらかい光、落ち着いた上品な色調、職場コメディの一場面。画像内に文字・ロゴ・字幕・吹き出しは一切描かない。縦長の構図。"
@@ -31,12 +31,12 @@ p { out: none }
 div { out: none }
 bgm#music(fade: 600,60; keys: "0:0") ファゴットとマリンバとアコースティックギターが跳ねる、とぼけて愉快な軽いコメディ曲
 # 字幕 (白の極太 + 紺の縁・中央・話者札は上・文ごとの札・16 字を超える文は読点で 2 行)
-subtitle(left: 40px; width: 640px; top: 960px; font-size: 39px; line-height: 1.3; color: #FFFFFF; stroke: #0D1222,4; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0; tail: 250; hold: same,1500; in: {y:12, opacity:0, duration:.16, ease:'power2.out'})
+subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; stroke: #0D1222,4; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0; tail: 250; hold: same,1500; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
 
 # 2 段テロップ (Dela・前置き 白 52 / 落ち 黄 75 (9 字以上は 65)・-2° 傾き・拡大から back で着地・落ちは着地後に横に揺れる)
-def telop(setup, punchline, punch_size=75) = group(left: 0px; top: 687px; width: 720px; height: 170px)
-  p#setup(cx: 50%; top: 0px; overlap: self.punch; font-size: 52px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: $ink,5; text-shadow: 0px 5px 0px #0000008C; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.6, opacity:0, rotation:-4, duration:.28, ease:'back.out(2.2)'}; content: {setup})
-  p#punch(cx: 50%; top: 62px; font-size: {punch_size}; font-family: d; line-height: 1.12; color: $punch; stroke: $ink,5; text-shadow: 0px 7px 0px #00000099; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.7, opacity:0, rotation:3, duration:.3, ease:'back.out(2.6)'}; content: {punchline})
+def telop(setup, punchline, punch_size=75) = group(left: 0px; top: 1030px; width: 1080px; height: 255px)
+  p#setup(cx: 50%; top: 0px; overlap: self.punch; font-size: 78px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: $ink,5; text-shadow: 0px 8px 0px #0000008C; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.6, opacity:0, rotation:-4, duration:.28, ease:'back.out(2.2)'}; content: {setup})
+  p#punch(cx: 50%; top: 93px; font-size: {punch_size}; font-family: d; line-height: 1.12; color: $punch; stroke: $ink,5; text-shadow: 0px 10px 0px #00000099; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.7, opacity:0, rotation:3, duration:.3, ease:'back.out(2.6)'}; content: {punchline})
 
 # 組織図の部品 (hf の svg を節点ごとに切った物: 結線 2 段・役員 / 管理職 / 社員の札・資格証・赤い ×)。× と社員の資格証は語で動かすので別の部品
 svg links_upper = """<svg viewBox="0 0 900 640"><path d="M450 150 V215 M250 215 H650 M250 215 V260 M650 215 V260" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.85"/></svg>"""
@@ -48,13 +48,13 @@ svg badge = """<svg viewBox="-30 -30 60 50"><rect x="-30" y="-30" width="60" hei
 svg red_x = """<svg viewBox="-38 -38 76 76"><rect x="-44" y="-9" width="88" height="18" rx="9" fill="#ff2d3d" transform="rotate(45)"/><rect x="-44" y="-9" width="88" height="18" rx="9" fill="#ff2d3d" transform="rotate(-45)"/></svg>"""
 def org_node(plate) = div(border: none; background: $panel; in: {scale:.2, opacity:0, duration:.32, ease:'back.out(2)'})
   svg#plate(part: {plate})
-def slam_x() = svg(width: 51px; height: 51px; part: red_x; in: {scale:2.4, opacity:0, duration:.18, ease:'power4.in'})
+def slam_x() = svg(width: 76px; height: 76px; part: red_x; in: {scale:2.4, opacity:0, duration:.18, ease:'power4.in'})
 
 # 常設の層: 上下の暗いグラデ (上 330 px・下 760 px) と題の帯 (紺の板・下に黄の縁・硬い影・「役職はあります。」だけ大きく黄)
-div#shade_top(left: 0px; top: 0px; width: 720px; height: 220px; background: linear(#0508129E,#05081200,180); in: none)
-div#shade_bottom(left: 0px; top: 773px; width: 720px; height: 507px; background: linear(#05081200,#05081273@45%,#050812CC,180); in: none)
-div#title_bar.sticky(left: 56px; top: 47px; width: 608px; height: 66px; background: $navy; border-radius: 4px; border-bottom: 5px solid $y; box-shadow: 0px 7px 0px #00000059; border: 1px solid $line; in: none)
-  p#title(cx: 50%; cy: 52%; font-size: 33px; font-family: d; color: #FFFFFF; letter-spacing: .01em) 資格はないけど、{big}役職はあります。{/}
+div#shade_top(left: 0px; top: 0px; width: 1080px; height: 330px; background: linear(#0508129E,#05081200,180); in: none)
+div#shade_bottom(left: 0px; top: 1160px; width: 1080px; height: 760px; background: linear(#05081200,#05081273@45%,#050812CC,180); in: none)
+div#title_bar.sticky(left: 84px; top: 70px; width: 912px; height: 99px; background: $navy; border-radius: 6px; border-bottom: 8px solid $y; box-shadow: 0px 10px 0px #00000059; border: 2px solid $line; in: none)
+  p#title(cx: 50%; cy: 52%; font-size: 50px; font-family: d; color: #FFFFFF; letter-spacing: .01em) 資格はないけど、{big}役職はあります。{/}
 
 # 発端: 2 人の引き → 幕を沈めて組織図 (「上の人は誰も資格なし」を × で見せる) → 部下の驚き
 section#org_chart
@@ -62,17 +62,17 @@ img#desk_wide(inset: 0; main: kb {scale: [1.04, 1.11], focus: ['50% 40%', '50% 4
 img#sub_surprised(inset: 0; main: kb {scale: [1.04, 1.11], focus: ['50% 40%', '50% 45%']}) [ref:@sheet]部下のバストアップ。少し目を見開いて意外そうな表情、片手でメガネのブリッジを押し上げている。顔は画面の左側を向いている。背景は明るく清潔な日本のオフィス (木目のデスク、観葉植物、大きな窓、白い壁)。背景は少しぼかす。
 # 組織図 (幕で沈めた上に、節点が順に弾み、線が出て、上の 3 つの資格証に赤い × が叩きつけられ、下の 3 つの資格証が脈打つ)
 div#org_dim(inset: 0; border: none; background: #080C1A94; in: {opacity:0, duration:.3, ease:'power1.out'}; out: {opacity:0, duration:.25, ease:'power1.in'})
-group#org(in: {stagger: {each: .06}}; left: 60px; top: 253px; width: 600px; height: 427px; out: {opacity:0, duration:.25, ease:'power1.in'})
+group#org(in: {stagger: {each: .06}}; left: 90px; top: 380px; width: 900px; height: 640px; out: {opacity:0, duration:.25, ease:'power1.in'})
   svg#upper(part: links_upper; in: {opacity:0, duration:.3})
   svg#lower(part: links_lower; in: {opacity:0, duration:.3})
-  org_node#exec(left: 220px; top: 22px; width: 160px; height: 83px; plate: plate_exec)
-    slam_x#cross(left: 83px; top: 12px)
-  org_node#mgr_l(left: 87px; top: 173px; width: 160px; height: 75px; plate: plate_mgr)
-    slam_x#cross(left: 84px; top: 9px; width: 48px; height: 48px)
-  org_node#mgr_r(left: 353px; top: 173px; width: 160px; height: 75px; plate: plate_mgr)
-    slam_x#cross(left: 84px; top: 9px; width: 48px; height: 48px)
-  org_node#staff(left: "27;227;427"; top: 312px; width: 147px; height: 69px; plate: plate_staff) ×3
-    svg#cert(left: 80px; top: 15px; width: 40px; height: 33px; part: badge)
+  org_node#exec(left: 330px; top: 33px; width: 240px; height: 124px; plate: plate_exec)
+    slam_x#cross(left: 124px; top: 18px)
+  org_node#mgr_l(left: 130px; top: 260px; width: 240px; height: 112px; plate: plate_mgr)
+    slam_x#cross(left: 126px; top: 14px; width: 72px; height: 72px)
+  org_node#mgr_r(left: 530px; top: 260px; width: 240px; height: 112px; plate: plate_mgr)
+    slam_x#cross(left: 126px; top: 14px; width: 72px; height: 72px)
+  org_node#staff(left: "27;227;427"; top: 468px; width: 220px; height: 104px; plate: plate_staff) ×3
+    svg#cert(left: 120px; top: 22px; width: 60px; height: 50px; part: badge)
 telop#nobody(setup: "上の人たち、"; punchline: "誰も持ってなかった。"; punch_size: 65)
 
 # 上司の自慢 → 部下の褒め殺し (落ち「役職取得。」) → 照れる上司の打ち込み

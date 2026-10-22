@@ -1,5 +1,5 @@
 #v2
-canvas 1280x720 bg=#F6F3EC
+canvas 1920x1080 bg=#F6F3EC
 theme light
 palette a=#E8542A b=#1F8A70
 # 本文の書体 (`font`) と数字の書体 (`fonts n` = `font-family: n`) は style の組 (looks.md) で題材に合わせて決める — 下は骨組みの仮の値で、写さない。数字は太く字形のはっきりした物 (細いセリフ・等幅・筆の数字は細く見え、筆の「1」は「7」に見える)
@@ -7,80 +7,80 @@ font "太い角ゴシック体、端正で現代的な和文"
 fonts n="太い欧文グロテスク、等幅寄りで数字が揃う"
 
 # 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
-motion title { in: {y:-40, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-16, opacity:0, duration:0.24} }
+motion title { in: {y:-60, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-24, opacity:0, duration:0.24} }
 motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; out: fade {duration:0.22} }
-motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
-motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
-motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
+motion div { in: {y:36, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
+motion row { in: {x:-90, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
+motion note { in: {y:21, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
 div { in: div }
 # 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `section#名(stagger: {each: .12})` で頭の組み上がりに戻せる)
 # 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
 cut { stagger: sentence }
 # 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
-def h1(t) = p(font-size: 72px; line-height: 1.15; in: title; content: {t})
-def num(t) = p(font-size: 96px; color: $a; in: big; content: {t})
-def big(t) = p(font-size: 80px; text-align: center; in: big; content: {t})
-def sub(t) = p(font-size: 30px; color: $mute; in: note; content: {t})
-def body(t) = p(font-size: 32px; in: row; content: {t})
-def note(t) = p(font-size: 24px; color: $mute; in: note; content: {t})
+def h1(t) = p(font-size: 108px; line-height: 1.15; in: title; content: {t})
+def num(t) = p(font-size: 144px; color: $a; in: big; content: {t})
+def big(t) = p(font-size: 120px; text-align: center; in: big; content: {t})
+def sub(t) = p(font-size: 45px; color: $mute; in: note; content: {t})
+def body(t) = p(font-size: 48px; in: row; content: {t})
+def note(t) = p(font-size: 36px; color: $mute; in: note; content: {t})
 # 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
-def stat(v, u, l) = div(width: 560px; height: 166px)
-  p#l(left: 0px; top: 0px; font-size: 30px; color: $mute; content: {l})
-  p#v(left: 0px; top: 46px; font-size: 112px; font-family: n; color: $a; line-height: 1; content: {v})
-  p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
+def stat(v, u, l) = div(width: 840px; height: 249px)
+  p#l(left: 0px; top: 0px; font-size: 45px; color: $mute; content: {l})
+  p#v(left: 0px; top: 69px; font-size: 168px; font-family: n; color: $a; line-height: 1; content: {v})
+  p#u(left: .v.right+18; top: 141px; font-size: 84px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
-def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
+def stamp(content) = p(font-size: 72px; color: $a; border: 4px solid $a; border-radius: 18px; padding: 15px 36px; text-align: center; in: pop; content: {content})
 # 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
-def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px; border: 1px solid $line; box-shadow: 2)
-  p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
-  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column; background: $panel; border: 1px solid $line; border-radius: 16px; box-shadow: 2) ×3
-    icon#ic(left: 0px; cy: 50%; font-size: 56px; name: {icons}; color: $b)
-    p#t(left: 80px; cy: 50%; font-size: 38px; content: {items})
-  p#cta(left: 0px; bottom: 0px; font-size: 38px; color: $a; content: {cta})
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 36px; padding: 60px; border: 2px solid $line; box-shadow: 2)
+  p#t(left: 0px; top: 0px; font-size: 96px; content: {t})
+  div#i(left: 0px; top: 168px; width: 100%; height: 330px; gap: 24px; display: flex; flex-direction: column; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 2) ×3
+    icon#ic(left: 0px; cy: 50%; font-size: 84px; name: {icons}; color: $b)
+    p#t(left: 120px; cy: 50%; font-size: 57px; content: {items})
+  p#cta(left: 0px; bottom: 0px; font-size: 57px; color: $a; content: {cta})
 image bg = "[photo]明るい生成りの紙の質感に橙と青緑の淡い光が斜めに差す抽象的な背景、柔らかいぼけ、文字なし"
 # 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
 backdrop#bd(look: glow; vignette: 0.1)
 bgm#music 明るく軽快なアコースティックポップ、手拍子と口笛、生活情報の解説向け
 bgm#music2 同じ系統で高揚する明るいポップ、テンポを上げてストリングスと手拍子が重なる、山場向け
-subtitle.hug(font-size: 30px; bottom: 24px; unit: phrase)
+subtitle.hug(font-size: 45px; bottom: 36px; unit: phrase)
 
 section#title
 img#t_bg(inset: 0; content: @bg)
-h1#t_h(left: 80px; top: 196px; width: 1120px) 会議の時間は[br]どこへ消えた
-sub#t_m(left: 80px; top: 364px; width: 1120px) 推移 ・ 内訳 ・ 結論
+h1#t_h(left: 120px; top: 294px; width: 1680px) 会議の時間は[br]どこへ消えた
+sub#t_m(left: 120px; top: 546px; width: 1680px) 推移 ・ 内訳 ・ 結論
 
 section#overview
 # 板の cut にも絵: 全面の写真を紙色の幕 (0.6 まで — 濃い一様の幕は写真を消す・lint photo_hidden) で薄め、その上に板と数字
 img#ov_bg(inset: 0) [photo]明るい会議室の長机と椅子、窓からの白い光、文字なし
 veil#ov_v(color: #F6F3EC; opacity: 0.6)
 # 番号つきの段: 板の題は「01 推移」の形 (番号は num・題は本文の段)・推移は横棒の段 ×3 (棒の幅 = 値)
-div#ov(left: 80px; top: 112px; width: 643px; height: 480px; background: $panel; border-radius: 16px; padding: 24px; border: 1px solid $line; box-shadow: 2)
+div#ov(left: 120px; top: 168px; width: 964px; height: 720px; background: $panel; border-radius: 24px; padding: 36px; border: 2px solid $line; box-shadow: 2)
   num#k(left: 0px; top: 0px) 01
-  body#h(left: .k.right+20; top: 34px) 1 人・週の会議時間
-  div#c(left: 0px; top: 120px; width: 100%; height: 180px; gap: 12px; display: flex; flex-direction: column; background: $panel; border: 1px solid $line; border-radius: 16px; box-shadow: 2) ×3
-    p#m(left: 0px; cy: 50%; font-size: 30px; color: $mute) 7 月;8 月;9 月
-    div#b(left: 96px; cy: 50%; width: "65%;55%;50%"; height: 28px; background: "$mute;$mute;$a"; border-radius: 6px; border: 1px solid $line; box-shadow: 2)
-    p#v(left: .b.right+12; cy: 50%; font-size: 30px) 13 h;11 h;10 h
+  body#h(left: .k.right+30; top: 51px) 1 人・週の会議時間
+  div#c(left: 0px; top: 180px; width: 100%; height: 270px; gap: 18px; display: flex; flex-direction: column; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 2) ×3
+    p#m(left: 0px; cy: 50%; font-size: 45px; color: $mute) 7 月;8 月;9 月
+    div#b(left: 144px; cy: 50%; width: "65%;55%;50%"; height: 42px; background: "$mute;$mute;$a"; border-radius: 9px; border: 2px solid $line; box-shadow: 2)
+    p#v(left: .b.right+18; cy: 50%; font-size: 45px) 13 h;11 h;10 h
   body#n(left: 0px; bottom: 0px; color: $a) → 3 か月で 4 分の 1 が浮いた
-stat#k1(left: 747px; top: 112px; width: 453px; v: "1"; u: "時間"; l: "浮いた時間 / 週")
-stat#k2(left: 747px; top: 364px; width: 453px; v: "20"; u: "% 減"; l: "会議の数")
+stat#k1(left: 1120px; top: 168px; width: 680px; v: "1"; u: "時間"; l: "浮いた時間 / 週")
+stat#k2(left: 1120px; top: 546px; width: 680px; v: "20"; u: "% 減"; l: "会議の数")
 
 section#insight
 # 白い文字を載せる全面の絵は幕を暗く (幕の色の既定は根の bg = 明の根では紙色で、白い文字が沈む)
 img#in_p(inset: 0; scrim: 0.55,#000000) [photo]夕方の誰もいない会議室、整然と並んだ椅子と窓からの斜めの光、文字なし
-stat#in_v(left: 80px; top: 250px; v: "[count:150]"; u: "時間"; l: "一年で減った会議の時間"; in_v.l.color: #FFFFFF; in_v.u.color: #FFFFFF)
-sub#in_s(left: 80px; top: 448px; width: 1120px; text-align: center; color: #FFFFFF) 報告を文書に置き換えたのが一番効いた
+stat#in_v(left: 120px; top: 375px; v: "[count:150]"; u: "時間"; l: "一年で減った会議の時間"; in_v.l.color: #FFFFFF; in_v.u.color: #FFFFFF)
+sub#in_s(left: 120px; top: 672px; width: 1680px; text-align: center; color: #FFFFFF) 報告を文書に置き換えたのが一番効いた
 
 section#end
 img#pt_bg(inset: 0) [photo]朝の明るいオフィスで立ったまま短く話す三人、窓の光、文字なし
 veil#pt_v(color: #F6F3EC; opacity: 0.6)
-div#pt(left: 80px; top: 112px; width: 1120px; height: 312px; gap: 24px; background: $panel; border-radius: 16px; padding: 24px; display: flex; border: 1px solid $line; box-shadow: 2) ×3
-  icon#ic(left: 0px; top: 0px; font-size: 150px; name: "timer;file-text;users-three"; color: $b)
-  body#t(left: 0px; top: 166px) 定例は 15 分で切る;報告は文書で残す;決める人だけ呼ぶ
-  note#s(left: 0px; top: 216px) 長いほど話が散る;口頭の報告は残らない;聞くだけの人は呼ばない
-stamp#end_st(cx: 640px; cy: 520px; font-size: 60px) 次の定例は 15 分
+div#pt(left: 120px; top: 168px; width: 1680px; height: 468px; gap: 36px; background: $panel; border-radius: 24px; padding: 36px; display: flex; border: 2px solid $line; box-shadow: 2) ×3
+  icon#ic(left: 0px; top: 0px; font-size: 225px; name: "timer;file-text;users-three"; color: $b)
+  body#t(left: 0px; top: 249px) 定例は 15 分で切る;報告は文書で残す;決める人だけ呼ぶ
+  note#s(left: 0px; top: 324px) 長いほど話が散る;口頭の報告は残らない;聞くだけの人は呼ばない
+stamp#end_st(cx: 960px; cy: 780px; font-size: 90px) 次の定例は 15 分
 
 section#close
 img#cl_bg(inset: 0) [photo]片づいた明るい会議室、開いた窓と壁のカレンダー、文字なし
 veil#cl_v(color: #F6F3EC; opacity: 0.6)
-wrap#cl(left: 80px; top: 112px; width: 1120px; height: 480px; t: "会議の時間はどこへ消えた"; items: "15 分;文書;少人数"; icons: "timer;file-text;users-three"; cta: "短く、少なく")
+wrap#cl(left: 120px; top: 168px; width: 1680px; height: 720px; t: "会議の時間はどこへ消えた"; items: "15 分;文書;少人数"; icons: "timer;file-text;users-three"; cta: "短く、少なく")

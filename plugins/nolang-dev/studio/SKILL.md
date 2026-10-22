@@ -9,18 +9,18 @@ description: NoLang の動画を draft src (HTML / CSS / GSAP の圧縮形) で 
 draft src はその動画の圧縮形で、書く物は同じです。圧縮の規則は 4 つだけ:
 
 1. **閉じタグは字下げ**。1 行 1 要素 `tag#id.class(css 宣言) 内容`。字下げ 2 空白 = 子。
-2. **style は要素の行**。`(…)` の中に CSS の宣言をそのまま (`left:48px; top:120px; font-size:32px; color:#fff; border:3px solid $a; box-shadow:0 0 24px $a`)。共通の見た目は `def` (= class) に 1 回・型ごとの既定は `tag { 宣言 }` (= CSS の要素の rule)。
-3. **gsap.from / to は object のまま**。入場 `in:{y:30, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定。
+2. **style は要素の行**。`(…)` の中に CSS の宣言をそのまま (`left:72px; top:180px; font-size:48px; color:#fff; border:4px solid $a; box-shadow:0 0 36px $a`)。共通の見た目は `def` (= class) に 1 回・型ごとの既定は `tag { 宣言 }` (= CSS の要素の rule)。
+3. **gsap.from / to は object のまま**。入場 `in:{y:45, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定。
 4. **時刻は秒ではなく台詞の語**。timeline.txt は台本で、tween はその語の前に置く: `[>#id]` 出す・`[!#id to,{…}]` 変える・`[<#id]` 消す。`tl.to(el, {…}, 2.3)` の 2.3 を書く場所は無く、声の実尺が時刻を決める。
 
 ```
 #v2
-canvas 1280x720 bg=#0A0614
+canvas 1920x1080 bg=#0A0614
 palette a=#FF2D55 mute=#9A93B5
 section#hook
-div#c1(left:48px; top:420px; width:300px; padding:16px; border-radius:16px; background:#0a0614e6; border:3px solid $a; box-shadow:0 0 24px $a; in:{y:60, scale:.7, opacity:0, duration:.5, ease:'back.out(1.7)'})
-  p#l(font-size:22px; color:$mute; letter-spacing:.2em) STAGE A
-  p#t(font-size:72px; color:#fff; text-shadow:0 0 24px $a) 18:30
+div#c1(left:72px; top:630px; width:450px; padding:24px; border-radius:24px; background:#0a0614e6; border:4px solid $a; box-shadow:0 0 36px $a; in:{y:90, scale:.7, opacity:0, duration:.5, ease:'back.out(1.7)'})
+  p#l(font-size:33px; color:$mute; letter-spacing:.2em) STAGE A
+  p#t(font-size:108px; color:#fff; text-shadow:0 0 36px $a) 18:30
 img#venue(inset: 0; main: kb {scale: [1, 1.06]}) 夜の野外フェス会場、遠くに二つのステージ、青と赤のネオン、人物なし
 ```
 
@@ -33,9 +33,9 @@ cast n = "落ち着いた30代女性のナレーター"
 ```
 
 台本 (timeline.txt) と画面 (design.txt) を書き、check で欠陥と尺と配置を検査し、render で 1 回だけ描く。
-tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。`div` は CSS と同じ素の箱 (地・縁・角丸・影・余白は書いた物だけ) — 板は宣言で書く: `div#c(…; background: $panel; border: 1px solid $line; border-radius: 16px; box-shadow: 0 4px 12px #0003; padding: 24px)` (繰り返すなら `def card = div(…)`)。
+tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。`div` は CSS と同じ素の箱 (地・縁・角丸・影・余白は書いた物だけ) — 板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)` (繰り返すなら `def card = div(…)`)。
 `#id` が名 (字下げの子は相対名・印では `#親.子`)、`.class` は flag (`.hug` 中身の幅・`.sticky` cut を跨ぐ) か変種の tag (全面は宣言 `inset: 0`)、文字の内容は行の残り。
-CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。`border` の線種は `solid` `dashed` `dotted` (破線 / 点線は Chromium と同じ模様・`double` などは DEFECT:CSS)。表に無い名の宣言は DEFECT:KEY。`canvas 1920x1080` など短辺 720 以外の canvas は px ごと 720 に写す。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
+CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。`border` の線種は `solid` `dashed` `dotted` (破線 / 点線は Chromium と同じ模様・`double` などは DEFECT:CSS)。表に無い名の宣言は DEFECT:KEY。canvas の短辺は 1080 (`canvas 1920x1080` / `1080x1920` / `1080x1080`・px はそのまま layout の px) — 他の短辺は DEFECT:ARG。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
 
 ```bash
 S=.agents/skills/nolang-draft-studio/scripts/studio.py; P="env PYTHONPATH=$PWD /opt/venv/bin/python"   # repo root から
@@ -48,7 +48,7 @@ $P $S icons  lock shield                  # icon の名を探す (Phosphor 1,512
 
 project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材の pin は check が書く) / `out/`。両 file の 1 行目は `#v2`。
 素材は説明文で書く: 話者 `cast n = "落ち着いた30代女性のナレーター" speed=110%`・BGM `bgm#m 静かなピアノと弦`・絵 `img#p(inset: 0) 夜の屋台の湯気、文字なし` (`alt` と同じ)・書体 `font "太い明朝体"`・効果音 `[♪"グラスに注ぐ音" -6dB]`。名や id で指定しない。
-依頼がキャラ (ずんだもん等) を名指ししたら、声は `cast z = character="ずんだもん"` (例外的に名で書く) で、画面にも立ち絵を出す: 最初の cut に `avatar#lay.sticky(left:900px; top:200px; width:360px; height:520px; cast:z; object-fit:contain)` (`.sticky` で cut を跨いで出続ける)・文字や図は立ち絵の場所を空けて置く・表情は台詞に `[!#lay expression,happy]`。
+依頼がキャラ (ずんだもん等) を名指ししたら、声は `cast z = character="ずんだもん"` (例外的に名で書く) で、画面にも立ち絵を出す: 最初の cut に `avatar#lay.sticky(left:1350px; top:300px; width:540px; height:780px; cast:z; object-fit:contain)` (`.sticky` で cut を跨いで出続ける)・文字や図は立ち絵の場所を空けて置く・表情は台詞に `[!#lay expression,happy]`。
 読みは src の責務でない (後段の読み検査が差し替える)。全出現を強制する語だけ根に `read 3日 = みっか`、その場だけ `{3日|みっか}`。
 
 ## 前提 (環境)
@@ -86,13 +86,13 @@ project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材�
 
 ## 書き方の対応 (迷った時だけ)
 
-- 位置: 絶対 `left top width height` (中心 `cx cy`・全面 `inset: 0`)、子は親の内側から。`x y` は GSAP の移動量 (`in: {x: -40}`・`to,{y: 20}`) だけ。flex は `display:flex; gap:24px` (`flex-direction:column` で縦)、表は容器の `display:grid; grid-template-columns:repeat(3,1fr); gap:16px` + 字下げに位置を書かない ×N 1 つ (CSS の grid: cell いっぱい・gap 既定 0・×N の行の `display:grid,3` も同じ)。重なりは書いた順 (後が上)・`z-index:front`・意図の重なり `overlap:相手`。
-- 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:20, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)・消える間隔は `out: {opacity:0, stagger: .08}` (`[<#c[*]]` でも cut 末の自動 close でも)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
+- 位置: 絶対 `left top width height` (中心 `cx cy`・全面 `inset: 0`)、子は親の内側から。`x y` は GSAP の移動量 (`in: {x: -60}`・`to,{y: 30}`) だけ。flex は `display:flex; gap:36px` (`flex-direction:column` で縦)、表は容器の `display:grid; grid-template-columns:repeat(3,1fr); gap:24px` + 字下げに位置を書かない ×N 1 つ (CSS の grid: cell いっぱい・gap 既定 0・×N の行の `display:grid,3` も同じ)。重なりは書いた順 (後が上)・`z-index:front`・意図の重なり `overlap:相手`。
+- 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:30, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)・消える間隔は `out: {opacity:0, stagger: .08}` (`[<#c[*]]` でも cut 末の自動 close でも)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
 - 変種: `#名.tag(宣言)` (静止の別の姿) → `[!#名 .tag]` (補間して移る。`points=` / `path=` の shape の変種は形ごと補間 = morph。書体 / style・画像・fit の種類・形の種類・blend・mask が違う変種は補間せず、その語で開き直す — 変種の `in=` が入場・無ければ切替)。部品: `def 名(引数) = tag(宣言) {引数}` → `名#x(…) 文字` (同じ形の 2 つ目も def に上げて実体を並べる)。
 - 文字の一部: `{t}語{/}` + `[!#名{t} recolor,$a]` / `highlight` / `marker` / `strike` (`[=#名{t}]` で戻す)。
-- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -30}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`。名は型を問わず同じ動き — 文字も層ごと。1 字ずつは stagger を足す `in: rise {stagger: .03}`)・役 `title big div row note` (雛形の根の `motion 名 { in: …; out: … }` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
+- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -45}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`。名は型を問わず同じ動き — 文字も層ごと。1 字ずつは stagger を足す `in: rise {stagger: .03}`)・役 `title big div row note` (雛形の根の `motion 名 { in: …; out: … }` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
 - 常時 `main: float|breathe|sway|pulse`・`spin {period: 9}`・`kb {scale: [1.1, 1], focus: '40% 60%'}` (寄りながら動くなら `focus: ['40% 60%', '60% 50%']`)。2 本以上の tween は `,` で並べる (`in: fade {duration: .8}, typewriter {level: 3, duration: 0}` — 1 字ずつの語も object では 1 字が 0.5 秒・即座に切り替えるなら `duration: 0`)。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
-- 字幕: 印だけの行 `[>#subtitle]` で以後の台詞が自動の字幕 (cut を跨いで続く・閉じるのは `[<#subtitle]` — cut 末の印だけの行ならその cut の終わり・hold の字幕札が cut 境界を跨ぐ時は engine が次の cut の lane と 1 枚に繋ぐ (帯は cut で入り直さない))。`subtitle(font-size:32px; …)`・テロップの間だけ消す `.hide_subtitle`。話者札は `cast a = "…" label="部下" label_fill=$a`。
+- 字幕: 印だけの行 `[>#subtitle]` で以後の台詞が自動の字幕 (cut を跨いで続く・閉じるのは `[<#subtitle]` — cut 末の印だけの行ならその cut の終わり・hold の字幕札が cut 境界を跨ぐ時は engine が次の cut の lane と 1 枚に繋ぐ (帯は cut で入り直さない))。`subtitle(font-size:48px; …)`・テロップの間だけ消す `.hide_subtitle`。話者札は `cast a = "…" label="部下" label_fill=$a`。
 
 ## 書けない物 (runtime に無い・GSAP と違う例外)
 

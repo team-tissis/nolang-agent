@@ -10,7 +10,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SCAFFOLDS = HERE.parent / "reference/scaffolds"
-SCHEMA_VERSION = 9  # domain.constants.draft_composer.DRAFT_COMPOSER_SCHEMA_VERSION (test が同じ値か見る)
+SCHEMA_VERSION = 10  # domain.constants.draft_composer.DRAFT_COMPOSER_SCHEMA_VERSION (test が同じ値か見る)
 KINDS = ("data", "concept", "compare", "story", "cinematic")
 
 

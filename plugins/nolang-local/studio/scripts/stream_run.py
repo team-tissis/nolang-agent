@@ -528,6 +528,11 @@ class Run:
             return "ja"
         return str(value or "ja")
 
+    @property
+    def aspect(self) -> str:
+        """依頼の縦横比 (params.txt の 2 つ目・`16:9` / `9:16`) — 根の canvas がこれと違えば check と投入検査が止める。"""
+        return (self.project / "params.txt").read_text().split()[1]
+
     def plan_seconds(self) -> dict[str, float]:
         """plan の cut ごとの見込み秒 (著者の目分量・記録用)。無ければ空。"""
         from stream_author import plan_names  # noqa: PLC0415 — scripts dir を sys.path に足している
@@ -663,8 +668,8 @@ class Run:
     # ---- check と直し ----
     def check(self, dd: Path, *, ended: bool) -> tuple[str, list[Defect], list[dict]]:
         """ended = 動画の終わりまで書いた doc (False = この prefix の後に cut が続く — 最後の cut だけの規則を掛けない)。
-        remote は server の compile の check (`drafts/check/`・DEFECT と compile の注意だけ — layout / render の段の lint は製品の
-        stream が描く時に記録する)。local は studio の check (compile + layout + lint)。欠陥はどちらも `Defect.as_record()` の形
+        remote は server の check (`drafts/check/`・DEFECT と compile の注意と layout の監査の崩れ — studio の lint の他の規則は
+        local だけ)。local は studio の check (compile + layout + lint)。欠陥はどちらも `Defect.as_record()` の形
         (local は doc の out/defects.json — DEFECT の無い check はその file を消す)。"""
         if self.remote is not None:
             body = self.remote_post(
@@ -673,6 +678,7 @@ class Run:
                     "design": (dd / "design.txt").read_text(),
                     "timeline": (dd / "timeline.txt").read_text(),
                     "open_ended": not ended,
+                    "aspect_ratio": self.aspect,
                 },
             )
             defects = [Defect.read(d) for d in body.get("defects", []) if isinstance(d, dict)]
@@ -1800,6 +1806,8 @@ class Run:
             *(["--end"] if ended else []),
             "--language",
             self.language,
+            "--aspect",
+            self.aspect,
         )
         return [l for l in out.splitlines() if l.startswith("DEFECT")]
 

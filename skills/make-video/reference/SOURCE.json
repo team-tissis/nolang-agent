@@ -1,9 +1,9 @@
 {
   "from": "nolang-backend/.agents/skills/nolang-draft-studio",
   "ref": "claude-draft-src",
-  "commit": "f1b620eed4dabc46f7803cd913b007a08068b6eb",
+  "commit": "2cbdafea2a9c7097aa18bfe57c1ed2e69293bb75",
   "dirty": null,
-  "synced_at": "2026-10-22T04:49:44.942Z",
+  "synced_at": "2026-10-22T07:27:14.993Z",
   "files": [
     "authoring.md",
     "capabilities.md",

@@ -1,4 +1,4 @@
-# concept · tech-crime-law (hf 全力版の全量の写し — テクノロジー犯罪を抑制する法律が必要・14 場面の暗い絵と「赤枠 × 黄の文字」で訴える縦リール) — canvas 720x1280
+# concept · tech-crime-law (hf 全力版の全量の写し — テクノロジー犯罪を抑制する法律が必要・14 場面の暗い絵と「赤枠 × 黄の文字」で訴える縦リール) — canvas 1080x1920
 
 見せる作り: 常設の層 (上下の暗幕 + 周辺減光・grain・上端の赤→黄の進行線)・場面ごとの暗い絵の溶け替え (文の途中の絵替え 3 回・グリッチで揺れて入る絵)・判子のように叩きつける赤枠 × 黄の札と画面の揺れ・字幕の強調 run・3 つの章扉 (薄い巨大な番号 + 線の icon + 2 段の見出し) と左上の章札 (sticky)・ぼけから浮かぶ囁きの吹き出し・赤縁の丸窓・伸びる帯・柱の札 3 枚 (白の地から赤枠へ移る強調)・赤と青緑にずれる写し・広がる光の輪・2 つの吹き出し・2 曲の BGM と語に結んだ効果音 46
 
@@ -8,7 +8,7 @@
 # 「赤枠 × 黄の文字」を 1 つの class で通す: 主役の語は判子のように叩きつける札 (key)・字幕の強調は run・板の中の強調は白の地から赤枠へ移る変種 (.on)
 # 3 つの章は章扉 (薄い巨大な番号 + 線の icon + 見出し) で区切り、章の間は左上の章札 (sticky) を残す・囁きの吹き出し・柱の札 3 枚・二重にずれる見出し・広がる光の輪
 # hf b08 tech-crime-law (全力版) の全量の写し。座標は hf の 1080x1920 × 2/3
-canvas 720x1280 bg=#05070D
+canvas 1080x1920 bg=#05070D
 theme dark
 palette y=#FFE600 red=#E60012 warm=#FFC56B gr=#FF0030 gc=#00E5FF line=#FF2A3A
 font "太字 (Bold) の角ゴシック体、力強く端正で読みやすい"
@@ -22,8 +22,8 @@ lint off=spoiler,caption_gap,stacked_labels,overlap,low_contrast,duplicate_text,
 master lufs=-15
 art "Cinematic semi-realistic digital painting, volumetric lighting, subtle film grain, high detail"
 prompt_tail "Vertical 9:16 portrait composition, the main subject large and centered in the middle of the frame, the scene fills the whole frame from top to bottom. Absolutely no text, no letters, no numbers, no logos, no watermarks, no UI text."
-# 字幕の強調 = 赤枠 × 黄の字 (hf の .hl: border 7px / radius 12 / padding 0 14px を 2/3 に)
-run h { color: $y; background: #0E0406CC; border: 5px solid $red; border-radius: 8px; padding: 9px }
+# 字幕の強調 = 赤枠 × 黄の字 (hf の .hl: border 10px / radius 12 / padding 0 21px を 2/3 に)
+run h { color: $y; background: #0E0406CC; border: 8px solid $red; border-radius: 12px; padding: 14px }
 cut { stagger: 0 }
 p { color: #FFFFFF; out: {opacity:0, duration:0.3, ease:'power1.in'} }
 div { border: none; out: {opacity:0, duration:0.3, ease:'power1.in'} }
@@ -73,41 +73,41 @@ bgm#doc(fade: 400,2100) 不穏で不気味な社会派ドキュメンタリー�
 bgm#hope(fade: 600,3200) 明るく温かく穏やかな希望の曲、三拍子のクラシカルなピアノと弦楽、後半に向けて壮大に広がる
 # 字幕: 画面の中ほど (y 841) に白文字 + 黒の縁 + 黒い光彩・句の割り方は台詞の [|]・句点だけ外す
 # hf の作り: 字幕を下端でなく画面の中ほどに置き、下 3 割は暗幕だけ
-subtitle.hug(left: 27px; top: 841px; width: 667px; font-size: 41px; line-height: 1.42; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: #000000,5; text-shadow: 0px 3px 17px #000000D9; background: none; unit: sentence; strip: 。; lead: 50; tail: 450; hold: off; in: {y:23, opacity:0, duration:0.32, ease:'power3.out'}; out: {y:-12, opacity:0, duration:0.22, ease:'power2.in'})
+subtitle.hug(left: 40px; top: 1262px; width: 1000px; font-size: 62px; line-height: 1.42; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: #000000,5; text-shadow: 0px 4px 26px #000000D9; background: none; unit: sentence; strip: 。; lead: 50; tail: 450; hold: off; in: {y:34, opacity:0, duration:0.32, ease:'power3.out'}; out: {y:-18, opacity:0, duration:0.22, ease:'power2.in'})
 
 # 暗幕 (上 62% → 20〜50% は素通し → 下 90%) + 周辺減光の子 (章ごとに濃さを語で変える)
-def shade() = div(inset: 0; background: linear(#03050C9E,#03050C00@20%,#03050C00@50%,#03050CB3@66%,#03050CDB@84%,#03050CE6,180); border-radius: 16px; in: none; out: none)
-  div#v(inset: 0; background: radial(#00000000@42%,#000000C7,50%,44%); opacity: 0.85; border-radius: 16px; in: none; out: none)
+def shade() = div(inset: 0; background: linear(#03050C9E,#03050C00@20%,#03050C00@50%,#03050CB3@66%,#03050CDB@84%,#03050CE6,180); border-radius: 24px; in: none; out: none)
+  div#v(inset: 0; background: radial(#00000000@42%,#000000C7,50%,44%); opacity: 0.85; border-radius: 24px; in: none; out: none)
 # 見出しの白文字 (黒の縁 + 黒い光彩・下から上がる)
-def head(t, s=67) = p(width: 640px; text-align: center; font-size: {s}; line-height: 1.2; letter-spacing: 0.03em; stroke: #000000,4; text-shadow: 0px 3px 17px #000000D9; in: {y:27, opacity:0, duration:0.45, ease:'power3.out'}; content: {t})
+def head(t, s=67) = p(width: 960px; text-align: center; font-size: {s}; line-height: 1.2; letter-spacing: 0.03em; stroke: #000000,4; text-shadow: 0px 4px 26px #000000D9; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}; content: {t})
 # 主役の語の札 = 赤枠 × 黄の文字 (判子: 1.9 倍から縮んで叩きつける)
-def key(t, s=85) = p(font-size: {s}; line-height: 1.15; letter-spacing: 0.04em; color: $y; background: #0C0406D6; border: 8px solid $red; border-radius: 12px; padding: 5px 27px 13px 27px; box-shadow: 0px 0px 40px #E60012A6; text-shadow: 0px 3px 0px #00000099; in: {scale:1.9, opacity:0, duration:0.26, ease:'power4.in'}; content: {t})
+def key(t, s=85) = p(font-size: {s}; line-height: 1.15; letter-spacing: 0.04em; color: $y; background: #0C0406D6; border: 12px solid $red; border-radius: 18px; padding: 8px 40px 20px 40px; box-shadow: 0px 0px 60px #E60012A6; text-shadow: 0px 4px 0px #00000099; in: {scale:1.9, opacity:0, duration:0.26, ease:'power4.in'}; content: {t})
 # 章扉の薄い巨大な番号 (4 秒かけて濃く・大きく)
-def bignum(t, c=#FFFFFF29) = p(cx: 360px; top: 200px; font-size: 413px; line-height: 1; letter-spacing: -0.02em; color: #FFFFFF1A; stroke: {c},3; in: {opacity:0, scale:0.85, duration:4.4, ease:'power1.out'}; content: {t})
+def bignum(t, c=#FFFFFF29) = p(cx: 540px; top: 300px; font-size: 620px; line-height: 1; letter-spacing: -0.02em; color: #FFFFFF1A; stroke: {c},3; in: {opacity:0, scale:0.85, duration:4.4, ease:'power1.out'}; content: {t})
 # 左上の章札 (赤の丸に黄の番号 + 線の icon + 題・赤の縁の暗いピル)
-def chap(n, ic, t, w, tw) = div(left: 37px; top: 117px; width: {w}; height: 51px; background: #080A14BD; border: 2px solid $red; border-radius: 99px; in: {x:-27, opacity:0, duration:0.4, ease:'power3.out'}; out: {opacity:0, duration:0.3})
-  p#n(left: 5px; cy: 50%; width: 39px; font-size: 20px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 99px; padding: 10px 0px; content: {n})
-  svg#i(left: 52px; cy: 50%; width: 27px; height: 27px; part: {ic})
-  p#t(left: 87px; cy: 50%; width: {tw}; font-size: 27px; line-height: 1.2; content: {t})
+def chap(n, ic, t, w, tw) = div(left: 56px; top: 176px; width: {w}; height: 76px; background: #080A14BD; border: 3px solid $red; border-radius: 148px; in: {x:-40, opacity:0, duration:0.4, ease:'power3.out'}; out: {opacity:0, duration:0.3})
+  p#n(left: 8px; cy: 50%; width: 58px; font-size: 30px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 148px; padding: 15px 0px; content: {n})
+  svg#i(left: 78px; cy: 50%; width: 40px; height: 40px; part: {ic})
+  p#t(left: 130px; cy: 50%; width: {tw}; font-size: 40px; line-height: 1.2; content: {t})
 # 囁きの吹き出し (明朝・青い光・ぼけから浮かぶ)
-def whisper(t, s=41) = p(font-family: m; font-size: {s}; line-height: 1.35; color: #EEF4FF; background: #060C1CA3; border: 2px solid #AAC8FF99; border-radius: 24px; padding: 13px 23px 16px 23px; box-shadow: 0px 0px 27px #5A96FF47; text-shadow: 0px 0px 8px #78AAFF99; in: {y:17, opacity:0, blur:9, duration:0.6, ease:'power2.out'}; out: {opacity:0, blur:8, duration:0.9, ease:'power1.in'}; content: {t})
+def whisper(t, s=41) = p(font-family: m; font-size: {s}; line-height: 1.35; color: #EEF4FF; background: #060C1CA3; border: 3px solid #AAC8FF99; border-radius: 36px; padding: 20px 34px 24px 34px; box-shadow: 0px 0px 40px #5A96FF47; text-shadow: 0px 0px 12px #78AAFF99; in: {y:26, opacity:0, blur:14, duration:0.6, ease:'power2.out'}; out: {opacity:0, blur:12, duration:0.9, ease:'power1.in'}; content: {t})
 # 赤縁の丸い窓 + 線の icon
-def orb(ic) = div(top: 427px; width: 240px; height: 240px; border-radius: 120px; background: radial(#1E2846E0,#060812EB,50%,40%); border: 5px solid $red; box-shadow: 0px 0px 33px #E6001280; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}; out: {opacity:0, duration:0.35, ease:'power1.in'})
-  svg#i(left: 53px; top: 53px; width: 133px; height: 133px; part: {ic})
+def orb(ic) = div(top: 640px; width: 360px; height: 360px; border-radius: 180px; background: radial(#1E2846E0,#060812EB,50%,40%); border: 8px solid $red; box-shadow: 0px 0px 50px #E6001280; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}; out: {opacity:0, duration:0.35, ease:'power1.in'})
+  svg#i(left: 80px; top: 80px; width: 200px; height: 200px; part: {ic})
 # 柱の札 (左の赤い縁 + 番号の丸 + icon + 2 行)・2 行目の強調 k は白の地で出て語で赤枠へ移る (変種 .on)
-def pillar(n, ic, l1, k, l2) = div(left: 29px; width: 661px; height: 121px; background: #080C18D6; border: 2px solid #FFFFFF29; border-radius: 15px; box-shadow: 0px 7px 27px #00000080; in: {x:107, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.35, ease:'power1.in'})
-  div#edge(left: 0px; top: 0px; width: 9px; height: 117px; background: $red; border-radius: 13px 0px 0px 13px)
-  p#n(left: 25px; cy: 50%; width: 51px; font-size: 31px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 99px; padding: 10px 0px; content: {n})
-  svg#i(left: 91px; cy: 50%; width: 64px; height: 64px; part: {ic}; delay: 150; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.7)'})
-  p#l1(left: 170px; top: 12px; width: 470px; font-size: 32px; line-height: 1.42; content: {l1})
-  p#k(left: 168px; top: 56px; font-size: 32px; line-height: 1.22; background: #0E040680; border: 4px solid #E6001200; border-radius: 8px; padding: 0px 6px 3px 6px; content: {k})
-  p#l2(left: .k.right+2; top: 58px; width: 215px; font-size: 32px; line-height: 1.42; content: {l2})
+def pillar(n, ic, l1, k, l2) = div(left: 44px; width: 992px; height: 182px; background: #080C18D6; border: 3px solid #FFFFFF29; border-radius: 22px; box-shadow: 0px 10px 40px #00000080; in: {x:160, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.35, ease:'power1.in'})
+  div#edge(left: 0px; top: 0px; width: 14px; height: 176px; background: $red; border-radius: 20px 0px 0px 20px)
+  p#n(left: 38px; cy: 50%; width: 76px; font-size: 46px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 148px; padding: 15px 0px; content: {n})
+  svg#i(left: 136px; cy: 50%; width: 96px; height: 96px; part: {ic}; delay: 150; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.7)'})
+  p#l1(left: 255px; top: 18px; width: 705px; font-size: 48px; line-height: 1.42; content: {l1})
+  p#k(left: 252px; top: 84px; font-size: 48px; line-height: 1.22; background: #0E040680; border: 6px solid #E6001200; border-radius: 12px; padding: 0px 9px 4px 9px; content: {k})
+  p#l2(left: .k.right+3; top: 87px; width: 322px; font-size: 48px; line-height: 1.42; content: {l2})
 
 # 全編の層: 暗幕と周辺減光・grain・上端の進行線 (地 16% の白 + 赤→黄の棒)
 shade#shade
-veil#grain(grain: 0.08; mix-blend-mode: multiply; main: noise {x: 4, y: 4, period: 0.083})
-div#prog_track(left: 0px; top: 0px; width: 720px; height: 5px; background: #FFFFFF29; z-index: front; border-radius: 16px; in: none; out: none)
-progress#prog(left: 0px; top: 0px; width: 720px; height: 5px; background: linear($red,$y,90); until: end; z-index: front; overlap: prog_track)
+veil#grain(grain: 0.08; mix-blend-mode: multiply; main: noise {x: 6, y: 6, period: 0.083})
+div#prog_track(left: 0px; top: 0px; width: 1080px; height: 8px; background: #FFFFFF29; z-index: front; border-radius: 24px; in: none; out: none)
+progress#prog(left: 0px; top: 0px; width: 1080px; height: 8px; background: linear($red,$y,90); until: end; z-index: front; overlap: prog_track)
 
 # 開幕: 夜の街の俯瞰がグリッチで揺れて入り、走査線が上から下へ走る・題を 3 段に語ごとに組み「必要です」を判子で
 section#hook
@@ -118,10 +118,10 @@ img#gs2(inset: 0; object-fit: cover; object-position: bottom; zoom: 200%; clip-p
 img#gs3(inset: 0; object-fit: cover; object-position: bottom; zoom: 200%; clip-path: inset(52% 0 36% 0); opacity: 0; main: none; in: none; out: none) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 img#gs4(inset: 0; object-fit: cover; object-position: bottom; zoom: 200%; clip-path: inset(71% 0 18% 0); opacity: 0; main: none; in: none; out: none) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 img#gs5(inset: 0; object-fit: cover; object-position: bottom; zoom: 200%; clip-path: inset(88% 0 4% 0); opacity: 0; main: none; in: none; out: none) A vast modern city at night seen from high above. Countless windows and smartphone screens glow in the streets like stars. Thin luminous cyan network lines connect the buildings like a giant spider web over the city, and a few of the lines pulse in an ominous red. Calm surface, hidden danger. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
-div#scan.bleed(left: 0px; top: -13px; width: 720px; height: 3px; background: linear(#78F0FF00,#78F0FFE6@25%,#FFFFFF,#78F0FFE6@75%,#78F0FF00,90); box-shadow: 0px 0px 17px 4px #50DCFF8C; in: none; out: none)
-head#t1a(cx: 360px; cy: 449px; s: 64; in: {y:33, opacity:0, duration:0.45, ease:'power3.out'}) テクノロジー犯罪を
-head#t1b(cx: 360px; cy: 538px; s: 64; in: {y:33, opacity:0, duration:0.45, ease:'power3.out'}) 抑制する法律が
-key#t1c(cx: 360px; cy: 669px; width: 418px; text-align: center) 必要です
+div#scan.bleed(left: 0px; top: -20px; width: 1080px; height: 4px; background: linear(#78F0FF00,#78F0FFE6@25%,#FFFFFF,#78F0FFE6@75%,#78F0FF00,90); box-shadow: 0px 0px 26px 6px #50DCFF8C; in: none; out: none)
+head#t1a(cx: 540px; cy: 674px; s: 64; in: {y:50, opacity:0, duration:0.45, ease:'power3.out'}) テクノロジー犯罪を
+head#t1b(cx: 540px; cy: 807px; s: 64; in: {y:50, opacity:0, duration:0.45, ease:'power3.out'}) 抑制する法律が
+key#t1c(cx: 540px; cy: 1004px; width: 627px; text-align: center) 必要です
 
 # 便利な暮らし → 文の途中で「見えない」影の絵へグリッチで替わる・「増えています」で赤い上昇の矢印を描く
 section#life
@@ -130,53 +130,53 @@ img#life_photo(inset: 0; object-fit: cover; object-position: bottom; zoom: 180%;
 img#shadow_photo(inset: 0; content: @shadow; object-fit: cover; object-position: 72% 100%; zoom: 160%; main: kb {scale: [1, 1.06], focus: ['88% 100%', '88% 100%']}; in: {opacity:0, duration:0.12, ease:'power1.inOut'})
 # 爪と小さな人は絵の下 (y 55〜86%) にいるので、この絵の暗幕は下を浅く (55% まで素通し・周辺減光も薄く) して見せる
 shade#life_shade(background: linear(#03050C9E,#03050C00@20%,#03050C00@55%,#03050C59@78%,#03050CB3@92%,#03050CD9,180); life_shade.v.opacity: 0.35)
-shape#up_line(path: "M542 779 L585 739 L613 754 L662 687"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw {duration: 0.6})
-shape#up_head(path: "M628 684 L665 684 L665 721"; background: none; border: 6px solid $line; box-shadow: 0px 0px 11px #FF283CB3; in: draw {duration: 0.6})
+shape#up_line(path: "M542 779 L585 739 L613 754 L662 687"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
+shape#up_head(path: "M628 684 L665 684 L665 721"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
 
 # 大きな壁: 霧の中にそびえる壁の絵・「大きな壁」の札を判子で
 section#wall
 img#wall_photo(inset: 0; object-fit: cover; object-position: 50% 85%; zoom: 190%; main: kb {scale: [1, 1.08], focus: ['50% 85%', '50% 85%']}) Low-angle shot of a small lone person seen from behind, standing in front of an enormous towering dark concrete wall that fills the whole frame and disappears into the fog above. Faint glowing circuit-board lines and cracks run across the wall surface. Overwhelming sense of scale and obstruction, cold mist on the ground. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
-key#wall_key(cx: 360px; cy: 498px; width: 452px; text-align: center; s: 93; in: {scale:2.2, opacity:0, duration:0.26, ease:'power4.in'}; out: {opacity:0, duration:0.35, ease:'power1.in'}) 大きな壁
+key#wall_key(cx: 540px; cy: 747px; width: 678px; text-align: center; s: 93; in: {scale:2.2, opacity:0, duration:0.26, ease:'power4.in'}; out: {opacity:0, duration:0.35, ease:'power1.in'}) 大きな壁
 
 # 章扉 01: ぼかした孤独の絵に薄い巨大な「01」・回りながら出る虫眼鏡・判子の「問題点」・2 段の見出し (2 段目は赤枠の札)
 section#problem
-img#problem_photo(inset: 0; content: @alone; filter: blur(12px); main: kb {scale: [1.12, 1.18]})
+img#problem_photo(inset: 0; content: @alone; filter: blur(18px); main: kb {scale: [1.12, 1.18]})
 bignum#s4n 01
-svg#s4i(left: 284px; top: 337px; width: 153px; height: 153px; part: mag; overlap: s4n; delay: 50; in: {rotation:-25, scale:0.6, opacity:0, duration:0.9, ease:'back.out(1.6)'})
-key#s4l(cx: 360px; cy: 545px; s: 39; overlap: s4n; letter-spacing: 0.12em; border: 5px solid $red; border-radius: 8px; padding: 4px 20px 7px 20px; box-shadow: 0px 0px 15px #E6001273; in: {scale:1.7, opacity:0, duration:0.26, ease:'power4.in'}) 問題点
-head#s4h1(cx: 360px; cy: 645px) 被害者が
-key#s4h2(cx: 360px; cy: 757px; width: 554px; text-align: center; s: 69; line-height: 1.22; border: 7px solid $red; border-radius: 8px; padding: 3px 20px 9px 20px; box-shadow: 0px 0px 15px #E6001273; in: {y:27, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げづらい
+svg#s4i(left: 426px; top: 506px; width: 230px; height: 230px; part: mag; overlap: s4n; delay: 50; in: {rotation:-25, scale:0.6, opacity:0, duration:0.9, ease:'back.out(1.6)'})
+key#s4l(cx: 540px; cy: 818px; s: 39; overlap: s4n; letter-spacing: 0.12em; border: 8px solid $red; border-radius: 12px; padding: 6px 30px 10px 30px; box-shadow: 0px 0px 22px #E6001273; in: {scale:1.7, opacity:0, duration:0.26, ease:'power4.in'}) 問題点
+head#s4h1(cx: 540px; cy: 968px) 被害者が
+key#s4h2(cx: 540px; cy: 1136px; width: 831px; text-align: center; s: 69; line-height: 1.22; border: 10px solid $red; border-radius: 12px; padding: 4px 30px 14px 30px; box-shadow: 0px 0px 22px #E6001273; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げづらい
 
 # 被害者の声: 膝を抱える人の絵に、囁きの吹き出しが 1 つずつぼけから浮かび前の囁きは沈む → 「そんな気持ち」で同じ絵の寄りへ溶けて替わる
 section#voices
 img#alone_photo(inset: 0; content: @alone; object-fit: cover; object-position: bottom; zoom: 150%; main: kb {scale: [1, 1.12], focus: ['52% 100%', '54% 100%']})
 chap#ch1.sticky(n: "01"; ic: mag_b; t: "問題点"; w: 192; tw: 86)
-whisper#w1(left: 40px; top: 280px) 「恥ずかしい…」
-whisper#w2(left: 427px; top: 200px) 「怖い…」
-whisper#w3(left: 47px; top: 393px; s: 37) 「どう相談したら[br]いいのか分からない…」
+whisper#w1(left: 60px; top: 420px) 「恥ずかしい…」
+whisper#w2(left: 640px; top: 300px) 「怖い…」
+whisper#w3(left: 70px; top: 590px; s: 37) 「どう相談したら[br]いいのか分からない…」
 img#alone_zoom(inset: 0; content: @alone; object-fit: cover; object-position: bottom; zoom: 185%; main: kb {scale: [1, 1.07], focus: ['51% 100%', '51% 100%']}; in: {opacity:0, duration:0.3, ease:'power1.inOut'})
 shade#zoom_shade
 
 # デジタル空間: 画素のドームの絵がグリッチで入り、「周囲」で目の窓・「証拠」でフォルダの窓 (前の窓は沈む)
 section#digital
 img#digital_photo(inset: 0; object-fit: cover; object-position: bottom; zoom: 160%; main: kb {scale: [1, 1.1], focus: ['50% 45%', '50% 45%']}) A person standing alone inside a translucent dome made of floating pixels and blurred chat bubbles, notification icons and broken file icons, cut off from the world. Outside the dome, blurred passers-by on a city street walk past without noticing anything. The harm is invisible from outside. Surreal, cold, quiet. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
-orb#o1(left: 80px; ic: eye)
-orb#o2(left: 400px; ic: folder)
+orb#o1(left: 120px; ic: eye)
+orb#o2(left: 600px; ic: folder)
 
 # 長期化: 時計と舞う暦の絵・「長期化」で字幕の下に橙→赤の帯が伸びる
 section#longterm
 img#time_photo(inset: 0; main: kb {scale: [1.06, 1.17], focus: ['50% 40%', '50% 43%']}) A dim room at night: torn pages of a wall calendar fly through the air, a large wall clock looms in the background, and on the desk a smartphone screen glows with many unread message bubbles shown only as shapes. Days passing while suffering continues. Gloomy blue light, slow and heavy atmosphere. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
-div#stretch(left: 107px; top: 928px; width: 507px; height: 11px; background: #FFFFFF24; border-radius: 5px; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.25})
-  div#fill(left: 0px; top: 0px; width: 507px; height: 11px; background: linear(#FF9A00,$red,90); border-radius: 5px; box-shadow: 0px 0px 12px #FF3C00CC; delay: 100; in: {scaleX:0.02, duration:1.76, ease:'power1.inOut', pivot:'left'})
+div#stretch(left: 160px; top: 1392px; width: 760px; height: 16px; background: #FFFFFF24; border-radius: 8px; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.25})
+  div#fill(left: 0px; top: 0px; width: 760px; height: 16px; background: linear(#FF9A00,$red,90); border-radius: 8px; box-shadow: 0px 0px 18px #FF3C00CC; delay: 100; in: {scaleX:0.02, duration:1.76, ease:'power1.inOut', pivot:'left'})
 
 # 章扉 02: 白い閃光 → ぼかした法の絵に「02」・盾の icon・「だからこそ、」と判子の「法律が必要です」
 section#law
-img#law_blur(inset: 0; content: @law; filter: blur(12px); main: kb {scale: [1.1, 1.16]})
+img#law_blur(inset: 0; content: @law; filter: blur(18px); main: kb {scale: [1.1, 1.16]})
 veil#flash(color: #FFFFFF; opacity: 0.6; z-index: curtain; in: {opacity:0, duration:0.08}; out: none)
 bignum#s8n 02
-svg#s8i(left: 277px; top: 373px; width: 167px; height: 167px; part: shield; overlap: s8n; in: {scale:0.5, opacity:0, duration:0.7, ease:'back.out(1.8)'})
-head#s8h1(cx: 360px; cy: 605px) だからこそ、
-key#s8k(cx: 360px; cy: 727px; width: 612px; text-align: center; s: 75; in: {scale:1.8, opacity:0, duration:0.26, ease:'power4.in'}) 法律が必要です
+svg#s8i(left: 416px; top: 560px; width: 250px; height: 250px; part: shield; overlap: s8n; in: {scale:0.5, opacity:0, duration:0.7, ease:'back.out(1.8)'})
+head#s8h1(cx: 540px; cy: 908px) だからこそ、
+key#s8k(cx: 540px; cy: 1090px; width: 918px; text-align: center; s: 75; in: {scale:1.8, opacity:0, duration:0.26, ease:'power4.in'}) 法律が必要です
 
 # 3 つの柱: 文ごとに絵を替え (相談室 → 対応の現場 → 法の盾)、柱の札を右から 1 枚ずつ積む (前の札は沈み、言い終えて戻る)
 section#pillars
@@ -186,55 +186,55 @@ img#team_photo(inset: 0; main: kb {scale: [1.08, 1.18], focus: ['50% 30%', '50% 
 shade#team_shade(team_shade.v.opacity: 0.7)
 img#law_photo(inset: 0; content: @law; object-fit: cover; object-position: 60% 100%; zoom: 186%; main: kb {scale: [1, 1.06], focus: ['60% 100%', '60% 100%']}; in: {opacity:0, duration:0.4, ease:'power1.inOut'})
 shade#law_shade(law_shade.v.opacity: 0.7)
-pillar#pl1(top: 593px; pl1.k.width: 216px; n: 1; ic: chat; l1: "被害者が"; k: "安心して相談"; l2: "できる仕組み")
-pillar#pl2(top: 728px; pl2.k.width: 216px; n: 2; ic: bolt; l1: "専門機関が"; k: "迅速に動ける"; l2: "ルール")
-pillar#pl3(top: 863px; pl3.k.width: 278px; n: 3; ic: scales; l1: "匿名性を悪用した加害行為を、"; k: "確実に取り締まる"; l2: "ための法整備")
-#pl1.k.on(color: $y; background: #0E0406CC; border: 4px solid $red; box-shadow: 0px 0px 15px #E6001273)
-#pl2.k.on(color: $y; background: #0E0406CC; border: 4px solid $red; box-shadow: 0px 0px 15px #E6001273)
-#pl3.k.on(color: $y; background: #0E0406CC; border: 4px solid $red; box-shadow: 0px 0px 15px #E6001273)
+pillar#pl1(top: 890px; pl1.k.width: 324px; n: 1; ic: chat; l1: "被害者が"; k: "安心して相談"; l2: "できる仕組み")
+pillar#pl2(top: 1092px; pl2.k.width: 324px; n: 2; ic: bolt; l1: "専門機関が"; k: "迅速に動ける"; l2: "ルール")
+pillar#pl3(top: 1294px; pl3.k.width: 417px; n: 3; ic: scales; l1: "匿名性を悪用した加害行為を、"; k: "確実に取り締まる"; l2: "ための法整備")
+#pl1.k.on(color: $y; background: #0E0406CC; border: 6px solid $red; box-shadow: 0px 0px 22px #E6001273)
+#pl2.k.on(color: $y; background: #0E0406CC; border: 6px solid $red; box-shadow: 0px 0px 22px #E6001273)
+#pl3.k.on(color: $y; background: #0E0406CC; border: 6px solid $red; box-shadow: 0px 0px 22px #E6001273)
 
 # 見えない暴力: 影の絵を赤く染めてグリッチで入り、「見えない暴力」の札に赤と青緑の写しが左右にずれて消える
 section#violence
 img#violence_photo(inset: 0; content: @shadow; object-fit: cover; object-position: 48% 100%; zoom: 185%; main: kb {scale: [1, 1.06], focus: ['40% 100%', '40% 100%']})
-div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: multiply; border-radius: 16px; in: none)
-head#s10a(cx: 360px; cy: 496px) テクノロジー犯罪は
-group#vk(left: 0px; top: 520px; width: 720px; height: 226px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
+div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: multiply; border-radius: 24px; in: none)
+head#s10a(cx: 540px; cy: 744px) テクノロジー犯罪は
+group#vk(left: 0px; top: 780px; width: 1080px; height: 339px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
   key#m(cx: 50%; cy: 50%; s: 93) 見えない暴力
-  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 8px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220; in: keys(at=0 x=-11 opacity=0.8 | at=0.2 x=7 opacity=0.8 | at=0.4 x=-5 opacity=0.8 | at=0.6 x=3 opacity=0.8 | at=0.8 x=-6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
-  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 8px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220; in: keys(at=0 x=11 opacity=0.8 | at=0.2 x=-7 opacity=0.8 | at=0.4 x=5 opacity=0.8 | at=0.6 x=-3 opacity=0.8 | at=0.8 x=6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 12px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220; in: keys(at=0 x=-11 opacity=0.8 | at=0.2 x=7 opacity=0.8 | at=0.4 x=-5 opacity=0.8 | at=0.6 x=3 opacity=0.8 | at=0.8 x=-6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 12px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220; in: keys(at=0 x=11 opacity=0.8 | at=0.2 x=-7 opacity=0.8 | at=0.4 x=5 opacity=0.8 | at=0.6 x=-3 opacity=0.8 | at=0.8 x=6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
 
 # 社会全体で守る: 光の輪を囲む手の絵・「社会全体」で中央から金色の輪が 4 重に 3 回広がる
 section#society
 img#hands_photo(inset: 0; object-fit: cover; object-position: bottom; zoom: 180%; main: kb {scale: [1, 1.1], focus: ['50% 55%', '50% 55%']}) Many hands of diverse people of different ages and skin tones reaching in from all sides to form a protective circle of warm light around a small glowing figure of a person in the center. The dark background is turning warm and golden where the light spreads. Solidarity, society protecting someone together. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
-shape#ring.ellipse(left: 293px; top: 640px; width: 134px; height: 134px; background: none; border: 4px solid #FFD68C66; mix-blend-mode: screen; in: {scale:0.4, opacity:0, duration:0.3})
+shape#ring.ellipse(left: 440px; top: 960px; width: 201px; height: 201px; background: none; border: 6px solid #FFD68C66; mix-blend-mode: screen; in: {scale:0.4, opacity:0, duration:0.3})
 
 # 章扉 03: 夜明けの絵の芽に寄った構図・温かい縁の「03」・芽の icon・赤枠の「声を上げられる」と「社会へ」
 section#voice_up
 img#dawn_zoom(inset: 0; content: @dawn; object-fit: cover; object-position: bottom; zoom: 260%; main: kb {scale: [1.08, 1], focus: ['50% 100%', '50% 100%']})
 bignum#s12n(c: #FFD68C38) 03
-svg#s12i(left: 280px; top: 381px; width: 160px; height: 160px; part: sprout; overlap: s12n; delay: 180; in: {y:27, scale:0.6, opacity:0, duration:1.2, ease:'power3.out'})
-key#s12h1(cx: 360px; cy: 625px; s: 69; line-height: 1.22; border: 7px solid $red; border-radius: 8px; padding: 3px 20px 9px 20px; box-shadow: 0px 0px 15px #E6001273; in: {y:27, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げられる
-head#s12h2(cx: 360px; cy: 740px) 社会へ
+svg#s12i(left: 420px; top: 572px; width: 240px; height: 240px; part: sprout; overlap: s12n; delay: 180; in: {y:40, scale:0.6, opacity:0, duration:1.2, ease:'power3.out'})
+key#s12h1(cx: 540px; cy: 938px; s: 69; line-height: 1.22; border: 10px solid $red; border-radius: 12px; padding: 4px 30px 14px 30px; box-shadow: 0px 0px 22px #E6001273; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げられる
+head#s12h2(cx: 540px; cy: 1110px) 社会へ
 
 # 二つの声: 相談室の絵に、白い吹き出し (相談していいんだ) と暗い金縁の吹き出し (あなたは ひとりじゃない) が弾んで出る
 section#bubbles
 img#bubbles_photo(inset: 0; content: @consult; main: kb {scale: [1.28, 1.18], focus: ['35% 45%', '35% 45%']})
 chap#ch3.sticky(n: "03"; ic: sprout_b; t: "声を上げられる社会へ"; w: 384; tw: 278)
-p#b1(left: 43px; top: 260px; font-family: m; font-size: 44px; line-height: 1.32; color: #2B2018; background: #FFFAF0F2; border-radius: 29px; padding: 16px 27px 20px 27px; box-shadow: 0px 8px 27px #00000059; shape: speech-bubble; in: {scale:0.6, y:20, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'}) 「相談していいんだ」
-div#b2(left: 220px; top: 767px; width: 463px; height: 165px; background: #16100AD6; border: 2px solid $warm; border-radius: 29px; box-shadow: 0px 8px 27px #00000059; in: {scale:0.6, y:20, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'})
-  p#l1(right: 27px; top: 16px; font-family: m; font-size: 44px; line-height: 1.32) 「あなたは
-  p#k(left: 27px; top: 78px; font-size: 47px; line-height: 1.22; background: #0E040680; border: 5px solid #E6001200; border-radius: 8px; padding: 0px 9px 3px 9px) ひとりじゃない
-  p#q(left: .k.right+2; top: 84px; font-family: m; font-size: 44px; line-height: 1.32) 」
-  svg#tail.bleed(left: 380px; top: 163px; width: 20px; height: 13px; part: tail)
-#b2.k.on(color: $y; background: #0E0406CC; border: 5px solid $red; box-shadow: 0px 0px 15px #E6001273)
+p#b1(left: 64px; top: 390px; font-family: m; font-size: 66px; line-height: 1.32; color: #2B2018; background: #FFFAF0F2; border-radius: 44px; padding: 24px 40px 30px 40px; box-shadow: 0px 12px 40px #00000059; shape: speech-bubble; in: {scale:0.6, y:30, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'}) 「相談していいんだ」
+div#b2(left: 330px; top: 1150px; width: 694px; height: 248px; background: #16100AD6; border: 3px solid $warm; border-radius: 44px; box-shadow: 0px 12px 40px #00000059; in: {scale:0.6, y:30, opacity:0, duration:0.55, ease:'back.out(2.2)'}; out: {opacity:0, duration:0.4, ease:'power1.in'})
+  p#l1(right: 40px; top: 24px; font-family: m; font-size: 66px; line-height: 1.32) 「あなたは
+  p#k(left: 40px; top: 117px; font-size: 70px; line-height: 1.22; background: #0E040680; border: 8px solid #E6001200; border-radius: 12px; padding: 0px 14px 4px 14px) ひとりじゃない
+  p#q(left: .k.right+3; top: 126px; font-family: m; font-size: 66px; line-height: 1.32) 」
+  svg#tail.bleed(left: 570px; top: 244px; width: 30px; height: 20px; part: tail)
+#b2.k.on(color: $y; background: #0E0406CC; border: 8px solid $red; box-shadow: 0px 0px 22px #E6001273)
 
 # 結び: 夜明けの街の全景に、文を語ごとに 4 段で組み「欠かせません」を判子で・最後は黒へ落ちる
 section#closing
 img#dawn_photo(inset: 0; content: @dawn; object-fit: cover; object-position: bottom; zoom: 190%; main: kb {scale: [1, 1.08], focus: ['50% 100%', '50% 100%']})
-head#t2a(cx: 360px; cy: 409px; s: 40; line-height: 1.3; letter-spacing: 0.02em) そう言える社会をつくるために、
-head#t2b(cx: 360px; cy: 491px; s: 64) テクノロジー犯罪を
-head#t2c(cx: 360px; cy: 579px; s: 64) 抑制する法律は
-key#t2d(cx: 360px; cy: 704px; width: 534px; text-align: center; s: 75; in: {scale:1.8, opacity:0, duration:0.26, ease:'power4.in'}) 欠かせません
+head#t2a(cx: 540px; cy: 614px; s: 40; line-height: 1.3; letter-spacing: 0.02em) そう言える社会をつくるために、
+head#t2b(cx: 540px; cy: 736px; s: 64) テクノロジー犯罪を
+head#t2c(cx: 540px; cy: 868px; s: 64) 抑制する法律は
+key#t2d(cx: 540px; cy: 1056px; width: 801px; text-align: center; s: 75; in: {scale:1.8, opacity:0, duration:0.26, ease:'power4.in'}) 欠かせません
 ```
 
 ```timeline.txt
@@ -246,7 +246,7 @@ transition = dissolve,400,overlap=400,ease=power1.inOut
 
 *** hook
 bgm doc
-@n: [silence:0.55s][!#city shake,30,duration=240 -550][!#gs1 to,{x:-90, opacity:1, duration:0.01} -550][!#gs1 to,{x:45, duration:0.07, ease:'steps(1)'} -480][!#gs1 to,{x:-30, duration:0.07, ease:'steps(1)'} -410][!#gs1 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs2 to,{x:70, opacity:1, duration:0.01} -550][!#gs2 to,{x:-35, duration:0.07, ease:'steps(1)'} -480][!#gs2 to,{x:23, duration:0.07, ease:'steps(1)'} -410][!#gs2 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs3 to,{x:-50, opacity:1, duration:0.01} -550][!#gs3 to,{x:25, duration:0.07, ease:'steps(1)'} -480][!#gs3 to,{x:-17, duration:0.07, ease:'steps(1)'} -410][!#gs3 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs4 to,{x:110, opacity:1, duration:0.01} -550][!#gs4 to,{x:-55, duration:0.07, ease:'steps(1)'} -480][!#gs4 to,{x:36, duration:0.07, ease:'steps(1)'} -410][!#gs4 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs5 to,{x:-70, opacity:1, duration:0.01} -550][!#gs5 to,{x:35, duration:0.07, ease:'steps(1)'} -480][!#gs5 to,{x:-24, duration:0.07, ease:'steps(1)'} -410][!#gs5 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][♪impact_bass -550][♪glitch_short -5dB -530][!#scan to,{y:1300, duration:1.1, ease:'power1.inOut'} -500][<#scan +800][♪swing_low -9dB -50][>#t1a]テクノロジー犯罪を[>#t1b][♪swing_low -9dB -50]抑制する法律が[>#t1c -200][♪impact_thud +40][!#t1a shake,9,duration=320 +40][!#t1b shake,9,duration=320 +40][!#t1c shake,9,duration=320 +40]必要です。[silence:0.55s]
+@n: [silence:0.55s][!#city shake,30,duration=240 -550][!#gs1 to,{x:-135, opacity:1, duration:0.01} -550][!#gs1 to,{x:68, duration:0.07, ease:'steps(1)'} -480][!#gs1 to,{x:-45, duration:0.07, ease:'steps(1)'} -410][!#gs1 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs2 to,{x:105, opacity:1, duration:0.01} -550][!#gs2 to,{x:-52, duration:0.07, ease:'steps(1)'} -480][!#gs2 to,{x:34, duration:0.07, ease:'steps(1)'} -410][!#gs2 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs3 to,{x:-75, opacity:1, duration:0.01} -550][!#gs3 to,{x:38, duration:0.07, ease:'steps(1)'} -480][!#gs3 to,{x:-26, duration:0.07, ease:'steps(1)'} -410][!#gs3 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs4 to,{x:165, opacity:1, duration:0.01} -550][!#gs4 to,{x:-82, duration:0.07, ease:'steps(1)'} -480][!#gs4 to,{x:54, duration:0.07, ease:'steps(1)'} -410][!#gs4 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs5 to,{x:-105, opacity:1, duration:0.01} -550][!#gs5 to,{x:52, duration:0.07, ease:'steps(1)'} -480][!#gs5 to,{x:-36, duration:0.07, ease:'steps(1)'} -410][!#gs5 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][♪impact_bass -550][♪glitch_short -5dB -530][!#scan to,{y:1950, duration:1.1, ease:'power1.inOut'} -500][<#scan +800][♪swing_low -9dB -50][>#t1a]テクノロジー犯罪を[>#t1b][♪swing_low -9dB -50]抑制する法律が[>#t1c -200][♪impact_thud +40][!#t1a shake,9,duration=320 +40][!#t1b shake,9,duration=320 +40][!#t1c shake,9,duration=320 +40]必要です。[silence:0.55s]
 transition dissolve,450,overlap=450
 
 *** life
@@ -266,9 +266,9 @@ transition dissolve,600,overlap=600
 [>#subtitle]
 @n: [silence:0.6s][>#ch1 -200]テクノロジー犯罪の被害者は、[silence:0.55s]
 [<#subtitle]
-@v: [>#w1 -150][♪whoosh_soft -12dB -200 to=1.3s][!#w1 to,{y:-11, duration:9.4, ease:'none'} +450]恥ずかしい…[silence:0.6s]
-@: [>#w2 -150][!#w1 dim,0.55 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w2 to,{y:-11, duration:7.1, ease:'none'} +450]怖い…[silence:0.6s]
-@: [>#w3 -150][!#w2 dim,0.55 -100][!#w1 dim,0.4 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w3 to,{y:-11, duration:5.1, ease:'none'} +450]どう相談したらいいのか分からない…[silence:0.9s]
+@v: [>#w1 -150][♪whoosh_soft -12dB -200 to=1.3s][!#w1 to,{y:-16, duration:9.4, ease:'none'} +450]恥ずかしい…[silence:0.6s]
+@: [>#w2 -150][!#w1 dim,0.55 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w2 to,{y:-16, duration:7.1, ease:'none'} +450]怖い…[silence:0.6s]
+@: [>#w3 -150][!#w2 dim,0.55 -100][!#w1 dim,0.4 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w3 to,{y:-16, duration:5.1, ease:'none'} +450]どう相談したらいいのか分からない…[silence:0.9s]
 [>#subtitle]
 @n: [♪heartbeat -11dB -400 fade=800,1600 to=6.2s][>#alone_zoom -120][>#zoom_shade -120][!#shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][!#zoom_shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][<#w1 +700][<#w2 +700][<#w3 +700]そんな気持ちを抱えたまま、[|]{h}ひとりで苦しんで{/}しまうことが[br]多いんです。[silence:0.6s]
 transition dissolve,120,overlap=120
@@ -295,7 +295,7 @@ bgm hope +390
 transition dissolve,120,overlap=120
 
 *** violence
-@n: [silence:0.2s][!#violence_photo shake,30,duration=240 -200][♪glitch_long -6dB -200 to=1.8s][>#s10a -60]テクノロジー犯罪は“[>#vk -220][♪impact_bighit -3dB +20 to=4.3s fade=0,1500][♪glitch_short -6dB +20][!#s10a shake,9,duration=320 +20][!#vk shake,9,duration=320 +20]見えない[!#vk.ghost_r to,{opacity:0.75, x:-5, duration:0.05} +500][!#vk.ghost_c to,{opacity:0.75, x:-5, duration:0.05} +500][!#vk.ghost_r to,{opacity:0, x:0, duration:0.08} +620][!#vk.ghost_c to,{opacity:0, x:0, duration:0.08} +620][♪glitch_short -11dB +500]暴力”。[silence:0.2s]
+@n: [silence:0.2s][!#violence_photo shake,30,duration=240 -200][♪glitch_long -6dB -200 to=1.8s][>#s10a -60]テクノロジー犯罪は“[>#vk -220][♪impact_bighit -3dB +20 to=4.3s fade=0,1500][♪glitch_short -6dB +20][!#s10a shake,9,duration=320 +20][!#vk shake,9,duration=320 +20]見えない[!#vk.ghost_r to,{opacity:0.75, x:-8, duration:0.05} +500][!#vk.ghost_c to,{opacity:0.75, x:-8, duration:0.05} +500][!#vk.ghost_r to,{opacity:0, x:0, duration:0.08} +620][!#vk.ghost_c to,{opacity:0, x:0, duration:0.08} +620][♪glitch_short -11dB +500]暴力”。[silence:0.2s]
 [<#vk.m fade][<#vk.ghost_r fade][<#vk.ghost_c fade]
 transition dissolve,600,overlap=600
 
