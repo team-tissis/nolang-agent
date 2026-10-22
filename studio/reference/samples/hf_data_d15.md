@@ -39,7 +39,7 @@ run nw { font-size: 27px; color: $ink; font-family: n }
 run na2 { font-size: 27px; color: $amber; font-family: n }
 run h { color: $sky }
 p { color: $ink; out: none }
-div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; out: none }
+div { border: none; out: none }
 shape { out: none }
 svg { out: none }
 img { out: none }

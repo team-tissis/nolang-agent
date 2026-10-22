@@ -47,7 +47,7 @@ svg burst = """<svg viewBox="-160 -160 320 320"><polygon points="0.0,-150.0 19.4
 svg clock = """<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="#fff" stroke-width="4"/><line x1="20" y1="20" x2="20" y2="9" stroke="#fff" stroke-width="4" stroke-linecap="round"/><line x1="20" y1="20" x2="28" y2="24" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>"""
 cut { stagger: 0 }
 p { out: none }
-div { border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 img { in: none; out: none }
 bgm#music(fade: 120,1100) テンポが速くコミカルで慌ただしい、焦りを煽るドタバタのBGM
 # 字幕: 白の太字 + 黒の太い縁・中央・句ごとの札 (hf の割り方を [|] で)・札は縮んだ所から弾んで出て、次の札まで残る
@@ -55,7 +55,7 @@ subtitle(left: 0px; top: 928px; width: 720px; font-size: 48px; line-height: 1.2;
 subtitle.small(font-size: 44px)
 
 # 星形の判子「N つ目！」(-8° に傾けて置き、-30° の 0.2 倍から 1.12 倍へ弾んで 1 倍に・退場は縮みながら下の見出しへ落ちる)・出ている間は字幕を消す
-def stamp(n) = div(left: 24px; top: 301px; width: 227px; height: 227px; background: none; transform: rotate(-8deg); hide_subtitle: true; in: keys(at=0 scale=0.2 rotation=-22 opacity=0 | at=0.57 scale=1.12 opacity=1 ease=back(3) | at=1 ease=power1.out),duration=280; out: {scale:.3, x:-40, y:373, opacity:0, duration:.16, ease:'power2.in'})
+def stamp(n) = div(left: 24px; top: 301px; width: 227px; height: 227px; transform: rotate(-8deg); hide_subtitle: true; in: keys(at=0 scale=0.2 rotation=-22 opacity=0 | at=0.57 scale=1.12 opacity=1 ease=back(3) | at=1 ease=power1.out),duration=280; out: {scale:.3, x:-40, y:373, opacity:0, duration:.16, ease:'power2.in'})
   svg#burst(left: 7px; top: 7px; width: 213px; height: 213px; part: burst)
   p#n(cx: 50%; top: 49px; font-size: 100px; line-height: .91; color: $ink; content: {n})
   p#s(cx: 50%; top: 140px; font-size: 33px; line-height: 1.1; color: $ink) つ目！
@@ -69,8 +69,8 @@ def ono(t, w, s=53, c=#FFFFFF) = p(width: {w}; font-size: {s}; line-height: 1.25
 def scene() = img(left: 0px; top: 180px; width: 720px; height: 1100px; z-index: back)
 
 # 常設の層: 題の帯 (紺の地 + 下に黄の線 + 影・白の斜めの縞が全編で左へ流れる)・前置き・題・番号の札 5 つ
-div#header(left: 0px; top: 0px; width: 720px; height: 220px; background: $navy; border-bottom: 4px solid $y; box-shadow: 0px 7px 16px #0000008C; z-index: front; in: none)
-div#stripes.bleed(left: -133px; top: 0px; width: 1000px; height: 216px; pattern: hatch,-45,#FFFFFF0B,48,24; z-index: front; in: none; main: ramp {x: -107})
+div#header(left: 0px; top: 0px; width: 720px; height: 220px; background: $navy; border-bottom: 4px solid $y; box-shadow: 0px 7px 16px #0000008C; z-index: front; border-radius: 16px; in: none)
+div#stripes.bleed(left: -133px; top: 0px; width: 1000px; height: 216px; pattern: hatch,-45,#FFFFFF0B,48,24; z-index: front; border-radius: 16px; in: none; main: ramp {x: -107})
 p#hd_kicker(cx: 360px; top: 57px; font-size: 31px; color: $rose; letter-spacing: .04em; z-index: front; in: none) 【毎週の悪夢】
 p#hd_title(left: 0px; top: 96px; width: 720px; font-size: 53px; line-height: 1.25; text-align: center; color: #FFFFFF; stroke: $ink,8; z-index: front; in: {scale:1.12, duration:.32, ease:'back.out(2)'}) 月曜日が嫌すぎる瞬間{y}5選{/}
 # 番号の札: 淡い枠で並び、項目の頭で黄 (.on)・次の項目で赤 (.done)
@@ -79,12 +79,12 @@ p#pc(left: "229;284;339;394;449"; top: 175px; width: 43px; font-size: 21px; line
 #pc.done(background: #FF3B5CD9; color: #FFFFFF; border: 2px solid #FF3B5CD9)
 # 全編の周辺減光 (場面の絵の直上) と、下半分を沈める暗いグラデ (字幕と見出しの地)
 veil#vig(vignette: 0.5; in: none)
-div#bottomfade(left: 0px; top: 640px; width: 720px; height: 640px; background: linear(#05061400,#05061480@32%,#050614D1@62%,#050614E6,180); in: none)
+div#bottomfade(left: 0px; top: 640px; width: 720px; height: 640px; background: linear(#05061400,#05061480@32%,#050614D1@62%,#050614E6,180); border-radius: 16px; in: none)
 
 # つかみ: 日曜の夜に絶望する彼。青い縦縞の陰が上から降り、震える「明日が来るな…」→ 白の閃光と一緒に「月曜の絶望 あるある5選」が叩きつけられ、番号の札が並ぶ
 section#hook
 scene#p0(in: {scale:1.14, duration:.38, ease:'power3.out'}; main: kb {scale: [1, 1.08], focus: ['33% 36%', '33% 36%']}) [ref:@tsukio]日曜の夜、薄暗いワンルームの部屋。グレーのパーカー姿の彼が床に体育座りし、壁に掛かったカレンダーの赤丸のついたマスを見つめ、真っ青な顔で絶望している。顔の上半分に縦線の影（ガーンという漫画表現）、大粒の冷や汗。窓の外は真っ暗な夜。部屋全体は青紫の暗いトーンで、カレンダーだけがスポットライトのように白く浮かび上がる。
-div#gloom0(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#283CBE8C,19,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .9; in: {scaleY:.2, opacity:0, duration:.35, ease:'power2.out', pivot:'top'}; out: {opacity:0, duration:.5, ease:'power1.in'})
+div#gloom0(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#283CBE8C,19,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .9; border-radius: 16px; in: {scaleY:.2, opacity:0, duration:.35, ease:'power2.out', pivot:'top'}; out: {opacity:0, duration:.5, ease:'power1.in'})
 p#hook1(cx: 360px; top: 667px; font-size: 67px; color: $ice; stroke: $ink,10; text-shadow: 0px 0px 17px #5078FFE6; in: {scale:1.25, duration:.3, ease:'back.out(2.2)'}; main: noise {x: 3, y: 3, period: 0.06, window: '320,2900'}) 明日が来るな…
 p#hook2(left: 0px; top: 740px; width: 720px; font-size: 95px; line-height: 1.12; color: $hy; text-align: center; stroke: $ink,12; text-shadow: 7px 7px 0px $red; hide_subtitle: true; overlap: subtitle; in: {scale:1.6, opacity:0, duration:.2, ease:'back.out(2.4)'}) 月曜の絶望[br]あるある{five}5選{/}
 veil#fl0(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)
@@ -122,7 +122,7 @@ stamp#st3(n: 3)
 veil#fl3(color: #FFFFFF; opacity: .75; z-index: curtain; in: none)
 headline#hl3(c: "アラーム前の[br]{l2}謎の{/}{l2r}微熱チェック{/}"; n: 3)
 # 体温計 (白い管 + 赤い液 = 下を軸に伸び縮み + 赤い球 + 目盛り 38 / 37 / 36)・右から入る
-div#th(left: 600px; top: 313px; width: 80px; height: 347px; background: none; in: {x:147, opacity:0, duration:.22, ease:'back.out(1.8)'})
+div#th(left: 600px; top: 313px; width: 80px; height: 347px; in: {x:147, opacity:0, duration:.22, ease:'back.out(1.8)'})
   div#tube(left: 23px; top: 0px; width: 35px; height: 287px; border-radius: 17px; background: #FFFFFFEB; border: 4px solid $ink)
   div#fill(left: 32px; width: 16px; top: 266px; height: 13px; border-radius: 8px; background: $pink)
   div#bulb(left: 9px; top: 269px; width: 61px; height: 61px; border-radius: 99px; background: $pink; border: 4px solid $ink)
@@ -132,7 +132,7 @@ div#th(left: 600px; top: 313px; width: 80px; height: 347px; background: none; in
 ono#pt1(left: 333px; top: 333px; w: 170; overlap: th; t: ペタ; s: 69; c: $peta; stroke: $ink,10; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
 ono#pt2(left: 440px; top: 393px; w: 170; overlap: th; t: ペタ; s: 69; c: $peta; stroke: $ink,10; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
 # 判定: 「36.5℃」+ 青の札「平熱…」が 1.6 倍から弾む
-div#read(left: 27px; top: 373px; width: 280px; height: 125px; background: none; in: {scale:1.6, opacity:0, duration:.14, ease:'back.out(2.5)'})
+div#read(left: 27px; top: 373px; width: 280px; height: 125px; in: {scale:1.6, opacity:0, duration:.14, ease:'back.out(2.5)'})
   p#t(left: 0px; top: -4px; width: 280px; font-size: 57px; line-height: 1.25; text-align: center; color: #FFFFFF; stroke: $ink,9) 36.5℃
   p#v(cx: 50%; top: 70px; font-size: 35px; line-height: 1.1; background: $blue; border: 3px solid $ink; border-radius: 9px; padding: 3px 15px) 平熱…
 
@@ -141,7 +141,7 @@ section#four
 scene#p4.bleed(content: @walk; main: kb {scale: [1, 1.08], focus: ['45% 17%', '45% 17%']})
 stamp#st4(n: 4)
 headline#hl4(c: "駅へ向かう足が[br]{l2r}鉛{/}{l2}のように重い{/}"; n: 4)
-div#gv(left: 0px; top: 280px; width: 720px; height: 210px; background: none; in: {y:-280, scale:1.3, opacity:0, duration:.18, ease:'power4.in'}; out: {opacity:0, duration:.15})
+div#gv(left: 0px; top: 280px; width: 720px; height: 210px; in: {y:-280, scale:1.3, opacity:0, duration:.18, ease:'power4.in'}; out: {opacity:0, duration:.15})
   p#l(left: 0px; top: -6px; width: 720px; font-size: 61px; line-height: 1.2; text-align: center; color: #FFFFFF; stroke: $ink,9) 重力
   p#x(left: 0px; top: 61px; width: 720px; text-align: center; font-size: 153px; line-height: .95; color: $pink; stroke: $ink,14; text-shadow: 8px 8px 0px $ink; content: "×10")
 # 足元の寄りの丸窓 (同じ絵を 3.2 倍に寄せて鉄球の足元だけ・黄の縁 + 黒の外縁・3° 傾けて弾む)。絵は縁の内側に置く (inset: 0 だと縁を覆う)
@@ -155,8 +155,8 @@ section#five
 scene#p5.bleed(main: kb {scale: [1, 1.08], focus: ['48% 22%', '48% 22%']}) [ref:@tsukio]月曜の朝のオフィスの自分のデスク。紺色のスーツの彼が椅子に座り、卓上カレンダーを前に指を折って何かを数えながら白目になり、口から白い魂がふわっと抜け出しかけている（漫画的な表現）。蛍光灯の白っぽい無機質な光、背景の同僚たちはぼかしたシルエット。
 # 絶望の幕 3 枚 (絵の直上・見出しと札より下): 彩度を抜く・紺を乗算・上から降りる暗い縦縞
 veil#desat(filter: saturate(0.1); in: {opacity:0, duration:.5, ease:'power1.out'})
-div#tint(left: 0px; top: 220px; width: 720px; height: 1060px; background: #1B2350; mix-blend-mode: multiply; opacity: .55; in: {opacity:0, duration:.5, ease:'power1.out'})
-div#gloom5(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#08081E9E,21,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .95; in: {scaleY:.1, opacity:0, duration:.45, ease:'power2.out', pivot:'top'})
+div#tint(left: 0px; top: 220px; width: 720px; height: 1060px; background: #1B2350; mix-blend-mode: multiply; opacity: .55; border-radius: 16px; in: {opacity:0, duration:.5, ease:'power1.out'})
+div#gloom5(left: 0px; top: 220px; width: 720px; height: 600px; pattern: hatch,0,#08081E9E,21,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .95; border-radius: 16px; in: {scaleY:.1, opacity:0, duration:.45, ease:'power2.out', pivot:'top'})
 stamp#st5(n: 5)
 veil#fl5(color: #FFFFFF; opacity: .75; z-index: curtain; in: none)
 # 締め: 声の 0.55 秒後に全面を夜の地の色へ 0.4 秒で落とす (hf の暗転と同じ時刻・最後の frame は真っ暗)

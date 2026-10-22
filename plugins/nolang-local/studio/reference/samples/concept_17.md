@@ -45,13 +45,13 @@ section#ing
 img#ig_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) [photo]木のテーブルの上に並べたパスタの材料を真上から、乾麺のスパゲッティ、しめじ、えのき、バター、醤油の小瓶、にんにく、刻みのり、青ねぎ
 veil#ig_v(color: #2B2118; opacity: 0.35)
 p#ig_h(left: 40px; top: 64px; font-size: 40px; color: $paper; background: $a; border-radius: 99px; padding: 8px 24px; border: 3px solid $ink; in: pop) 材料（2人分）
-div#ig_c(left: 40px; top: 150px; width: 640px; height: 860px; padding: 0px)
+div#ig_c(left: 40px; top: 150px; width: 640px; height: 860px)
 p#ig_i(left: 72px; top: 180px; width: 576px; height: 800px; overlap: ig_c; gap: 14; font-size: 36px; color: $ink; in: {x:-24, opacity:0, duration:0.4, ease:'power3.out'}; display: flex; flex-direction: column) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
 
 section#s1
 img#s1_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 35%', '50% 30%']}) [photo]大きな鍋で沸騰した湯の中にスパゲッティを放射状に入れる手元、湯気、ガスの火
 num#s1_n(left: 40px; top: 64px) 01
-div#s1_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
+div#s1_c(left: 32px; top: 760px; width: 656px; height: 250px)
   ttl#t1(left: 32px; top: 28px; right: 32px) 塩を入れた湯で茹でる
   ttl#t2(left: 32px; top: 84px; right: 32px) 袋の表示より{m}1分短く{/}
   p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) あとでフライパンで仕上げるから
@@ -62,7 +62,7 @@ img#s2_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}) [photo]鉄の�
 num#s2_n(left: 40px; top: 64px) 02
 p#s2_h(right: 40px; top: 80px; font-size: 40px; color: $paper; background: $b; border-radius: 99px; padding: 8px 26px; border: 3px solid $ink; in: pop) 弱火
 #s2_h.hot(background: $a) 強火
-div#s2_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
+div#s2_c(left: 32px; top: 760px; width: 656px; height: 250px)
   ttl#t1(left: 32px; top: 28px; right: 32px) バター＋にんにくで香り
   ttl#t2(left: 32px; top: 84px; right: 32px) きのこを{r}強火{/}で炒める
   p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) バター 20g・にんにく 1片
@@ -78,7 +78,7 @@ p#tp_st(left: 440px; top: 620px; font-size: 44px; color: $ink; background: $c; b
 section#s3
 img#s3_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 40%', '50% 35%']}) [photo]フライパンのきのこにお玉でパスタの茹で汁を注ぎ、醤油を回しかける手元、湯気が立つ
 num#s3_n(left: 40px; top: 64px) 03
-div#s3_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
+div#s3_c(left: 32px; top: 760px; width: 656px; height: 250px)
   ttl#t1(left: 32px; top: 28px; right: 32px) 茹で汁＋醤油を回しかけ
   ttl#t2(left: 32px; top: 84px; right: 32px) よく混ぜて{m}乳化{/}させる
   p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) 醤油 大さじ1.5 を回しかける
@@ -88,7 +88,7 @@ p#s3_b(left: 260px; top: 650px; font-size: 34px; color: $paper; background: $a; 
 section#s4
 img#s4_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 40%'}) [photo]フライパンでスパゲッティときのこをトングで和えている手元、ソースが絡んでつやつや、湯気
 num#s4_n(left: 40px; top: 64px) 04
-div#s4_c(left: 32px; top: 760px; width: 656px; height: 250px; padding: 0px)
+div#s4_c(left: 32px; top: 760px; width: 656px; height: 250px)
   ttl#t1(left: 32px; top: 28px; right: 32px) パスタを和える
   ttl#t2(left: 32px; top: 84px; right: 32px) のりと青ねぎをのせる
   p#q(left: 32px; bottom: 28px; font-size: 28px; color: $mute) さっと和えたら火を止める

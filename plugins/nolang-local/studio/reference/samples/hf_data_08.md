@@ -12,7 +12,6 @@ canvas 1280x720 bg=#F6F1E6
 theme light
 palette navy=#1F3A5F navy_deep=#142A47 slate=#7B8CA3 orange=#E8743B o2=#CF5B22 cream=#F6F1E6 paper=#FBF8F2 ink=#1D2733 gray=#5F6B7B line=#DDD5C6 red=#D2463A red_t=#F9DED9 sky=#BCD6F0
 font "BIZ UDPゴシック Bold"
-shadow_default 0
 sfx off
 master lufs=-16
 # hf の作り: 題・帯・場面の札と見出しは場面の頭に出し台詞が後から読む (図の棒の時刻と目盛りは前の場面で言った値)
@@ -45,7 +44,7 @@ run r { color: $red }
 run num { color: $navy; font-size: 37px }
 run num_o { color: $orange; font-size: 37px }
 p { out: none }
-div { border-radius: 0px; background: #FFFFFF; padding: 0px; border: none; box-shadow: none; out: none }
+div { background: #FFFFFF; out: none }
 img { main: none; out: none }
 shape { out: none }
 icon { out: none }
@@ -109,7 +108,7 @@ group#hanko(left: 1128px; top: 410px; width: 119px; height: 119px; transform: ro
 
 # gaps — 差を図にする: 紙の地に目盛りと棒 2 本 → 差の枠と吹き出し → 斜線と × → 注意の帯 (図ごとゆっくり寄る)
 section#gaps(stagger: {each:0}; out: {x:-93, duration:0.7, ease:'power3.inOut'})
-div#bg_gaps(inset: 0; background: $paper; border-radius: 0; border: none; box-shadow: 0; padding: 0; in: none; out: none; z-index: back)
+div#bg_gaps(inset: 0; background: $paper; in: none; out: none; z-index: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
 group#chart(main: ramp {scale: 0.035, window: '700,20830', pivot: '50%,45%'})
 shape#chart.head_bar(left: 87px; top: 91px; width: 8px; height: 40px; path: rect; background: $orange; delay: 350; in: {y:13, opacity:0, duration:0.55, ease:'power3.out'})

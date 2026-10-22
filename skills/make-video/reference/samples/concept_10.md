@@ -19,7 +19,7 @@ motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: 
 motion div { in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
 motion row { in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
 motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
-div { border-radius: 14px; box-shadow: none; border: 2px solid $line; background: #FBF8F2; in: div }
+div { border-radius: 14px; border: 2px solid $line; background: #FBF8F2; in: div }
 cut { stagger: sentence }
 run a { color: $a }
 run m { marker: #B5523B40 }
@@ -49,7 +49,7 @@ veil#w_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#w_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#w_k(left: 48px; top: 96px) 就職の迷い
 h1#w_h(left: 48px; top: 140px) やりたいことが[br]{a}ない{/}まま
-div#w_c(left: 48px; top: 890px; width: 624px; height: 130px; padding: 0px)
+div#w_c(left: 48px; top: 890px; width: 624px; height: 130px)
   icon#i(left: 32px; cy: 50%; font-size: 56px; name: question; color: $a)
   p#t(left: 110px; cy: 50%; font-size: 36px; font-family: m; color: $ink) 迷う人は、{m}多い{/}のでは
 
@@ -59,7 +59,7 @@ veil#s_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#s_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#s_k(left: 48px; top: 96px) JEAN-PAUL SARTRE
 h1#s_h(left: 48px; top: 140px) サルトル
-div#s_q(left: 48px; top: 780px; width: 420px; height: 96px; padding: 0px)
+div#s_q(left: 48px; top: 780px; width: 420px; height: 96px)
   p#t(left: 28px; cy: 50%; font-size: 36px; color: $ink) {s}気持ちで決める{/}
 note#s_qn(left: 484px; top: 812px) 教え子の言葉
 chip#s_a(left: 48px; top: 900px; width: 220px; text-align: center) 行動
@@ -84,9 +84,9 @@ veil#c_vt(color: $paper; opacity: 0.96; to: top; start: 0.65)
 veil#c_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#c_k(left: 48px; top: 96px) 結論
 h1#c_h(left: 48px; top: 140px) やりたいことは、[br]選ぶ前の{a}条件{/}にできない
-div#c_r1(left: 48px; top: 800px; width: 624px; height: 96px; padding: 0px)
+div#c_r1(left: 48px; top: 800px; width: 624px; height: 96px)
   p#t(left: 32px; cy: 50%; font-size: 34px; font-family: m; color: $mute) {x}意識が向く → 関わる{/}
-div#c_r2(left: 48px; top: 916px; width: 624px; height: 110px; padding: 0px; border: 3px solid $a)
+div#c_r2(left: 48px; top: 916px; width: 624px; height: 110px; border: 3px solid $a)
   p#t(left: 32px; cy: 50%; font-size: 40px; color: $ink) 関わる → {a}意識が向く{/}
 #c_r2.on(background: #F6E3DC)
 

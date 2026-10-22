@@ -38,7 +38,7 @@ lint off=ghost_dissolve
 # 題と締めは白地のロゴだけの 1 枚 (hf の作り)
 lint off=text_only_cut,sparse_cut
 p { color: $ink; out: none }
-div { padding: 0px; border: none; box-shadow: none; background: none; out: none }
+div { out: none }
 img { out: none }
 shape { out: none }
 icon { out: none }
@@ -72,8 +72,8 @@ def photo_tag(ic, t) = div(width: 320px; height: 104px; background: #FFFFFFF2; b
   icon#i(left: 27px; cy: 50%; font-size: 20px; name: {ic}; color: #5D6D80)
   p#t(left: 69px; cy: 50%; font-size: 27px; line-height: 1.35; content: {t})
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
-def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back)
-def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0; border-radius: 0px)
+def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back; border-radius: 16px)
+def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
   shape#r1.ellipse(left: {x1}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp {scale: 0.08})
   shape#r2.ellipse(left: {x2}; top: {y}; width: {d}; height: {d}; background: none; border: 1px solid #1F6FE01F; main: ramp {scale: 0.08})
 def wordmark(y) = p(cx: 640px; top: {y}; font-size: 100px; font-family: e; in: {y:27, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
@@ -88,11 +88,11 @@ def tablet() = div(width: 787px; height: 533px; border-radius: 31px; background:
   div#sd(left: 519px; top: 63px; width: 256px; height: 459px; background: #EEF3F9; border-radius: 0,0,20,0)
     p#br(left: 19px; top: 430px; font-size: 11px; font-family: e; color: $a) Live {nv}Assist{/}
 # 1 枚目の page: 契約変更の form (段の札 4 つ・項目 3 行・次へ)。×N は 1 枠 + flex で等分し、×N の子は 1 段まで (入力の字は入力枠の兄弟)
-def form_page() = div(border-radius: 0px; width: 507px; height: 459px)
+def form_page() = div(width: 507px; height: 459px)
   p#t(left: 29px; top: 20px; font-size: 23px; font-family: b; letter-spacing: 0.05em) ご契約内容の変更
   div#st(left: 29px; top: 61px; width: 441px; height: 25px; display: flex; gap: 7px; border-radius: 13px; background: "#DBE9FB;$a;#E9EEF5;#E9EEF5") ×4
     p#t(cx: 50%; cy: 50%; font-size: 11px; color: "$a;#FFFFFF;#8A97A6;#8A97A6") 1 お客様情報;2 プラン選択;3 お支払い;4 確認
-  div#row(border-radius: 0px; left: 29px; top: 100px; width: 448px; height: 204px; display: flex; flex-direction: column; gap: 0px) ×3
+  div#row(left: 29px; top: 100px; width: 448px; height: 204px; display: flex; flex-direction: column; gap: 0px) ×3
     p#lb(left: 0px; top: 0px; font-size: 12px; color: $gray) ご契約者名;ご契約プラン;ご利用開始日
     div#in(left: 0px; top: 17px; width: 448px; height: 39px; border-radius: 7px; background: #FFFFFF; border: 1px solid #D5DEE9)
     p#v(left: 13px; top: 27px; font-size: 15px) 佐藤 美咲;{ph}選択してください{/};2026年11月1日
@@ -100,14 +100,14 @@ def form_page() = div(border-radius: 0px; width: 507px; height: 459px)
   div#btn(left: 29px; top: 316px; width: 200px; height: 41px; border-radius: 21px; background: $a; box-shadow: 0px 5px 12px #1F6FE040)
     p#t(cx: 50%; cy: 50%; font-size: 15px; font-family: b; color: #FFFFFF; letter-spacing: 0.1em) 次へ進む
 # 2 枚目の page: 契約内容の確認 (項目の札 4 枚)
-def plan_page() = div(border-radius: 0px; width: 507px; height: 459px)
+def plan_page() = div(width: 507px; height: 459px)
   p#t(left: 29px; top: 20px; font-size: 23px; font-family: b; letter-spacing: 0.05em) ご契約内容の確認
   p#s(left: 29px; top: 56px; font-size: 12px; color: $gray) 現在のご契約内容をご確認いただけます
   div#ic(left: 29px; top: 87px; width: 448px; height: 266px; display: flex; flex-direction: column; gap: 10px; border-radius: 8px; background: #FFFFFF; border: 1px solid #E3E9F1) ×4
     p#k(left: 16px; top: 9px; font-size: 11px; color: $gray) 現在のご契約プラン;オプション;お支払い方法;次回更新日
     p#v(left: 16px; top: 27px; font-size: 17px; font-family: b) スタンダードプラン;安心サポートパック;クレジットカード（**** 1234）;2027年3月31日
 # 画面に差す部品: 通話中の側板 (スタッフの映像・名の帯・通話の釦 3 つ)・操作の案内・form の上に開くプランの一覧・スタッフのメッセージ
-def call_panel() = div(border-radius: 0px; width: 256px; height: 330px)
+def call_panel() = div(width: 256px; height: 330px)
   img#fd(left: 19px; top: 19px; width: 219px; height: 157px; border-radius: 9px; content: @staff; object-fit: cover; object-position: 50% 30%)
   p#lv(left: 27px; top: 27px; font-size: 9px; color: #FFFFFF; background: #0E2A478C; border-radius: 99px; padding: 4px 8px) {gn}●{/} 通話中
   p#nm(left: 19px; top: 150px; width: 219px; padding: 6px 9px 6px 9px; font-size: 10px; color: #FFFFFF; letter-spacing: 0.05em; background: #0E2A4773; border-radius: 9px) 高橋（サポート担当）
@@ -122,7 +122,7 @@ def help_panel() = div(width: 219px; height: 220px; border-radius: 11px; backgro
   div#b(left: 19px; top: 164px; width: 181px; height: 37px; border-radius: 19px; background: $a)
     p#t(cx: 50%; cy: 50%; font-size: 13px; font-family: b; color: #FFFFFF) スタッフにつなぐ
 def dropdown() = div(width: 448px; height: 144px; border-radius: 8px; background: #FFFFFF; box-shadow: 0px 12px 27px #0E2A4729; in: {y:-5, opacity:0, duration:0.3, ease:'power2.out'}; out: fade {duration: 0.3})
-  div#hv(left: 0px; top: 36px; width: 448px; height: 36px; background: #F0F5FC)
+  div#hv(left: 0px; top: 36px; width: 448px; height: 36px; background: #F0F5FC; border-radius: 16px)
   p#o1(left: 15px; top: 9px; font-size: 14px) スタンダードプラン
   p#o2(left: 15px; top: 45px; font-size: 14px) スタンダードプラス
   p#o3(left: 15px; top: 81px; font-size: 14px) プレミアムプラン
@@ -202,7 +202,7 @@ telop#fc_tel {bb}顔を見ながら{/}、状況に合わせてサポート
 
 # STEP 02: スタッフの写真 + 共有中のタブレット。カーソルが動き、画面に寄って強調枠と吹き出しで案内
 section#share_screen
-div#sc_bg(inset: 0; background: $paper)
+div#sc_bg(inset: 0; background: $paper; border-radius: 16px)
 img#pn_s(left: 0px; top: 0px; width: 573px; height: 720px; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
 tablet#ts(left: 612px; top: 147px; scale: 0.8; delay: 200; in: {x:293, duration:0.9, ease:'power3.out'})
   form_page#p1(left: 10px; top: 50px; scale: 0.8)
@@ -254,7 +254,7 @@ telop#dc_tel 資料や書類も、{bb}その場で共有{/}
 
 # STEP 05: 左に写真・右に進行の板 (段ごとに ✓ と縦線が伸び → 完了の板) → 完了の写真が覆う
 section#procedure
-div#pr_bg(inset: 0; background: $paper)
+div#pr_bg(inset: 0; background: $paper; border-radius: 16px)
 img#pr_p(left: 0px; top: 0px; width: 653px; height: 720px; main: kb {scale: [1, 1.07], focus: '21% 50%'}) [ref:@cust]Medium shot of the same woman at a white dining table at home, entering information on a white tablet with her finger, calm and focused, a cup of tea and a pen beside her, a printed document on the table; the screen shows a simple form with blue progress steps
 div#fl(left: 701px; top: 80px; width: 520px; height: 560px; border-radius: 15px; background: #FFFFFF; border: 1px solid $rule; box-shadow: 0px 20px 53px #0E2A4724; delay: 300; in: {x:40, opacity:0, duration:0.8, ease:'power3.out'})
   p#h(left: 32px; top: 29px; font-size: 21px; font-family: b; letter-spacing: 0.06em) お手続きの進行状況
@@ -265,7 +265,7 @@ div#fl(left: 701px; top: 80px; width: 520px; height: 560px; border-radius: 15px;
     p#b(left: 112px; top: 47px; font-size: 12px; color: $gray) {gn}●{/} Live Assist で通話中
   div#vl(left: 48px; top: 248px; width: 2px; height: 200px; background: $rule)
   div#vf(left: 48px; top: 248px; width: 2px; height: 2px; background: $a)
-  div#s(border-radius: 0px; left: 32px; top: "216;283;349;416"; width: 456px; height: 64px) ×4
+  div#s(left: 32px; top: "216;283;349;416"; width: 456px; height: 64px) ×4
     shape#d.ellipse(left: 0px; cy: 50%; width: 35px; height: 35px; background: #FFFFFF; border: 2px solid $line)
     p#n(left: 13px; cy: 50%; font-size: 14px; font-family: e; color: $mute) 1;2;3;4
     p#nm(left: 51px; cy: 50%; font-size: 18px; color: $mute; letter-spacing: 0.05em) お客様情報の入力;ご契約プランの選択;お支払い方法の登録;内容の確認・完了
@@ -298,7 +298,7 @@ section#values
 soft_bg#vl_bg
 img#vp(left: "80;467;853"; top: 77px; width: 347px; height: 347px; border-radius: 12px; box-shadow: 0px 13px 33px #0E2A4724; in: {y:20, opacity:0, duration:0.8, ease:'power3.out'}; main: kb {scale: [1.12, 1]}) ×3 [ref:@cust]Tight close-up of the same woman looking at a tablet just below frame with a warm genuine smile, soft window light, creamy bokeh of the white living room, 85mm lens;[ref:@staff]The same staff woman working in a calm bright flexible workspace by a large window with plants and a light wood table, smiling while talking on a video call through a slim laptop;[photo]A modern Japanese corporate meeting room with large windows over a bright city, a small team of Japanese business people reviewing a large wall display showing an abstract customer-engagement dashboard with blue charts and connecting lines
 #vp.dim(opacity: 0.32)
-div#vc(border-radius: 0px; left: "80;467;853"; top: 454px; width: 347px; height: 196px; in: {y:12, opacity:0, duration:0.6, ease:'power3.out'}) ×3
+div#vc(left: "80;467;853"; top: 454px; width: 347px; height: 196px; in: {y:12, opacity:0, duration:0.6, ease:'power3.out'}) ×3
   p#k(left: 3px; top: 0px; font-size: 11px; font-family: e; color: $a; letter-spacing: 0.26em) FOR CUSTOMERS;FOR STAFF;FOR BUSINESS
   p#n(left: 0px; top: 24px; font-size: 31px; font-family: b; letter-spacing: 0.1em) お客様;スタッフ;企業
   shape#ul(left: 0px; top: 66px; width: 40px; height: 2px; path: rect; background: $a; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.out', delay: 0.4})
@@ -307,7 +307,7 @@ div#vc(border-radius: 0px; left: "80;467;853"; top: 454px; width: 347px; height:
 # 人: スタッフの寄り + 右へ白む幕に 2 段の言葉 (「人。」は語で)
 section#human
 img#hm_p(inset: 0; main: kb {scale: [1.12, 1.17], focus: ['80% 50%', '87% 50%']}) [ref:@staff]Tight close-up of the same staff woman, warm genuine smile, looking slightly off-camera toward her monitor, speaking softly into the headset microphone, soft key light from the window, creamy bokeh of the bright office, 85mm lens
-div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); delay: 200; in: fade {duration: 0.8})
+div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); border-radius: 16px; delay: 200; in: fade {duration: 0.8})
 p#hm1(left: 833px; top: 208px; font-size: 37px; font-family: r; letter-spacing: 0.12em; line-height: 1.55; in: {y:11, opacity:0, duration:0.7, ease:'power2.out'}) テクノロジーの[br]先にいるのは、
 p#hm2(left: 829px; top: 333px; font-size: 112px; letter-spacing: 0.06em; in: {y:16, opacity:0, duration:0.9, ease:'power3.out'}) {a}人{/}。
 

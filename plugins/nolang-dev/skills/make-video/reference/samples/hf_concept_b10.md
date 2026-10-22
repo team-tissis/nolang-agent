@@ -40,7 +40,7 @@ sound click = "マウスのカチッという短いクリック音"
 run hl { marker: $butter,37%; border-radius: 9px; padding: 4px }
 run ng { marker: #DDD5FB,37%; border-radius: 9px; padding: 4px }
 p { color: $ink; out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
-div { border: none; box-shadow: none; padding: 0px; out: {y:-47, scale:.9, rotation:1.5, opacity:0, duration:.22, ease:'power2.in'} }
+div { out: {y:-47, scale:.9, rotation:1.5, opacity:0, duration:.22, ease:'power2.in'} }
 shape { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 icon { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 group { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
@@ -55,13 +55,13 @@ bgm#music(fade: 250,2600) 明るく軽快なアコースティックポップ、
 subtitle.hug(top: 867px; width: 680px; font-size: 37px; line-height: 1.36; text-align: center; color: $ink; background: #FFFFFF; border-radius: 28px; padding: 15px 28px 17px 28px; box-shadow: 0px 12px 27px #785A3C1A; unit: sentence; lead: 0; tail: 10000; hold: next,1200; in: {y:23, scale:.94, opacity:0, duration:.24, ease:'back.out(1.8)'}; out: {y:-9, opacity:0, duration:.14, ease:'power1.in'})
 
 # 地 (全編・最背面): 地の色 (語で塗り替える) → 漂う色の光 5 つ → 点の地紋 → 下端の丘 3 つ → 回りながら漂う菱形 5 つ
-div#tint(inset: 0; background: $cream; border-radius: 0px; z-index: back; in: none; out: none)
+div#tint(inset: 0; background: $cream; z-index: back; in: none; out: none)
 div#b1(left: -187px; top: -133px; width: 520px; height: 520px; border-radius: 260px; background: radial(#FFB8A39E,#FFB8A300@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=80 y=64 ease=none | at=0.5 x=16 y=107 ease=none | at=0.75 x=64 y=32 ease=none | at=1 ease=none),duration=60000)
 div#b2(left: 373px; top: 253px; width: 573px; height: 573px; border-radius: 287px; background: radial(#9EE3C899,#9EE3C800@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-93 y=48 ease=none | at=0.5 x=-19 y=80 ease=none | at=0.75 x=-75 y=24 ease=none | at=1 ease=none),duration=60000)
 div#b3(left: -200px; top: 640px; width: 507px; height: 507px; border-radius: 254px; background: radial(#C9BDFF8C,#C9BDFF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=107 y=-56 ease=none | at=0.5 x=21 y=-93 ease=none | at=0.75 x=85 y=-28 ease=none | at=1 ease=none),duration=60000)
 div#b4(left: 373px; top: 867px; width: 467px; height: 467px; border-radius: 234px; background: radial(#FFE38A9E,#FFE38A00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-80 y=-64 ease=none | at=0.5 x=-16 y=-107 ease=none | at=0.75 x=-64 y=-32 ease=none | at=1 ease=none),duration=60000)
 div#b5(left: 200px; top: -200px; width: 400px; height: 400px; border-radius: 200px; background: radial(#BFE3FF99,#BFE3FF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=60 y=44 ease=none | at=0.5 x=12 y=73 ease=none | at=0.75 x=48 y=22 ease=none | at=1 ease=none),duration=60000)
-div#dots(inset: 0; background: none; pattern: dots,31,#4A3B331A; border-radius: 0px; z-index: back; in: none; out: none)
+div#dots(inset: 0; pattern: dots,31,#4A3B331A; z-index: back; in: none; out: none)
 shape#h1.ellipse.bleed(left: -307px; top: 1060px; width: 1000px; height: 507px; background: #D9F2E6; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=40 ease=none | at=0.5 x=-13 ease=none | at=0.75 x=20 ease=none | at=1 ease=none),duration=60000)
 shape#h2.ellipse.bleed(left: 213px; top: 1100px; width: 867px; height: 467px; background: #FFE4D9; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=-47 ease=none | at=0.5 x=7 ease=none | at=0.75 x=-27 ease=none | at=1 ease=none),duration=60000)
 shape#h3.ellipse.bleed(left: -80px; top: 1173px; width: 600px; height: 347px; background: #ECE7FF; z-index: back; in: none; out: none)
@@ -69,7 +69,7 @@ shape#h3.ellipse.bleed(left: -80px; top: 1173px; width: 600px; height: 347px; ba
 def gem(c) = div(border-radius: 5px; background: {c}; transform: rotate(45deg))
 gem#bgs(left: "68;622;127;572;354"; top: "978;1002;1127;1152;1101"; width: "18;22;13;15;11"; height: "18;22;13;15;11"; c: "$butter;$mint;$peach;$lav;#FFFFFF"; z-index: back; in: none; out: none; main: keys(at=0 y=0 rotation=0 | at=0.1667 y=-12 rotation=45 ease=none | at=0.3333 y=0 rotation=90 ease=none | at=0.5 y=-8 rotation=135 ease=none | at=0.6667 y=0 rotation=180 ease=none | at=0.8333 y=-11 rotation=225 ease=none | at=1 rotation=270 ease=none),duration=60000) ×5
 # 上端の進行線 (淡い地 + 珊瑚 → 橙 → 緑のグラデの棒が 60 秒で伸びる)
-div#track(left: 0px; top: 0px; width: 720px; height: 8px; background: #4A3B3314; border-radius: 0px; z-index: front; in: none; out: none)
+div#track(left: 0px; top: 0px; width: 720px; height: 8px; background: #4A3B3314; z-index: front; in: none; out: none)
 progress#bar(left: 0px; top: 0px; width: 720px; height: 8px; background: linear(#FF8F7A,#FFC46B,#5CCFA5,90); until: end; z-index: front; overlap: track)
 
 # 部品
@@ -82,7 +82,7 @@ def card(src) = div(left: 60px; top: 167px; width: 600px; height: 600px; border-
 def mini(src) = div(top: 313px; width: 313px; height: 313px; border-radius: 35px; background: #FFFFFF; box-shadow: 0px 17px 33px #785A3C26; out: {y:-40, opacity:0, duration:.22, ease:'power2.in'})
   img#img(left: 9px; top: 9px; width: 295px; height: 295px; border-radius: 27px; main: none; content: {src})
 # × の判子 (白い縁の赤い太い棒 2 本を ±45°・大きく回って叩きつけられる)
-def ngx(w, h) = div(cx: 50%; cy: 50%; width: {w}; height: {w}; background: none; z-index: front; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
+def ngx(w, h) = div(cx: 50%; cy: 50%; width: {w}; height: {w}; z-index: front; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
   div#a(left: 0px; cy: 50%; width: {w}; height: {h}; border-radius: 99px; background: $ngc; box-shadow: 0px 0px 0px 6px #FFFFFF; transform: rotate(45deg))
   div#b(left: 0px; cy: 50%; width: {w}; height: {h}; border-radius: 99px; background: $ngc; box-shadow: 0px 0px 0px 6px #FFFFFF; transform: rotate(-45deg))
 # 原則の札 (紫の地・白い縁・白い丸札の番号 + 名 + 小さな英名)・板は群の中の兄弟 (文字が板の上に乗るのを check が読める形)
@@ -140,7 +140,7 @@ group#b3(in: {opacity:0, duration:.05, stagger:.03}; out: none)
 mini#c3a(left: 30px; src: "[ref:@hero]The young woman stands still holding a huge unrolled blueprint plan that is taller than she is, with a big wall clock and a large hourglass behind her, looking bored and tired of waiting for the perfect plan."; transform: rotate(-2.5deg); in: {x:-40, y:73, scale:.82, rotation:-7.5, opacity:0, duration:.6, ease:'back.out(1.5)'})
   ngx#ng(w: 187; h: 31)
 mini#c3b(left: 377px; src: "@bag"; transform: rotate(2.5deg); in: {x:53, y:73, scale:.82, rotation:7.5, opacity:0, duration:.6, ease:'back.out(1.5)'})
-  div#ok(cx: 50%; cy: 50%; width: 167px; height: 167px; border-radius: 99px; background: none; z-index: front; border: 24px solid $mintd; box-shadow: 0px 0px 0px 6px #FFFFFF; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
+  div#ok(cx: 50%; cy: 50%; width: 167px; height: 167px; border-radius: 99px; z-index: front; border: 24px solid $mintd; box-shadow: 0px 0px 0px 6px #FFFFFF; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
 icon#arrow3(left: 331px; top: 441px; font-size: 27px; name: play; weight: fill; color: #FFFFFF; background: $coral; border: 5px solid #FFFFFF; in: {scale:.2, opacity:0, duration:.45, ease:'back.out(2.2)'})
 p#l3a(left: 20px; top: 657px; width: 333px; font-size: 36px; font-family: m; line-height: 1.25; text-align: center; color: $neglabel; in: {y:13, scale:.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 完璧な計画を[br]待つ
 p#l3b(left: 367px; top: 657px; width: 333px; font-size: 36px; font-family: m; line-height: 1.25; text-align: center; color: $mintd; in: {y:13, scale:.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 今あるものから[br]始める
@@ -201,7 +201,7 @@ sticker#st7b(t: "手元にあるもので今すぐ動く"; c: $mint; r: 2; overl
 # recap — まとめ: 5 枚の小カード (前の場面の絵 + 番号の丸札と原則名) が順に弾み、題「エフェクチュエーション の考え方」→ カードが順に跳ねる
 section#recap(out: {scale:.85, opacity:0, duration:.22, ease:'power2.in'})
 # まとめの小カード (白い枠の絵 + 紫の番号の丸札つきの原則名)・入場の stagger で順に弾む
-def rc(src, n, t) = div(width: 253px; height: 240px; background: none; in: {scale:.3, rotation:-8, opacity:0, duration:.5, ease:'back.out(2.2)', stagger:.16})
+def rc(src, n, t) = div(width: 253px; height: 240px; in: {scale:.3, rotation:-8, opacity:0, duration:.5, ease:'back.out(2.2)', stagger:.16})
   div#f(left: 33px; top: 0px; width: 187px; height: 187px; border-radius: 29px; background: #FFFFFF; box-shadow: 0px 13px 24px #785A3C24)
     img#img(left: 7px; top: 7px; width: 173px; height: 173px; border-radius: 24px; main: none; content: {src})
   p#t(cx: 50%; top: 196px; font-size: 21px; font-family: r; line-height: 1.1; white-space: nowrap; padding: 0px 0px 0px 34px; content: {t})
@@ -214,7 +214,7 @@ group#rc_title(in: {y:-20, scale:.4, opacity:0, duration:.55, ease:'back.out(2.2
 # cta — 案内: 記事と対談の 2 枚のカード → 語ごとに札・概要欄 / コメント欄の札 → 珊瑚のボタン → カーソルが来て押す → 下向きの三角が揺れ続ける
 section#cta
 # 案内のカード (白い枠の絵 + 語で弾むバターの札)
-def kcard(src, l, r=-2) = div(width: 300px; height: 370px; background: none; in: {scale:.4, rotation:-8, opacity:0, duration:.55, ease:'back.out(2.2)'})
+def kcard(src, l, r=-2) = div(width: 300px; height: 370px; in: {scale:.4, rotation:-8, opacity:0, duration:.55, ease:'back.out(2.2)'})
   div#f(left: 0px; top: 0px; width: 300px; height: 300px; border-radius: 35px; background: #FFFFFF; box-shadow: 0px 17px 33px #785A3C26)
     img#img(left: 9px; top: 9px; width: 282px; height: 282px; border-radius: 27px; main: none; content: {src})
   p#l(cx: 50%; top: 312px; font-size: 31px; font-family: m; line-height: 1; background: $butter; border: 4px solid #FFFFFF; border-radius: 99px; padding: 9px 21px 12px 21px; box-shadow: 0px 5px 0px #4A3B331A; rotation: {r}; in: {scale:.3, rotation:-6, opacity:0, duration:.45, ease:'back.out(2.2)'}; content: {l})

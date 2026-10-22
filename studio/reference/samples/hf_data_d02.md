@@ -94,7 +94,7 @@ sound whoosh = "低めの柔らかい空気のヒュッという風切り、ほ�
 image paper = "[photo]温かいクリーム色 (生成り) の再生紙の白紙 1 枚を真上から撮った写真が画面いっぱいに広がる。細かな紙の繊維、ごく小さな斑点、ゆるやかな濃淡のむら。物も影も折り目も縁も文字も無い、継ぎ目のない一様な紙の質感の背景" aspect=16:9
 image park = "雨の日の郊外の公園沿いのカフェ。濡れた木のテラスに人のいない椅子と閉じたパラソル、小道に水たまり、雨の中の木々、外に客はおらず店内に静かな暖かい灯り。画面いっぱいに風景を描き余白を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。文字・数字・ロゴ・看板の文字は一切入れない" aspect=3:2
 p { color: $ink; out: none }
-div { background: none; border: none; box-shadow: none; padding: 0px; out: none }
+div { out: none }
 img { out: none }
 shape { out: none }
 icon { out: none }
@@ -205,7 +205,7 @@ board#b2(left: 460px; top: 175px; width: 747px; height: 433px; t: "図1　月別
   div#bar(left: "51;106;161;215;270;325;379;434;489;543;598;653"; top: "231;260;288;303;274;217;202;217;116;174;245;188"; width: 37px; height: "129;100;72;57;86;143;158;143;244;186;115;172"; border-radius: 5px 5px 1px 1px; background: "#9FBDD2;#9FBDD2;#9FBDD2;#9FBDD2;#9FBDD2;#9FBDD2;#9FBDD2;#9FBDD2;#3A6180;#3A6180;#9FBDD2;#9FBDD2"; delay: 550; in: {scaleY:0, duration:0.55, ease:'back.out(1.4)', pivot:'bottom', stagger: {each: 0.07}}) ×12
   p#val(left: "42;97;152;206;261;316;370;425;480;534;589;644"; top: "200;229;257;272;243;186;171;186;85;143;214;157"; width: 56px; font-size: 23px; font-family: n; text-align: center; color: "$ink;$ink;$ink;$ink;$ink;$ink;$ink;$ink;$rain_d;$rain_d;$ink;$ink"; delay: 800; in: {y:8, opacity:0, duration:0.35, ease:'power2.out', stagger: {each: 0.07}}) ×12 9;7;5;4;6;10;11;10;17;13;8;12
   p#mo(left: "42;97;152;206;261;316;370;425;480;534;589;644"; top: 368px; width: 56px; font-size: 16px; font-family: m; text-align: center; color: $ink2) ×12 10月;11月;12月;1月;2月;3月;4月;5月;6月;7月;8月;9月
-  div#yr(left: "47;211"; top: 395px; width: "156;484"; height: 22px; border-top: 1px solid #3A2A1E38; delay: 1150; in: {y:23, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.1}}) ×2
+  div#yr(left: "47;211"; top: 395px; width: "156;484"; height: 22px; border-top: 1px solid #3A2A1E38; border-radius: 16px; delay: 1150; in: {y:23, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.1}}) ×2
     p#t(left: 0px; top: 5px; width: 100%; font-size: 13px; text-align: center; color: $ink2) 2025年;2026年
   # 6〜7 月のかぎ (上の線 + 両端の短い縦線・下から立つ)
   div#br(left: 487px; top: 64px; width: 96px; height: 12px; in: {scaleY:0, opacity:0, duration:0.4, ease:'power2.out', pivot:'bottom'})
@@ -251,19 +251,19 @@ loc#lc1(left: 73px; transform: rotate(0deg); nm: "駅直結・地下街"; cnt: "
     div#win(left: 0px; top: 0px; width: 360px; height: 445px)
     group#in(left: 0px; top: 0px; width: 360px; height: 167px; clip: true)
       img#pic(inset: 0; in: none; main: keys(at=0 scale=1.18 | at=1 scale=1.02 ease=power1.out),duration=3200) 駅に直結した明るい地下街の小さなカフェのカウンター。通勤客でにぎわい、閉じて水滴の落ちる傘を持つ人が何人も並ぶ短い列、暖かい天井の灯り、タイルの床。屋内は乾いていて活気がある。横長の画面いっぱいに描き余白を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。文字・数字・ロゴ・看板の文字は一切入れない
-    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $terra)
+    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $terra; border-radius: 16px)
 loc#lc2(left: 460px; nm: "路面・商店街"; cnt: "11店"; cd: $mustard_d; va: "{vn}24.0{/}万円"; vb: "{vn}21.4{/}万円"; wa: 92px; wb: 82px; pct: "−11{pp}%{/}"; dir: "雨の日に減少"; ic: arrow-down; dc: $rain_d)
   group#ph(left: 0px; top: 0px; width: 360px; height: 445px; clip: 15,lc2.ph.win; in: {opacity:0, duration:0.35, ease:'power2.out'})
     div#win(left: 0px; top: 0px; width: 360px; height: 445px)
     group#in(left: 0px; top: 0px; width: 360px; height: 167px; clip: true)
       img#pic(inset: 0; in: none; main: keys(at=0 scale=1.18 | at=1 scale=1.02 ease=power1.out),duration=3200) 雨の日の開けた商店街の通りにある小さなカフェ。濡れた通りを傘をさした通行人が数人、暖かい窓越しに客が 2 人ほど見える落ち着いた店内、静かに降る雨。横長の画面いっぱいに描き余白を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。文字・数字・ロゴ・看板の文字は一切入れない
-    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $mustard)
+    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $mustard; border-radius: 16px)
 loc#lc3(left: 847px; nm: "公園沿い・郊外"; cnt: "6店"; cd: $sage_d; va: "{vn}21.0{/}万円"; vb: "{vn}14.5{/}万円"; wa: 81px; wb: 56px; pct: "−31{pp}%{/}"; dir: "雨の日に減少"; ic: arrow-down; dc: $rain_d)
   group#ph(left: 0px; top: 0px; width: 360px; height: 445px; clip: 15,lc3.ph.win; in: {opacity:0, duration:0.35, ease:'power2.out'})
     div#win(left: 0px; top: 0px; width: 360px; height: 445px)
     group#in(left: 0px; top: 0px; width: 360px; height: 167px; clip: true)
       img#pic(inset: 0; content: @park; in: none; main: keys(at=0 scale=1.18 | at=1 scale=1.02 ease=power1.out),duration=3200)
-    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $sage)
+    div#stripe(left: 0px; top: 0px; width: 360px; height: 7px; background: $sage; border-radius: 16px)
 
 # sc5 店別の分布: 増減率の 5 つの区分にカップの札を 1 店 1 枚で積む (区分ごとに弾んで落ちる)・0% の縦線・語で「上がる 8 店」「下がる 16 店」のかぎ → −20% 以下の 6 店を破線で囲み「6店すべて 公園沿い・郊外」
 section#sc5(stagger: {each:0})
@@ -316,14 +316,14 @@ board#b6(left: 73px; top: 167px; width: 1133px; height: 413px; t: "図4　全店
   div#s1(left: 207px; top: 80px; width: 867px; height: 87px)
     div#g1(left: 0px; top: 0px; width: 321px; height: 87px; border-radius: 9px 0px 0px 9px; background: $terra; delay: 150; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; color: #FFFAF2; white-space: nowrap) 37{sp}%{/}
-    div#g2(left: 323px; top: 0px; width: 371px; height: 87px; background: $mustard; delay: 310; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
+    div#g2(left: 323px; top: 0px; width: 371px; height: 87px; background: $mustard; border-radius: 16px; delay: 310; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; white-space: nowrap) 43{sp}%{/}
     div#g3(left: 696px; top: 0px; width: 171px; height: 87px; border-radius: 0px 9px 9px 0px; background: $sage; delay: 470; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; white-space: nowrap) 20{sp}%{/}
   div#s2(left: 207px; top: 253px; width: 867px; height: 87px)
     div#g1(left: 0px; top: 0px; width: 381px; height: 87px; border-radius: 9px 0px 0px 9px; background: $terra; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; color: #FFFAF2; white-space: nowrap) 44{sp}%{/}
-    div#g2(left: 383px; top: 0px; width: 354px; height: 87px; background: $mustard; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
+    div#g2(left: 383px; top: 0px; width: 354px; height: 87px; background: $mustard; border-radius: 16px; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; white-space: nowrap) 41{sp}%{/}
     div#g3(left: 739px; top: 0px; width: 128px; height: 87px; border-radius: 0px 9px 9px 0px; background: $sage; in: {scaleX:0, opacity:0, duration:0.5, ease:'power3.out', pivot:'left'})
       p#v(left: 16px; cy: 50%; font-size: 40px; font-family: n; white-space: nowrap) 15{sp}%{/}
@@ -372,7 +372,7 @@ board#rule(left: 73px; top: 165px; width: 1133px; height: 172px; t: "試行　20
   img#prep(left: 15px; top: 15px; width: 213px; height: 143px; border-radius: 9px; main: none; delay: 150; in: {scale:1.1, opacity:0, duration:0.8, ease:'power2.out'}) 夕方のカフェの奥の仕込み台。店員の手が翌日のサンドイッチと焼き菓子のトレイを並べ、台の上に立てたタブレットの画面には雨粒の付いた雲の簡単な絵だけ、罫線だけのクリップボード、暖かい灯り。横長の画面いっぱいに描き余白を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。文字・数字・ロゴは一切入れない
   p#k(left: 248px; top: 23px; font-size: 15px; color: $card; background: $terra_d; border-radius: 5px; padding: 3px 9px 3px 9px; delay: 300; in: {y:23, opacity:0, duration:0.6, ease:'power3.out'}) ルール
   p#t(left: 248px; top: 49px; font-size: 24px; font-family: h; line-height: 1.32; white-space: nowrap; delay: 420; in: {y:23, opacity:0, duration:0.6, ease:'power3.out'}) 前日17時の予報で、翌日の[br]{r}降水確率が60%以上{/}なら、仕込みを変える
-  p#chip(left: "249;404;547"; top: 119px; font-size: 15px; color: "$terra_d;$mustard_d;$sage_d"; background: #F3EAD9; border: "$terra_d,1;$mustard_d,1;$sage_d,1"; border-radius: 8px; padding: 5px 11px 5px 11px; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.4, ease:'back.out(2)', stagger: {each: 0.25}}) ×3 駅直結 1店 {pb}+15%{/};路面 1店 {pb}−10%{/};公園沿い 1店 {pb}−25%{/}
+  p#chip(left: "249;404;547"; top: 119px; font-size: 15px; color: "$terra_d;$mustard_d;$sage_d"; background: #F3EAD9; border: "1px solid $terra_d;1px solid $mustard_d;1px solid $sage_d"; border-radius: 8px; padding: 5px 11px 5px 11px; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.4, ease:'back.out(2)', stagger: {each: 0.25}}) ×3 駅直結 1店 {pb}+15%{/};路面 1店 {pb}−10%{/};公園沿い 1店 {pb}−25%{/}
   p#days(left: 804px; top: 19px; font-size: 16px; line-height: 1.35; white-space: nowrap; in: {y:8, opacity:0, duration:0.6, ease:'power3.out'}) 対象日 {dd}21{/}日 ／ 56日
   p#dsub(left: 804px; top: 53px; font-size: 13px; font-family: m; color: $ink2; white-space: nowrap; in: {y:8, opacity:0, duration:0.6, ease:'power3.out'}) 実際に雨 17日・予報の外れ 4日
   div#cell(left: "804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081"; top: "80;80;80;80;80;80;80;80;80;80;80;80;80;80;100;100;100;100;100;100;100;100;100;100;100;100;100;100;120;120;120;120;120;120;120;120;120;120;120;120;120;120;140;140;140;140;140;140;140;140;140;140;140;140;140;140"; width: 17px; height: 17px; border-radius: 4px; background: "#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#FBF6EC;#FBF6EC;#FBF6EC;#FBF6EC;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4"; in: {scale:0, opacity:0, duration:0.25, ease:'back.out(2)', stagger: {each: 0.022}}) ×56

@@ -29,7 +29,7 @@ veil#grain(grain: 0.05; color: #00000000; mix-blend-mode: overlay; z-index: fron
 section#dawn
 img#dawn_p(inset: 0; subject: right 45%; room: left 50%; main: kb {scale: [1.02, 1.1], focus: ['62% 55%', '58% 45%']}) 夜明け前の暗い奥多摩の渓流、画面の右側に青黒い岩と白く流れる沢、左側はほとんど光の無い深い森の影で静か、木々の隙間にかすかな青い空、人物なし
 veil#dawn_v(background: linear(#060A08D9,#060A0899@40%,#060A0800@70%,90); in: none)
-div#dawn_glow(inset: 0; background: radial(#E8C98738,#E8C98700@100%,82%,8%); mix-blend-mode: screen; border: none; box-shadow: none; border-radius: 0px; in: {opacity:0, duration:2.4, ease:'power1.inOut'})
+div#dawn_glow(inset: 0; background: radial(#E8C98738,#E8C98700@100%,82%,8%); mix-blend-mode: screen; in: {opacity:0, duration:2.4, ease:'power1.inOut'})
 p#dawn_l(left: 100px; top: 196px; font-size: 24px; color: $a; letter-spacing: 0.4em; in: note) 奥多摩　沢の朝
 p#dawn_t(left: 92px; top: 226px; font-size: 156px; font-family: n; color: $ink; letter-spacing: 0.05em; line-height: 1; text-shadow: 0px 0px 18px #000000B3; in: big) 4:00
 shape#dawn_r(left: 100px; top: 418px; width: 140px; height: 2px; path: line_h; background: $a; border: 2px solid $a; in: wipe {dir: 'right', duration: 0.9})
@@ -38,7 +38,7 @@ p#dawn_s.hide_subtitle(left: 96px; top: 446px; width: 720px; font-size: 64px; co
 section#mist
 img#mist_a(inset: 0; main: kb {scale: [1.04, 1.1], focus: ['50% 40%', '55% 45%']}) 夜明け直後の奥多摩の渓谷、白く濃い朝靄が谷いっぱいに満ち、杉の森の輪郭が青灰色にかすむ、まだ日の差さない薄明、静まり返った沢
 img#mist_b(inset: 0; subject: right 55%; room: left 45%; in: {opacity:0, duration:2.2, ease:'sine.inOut'}; main: kb {scale: [1.06, 1.12], focus: '60% 40%'}) 靄が薄くほどけていく奥多摩の渓谷、右奥の山の稜線から最初の朝日が差し込み淡い金色の光の筋が谷へ落ちる、澄んだ深い緑の杉林と光る沢、左側は靄の残る静かな影
-div#mist_sun(inset: 0; background: radial(#E8C98770,#E8C98700@100%,74%,20%); border: none; box-shadow: none; border-radius: 0px; mix-blend-mode: screen; in: {opacity:0, duration:2.6, ease:'sine.inOut'})
+div#mist_sun(inset: 0; background: radial(#E8C98770,#E8C98700@100%,74%,20%); mix-blend-mode: screen; in: {opacity:0, duration:2.6, ease:'sine.inOut'})
 veil#mist_v(background: linear(#060A08C0,#060A0866@38%,#060A0800@62%,90); in: none)
 p#mist_c(left: 100px; top: 120px; font-size: 44px; font-family: n; color: $a; letter-spacing: 0.08em; in: note) [count:4:40 start=4:00]
 p#mist_h(left: 96px; top: 280px; font-size: 84px; color: $ink; letter-spacing: 0.12em; text-shadow: 0px 0px 18px #000000B3; in: big) 山が、目を覚ます。

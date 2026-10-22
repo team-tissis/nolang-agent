@@ -39,7 +39,7 @@ cue tick(x) = [>#x.box_fill][>#x.mark +80]
 cue bumper_in(b) = [>#b.s][>#b.t][>#b.u]
 cue bumper_out(b) = [<#b.s][<#b.t][<#b.u]
 p { line-height: 1; out: none }
-div { padding: 0px; border: none; box-shadow: none; out: none }
+div { out: none }
 img { out: none }
 svg { out: none }
 shape { out: none }
@@ -50,8 +50,8 @@ subtitle.student(border: 3px solid $mint)
 bgm#music(duck: -6; volume: 6dB; fade: 800,2400; keys: "0:+5|15s:+5|30s:0") 明るく温かく穏やかなアコースティックのピアノとギター、弦と鉄琴、日常と希望の雰囲気の遅めの曲
 
 # 章の区切り: 淡い mint と mint の 2 枚の板が左から払い、mint の板の上に章の文字が出て右へ抜ける (sticky — 前の cut の末尾で出し次の cut の頭で抜く・文字の板が上)
-def bumper_back(c) = div(inset: 0; background: {c}; z-index: front; in: {x:-1280, duration:0.42, ease:'power3.inOut'}; out: {x:1280, duration:0.4, ease:'power3.inOut'})
-def bumper(s, t, u) = div(inset: 0; background: $mint; z-index: front; in: {x:-1280, duration:0.42, ease:'power3.inOut'}; out: {x:1280, duration:0.4, ease:'power3.inOut'})
+def bumper_back(c) = div(inset: 0; background: {c}; z-index: front; border-radius: 16px; in: {x:-1280, duration:0.42, ease:'power3.inOut'}; out: {x:1280, duration:0.4, ease:'power3.inOut'})
+def bumper(s, t, u) = div(inset: 0; background: $mint; z-index: front; border-radius: 16px; in: {x:-1280, duration:0.42, ease:'power3.inOut'}; out: {x:1280, duration:0.4, ease:'power3.inOut'})
   p#s(cx: 50%; top: 253px; font-size: 36px; letter-spacing: 0.3em; color: #FFFFFF; opacity: 0.9; content: {s}; in: {x:-47, opacity:0, duration:0.32, ease:'power3.out'}; out: {x:47, opacity:0, duration:0.22, ease:'power2.in'})
   p#t(cx: 50%; top: 289px; font-size: 100px; line-height: 1.2; letter-spacing: 0.06em; color: #FFFFFF; content: {t}; in: {x:-47, opacity:0, duration:0.32, ease:'power3.out'}; out: {x:47, opacity:0, duration:0.22, ease:'power2.in'})
   p#u(cx: 50%; top: 421px; font-size: 27px; color: #FFFFFF; border: 2px solid #FFFFFFD9; border-radius: 99px; padding: 7px 23px 8px 23px; content: {u}; in: {x:-47, opacity:0, duration:0.32, ease:'power3.out'}; out: {x:47, opacity:0, duration:0.22, ease:'power2.in'})
@@ -92,7 +92,7 @@ svg top_callout = """<svg viewBox="0 0 880 600"><line x1="282" y1="411" x2="236"
 # title — 開幕: 写真が寄りながら現れ、左の余白に題札 (前置き・字ごとに上がる 2 行・下線の帯)・「基本手順」で 3 つの目次の札
 section#title(stagger: {each:0})
 img#title_photo(inset: 0; content: @hero; main: keys(at=0 scale=1.12 opacity=0 | at=0.31 scale=1 opacity=1 ease=power2.out | at=0.999 scale=1.035 ease=none),duration=8450,pivot=70%,55%)
-div#title_veil(inset: 0; background: linear(#FBF7EFF7,#FBF7EFEB@36%,#FBF7EF00@56%,90); delay: 150; in: {opacity:0, duration:0.8, ease:'power2.out'})
+div#title_veil(inset: 0; background: linear(#FBF7EFF7,#FBF7EFEB@36%,#FBF7EF00@56%,90); border-radius: 16px; delay: 150; in: {opacity:0, duration:0.8, ease:'power2.out'})
 group#title_card(out: {x:-40, opacity:0, duration:0.35, ease:'power2.in'})
 p#title_card.kicker(left: 75px; top: 140px; font-size: 21px; letter-spacing: 0.08em; color: #FFFFFF; background: $mint; border-radius: 99px; padding: 7px 17px 7px 17px; delay: 450; in: {x:-27, opacity:0, duration:0.5, ease:'power3.out'}) 介護の基本技術
 p#title_card.line1(left: 75px; top: 198px; font-size: 55px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 650; in: {y:31, opacity:0, duration:0.5, ease:'power3.out', stagger:.05}) 車椅子への
@@ -128,7 +128,7 @@ p#brake_check(left: 879px; top: 507px; font-size: 21px; color: #FFFFFF; backgrou
 # ng — 学生の気づき: 学生の顔に寄る → 写真を左へずらし右から NG 図 → 「動いちゃって」で車椅子が走り「危険」で警告 → 「その通り」で写真を戻して丸
 section#ng(stagger: {each:0})
 img#ng_photo(inset: 0; main: none) [ref:@hero]介護実習室。学生A（ミディアムボブの女性）の上半身のアップ。ハッと気づいた表情で少し眉を寄せ、右手の人差し指を立てて話している。そばに車椅子のグリップの一部が見える。背景には学生Bと学生Cがうなずいている姿をやわらかくぼかして描く。
-div#ng_panel(left: 640px; top: 0px; width: 640px; height: 720px; background: linear($pane,$pane2,180); box-shadow: -12px 0px 27px #192D462E; in: {x:653, duration:0.6, ease:'power3.out'}; out: {x:653, duration:0.5, ease:'power3.in'})
+div#ng_panel(left: 640px; top: 0px; width: 640px; height: 720px; background: linear($pane,$pane2,180); box-shadow: -12px 0px 27px #192D462E; border-radius: 16px; in: {x:653, duration:0.6, ease:'power3.out'}; out: {x:653, duration:0.5, ease:'power3.in'})
 div#ng_card(left: 667px; top: 93px; width: 573px; height: 447px; border-radius: 19px; background: #FFFFFF; border: 3px solid $ngline; box-shadow: 0px 11px 27px #192D4640; in: {x:653, duration:0.6, ease:'power3.out'}; out: {x:653, duration:0.5, ease:'power3.in'})
   p#pill(left: 23px; top: 20px; font-size: 23px; letter-spacing: 0.06em; color: #FFFFFF; background: $red; border-radius: 8px; padding: 4px 12px 5px 12px) NG
   p#head(left: 99px; top: 23px; font-size: 25px; color: $ink) ブレーキをかけずに立ち上がると…
@@ -152,7 +152,7 @@ bumper#bumper2.sticky(s: "STEP 2"; t: "位置調整"; u: "ベッドと車椅子�
 
 # angle — STEP 2: 格子の地に写真と上から見た図を並べ、「角度」で軸・「15度」「30度」で車椅子を回し、角度の札と扇の明滅
 section#angle(stagger: {each:0})
-div#angle_bg(inset: 0; background: $cream; pattern: grid,40,#23446B0F)
+div#angle_bg(inset: 0; background: $cream; pattern: grid,40,#23446B0F; border-radius: 16px)
 heading#angle_head(s: "ステップ2"; t: "ベッドと車椅子の角度"; w: 389; delay: 350)
 img#angle_photo(left: 37px; top: 175px; width: 568px; height: 323px; border-radius: 17px; border: 5px solid #FFFFFF; box-shadow: 0px 9px 23px #192D4638; main: kb {scale: [1, 1.08], focus: ['40% 60%', '40% 60%']}; delay: 300; in: {y:27, opacity:0, duration:0.55, ease:'power3.out'}) [ref:@hero]介護実習室を斜め上から見下ろした構図。介護ベッドの長い辺の中央に、利用者役の学生B（短い黒髪の男性）が端座位で座っている（足は床につけ、ベッドの外側を向いている）。介護スタッフが、学生Bのすぐ横に車椅子を置き、ベッドの側面に対して浅い斜め（約20〜30度）の角度に向きを整えている。車椅子の座面は学生Bの方を向いている。学生Aと学生Cが横で見学している。
 p#angle_cap(left: 37px; top: 508px; width: 568px; font-size: 24px; text-align: center; color: $navy; delay: 750; in: {y:12, opacity:0, duration:0.45, ease:'power3.out'}) ベッドのすぐ横に、斜めに置く
@@ -175,11 +175,11 @@ bumper#bumper3.sticky(s: "POINT"; t: "まとめ"; u: "移乗介助のポイン�
 # summary — まとめ: 写真の右に 4 項目の板・語ごとにチェックが付き、最後に板の縁が光る
 section#summary(stagger: {each:0})
 img#sum_photo(inset: 0; main: kb {scale: [1.12, 1.16], focus: ['87% 46%', '81% 42%']}) [ref:@hero]介護実習室。介護ベッドの端に座る高齢の女性利用者（白髪のショートヘア、薄いピンクのカーディガン）の前で、介護スタッフがしゃがんで目線を合わせ、両手で利用者の手をやさしく取りながら笑顔で声をかけている。ベッドのすぐ横には車椅子が斜めに置かれている。少し離れて学生3人が温かく見守っている。午後のやわらかな光。
-div#sum_veil(inset: 0; background: linear(#FBF7EF00,#FBF7EF00@56%,#FBF7EF66@70%,#FBF7EFBF,90))
+div#sum_veil(inset: 0; background: linear(#FBF7EF00,#FBF7EF00@56%,#FBF7EF66@70%,#FBF7EFBF,90); border-radius: 16px)
 div#points(left: 797px; top: 100px; width: 445px; height: 403px; border-radius: 19px; background: #FFFFFFF7; box-shadow: 0px 11px 27px #192D463D; delay: 200; in: {x:53, opacity:0, duration:0.55, ease:'power3.out'})
   p#head(left: 27px; top: 23px; font-size: 31px; color: $navy) 移乗介助のポイント
   shape#rule(left: 27px; top: 65px; width: 392px; height: 3px; path: rect; background: $bar)
-  div#item(left: 27px; top: "82;161;239;318"; width: 392px; height: 79px; in: {y:16, opacity:0, duration:0.4, ease:'power3.out'}) ×4
+  div#item(left: 27px; top: "82;161;239;318"; width: 392px; height: 79px; background: $panel; border-radius: 16px; in: {y:16, opacity:0, duration:0.4, ease:'power3.out'}) ×4
     div#box(left: 0px; cy: 50%; width: 40px; height: 40px; border-radius: 9px; background: #FFFFFF; border: 3px solid $mint)
     div#box_fill(left: 0px; cy: 50%; width: 40px; height: 40px; border-radius: 9px; background: $mint; in: {scale:0, duration:0.25, ease:'back.out(2)'})
     icon#mark(left: 7px; cy: 50%; font-size: 26px; name: check; weight: bold; color: #FFFFFF; in: draw {duration: 0.3})

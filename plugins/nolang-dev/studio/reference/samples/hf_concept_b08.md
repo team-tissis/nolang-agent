@@ -26,7 +26,7 @@ prompt_tail "Vertical 9:16 portrait composition, the main subject large and cent
 run h { color: $y; background: #0E0406CC; border: 5px solid $red; border-radius: 8px; padding: 9px }
 cut { stagger: 0 }
 p { color: #FFFFFF; out: {opacity:0, duration:0.3, ease:'power1.in'} }
-div { border: none; box-shadow: none; padding: 0px; out: {opacity:0, duration:0.3, ease:'power1.in'} }
+div { border: none; out: {opacity:0, duration:0.3, ease:'power1.in'} }
 svg { out: {opacity:0, duration:0.3, ease:'power1.in'} }
 shape { out: {opacity:0, duration:0.3, ease:'power1.in'} }
 group { out: {opacity:0, duration:0.3, ease:'power1.in'} }
@@ -76,8 +76,8 @@ bgm#hope(fade: 600,3200) 明るく温かく穏やかな希望の曲、三拍子�
 subtitle.hug(left: 27px; top: 841px; width: 667px; font-size: 41px; line-height: 1.42; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: #000000,5; text-shadow: 0px 3px 17px #000000D9; background: none; unit: sentence; strip: 。; lead: 50; tail: 450; hold: off; in: {y:23, opacity:0, duration:0.32, ease:'power3.out'}; out: {y:-12, opacity:0, duration:0.22, ease:'power2.in'})
 
 # 暗幕 (上 62% → 20〜50% は素通し → 下 90%) + 周辺減光の子 (章ごとに濃さを語で変える)
-def shade() = div(inset: 0; background: linear(#03050C9E,#03050C00@20%,#03050C00@50%,#03050CB3@66%,#03050CDB@84%,#03050CE6,180); in: none; out: none)
-  div#v(inset: 0; background: radial(#00000000@42%,#000000C7,50%,44%); opacity: 0.85; in: none; out: none)
+def shade() = div(inset: 0; background: linear(#03050C9E,#03050C00@20%,#03050C00@50%,#03050CB3@66%,#03050CDB@84%,#03050CE6,180); border-radius: 16px; in: none; out: none)
+  div#v(inset: 0; background: radial(#00000000@42%,#000000C7,50%,44%); opacity: 0.85; border-radius: 16px; in: none; out: none)
 # 見出しの白文字 (黒の縁 + 黒い光彩・下から上がる)
 def head(t, s=67) = p(width: 640px; text-align: center; font-size: {s}; line-height: 1.2; letter-spacing: 0.03em; stroke: #000000,4; text-shadow: 0px 3px 17px #000000D9; in: {y:27, opacity:0, duration:0.45, ease:'power3.out'}; content: {t})
 # 主役の語の札 = 赤枠 × 黄の文字 (判子: 1.9 倍から縮んで叩きつける)
@@ -106,7 +106,7 @@ def pillar(n, ic, l1, k, l2) = div(left: 29px; width: 661px; height: 121px; back
 # 全編の層: 暗幕と周辺減光・grain・上端の進行線 (地 16% の白 + 赤→黄の棒)
 shade#shade
 veil#grain(grain: 0.08; mix-blend-mode: multiply; main: noise {x: 4, y: 4, period: 0.083})
-div#prog_track(left: 0px; top: 0px; width: 720px; height: 5px; background: #FFFFFF29; z-index: front; in: none; out: none)
+div#prog_track(left: 0px; top: 0px; width: 720px; height: 5px; background: #FFFFFF29; z-index: front; border-radius: 16px; in: none; out: none)
 progress#prog(left: 0px; top: 0px; width: 720px; height: 5px; background: linear($red,$y,90); until: end; z-index: front; overlap: prog_track)
 
 # 開幕: 夜の街の俯瞰がグリッチで揺れて入り、走査線が上から下へ走る・題を 3 段に語ごとに組み「必要です」を判子で
@@ -196,7 +196,7 @@ pillar#pl3(top: 863px; pl3.k.width: 278px; n: 3; ic: scales; l1: "匿名性を�
 # 見えない暴力: 影の絵を赤く染めてグリッチで入り、「見えない暴力」の札に赤と青緑の写しが左右にずれて消える
 section#violence
 img#violence_photo(inset: 0; content: @shadow; object-fit: cover; object-position: 48% 100%; zoom: 185%; main: kb {scale: [1, 1.06], focus: ['40% 100%', '40% 100%']})
-div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: multiply; in: none)
+div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: multiply; border-radius: 16px; in: none)
 head#s10a(cx: 360px; cy: 496px) テクノロジー犯罪は
 group#vk(left: 0px; top: 520px; width: 720px; height: 226px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
   key#m(cx: 50%; cy: 50%; s: 93) 見えない暴力

@@ -45,7 +45,7 @@ img#nm_p(inset: 0) [ref:@otter]緑の澄んだ川を水中で体を伸ばして�
 veil#nm_v(color: #F4EEE2; opacity: 0.85; to: top; start: 0.45)
 kick#nm_k(left: 48px; top: 88px) Lutra nippon
 rule#nm_r(left: 48px; top: 128px)
-div#nm_c(left: 584px; top: 72px; width: 96px; height: 560px; background: #F4EEE2E6; border-radius: 4px; box-shadow: none; border: 2px solid $a; padding: 0px; in: mask_rise)
+div#nm_c(left: 584px; top: 72px; width: 96px; height: 560px; background: #F4EEE2E6; border-radius: 4px; border: 2px solid $a; in: mask_rise)
   p#t(cx: 50%; cy: 50%; font-size: 64px; writing-mode: vertical-rl; text-align: center; color: $ink) ニホンカワウソ
 p#nm_s(left: 48px; top: 160px; width: 480px; font-size: 36px; line-height: 1.5; color: $ink; in: rise) 川を泳ぎ、[br]魚を追いかけ
 
@@ -68,7 +68,7 @@ img#cz_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}) コン�
 veil#cz_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.55)
 kick#cz_k(left: 48px; top: 88px) WHY THEY VANISHED
 rule#cz_r(left: 48px; top: 128px)
-div#cz(left: 48px; top: 160px; width: 440px; height: 344px; gap: 12; background: #F4EEE2F0; border-radius: 8px; box-shadow: 0px 4px 12px #2A262233; border: none; padding: 0px; in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; display: flex; flex-direction: column) ×4
+div#cz(left: 48px; top: 160px; width: 440px; height: 344px; gap: 12; background: #F4EEE2F0; border-radius: 8px; box-shadow: 0px 4px 12px #2A262233; in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; display: flex; flex-direction: column) ×4
   p#n(left: 20px; cy: 50%; font-size: 26px; font-family: e; color: $b) 01;02;03;04
   p#t(left: 72px; cy: 50%; font-size: 32px; font-family: s; color: $ink) 毛皮をとるために;川の開発;水の汚れ;餌の魚が減る
 

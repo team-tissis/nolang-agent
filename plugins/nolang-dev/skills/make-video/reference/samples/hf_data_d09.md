@@ -63,7 +63,6 @@ sound pop = "泡がはじけるような明るい電子のチャイム、上が�
 sound bell = "ゆっくり立ち上がる中音域の柔らかく温かいシンセのベルの和音、上品な締め"
 motion pp { in: {scale:0.82, opacity:0, duration:0.45, ease:'back.out(1.8)'} }
 p { color: $ink }
-div { padding: 0px; background: none; border: none; box-shadow: none; border-radius: 0px }
 # 字幕: 下端中央の白い札 (細い縁・薄い影)・1 行で折らない・札 = 句 (2 文を 1 枚にする所は台詞の [||])
 subtitle.hug(bottom: 56px; font-size: 21px; font-family: m; line-height: 1.35; color: $ink; background: #FFFFFFF7; border: 1px solid $hair; border-radius: 8px; padding: 6px 20px 7px 20px; box-shadow: 0px 4px 12px #14213D14; unit: sentence; lead: 50; tail: 350; hold: next,800; in: {y:5, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.08})
 bgm#music(fade: 1200,3200) 落ち着いたジャズ寄りのエレクトロニカ、エレクトリックピアノとウッドベースとシンセ、控えめで知的なグルーヴ、企業のデータ解説やプレゼン向け

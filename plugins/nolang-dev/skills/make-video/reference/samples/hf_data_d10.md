@@ -65,7 +65,7 @@ svg arrow = """<svg viewBox="0 0 64 24"><path d="M2 12h54" stroke="#3d5373" stro
 # 上端の帯の点: 今の場面を青緑で 1.3 倍に、前の場面を暗い青緑に戻す
 cue step(x, p) = [!#x to,scale=1.3,duration=50][!#x recolor,#2EC4B6,duration=50][!#p to,scale=1,duration=50][!#p recolor,#3F6B78,duration=50]
 p { color: $fg; line-height: 1.2; out: none }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none; out: none }
+div { border: none; out: none }
 img { out: none }
 shape { out: none }
 svg { out: none }
@@ -237,7 +237,7 @@ p#e_cap(left: 64px; top: 532px; width: 313px; text-align: center; font-size: 15p
 board#e_bd(left: 427px; top: 195px; width: 789px; height: 451px; t: "カテゴリ別の初回解決率"; u: "単位：%"; delay: 300; in: {x:27, opacity:0, duration:0.65, ease:'power3.out'})
   # 行の枠は語で点く 3 行 (81 の青緑・34 / 22 の珊瑚) だけ・他の行の枠は透明
   div#r(left: 12px; top: "93;134;175;216;257;298;339"; width: 765px; height: 41px; in: none) ×7
-    div#hl(left: 0px; top: 4px; width: 765px; height: 33px; border-radius: 7px; background: "#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#E8615A14;#E8615A14"; border: "#7ADFD3BF,2;#7ADFD3BF,2;#7ADFD3BF,2;#7ADFD3BF,2;#7ADFD3BF,2;#E8615ABF,2;#E8615ABF,2"; opacity: "1;0;0;0;0;1;1"; in: {opacity:0, duration:0.3})
+    div#hl(left: 0px; top: 4px; width: 765px; height: 33px; border-radius: 7px; background: "#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#E8615A14;#E8615A14"; border: "2px solid #7ADFD3BF;2px solid #7ADFD3BF;2px solid #7ADFD3BF;2px solid #7ADFD3BF;2px solid #7ADFD3BF;2px solid #E8615ABF;2px solid #E8615ABF"; opacity: "1;0;0;0;0;1;1"; in: {opacity:0, duration:0.3})
     cat#nm(left: 9px; cy: 50%; width: 220px; t: "ログイン・アカウント;操作方法;権限・設定;請求・プラン;その他;データ連携（CSV・API）;不具合の報告"; c: "$teal;$teal2;$slate;$amber;$slate2;$orange;$coral"; delay: "600;660;720;780;840;900;960"; in: {x:-11, opacity:0, duration:0.4, ease:'power2.out'})
     div#tr(left: 229px; cy: 50%; width: 400px; height: 21px; border-radius: 0px 4px 4px 0px; background: #FFFFFF0A)
     div#bar(left: 229px; cy: 50%; width: "324;296;252;232;220;136;88"; height: 21px; border-radius: 0px 4px 4px 0px; background: "$teal;$teal2;$slate;$amber;$slate2;$orange;$coral"; delay: "700;770;840;910;980;1050;1120"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})

@@ -75,7 +75,7 @@ svg logo = """<svg viewBox="0 0 46 46"><defs><linearGradient id="g" x1="0" y1="0
 svg ring = """<svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="160" fill="none" stroke="#DCE4F3" stroke-width="44"/></svg>"""
 # 子は親 (板) と一緒に 1 枚で抜ける (自分の退場を持たない)・場面の頭の要素は自分の out を書く
 p { color: $ink; out: none }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none; out: none }
+div { out: none }
 img { out: none }
 svg { out: none }
 shape { out: none }

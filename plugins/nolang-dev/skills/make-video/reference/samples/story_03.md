@@ -53,7 +53,7 @@ section#clash
 img#cs_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) 夜の野外フェス会場を高い所から見下ろす、遠く離れた2つのステージがネオンに光る、広い芝生
 neon#cs_v
 h1#cs_h(left: 40px; top: 90px) 推しAと推しB[br]{r}まさかの同時刻{/}
-div#cs_c(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 210px; gap: 24; padding: 0px; display: flex) ×2
+div#cs_c(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 210px; gap: 24; display: flex) ×2
   p#s(left: 24px; top: 20px; font-size: 26px; font-family: e; color: $b; letter-spacing: 0.15em) MAIN STAGE;SUB STAGE
   p#t(left: 24px; top: 58px; font-size: 72px; font-family: e; color: $ink) 18:30;18:30
   p#n(left: 24px; bottom: 18px; font-size: 32px; color: $mute) 推しA;推しB
@@ -66,7 +66,7 @@ neon#ht_v
 shape#ht_sun(left: 330px; top: 50px; width: 360px; height: 360px; path: sunburst,n=16; background: #FF2E6326; border: none; main: spin {period: 40})
 p#ht_n(right: 40px; top: 70px; font-size: 210px; font-family: e; color: $ink; text-align: right; text-shadow: 0px 0px 26px #FF2E63CC; in: big) [count:36]{u}℃{/}
 p#ht_l(right: 44px; top: 320px; font-size: 32px; color: $mute; text-align: right; in: note) 当日の最高気温
-div#ht_r(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 250px; gap: 18; padding: 0px; display: flex; flex-direction: column) ×2
+div#ht_r(in: {stagger: {each: 0.15}}; left: 40px; top: 780px; width: 640px; height: 250px; gap: 18; display: flex; flex-direction: column) ×2
   icon#i(left: 24px; cy: 50%; font-size: 48px; name: "drop;t-shirt"; color: "$b;$a")
   p#t(left: 96px; cy: 50%; font-size: 38px; color: $ink) 日焼け止め、汗で消滅;タオル、絞れる
 p#ht_s(right: 40px; top: 1060px; font-size: 48px; color: $deep; background: $b; border-radius: 12px; padding: 8px 22px; in: pop; transform: rotate(4deg)) 最前死守
@@ -76,7 +76,7 @@ img#cx_p(inset: 0; main: kb {scale: [1, 1.1], focus: '50% 40%'}) 夜の野外フ
 neon#cx_v
 h1#cx_h(left: 40px; top: 90px) イントロ一音目で[br]全部、飛んだ
 p#cx_w(left: 40px; top: 260px; font-size: 128px; color: $a; text-shadow: 0px 0px 30px #FF2E63; in: punch; transform: rotate(-5deg)) 完全勝利
-div#cx_r(in: {stagger: {each: 0.12}}; left: 40px; top: 790px; width: 640px; height: 200px; gap: 18; padding: 0px; display: flex) ×3
+div#cx_r(in: {stagger: {each: 0.12}}; left: 40px; top: 790px; width: 640px; height: 200px; gap: 18; display: flex) ×3
   p#l(cx: 50%; top: 24px; font-size: 30px; color: $mute) 体力;声;足
   p#v(cx: 50%; bottom: 30px; font-size: 52px; color: $ink) ゼロ;ガラガラ;棒
 confetti#cx_cf

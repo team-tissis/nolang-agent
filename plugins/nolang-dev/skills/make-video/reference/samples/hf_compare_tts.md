@@ -19,7 +19,6 @@ fonts sb="癖のない標準的なゴシック体の太字 (Bold)、札と軸の
 fonts i="癖のない標準的なゴシック体の太字 (Bold)、数字と英字が端正で読みやすい"
 fonts n="癖のない標準的なゴシック体の極太 (ExtraBold)、大きな数字が端正でくっきり"
 fonts m="等幅のプログラミング用書体の SemiBold"
-shadow_default 0
 sfx off
 # hf の作り: 見出し・板の題・凡例・注記は場面の頭に置き、台詞が後から読む (spoiler)・注記は場面の頭に 1 行で全文 (all_at_once)・図だけの板で写真は使わない (text_only_cut)
 # hf の作り: 凡例・板の副題・注記・章の進行は 12〜17 px (1080 換算 18〜26 px) の小さな字 (small_text)・題の副題と売りの板の足は短く出る (flash_text)
@@ -43,7 +42,7 @@ run w { color: $t1 }
 run s { font-size: 0.77em }
 run a6 { color: $amber; font-family: n; font-size: 1.75em }
 p { color: $t1 }
-div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none }
+div { border: none }
 motion fup { in: {y:15, opacity:0, duration:0.55, ease:'power3.out'} }
 motion fups { in: {y:7, opacity:0, duration:0.55, ease:'power3.out'} }
 motion fin { in: {opacity:0, duration:0.45, ease:'power1.out'} }
@@ -267,7 +266,7 @@ div#pd5.sticky(left: 579px; top: 697px; width: 123px; height: 3px; background: $
 progress#pf6(left: 709px; top: 697px; width: 123px; height: 3px; background: $t2; until: cut)
 board#b7a(left: 59px; top: 163px; width: 667px; height: 453px; t: "声の類似度"; s: "同じ声・同じ文で比較"; rw: 621px; delay: 250)
   div#vc(left: "155;381"; top: 74px; width: "148;132"; height: 51px; border-radius: 11px; border: 1px solid #FFFFFF2E; background: #FFFFFF0A; delay: 300; in: {scale:0.8, opacity:0, duration:.45, ease:'back.out(2.2)', stagger:{each:.12}}) ×2
-    shape#w(left: 18px; cy: 50%; width: 44px; height: 11px; path: "wave,n=3"; background: none; border: "$flash,2;$lite,2")
+    shape#w(left: 18px; cy: 50%; width: 44px; height: 11px; path: "wave,n=3"; background: none; border: "2px solid $flash;2px solid $lite")
     p#t(left: 73px; cy: 50%; font-size: 21px; font-family: i; color: "$flash;$lite") Flash;Lite
   p#eqs(left: 324px; cy: 99px; font-size: 29px; font-family: i; color: $t3; delay: 500; in: fin) ↔
   div#ax(left: 50px; top: 254px; width: 567px; height: 3px; border-radius: 2px; background: #FFFFFF24; delay: 500; in: fin)

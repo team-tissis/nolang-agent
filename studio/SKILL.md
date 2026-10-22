@@ -10,7 +10,7 @@ draft src はその動画の圧縮形で、書く物は同じです。圧縮の�
 
 1. **閉じタグは字下げ**。1 行 1 要素 `tag#id.class(css 宣言) 内容`。字下げ 2 空白 = 子。
 2. **style は要素の行**。`(…)` の中に CSS の宣言をそのまま (`left:48px; top:120px; font-size:32px; color:#fff; border:3px solid $a; box-shadow:0 0 24px $a`)。共通の見た目は `def` (= class) に 1 回・型ごとの既定は `tag { 宣言 }` (= CSS の要素の rule)。
-3. **gsap.from / to は object のまま**。入場 `in:{y:30, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。
+3. **gsap.from / to は object のまま**。入場 `in:{y:30, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定。
 4. **時刻は秒ではなく台詞の語**。timeline.txt は台本で、tween はその語の前に置く: `[>#id]` 出す・`[!#id to,{…}]` 変える・`[<#id]` 消す。`tl.to(el, {…}, 2.3)` の 2.3 を書く場所は無く、声の実尺が時刻を決める。
 
 ```
@@ -33,9 +33,9 @@ cast n = "落ち着いた30代女性のナレーター"
 ```
 
 台本 (timeline.txt) と画面 (design.txt) を書き、check で欠陥と尺と配置を検査し、render で 1 回だけ描く。
-tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。
+tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。`div` は CSS と同じ素の箱 (地・縁・角丸・影・余白は書いた物だけ) — 板は宣言で書く: `div#c(…; background: $panel; border: 1px solid $line; border-radius: 16px; box-shadow: 0 4px 12px #0003; padding: 24px)` (繰り返すなら `def card = div(…)`)。
 `#id` が名 (字下げの子は相対名・印では `#親.子`)、`.class` は flag (`.hug` 中身の幅・`.sticky` cut を跨ぐ) か変種の tag (全面は宣言 `inset: 0`)、文字の内容は行の残り。
-CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。表に無い名の宣言は DEFECT:KEY。`canvas 1920x1080` など短辺 720 以外の canvas は px ごと 720 に写す。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
+CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。`border` の線種は `solid` `dashed` `dotted` (破線 / 点線は Chromium と同じ模様・`double` などは DEFECT:CSS)。表に無い名の宣言は DEFECT:KEY。`canvas 1920x1080` など短辺 720 以外の canvas は px ごと 720 に写す。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
 
 ```bash
 S=.agents/skills/nolang-draft-studio/scripts/studio.py; P="env PYTHONPATH=$PWD /opt/venv/bin/python"   # repo root から
@@ -74,7 +74,7 @@ project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材�
 - **storyboard は構造の設計で、見た目の設計ではない**: 各 frame に「この frame で分かること」が 1 つ。frame の尺は台詞の長さから出る (4〜25 秒)。
 - **design system が先**: hf と同じく、色・書体・文字の段・札と箱の class を根に決めてから frame を書く。frame の要素は class を当てて差分だけ書く。
 - **build は frame 単位**: 1 frame = `section#名` の design + `*** 名` の台詞。frame の「いちばん見える瞬間」を design に書き (要素は全部出た時の位置と大きさ・絶対配置でよい)、入場はそこへ来る道・語の印はその瞬間の変化。
-- **review は check の出力で**: 「出る時刻」の表で frame ごとに、見出し → 本文 → 変化 の順が台詞と合っているかを読む。render 後の frame は報告にだけ使う。
+- **review は check の出力で**: 「出る時刻」の表で frame ごとに、見出し → 本文 → 変化 の順が台詞と合っているかを読む (変化 = 書いた印の全部・既定 = engine が足した動き)。render 後の frame は報告にだけ使う。
 
 ## 違い (CSS / GSAP に無い物・5 つ)
 
@@ -86,12 +86,12 @@ project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材�
 
 ## 書き方の対応 (迷った時だけ)
 
-- 位置: 絶対 `left top width height` (中心 `cx cy`・全面 `inset: 0`)、子は親の内側から。`x y` は GSAP の移動量 (`in: {x: -40}`・`to,{y: 20}`) だけ。flex は `display:flex; gap:24px` (`flex-direction:column` で縦)、`display:grid` で 2×2。重なりは書いた順 (後が上)・`z-index:front`・意図の重なり `overlap:相手`。
-- 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:20, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
+- 位置: 絶対 `left top width height` (中心 `cx cy`・全面 `inset: 0`)、子は親の内側から。`x y` は GSAP の移動量 (`in: {x: -40}`・`to,{y: 20}`) だけ。flex は `display:flex; gap:24px` (`flex-direction:column` で縦)、表は容器の `display:grid; grid-template-columns:repeat(3,1fr); gap:16px` + 字下げに位置を書かない ×N 1 つ (CSS の grid: cell いっぱい・gap 既定 0・×N の行の `display:grid,3` も同じ)。重なりは書いた順 (後が上)・`z-index:front`・意図の重なり `overlap:相手`。
+- 繰り返し: `div#c(…) ×3` + 子 `  p#t(…) a;b;c` (`;` で instance ごと) → `#c[1]` `#c[1].t` `#c[*]`・出る間隔は入場の tween の中 `div#c(in: {y:20, opacity:0, stagger: {each: .12, from: 'end'}}) ×3` か印 `[>#c[*] {stagger:{each:0.04, from:'center'}}]` (stagger は tween の object の中だけ — 1 つの文字なら 1 字ずつ)・消える間隔は `out: {opacity:0, stagger: .08}` (`[<#c[*]]` でも cut 末の自動 close でも)。一括の変化は `[!#c[*] to,{…, stagger:.08}]`・主役の切替は `[!#c[2] focus]` (`stagger: dim` で薄く先出し)。
 - 変種: `#名.tag(宣言)` (静止の別の姿) → `[!#名 .tag]` (補間して移る。`points=` / `path=` の shape の変種は形ごと補間 = morph。書体 / style・画像・fit の種類・形の種類・blend・mask が違う変種は補間せず、その語で開き直す — 変種の `in=` が入場・無ければ切替)。部品: `def 名(引数) = tag(宣言) {引数}` → `名#x(…) 文字` (同じ形の 2 つ目も def に上げて実体を並べる)。
 - 文字の一部: `{t}語{/}` + `[!#名{t} recolor,$a]` / `highlight` / `marker` / `strike` (`[=#名{t}]` で戻す)。
-- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -30}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`)・役 `title big div row note` (雛形の根の `motion 名 { in: …; out: … }` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
-- 常時 `main: float|breathe|sway|pulse`・`spin {period: 9}`・`kb {scale: [1.1, 1], focus: '40% 60%'}` (寄りながら動くなら `focus: ['40% 60%', '60% 50%']`)。2 本以上の tween は `,` で並べる (`in: fade {duration: .8}, typewriter {level: 3}`)。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
+- 糖衣: 入場の名 `in: rise` (`fade rise drop slide zoom pop wipe` — 量と向きは config: `slide {x: -30}` = 左から・`wipe {dir: 'right'}` + studio の `spring settle bounce flash mask_rise swing_in travel punch typewriter fade_stagger blur pixelate circle_wipe iris_wipe clock_wipe spin_zoom zoom_reverse draw drift ping`。名は型を問わず同じ動き — 文字も層ごと。1 字ずつは stagger を足す `in: rise {stagger: .03}`)・役 `title big div row note` (雛形の根の `motion 名 { in: …; out: … }` 5 行)。property・ease・ms が固定なので、同じ名を繰り返すと動きが揃って見える — 急ぐ時と役の既定にだけ。
+- 常時 `main: float|breathe|sway|pulse`・`spin {period: 9}`・`kb {scale: [1.1, 1], focus: '40% 60%'}` (寄りながら動くなら `focus: ['40% 60%', '60% 50%']`)。2 本以上の tween は `,` で並べる (`in: fade {duration: .8}, typewriter {level: 3, duration: 0}` — 1 字ずつの語も object では 1 字が 0.5 秒・即座に切り替えるなら `duration: 0`)。同じ tween を関数に `cue 名(x) = [!#x punch][!#x check >]` → 台詞に `[名 #対象]`。
 - 字幕: 印だけの行 `[>#subtitle]` で以後の台詞が自動の字幕 (cut を跨いで続く・閉じるのは `[<#subtitle]` — cut 末の印だけの行ならその cut の終わり・hold の字幕札が cut 境界を跨ぐ時は engine が次の cut の lane と 1 枚に繋ぐ (帯は cut で入り直さない))。`subtitle(font-size:32px; …)`・テロップの間だけ消す `.hide_subtitle`。話者札は `cast a = "…" label="部下" label_fill=$a`。
 
 ## 書けない物 (runtime に無い・GSAP と違う例外)
@@ -104,12 +104,12 @@ project = `timeline.txt` / `design.txt` / `src.json` (`new` が書く・素材�
 ## ループ (render 1 回)
 
 1. 工程 (上) の順に書く → `check` を DEFECT 0 まで。
-2. check の読み方: DEFECT = 文法の誤り (file:行と直し方つき・描けない)・severe = 描けるが崩れる (直す)・warn = 直す・info = 参考。`出る時刻` の表 = 要素が語に結べているか。`展開表` = def の実体と ×N の子の名・箱・字の size (印と位置の式 `名.right+8` の宛先はこの名)。`css` の warn = 落とした宣言 (無い物として描く)。
+2. check の読み方: DEFECT = 文法の誤り (file:行と直し方つき・描けない)・severe = 描けるが崩れる (直す)・warn = 直す・info = 参考。`出る時刻` の表 = 要素が語に結べているか (変化の列は書いた `[!#名]` `[=#名]` を全部・既定の列は engine が足した動き)。`展開表` = def の実体と ×N の子の名・箱・字の size (印と位置の式 `名.right+8` の宛先はこの名)。`css` の warn = 落とした宣言 (無い物として描く)。
 3. `render` 1 回。見た目の指摘を報告に書くときは、その frame (`out/render_frames/`) を Read して秒数と一緒に書く。
 4. 通しの批評が要るときは `tmp/critic/make_sheets.sh out/video.mp4 <dir>` の一覧を subagent `video-compare-opus-medium` に (reference/compare.md)。
 5. 音は `listen` (render の後・`--apply` で描き直しまで): cut ごとの音を Gemini 3.8 Flash に 2 回聴かせ、場面に合わない音 (2 回一致の drop) と同じ音の連打 (repeat) を `listen.json` に記録し、次の render がそれを外す。音量は聴かせない (床と anchor は engine が測る)。詳細 reference/sounds.md。
 
-規則の名と直し方 (2 つの台帳 `scripts/studio_rules.py` と製品の `quality_rules.py` から生成・型に合わない規則は根の `lint off=規則,…`): `empty_cut` 絵か札を置く・`shrunk` 幅か size を変える (枠を広げる / w= を外して文字幅にする / 文言を短く)・`offcanvas` (severe) 位置を内側に・`duplicate_text` 字幕と同文の札は `.hide_subtitle`・`spoiler` 見出しが台詞の語を先に見せる → 語の印で出す・`still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す・`long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印・`cut_head_gap` cut 頭が 1.2 秒以上空く → 頭の要素は印なしで置く・`entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ・`no_closer` 最後の cut に大きな締めの一言が無い・`same_picture` 同じ絵が 15 秒以上 → 場面ごとに絵を替える・`blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を・`dip_black_frame` dip は黒 frame → dissolve か wipe・`sparse_cut` 4 秒以上で要素が少ない → 絵か札を足す・`palette_drift` palette 外の色が多い・`low_contrast` 文字と地の差が小さい (沈めた `dim` / focus の兄弟・`recolor` の後も) → 沈める濃さを上げる・`overlap` 同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す・`title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)・`leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (根の要素は engine が既定の fade で揃える — 残るのは子・写し・自分で閉じた層) → cut 末に `[<#名 fade]`・`orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく・`[br]` で切る・`overridden` engine が書いた値を変えた (cause つき) — subject_clear: 文字を絵の主体の外に置く / icon_square と late_admission: engine の揃え (直さなくてよい)・`transition_over_speech` 切替が台詞に掛かる・`se_dense` 効果音が密 (`sfx off`)・`running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す・`month_reading` 月日に読み `{9月5日|くがついつか}`・`font_not_pinned` 台帳に書体の pin か TTF が無く既定 font で測った (DB のある所で check を回す)・`font_version_mismatch` cache の TTF が catalog の版と違う (check が引き直す)・`ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`・`photo_hidden` 全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側) か、幕を 0.6 までにして文字の下にだけ帯 / 板。
+規則の名と直し方 (2 つの台帳 `scripts/studio_rules.py` と製品の `quality_rules.py` から生成・型に合わない規則は根の `lint off=規則,…`): `empty_cut` 絵か札を置く・`shrunk` 幅か文字の大きさを変える (枠を広げる / `width:` を外して文字幅にする / 文言を短く)・`offcanvas` (severe) 位置を内側に・`duplicate_text` 字幕と同文の札 → 画面は要点の短い語に (`.hide_subtitle` は字幕の代わりに台詞を見せる札だけ)・`spoiler` 見出しが台詞の語を先に見せる → 語の印で出す・`still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す・`long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印・`cut_head_gap` cut 頭が 1.2 秒以上空く → 頭の要素は印なしで置く・`entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ・`entrance_in_transition` 語の印の入場が前の切替の窓の中で済む → 最初の台詞の頭に `[silence:+0.4s]` を足して語を窓の後へ (要る秒は check が言う)・`no_closer` 最後の cut に大きな締めの一言が無い・`same_picture` 同じ絵が 15 秒以上 → 場面ごとに絵を替える・`blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を・`dip_black_frame` dip は黒 frame → dissolve か wipe・`sparse_cut` 4 秒以上で要素が少ない → 絵か札を足す・`palette_drift` palette 外の色が多い・`low_contrast` 文字と地の差が小さい (沈めた `dim` / focus の兄弟・`recolor` の後も) → 沈める濃さを上げる・`overlap` 同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す・`title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)・`leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (根の要素は engine が既定の fade で揃える — 残るのは子・写し・自分で閉じた層) → cut 末に `[<#名 fade]`・`orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく・`[br]` で切る・`overridden` engine が書いた値を変えた (cause つき) — subject_clear: 文字を絵の主体の外に置く / icon_square と late_admission: engine の揃え (直さなくてよい)・`transition_over_speech` 切替が台詞に掛かる・`se_dense` 効果音が密 (`sfx off`)・`running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す・`month_reading` 月日に読み `{9月5日|くがついつか}`・`font_not_pinned` 台帳に書体の pin か TTF が無く既定 font で測った (DB のある所で check を回す)・`font_version_mismatch` cache の TTF が catalog の版と違う (check が引き直す)・`ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`・`photo_hidden` 全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側) か、幕を 0.6 までにして文字の下にだけ帯 / 板。
 
 ## stream で作る (製品と同じ段取り・依頼文から 1 本)
 

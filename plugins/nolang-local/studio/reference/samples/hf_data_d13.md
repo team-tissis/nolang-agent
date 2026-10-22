@@ -54,7 +54,6 @@ run s4 { font-size: 0.61em; font-family: m; color: #D9E2F5 }
 cue chap(a, b, l, w) = [!#chap.ind to,left={l},w={w},duration=500,ease=power3.inOut][!#a recolor,$muted,duration=300 +50][!#b recolor,#FFFFFF,duration=300 +200]
 svg leaf = """<svg viewBox="0 0 24 24"><path d="M20 4C11 4 5 8.5 5 15c0 1.6.4 3 1 4.2C8 14 12 10.5 16 9c-3.5 2.5-6.6 6-8.3 10.6C9 20.5 10.5 21 12 21c6 0 8.5-6.5 8-17z" fill="#FFFFFF"/></svg>"""
 p { color: $ink }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
 # 字幕: 下端中央の濃い半透明の札・白の中字・句末の約物は外す・札 = 文 ([|] で句に切る)
 subtitle.hug(bottom: 28px; font-size: 25px; line-height: 1.35; letter-spacing: 0.03em; color: #FFFFFF; font-family: m; background: #0F1C24DB; border-radius: 9px; padding: 8px 24px 9px 24px; unit: sentence; strip: 、。; lead: 60; tail: 250; hold: off; in: {y:5, opacity:0, duration:0.18, ease:'power1.out'})
 # 曲: 声の無い頭と締めだけ前に出し、台詞の間は下げる

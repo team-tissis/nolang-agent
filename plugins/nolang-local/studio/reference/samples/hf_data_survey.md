@@ -47,7 +47,7 @@ cue lit(r) = [!#r.l to,opacity=1,duration=300 -100][>#r.b][>#r.v]
 # 場面の要素は一斉に上へ抜ける (hf の leave: y -18・scale .985・opacity 0・0.32 s)
 motion leave { out: {y:-12, scale:0.985, opacity:0, duration:0.32, ease:'power2.in'} }
 p { color: $fg; out: leave }
-div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; out: leave }
+div { border: none; out: leave }
 shape { out: leave }
 svg { out: leave }
 # 字幕: 下端中央の暗い札・句点で割り、句末の。は外す (声の 60 ms 前に出て 150 ms 後に消える)

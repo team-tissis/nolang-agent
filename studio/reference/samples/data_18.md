@@ -18,7 +18,7 @@ motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: 
 motion div { in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
 motion row { in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
 motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
-div { in: div; border-radius: 12px; background: $card; border: 1px solid $line; box-shadow: none }
+div { in: div; border-radius: 12px; background: $card; border: 1px solid $line }
 cut { stagger: sentence }
 run u { color: $a }
 run y { font-size: 0.6em; color: $mute; font-family: m }
@@ -30,7 +30,7 @@ def note(t) = p(font-size: 24px; color: $mute; font-family: m; in: note; content
 def kick(t) = p(font-size: 20px; color: $a; letter-spacing: 0.2em; font-family: m; in: note; content: {t})
 def paper = veil(color: #F4F1EA; opacity: 0.6)
 # 横棒の段 (×N で並べ、印は #名[k]): 札 + 棒 (幅 = 値 ÷ 最大 × 50% — 段の幅の比・棒は左から伸びる) + 棒の右端に値
-def hbar(v, t, n, c=$a) = div(width: 740px; height: 60px; padding: 0px; background: none; border: none)
+def hbar(v, t, n, c=$a) = div(width: 740px; height: 60px; background: none; border: none)
   p#t(left: 0px; cy: 50%; width: 200px; font-size: 26px; color: $ink; text-align: right; content: {t})
   div#b(left: 220px; cy: 50%; width: {v}%; height: 40px; border-radius: 4px; background: {c}; border: none; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
   p#n(left: .b.right+12; cy: 50%; font-size: 26px; font-family: e; color: {c}; content: {n})
@@ -51,7 +51,7 @@ section#model
 img#md_p(left: 660px; top: 0px; width: 620px; height: 720px; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [photo]30代の夫婦がリビングのソファに並んでノートパソコンで家計を確認する横顔、穏やかな表情、自然光
 kick#md_k(left: 64px; top: 56px) MODEL CASE
 h1#md_h(left: 64px; top: 84px; font-size: 48px) 30 代の夫婦、3 つの固定費
-div#md_r(left: 64px; top: 184px; width: 560px; height: 264px; gap: 16; padding: 0px; display: flex; flex-direction: column) ×3
+div#md_r(left: 64px; top: 184px; width: 560px; height: 264px; gap: 16; display: flex; flex-direction: column) ×3
   icon#i(left: 22px; cy: 50%; font-size: 34px; name: "device-mobile;lightning;television-simple"; color: $a)
   p#n(left: 76px; cy: 50%; font-size: 28px; color: $ink) スマホ (2 人);電気;サブスク (3 本)
   p#v(right: 24px; cy: 50%; font-size: 36px; font-family: e; color: $ink) 16,000{y}円 / 月{/};11,000{y}円 / 月{/};3,300{y}円 / 月{/}
@@ -66,7 +66,7 @@ num#ph_n(left: 64px; top: 44px) 01
 h1#ph_h(left: 152px; top: 52px; font-size: 52px) スマホ
 sub#ph_s(left: 64px; top: 128px) 大手キャリア 2 人 → 格安プラン
 hbar#ph_c(left: 64px; top: 240px; width: 740px; height: 160px; display: flex; flex-direction: column; gap: 40px; v: "50;16"; t: "今 (大手キャリア);見直し後 (格安)"; n: "16,000 円;5,000 円"; c: "$mute;$a") ×2
-div#ph_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
+div#ph_d(left: 860px; top: 196px; width: 356px; height: 250px)
   p#l(left: 28px; top: 26px; font-size: 22px; font-family: m; color: $mute) 年間の差
   p#v(left: 28px; top: 70px; font-size: 64px; font-family: e; color: $a) [count:132,000]{y}円{/}
   shape#r(left: 28px; top: 162px; width: 300px; height: 2px; path: line_h; background: $line; border: 2px solid $line)
@@ -77,11 +77,11 @@ img#pw_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '45% 50%']}) [
 paper#pw_v
 num#pw_n(left: 64px; top: 44px) 02
 h1#pw_h(left: 152px; top: 52px; font-size: 52px) 電気
-div#pw_t(left: 64px; top: 124px; width: 480px; height: 52px; padding: 0px; background: $a2; border: none; border-radius: 26px)
+div#pw_t(left: 64px; top: 124px; width: 480px; height: 52px; background: $a2; border: none; border-radius: 26px)
   icon#i(left: 18px; cy: 50%; font-size: 26px; name: check-circle; color: $a)
   p#t(left: 54px; cy: 50%; font-size: 24px; color: $a) 使用量はそのまま、契約先だけ変更
 hbar#pw_c(left: 64px; top: 240px; width: 740px; height: 160px; display: flex; flex-direction: column; gap: 40px; v: "50;43"; t: "今の契約;新しい契約"; n: "11,000 円;9,400 円"; c: "$mute;$a") ×2
-div#pw_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
+div#pw_d(left: 860px; top: 196px; width: 356px; height: 250px)
   p#l(left: 28px; top: 26px; font-size: 22px; font-family: m; color: $mute) 年間の差
   p#v(left: 28px; top: 70px; font-size: 64px; font-family: e; color: $a) [count:19,200]{y}円{/}
   shape#r(left: 28px; top: 162px; width: 300px; height: 2px; path: line_h; background: $line; border: 2px solid $line)
@@ -93,11 +93,11 @@ paper#sb_v
 num#sb_n(left: 64px; top: 44px) 03
 h1#sb_h(left: 152px; top: 52px; font-size: 52px) サブスク
 sub#sb_s(left: 64px; top: 128px) 使っていない動画・音楽の 3 本を解約
-div#sb_k(left: 64px; top: 196px; width: 740px; height: 76px; gap: 16; padding: 0px; display: flex) ×3
+div#sb_k(left: 64px; top: 196px; width: 740px; height: 76px; gap: 16; display: flex) ×3
   icon#i(left: 18px; cy: 50%; font-size: 28px; name: "film-strip;film-strip;music-notes"; color: $mute)
   p#t(left: 56px; cy: 50%; font-size: 24px; color: $ink) 動画配信 A;動画配信 B;音楽配信
 hbar#sb_c(left: 64px; top: 310px; width: 740px; height: 130px; display: flex; flex-direction: column; gap: 30px; v: "50;1"; t: "今;解約後"; n: "3,300 円;0 円"; c: "$mute;$a") ×2
-div#sb_d(left: 860px; top: 196px; width: 356px; height: 250px; padding: 0px)
+div#sb_d(left: 860px; top: 196px; width: 356px; height: 250px)
   p#l(left: 28px; top: 26px; font-size: 22px; font-family: m; color: $mute) 年間の差
   p#v(left: 28px; top: 70px; font-size: 64px; font-family: e; color: $a) [count:39,600]{y}円{/}
   shape#r(left: 28px; top: 162px; width: 300px; height: 2px; path: line_h; background: $line; border: 2px solid $line)
@@ -120,7 +120,7 @@ veil#mo_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 shape#mo_c(left: 24px; top: 24px; width: 240px; height: 240px; path: circle; background: $a; opacity: 0.06; main: breathe)
 p#mo_k(left: 72px; top: 150px; font-size: 30px; font-family: m; color: $mute) 年 190,800 円は
 h1#mo_h(left: 72px; top: 200px; font-size: 72px) 月の手取りの[br]{m}1 か月分近く{/}
-div#mo_n(left: 72px; top: 420px; width: 420px; height: 64px; padding: 0px)
+div#mo_n(left: 72px; top: 420px; width: 420px; height: 64px)
   icon#i(left: 20px; cy: 50%; font-size: 28px; name: arrows-clockwise; color: $a)
   p#t(left: 62px; cy: 50%; font-size: 26px; color: $ink) 一度の手続きで、毎年続く
 
@@ -129,7 +129,7 @@ img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '65% 50%']}) [
 veil#cl_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 kick#cl_k(left: 72px; top: 120px) THIS WEEK
 h1#cl_h(left: 72px; top: 150px; font-size: 76px) まず 1 つだけ、[br]{u}今週やる。{/}
-div#cl_c(left: 72px; top: 380px; width: 600px; height: 70px; gap: 14; padding: 0px; display: flex) ×3
+div#cl_c(left: 72px; top: 380px; width: 600px; height: 70px; gap: 14; display: flex) ×3
   icon#i(left: 16px; cy: 50%; font-size: 26px; name: "device-mobile;lightning;television-simple"; color: $a)
   p#t(left: 50px; cy: 50%; font-size: 24px; color: $ink) スマホ;電気;サブスク
 ```

@@ -46,7 +46,7 @@ sound cheer = "イェーイという歓声と拍手"
 run y { color: $yellow }
 cut { stagger: 0 }
 p { color: #FFFFFF; white-space: nowrap; palt: off; out: none }
-div { padding: 0px; border: none; box-shadow: none; out: none }
+div { border: none; out: none }
 img { out: none }
 svg { out: none }
 shape { out: none }
@@ -60,7 +60,7 @@ subtitle(left: 0px; bottom: 31px; width: 1280px; font-size: 43px; line-height: 1
 # 切替の前の文の札: 字幕は切替の帯より上に描かれるので、声の終わりで消して帯に被らせない ([card:early])
 subtitle.early(tail: 0)
 # 全編の層: 字幕の下の暗い帯 (溜めと結果で to で消して締めで戻す)・全面の白い閃光 (攻撃・すぐに・結果の語で to)
-div#sub_band(left: 0px; top: 540px; width: 1280px; height: 180px; background: linear(#120E3000,#120E3080@55%,#120E30C7,180); in: {opacity:0, duration:0.3})
+div#sub_band(left: 0px; top: 540px; width: 1280px; height: 180px; background: linear(#120E3000,#120E3080@55%,#120E30C7,180); border-radius: 16px; in: {opacity:0, duration:0.3})
 veil#flash(color: #FFFFFF; opacity: 0; z-index: curtain; in: none)
 # 部品の svg (4 方向の星・点線の輪・上向きの山形・ハート・警告の三角・集中線・桃の斜めの縞・星形の爆発の板)
 svg star = """<svg viewBox="-50 -50 100 100"><path d="M0 -48 C6 -10 10 -6 48 0 C10 6 6 10 0 48 C-6 10 -10 6 -48 0 C-10 -6 -6 -10 0 -48 Z" fill="#FFFBE0" stroke="#FFB3D4" stroke-width="4"/></svg>"""
@@ -73,7 +73,7 @@ svg stripes = """<svg viewBox="0 0 1280 720"><defs><pattern id="p" width="61" he
 svg burst = """<svg viewBox="0 0 1880 500"><polygon points="1814.0,250.0 1640.4,269.1 1828.9,299.0 1616.4,307.0 1779.3,347.0 1557.1,342.4 1645.2,382.9 1474.2,374.8 1514.1,415.4 1368.7,403.1 1373.6,444.9 1227.1,417.3 1210.7,466.2 1093.7,437.6 1033.1,479.8 940.0,438.4 850.2,471.6 788.9,434.4 671.4,464.5 652.6,417.5 486.9,453.6 505.6,405.1 360.3,417.0 397.2,376.8 208.0,388.0 304.1,345.3 126.7,343.9 279.8,305.7 53.0,298.9 207.8,270.0 77.8,250.0 218.6,230.3 64.7,201.7 279.6,194.3 113.4,154.5 314.6,156.3 204.7,111.4 419.9,128.5 356.8,82.0 528.9,103.2 496.4,50.7 654.2,83.4 669.0,33.6 787.5,63.8 848.2,23.5 940.0,64.9 1034.3,17.3 1086.4,71.3 1211.9,32.9 1240.8,74.7 1368.0,57.7 1365.7,98.0 1541.6,76.6 1459.9,128.5 1673.4,111.7 1573.8,155.1 1728.7,158.9 1631.5,191.7 1772.5,204.1 1675.3,229.9" fill="#FF4F9A" stroke="#1E1B4B" stroke-width="12" stroke-linejoin="round"/></svg>"""
 
 # STEP 札: 黄の札 (STEP + 番号・傾き -4°) → 縁取りの題 → 進みの点 5 つ (済 = 黄・今 = 桃の横長)。札・題・点は切替の帯が過ぎてから順に出る
-def step_tag(n, t, w, ta, pl, dl, dw, dc) = div(width: {w}; height: 140px; background: none)
+def step_tag(n, t, w, ta, pl, dl, dw, dc) = div(width: {w}; height: 140px)
   div#pill(left: {pl}; top: 0px; width: 170px; height: 56px; background: $yellow; border: 4px solid $navy; border-radius: 12px; box-shadow: 0px 5px 0px $navy; transform: rotate(-4deg); delay: 490; in: {scale:2.2, opacity:0, rotation:-24, duration:0.34, ease:'back.out(2.2)'})
     p#s(left: 13px; top: 15px; width: 92px; font-family: d; font-size: 25px; line-height: 1.25; color: $navy) STEP
     p#n(left: 108px; top: 0px; width: 50px; font-family: d; font-size: 44px; line-height: 1.2; color: $navy; content: {n})
@@ -84,7 +84,7 @@ def sfx = p(font-family: d; color: $yellow; stroke: $navy,12; text-shadow: 0px 5
 # 札の文字 (白地・紺の縁・紺の硬い影)
 def plate = p(width: 184px; font-size: 56px; text-align: center; color: $navy; background: #FFFFFF; border: 5px solid $navy; border-radius: 15px; padding: 0px 29px 5px 29px; box-shadow: 0px 6px 0px $navy; in: {y:80, opacity:0, duration:0.35, ease:'back.out(2)'})
 # 下準備の行: 黄の光 (語で点ける) + アイテムの絵 + 小見出し + 本文 + チェックの枠と描かれる ✓
-def prep_row(s, b, pic) = div(width: 457px; height: 93px; background: none; in: {x:40, opacity:0, duration:0.3, ease:'power2.out'})
+def prep_row(s, b, pic) = div(width: 457px; height: 93px; in: {x:40, opacity:0, duration:0.3, ease:'power2.out'})
   div#hl(left: 7px; top: 4px; width: 443px; height: 85px; border-radius: 13px; background: $hl; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.2})
   img#icon(left: 17px; cy: 50%; width: 75px; height: 75px; object-fit: contain; main: none; content: {pic})
   p#s(left: 105px; top: 13px; font-size: 19px; color: $pink_deep; content: {s})
@@ -141,7 +141,7 @@ div#prep_card(left: 778px; top: 27px; width: 467px; height: 266px; background: $
   div#head(left: 0px; top: 0px; width: 457px; height: 61px; background: $pink; border-radius: 15px 15px 0px 0px)
     p#t(left: 20px; cy: 50%; font-size: 39px) 下準備
     p#sub(left: 150px; cy: 50%; font-size: 20px; color: $navy; background: $yellow; border-radius: 99px; padding: 3px 12px 4px 12px) 復活させる前に
-  div#rule(left: 0px; top: 61px; width: 457px; height: 5px; background: $navy)
+  div#rule(left: 0px; top: 61px; width: 457px; height: 5px; background: $navy; border-radius: 16px)
   prep_row#r1(left: 0px; top: 66px; s: 着替え; b: 神父に着替える; pic: "[transparent]木のハンガーに掛かった、白いローマンカラーと小さな銀の十字架のペンダントのついた長い黒の神父服。かわいいトゥーンシェードの 3D ゲームの衣装アイテムのアイコン、中央に一つだけ。"; delay: 760)
   shape#sep(left: 17px; top: 160px; width: 423px; height: 3px; path: line_h; border: 3px solid #1E1B4B40; dash: 9,7)
   prep_row#r2(left: 0px; top: 163px; s: 小道具から; b: 車椅子を出す; pic: "[transparent]黒い座面の光沢のある銀色の車椅子を斜め前から。かわいいトゥーンシェードの 3D ゲームのアイテムのアイコン、中央に一つだけ。"; delay: 860)
@@ -168,7 +168,7 @@ step_tag#tag_lift(left: 37px; top: 400px; n: 4; t: 倒れたら持ち上げる; 
 section#counter
 img#counter_bg(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 30%', '50% 30%']}) [ref:@sheet]画面には二人だけ。晴れた町の通りで、神父の服の黒髪ボブの女子高生が黒スーツの男を両腕に抱えているが、男が突然怒って目を覚まし、暴れて拳を振り上げ反撃しようとしている。頭の上にマンガの怒りマークと湯気。女子高生は大きな汗をかいてあわてた顔。コミカルで無害。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
 img#seat_bg(inset: 0; content: @seat; main: kb {scale: [1.12, 1], focus: ['50% 40%', '50% 40%']}; in: none)
-div#warn_frame(inset: 0; background: radial(#FF282800,#FF282800@50%,#FF2828A6,50%,50%); border: 11px solid #FF3B3BF2; opacity: 0; in: none)
+div#warn_frame(inset: 0; background: radial(#FF282800,#FF282800@50%,#FF2828A6,50%,50%); border: 11px solid #FF3B3BF2; opacity: 0; border-radius: 16px; in: none)
 div#warn_sign(left: 867px; top: 373px; width: 376px; height: 86px; background: $red; border: 5px solid #FFFFFF; border-radius: 16px; box-shadow: 0px 8px 0px 4px $navy; in: {scale:0, rotation:-25, duration:0.32, ease:'back.out(2.6)'}; out: {scale:0, opacity:0, duration:0.2, ease:'power2.in'})
   svg#tri(left: 15px; cy: 50%; width: 61px; height: 55px; part: warn_tri)
   p#t(left: 88px; cy: 50%; font-size: 43px) 反撃に注意！
@@ -179,7 +179,7 @@ step_tag#tag_counter(left: 37px; top: 29px; n: 5; t: すぐ車椅子に座らせ
 # 溜め: 切替なしで同じ車椅子の絵に寄り続け、周りを暗く沈め、「そうすると」が 1 字ずつ上がり、点が 1 つずつ落ちて弾む (字幕は消す)
 section#suspense
 img#sus_bg(inset: 0; content: @seat; main: kb {scale: [1, 1.42], focus: ['55% 26%', '55% 26%']})
-div#sus_dim(inset: 0; background: radial(#0E0A2826,#0E0A28D1@62%,55%,30%); in: {opacity:0, duration:0.5, ease:'power1.out'})
+div#sus_dim(inset: 0; background: radial(#0E0A2826,#0E0A28D1@62%,55%,30%); border-radius: 16px; in: {opacity:0, duration:0.5, ease:'power1.out'})
 group#hero_sus(left: 0px; top: 0px; width: 1280px; height: 720px; transform-origin: 50% 70%)
   p#word(left: 370px; top: 467px; width: 455px; font-family: d; font-size: 80px; letter-spacing: 0.09em; stroke: $navy,14; in: {y:33, opacity:0, duration:0.25, ease:'power2.out', stagger:{each:0.15}}) そうすると
   p#dot(left: "hero_sus.word.right-26;hero_sus.word.right+4;hero_sus.word.right+34"; top: 467px; width: 44px; font-family: d; font-size: 80px; stroke: $navy,14; in: {y:-27, opacity:0, duration:0.25, ease:'bounce.out', stagger:{each:0.28}}) ×3 .;.;.

@@ -56,7 +56,7 @@ svg voice_ico = """<svg viewBox="0 0 84 84"><rect x="1" y="1" width="82" height=
 svg wand_ico = """<svg viewBox="0 0 60 60"><rect x="1" y="1" width="58" height="58" rx="14" fill="#5B9DFF" fill-opacity="0.14" stroke="#5B9DFF" stroke-opacity="0.6" stroke-width="2"/><path d="M17 41 L35 23 M31 19 L41 29 M22 18 L24 22 M18 26 L22 24 M40 38 L43 42" fill="none" stroke="#86B8FF" stroke-width="4" stroke-linecap="round"/></svg>"""
 svg bubble_ico = """<svg viewBox="0 0 60 60"><rect x="1" y="1" width="58" height="58" rx="14" fill="#F4B942" fill-opacity="0.14" stroke="#F4B942" stroke-opacity="0.6" stroke-width="2"/><path d="M13 16 H47 A4 4 0 0 1 51 20 V36 A4 4 0 0 1 47 40 H26 L19 46 V40 H13 A4 4 0 0 1 9 36 V20 A4 4 0 0 1 13 16 Z" fill="none" stroke="#F4B942" stroke-width="3" stroke-linejoin="round"/><path d="M19 28 V28 M24 24 V32 M29 21 V35 M34 25 V31 M39 23 V33 M44 27 V29" stroke="#F4B942" stroke-width="3" stroke-linecap="round"/></svg>"""
 p { color: $ink }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
+div { border: none }
 # 字幕: 下端中央の半透明の黒い札・数字は黄の欧文 (台詞の {b})・札の中の読点は空白に・cut を割らない (札 = 文、[|] で句に切る)
 subtitle.hug(bottom: 33px; font-size: 25px; line-height: 1.24; letter-spacing: 0.03em; color: #F4F7FC; background: #04070F94; border-radius: 8px; padding: 5px 17px 7px 17px; box-shadow: 0px 4px 16px #00000040; unit: sentence; strip: 、。>space; lead: 50; tail: 0; hold: off; in: {y:5, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power2.in'})
 # 曲: 頭の 1 秒と締めの題だけ前に出し、台詞の間は 6 dB 下げる

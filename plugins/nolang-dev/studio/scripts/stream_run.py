@@ -76,6 +76,38 @@ _RENAMABLE = re.compile(r"^[a-z]+(?:_[a-z0-9_]+|[0-9][a-z0-9_]*)$")
 _RESERVED_NAMES = frozenset({"bg", "se", "subtitle", "cut", "screen", "self", "prev"})
 
 
+def rows_naming_layers(text: str, layers: list[str]) -> tuple[set[int], int]:
+    """text (cut の block) の中で層の名を指す行 (section の `#名(`・印の `#名`) の 0 始まりの行番号と、見つかった層の数。板の子の層
+    (`板._board`・`板._text`) は板の名でも引く (板の出現の印は `[>#板]`)。子の名 (`板.k`) は自分の名だけ。"""
+    lines = text.split("\n")
+    rows: set[int] = set()
+    hit = 0
+    for layer in layers:
+        names = {name for name in (layer, layer.split("._")[0]) if name and name != "-"}
+        if not names:
+            continue
+        pattern = re.compile(r"#(?:" + "|".join(re.escape(name) for name in names) + r")(?![\w.])")
+        found = {k for k, line in enumerate(lines) if pattern.search(line)}
+        if found:
+            rows |= found
+            hit += 1
+    return rows, hit
+
+
+def cut_timing(check_out: str, cut: str) -> str:
+    """check の出力から担当に渡す時刻の行を取る: 動画全体の `cut の見積り` と、cut の `scene の尺` と `出る時刻` の行 (見出しを頭に付ける)。"""
+    keep: list[str] = []
+    header = ""
+    for line in check_out.splitlines():
+        if line.startswith("  cut の見積り"):
+            keep.append(line.strip())
+        elif line.startswith("  ") and not line.startswith("    "):
+            header = line.strip().split(" (", 1)[0].rstrip(":")
+        elif line.startswith(f"    {cut}:") and header in ("scene の尺", "出る時刻"):
+            keep.append(f"{header} — {line.strip()}")
+    return "\n".join(keep)
+
+
 def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None:
     """after (直し役の出力) のうち、bad (0 始まりの行番号) を含む変更の塊 (before との差分の塊) を before の行に戻した text。
     bad が変更の塊の外にしか無ければ None (直し役の変更が原因ではない)。"""
@@ -868,6 +900,10 @@ class Run:
         fix_calls = 0  # 直し役を呼んだ回数 (著者版への差し戻しも 1 回と数える)・2 回まで
         before_fix: str | None = None  # 直し役を掛ける直前の cut の text (直し役が作った DEFECT の行を戻す元)
         settled = False  # 直し役の壊した行を戻した — DEFECT が消えれば残りの指摘で直し役をもう呼ばない
+        before_clean = False  # before_fix の版の check が DEFECT 0 だったか (直しが DEFECT を作ったら版ごと戻せる)
+        prev_keys: set[tuple[str, str]] | None = (
+            None  # 直し役を掛ける直前の check の指摘 (規則と層) — 直しが新しく作った指摘の判定
+        )
         prev_findings: str | None = None
         reverted_fixes: list[str] = []  # 戻した直し役の出力 (cut の text) — 同じ edit が返ったら当てずに戻す
         failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
@@ -895,11 +931,34 @@ class Run:
             if defects and before_fix is not None:
                 fixed_text = (self.solo / f"cut_{c}.txt").read_text()
                 reverted = self.revert_fixer_damage(c, cuts, before_fix, defects)
+                if not reverted and before_clean:
+                    # 直す前の版は DEFECT 0 だった — 直し役が警告を直しに行って DEFECT を作った (別の行に同じ印を書き足す等で、
+                    # 報告の行が直し役の変更の塊の外に出る)。落とすより直す前の版の方が良いので、直しをまるごと戻す
+                    (self.solo / f"cut_{c}.txt").write_text(before_fix)
+                    reverted = len(defects)
                 before_fix = None
                 if reverted:
                     reverted_fixes.append(fixed_text)
                     failed_edits = edit_lines((self.solo / f"cut_{c}.txt").read_text(), fixed_text)
                     self.log(cut=c, event="fix_reverted", round=rnd, n=reverted, defect=len(defects))
+                    settled = True
+                    continue
+            if not defects and before_fix is not None and prev_keys is not None:
+                # 直しが新しく作った指摘 (直す前の check に無かった規則と層の組・直しの列か severe) — その層を指す行が直し役の
+                # 変更の塊にあれば、その塊だけ直す前に戻す (板の印を足して空の板を作る等。最後の直しが作った欠陥は誰も直さない)
+                regressed = [
+                    f
+                    for f in mine
+                    if f.get("severity") in ("severe", "warn")
+                    and (self.to_fix(f) or f.get("severity") == "severe")
+                    and (str(f.get("rule", "")), str(f.get("layer", ""))) not in prev_keys
+                ]
+                undone = self.revert_new_findings(c, before_fix, regressed) if regressed else 0
+                before_fix = None
+                if undone:
+                    self.log(
+                        cut=c, event="fix_regressed", round=rnd, n=undone, rules=sorted({f["rule"] for f in regressed})
+                    )
                     settled = True
                     continue
             need = bool(defects) or (bool(fixes) and not settled)
@@ -941,6 +1000,12 @@ class Run:
                 self.log(cut=c, event="revert_author", round=rnd, defect=len(defects))
                 continue
             before_fix = (self.solo / f"cut_{c}.txt").read_text()
+            before_clean = not defects
+            prev_keys = {
+                (str(f.get("rule", "")), str(f.get("layer", "")))
+                for f in mine
+                if f.get("severity") in ("severe", "warn")
+            }
             ok, tail = self.run_fixer(c, ff)
             if ok:
                 fix_calls += 1
@@ -1038,6 +1103,24 @@ class Run:
 
         return self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes)
 
+    def revert_new_findings(self, c: str, before: str, findings: list[dict[str, object]]) -> int:
+        """直しが新しく作った指摘の層を指す行 (section の `#名(`・印の `#名`) のうち、直し役が変えた塊にある物を直す前 (before) に
+        戻す。板の子の層 (`板._board`) は板の名でも引く。戻した指摘の数 (0 = 直し役の変更の外 → そのまま)。"""
+        blk = self.cut_block(c)
+        before_blk = self.split_block(c, before)
+        if blk is None or before_blk is None:
+            return 0
+        after_text = blk[0] + "---timeline---\n" + blk[1]
+        before_text = before_blk[0] + "---timeline---\n" + before_blk[1]
+        if after_text == before_text:
+            return 0
+        bad, hit = rows_naming_layers(after_text, [str(f.get("layer", "")) for f in findings])
+        new_text = revert_changed_regions(before_text, after_text, bad) if bad else None
+        if new_text is None or new_text == after_text:
+            return 0
+        (self.solo / f"cut_{c}.txt").write_text(new_text)
+        return hit
+
     def staff(self, i: int, c: str) -> None:
         """担当 (Opus・8 観点) が著者の cut を見直して書き直す。前の cut は著者の版を渡すので cut ごとに並列に走る。
         著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当が台詞の文字を変えていたら著者の版の文字に
@@ -1090,7 +1173,8 @@ class Run:
           DEFECT:ARG で落ちて台詞ごと消えた。子の名 (`icon#i` → `img#p`) だけを変えても後の cut の `[!#rv_f[1].i …]` が DEFECT:KEY に
           なる。変えた側の版の `def` は `名_<cut>` に改名してこの block の使い方ごと残す (担当・直し役の絵は変えない)。def 以外の種は
           元に戻すだけ (この cut の使い方が新しい形なら check の DEFECT で直し役に回る)。
-        同じ名・同じ形のまま中身 (見た目) を変えた定義は触らない。戻した時は `defs_restored` に `who` を記録する。"""
+        同じ名・同じ形のまま見た目 (大きさ・余白・色) を変えた定義は、担当なら形の変更と同じに扱う (後の cut の担当は元の見た目で並列に
+        置いている)。直し役は DEFECT を直すために定義の中身を変えるので触らない。戻した時は `defs_restored` に `who` を記録する。"""
         blk = self.cut_block(c)
         if blk is None or "---timeline---" not in before:
             return
@@ -1109,7 +1193,10 @@ class Run:
                     missing.append((name, text))
                 continue
             gone = sorted(self.children_used_later(c, name, def_children(text)) - def_children(cur))
-            if (self.def_signature(cur) != self.def_signature(text) or gone) and self.used_later(c, name):
+            # 担当は見た目 (大きさ・余白・色) も変えない — 後の cut の担当は元の見た目で並列に置いている (nw1 の判子 52 → 112px で
+            # 後の 2 cut がはみ出した・10-22)。直し役は DEFECT の直しで定義の中身を変えるので形だけを見る
+            looks = who == "staff" and re.sub(r"\s+", " ", cur).strip() != re.sub(r"\s+", " ", text).strip()
+            if (self.def_signature(cur) != self.def_signature(text) or gone or looks) and self.used_later(c, name):
                 reshaped.append((kind, name, cur, text))
                 if gone:
                     lost[name] = gone
@@ -1458,13 +1545,13 @@ class Run:
         """著者の版 (担当が触る前) を check し、DEFECT 0 なら author_clean に (revert_author の元)。指摘の file を返す (担当へ)。"""
         t = time.time()
         cuts = self.live_cuts(self.order[: i + 1])
-        dd, _out, defects, lint, blockers = self.check_cut(c, cuts, "author")
+        dd, out, defects, lint, blockers = self.check_cut(c, cuts, "author")
         clean = not defects and not blockers  # 止まった check では c の実行の DEFECT が見えない
         if blockers - {"?", ROOT}:
             # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut を除いた doc で c の lint を取る (除いた cut の
             # 定義は根の後ろに写す — c が使う名を失った誤った DEFECT で unclean にしない)。判定は c の行に落ちる DEFECT で数える
             skip = frozenset(blockers - {"?", ROOT})
-            dd, _out, skipped, lint, rest = self.check_without(c, cuts, skip, "author")
+            dd, out, skipped, lint, rest = self.check_without(c, cuts, skip, "author")
             clean = not defects and not skipped and not rest
         if clean:
             self.author_clean.add(c)
@@ -1475,6 +1562,7 @@ class Run:
         )
         ff = dd / "out/findings_author.txt"
         ff.write_text(findings)
+        (dd / "out/timing_author.txt").write_text(cut_timing(out, c))  # 担当が読む (stream_author の staff・指摘の隣)
         self.log(cut=c, event="check", round="author", s=round(time.time() - t, 1), defect=len(defects), warn=len(mine))
         if c in self.cut_estimate:
             self.log(

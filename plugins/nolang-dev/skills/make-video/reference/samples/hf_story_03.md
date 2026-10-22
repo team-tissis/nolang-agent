@@ -33,7 +33,7 @@ run m { marker: $y,45% }
 run no { color: $c; font-family: dot }
 cut { stagger: 0 }
 p { color: #FFFFFF; out: none }
-div { border-radius: 0px; border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 img { out: none }
 svg { out: none }
 shape { out: none }
@@ -100,10 +100,10 @@ def capword(t, s=107) = p(font-size: {s}; font-family: d; line-height: 1.12; str
 # タイムテーブルの枠 (地 + 文字)・地図のピン (色の点 + 名札・輪は ping で広げる)・HP の段 (名 + 枠 + 赤の地 + 緑の残量 + ダメージ数字)
 def blk(t, bg, fg=#FFFFFF8C, s=20) = div(width: 253px; border-radius: 9px; background: {bg})
   p#t(left: 11px; cy: 50%; font-size: {s}; color: {fg}; content: {t})
-def pin(lab, c, glow) = div(width: 80px; height: 80px; background: none; in: {y:-40, scale:.2, opacity:0, duration:.25, ease:'back.out(1.7)'})
+def pin(lab, c, glow) = div(width: 80px; height: 80px; in: {y:-40, scale:.2, opacity:0, duration:.25, ease:'back.out(1.7)'})
   div#dot(cx: 50%; cy: 50%; width: 29px; height: 29px; border-radius: 99px; background: {c}; border: 4px solid #FFFFFF; box-shadow: 0px 0px 17px {glow})
   p#lab(cx: 50%; top: -41px; font-size: 20px; background: {c}; border-radius: 99px; padding: 3px 13px; content: {lab})
-def hudrow(n, d) = div(left: 20px; width: 573px; height: 71px; background: none; in: none)
+def hudrow(n, d) = div(left: 20px; width: 573px; height: 71px; in: none)
   p#nm(left: 0px; top: 29px; font-size: 27px; font-family: dot; content: {n})
   div#tr(left: 140px; top: 31px; width: 373px; height: 32px; background: #FFFFFF14; border: 3px solid #FFFFFF)
   div#red(left: 143px; top: 34px; width: 367px; height: 26px; background: $red)
@@ -117,10 +117,10 @@ div#blob2(left: 413px; top: 347px; width: 547px; height: 547px; background: radi
 div#blob3(left: -200px; top: 833px; width: 733px; height: 733px; background: radial(#FF2A3A,#FF2A3A00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: 67, period: 24}; bleed)
 div#blob4(left: 427px; top: -133px; width: 507px; height: 507px; background: radial(#2A4BFF,#2A4BFF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -60, y: 73, period: 36}; bleed)
 div#beam(left: "53;220;427;587"; top: -120px; width: 87px; height: 1533px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: sine {rotation: '21;-17;19;-23', period: '4.8;5.8;6.8;7.8', pivot: 'bottom'}; z-index: back; in: none; bleed) ×4
-div#floor_h(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,0,#00F0FFBF,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
-div#floor_v(left: -360px; top: 920px; width: 1440px; height: 507px; background: none; pattern: hatch,90,#FF46D2A6,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
+div#floor_h(left: -360px; top: 920px; width: 1440px; height: 507px; pattern: hatch,0,#00F0FFBF,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
+div#floor_v(left: -360px; top: 920px; width: 1440px; height: 507px; pattern: hatch,90,#FF46D2A6,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_fade(left: 0px; top: 920px; width: 720px; height: 133px; background: linear(#5A14AAE6,#5A14AA00,180); z-index: back; in: none)
-div#scan(inset: 0; background: none; pattern: hatch,0,#00000038,4,1.3; opacity: .45; z-index: back; in: none)
+div#scan(inset: 0; pattern: hatch,0,#00000038,4,1.3; opacity: .45; z-index: back; in: none)
 
 # 常設の上端 (z: front): 進行線 (青緑→マゼンタ→赤)・章札 (番号はドット書体・cut の頭で文字を差し替えて弾む)・右上のタグ
 div#prog_track(left: 0px; top: 0px; width: 720px; height: 8px; background: #FFFFFF26; z-index: front; in: none)
@@ -177,7 +177,7 @@ panel#tt(h: 248px)
   blk#g4(left: 343px; top: 179px; height: 47px; t: IDOL Q; bg: #FFFFFF1F)
   blk#ow(left: 80px; top: 96px; height: 56px; t: 推しA ♥; bg: linear(#2B7BFF,#3FD2FF,135); s: 27; box-shadow: 0px 0px 19px #3FB5FFE6; in: {scale:.6, opacity:0, duration:.2, ease:'back.out(1.7)'})
   blk#oe(left: 343px; top: 96px; height: 56px; t: 推しB ♥; bg: linear(#FF2448,#FF6A3D,135); s: 27; box-shadow: 0px 0px 19px #FF4A6AE6; in: {scale:.6, opacity:0, duration:.2, ease:'back.out(1.7)'})
-  div#band(left: 75px; top: 91px; width: 529px; height: 67px; border-radius: 12px; background: none; border: 4px solid $y; box-shadow: 0px 0px 20px #FFE94AE6; overlap: tt.ow; in: keys(at=0 scale=1.25 opacity=0 | at=0.165 scale=1 opacity=1 ease=power3.out | at=0.188 opacity=1 | at=0.323 opacity=0.45 | at=0.459 opacity=1 | at=0.594 opacity=0.45 | at=0.729 opacity=1 | at=0.865 opacity=0.45 | at=1 ease=none),duration=1330)
+  div#band(left: 75px; top: 91px; width: 529px; height: 67px; border-radius: 12px; border: 4px solid $y; box-shadow: 0px 0px 20px #FFE94AE6; overlap: tt.ow; in: keys(at=0 scale=1.25 opacity=0 | at=0.165 scale=1 opacity=1 ease=power3.out | at=0.188 opacity=1 | at=0.323 opacity=0.45 | at=0.459 opacity=1 | at=0.594 opacity=0.45 | at=0.729 opacity=1 | at=0.865 opacity=0.45 | at=1 ease=none),duration=1330)
   p#same(right: 5px; top: 59px; overlap: tt.g2; font-size: 19px; color: $navy; background: $y; border-radius: 99px; padding: 3px 11px; in: keys(at=0 scale=1.25 opacity=0 | at=0.165 scale=1 opacity=1 ease=power3.out | at=0.188 opacity=1 | at=0.323 opacity=0.45 | at=0.459 opacity=1 | at=0.594 opacity=0.45 | at=0.729 opacity=1 | at=0.865 opacity=0.45 | at=1 ease=none),duration=1330) SAME TIME
   p#stamp(left: 173px; top: 124px; font-size: 47px; font-family: d; color: $red; background: #FFFFFFE0; border: 7px solid $red; border-radius: 11px; padding: 4px 20px; box-shadow: 0px 0px 20px #FF2448CC; transform: rotate(-12deg); overlap: tt.ow; in: {scale:3, rotation:-18, opacity:0, duration:.15, ease:'power4.in'}) 被り確定
 
@@ -198,7 +198,7 @@ img#bottle(left: 433px; top: 253px; width: 227px; height: 335px; transform-origi
 svg#waves(left: 513px; top: 167px; width: 107px; height: 80px; part: waves; in: {opacity:0, duration:.2}; out: {x:-133, opacity:0, duration:.3, ease:'power2.in'})
 p#nurui(left: 373px; top: 220px; font-size: 29px; color: $ink; background: #7FE3FF; border-radius: 99px; padding: 5px 15px; box-shadow: 0px 0px 0px 3px #0B0730; transform: rotate(10deg); in: {scale:.3, rotation:20, opacity:0, duration:.22, ease:'back.out(1.7)'}; out: {x:-133, opacity:0, duration:.3, ease:'power2.in'}) ぬるい…
 # 流線 (100° の白い斜線を screen で・左へ流れる)
-div#speed(left: 0px; top: 0px; width: 1200px; height: 1280px; background: none; pattern: hatch,10,#FFFFFF8C,100,3; mix-blend-mode: screen; in: {opacity:0, duration:.08}; bleed)
+div#speed(left: 0px; top: 0px; width: 1200px; height: 1280px; pattern: hatch,10,#FFFFFF8C,100,3; mix-blend-mode: screen; in: {opacity:0, duration:.08}; bleed)
 
 # 限界突破: ステージの写真・HP のパネル (曲数・声 / 膝 / HP の残量が語で削れて赤くなり、ダメージ数字・警告の赤枠)・膝のポラロイド・「全部」で全回復と FULL RECOVERY・「限界？」で周辺減光 + 灰に沈む
 section#limit
@@ -208,7 +208,7 @@ panel#hud(h: 235px; border: 2px solid $c)
   p#song(left: 20px; top: 15px; font-size: 25px; font-family: dot; color: $y) SONG
   p#cnt(left: 113px; top: 11px; font-size: 33px; font-family: dot) 03 / 12
   hudrow#r(top: "40;93;147"; n: "声 VOICE;膝 LEGS;HP"; d: "-92;-95;-88") ×3
-  div#warn(left: -2px; top: -2px; width: 617px; height: 239px; border-radius: 20px; background: none; border: 5px solid $red; box-shadow: 0px 0px 27px #FF2448E6; in: {opacity:0, duration:.05})
+  div#warn(left: -2px; top: -2px; width: 617px; height: 239px; border-radius: 20px; border: 5px solid $red; box-shadow: 0px 0px 27px #FF2448E6; in: {opacity:0, duration:.05})
 # 膝のポラロイド (白い台紙 + 泥のスニーカー + 手書き風の一言・群ごと 8° 傾ける)
 group#shoe(left: 373px; top: 220px; width: 267px; height: 313px; rotation: 8; in: {x:133, scale:.4, rotation:22, opacity:0, duration:.28, ease:'back.out(1.7)'}; out: {opacity:0, duration:.15})
   div#paper(left: 0px; top: 0px; width: 267px; height: 313px; background: #FFFFFF; box-shadow: 0px 13px 33px #0000008C)
@@ -249,7 +249,7 @@ panel#cmp(h: 227px)
   p#lh(left: 20px; top: 16px; font-size: 29px; color: #7FE3FF; letter-spacing: .08em) 音源
   p#li(left: 20px; top: 59px; font-size: 27px; line-height: 1.55; color: #E9E6FF; opacity: .78) 耳で聴く[br]いつでも[br]何度でも
   div#vs(left: 303px; top: 20px; width: 3px; height: 187px; background: linear(#00E5FF,#FF2BD6,180))
-  div#cr(left: 313px; top: 16px; width: 280px; height: 200px; background: none; in: {x:27, scale:.6, opacity:0, duration:.22, ease:'back.out(1.7)'})
+  div#cr(left: 313px; top: 16px; width: 280px; height: 200px; in: {x:27, scale:.6, opacity:0, duration:.22, ease:'back.out(1.7)'})
     p#h(left: 0px; top: 0px; font-size: 29px; color: #FF6AB0; letter-spacing: .08em) フェス
     p#i(left: 0px; top: 43px; font-size: 27px; line-height: 1.55; text-shadow: 0px 0px 12px #FF4FA8E6) 全身で浴びる[br]一度きり[br]一生モノ
 flash#fl_neq(o: .5)

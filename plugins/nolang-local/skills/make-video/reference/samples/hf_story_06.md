@@ -20,7 +20,7 @@ sfx off
 lint off=dip_black_frame,duplicate_media,caption_collision,entrance_in_transition,entrance_in_fadeout,flash_text
 run g { color: $hl; font-family: mb }
 p { color: $ink; out: none }
-div { border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 img { out: none }
 group { out: none }
 shape { out: none }
@@ -56,8 +56,8 @@ bgm#music(volume: 0dB; duck: -7; fade: 300,1000; keys: "0:0|13.9s:0|14.5s:-2.5|1
 # 字幕: 明朝の白文字 + 濃い落ち影 (板なし)・画面の下 1/5 の上に置く・強調の語は金の極太 {g}
 subtitle(left: 40px; bottom: 261px; width: 640px; font-size: 40px; line-height: 1.42; letter-spacing: 0.04em; color: #FBF7EE; background: none; text-shadow: 0px 2px 7px #000000E6; unit: sentence; lead: 0; in: {y:8, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
 # 写真の下の陰 (字幕の地・下 507px で 78% まで) と上の陰 (題の地)
-def shade_b() = div(left: 0px; top: 773px; width: 720px; height: 507px; background: linear(#06080700,#0608076B@55%,#060807C7,bottom); in: none)
-def shade_t() = div(left: 0px; top: 0px; width: 720px; height: 427px; background: linear(#060807B8,#06080759@50%,#06080700,bottom); in: none)
+def shade_b() = div(left: 0px; top: 773px; width: 720px; height: 507px; background: linear(#06080700,#0608076B@55%,#060807C7,bottom); border-radius: 16px; in: none)
+def shade_t() = div(left: 0px; top: 0px; width: 720px; height: 427px; background: linear(#060807B8,#06080759@50%,#06080700,bottom); border-radius: 16px; in: none)
 # 消えた理由の札: 写真 (ゆっくり寄る・左からの暗幕 scrim) + 金の番号 + 太いゴシックの題。右から滑り込む
 def card(n, t, pic) = div(left: 47px; width: 627px; height: 193px; border-radius: 12px; background: $dark; border: 1px solid #FFFFFF1F; box-shadow: 0px 12px 27px #00000080; in: {x:93, opacity:0, duration:0.5, ease:'power3.out'})
   img#ph(inset: 0; content: {pic}; filter: saturate(0.85) brightness(1.18) contrast(1.05); scrim: left,0.86; main: kb {scale: [1, 1.12]})
@@ -97,7 +97,7 @@ shade_b#life_shade
 
 # 消えた理由: 暗い地に見出し・語ごとに右から写真の札 (01 → 02 → 03)・新しい札が出ると前の札を薄め、「餌」で 03 に語を足し、言い終わりで濃さを戻す
 section#causes
-div#c_bg(inset: 0; background: radial($moss,$dark@70%,50%,30%); in: none)
+div#c_bg(inset: 0; background: radial($moss,$dark@70%,50%,30%); border-radius: 16px; in: none)
 group#c_head(left: 47px; top: 117px; in: {y:12, opacity:0, duration:0.45, ease:'power2.out'})
   p#k(left: 0px; top: 0px; font-size: 19px; font-family: gb; letter-spacing: 0.42em; color: $gold) REASONS
   p#h(left: 0px; top: 36px; font-size: 52px; font-family: mb; letter-spacing: 0.06em) 消えた理由
@@ -108,7 +108,7 @@ card#card3(top: 672px; n: "03"; t: "水質汚染"; pic: "[photo]1970s Japan: a p
 
 # 1979: ほぼ黒の地に居ない川の写真を 2 割で敷き、「そして」→ 1920 から回って 1979 に止まる年 (着地で締まる) → 金の「年」→ 昭和54年
 section#year
-div#y_bg(inset: 0; background: $night; in: none)
+div#y_bg(inset: 0; background: $night; border-radius: 16px; in: none)
 img#y_photo(inset: 0; content: @kochi_empty; opacity: 0.2; filter: sepia(1) brightness(0.7); main: kb {scale: [1.18, 1.08]})
 p#soshite(cx: 360px; top: 427px; font-size: 39px; letter-spacing: 0.3em; color: $bone; in: {y:9, opacity:0, duration:0.45, ease:'power2.out'}) そして
 p#year(left: 66px; top: 507px; font-size: 200px; font-family: mb; line-height: 1; palt: off; text-shadow: 0px 7px 33px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0,0,1380,1460 laps=0,0,0,4 delay=320 ease=ease_in_out]
@@ -132,7 +132,7 @@ veil#flash(color: $white; opacity: 0.85; z-index: curtain; in: none)
 
 # 日本中 → 数十年: これまでの写真を切り出した 12 枚の格子が弾んで並び、「たった」から無作為な順に 1 枚ずつ消える → 「私たちの」で古い写真の静物が溶けて重なり、塵が漂う
 section#grid
-div#g_bg(inset: 0; background: $dark; in: none)
+div#g_bg(inset: 0; background: $dark; border-radius: 16px; in: none)
 group#grid(main: keys(at=0 scale=1 | at=1 scale=1.05 ease=none),window=0,4470,forwards)
   img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 188px; height: 188px; border-radius: 9px; box-shadow: 0px 7px 17px #00000080; main: none; object-fit: cover; object-position: "50% 40%;52% 45%;60% 52%;42% 30%;8% 74%;52% 58%;47% 50%;50% 46%;72% 58%;52% 58%;50% 30%;34% 28%"; zoom: "140%;170%;150%;150%;300%;220%;300%;230%;230%;210%;260%;230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
 img#memory(inset: 0; content: @memory; main: kb {scale: [1, 1.13], focus: ['52% 59%', '52% 59%'], ease:'sine.inOut'}; in: {opacity:0, duration:0.5})

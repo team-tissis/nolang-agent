@@ -36,7 +36,7 @@ run so { font-size: 1.22em }
 run gd { color: $gold; font-family: n; font-size: 2.6em }
 prompt_tail "No text, no letters, no numbers, no logos, no watermark, no readable race bibs."
 p { color: $ink; out: none }
-div { border: none; box-shadow: none; padding: 0px; background: none; border-radius: 0px; out: none }
+div { border: none; out: none }
 shape { out: none }
 svg { out: none }
 img { out: none }

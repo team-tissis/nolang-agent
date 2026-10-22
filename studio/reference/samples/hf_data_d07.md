@@ -43,7 +43,7 @@ sound blip = "やわらかく短い電子のピッという合図の音"
 sound peta = "シールをペタッと貼る音"
 sound check = "鉛筆でチェックを付けるシュッという音"
 p { color: $ink }
-div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; in: none }
+div { in: none }
 bgm#music 明るく前向きで軽やかなアコースティックの曲、ギターと木琴と軽い手拍子、穏やかなテンポで主旋律は控えめ、調査報告の解説の下地
 
 # 付箋 (色の地 + 上の光沢 + 右下のめくれ + 柔らかい落ち影)・叩きつけて出る (上から・大きめ・傾けて・back で着地)

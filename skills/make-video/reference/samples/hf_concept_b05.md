@@ -30,7 +30,7 @@ run b { color: $chip }
 run g { color: $ok }
 run nb { font-size: 1.4em }
 p { color: #FFFFFF; line-height: 1.45; out: none }
-div { border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 img { out: none }
 group { color: #FFFFFF; out: none }
 shape { out: none }
@@ -72,7 +72,7 @@ subtitle.hug(bottom: 247px; padding: 12px 0px; font-size: 41px; line-height: 1.2
 def telop = group(left: 20px; top: 119px; width: 680px; height: 340px; transform-origin: 50% 40%; in: {scale:1.45, opacity:0, duration:.24, ease:'back.out(2.4)'})
 def tl(t, s, w) = p(left: 0px; width: 680px; text-align: center; color: #FFFFFF; font-family: d; font-size: {s}; line-height: 1.35; white-space: nowrap; stroke: #05060B,{w}; text-shadow: 0px 7px 17px #000000A6; content: {t})
 # 上 4 割の暗幕 (テロップの下地・どの写真の場面にも)
-def topshade = div(left: 0px; top: 0px; width: 720px; height: 507px; background: linear(#0000009E,#00000059@55%,#00000000,180); in: none)
+def topshade = div(left: 0px; top: 0px; width: 720px; height: 507px; background: linear(#0000009E,#00000059@55%,#00000000,180); border-radius: 16px; in: none)
 # 図の白い名札 (極太・中央揃え・ふわっと出る)
 def lab(t) = p(font-size: 37px; text-align: center; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}; content: {t})
 # 結論の札 (紺の丸札 + 水色の縁・弾んで出る・太字は {b} 黄 / {g} 緑)
@@ -82,7 +82,7 @@ def stamp(t, c, bg) = p(font-family: d; text-align: center; color: {c}; backgrou
 # 光の筋 (外側だけ光る細い帯・回すと左端が中心に来るよう中点を置く)
 def ray(r) = div(width: 507px; height: 5px; border-radius: 3px; rotation: {r}; background: linear(#FFD65A00,#FFD65A00@36%,#FFD65AF2@52%,#FFF4BE,90))
 # 全編の周辺減光 (写真と図の上・テロップの下)
-div#grade(inset: 0; background: radial(#00000000@60%,#00000073,50%,50%); in: none)
+div#grade(inset: 0; background: radial(#00000000@60%,#00000073,50%,50%); border-radius: 16px; in: none)
 
 # 冒頭: 星空の大きな太陽が呼吸して、語で一気に縮み、白い閃光と揺れで漆黒の円盤に変わる。地球が渦を巻いて吸い込まれ、「巻き戻し」で戻る
 section#hook
@@ -104,7 +104,7 @@ group#h_label(left: 343px; top: 800px; width: 377px; height: 90px; in: {x:27, op
 img#h_earth.bleed(left: 615px; top: 811px; width: 127px; height: 127px; content: @earth; object-fit: contain; in: {opacity:0, duration:.05})
 p#h_q(left: 413px; top: 527px; width: 200px; font-family: d; font-size: 200px; line-height: 1; text-align: center; color: $red; stroke: #05060B,17; text-shadow: 0px 7px 17px #000000A6; transform: rotate(12deg); in: {scale:.2, rotation:-32, opacity:0, duration:.38, ease:'back.out(2.6)'}; out: {opacity:0, duration:.15}) ？
 # 巻き戻しの走査線 + 札
-div#h_rew(inset: 0; pattern: hatch,90,#FFFFFF12,5,1; in: {opacity:0, duration:.08})
+div#h_rew(inset: 0; pattern: hatch,90,#FFFFFF12,5,1; border-radius: 16px; in: {opacity:0, duration:.08})
   p#tag(left: 40px; top: 810px; width: 240px; text-align: center; font-size: 31px; padding: 4px 15px; border: 3px solid #FFFFFF; border-radius: 7px; background: #00000059) ◀◀ 巻き戻し
 topshade#h_shade
 # 表紙のテロップは 0 frame 目から見えている (1.08 から締まり、呼吸する)・ブラックホールは炎のグラデの文字
@@ -146,7 +146,7 @@ veil#s_flash(color: #FFFFFF; opacity: .85; z-index: curtain; in: {opacity:0, dur
 # なぜ: 方眼の宇宙に式の札、太陽と地球と距離の点線を置き、太陽が縮んで半径の数字が 696,000 → 3 に減り、距離の線が伸びて 1億5000万 km、引力の矢、全体を薄めて判子
 section#why
 img#w_space(inset: 0; content: @space; opacity: .8; main: none)
-div#w_grid(inset: 0; pattern: grid,60,#78B4FF59; opacity: .28; in: none)
+div#w_grid(inset: 0; pattern: grid,60,#78B4FF59; opacity: .28; border-radius: 16px; in: none)
 topshade#w_shade
 p#w_formula(left: 60px; top: 347px; width: 600px; font-size: 49px; line-height: 1.35; text-align: center; padding: 17px 0px; border-radius: 17px; background: #060C1CD1; border: 2px solid #8CBEFF99; box-shadow: 0px 7px 20px #00000080; delay: 250; in: {y:27, opacity:0, duration:.4, ease:'power3.out'}) 重力 ∝ {m}質量{/} ÷ {d}距離{/}²
 group#w_diag(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
@@ -157,7 +157,7 @@ group#w_diag(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   p#radius(left: 7px; top: 805px; width: 347px; font-size: 32px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180 delay=450]{/} km
   shape#dline(points: "227,673 527,673"; background: none; border: 3px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
   lab#dlab(left: 227px; top: 613px; width: 300px; color: $cyan; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.15}) 距離
-  div#line(left: 227px; top: 671px; width: 300px; height: 5px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 9px #5FE0FFCC; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
+  div#line(left: 227px; top: 671px; width: 300px; height: 5px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 9px #5FE0FFCC; border-radius: 16px; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
   p#dist(left: 200px; top: 607px; width: 360px; font-size: 41px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250]万 km
   img#earth(left: 530px; top: 617px; width: 113px; height: 113px; content: @earth; object-fit: contain; delay: 750; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
   p#pull(left: 233px; top: 693px; width: 307px; font-size: 36px; text-align: center; white-space: nowrap; in: {x:27, opacity:0, duration:.35, ease:'power2.out'}) ◀── 引力
@@ -188,7 +188,7 @@ group#l_a.bleed(left: 0px; top: 0px; width: 720px; height: 1280px; in: none; out
     ray#r12(left: 176px; top: 421px; r: 286deg)
     ray#r13(left: 273px; top: 473px; r: 311deg)
     ray#r14(left: 336px; top: 557px; r: 335deg)
-  div#red(z-index: front; inset: 0; background: radial(#780A0A00@40%,#960014A6,50%,42%); opacity: .95; in: none)
+  div#red(z-index: front; inset: 0; background: radial(#780A0A00@40%,#960014A6,50%,42%); opacity: .95; border-radius: 16px; in: none)
   topshade#shade(z-index: front)
 group#l_b.bleed(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, duration:.25})
   group#ph(left: 0px; top: 0px; width: 720px; height: 1280px; transform-origin: 60% 12%; in: none)
@@ -215,14 +215,14 @@ section#freeze
 group#f_a(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   img#city(inset: 0; content: @city_frozen; subject: "0%,0%,100%,100%"; main: kb {scale: [1.12, 1], focus: ['50% 40%', '50% 40%']})
   img#night.bleed(left: -30px; top: -11px; width: 770px; height: 1370px; content: @city_night; subject: "0%,0%,100%,100%"; main: none; in: none; out: {opacity:0, duration:2.68, ease:'power1.inOut'})
-  div#tint(z-index: front; inset: 0; background: #3C8CFF29; mix-blend-mode: screen; in: {opacity:0, duration:2})
-  div#frost(z-index: front; inset: 0; background: radial(#C8F0FF00@52%,#CDF2FF80@88%,#EBFAFFCC,50%,50%); in: {opacity:0, duration:2, ease:'power2.out'})
+  div#tint(z-index: front; inset: 0; background: #3C8CFF29; mix-blend-mode: screen; border-radius: 16px; in: {opacity:0, duration:2})
+  div#frost(z-index: front; inset: 0; background: radial(#C8F0FF00@52%,#CDF2FF80@88%,#EBFAFFCC,50%,50%); border-radius: 16px; in: {opacity:0, duration:2, ease:'power2.out'})
   topshade#shade(z-index: front)
 particles#f_snow(n: 46; dot: 3-9; color: #F0FAFFE6; drift: down)
 group#f_b(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   img#ocean(inset: 0; content: "[photo]Vertical 9:16 cinematic photo of an ocean frozen solid at night with no sun: towering waves frozen mid-motion into jagged translucent blue ice rise from the bottom edge of the frame up to near the top and fill the whole frame, only a thin strip of pitch-black starry sky at the very top edge, frost mist drifting between the ice crests, cold blue and teal tones, low camera close to the frozen waves, no empty sky band"; subject: "0%,0%,100%,100%"; main: none; in: {scale:1.16, duration:.9, ease:'power2.out'})
-  div#icy(z-index: front; inset: 0; background: linear(#96D2FF1A,#C8F0FF47,180); mix-blend-mode: screen)
-  div#frost(z-index: front; inset: 0; background: radial(#C8F0FF00@50%,#D7F5FF8C@90%,#F0FCFFD9,50%,50%))
+  div#icy(z-index: front; inset: 0; background: linear(#96D2FF1A,#C8F0FF47,180); mix-blend-mode: screen; border-radius: 16px)
+  div#frost(z-index: front; inset: 0; background: radial(#C8F0FF00@50%,#D7F5FF8C@90%,#F0FCFFD9,50%,50%); border-radius: 16px)
   topshade#shade(z-index: front)
 group#f_a2(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   img#city.bleed(left: -43px; top: -95px; width: 806px; height: 1434px; content: @city_frozen; subject: "0%,0%,100%,100%"; transform-origin: 50% 62%; main: none; in: {scale:1.18, duration:1, ease:'power2.out'})
@@ -230,7 +230,7 @@ group#f_a2(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
 # 宇宙の場面: カメラが 1.35 倍から引き、氷の地球が楕円を回る (x の群 → y の群 → 地球)
 group#f_c(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, duration:.35})
   # hf の #f-c は地が黒 (下の凍った街を透かさない)
-  div#void(inset: 0; background: #000000)
+  div#void(inset: 0; background: #000000; border-radius: 16px)
   img#space(inset: 0; content: @space; opacity: .55; main: none)
   group#cam(left: 0px; top: 0px; width: 720px; height: 1280px; transform-origin: 50% 53.7%; in: {scale:1.35, duration:4.63, ease:'power1.out'})
     img#bh(left: 248px; top: 575px; width: 224px; height: 224px; content: @bh_disc; object-fit: contain; opacity: .9)
@@ -256,8 +256,8 @@ telop#t_freeze_c
 section#relief
 group#r_a(left: 0px; top: 0px; width: 720px; height: 1280px; in: none)
   img#sunrise(inset: 0; content: "[photo]Cinematic photo of a warm, gentle sunrise seen from space over the curved horizon of planet Earth, a soft golden sun peeking over the blue atmosphere glow near the center, thin clouds below, horizon in the lower third, hopeful, calm and reassuring"; main: kb {scale: [1.14, 1], focus: ['50% 52%', '50% 52%']})
-  div#glow(z-index: front; inset: 0; background: radial(#FFC87873,#FFAA5000@45%,50%,52%); delay: 200; in: {opacity:0, duration:1.2, ease:'power2.out'})
-  div#dim(z-index: front; inset: 0; background: #040610A8; in: {opacity:0, duration:.35})
+  div#glow(z-index: front; inset: 0; background: radial(#FFC87873,#FFAA5000@45%,50%,52%); border-radius: 16px; delay: 200; in: {opacity:0, duration:1.2, ease:'power2.out'})
+  div#dim(z-index: front; inset: 0; background: #040610A8; border-radius: 16px; in: {opacity:0, duration:.35})
   topshade#shade(z-index: front)
 group#r_b(left: 0px; top: 0px; width: 720px; height: 1280px; in: {opacity:0, duration:.2})
   div#star(left: 327px; top: 513px; width: 307px; height: 307px; border-radius: 50%; background: radial(#FFFFFF,#DFF3FF@22%,#8FD0FF@50%,#3C7DFF@74%,#285AFF00,42%,40%); box-shadow: 0px 0px 53px 13px #78BEFF73; in: {scale:0, duration:.5, ease:'back.out(1.6)'})

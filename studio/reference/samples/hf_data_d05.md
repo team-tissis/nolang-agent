@@ -51,7 +51,7 @@ sound tension = "低めのビジネス系の緊張感のある電子音、注意
 sound blip = "高めのビジネス系の電子音、ピコッと上がる気づきの合図"
 svg dots = """<svg viewBox="0 0 34 22"><circle cx="4" cy="17" r="3" fill="#f5b544"/><circle cx="14" cy="12" r="3" fill="#c9c47f"/><circle cx="24" cy="8" r="3" fill="#7fd0c6"/><circle cx="31" cy="4" r="2.5" fill="#3dd9eb"/></svg>"""
 p { color: $tx; line-height: 1.2 }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
+div { border: none }
 # 字幕: 下端中央に地なしの白い字 + 濃い影 (下の暗い帯の上)・句末の約物は外す・声の 0.08 秒前に出て声と同時に消える
 subtitle.hug(left: 93px; bottom: 44px; width: 1093px; font-size: 22px; font-family: m; line-height: 1.2; letter-spacing: 0.03em; color: #E6EDF4; text-shadow: 0px 1px 9px #000000E6; background: none; border: none; box-shadow: none; text-align: center; unit: sentence; strip: 、。; lead: 80; tail: 0; hold: off; in: {y:7, opacity:0, duration:0.2, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
 # 曲: 最後の 2.7 秒だけ前に出してから消える (hf は同じ曲の末尾を大きめの音量で重ねる)

@@ -19,7 +19,7 @@ sfx off
 lint off=ghost_dissolve
 prompt_tail "Photorealistic cinematic film still from a luxury Japanese sake commercial, vertical 9:16 frame, shot on a digital cinema camera with a fast prime lens, shallow depth of field, natural light, soft highlight roll-off, unified refined color grade: warm amber highlights, deep charcoal shadows, gently desaturated greens, subtle film grain. Quiet, modern, premium mood. No text, letters or logos other than those described, no watermark."
 p { color: $paper; out: none }
-div { border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 img { out: none }
 shape { out: none }
 # 同じ瓶を 2 つの構図で引くので根に 1 枚・湯気の透過は 2 枚の層で使う
@@ -39,8 +39,8 @@ sound pour = "日本酒をグラスにとくとくと注ぐ音"
 sound taiko = "和太鼓の深く響くドンという一打"
 bgm#music(fade: 1200,900) 静かで上品な和のシネマティックな曲、ピアノと高弦・低弦、ゆっくり始まり終盤で厚みを増して終止和音で余韻を残す、高級日本酒のCM向け
 # 縦組みのコピー: 右の列 a → 1.55 字下げた左の列 b (b は a の字数 × 55 ms 遅れて滲み始める)。後ろの暗い楕円の陰は正方形の radial (端で透明) を main の constant で縦に 2.1 倍。閉じると 0.55 s で薄れ、字はぼける
-def copy(a, b, d) = div(left: 400px; top: 57px; width: 320px; height: 720px; background: none; in: none; out: {opacity:0, duration:0.55, ease:'sine.in'})
-  div#shade(left: 23px; top: 177px; width: 322px; height: 322px; border-radius: 0px; background: radial(#0C080475,#0C080438@35%,#0C080400@71%); main: constant {scaleY: 2.1})
+def copy(a, b, d) = div(left: 400px; top: 57px; width: 320px; height: 720px; in: none; out: {opacity:0, duration:0.55, ease:'sine.in'})
+  div#shade(left: 23px; top: 177px; width: 322px; height: 322px; background: radial(#0C080475,#0C080438@35%,#0C080400@71%); main: constant {scaleY: 2.1})
   p#a(left: 202px; top: 100px; width: 46px; font-size: 43px; writing-mode: vertical-rl; letter-spacing: 0.2em; line-height: 1; text-shadow: 0px 2px 10px #000000A6; in: {y:11, opacity:0, blur:5, duration:0.9, ease:'power2.out', stagger:{each:0.055}}; out: {blur:4, duration:0.55, ease:'sine.in'}; content: {a})
   p#b(left: 135px; top: 166px; width: 46px; font-size: 43px; writing-mode: vertical-rl; letter-spacing: 0.2em; line-height: 1; text-shadow: 0px 2px 10px #000000A6; delay: {d}; in: {y:11, opacity:0, blur:5, duration:0.9, ease:'power2.out', stagger:{each:0.055}}; out: {blur:4, duration:0.55, ease:'sine.in'}; content: {b})
 # 朝霧 (淡い暖色の楕円の光を screen で重ね、印の to で横へ流す)。正方形の radial (端で透明) を main の constant で横に伸ばして楕円にする — 縁は柔らかいまま
@@ -107,7 +107,7 @@ mist#mist4.bleed(left: 526px; top: 887px; width: 307px; height: 307px; opacity: 
 mist#mist5.bleed(left: 234px; top: 507px; width: 347px; height: 347px; opacity: 0.22; main: constant {scaleX: 2.88})
 div#seal(left: 399px; top: 612px; width: 21px; height: 21px; border-radius: 1px; background: $seal; opacity: 0.95; in: {scale:0.6, opacity:0, duration:0.6, ease:'power2.out'})
 p#logo(cx: 360px; top: 303px; font-size: 143px; font-family: mb; writing-mode: vertical-rl; letter-spacing: 0.08em; line-height: 1; color: $ink; text-shadow: 0px 0px 24px #FFF6E68C; in: {y:17, opacity:0, blur:9, duration:1.6, ease:'power2.out', stagger:{each:0.28}}) 田恵
-div#rule(left: 359px; top: 667px; width: 2px; height: 43px; border-radius: 0px; background: #211A14BF; transform-origin: top; in: {scaleY:0, duration:0.9, ease:'power2.inOut'})
+div#rule(left: 359px; top: 667px; width: 2px; height: 43px; background: #211A14BF; transform-origin: top; in: {scaleY:0, duration:0.9, ease:'power2.inOut'})
 p#latin(cx: 360px; top: 728px; font-size: 32px; letter-spacing: 0.6em; color: #231C16; text-shadow: 0px 0px 13px #FFF6E699; in: {y:9, opacity:0, duration:1.4, ease:'power2.out'}) DENEI
 p#sub(cx: 360px; top: 781px; font-size: 21px; letter-spacing: 0.55em; color: #231C16E0; text-shadow: 0px 0px 11px #FFF6E699; in: {opacity:0, duration:1, ease:'sine.out'}) 日本酒
 ```

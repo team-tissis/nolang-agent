@@ -51,7 +51,7 @@ image station = "夜の日本の通勤駅のすぐ前の建物に入った小さ
 # 板の中の動き: 段の入場 (cue) と、話者が替わる時に字幕の帯の顔の丸窓を入れ替える
 cue spk(on, off) = [!#off to,opacity=0,scale=0.8,duration=150,ease=none][!#on to,opacity=1,scale=1,duration=300,ease=back.out]
 p { color: $ink; in: none; out: none }
-div { padding: 0px; border: none; box-shadow: none; border-radius: 0px; background: none; in: none; out: none }
+div { in: none; out: none }
 img { in: none; out: none }
 shape { in: none; out: none }
 icon { in: none; out: none }

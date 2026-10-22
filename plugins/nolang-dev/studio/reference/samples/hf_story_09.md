@@ -53,7 +53,7 @@ image brush = "[transparent]A single bold horizontal brush stroke of black sumi 
 bgm#music(volume: 8dB; duck: -9.5; duck_attack: 120; duck_release: 450; duck_lead: 250; jump: at_cut:noma>180.9s; xfade: 1000; keys: "end-5.8s:0|end-4.3s:+5"; fade: 0,900) 温かく力強い和風の管弦楽、和太鼓と笛と弦、厳かで郷愁のある時代劇の曲
 subtitle(font-size: 31px; bottom: 44px; width: 1067px; background: none; color: #FFFFFF; letter-spacing: 0.04em; text-shadow: 0px 1px 7px #000000E6; unit: sentence; in: {y:5, opacity:0, duration:0.16, ease:'power1.out'}; lead: 80; tail: 250)
 # 左からの陰 (写真の上の札の地)
-def shade() = div(inset: 0; border-radius: 0px; border: none; box-shadow: none; padding: 0px; background: linear(#0000009E,#00000040@34%,#00000000@55%,right))
+def shade() = div(inset: 0; background: linear(#0000009E,#00000040@34%,#00000000@55%,right))
 # 場面の札 (区分 > 名称 > 補足): 朱の縦の罫が上から伸び、区分が左から・名称が左から拭われ・補足がせり上がり、切替の前に揃って消える
 def scene_label(when, what, where) = group(left: 75px; top: 61px)
   shape#bar(left: 0px; top: 4px; width: 5px; height: 145px; background: $shu; in: wipe {dir: 'down', duration: 0.4, ease: 'power3.out'}; out: fade {duration: 0.35})
@@ -113,7 +113,7 @@ p#masakado_ruby(left: 262px; top: 91px; font-size: 20px; font-family: sm; color:
 # 現在: 墨絵と同じ構図の丘の武者の実写に、国指定の判子が押印の勢いで落ちて揺れる
 section#hill
 img#hill_photo(inset: 0; main: kb {scale: [1.08, 1.17], focus: ['86% 59%', '84% 58%']}) [photo]Photorealistic photograph: a samurai rider in full armor with a tall banner on his back, on horseback atop a small grassy hill on the right side of the frame, seen from behind at three-quarter view, looking out over a wide green festival field on the left where hundreds of mounted samurai with colorful banners gather, distant low mountains, early summer, bright sky with soft clouds. Composition mirrors a classical ink painting: rider on the right, open plain on the left. No text, no letters.
-div#hill_shade(left: 0px; top: 0px; width: 1280px; height: 280px; background: linear(#0000008C,#00000000,bottom))
+div#hill_shade(left: 0px; top: 0px; width: 1280px; height: 280px; background: linear(#0000008C,#00000000,bottom); border-radius: 16px)
 # 文化財の印: 朱の板 + 白の縁 + 外の朱の輪 (outline)・押印の勢いで落ちて揺れる
 div#seal(left: 80px; top: 73px; width: 540px; height: 127px; background: #B3261EF0; border: 2px solid #FFEBDCD9; border2: #B3261EF0,1,4; border-radius: 4px; box-shadow: 0px 7px 27px #00000073; transform: rotate(-2deg); in: {scale:1.75, rotation:-5, opacity:0, duration:0.2, ease:'power4.in'})
   p#kind(left: 20px; cy: 50%; font-size: 27px; font-family: s; writing-mode: vertical-rl; letter-spacing: 0.12em; line-height: 1.15) 国指定
@@ -128,7 +128,7 @@ group#schedule_head(left: 253px; top: 243px; width: 900px; height: 165px; in: {o
   p#kick(left: 0px; top: 0px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) 開催時期
   p#head(left: 0px; top: 36px; font-size: 84px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) 毎年5月下旬 {r}・{/} 3日間
 shape#schedule_rule(left: 100px; top: 200px; width: 1080px; height: 2px; background: linear(#D8B26A,#D8B26A40,right); in: wipe {dir: 'right', duration: 4.2, ease: 'power1.inOut'}; out: fade {duration: 0.4})
-div#day_card(left: "100;473;847"; top: 221px; width: 333px; height: 383px; border-radius: 0px; padding: 0px; background: #0E0C0BD1; border: 1px solid #D8B26A73; in: {y:47, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration: 0.4}) ×3
+div#day_card(left: "100;473;847"; top: 221px; width: 333px; height: 383px; background: #0E0C0BD1; border: 1px solid #D8B26A73; box-shadow: 2; in: {y:47, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration: 0.4}) ×3
   img#photo(left: 0px; top: 0px; width: 333px; height: 200px; content: "@dawn;@sky;@noma"; main: kb {scale: [1.16, 1], ease:'power1.out'}; out: fade {duration: 0.4})
   shape#tick.ellipse(left: 23px; top: 193px; width: 15px; height: 15px; background: $shu; border: 2px solid $gold; out: fade {duration: 0.4})
   p#day(left: 23px; top: 206px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.2em; out: fade {duration: 0.4}) {dn}1{/}日目;{dn}2{/}日目;{dn}3{/}日目
@@ -171,10 +171,10 @@ scene_label#noma_label(when: "3日目（最終日）"; what: "野馬懸"; where:
 section#manners
 img#manners_blur(inset: 0; content: @procession; filter: blur(16px); main: kb {scale: [1.05, 1.1]})
 veil#manners_dim(opacity: 0.42; color: #000000; in: none)
-div#manners_board(left: 200px; top: 113px; width: 880px; height: 400px; border-radius: 0px; padding: 0px; background: #0C0A09C7; border: 1px solid #D8B26A80; box-shadow: none; in: {y:20, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.4})
+div#manners_board(left: 200px; top: 113px; width: 880px; height: 400px; background: #0C0A09C7; border: 1px solid #D8B26A80; in: {y:20, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.4})
   p#kick(left: 53px; top: 43px; font-size: 20px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) お行列を見るときは
   p#head(left: 53px; top: 93px; font-size: 61px; font-family: s; letter-spacing: 0.1em; out: fade {duration: 0.4}) 観覧の心得
-  div#rule(left: 53px; top: "190;280"; width: 780px; height: 61px; padding: 0px; background: none; border: none; box-shadow: none; in: {x:-24, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration: 0.4}) ×2
+  div#rule(left: 53px; top: "190;280"; width: 780px; height: 61px; in: {x:-24, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration: 0.4}) ×2
     p#num(left: 0px; cy: 50%; width: 61px; height: 61px; font-size: 36px; font-family: s; text-align: center; vertical-align: center; background: $shu; border-radius: 99px; padding: 0px; out: fade {duration: 0.4}) 一;二
     p#words(left: 84px; cy: 50%; font-size: 41px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) お行列を横切らない;高い所から見下ろさない{sm}（建物の2階など）{/}
 

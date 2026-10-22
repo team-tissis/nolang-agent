@@ -35,7 +35,7 @@ run s33 { font-size: 33px }
 run wsm { font-size: 20px; color: $ink2 }
 run u { font-size: 20px; font-family: r }
 p { color: #FFFFFF; in: none; out: none }
-div { background: none; border: none; box-shadow: none; padding: 0px; border-radius: 0px; in: none; out: none }
+div { border: none; in: none; out: none }
 img { out: none }
 svg { out: none }
 group { out: none }
@@ -241,7 +241,7 @@ board#b5(n: "04"; t: "2週間の実験")
   div#res(left: 0px; top: 0px; width: 656px; height: 767px)
     p#rc(left: 27px; top: 113px; font-size: 18px; background: #FFD23F24; border: 1px solid $yellow; border-radius: 20px; padding: 9px 15px; delay: 50; in: {scale:0.8, y:7, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 22:30 別の部屋で充電 ×2週間・続けた76人
     # 行 = 題 + 前 (薄い) → 矢印 → 後 (大きいポップ体)・2・3 行目はミントの地
-    div#rr(left: 27px; top: "168;299;429;560"; width: 603px; height: 120px; border-radius: 20px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "#FFFFFF1A,1;#39E0B88C,1;#39E0B88C,1;#FFFFFF1A,1"; delay: 150; in: {scale:0.9, y:27, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
+    div#rr(left: 27px; top: "168;299;429;560"; width: 603px; height: 120px; border-radius: 20px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "1px solid #FFFFFF1A;1px solid #39E0B88C;1px solid #39E0B88C;1px solid #FFFFFF1A"; delay: 150; in: {scale:0.9, y:27, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
       p#k(left: 19px; top: 15px; font-size: 21px; line-height: 1.3) 寝る時刻[br]{ks}平日の平均{/};睡眠時間[br]{ks}平日の平均{/};朝とても眠い;週3回以上の居眠り
       p#bef(left: 220px; top: 20px; width: 153px; font-size: 25px; text-align: right; color: $ink3) 0時31分;6時間04分;44人 58%;22人 29%
       svg#arr(left: 385px; top: 22.5%; width: 29px; height: 24px; part: "arr_gray;arr_mint;arr_mint;arr_gray")
@@ -260,7 +260,7 @@ svg#fx5(left: 393px; top: 317px; width: 347px; height: 347px; part: burst5; over
 section#tip(stagger: {each:0})
 board#b6(n: "05"; t: "続けるコツ")
   p#lead(left: 29px; top: 116px; font-size: 24px; delay: 300; in: {scale:0.9, y:11, opacity:0, duration:0.4, ease:'power2.out'}) 続けられなかった{b8}8{/}人の理由で多かったのは…
-  div#rsn(left: "27;341"; top: 193px; width: 288px; height: 167px; border-radius: 23px; background: "#FF5C9E1F;#FFFFFF12"; border: "#FF5C9EB3,1;#FFFFFF24,1"; delay: "500;650"; in: {scale:0.6, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
+  div#rsn(left: "27;341"; top: 193px; width: 288px; height: 167px; border-radius: 23px; background: "#FF5C9E1F;#FFFFFF12"; border: "1px solid #FF5C9EB3;1px solid #FFFFFF24"; delay: "500;650"; in: {scale:0.6, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
     svg#ic(cx: 50%; top: 12%; width: 73px; height: 73px; part: "rsn_alarm;rsn_chat")
     p#t(cx: 50%; top: 107px; font-size: 27px) 目覚ましがスマホ;友だちへの返信
   img#alarm(left: 20px; top: 419px; width: 287px; height: 287px; object-fit: contain; in: {scale:0.3, y:40, rotation:-20, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent]かわいいレトロな双子ベルの目覚まし時計: 月の黄色の本体、ピンクのベルとハンマー、目盛りだけの丸い白い文字盤 (数字なし)、短い針 2 本、鳴っていることを示すベルのまわりの小さな曲線。細い白のふちどりのステッカー、枠いっぱいに大きく

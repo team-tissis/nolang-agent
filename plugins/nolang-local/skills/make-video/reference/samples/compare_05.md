@@ -19,7 +19,7 @@ motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; ou
 motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
 motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
 motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
-div { in: div; border-radius: 14px; box-shadow: none; border: 1px solid $line; background: $panel }
+div { in: div; border-radius: 14px; border: 1px solid $line; background: $panel }
 cut { stagger: sentence }
 run a { color: $a }
 run b { color: $b }
@@ -29,11 +29,11 @@ def sub(t) = p(font-size: 30px; font-family: m; color: $mute; in: note; content:
 def body(t) = p(font-size: 32px; color: $ink; in: row; content: {t})
 def note(t) = p(font-size: 24px; font-family: m; color: $mute; in: note; content: {t})
 def pill(t) = p(font-size: 26px; font-family: e; color: #12161C; background: $a; border-radius: 8px; padding: 6px 16px; in: pop; content: {t})
-def dimrow(k,v,c=$a) = div(width: 520px; height: 84px; padding: 0px)
+def dimrow(k,v,c=$a) = div(width: 520px; height: 84px)
   p#k(left: 28px; cy: 50%; font-size: 28px; font-family: m; color: $mute; content: {k})
   p#v(right: 28px; cy: 50%; font-size: 44px; font-family: e; color: {c}; content: {v})
 # 流れ図の札 (×N で並べる・間の矢印は shape を位置の式 `札[k].right+N` で置く)
-def node(t, i, c=$a) = div(width: 220px; height: 220px; padding: 0px)
+def node(t, i, c=$a) = div(width: 220px; height: 220px)
   icon#i(cx: 50%; top: 36px; font-size: 76px; name: {i}; color: {c})
   p#t(left: 0px; top: 140px; width: 100%; font-size: 28px; color: $ink; text-align: center; content: {t})
 image part = "[photo]アルミ削り出しの L 字ブラケット部品、丸い穴が 2 つ、斜め上からの眺め、グラファイトの背景"
@@ -55,7 +55,7 @@ section#goal
 img#gl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品の3Dモデルが大きなモニターに表示された作業机、暗い部屋、モニターの光
 num#gl_n(left: 80px; top: 110px) COMMON
 h1#gl_h(left: 80px; top: 150px) ゴールは同じ
-div#gl_c(left: 80px; top: 260px; width: 560px; height: 150px; padding: 0px; in: rise {y: 24, duration: 0.5})
+div#gl_c(left: 80px; top: 260px; width: 560px; height: 150px; in: rise {y: 24, duration: 0.5})
   shape#bg(left: 28px; cy: 50%; width: 88px; height: 88px; path: rect,r=0.5; background: $a_t)
   icon#i(left: 46px; cy: 50%; font-size: 52px; name: cube; color: $a)
   p#t(left: 140px; cy: 50%; font-size: 34px; color: $ink; line-height: 1.3) パソコンの中の[br]部品の3Dデータ
@@ -88,7 +88,7 @@ p#fd_st(left: 80px; top: 470px; font-size: 30px; color: $ink; background: $a_t; 
 section#f_use
 img#fu_bg(inset: 0; scrim: 0.55; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]新しい製品の試作品がいくつか並ぶ開発室の机、3D プリンタ、暖かい光
 note#fu_n(left: 80px; top: 150px) 通常の CAD が向いているのは
-div#fu_c(left: 80px; top: 200px; width: 640px; height: 150px; padding: 0px; in: rise {y: 24, duration: 0.5})
+div#fu_c(left: 80px; top: 200px; width: 640px; height: 150px; in: rise {y: 24, duration: 0.5})
   shape#bg(left: 28px; cy: 50%; width: 88px; height: 88px; path: rect,r=0.5; background: $a_t)
   icon#i(left: 46px; cy: 50%; font-size: 52px; name: lightbulb; color: $a)
   p#t(left: 140px; cy: 50%; font-size: 36px; color: $ink; line-height: 1.3) 新しい製品を[br]一から設計する
@@ -106,7 +106,7 @@ section#r_scan
 img#rs_bg(inset: 0; scrim: 0.45; main: kb {scale: [1, 1.08], focus: ['60% 50%', '62% 48%']}) [photo][ref:@part]同じ部品に青緑の縞模様の光を当てる据え置き型の3Dスキャナー、暗い作業室
 pill#rs_t(left: 80px; top: 110px; background: $b) STEP 1  測る
 h1#rs_h(left: 80px; top: 170px; font-size: 48px) 3Dスキャナーで{b}測る{/}
-div#rs_c(left: 80px; top: 280px; width: 480px; height: 200px; padding: 0px; in: rise {y: 24, duration: 0.5})
+div#rs_c(left: 80px; top: 280px; width: 480px; height: 200px; in: rise {y: 24, duration: 0.5})
   p#v(left: 28px; top: 26px; font-size: 72px; font-family: e; color: $b) [count:300,000]
   p#k(left: 30px; top: 124px; font-size: 26px; font-family: m; color: $mute) 点の位置を一気に読み取る (例)
 
@@ -116,7 +116,7 @@ pill#rm_t(left: 80px; top: 90px; background: $b) STEP 2  つなぐ
 h1#rm_h(left: 80px; top: 146px; font-size: 48px) 点 → {b}三角形の面{/}
 pill#rm_l1(left: 80px; top: 520px; background: #12161C; color: $b; border: 2px solid $b) 点群
 shape#rm_a(left: 560px; top: 330px; width: 140px; height: 60px; path: arrow_r; background: $b; border: none; in: wipe {dir: 'right', duration: 0.5})
-div#rm_m(left: 740px; top: 150px; width: 460px; height: 360px; padding: 0px; in: zoom)
+div#rm_m(left: 740px; top: 150px; width: 460px; height: 360px; in: zoom)
   img#img(left: 0px; top: 0px; width: 460px; height: 360px) [photo][ref:@part]同じ部品の形をした細かい三角形のポリゴンメッシュ、青緑の線、暗い空間
 pill#rm_l2(left: 760px; top: 530px; background: $b) メッシュ
 
@@ -125,7 +125,7 @@ img#rc_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '
 pill#rc_t(left: 80px; top: 90px; background: $b) STEP 3  当てはめる
 h1#rc_h(left: 80px; top: 146px; font-size: 48px) メッシュに{b}形の意味{/}を与える
 note#rc_w(left: 80px; top: 226px) メッシュ = {x}表面の形だけ{/}
-div#rc_c(left: 80px; top: 290px; width: 760px; height: 110px; gap: 24; padding: 0px; display: flex) ×2
+div#rc_c(left: 80px; top: 290px; width: 760px; height: 110px; gap: 24; display: flex) ×2
   icon#i(left: 24px; cy: 50%; font-size: 44px; name: "square;cylinder"; color: $b)
   p#t(left: 84px; cy: 50%; font-size: 30px; color: $ink) 平らな所 → 平面;丸い所 → 円筒
 p#rc_st(left: 80px; top: 450px; font-size: 32px; color: $ink; background: $b_t; border: 2px solid $b; border-radius: 10px; padding: 10px 22px; in: pop) 編集できる CAD データへ
@@ -141,7 +141,7 @@ p#rd_m(left: 80px; top: 470px; font-size: 30px; color: $ink) 実物の{w}ズレ�
 section#r_use
 img#ru_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]棚に並んだ古い機械部品と、手で削った木の試作品、柔らかい光の作業場
 note#ru_n(left: 80px; top: 96px) リバースが活きる場面
-div#ru_c(left: 80px; top: 150px; width: 700px; height: 400px; gap: 20; padding: 0px; display: flex; flex-direction: column) ×3
+div#ru_c(left: 80px; top: 150px; width: 700px; height: 400px; gap: 20; display: flex; flex-direction: column) ×3
   shape#bg(left: 20px; cy: 50%; width: 64px; height: 64px; path: rect,r=0.5; background: $b_t)
   icon#i(left: 34px; cy: 50%; font-size: 36px; name: "clock-counter-clockwise;hand;puzzle-piece"; color: $b)
   p#t(left: 108px; cy: 50%; font-size: 32px; color: $ink) 図面のない古い部品;手作りの試作品;実物どうしの合わせ
@@ -149,14 +149,14 @@ div#ru_c(left: 80px; top: 150px; width: 700px; height: 400px; gap: 20; padding: 
 section#cmp
 img#cm_bg(inset: 0; scrim: 0.6) [photo][ref:@part]同じ部品が 2 つ向かい合う、左は橙に光る線のワイヤーフレーム、右は青緑の光の点群
 num#cm_n(left: 80px; top: 60px; color: $ink) 03  COMPARE
-div#cm_l(left: 80px; top: 110px; width: 540px; height: 470px; padding: 0px; border: 2px solid $a)
+div#cm_l(left: 80px; top: 110px; width: 540px; height: 470px; border: 2px solid $a)
   p#t(left: 32px; top: 28px; font-size: 40px; color: $a) 通常の CAD
-  div#r(left: 24px; top: 104px; width: 492px; height: 340px; padding: 0px; border: none; background: $a_t; display: flex; flex-direction: column; gap: 14px) ×3
+  div#r(left: 24px; top: 104px; width: 492px; height: 340px; border: none; background: $a_t; display: flex; flex-direction: column; gap: 14px) ×3
     p#k(left: 24px; cy: 50%; font-size: 24px; font-family: m; color: $mute) 出発点;寸法;得意
     p#v(left: 128px; cy: 50%; font-size: 34px; color: $ink) アイデア・図面;狙った値;新しくつくる
-div#cm_r(left: 660px; top: 110px; width: 540px; height: 470px; padding: 0px; border: 2px solid $b)
+div#cm_r(left: 660px; top: 110px; width: 540px; height: 470px; border: 2px solid $b)
   p#t(left: 32px; top: 28px; font-size: 40px; color: $b) リバース
-  div#r(left: 24px; top: 104px; width: 492px; height: 340px; padding: 0px; border: none; background: $b_t; display: flex; flex-direction: column; gap: 14px) ×3
+  div#r(left: 24px; top: 104px; width: 492px; height: 340px; border: none; background: $b_t; display: flex; flex-direction: column; gap: 14px) ×3
     p#k(left: 24px; cy: 50%; font-size: 24px; font-family: m; color: $mute) 出発点;寸法;得意
     p#v(left: 128px; cy: 50%; font-size: 34px; color: $ink) 実物;測った値;今あるものを写す
 
@@ -169,10 +169,10 @@ shape#cb_a(left: "cb_f[1].right+12;cb_f[2].right+12;cb_f[3].right+12"; cy: cb_f[
 
 section#close
 img#cl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.06], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品が、橙の線のワイヤーフレームと青緑の点群から一つの完成品に重なっていく、明るく澄んだ光
-div#cl_a(left: 80px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $a; in: slide {dir: 'left'})
+div#cl_a(left: 80px; top: 110px; width: 540px; height: 250px; border: 2px solid $a; in: slide {dir: 'left'})
   p#k(left: 36px; top: 36px; font-size: 26px; font-family: e; color: $a; letter-spacing: 0.15em) 通常の CAD
   p#v(left: 36px; top: 100px; font-size: 52px; color: $ink) アイデア → 形
-div#cl_b(left: 660px; top: 110px; width: 540px; height: 250px; padding: 0px; border: 2px solid $b; in: slide {dir: 'right'})
+div#cl_b(left: 660px; top: 110px; width: 540px; height: 250px; border: 2px solid $b; in: slide {dir: 'right'})
   p#k(left: 36px; top: 36px; font-size: 26px; font-family: e; color: $b; letter-spacing: 0.15em) リバース
   p#v(left: 36px; top: 100px; font-size: 52px; color: $ink) 形 → データ
 p#cl_t(left: 80px; top: 420px; width: 1120px; font-size: 44px; color: $ink; text-align: center; in: rise) {k}向き{/}のちがいで、使い分ける

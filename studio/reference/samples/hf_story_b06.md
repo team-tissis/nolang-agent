@@ -41,7 +41,7 @@ run k { color: $kin; font-family: d; font-size: 44px }
 run wa { color: $sumi; font-family: z; font-size: 73px }
 run r { color: $shu }
 p { out: none }
-div { border: none; box-shadow: none; padding: 0px; border-radius: 0px; out: none }
+div { border: none; out: none }
 img { out: none }
 svg { out: none }
 shape { out: none }
@@ -65,9 +65,9 @@ def washi(c=$washi) = div(inset: 0; background: {c}; pattern: hatch,-7,#785A280D
   div#hi(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@55%,30%,20%))
   div#vig(inset: 0; background: radial(#28140500@45%,#2814058C,50%,45%))
 # 章の札 (朱の地に白の細枠の番号 + 縁取りの極太の題)・sticky で章のあいだ残る
-def chapter(no, t) = div(left: 32px; top: 100px; width: 460px; height: 68px; background: none; z-index: front; in: none)
+def chapter(no, t) = div(left: 32px; top: 100px; width: 460px; height: 68px; z-index: front; in: none)
   div#no(left: 0px; cy: 50%; width: 137px; height: 64px; background: $shu; box-shadow: 5px 5px 0px #00000073; in: {x:-173, opacity:0, duration:0.3, ease:'back.out(1.8)'})
-    div#line(left: 3px; top: 3px; width: 131px; height: 58px; border: 3px solid $white; background: none)
+    div#line(left: 3px; top: 3px; width: 131px; height: 58px; border: 3px solid $white)
     p#t(cx: 50%; cy: 50%; font-family: z; font-size: 31px; content: {no})
   p#t(left: 152px; cy: 50%; width: 300px; font-family: d; font-size: 47px; letter-spacing: 0.02em; stroke: $sumi,5; delay: 80; in: {x:-80, opacity:0, duration:0.3, ease:'power3.out'}; content: {t})
 # 横から見た線路の景色 (峠の絵の上半分 + 地面 + レール + 枕木)・3 場面で使う
@@ -79,7 +79,7 @@ def land() = div(inset: 0; background: $washi; in: none)
   div#ground(left: 0px; top: 860px; width: 720px; height: 420px; background: linear(#C9A062,#B88A4C@40%,#7D5730,180); pattern: hatch,-28,#5A3C1E1A,15,2; z-index: front)
   div#edge(left: 0px; top: 860px; width: 720px; height: 4px; background: #6B4A2A; z-index: front)
   div#rail.bleed(left: -133px; top: 848px; width: 1000px; height: 12px; background: linear(#8A8F99,#2A2B30,180); z-index: front)
-  div#sleepers.bleed(left: -267px; top: 859px; width: 1333px; height: 16px; background: none; pattern: hatch,0,#5A3B22,57,23; z-index: front)
+  div#sleepers.bleed(left: -267px; top: 859px; width: 1333px; height: 16px; pattern: hatch,0,#5A3B22,57,23; z-index: front)
 
 svg gauge = """<svg viewBox="0 0 457 270"><path d="M46 227A187 187 0 0 1 49 193L135 209A100 100 0 0 0 133 227Z" fill="#549d49"/><path d="M49 195A187 187 0 0 1 58 162L139 192A100 100 0 0 0 135 210Z" fill="#68a348"/><path d="M57 163A187 187 0 0 1 72 132L147 176A100 100 0 0 0 139 193Z" fill="#7caa47"/><path d="M71 134A187 187 0 0 1 91 106L157 162A100 100 0 0 0 146 177Z" fill="#90b046"/><path d="M90 107A187 187 0 0 1 114 83L169 150A100 100 0 0 0 156 163Z" fill="#a4b644"/><path d="M113 84A187 187 0 0 1 141 64L184 140A100 100 0 0 0 169 150Z" fill="#b9bc43"/><path d="M140 65A187 187 0 0 1 170 51L199 133A100 100 0 0 0 183 140Z" fill="#cdc242"/><path d="M169 51A187 187 0 0 1 202 43L216 128A100 100 0 0 0 199 133Z" fill="#e1c941"/><path d="M201 43A187 187 0 0 1 234 40L234 127A100 100 0 0 0 216 129Z" fill="#f5cf40"/><path d="M233 40A187 187 0 0 1 267 43L251 129A100 100 0 0 0 233 127Z" fill="#fcca3e"/><path d="M265 43A187 187 0 0 1 298 52L268 133A100 100 0 0 0 250 129Z" fill="#f8ba3c"/><path d="M297 51A187 187 0 0 1 328 66L284 141A100 100 0 0 0 267 133Z" fill="#f2a939"/><path d="M326 65A187 187 0 0 1 354 85L298 151A100 100 0 0 0 283 140Z" fill="#ee9937"/><path d="M353 84A187 187 0 0 1 377 108L310 163A100 100 0 0 0 297 150Z" fill="#e88834"/><path d="M376 107A187 187 0 0 1 396 135L320 178A100 100 0 0 0 310 163Z" fill="#e47832"/><path d="M395 134A187 187 0 0 1 409 164L327 193A100 100 0 0 0 320 177Z" fill="#de6830"/><path d="M409 163A187 187 0 0 1 417 196L332 210A100 100 0 0 0 327 193Z" fill="#da582e"/><path d="M417 195A187 187 0 0 1 420 227L333 227A100 100 0 0 0 331 210Z" fill="#d4472b"/><line x1="233" y1="227" x2="79" y2="88" stroke="#1b1511" stroke-width="5" stroke-dasharray="11 8"/></svg>"""
 svg seigaiha = """<svg viewBox="0 0 720 1280"><defs><pattern id="w" width="80" height="40" patternUnits="userSpaceOnUse"><rect width="80" height="40" fill="#1d3a63"/><circle cx="0" cy="20" r="40" fill="#27497a"/><circle cx="0" cy="20" r="36" fill="#1d3a63"/><circle cx="0" cy="20" r="28" fill="#27497a"/><circle cx="0" cy="20" r="24" fill="#1d3a63"/><circle cx="0" cy="20" r="17" fill="#27497a"/><circle cx="0" cy="20" r="12" fill="#1d3a63"/><circle cx="0" cy="20" r="4" fill="#27497a"/><circle cx="80" cy="20" r="40" fill="#27497a"/><circle cx="80" cy="20" r="36" fill="#1d3a63"/><circle cx="80" cy="20" r="28" fill="#27497a"/><circle cx="80" cy="20" r="24" fill="#1d3a63"/><circle cx="80" cy="20" r="17" fill="#27497a"/><circle cx="80" cy="20" r="12" fill="#1d3a63"/><circle cx="80" cy="20" r="4" fill="#27497a"/><circle cx="40" cy="40" r="40" fill="#27497a"/><circle cx="40" cy="40" r="36" fill="#1d3a63"/><circle cx="40" cy="40" r="28" fill="#27497a"/><circle cx="40" cy="40" r="24" fill="#1d3a63"/><circle cx="40" cy="40" r="17" fill="#27497a"/><circle cx="40" cy="40" r="13" fill="#1d3a63"/><circle cx="40" cy="40" r="6" fill="#27497a"/><circle cx="0" cy="60" r="40" fill="#27497a"/><circle cx="0" cy="60" r="36" fill="#1d3a63"/><circle cx="0" cy="60" r="28" fill="#27497a"/><circle cx="0" cy="60" r="24" fill="#1d3a63"/><circle cx="80" cy="60" r="40" fill="#27497a"/><circle cx="80" cy="60" r="36" fill="#1d3a63"/><circle cx="80" cy="60" r="28" fill="#27497a"/><circle cx="80" cy="60" r="24" fill="#1d3a63"/></pattern></defs><rect width="720" height="1280" fill="url(#w)"/></svg>"""
@@ -107,7 +107,7 @@ chapter#ch1.sticky(no: "其の一"; t: "開業")
 group#date_plate(left: 40px; top: 200px; width: 520px; height: 150px; transform: rotate(-3deg); in: {scale:1.9, rotation:-6, opacity:0, duration:0.2, ease:'power4.in'})
   ol#era(left: 0px; top: 0px; s: 35; f: z; text-align: left) 明治21年
   p#ymd(left: 0px; top: 50px; width: 500px; white-space: nowrap; font-family: d; font-size: 88px; line-height: 1.15; color: $kin; stroke: $sumi,7; text-shadow: 5px 5px 0px #A01E0FF2) 1888.9.5
-div#pin(left: 313px; top: 507px; width: 226px; height: 223px; background: none; in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.4)'})
+div#pin(left: 313px; top: 507px; width: 226px; height: 223px; in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.4)'})
   div#tag(left: 0px; top: 0px; width: 226px; height: 124px; background: $washi; border: 4px solid $sumi; box-shadow: 7px 7px 0px #00000073)
     p#big(cx: 50%; top: 9px; font-family: z; font-size: 61px; line-height: 1; color: $sumi) 碓氷峠
     p#sm(cx: 50%; top: 77px; font-family: z; font-size: 27px; color: $shu) 群馬 ⇔ 長野
@@ -140,8 +140,8 @@ img#name_bg(inset: 0; content: @hero; main: kb {scale: [1.3, 1.16], focus: ['13%
 shade#name_shade
 p#sonna(cx: 360px; top: 400px; font-family: z; font-size: 43px; background: $sumi; padding: 4px 20px 7px 20px; in: {y:27, opacity:0, duration:0.25, ease:'power3.out'}) その名も
 div#cartouche(left: 33px; top: 480px; width: 654px; height: 236px; background: $washi; border: 4px solid $sumi; box-shadow: 11px 11px 0px #00000080; in: {scale:1.8, opacity:0, duration:0.2, ease:'power4.in'})
-  div#d1(left: 3px; top: 3px; width: 640px; height: 222px; border: 2px solid $shu; background: none)
-  div#d2(left: 9px; top: 9px; width: 628px; height: 210px; border: 2px solid $shu; background: none)
+  div#d1(left: 3px; top: 3px; width: 640px; height: 222px; border: 2px solid $shu)
+  div#d2(left: 9px; top: 9px; width: 628px; height: 210px; border: 2px solid $shu)
   p#rt(left: 57px; top: 14px; width: 130px; font-family: z; font-size: 31px; letter-spacing: 0.17em; text-align: center; color: $shu) うすい
   p#nm(left: 0px; top: 60px; width: 100%; text-align: center; font-family: z; font-size: 100px; line-height: 1.15; letter-spacing: 0.04em; color: $sumi) 碓氷馬車鉄道
   p#yr(left: 0px; top: 182px; width: 100%; text-align: center; font-size: 29px; color: $shu) 1888年（明治21年）開業
@@ -164,7 +164,7 @@ div#spot(left: 27px; top: 200px; width: 667px; height: 667px; border-radius: 999
 chapter#ch2.sticky(no: "其の二"; t: "文豪、激怒")
 img#ogai_pop(left: 20px; top: 190px; width: 680px; height: 680px; content: @ogai; in: {y:200, scale:0.5, opacity:0, duration:0.45, ease:'back.out(1.6)'})
 div#nameplate(left: 530px; top: 216px; width: 153px; height: 395px; background: $shu; box-shadow: 8px 8px 0px #00000073; in: {scale:1.7, opacity:0, duration:0.2, ease:'power4.in'})
-  div#line(left: 3px; top: 3px; width: 147px; height: 389px; border: 4px solid $white; background: none)
+  div#line(left: 3px; top: 3px; width: 147px; height: 389px; border: 4px solid $white)
   p#t(cx: 50%; top: 24px; font-family: z; font-size: 32px; letter-spacing: 0.13em; vertical: true) 文豪
   p#n(cx: 50%; top: 104px; font-family: z; font-size: 85px; letter-spacing: 0.08em; vertical: true) 森鴎外
 
@@ -261,7 +261,7 @@ section#end
 washi#end_washi
 p#end_date(cx: 360px; top: 313px; font-family: d; font-size: 153px; line-height: 1.22; color: $shu; stroke: $sumi,7; transform: rotate(-2deg); in: {scale:1.8, rotation:-4, opacity:0, duration:0.2, ease:'power4.in'}) 9月5日{wa}は{/}
 p#end_name(left: 40px; top: 533px; width: 640px; font-family: z; font-size: 80px; text-align: center; color: $washi; background: $sumi; border: 5px solid $sumi; padding: 12px 0px 17px 0px; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2.4)'}) 碓氷馬車鉄道
-  div#line(left: 5px; top: 5px; width: 620px; height: 118px; border: 3px solid $washi; background: none)
+  div#line(left: 5px; top: 5px; width: 620px; height: 118px; border: 3px solid $washi)
 p#end_sub(cx: 360px; top: 707px; font-family: z; font-size: 64px; color: $sumi; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2.4)'}) 開業の日
 img#end_horse(left: 400px; top: 860px; width: 280px; height: 280px; content: @horse; in: {y:347, rotation:-8, duration:0.45, ease:'back.out(1.7)'})
 p#end_note(left: 40px; top: 1000px; font-size: 24px; color: #1B15119E) ※諸説あり・一部演出を含みます

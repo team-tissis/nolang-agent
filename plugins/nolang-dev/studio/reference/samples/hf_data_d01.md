@@ -57,7 +57,7 @@ cue abrow(r) = [>#r][>#r.nm][>#r.a +50][>#r.b +200][>#r.va +450][>#r.vb +450]
 image parcel = "[transparent]A small closed cardboard shipping box with a blank paper price tag tied with twine, minimal clean 3D render, warm soft key light from the upper left, gentle shadow underneath, the box fills the frame centered, isolated object on a transparent background. The tag is blank. No text, no letters, no numbers, no logos."
 image phone = "[transparent]A modern smartphone seen from the front, slightly tilted, its screen showing a dark-mode online shop checkout page with a long stack of eleven empty rounded input fields (plain blank rectangles, no readable text) and a small amber button at the bottom. Clean minimal 3D product render, soft cool rim light, crisp edges, the phone fills the frame vertically and is centered, isolated object on a transparent background. No text, no letters, no logos, no hands."
 p { color: $ink }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
+div { border: none }
 # 字幕: 下端中央の半透明の黒い札 (細い白の縁)・声と同時に出て声の 0.1 秒後に消える・句末の読点と句点は外す・動きなし
 subtitle.hug(bottom: 27px; font-size: 21px; font-family: m; line-height: 1.35; letter-spacing: 0.02em; color: #F3F6FA; background: #06090DC7; border: 1px solid #FFFFFF0F; border-radius: 8px; padding: 7px 17px 8px 17px; unit: sentence; strip: 、。; lead: 0; tail: 100; hold: off; in: none; out: none)
 bgm#music(fade: 1600,3200) ジャズ寄りのエレクトロニカ、エレクトリックピアノとアップライトベースとシンセ、115 BPM 前後、淡々とクールで知的な企業紹介やデータ解説向け、主旋律は控えめ
@@ -299,14 +299,14 @@ panel#aba(left: 64px; top: 153px; width: 568px; height: 115px; in: {y:15, opacit
   p#bd(left: 19px; top: 16px; font-size: 15px; font-family: n; color: #0B1015; background: $slate; border-radius: 5px; padding: 3px 9px) A
   p#tt(left: 75px; top: 15px; font-size: 17px) 現行：配送先入力で送料を表示
   p#ppl(right: 20px; top: 12px; font-size: 15px; color: $ink2) {n23}1,500{/}人
-  node#nd(left: "19;118;245;344"; top: 56px; font-size: 14px; padding: 9px 12px; color: "$ink2;#FFE1B0;$ink2;$ink2"; background: "#FFFFFF0D;#FFB5471F;#FFFFFF0D;#FFFFFF0D"; border: "#FFFFFF24,1;#FFB547D9,1;#FFFFFF24,1;#FFFFFF24,1"; t: "カート;配送先入力;支払い;完了") ×4
+  node#nd(left: "19;118;245;344"; top: 56px; font-size: 14px; padding: 9px 12px; color: "$ink2;#FFE1B0;$ink2;$ink2"; background: "#FFFFFF0D;#FFB5471F;#FFFFFF0D;#FFFFFF0D"; border: "1px solid #FFFFFF24;1px solid #FFB547D9;1px solid #FFFFFF24;1px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   shape#ar(left: "90;217;316"; top: 69px; width: 23px; height: 10px; path: arrow_r; background: #FFFFFF4D; border: 2px solid #FFFFFF4D) ×3
   p#tag(left: 184px; top: 45px; font-size: 11px; color: #1A1206; background: $amber; border-radius: 99px; padding: 1px 7px; overlap: aba.nd[2]; in: {scale:0.5, opacity:0, duration:0.5, ease:'back.out(1.6)'}) 送料
 panel#abb(left: 648px; top: 153px; width: 568px; height: 115px; in: {y:15, opacity:0, duration:0.6, ease:'power3.out'})
   p#bd(left: 19px; top: 16px; font-size: 15px; font-family: n; color: #0B1015; background: $teal; border-radius: 5px; padding: 3px 9px) B
   p#tt(left: 75px; top: 15px; font-size: 17px) カートで送料を表示
   p#ppl(right: 20px; top: 12px; font-size: 15px; color: $ink2) {n23}1,500{/}人
-  node#nd(left: "19;118;245;344"; top: 56px; font-size: 14px; padding: 9px 12px; color: "#FFE1B0;$ink2;$ink2;$ink2"; background: "#FFB5471F;#FFFFFF0D;#FFFFFF0D;#FFFFFF0D"; border: "#FFB547D9,1;#FFFFFF24,1;#FFFFFF24,1;#FFFFFF24,1"; t: "カート;配送先入力;支払い;完了") ×4
+  node#nd(left: "19;118;245;344"; top: 56px; font-size: 14px; padding: 9px 12px; color: "#FFE1B0;$ink2;$ink2;$ink2"; background: "#FFB5471F;#FFFFFF0D;#FFFFFF0D;#FFFFFF0D"; border: "1px solid #FFB547D9;1px solid #FFFFFF24;1px solid #FFFFFF24;1px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   shape#ar(left: "90;217;316"; top: 69px; width: 23px; height: 10px; path: arrow_r; background: #FFFFFF4D; border: 2px solid #FFFFFF4D) ×3
   p#tag(left: 57px; top: 45px; font-size: 11px; color: #1A1206; background: $amber; border-radius: 99px; padding: 1px 7px; overlap: abb.nd[1]; in: {scale:0.5, opacity:0, duration:0.5, ease:'back.out(1.6)'}) 送料
 p#ab_note(cx: 640px; top: 275px; font-size: 13px; font-family: m; color: $ink3; in: {opacity:0, duration:0.5}) 4週の後の2週間 ｜ カートに入れた人を半分ずつ A・B に分けて比較
@@ -368,14 +368,14 @@ act#a1(left: 64px; no: 1; st: "STEP 1 ｜ まず"; hd: "送料をカートで表
     div#mt(left: 16px; top: 88px; width: 288px; height: 7px; border-radius: 4px; background: #FFFFFF1A)
     div#mf(left: 16px; top: 88px; width: 207px; height: 7px; border-radius: 4px; background: linear(#D98B2B,#FFB547,90); in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
     p#msg(left: 16px; top: 109px; width: 288px; font-size: 14px; color: #FFE1B0; background: #FFB5471F; border: 1px solid #FFB54773; border-radius: 7px; padding: 8px 11px; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.6)'}) あと ◯◯円で送料無料
-  chip#ch(left: "21;176;21"; top: "363;363;397"; color: "$amber_l;$amber_l;$ink2"; background: "#FFB54721;#FFB54721;#FFFFFF0F"; border: "#FFB5478C,1;#FFB5478C,1;#FFFFFF24,1"; t: "比較で効果を確認済み;実装が軽い;+2.5pt ／ 4週で約180件") ×3
+  chip#ch(left: "21;176;21"; top: "363;363;397"; color: "$amber_l;$amber_l;$ink2"; background: "#FFB54721;#FFB54721;#FFFFFF0F"; border: "1px solid #FFB5478C;1px solid #FFB5478C;1px solid #FFFFFF24"; t: "比較で効果を確認済み;実装が軽い;+2.5pt ／ 4週で約180件") ×3
 act#a2(left: 459px; no: 2; st: "STEP 2 ｜ 次に"; hd: "スマホの配送先入力を[br]短くする")
   img#phone(left: 13px; top: 127px; width: 173px; height: 200px; content: @phone; object-fit: contain; main: none; in: {y:16, opacity:0, duration:0.7, ease:'power3.out'})
   p#k(left: 180px; top: 153px; font-size: 13px; line-height: 1.4; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) 郵便番号から[br]住所を自動入力
   p#big(left: 180px; top: 201px; font-size: 43px; line-height: 1; font-family: n; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) {g33}11{/} → {six}6{/}{k17}項目{/}
   chip#ch(left: 21px; top: 397px) 「入力が面倒」17%・大半はスマホ
 act#a3(left: 853px; no: 3; st: "STEP 3 ｜ そして"; hd: 後払い・コンビニ払いを足す)
-  p#pay(left: 21px; top: "153;205;257"; width: 320px; font-size: 16px; font-family: m; color: "$ink2;#C9F6EE;#C9F6EE"; background: "#FFFFFF0A;#35D0BA14;#35D0BA14"; border: "#FFFFFF1F,1;#35D0BA99,1;#35D0BA99,1"; border-radius: 9px; padding: 11px 15px; in: {x:-9, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.15}}) ×3 いまの支払い方法;{te}＋{/} 後払い;{te}＋{/} コンビニ払い
+  p#pay(left: 21px; top: "153;205;257"; width: 320px; font-size: 16px; font-family: m; color: "$ink2;#C9F6EE;#C9F6EE"; background: "#FFFFFF0A;#35D0BA14;#35D0BA14"; border: "1px solid #FFFFFF1F;1px solid #35D0BA99;1px solid #35D0BA99"; border-radius: 9px; padding: 11px 15px; in: {x:-9, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.15}}) ×3 いまの支払い方法;{te}＋{/} 後払い;{te}＋{/} コンビニ払い
   chip#ch(left: "21;175"; top: 397px; t: "支払いでの離脱 594件;「支払い方法がない」12%") ×2
 shape#chev(left: "436;831"; top: 362px; width: 9px; height: 20px; path: chevron; background: none; border: 2px solid #FFFFFF59; in: {opacity:0, duration:0.4}) ×2
 

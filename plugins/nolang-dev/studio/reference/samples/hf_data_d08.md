@@ -85,7 +85,6 @@ svg clockarc = """<svg viewBox="0 0 380 380"><path d="M 278 342.4 A 176 176 0 0 
 svg hhand = """<svg viewBox="0 0 380 380"><line x1="190" y1="190" x2="190" y2="96" stroke="#2B2522" stroke-width="16.5" stroke-linecap="round"/></svg>"""
 svg mhand = """<svg viewBox="0 0 380 380"><line x1="190" y1="190" x2="190" y2="51" stroke="#2B2522" stroke-width="10.5" stroke-linecap="round"/></svg>"""
 p { color: $ink }
-div { border-radius: 0px; background: none; padding: 0px; border: none; box-shadow: none }
 # 曲: 頭の 0.3 秒と締めの余韻だけ前に出す
 bgm#music(keys: "0:+7|320ms:+7|620ms:0|end-1.6s:0|end-1.1s:+6"; fade: 0,1600) 明るく軽やかなアコースティックのポップ、木琴とウクレレと手拍子、暮らしの情報やキッチンの解説向け、主旋律は控えめ
 # 字幕: 下の帯の中央に白い札 (黒の縁 + 下に硬い影)・強調の語は朱 (台詞の {e})・札は文 (句は [|] で切り、文を跨ぐ札は [||])
@@ -208,7 +207,7 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
   # 金額の段: 1kg あたりの売値の札 ×3 が語ごとに弾む
   div#summ(left: 27px; top: 579px; width: 603px; height: 127px; in: {opacity:0, duration:.3})
     p#t1(left: 0px; top: 0px; font-size: 20px; font-family: e; in: {y:13, duration:.3}) 1kgあたりの売値
-    div#pc(left: "0;205;410"; top: 31px; width: 193px; height: 67px; background: #FFFFFF; border: "$niku,2;$souzai,2;$seika,2"; border-radius: 15px; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2)'}) ×3
+    div#pc(left: "0;205;410"; top: 31px; width: 193px; height: 67px; background: #FFFFFF; border: "2px solid $niku;2px solid $souzai;2px solid $seika"; border-radius: 15px; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2)'}) ×3
       p#n(left: 12px; cy: 50%; font-size: 21px; color: "$niku;#C96A10;#2E8A4B") 精肉;惣菜;青果
       p#v(left: .n.right+8; cy: 50%; font-size: 35px; white-space: nowrap) 1,500{yn}円{/};1,100{yn}円{/};300{yn}円{/}
     p#note(left: 0px; top: 105px; font-size: 15px; font-family: d; color: $ink2; in: {opacity:0, duration:.3}) ※惣菜・青果・パンの3つは、金額では74.9万円（49.3%）

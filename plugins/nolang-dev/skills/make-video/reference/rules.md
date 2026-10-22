@@ -3,14 +3,15 @@
 `nolang check` / `nolang_draft_check` が返す `findings[].rule` (と描画時の lint) の名前ごとの直し方。型に合わない規則は根の `lint off=規則,…` で切れる。
 
 - `empty_cut` 絵か札を置く
-- `shrunk` 幅か size を変える (枠を広げる / w= を外して文字幅にする / 文言を短く)
+- `shrunk` 幅か文字の大きさを変える (枠を広げる / `width:` を外して文字幅にする / 文言を短く)
 - `offcanvas` (severe) 位置を内側に
-- `duplicate_text` 字幕と同文の札は `.hide_subtitle`
+- `duplicate_text` 字幕と同文の札 → 画面は要点の短い語に (`.hide_subtitle` は字幕の代わりに台詞を見せる札だけ)
 - `spoiler` 見出しが台詞の語を先に見せる → 語の印で出す
 - `still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す
 - `long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印
 - `cut_head_gap` cut 頭が 1.2 秒以上空く → 頭の要素は印なしで置く
 - `entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ
+- `entrance_in_transition` 語の印の入場が前の切替の窓の中で済む → 最初の台詞の頭に `[silence:+0.4s]` を足して語を窓の後へ (要る秒は check が言う)
 - `no_closer` 最後の cut に大きな締めの一言が無い
 - `same_picture` 同じ絵が 15 秒以上 → 場面ごとに絵を替える
 - `blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を

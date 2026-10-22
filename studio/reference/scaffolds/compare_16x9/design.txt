@@ -13,7 +13,7 @@ motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade 
 motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
 motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
 div { in: div }
-# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `section#名(stagger: {each: .12})` で頭の組み上がりに戻せる)
 # 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
 cut { stagger: sentence }
 # 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
@@ -24,16 +24,16 @@ def sub(t) = p(font-size: 30px; color: $mute; in: note; content: {t})
 def body(t) = p(font-size: 32px; in: row; content: {t})
 def note(t) = p(font-size: 24px; color: $mute; in: note; content: {t})
 # 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
-def stat(v, u, l) = div(width: 560px; height: 166px; background: none; border: none; box-shadow: 0; padding: 0px)
+def stat(v, u, l) = div(width: 560px; height: 166px)
   p#l(left: 0px; top: 0px; font-size: 30px; color: $mute; content: {l})
   p#v(left: 0px; top: 46px; font-size: 112px; font-family: n; color: $a; line-height: 1; content: {v})
   p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
 def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
 # 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
-def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px; box-shadow: 2)
   p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
-  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column) ×3
+  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column; background: $panel; border-radius: 16px; box-shadow: 2) ×3
     icon#ic(left: 0px; cy: 50%; font-size: 56px; name: {icons}; color: $b)
     p#t(left: 80px; cy: 50%; font-size: 38px; content: {items})
   p#cta(left: 0px; bottom: 0px; font-size: 38px; color: $a; content: {cta})
@@ -44,7 +44,7 @@ bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセ�
 bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
 subtitle.hug(font-size: 30px; bottom: 24px; unit: phrase)
 # 比べる 2 列の板: 絵 + 名・値・判定 (×2 を stack で左右 / 上下に等分)
-def side(t, v, i, c, j) = div(background: $panel; border-radius: 16px; padding: 32px)
+def side(t, v, i, c, j) = div(background: $panel; border-radius: 16px; padding: 32px; box-shadow: 2)
   icon#i(left: 0px; top: 0px; font-size: 72px; name: {i}; color: {c})
   p#t(left: 96px; top: 8px; font-size: 44px; content: {t})
   p#v(left: 0px; top: 120px; font-size: 36px; content: {v})
@@ -52,8 +52,8 @@ def side(t, v, i, c, j) = div(background: $panel; border-radius: 16px; padding: 
 
 section#title
 img#t_bg(inset: 0; content: @bg)
-h1#t_h(left: 80px; top: 196px; width: 1120px; height: 144px) 朝型か、夜型か
-sub#t_m(left: 80px; top: 364px; width: 1120px; height: 60px) 集中できる時間の長さで比べる
+h1#t_h(left: 80px; top: 196px; width: 1120px) 朝型か、夜型か
+sub#t_m(left: 80px; top: 364px; width: 1120px) 集中できる時間の長さで比べる
 
 section#axis1
 # 比較の板の cut にも絵: 全面の写真 + scrim の上に左右の板
@@ -66,8 +66,8 @@ side#c2(left: 80px; top: 112px; width: 1120px; height: 480px; gap: 32px; t: "朝
 
 section#verdict
 img#vd_p(inset: 0; scrim: 0.5) [photo]朝日の差し込む静かな机、湯気の立つマグカップ、文字なし
-big#vd_v(left: 80px; top: 280px; width: 1120px; height: 144px; in: big) 深く考える日は、朝
-sub#vd_s(left: 80px; top: 448px; width: 1120px; height: 60px; text-align: center) 夜は、手を動かす
+big#vd_v(left: 80px; top: 280px; width: 1120px; in: big) 深く考える日は、朝
+sub#vd_s(left: 80px; top: 448px; width: 1120px; text-align: center) 夜は、手を動かす
 
 section#close
 img#cl_bg(inset: 0; scrim: 0.6) [photo]夜明けの空と街のシルエット、東の空が白む、文字なし

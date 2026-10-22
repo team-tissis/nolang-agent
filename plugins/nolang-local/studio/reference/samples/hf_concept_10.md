@@ -24,7 +24,6 @@ lint off=spoiler,caption_gap,text_only_cut,small_text
 run m { marker: $sand,36% }
 run q { color: $accent }
 p { color: $ink }
-div { border: none; box-shadow: none; padding: 0px }
 # 場面の要素は一斉に左へ抜ける (hf の leave: x -26 px・0.4 s)・頭の組み上がりは一斉
 cut { stagger: 0; out: {x:-17, opacity:0, duration:.4, ease:'power1.in'} }
 sound page = "紙のページを1枚めくる乾いた短いペラッという音"
@@ -40,9 +39,9 @@ bgm#music(fade: 800,3200) 静かでゆっくりしたアンビエント、繊細
 # 字幕: 板なし・墨色の細い角ゴシック・画面の下 1/4 の位置・0.14 s の fade だけ
 subtitle(left: 20px; top: 964px; width: 680px; font-size: 31px; line-height: 1.58; letter-spacing: .02em; text-align: center; color: $ink; font-family: r; background: none; border: none; box-shadow: none; padding: 0px; unit: sentence; lead: 0; tail: 110; hold: off; in: {opacity:0, duration:.14}; out: {opacity:0, duration:.14})
 # 地: 点の地紋 + 中央が明るく縁がくすむ周辺の明るみ + 内側 24 px の細い枠 (全編・最背面)
-div#grain(inset: 0; background: none; pattern: dots,5,#7864460A; z-index: back; in: none; out: none)
-div#vignette(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@60%,#785F3C1A,50%,45%); z-index: back; in: none; out: none)
-div#frame(left: 24px; top: 24px; width: 672px; height: 1232px; background: none; border: 1px solid #A08C6E47; border-radius: 4px; z-index: back; in: none; out: none)
+div#grain(inset: 0; pattern: dots,5,#7864460A; z-index: back; border-radius: 16px; in: none; out: none)
+div#vignette(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@60%,#785F3C1A,50%,45%); z-index: back; border-radius: 16px; in: none; out: none)
+div#frame(left: 24px; top: 24px; width: 672px; height: 1232px; border: 1px solid #A08C6E47; border-radius: 4px; z-index: back; in: none; out: none)
 
 # 上端の章札 (煉瓦色の字 + 両脇の短い線)・場面の頭に右から
 def label(t) = p(cx: 360px; top: 131px; font-size: 20px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100; in: {x:20, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
@@ -140,8 +139,8 @@ label#lab5.sticky 結論
 div#cc7(left: 87px; top: 267px; width: 547px; height: 347px; background: $card; border: 2px solid $cardline; border-radius: 20px; box-shadow: 0px 12px 27px #5A46281A; delay: 100; in: {y:20, opacity:0, duration:.8, ease:'power2.out'})
   p#head(cx: 50%; top: 41px; font-family: s; font-size: 41px; letter-spacing: .06em) 選ぶ前の条件
   div#rule(left: 60px; top: 115px; width: 427px; height: 1px; background: $cardline)
-  div#item(left: 0px; top: 167px; width: 547px; height: 107px; background: none; in: {y:8, opacity:0, duration:.55, ease:'power2.out'})
-    div#box(left: 66px; cy: 50%; width: 56px; height: 56px; border: 3px solid $ink; border-radius: 9px; background: none)
+  div#item(left: 0px; top: 167px; width: 547px; height: 107px; in: {y:8, opacity:0, duration:.55, ease:'power2.out'})
+    div#box(left: 66px; cy: 50%; width: 56px; height: 56px; border: 3px solid $ink; border-radius: 9px)
     shape#x(left: 80px; cy: 50%; width: 29px; height: 29px; path: cross; background: none; border: 5px solid $accent; in: draw {duration: 0.4})
     p#t(left: 145px; cy: 50%; font-family: s; font-size: 56px) やりたいこと
     shape#st(left: 137px; cy: 52%; width: 352px; height: 29px; path: strike; background: none; border: 5px solid $accent; overlap: cc7.item.t; in: draw {duration: 0.55})

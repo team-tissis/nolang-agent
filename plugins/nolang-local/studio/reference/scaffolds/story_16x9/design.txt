@@ -13,7 +13,7 @@ motion div { in: {y:24, opacity:0, duration:0.45, ease:'power3.out'}; out: fade 
 motion row { in: {x:-60, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
 motion note { in: {y:14, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
 div { in: div }
-# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `[cut 名] stagger=120` で頭の組み上がりに戻せる)
+# 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `section#名(stagger: {each: .12})` で頭の組み上がりに戻せる)
 # 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
 cut { stagger: sentence }
 # 文字の段 (size は def だけに書き、要素は段の名で置く)。num = 番号つきの段の番号 (「01 推移」の 01)
@@ -24,16 +24,16 @@ def sub(t) = p(font-size: 30px; color: $mute; in: note; content: {t})
 def body(t) = p(font-size: 32px; in: row; content: {t})
 def note(t) = p(font-size: 24px; color: $mute; in: note; content: {t})
 # 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
-def stat(v, u, l) = div(width: 560px; height: 166px; background: none; border: none; box-shadow: 0; padding: 0px)
+def stat(v, u, l) = div(width: 560px; height: 166px)
   p#l(left: 0px; top: 0px; font-size: 30px; color: $mute; content: {l})
   p#v(left: 0px; top: 46px; font-size: 112px; font-family: n; color: $a; line-height: 1; content: {v})
   p#u(left: .v.right+12; top: 94px; font-size: 56px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
 def stamp(content) = p(font-size: 48px; color: $a; border: 3px solid $a; border-radius: 12px; padding: 10px 24px; text-align: center; in: pop; content: {content})
 # 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
-def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px)
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 24px; padding: 40px; box-shadow: 2)
   p#t(left: 0px; top: 0px; font-size: 64px; content: {t})
-  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column) ×3
+  div#i(left: 0px; top: 112px; width: 100%; height: 250px; gap: 16px; display: flex; flex-direction: column; background: $panel; border-radius: 16px; box-shadow: 2) ×3
     icon#ic(left: 0px; cy: 50%; font-size: 56px; name: {icons}; color: $b)
     p#t(left: 80px; cy: 50%; font-size: 38px; content: {items})
   p#cta(left: 0px; bottom: 0px; font-size: 38px; color: $a; content: {cta})
@@ -49,28 +49,28 @@ image owner = "[photo]50 代の男性のパン職人、白いコック帽と小�
 
 section#hook
 img#hk_p(inset: 0; main: kb {scale: [1, 1.06]}; scrim: 0.5) [photo]早朝の商店街の小さなパン屋、まだ暗い通りに灯る店の明かり、文字なし
-h1#hk_h(left: 80px; top: 112px; width: 739px; height: 144px) 売上が、半分になった朝
+h1#hk_h(left: 80px; top: 112px; width: 739px) 売上が、半分になった朝
 
 section#shock
 img#sk_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 40%'}; scrim: 0.45) [ref:@owner]売上の帳簿を見て目を見開く店主の顔のアップ、朝の厨房、文字なし
-big#sk_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 何が、起きたんだ
+big#sk_v(left: 80px; top: 448px; width: 1120px; text-align: center) 何が、起きたんだ
 stat#sk_st(left: 80px; top: 112px; v: "50"; u: "% 減"; l: "先月の売上")
 
 section#cause
 img#cs_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['40% 50%', '']}; scrim: 0.5) [photo]駅前に開店したばかりの大型スーパー、開店セールの旗と人だかり、文字なし
-h1#cs_h(left: 80px; top: 112px; width: 739px; height: 144px) 駅前に、大型店
+h1#cs_h(left: 80px; top: 112px; width: 739px) 駅前に、大型店
 
 section#empty
 img#em_p(inset: 0; main: kb {scale: [1.06, 1]}; scrim: 0.4) [photo]誰もいない朝のパン屋の店内、並んだパンと窓からの白い光、文字なし
-sub#em_s(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 朝の客が、消えた
+sub#em_s(left: 80px; top: 448px; width: 1120px; text-align: center) 朝の客が、消えた
 
 section#idea
 img#id_p(inset: 0; main: kb {scale: [1, 1.08], focus: '60% 45%'}; scrim: 0.45) [ref:@owner]店先で自転車を見つめて何かを決めた顔の店主、朝日、文字なし
-h1#id_h(left: 80px; top: 112px; width: 739px; height: 144px) 待つのは、やめだ
+h1#id_h(left: 80px; top: 112px; width: 739px) 待つのは、やめだ
 
 section#action
 img#ac_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['30% 50%', '70% 50%']}; scrim: 0.45) [ref:@owner]パンの箱を積んだ自転車で朝の住宅街を走る店主、動きのある構図、文字なし
-big#ac_v(left: 80px; top: 448px; width: 1120px; height: 144px; text-align: center) 配達、開始
+big#ac_v(left: 80px; top: 448px; width: 1120px; text-align: center) 配達、開始
 stat#ac_st(left: 80px; top: 112px; v: "[count:120]"; u: "件"; l: "3 か月で")
 
 section#turn
@@ -79,4 +79,4 @@ stat#tn_v(left: 80px; top: 180px; v: "9"; u: "割"; l: "売上は元の")
 
 section#close
 img#cl_p(inset: 0; main: kb {scale: [1, 1.05]}; scrim: 0.45) [photo]夕暮れの商店街、灯りのついたパン屋の看板を遠くから、文字なし
-big#cl_v(left: 80px; top: 280px; width: 1120px; height: 60px) 店は、動いた
+big#cl_v(left: 80px; top: 280px; width: 1120px) 店は、動いた

@@ -19,7 +19,7 @@ lint off=spoiler,duplicate_text
 prompt_tail "Photorealistic, cinematic color grading with deep blacks and warm highlights. Absolutely no text, no letters, no logos, no brand names, no watermark."
 run y { color: $y }
 p { color: #FFFFFF; out: none }
-div { border: none; box-shadow: none; padding: 0px; out: none }
+div { border: none; out: none }
 group { out: none }
 shape { out: none }
 svg { out: none }
@@ -42,7 +42,7 @@ bgm#music(keys: "0:+4.5|550ms:0|end-1.7s:0|end-1.3s:+4"; fade: 0,850) 明るく�
 # 字幕: 白文字 + 黒の太い縁 + 落ち影・句末の約物は外す・語の色は台詞の {y}
 subtitle.hug(left: 33px; bottom: 275px; width: 653px; padding: 0px; font-size: 48px; line-height: 1.3; letter-spacing: 0.01em; color: #FFFFFF; stroke: #000000,6; text-shadow: 0px 4px 7px #00000073; background: none; unit: sentence; strip: 、。; lead: 0; in: {y:12, scale:0.96, opacity:0, duration:0.16, ease:'back.out(2)'})
 # 左上の小札 (黄の縦棒 + 黄文字)・場面の頭に印なしで置き、絵と一緒に出る
-def kicker(t) = div(left: 48px; top: 133px; width: 624px; height: 48px; background: none; in: {x:-16, opacity:0, duration:0.25, ease:'power1.out'})
+def kicker(t) = div(left: 48px; top: 133px; width: 624px; height: 48px; in: {x:-16, opacity:0, duration:0.25, ease:'power1.out'})
   div#bar(left: 0px; cy: 50%; width: 8px; height: 33px; background: $y; border-radius: 2px)
   p#text(left: 19px; cy: 50%; font-size: 33px; color: $y; letter-spacing: 0.04em; text-shadow: 0px 3px 11px #00000099; content: {t})
 # 大見出し (下から mask で出る) と黄の札
@@ -58,10 +58,10 @@ def reason_chip(t, w) = group(width: {w}; height: 96px; in: {scale:0.3, opacity:
   p#text(left: 0px; cy: 50%; font-size: 67px; line-height: 1.1; color: $k; background: $y; border-radius: 99px; padding: 11px 31px 12px 73px; box-shadow: 0px 11px 24px #00000073; content: {t})
   svg#icon(left: 17px; cy: 50%; width: 41px; height: 41px; part: check)
 # 上下の暗幕 (上 78% → 40〜54% は素通し → 下 82%)
-def shade() = div(inset: 0; background: linear(#000000C7,#00000080@18%,#00000000@40%,#00000000@54%,#00000080@70%,#000000D1,180); in: none)
+def shade() = div(inset: 0; background: linear(#000000C7,#00000080@18%,#00000000@40%,#00000000@54%,#00000080@70%,#000000D1,180); border-radius: 16px; in: none)
 # 全編の層: 暗幕と上端の進行線 (地 18% の白 + 黄の棒)
 shade#shade
-div#progress_track(left: 0px; top: 0px; width: 720px; height: 7px; background: #FFFFFF2E; z-index: front; in: none)
+div#progress_track(left: 0px; top: 0px; width: 720px; height: 7px; background: #FFFFFF2E; z-index: front; border-radius: 16px; in: none)
 progress#progress_bar(left: 0px; top: 0px; width: 720px; height: 7px; background: $y; until: end; z-index: front; overlap: progress_track)
 
 # 問い: 黒いタイヤの写真に「Q. なぜタイヤは 黒い ？」を語ごとに組み、？ を揺らす
@@ -93,7 +93,7 @@ group#carbon_badge(left: 48px; top: 195px; width: 563px; height: 93px; sheen: ca
   p#text(cx: 50%; cy: 50%; font-size: 67px; line-height: 1.2; color: $y; white-space: nowrap) カーボンブラック
 p#carbon_meaning(left: 48px; cy: 326px; font-size: 36px; text-shadow: 0px 3px 12px #000000B3; in: {y:11, opacity:0, duration:0.28, ease:'power1.out'}) ＝ 炭素のとても細かい粒
 # 文の中の絵替え: 黒が先に覆い、混ぜる工程の写真が 1.08 → 1 で溶けて出る (語で出す絵は全編の暗幕より上に乗るので暗幕を重ね直す)
-div#mill_black(inset: 0; background: #000000; in: none)
+div#mill_black(inset: 0; background: #000000; border-radius: 16px; in: none)
 img#mill_photo(inset: 0; main: kb {scale: [1.12, 1.12], focus: ['15% 50%', '85% 50%']}; in: {opacity:0, scale:1.08, duration:0.32, ease:'power2.out'}) [photo]Vertical 9:16 photograph inside a tire factory. On a two-roll rubber mill, a sheet of pale beige raw rubber is being kneaded together with black powder; the sheet turns from beige to deep black where the powder is mixed in. Heavy steel rollers, industrial lighting, warm tones. Industrial documentary, no human faces.
 shade#mill_shade
 kicker#kick_mix ゴムに混ぜると…

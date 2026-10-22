@@ -25,7 +25,6 @@ sound hyoshigi = "拍子木を打つ鋭く乾いた音"
 sound slide = "小さなスライドホイッスルの高く可愛い下降音"
 sound taiko = "和太鼓の大太鼓を一打、低く重く響く"
 sfx off
-shadow_default 0
 cut { stagger: 0 }
 img { in: none; out: none }
 p { out: none }
@@ -47,14 +46,14 @@ svg plate_mgr = """<svg viewBox="-120 -56 240 112"><rect x="-120" y="-56" width=
 svg plate_staff = """<svg viewBox="-110 -52 220 104"><rect x="-110" y="-52" width="220" height="104" rx="20" fill="#3d6fb6"/><circle cx="-48" cy="-12" r="17" fill="#fff"/><path d="M-78 32 a30 26 0 0 1 60 0 z" fill="#fff"/></svg>"""
 svg badge = """<svg viewBox="-30 -30 60 50"><rect x="-30" y="-30" width="60" height="48" rx="6" fill="#fff4cf"/><circle cx="0" cy="-8" r="10" fill="#e2a51b"/><path d="M-7 1 l-5 18 l12 -6 l12 6 l-5 -18 z" fill="#c8551b"/></svg>"""
 svg red_x = """<svg viewBox="-38 -38 76 76"><rect x="-44" y="-9" width="88" height="18" rx="9" fill="#ff2d3d" transform="rotate(45)"/><rect x="-44" y="-9" width="88" height="18" rx="9" fill="#ff2d3d" transform="rotate(-45)"/></svg>"""
-def org_node(plate) = div(border-radius: 0px; border: none; box-shadow: none; padding: 0px; in: {scale:.2, opacity:0, duration:.32, ease:'back.out(2)'})
+def org_node(plate) = div(border: none; background: $panel; in: {scale:.2, opacity:0, duration:.32, ease:'back.out(2)'})
   svg#plate(part: {plate})
 def slam_x() = svg(width: 51px; height: 51px; part: red_x; in: {scale:2.4, opacity:0, duration:.18, ease:'power4.in'})
 
 # 常設の層: 上下の暗いグラデ (上 330 px・下 760 px) と題の帯 (紺の板・下に黄の縁・硬い影・「役職はあります。」だけ大きく黄)
-div#shade_top(border-radius: 0px; border: none; box-shadow: none; padding: 0px; left: 0px; top: 0px; width: 720px; height: 220px; background: linear(#0508129E,#05081200,180); in: none)
-div#shade_bottom(border-radius: 0px; border: none; box-shadow: none; padding: 0px; left: 0px; top: 773px; width: 720px; height: 507px; background: linear(#05081200,#05081273@45%,#050812CC,180); in: none)
-div#title_bar.sticky(left: 56px; top: 47px; width: 608px; height: 66px; background: $navy; border-radius: 4px; border-bottom: 5px solid $y; box-shadow: 0px 7px 0px #00000059; in: none)
+div#shade_top(left: 0px; top: 0px; width: 720px; height: 220px; background: linear(#0508129E,#05081200,180); in: none)
+div#shade_bottom(left: 0px; top: 773px; width: 720px; height: 507px; background: linear(#05081200,#05081273@45%,#050812CC,180); in: none)
+div#title_bar.sticky(left: 56px; top: 47px; width: 608px; height: 66px; background: $navy; border-radius: 4px; border-bottom: 5px solid $y; box-shadow: 0px 7px 0px #00000059; border: 1px solid $line; in: none)
   p#title(cx: 50%; cy: 52%; font-size: 33px; font-family: d; color: #FFFFFF; letter-spacing: .01em) 資格はないけど、{big}役職はあります。{/}
 
 # 発端: 2 人の引き → 幕を沈めて組織図 (「上の人は誰も資格なし」を × で見せる) → 部下の驚き
@@ -62,7 +61,7 @@ section#org_chart
 img#desk_wide(inset: 0; main: kb {scale: [1.04, 1.11], focus: ['50% 40%', '50% 45%']}) [ref:@sheet]部長席の引きの構図。大きな木製デスクの革張りの椅子に上司が深く座って満足げに微笑み、デスクの横に部下がタブレットを胸に抱えて立ち、にこやかに上司に話しかけている。2人とも全身に近い大きさで画面に収まる。背景は明るく清潔な日本のオフィス (木目のデスク、観葉植物、大きな窓、白い壁)。
 img#sub_surprised(inset: 0; main: kb {scale: [1.04, 1.11], focus: ['50% 40%', '50% 45%']}) [ref:@sheet]部下のバストアップ。少し目を見開いて意外そうな表情、片手でメガネのブリッジを押し上げている。顔は画面の左側を向いている。背景は明るく清潔な日本のオフィス (木目のデスク、観葉植物、大きな窓、白い壁)。背景は少しぼかす。
 # 組織図 (幕で沈めた上に、節点が順に弾み、線が出て、上の 3 つの資格証に赤い × が叩きつけられ、下の 3 つの資格証が脈打つ)
-div#org_dim(inset: 0; border-radius: 0px; border: none; box-shadow: none; padding: 0px; background: #080C1A94; in: {opacity:0, duration:.3, ease:'power1.out'}; out: {opacity:0, duration:.25, ease:'power1.in'})
+div#org_dim(inset: 0; border: none; background: #080C1A94; in: {opacity:0, duration:.3, ease:'power1.out'}; out: {opacity:0, duration:.25, ease:'power1.in'})
 group#org(in: {stagger: {each: .06}}; left: 60px; top: 253px; width: 600px; height: 427px; out: {opacity:0, duration:.25, ease:'power1.in'})
   svg#upper(part: links_upper; in: {opacity:0, duration:.3})
   svg#lower(part: links_lower; in: {opacity:0, duration:.3})
