@@ -77,7 +77,7 @@ def deco(c) = div(left: 1280px; top: -380px; width: 1000px; height: 1000px; back
 # 2. 左の人物 (役の色の淡い丸 + 床の影 + 透過の人物が浮遊)
 def role_char(img, t) = group(left: 70px; top: 150px; width: 560px; height: 740px)
   div#circle(left: 30px; top: 210px; width: 500px; height: 500px; border-radius: 1498px; background: {t}; delay: 400; in: {scale:.4, opacity:0, duration:.6, ease:'back.out(1.7)'})
-  shape#floor.ellipse(left: 130px; top: 699px; width: 300px; height: 34px; background: #1E2A4A1A; delay: 550; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
+  shape#floor(left: 130px; top: 699px; width: 300px; height: 34px; border-radius: 50%; background: #1E2A4A1A; delay: 550; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
   img#char(left: 46px; top: 26px; width: 466px; height: 700px; content: @{img}; object-fit: contain; delay: 470; in: {y:70, opacity:0, duration:.6, ease:'power3.out'}; main: sine {y: -8, period: 2.2})
 # 3. 右上の見出し (ROLE 0N・略称の大字・英語の正式名と和名は略称の語で下から — 正式名の文字は実体の子 en に書く)
 def role_head(n, a, ja, c, s=100, et=54, jt=96) = group(left: 680px; top: 110px; width: 1170px; height: 202px)
@@ -276,8 +276,8 @@ div#eng_ed(left: 680px; top: 404px; width: 590px; height: 344px; border-radius: 
 div#eng_ph(left: 1330px; top: 404px; width: 190px; height: 280px; border-radius: 30px; background: #FFFFFF; border: 8px solid $ink; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})
   div#pb(left: "14;14;14;14;32"; top: "14;44;110;132;154"; width: "99;99;99;99;63"; height: "23;60;16;16;20"; border-radius: 10px; background: "$eng;#D9D3FF;#E8E4DA;#E8E4DA;$po"; in: {y:-30, opacity:0, duration:.35, ease:'back.out(1.6)', stagger:{each:.1}}) ×5
 div#eng_flow(left: 1530px; top: 540px; width: 100px; height: 8px; border-radius: 4px; background: #DDD7CA; in: {scaleX:0, duration:.35, ease:'power2.out', pivot:'left'})
-shape#eng_d1.ellipse(left: 1530px; top: 534px; width: 20px; height: 20px; background: $eng; in: fade {duration: 0.2})
-shape#eng_d2.ellipse(left: 1610px; top: 534px; width: 20px; height: 20px; background: $eng; in: fade {duration: 0.2})
+shape#eng_d1(left: 1530px; top: 534px; width: 20px; height: 20px; border-radius: 50%; background: $eng; in: fade {duration: 0.2})
+shape#eng_d2(left: 1610px; top: 534px; width: 20px; height: 20px; border-radius: 50%; background: $eng; in: fade {duration: 0.2})
 # サーバー (紺の箱 3 段・青緑の灯と線)
 div#eng_sv(left: 1640px; top: 440px; width: 150px; height: 208px; in: {x:60, opacity:0, duration:.45, ease:'power3.out'})
   div#sv(left: 0px; top: "0;49;98"; width: 150px; height: 62px) ×3
@@ -300,7 +300,7 @@ div#des_ph(left: 720px; top: 330px; width: 250px; height: 420px; border-radius: 
   div#wb(left: "18;18;18;18;37"; top: "18;57;153;178;218"; width: "131;131;90;116;93"; height: "29;87;17;17;31"; border-radius: 10px; background: #E3E0D8) ×5
   div#ub(left: "18;18;18;18;37"; top: "18;57;153;178;218"; width: "131;131;90;116;93"; height: "29;87;17;17;31"; border-radius: 12px; background: "$des;#FFDED3;#F1D6E2;#F6E3EB;$ink"; in: {opacity:0, duration:.5, ease:'power1.inOut'}) ×5
 # カーソル (白い矢印に紺の縁)・押した所に広がる輪・「迷わず使える」の札
-shape#des_ring.ellipse(left: 796px; top: 632px; width: 96px; height: 96px; background: none; border: 4px solid $des; opacity: 0; in: keys(at=0 scale=0.19 opacity=0.9 | at=1 ease=power2.out),duration=600)
+shape#des_ring(left: 796px; top: 632px; width: 96px; height: 96px; border-radius: 50%; background: none; border: 4px solid $des; opacity: 0; in: keys(at=0 scale=0.19 opacity=0.9 | at=1 ease=power2.out),duration=600)
 shape#des_cur(left: 836px; top: 676px; width: 56px; height: 56px; path: cursor; background: #FFFFFF; border: 2px solid $ink; in: {x:120, y:60, opacity:0, duration:.5, ease:'power2.out'})
 p#des_ok(left: 990px; top: 612px; font-size: 24px; font-family: h; color: #FFFFFF; background: $des; border-radius: 12px; padding: 8px 14px 8px 45px; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'}) 迷わず使える
   icon#i(left: 14px; cy: 50%; font-size: 26px; name: check; weight: bold; color: #FFFFFF)

@@ -102,7 +102,7 @@ def ocard(c, no, tt, f) = div(out: leave; top: 216px; width: 540px; height: 700p
   p#for(left: 44px; top: 628px; font-size: 22px; color: $ink2; white-space: nowrap; in: {y:8, opacity:0, duration:.45, ease:'power3.out'}; content: {f})
 # 箇条の 1 行 (黒い点 + 文)
 def li(t) = div(width: 460px; height: 78px; in: {y:12, opacity:0, duration:.5, ease:'power3.out'})
-  shape#dot(left: 2px; top: 14px; width: 14px; height: 14px; path: ellipse; background: $ink)
+  shape#dot(left: 2px; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: $ink)
   p#t(left: 30px; top: 0px; width: 430px; font-size: 28px; line-height: 1.36; content: {t})
 # 結論の帯の付箋 (紺の丸の番号 + 題 (左から拭き出し) + 補足)
 def ccard(c, n, h, s) = div(out: leave; left: 96px; width: 1300px; height: 210px; border-radius: 3px 3px 18px 3px; background: {c}; box-shadow: 0px 14px 18px #503C1440; in: {y:-30, scale:1.14, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
@@ -219,11 +219,11 @@ p#k_ay(left: 150px; top: "578;525;472;418;365;312;258;205"; width: 70px; font-si
 p#k_ax(left: "167;347;527;707"; top: 900px; width: 160px; font-size: 30px; text-align: center; line-height: 1; delay: 600; in: {y:8, opacity:0, duration:.3, ease:'power3.out', stagger:{each:.08}}) ×4 1週目;2週目;3週目;4週目
 shape#k_area(path: "M220 278 L400 368 L580 448 L760 518 L760 587 L220 587 Z"; background: #DF5F4324; in: wipe {dir: 'right', duration: 1.27, ease: 'none'})
 shape#k_line(path: "M220 278 L400 368 L580 448 L760 518"; background: none; border: 8px solid $cor_ink; in: draw {duration: 1.27, ease: 'none'})
-shape#k_pt(left: "210;390;570;750"; top: "268;358;438;508"; width: 30px; height: 30px; path: ellipse; background: $cor_ink; border: 4px solid #FFFFFF; box-shadow: 0px 2px 6px #00000040; in: {scale:.1, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.42}}) ×4
+shape#k_pt(left: "210;390;570;750"; top: "268;358;438;508"; width: 30px; height: 30px; border-radius: 50%; background: $cor_ink; border: 4px solid #FFFFFF; box-shadow: 0px 2px 6px #00000040; in: {scale:.1, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.42}}) ×4
 p#k_val(left: "193;408;588;768"; top: "223;313;393;463"; font-size: 54px; font-family: m; line-height: 1; white-space: nowrap; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.42}}) ×4 5.8{ku}日{/};4.1{ku}日{/};2.6{ku}日{/};1.3{ku}日{/}
 card#k_legend(left: 1380px; top: 250px; width: 450px; height: 220px; transform: rotate(1deg); delay: 900; in: {y:-16, scale:1.04, rotation:3, opacity:0, duration:.55, ease:'back.out(1.6)'})
   div#sw(left: 30px; top: 39px; width: 60px; height: 8px; border-radius: 4px; background: $cor_ink)
-  shape#dot(left: 50px; top: 32px; width: 22px; height: 22px; path: ellipse; background: $cor_ink; border: 4px solid #FFFFFF)
+  shape#dot(left: 50px; top: 32px; width: 22px; height: 22px; border-radius: 50%; background: $cor_ink; border: 4px solid #FFFFFF)
   p#t(left: 108px; top: 26px; font-size: 27px; white-space: nowrap) やめた人12人の平均
   p#n(left: 30px; top: 78px; font-size: 22px; line-height: 1.4; color: $ink2) 1週あたりの記録日数[br]（ログと本人の話を突き合わせた値）
 note#k_take(left: 1395px; top: 544px; width: 440px; height: 360px; c: $pnk; transform: rotate(-2deg); in: {y:-46, scale:1.14, rotation:-8, opacity:0, duration:.55, ease:'back.out(1.6)'})
@@ -263,9 +263,9 @@ p#c_l2(left: 96px; top: 468px; font-size: 33px; line-height: 1.25; in: {y:10, op
 p#c_l3(left: 96px; top: 616px; font-size: 33px; line-height: 1.25; in: {y:10, opacity:0, duration:.5, ease:'power3.out'}) 1日の入力にかける時間[br]{sm}本人の申告・中央値{/}
 p#c_l4(left: 96px; top: 764px; font-size: 33px; line-height: 1.25; in: {y:10, opacity:0, duration:.5, ease:'power3.out'}) 週に1回ふり返る習慣
 # 1 点 = 1 人 (塗り = 該当・輪 = 非該当)
-shape#c_d1(left: "480;515;549;584;619;653"; top: 333px; width: 42px; height: 42px; path: ellipse; background: "$mnt_ink;$mnt_ink;$mnt_ink;$mnt_ink;$mnt_ink;none"; border: 4px solid $mnt_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.05}}) ×6
+shape#c_d1(left: "480;515;549;584;619;653"; top: 333px; width: 42px; height: 42px; border-radius: 50%; background: "$mnt_ink;$mnt_ink;$mnt_ink;$mnt_ink;$mnt_ink;none"; border: 4px solid $mnt_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.05}}) ×6
 cval#c_v1(left: 1050px; top: 315px; v: "5/6人"; s: "83%")
-shape#c_q1(left: "855;883;911;939;967;995;855;883;911;939;967;995"; top: "206;206;206;206;206;206;235;235;235;235;235;235"; width: 34px; height: 34px; path: ellipse; background: "$cor_ink;$cor_ink;$cor_ink;none;none;none;none;none;none;none;none;none"; border: 4px solid $cor_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.035}}) ×12
+shape#c_q1(left: "855;883;911;939;967;995;855;883;911;939;967;995"; top: "206;206;206;206;206;206;235;235;235;235;235;235"; width: 34px; height: 34px; border-radius: 50%; background: "$cor_ink;$cor_ink;$cor_ink;none;none;none;none;none;none;none;none;none"; border: 4px solid $cor_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.035}}) ×12
 cval#c_w1(left: 1552px; top: 315px; v: "3/12人"; s: "25%")
 div#c_b2a(left: 720px; top: 484px; width: 160px; height: 44px; border-radius: 4px 10px 10px 4px; background: $mnt; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left'})
 p#c_v2a(left: 898px; top: 480px; font-size: 52px; font-family: m; line-height: 1; in: {scale:.5, opacity:0, duration:.42, ease:'back.out(2.4)'}) 8{cu}個{/}
@@ -275,9 +275,9 @@ div#c_b3a(left: 720px; top: 633px; width: 80px; height: 44px; border-radius: 4px
 p#c_v3a(left: 818px; top: 628px; font-size: 52px; font-family: m; line-height: 1; in: {scale:.5, opacity:0, duration:.42, ease:'back.out(2.4)'}) 1{cu}分{/}
 div#c_b3b(left: 1282px; top: 633px; width: 320px; height: 44px; border-radius: 4px 10px 10px 4px; background: $cor; in: {scaleX:0, duration:.5, ease:'power2.out', pivot:'left'})
 p#c_v3b(left: 1620px; top: 628px; font-size: 52px; font-family: m; line-height: 1; in: {scale:.5, opacity:0, duration:.42, ease:'back.out(2.4)'}) 4{cu}分{/}
-shape#c_d4(left: "480;515;549;584;619;653"; top: 777px; width: 42px; height: 42px; path: ellipse; background: $mnt_ink; border: 4px solid $mnt_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.05}}) ×6
+shape#c_d4(left: "480;515;549;584;619;653"; top: 777px; width: 42px; height: 42px; border-radius: 50%; background: $mnt_ink; border: 4px solid $mnt_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.05}}) ×6
 cval#c_v4(left: 1050px; top: 774px; v: "6/6人")
-shape#c_q4(left: "855;883;911;939;967;995;855;883;911;939;967;995"; top: "502;502;502;502;502;502;531;531;531;531;531;531"; width: 34px; height: 34px; path: ellipse; background: "$cor_ink;$cor_ink;none;none;none;none;none;none;none;none;none;none"; border: 4px solid $cor_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.035}}) ×12
+shape#c_q4(left: "855;883;911;939;967;995;855;883;911;939;967;995"; top: "502;502;502;502;502;502;531;531;531;531;531;531"; width: 34px; height: 34px; border-radius: 50%; background: "$cor_ink;$cor_ink;none;none;none;none;none;none;none;none;none;none"; border: 4px solid $cor_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.035}}) ×12
 cval#c_w4(left: 1552px; top: 774px; v: "2/12人")
 note#c_quote(left: 360px; top: 866px; width: 1200px; height: 138px; c: $mnt; transform: rotate(-1deg); in: {y:-30, scale:1.14, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#q(left: 46px; top: 24px; font-size: 45px; font-family: h; line-height: 1; white-space: nowrap) {x2}「全部正確に」{/}より 「だいたい合っていればいい」

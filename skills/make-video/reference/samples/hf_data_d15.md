@@ -245,7 +245,7 @@ board#b8(k: "07"; t: "始めたいが、していない理由"; n: "{nb}385{/}�
   p#badge7(left: 260px; top: 152px; font-size: 24px; color: $bg; background: $amber; border-radius: 148px; padding: 6px 14px 4px 14px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2.5)'}) 1位
   # 空色の枠: 地の輪 + 61% の弧 (draw) + 中央の数え上げ + 右の文
   div#dn(left: 44px; top: 789px; width: 880px; height: 256px; background: #4FC3F714; border: 2px solid #4FC3F78C; border-radius: 22px; in: {y:50, opacity:0, duration:.4, ease:'power3.out'})
-    shape#ring.ellipse(left: 33px; top: 27px; width: 201px; height: 201px; background: none; border: 30px solid #FFFFFF1A)
+    shape#ring(left: 33px; top: 27px; width: 201px; height: 201px; border-radius: 50%; background: none; border: 30px solid #FFFFFF1A)
     shape#arc(path: "M 89 28.2 C 114.3 28.2 136.6 44.7 143.9 68.9 C 151.2 93.1 141.8 119.2 120.7 133.2 C 99.7 147.2 71.9 145.8 52.5 129.7"; background: none; border: 30px solid $sky; in: draw {duration: 0.9, ease: 'power2.out'})
     p#num(cx: 134px; top: 87px; font-size: 66px; font-family: n; line-height: 1) [count:61 start=0 ms=900]%
     p#den(cx: 134px; top: 162px; font-size: 20px; font-family: r; color: $muted) 77／127人

@@ -130,9 +130,9 @@ def crow(num, head, sub, c1, k1, v1, c2, k2, v2) = div(left: 56px; width: 1648px
 # 全編の地 (根): 淡い青の縦グラデ・点の格子・左上の青・右下の緑・上の琥珀の淡い光が全編でゆっくり漂う
 div#bg_base(inset: 0; background: linear(#F7FAFF,#E9F0FA,180); z-index: back; in: none)
 div#dots(inset: 0; pattern: dots,20,#34508F0E; z-index: back; in: none)
-shape#blob1.ellipse(left: -300px; top: -420px; width: 980px; height: 980px; background: radial(#2F80ED2B,#2F80ED00@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=120 y=73 ease=sine.inOut),duration=156500)
-shape#blob2.ellipse(left: 1180px; top: 460px; width: 1080px; height: 1080px; background: radial(#009E731F,#009E7300@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-133 y=-80 ease=sine.inOut),duration=156500)
-shape#blob3.ellipse(left: 760px; top: -300px; width: 760px; height: 760px; background: radial(#E69F0014,#E69F0000@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-80 y=60 ease=sine.inOut),duration=156500)
+shape#blob1(left: -300px; top: -420px; width: 980px; height: 980px; border-radius: 50%; background: radial(#2F80ED2B,#2F80ED00@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=120 y=73 ease=sine.inOut),duration=156500)
+shape#blob2(left: 1180px; top: 460px; width: 1080px; height: 1080px; border-radius: 50%; background: radial(#009E731F,#009E7300@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-133 y=-80 ease=sine.inOut),duration=156500)
+shape#blob3(left: 760px; top: -300px; width: 760px; height: 760px; border-radius: 50%; background: radial(#E69F0014,#E69F0000@70%); z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-80 y=60 ease=sine.inOut),duration=156500)
 
 # s01 題: 右に角丸の題の絵が寄りながら右から入り、左に小札 → mask から上がる 2 行 (800 が数え上がり、「800人の本音」に黄の下帯) → 罫と社名 → 語で補足と 3 つの数字の札・架空の注記
 section#s01(stagger: {each:0})

@@ -206,7 +206,7 @@ group#vk(left: 0px; top: 780px; width: 1080px; height: 339px; in: {scale:2, opac
 # 社会全体で守る: 光の輪を囲む手の絵・「社会全体」で中央から金色の輪が 4 重に 3 回広がる
 section#society
 img#hands_photo(inset: 0; object-fit: cover; object-position: bottom; zoom: 180%; main: kb {scale: [1, 1.1], focus: ['50% 55%', '50% 55%']}) Many hands of diverse people of different ages and skin tones reaching in from all sides to form a protective circle of warm light around a small glowing figure of a person in the center. The dark background is turning warm and golden where the light spreads. Solidarity, society protecting someone together. Color palette: warm amber, soft gold and gentle peach light with calm teal shadows.
-shape#ring.ellipse(left: 440px; top: 960px; width: 201px; height: 201px; background: none; border: 6px solid #FFD68C66; mix-blend-mode: screen; in: {scale:0.4, opacity:0, duration:0.3})
+shape#ring(left: 440px; top: 960px; width: 201px; height: 201px; border-radius: 50%; background: none; border: 6px solid #FFD68C66; mix-blend-mode: screen; in: {scale:0.4, opacity:0, duration:0.3})
 
 # 章扉 03: 夜明けの絵の芽に寄った構図・温かい縁の「03」・芽の icon・赤枠の「声を上げられる」と「社会へ」
 section#voice_up

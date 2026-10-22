@@ -87,7 +87,7 @@ def ci(c) = div(height: 8px; border-radius: 4px; background: {c}; in: {scaleX:0,
 # 3 案の画面の模型 (料金の切り替えタブ + 価格 + 行 2 本 + ボタン)
 def mockp(on, off, pr, c, ink) = div(width: 296px; height: 262px; border-radius: 14px; background: #0B121D; border: 2px solid #94A3B82E)
   div#bar(left: 2px; top: 2px; width: 292px; height: 26px; border-radius: 8,8,0,0; background: #94A3B814)
-  shape#dot.ellipse(left: "8;17;26"; top: 10px; width: 8px; height: 8px; background: #94A3B859) ×3
+  shape#dot(left: "8;17;26"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
   div#seg(left: 48px; top: 44px; width: 200px; height: 40px; border-radius: 148px; background: #94A3B81F)
     p#on(left: 4px; cy: 50%; width: 94px; font-size: 18px; font-family: m; line-height: 1.75; text-align: center; color: {ink}; background: {c}; border-radius: 148px; content: {on})
     p#off(left: 100px; cy: 50%; width: 94px; font-size: 18px; line-height: 1.75; text-align: center; color: $tx3; content: {off})
@@ -105,7 +105,7 @@ def vcard(ch, tl, sb, n, c=$va, ink=$ink, gc=$va, gs=#94A3B840) = div(top: 208px
   p#fn(right: 28px; bottom: 22px; font-size: 30px; font-family: m; white-space: nowrap; content: {n})
 # 折れ線の点 (縁取りの丸 + 値)・ポンと出る
 def pt(v, c, lc, ly, lx=8) = div(width: 24px; height: 24px; in: {scale:0.3, opacity:0, duration:0.5, ease:'back.out(2)'})
-  shape#d.ellipse(left: 0px; top: 0px; width: 24px; height: 24px; background: {c}; border: 4px solid #0B121D)
+  shape#d(left: 0px; top: 0px; width: 24px; height: 24px; border-radius: 50%; background: {c}; border: 4px solid #0B121D)
   p#v(cx: {lx}; cy: {ly}; font-size: 22px; font-family: b; color: {lc}; white-space: nowrap; content: {v})
 # 結論の札 (上端の色の線 + 番号 + 色の札 + 2 行の題 + 罫)
 def ccard(n, l, h, c) = div(top: 300px; width: 556px; height: 560px; border-radius: 22px; background: linear(#151F2FF0,#0B111BF5,180); border: 2px solid $line; box-shadow: 0px 40px 90px #0000008C; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'})
@@ -116,7 +116,7 @@ def ccard(n, l, h, c) = div(top: 300px; width: 556px; height: 560px; border-radi
   div#dv(left: 36px; top: 268px; width: 484px; height: 2px; background: $line2)
 # 結論の札の行 (色の点 + 文・語の頭で下から上がる)
 def li(t, c) = div(left: 36px; width: 495px; height: 36px; in: {y:12, opacity:0, duration:0.45, ease:'power3.out'})
-  shape#d.ellipse(left: 2px; top: 15px; width: 8px; height: 8px; background: {c})
+  shape#d(left: 2px; top: 15px; width: 8px; height: 8px; border-radius: 50%; background: {c})
   p#t(left: 24px; top: 0px; font-size: 24px; line-height: 1.5; color: $tx2; white-space: nowrap; content: {t})
 
 # 全編の地 (根): 紺の地に右上と左下の放射の光・方眼が全編で右下へ 32 / 16 px 漂う・周辺減光・字幕の下の暗い帯
@@ -181,7 +181,7 @@ vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チ�
   # C の模型: 3 段の比較表 (月額・年額・チームの列)・「C は」の語で列が順に弾む
   div#mock(left: 24px; top: 176px; width: 296px; height: 262px; border-radius: 14px; background: #0B121D; border: 2px solid #94A3B82E)
     div#bar(left: 2px; top: 2px; width: 292px; height: 26px; border-radius: 8,8,0,0; background: #94A3B814)
-    shape#dot.ellipse(left: "8;17;26"; top: 10px; width: 8px; height: 8px; background: #94A3B859) ×3
+    shape#dot(left: "8;17;26"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
     div#col(left: "8;70;132"; top: 44px; width: 86px; height: 150px; border-radius: 10px; border: 2px solid #94A3B833; in: {scale:0.8, opacity:0, duration:0.5, ease:'back.out(2)', stagger: {each: 0.08}}) ×3
       p#h(cx: 50%; top: 10px; font-size: 16px; font-family: m; color: $tx2) 月額;年額;チーム
       div#p(left: 6px; top: 42px; width: 74px; height: 22px; border-radius: 4px; background: "#5B8DEF8C;#F5B54799;#94A3B838")
@@ -199,7 +199,7 @@ section#conv(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.32, ease:'pow
 sec#sec3 {cy}02{/} 転換率
 board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／ 転換率"; t: "有料転換率"; s: "訪問から 14 日以内の課金")
   div#hr(right: 560px)
-  shape#lg_dot.ellipse(left: 876px; top: 78px; width: 18px; height: 18px; background: $tx)
+  shape#lg_dot(left: 876px; top: 78px; width: 18px; height: 18px; border-radius: 50%; background: $tx)
   p#lg1(left: 904px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 推定値
   div#lg_ln(left: 996px; cy: 87px; width: 30px; height: 4px; border-radius: 3px; background: $tx2)
   p#lg2(left: 1036px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 95% 信頼区間
@@ -211,9 +211,9 @@ board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／
   ci#cia(left: 567px; top: 278px; width: 291px; c: "#94A3B8BF")
   ci#cib(left: 728px; top: 418px; width: 306px; c: "#3DD9EBD9")
   ci#cic(left: 543px; top: 558px; width: 291px; c: "#5F6E83F2")
-  shape#da.ellipse(left: 700px; top: 270px; width: 26px; height: 26px; background: $va; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
-  shape#db.ellipse(left: 866px; top: 410px; width: 26px; height: 26px; background: $cyan; border: 4px solid #0B121D; box-shadow: 0px 0px 22px #3DD9EB99; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
-  shape#dc.ellipse(left: 676px; top: 549px; width: 26px; height: 26px; background: #8A98AD; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
+  shape#da(left: 700px; top: 270px; width: 26px; height: 26px; border-radius: 50%; background: $va; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
+  shape#db(left: 866px; top: 410px; width: 26px; height: 26px; border-radius: 50%; background: $cyan; border: 4px solid #0B121D; box-shadow: 0px 0px 22px #3DD9EB99; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
+  shape#dc(left: 676px; top: 549px; width: 26px; height: 26px; border-radius: 50%; background: #8A98AD; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
   p#va(cx: 712px; top: 214px; font-size: 40px; font-family: b; white-space: nowrap; in: {y:14, opacity:0, duration:0.45, ease:'power3.out'}) 3.10%
   p#vb(cx: 878px; top: 354px; font-size: 40px; font-family: b; color: $cyan; white-space: nowrap; in: {y:14, opacity:0, duration:0.45, ease:'power3.out'}) 3.44%
   p#vc(cx: 688px; top: 494px; font-size: 40px; font-family: b; color: #B3BFCD; white-space: nowrap; in: {opacity:0, duration:0.5}) 3.05%
@@ -233,7 +233,7 @@ board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／
       div#tk(left: 292px; top: 34px; width: 2px; height: 20px; background: #94A3B866)
     div#dn(left: 106px; top: 326px; width: 28px; height: 10px; border-radius: 6px; background: $rose; in: {scaleX:0, duration:0.4, ease:'power2.out', pivot:'right'})
     div#dp(left: 135px; top: 326px; width: 248px; height: 10px; border-radius: 6px; background: #EAF0F6D9; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
-    shape#dd.ellipse(left: 231px; top: 318px; width: 26px; height: 26px; background: $tx; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
+    shape#dd(left: 231px; top: 318px; width: 26px; height: 26px; border-radius: 50%; background: $tx; border: 4px solid #0B121D; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'})
     div#vd(left: 30px; top: 450px; width: 440px; height: 108px; border-radius: 14px; border: 2px solid $rose; background: #FF6B8114; in: {scale:1.25, rotation:-3, opacity:0, duration:0.45, ease:'back.out(1.6)'})
       p#v1(left: 20px; top: 16px; font-size: 22px; color: $rose; opacity: 0.9; white-space: nowrap) 信頼区間がゼロをまたぐ
       p#v2(left: 20px; top: 51px; font-size: 32px; font-family: b; color: $rose; white-space: nowrap) 統計的には言い切れない

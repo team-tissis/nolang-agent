@@ -91,7 +91,7 @@ def cand(m, d, c, bd) = div(width: 712px; height: 206px; border-radius: 22px; ba
   p#d2(left: 34px; top: 148px; font-size: 21px; font-family: r; color: $amber; opacity: .9; in: fin) 2026 年末まで導入価格
 # 丸のチェック (青緑の輪 + 描かれるチェック)
 def chk = div(width: 40px; height: 40px)
-  shape#o.ellipse(left: 0px; top: 0px; width: 40px; height: 40px; background: #2FDCAA24; border: 2px solid $lite)
+  shape#o(left: 0px; top: 0px; width: 40px; height: 40px; border-radius: 50%; background: #2FDCAA24; border: 2px solid $lite)
   icon#k(cx: 50%; cy: 50%; font-size: 24px; name: check; weight: bold; color: $lite; delay: 200; in: draw {duration: 0.4})
 # 結論の札 (番号の丸 + 題)
 def card(no, t) = div(width: 562px; height: 640px; border-radius: 24px; background: linear(#FFFFFF0E,#FFFFFF06,180); border: 2px solid #FFFFFF1A; box-shadow: 0px 34px 90px #0000006B; in: brd)
@@ -310,7 +310,7 @@ header#h8(n: "07"; k: "使い方"; h: "{f}Flash{/} の売りは、いまの使�
 div#pd6.sticky(left: 1064px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf7(left: 1258px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
 box#b8a(left: 88px; top: 250px; width: 540px; height: 660px; t: "言語"; rw: 471px)
-  shape#ring.ellipse(left: 126px; top: 138px; width: 286px; height: 286px; background: none; border: 34px solid #FFFFFF1A)
+  shape#ring(left: 126px; top: 138px; width: 286px; height: 286px; border-radius: 50%; background: none; border: 34px solid #FFFFFF1A)
   p#p97(cx: 268px; top: 238px; font-size: 86px; font-family: n; line-height: 1; in: fups) 97%
   p#ja(cx: 268px; top: 328px; font-size: 24px; font-family: r; color: $t2) 日本語
   p#ft(left: 0px; top: 591px; width: 540px; font-size: 24px; font-family: r; color: $t2; text-align: center; in: fin) ナレーションの {w}97%{/} が日本語

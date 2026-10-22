@@ -44,7 +44,7 @@ def copy(a, b, d) = div(left: 600px; top: 86px; width: 480px; height: 1080px; in
   p#a(left: 303px; top: 150px; width: 69px; font-size: 64px; writing-mode: vertical-rl; letter-spacing: 0.2em; line-height: 1; text-shadow: 0px 3px 15px #000000A6; in: {y:16, opacity:0, blur:8, duration:0.9, ease:'power2.out', stagger:{each:0.055}}; out: {blur:6, duration:0.55, ease:'sine.in'}; content: {a})
   p#b(left: 202px; top: 249px; width: 69px; font-size: 64px; writing-mode: vertical-rl; letter-spacing: 0.2em; line-height: 1; text-shadow: 0px 3px 15px #000000A6; delay: {d}; in: {y:16, opacity:0, blur:8, duration:0.9, ease:'power2.out', stagger:{each:0.055}}; out: {blur:6, duration:0.55, ease:'sine.in'}; content: {b})
 # 朝霧 (淡い暖色の楕円の光を screen で重ね、印の to で横へ流す)。正方形の radial (端で透明) を main の constant で横に伸ばして楕円にする — 縁は柔らかいまま
-def mist() = shape(path: ellipse; background: radial(#FFF4E48C,#FFF0DC2E@45%,#FFF0DC00@70%); mix-blend-mode: screen; in: none)
+def mist() = shape(border-radius: 50%; background: radial(#FFF4E48C,#FFF0DC2E@45%,#FFF0DC00@70%); mix-blend-mode: screen; in: none)
 # 全編の質感: 周辺減光 (中央 55% は素通し) + 動く grain (最前面)
 veil#vignette(background: radial(#00000000@55%,#0000006B@100%,50%,46%); z-index: front; in: none)
 veil#grain(grain: 0.11; color: #00000000; z-index: front; in: none; main: noise {x: 6, y: 6, period: 0.033, ease: 'steps(1)'})
@@ -81,9 +81,9 @@ section#drip
 img#shizuku_photo(inset: 0; main: kb {scale: [1.12, 1.12], focus: ['50% 20%', '50% 76%']}) [photo]In a dim sake brewery, clear freshly pressed sake drips slowly from the bottom tips of hanging canvas sake bags (shizuku-shibori) into a vessel below; warm golden backlight makes each falling drop shine; dark background.
 img#drop_photo(inset: 0; main: kb {scale: [1.03, 1.12], focus: ['50% 56%', '50% 59%']}) [photo]Macro shot of a single drop of clear sake falling into a still pool of sake in a dark lacquered vessel, gentle concentric ripples spreading, golden rim light on the drop, dark background.
 # 波紋: 着水点で潰れた楕円の輪 (screen) が小さな輪から広がり、出て 0.35 s 後から薄れる
-shape#ripple1.ellipse(left: 270px; top: 1492px; width: 540px; height: 120px; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
-shape#ripple2.ellipse(left: 270px; top: 1492px; width: 540px; height: 120px; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
-shape#ripple3.ellipse(left: 270px; top: 1492px; width: 540px; height: 120px; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1, ripple2; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
+shape#ripple1(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
+shape#ripple2(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
+shape#ripple3(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1, ripple2; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
 copy#copy4(a: "一滴に、"; b: "季節をとじこめて。"; d: 220)
 veil#blackout(color: #000000; opacity: 1; z-index: curtain; in: {opacity:0, duration:0.5, ease:'sine.in'})
 

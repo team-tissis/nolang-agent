@@ -167,7 +167,7 @@ board#st(n: "01"; t: "調査の舞台")
 section#shelves
 # 棚の行: 色の点 + 名 (+ 小さい補足) + 棒 (幅 = 値 ÷ 最大 × 304 px) + 棒の右の値 (重さ) / 金額の値
 def shelf(nm, sub, c, bw, v, mx, mv) = div(width: 984px; height: 96px; in: none)
-  shape#dot.ellipse(left: 44px; top: 28px; width: 20px; height: 20px; background: {c})
+  shape#dot(left: 44px; top: 28px; width: 20px; height: 20px; border-radius: 50%; background: {c})
   p#nm(left: 74px; top: 16px; font-size: 42px; line-height: 1.05; content: {nm})
   p#sub(left: 75px; top: 64px; font-size: 20px; font-family: e; color: $ink2; white-space: nowrap; content: {sub})
   div#bar(left: 252px; top: 21px; width: {bw}; height: 52px; border-radius: 14px; background: {c}; in: {scaleX:0, duration:.7, ease:'expo.out', pivot:'left'})
@@ -255,7 +255,7 @@ board#ex(n: "04"; t: "実験：値引きを2時間早く")
       # 針は時計と同じ 253 px 四方の svg (中心 = 時計の中心) に描き、既定の中心軸で回す (時針 210° = 7 時)
       svg#hh(left: 0px; top: 0px; width: 380px; height: 380px; part: hhand; transform: rotate(210deg))
       svg#mh(left: 0px; top: 0px; width: 380px; height: 380px; part: mhand)
-      shape#cdot.ellipse(left: 176px; top: 176px; width: 28px; height: 28px; background: $a)
+      shape#cdot(left: 176px; top: 176px; width: 28px; height: 28px; border-radius: 50%; background: $a)
     p#tl(left: 476px; top: 170px; font-size: 30px; font-family: e; color: $ink2; delay: 200; in: {opacity:0, duration:.3}) 半額シールを貼る時刻
     p#t19(left: 476px; top: 222px; font-size: 74px; color: #A79C92; delay: 300; in: {x:30, opacity:0, duration:.35}) 19:00
     p#t17(left: 476px; top: 322px; font-size: 128px; line-height: 1; color: $a; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) 17:00

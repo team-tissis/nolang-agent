@@ -71,7 +71,7 @@ veil#grain(grain: 0.07; color: #00000000; z-index: front; in: none; main: noise 
 section#open
 img#river(inset: 0; content: @river; subject: center 90%; main: keys(at=0 scale=1 | at=1 scale=1.09 y=-24 ease=none),window=0,3400,forwards)
 img#peek(inset: 0; content: @peek; main: kb {scale: [1.16, 1], ease:'power2.out'}; in: {opacity:0, duration:0.28, ease:'power2.out'})
-shape#ripple.ellipse(left: 330px; top: 1090px; width: 420px; height: 150px; background: none; border: 3px solid #FFFFFF00; overlap: peek)
+shape#ripple(left: 330px; top: 1090px; width: 420px; height: 150px; border-radius: 50%; background: none; border: 3px solid #FFFFFF00; overlap: peek)
 shade_b#open_shade
 veil#intro(color: $black; opacity: 0.55; z-index: curtain; in: none; out: none)
 
@@ -120,7 +120,7 @@ section#kochi
 group#kochi(main: keys(at=0 scale=1.03 | at=1 scale=1.16 ease=sine.inOut),window=0,7100,forwards; transform-origin: 47.6% 49%)
   img#empty(inset: 0; content: @kochi_empty; main: none)
   img#otter(inset: 0; content: @kochi; main: none)
-  shape#focus.ellipse(left: 430px; top: 892px; width: 190px; height: 190px; z-index: front; background: none; border: 3px solid $hl; box-shadow: 0px 0px 24px #F3C46A8C; in: {scale:1.6, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.9})
+  shape#focus(left: 430px; top: 892px; width: 190px; height: 190px; border-radius: 50%; z-index: front; background: none; border: 3px solid $hl; box-shadow: 0px 0px 24px #F3C46A8C; in: {scale:1.6, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.9})
 shade_b#kochi_shade
 # 場所の札: 金の縦棒 + 半透明の黒の板 (右だけ角丸) + ピン + 地名 / 年
 div#loc(left: 70px; top: 200px; width: 600px; height: 165px; background: #080A098C; border-radius: 0,9,9,0; in: {x:-24, opacity:0, duration:0.45, ease:'power2.out'})
@@ -137,14 +137,14 @@ group#grid(main: keys(at=0 scale=1 | at=1 scale=1.05 ease=none),window=0,4470,fo
   img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 282px; height: 282px; border-radius: 14px; box-shadow: 0px 10px 26px #00000080; main: none; object-fit: cover; object-position: "50% 40%;52% 45%;60% 52%;42% 30%;8% 74%;52% 58%;47% 50%;50% 46%;72% 58%;52% 58%;50% 30%;34% 28%"; zoom: "140%;170%;150%;150%;300%;220%;300%;230%;230%;210%;260%;230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
 img#memory(inset: 0; content: @memory; main: kb {scale: [1, 1.13], focus: ['52% 59%', '52% 59%'], ease:'sine.inOut'}; in: {opacity:0, duration:0.5})
 # 塵 16 粒 (粒ごとの位置・大きさ・濃さ・同じ向きにゆっくり上へ漂う)
-shape#dust.ellipse(left: "389;613;481;405;144;447;350;500;441;245;303;434;532;357;295;100"; top: "924;651;463;763;638;886;991;777;376;743;634;493;391;709;851;381"; width: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; height: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; background: $mote; box-shadow: 0px 0px 4px 2px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 30, y: -140}) ×16
+shape#dust(left: "389;613;481;405;144;447;350;500;441;245;303;434;532;357;295;100"; top: "924;651;463;763;638;886;991;777;376;743;634;493;391;709;851;381"; width: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; height: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; border-radius: 50%; background: $mote; box-shadow: 0px 0px 4px 2px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 30, y: -140}) ×16
 shade_b#memory_shade(in: {opacity:0, duration:0.5})
 
 # あの日の川: 開幕の川の夕景版 (引き) に金の光が流れ、「そこには」で泳ぐカワウソが溶けて重なり波紋が 2 重 → 上の陰の上に題の再掲と 2 行の事実 → 暗転
 section#return
 img#river_golden(inset: 0; main: kb {scale: [1.12, 1], ease:'power1.out'}) [photo][ref:@river]Edit this photo: the very same river village scene at golden hour just before sunset, warm golden sunlight, sparkling water surface, long soft shadows, gentle dreamy haze. Keep the composition, river, bridge and houses exactly the same.
 img#swimmer(inset: 0; content: @golden; main: kb {scale: [1, 1.11], focus: ['51% 57%', '51% 57%']}; in: {opacity:0, duration:0.8, ease:'sine.inOut'})
-shape#ripple2.ellipse(left: 400px; top: 1110px; width: 300px; height: 96px; background: none; border: 3px solid #FFFFFF00; overlap: swimmer)
+shape#ripple2(left: 400px; top: 1110px; width: 300px; height: 96px; border-radius: 50%; background: none; border: 3px solid #FFFFFF00; overlap: swimmer)
 shade_b#return_shade
 shade_t#end_shade(height: 900px; in: {opacity:0, duration:1})
 # 金の光 (画面の外から入る大きな丸い光を screen で重ね、ゆっくり流して消す)

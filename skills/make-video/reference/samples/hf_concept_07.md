@@ -50,7 +50,7 @@ def headline(t) = p(left: 72px; font-size: 118px; line-height: 1.16; letter-spac
 def yellow_tag(t, s=79) = p(font-size: {s}; line-height: 1.16; color: $k; background: $y; border-radius: 14px; padding: 0px 20px; content: {t})
 # 効果の行 (暗い板 + 黄の丸の icon + 文)
 def effect_row(t) = div(left: 60px; width: 960px; height: 152px; background: #0A0A0CC7; border: 2px solid #FFD21F8C; border-radius: 26px; box-shadow: 0px 12px 30px #00000059; in: {x:-80, opacity:0, duration:0.32, ease:'back.out(1.6)'})
-  shape#dot.ellipse(left: 32px; cy: 50%; width: 104px; height: 104px; background: $y)
+  shape#dot(left: 32px; cy: 50%; width: 104px; height: 104px; border-radius: 50%; background: $y)
   svg#icon(left: 52px; cy: 50%; width: 64px; height: 64px)
   p#text(left: 162px; cy: 50%; font-size: 60px; line-height: 1.2; content: {t})
 # 理由の札 (黄の丸札 + 黒丸の ✓・札ごと弾んで出る)
@@ -104,7 +104,7 @@ group#eq_rubber(left: 66px; top: 330px; width: 232px; height: 310px; in: {scale:
 p#eq_plus(cx: 362px; cy: 424px; font-size: 90px; text-shadow: 0px 6px 20px #00000099; in: {scale:0, opacity:0, duration:0.2, ease:'power1.out'}) ＋
 group#eq_carbon(left: 424px; top: 330px; width: 232px; height: 310px; in: {scale:0, opacity:0, duration:0.3, ease:'back.out(2)'})
   div#disc(cx: 50%; top: 0px; width: 190px; height: 190px; border-radius: 148px; background: radial($carbon_hi,$k@60%,35%,30%); border: 6px solid #FFFFFFE6; box-shadow: 0px 14px 34px #00000080)
-  shape#grain.ellipse(left: "52;102;71"; top: "52;89;107"; width: 4px; height: 4px; background: "#FFFFFF2E;#FFFFFF24;#FFFFFF1F") ×3
+  shape#grain(left: "52;102;71"; top: "52;89;107"; width: 4px; height: 4px; border-radius: 50%; background: "#FFFFFF2E;#FFFFFF24;#FFFFFF1F") ×3
   p#label(cx: 50%; top: 208px; font-size: 44px; line-height: 1.15; text-align: center; text-shadow: 0px 4px 14px #000000BF) カーボン[br]ブラック
 p#eq_equals(cx: 718px; cy: 424px; font-size: 90px; text-shadow: 0px 6px 20px #00000099; in: {scale:0, opacity:0, duration:0.2, ease:'power1.out'}) ＝
 group#eq_tire(left: 782px; top: 330px; width: 232px; height: 310px; in: {scale:0, opacity:0, rotation:-120, duration:0.45, ease:'back.out(1.7)'})

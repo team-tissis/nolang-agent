@@ -68,14 +68,14 @@ def telop(t, y=582) = p(left: 96px; top: {y}; font-size: 46px; line-height: 1.42
 def chap(n, t) = p(left: 92px; top: 76px; font-size: 27px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 148px; padding: 16px 30px 16px 26px; box-shadow: 0px 10px 30px #0E2A471F; in: {x:-24, opacity:0, duration:0.55, ease:'power3.out'}; out: {x:-12, opacity:0, duration:0.3}) {k}STEP {n}{/}　{l}｜{/}　{t}
 # 写真の左下の札 (icon の丸 + 2 行)
 def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; border-radius: 12px; box-shadow: 0px 14px 40px #0E2A4724; in: rise {y: 16.5, duration: 0.55})
-  shape#c.ellipse(left: 26px; cy: 50%; width: 58px; height: 58px; background: #EEF1F5)
+  shape#c(left: 26px; cy: 50%; width: 58px; height: 58px; border-radius: 50%; background: #EEF1F5)
   icon#i(left: 40px; cy: 50%; font-size: 30px; name: {ic}; color: #5D6D80)
   p#t(left: 104px; cy: 50%; font-size: 40px; line-height: 1.35; content: {t})
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
 def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back; border-radius: 24px)
 def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
-  shape#r1.ellipse(left: {x1}; top: {y}; width: {d}; height: {d}; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
-  shape#r2.ellipse(left: {x2}; top: {y}; width: {d}; height: {d}; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
+  shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
+  shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
 def wordmark(y) = p(cx: 960px; top: {y}; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
 
 # タブレット: 枠・上の帯・右の側板。中の page と側板の中身は場面ごとに子で差す (def の実体の scale で縮める)
@@ -112,10 +112,10 @@ def call_panel() = div(width: 384px; height: 495px)
   p#lv(left: 40px; top: 40px; font-size: 14px; color: #FFFFFF; background: #0E2A478C; border-radius: 148px; padding: 6px 12px) {gn}●{/} 通話中
   p#nm(left: 28px; top: 225px; width: 328px; padding: 9px 14px 9px 14px; font-size: 15px; color: #FFFFFF; letter-spacing: 0.05em; background: #0E2A4773; border-radius: 14px) 高橋（サポート担当）
   div#b(left: 82px; top: 282px; width: 225px; height: 52px; display: flex; gap: 0px) ×3
-    shape#c.ellipse(cx: 50%; cy: 50%; width: 52px; height: 52px; background: "#FFFFFF;#FFFFFF;$red")
+    shape#c(cx: 50%; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: "#FFFFFF;#FFFFFF;$red")
     icon#i(cx: 50%; cy: 50%; font-size: 30px; name: "microphone;video-camera;phone-x"; color: "$ink2;$ink2;#FFFFFF")
 def help_panel() = div(width: 328px; height: 330px; border-radius: 16px; background: #FFFFFF; box-shadow: 0px 10px 26px #0E2A471A)
-  shape#c.ellipse(left: 28px; top: 30px; width: 64px; height: 64px; background: $sky)
+  shape#c(left: 28px; top: 30px; width: 64px; height: 64px; border-radius: 50%; background: $sky)
   icon#i(left: 45px; top: 46px; font-size: 30px; name: headset; color: $a)
   p#h(left: 28px; top: 116px; font-size: 24px; font-family: b) 操作でお困りですか？
   p#d(left: 28px; top: 158px; width: 276px; font-size: 16px; color: $gray; line-height: 1.55) Live Assist なら、スタッフが画面を見ながらご案内します。
@@ -146,7 +146,7 @@ def cursor_tag() = p(font-size: 14px; font-family: b; color: #FFFFFF; background
 section#intro
 img#in_p(inset: 0; main: kb {scale: [1.1, 1], focus: '19% 50%', ease:'power1.out'}) [ref:@cust]Wide establishing shot of the same woman (same face, wavy dark brown hair, cream-white knit sweater, pearl earrings) on a light linen sofa in her bright white living room, relaxed, using a white tablet held in both hands, 3/4 side angle, large window, plants
 div#ch(left: 104px; top: "191;259;327;395"; width: 340px; height: 84px; border-radius: 14px; background: #FFFFFFF5; box-shadow: 0px 12px 30px #0E2A471A; in: {x:-26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.2}}) ×4
-  shape#c.ellipse(left: 24px; cy: 50%; width: 46px; height: 46px; background: $sky)
+  shape#c(left: 24px; cy: 50%; width: 46px; height: 46px; border-radius: 50%; background: $sky)
   icon#i(left: 34px; cy: 50%; font-size: 26px; color: $a; name: "file-text;clipboard-text;arrows-clockwise;credit-card")
   p#t(left: 88px; cy: 50%; font-size: 27px; letter-spacing: 0.05em) お申し込み;ご契約のお手続き;登録内容の変更;お支払い
 telop#in_tel オンラインで{bb}完結する{/}時代
@@ -159,13 +159,13 @@ tablet#tc(left: 429px; top: 136px; scale: 0.9; delay: 3500; in: fade {duration: 
   form_page#p1(left: 16px; top: 86px; scale: 0.9)
   help_panel#hp(left: 726px; top: 122px; scale: 0.9)
   dropdown#dd(left: 56px; top: 392px; scale: 0.9; z-index: front; overlap: tc.p1)
-  shape#tch.ellipse(left: 568px; top: 338px; width: 48px; height: 48px; background: #0E2A4729; border: 3px solid #FFFFFFF2; z-index: front; in: {x:234, y:123, opacity:0, duration:0.9, ease:'power2.inOut'}; overlap: tc.p1,tc.hp)
+  shape#tch(left: 568px; top: 338px; width: 48px; height: 48px; border-radius: 50%; background: #0E2A4729; border: 3px solid #FFFFFFF2; z-index: front; in: {x:234, y:123, opacity:0, duration:0.9, ease:'power2.inOut'}; overlap: tc.p1,tc.hp)
 telop#cf_tel 「{bb}誰かに聞きたい{/}」と思う瞬間
 
 # つなぐ: 画面を押す指の波紋 → 白地で 2 人の顔を弧で結び、点が渡って「つなぐ。」
 section#tap_connect
 img#tp_p(inset: 0; main: kb {scale: [1.02, 1.12], focus: ['', '76% 65%']}; out: fade {duration: 0.6}) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
-shape#rp.ellipse(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
+shape#rp(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; border-radius: 50%; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
 soft_bg#cn_bg(delay: 2300; in: fade {duration: 0.6})
 rings#cn_r(x1: 173; x2: 507; top: -60px; d: 600; delay: 2300; in: fade {duration: 0.6})
 shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600; in: fade {duration: 0.4})
@@ -174,7 +174,7 @@ img#av1(left: 310px; top: 300px; width: 300px; height: 300px; border-radius: 150
 img#av2(left: 1160px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @staff; object-fit: cover; object-position: 50% 28%; zoom: 190%; delay: 2650; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 p#wh1(cx: 460px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
 p#wh2(cx: 1310px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2950; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}STAFF{/}[br]スタッフ
-shape#cd.ellipse(left: 752px; top: 441px; width: 18px; height: 18px; background: $a; box-shadow: 0px 0px 0px 8px #1F6FE02E; in: fade {duration: 0.15}; out: fade {duration: 0.2})
+shape#cd(left: 752px; top: 441px; width: 18px; height: 18px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 8px #1F6FE02E; in: fade {duration: 0.15}; out: fade {duration: 0.2})
 p#cbig(cx: 960px; top: 792px; font-size: 56px; letter-spacing: 0.08em; in: {y:16, opacity:0, duration:0.6, ease:'power2.out'}) お客様とスタッフを、{bb}つなぐ。{/}
 
 # 題: 1 字ずつ上がるロゴ + 罫 + 一言
@@ -247,7 +247,7 @@ div#doc1(left: 1336px; top: 178px; width: 440px; height: 132px; border-radius: 1
   p#n(left: 122px; top: 36px; font-size: 26px; font-family: b; letter-spacing: 0.03em) サービスご案内資料
   p#s(left: 122px; top: 78px; font-size: 16px; color: $gray) スタッフ 高橋より ・ 2.4MB
 p#toast(left: 1336px; top: 336px; font-size: 22px; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 16px 28px 16px 72px; box-shadow: 0px 14px 34px #0E2A4747; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) 資料が共有されました
-  shape#ok.ellipse(left: 18px; cy: 50%; width: 34px; height: 34px; background: $ok)
+  shape#ok(left: 18px; cy: 50%; width: 34px; height: 34px; border-radius: 50%; background: $ok)
   icon#i(left: 24px; cy: 50%; font-size: 22px; name: check; weight: bold; color: #FFFFFF)
 chap#c4(n: 04; t: "資料をその場で共有")
 telop#dc_tel 資料や書類も、{bb}その場で共有{/}
@@ -266,15 +266,15 @@ div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22p
   div#vl(left: 72px; top: 372px; width: 3px; height: 300px; background: $rule)
   div#vf(left: 72px; top: 372px; width: 3px; height: 3px; background: $a)
   div#s(left: 48px; top: "216;283;349;416"; width: 684px; height: 96px) ×4
-    shape#d.ellipse(left: 0px; cy: 50%; width: 52px; height: 52px; background: #FFFFFF; border: 3px solid $line)
+    shape#d(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; border: 3px solid $line)
     p#n(left: 20px; cy: 50%; font-size: 21px; font-family: e; color: $mute) 1;2;3;4
     p#nm(left: 76px; cy: 50%; font-size: 27px; color: $mute; letter-spacing: 0.05em) お客様情報の入力;ご契約プランの選択;お支払い方法の登録;内容の確認・完了
     p#st(left: 570px; cy: 50%; font-size: 16px; font-family: b; color: $a; in: fade {duration: 0.3}; out: fade {duration: 0.25}) サポート中
-    shape#cur.ellipse(left: -8px; cy: 50%; width: 68px; height: 68px; background: none; border: 3px solid #1F6FE059; in: {scale:0.8, opacity:0, duration:0.35}; out: fade {duration: 0.25})
-    shape#ck.ellipse(left: 0px; cy: 50%; width: 52px; height: 52px; background: $a; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
+    shape#cur(left: -8px; cy: 50%; width: 68px; height: 68px; border-radius: 50%; background: none; border: 3px solid #1F6FE059; in: {scale:0.8, opacity:0, duration:0.35}; out: fade {duration: 0.25})
+    shape#ck(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: $a; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     icon#ci(left: 12px; cy: 50%; font-size: 28px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
   div#done(left: 0px; top: 0px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; in: fade {duration: 0.5}; overlap: fl.s)
-    shape#c.ellipse(cx: 50%; top: 225px; width: 190px; height: 190px; background: $a; box-shadow: 0px 0px 0px 18px #1F6FE01F; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
+    shape#c(cx: 50%; top: 225px; width: 190px; height: 190px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 18px #1F6FE01F; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     icon#i(cx: 50%; top: 270px; font-size: 99px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     p#t1(cx: 50%; top: 471px; font-size: 42px; font-family: b; letter-spacing: 0.08em) お手続きが完了しました
     p#t2(cx: 50%; top: 548px; font-size: 22px; color: $gray; letter-spacing: 0.06em) ご利用ありがとうございました
@@ -289,7 +289,7 @@ soft_bg#aw_bg
 p#aw_h(cx: 960px; top: 74px; font-size: 52px; letter-spacing: 0.1em; in: {y:16, opacity:0, duration:0.7, ease:'power2.out'}) どこにいても、{bb}人による{/}サポートを。
 img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 360px; border-radius: 16px; box-shadow: 0px 18px 44px #0E2A4724; delay: "350;690;1030;1370;1710"; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
   div#lb(left: 22px; top: 282px; width: 225px; height: 54px; border-radius: 148px; background: #FFFFFFF2; box-shadow: 0px 6px 18px #0E2A4724)
-  shape#c.ellipse(left: 36px; cy: 309px; width: 34px; height: 34px; background: $sky)
+  shape#c(left: 36px; cy: 309px; width: 34px; height: 34px; border-radius: 50%; background: $sky)
   icon#i(left: 42px; cy: 309px; font-size: 22px; color: $a; name: "device-mobile;laptop;device-tablet;storefront;buildings")
   p#t(left: 84px; cy: 309px; font-size: 24px; font-family: b; letter-spacing: 0.08em) スマートフォン;PC;タブレット;店舗;オフィス
 
@@ -316,7 +316,7 @@ section#together
 img#tg1(left: 0px; top: 0px; width: 960px; height: 1080px; content: @cust; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1.08, 1], focus: '24% 50%'})
 img#tg2(left: 960px; top: 0px; width: 960px; height: 1080px; content: @staff; object-fit: cover; object-position: center; main: kb {scale: [1.08, 1], focus: '76% 50%'})
 shape#tg_d.bleed(left: 957px; top: 0px; width: 6px; height: 1080px; path: rect; background: #FFFFFF)
-shape#tg_p.ellipse(left: 951px; top: 130px; width: 18px; height: 18px; background: $a; box-shadow: 0px 0px 0px 8px #1F6FE02E; in: fade {duration: 0.2}; out: fade {duration: 0.3})
+shape#tg_p(left: 951px; top: 130px; width: 18px; height: 18px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 8px #1F6FE02E; in: fade {duration: 0.2}; out: fade {duration: 0.3})
 p#tg_t(cx: 960px; top: 873px; font-size: 46px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 10px; padding: 24px 52px 26px 52px; box-shadow: 0px 14px 40px #0E2A4724; in: {y:14, opacity:0, duration:0.6, ease:'power2.out'}) デジタルと、人の接客を、{bb}もっと自然に。{/}
 
 # 締め: ロゴ + 罫 + by Kumolis

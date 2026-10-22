@@ -243,7 +243,7 @@ group#xmark(left: 90px; top: 447px; width: 400px; height: 400px; in: {scale:1.8,
   div#a(left: 0px; top: 183px; width: 400px; height: 34px; border-radius: 16px; background: $red; box-shadow: 0px 0px 0px 6px #FFFFFF; rotation: 45)
   div#b(left: 0px; top: 183px; width: 400px; height: 34px; border-radius: 16px; background: $red; box-shadow: 0px 0px 0px 6px #FFFFFF; rotation: -45)
 # 衝撃の輪 (同じ枠に 4 つ重ねる・0.15 倍から入場で 400 px へ・退場で 2.6 倍に広がって消える・0.12 秒おき)
-shape#sring(left: 240px; top: 350px; width: 600px; height: 600px; stack: z; path: ellipse; background: none; border: 16px solid #FF6EC8; opacity: .95; in: {scale:.15, duration:.25, ease:'power1.out'}; out: {scale:2.6, opacity:0, duration:.45, ease:'power1.out'}; bleed) ×4
+shape#sring(left: 240px; top: 350px; width: 600px; height: 600px; stack: z; border-radius: 50%; background: none; border: 16px solid #FF6EC8; opacity: .95; in: {scale:.15, duration:.25, ease:'power1.out'}; out: {scale:2.6, opacity:0, duration:.45, ease:'power1.out'}; bleed) ×4
 p#neq(cx: 540px; cy: 620px; font-size: 300px; line-height: 1; stroke: #FF2BD6,7; text-shadow: 0px 0px 30px #FF2BD6; in: {scale:3, rotation:-30, opacity:0, duration:.18, ease:'power4.in'}; out: {scale:.6, opacity:0, duration:.2}) ≠
 panel#cmp(h: 340px)
   p#lh(left: 30px; top: 24px; font-size: 44px; color: #7FE3FF; letter-spacing: .08em) 音源

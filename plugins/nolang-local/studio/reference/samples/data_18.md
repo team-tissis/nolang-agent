@@ -41,7 +41,7 @@ subtitle.hug(font-size: 45px; bottom: 36px; background: #1D2B33E6; color: #F4F1E
 section#open
 img#op_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '64% 48%']}) [photo]木のダイニングテーブルに広げた家計簿のノートと公共料金の請求書と電卓、30代夫婦の手元だけ、朝の自然光
 veil#op_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.45)
-shape#op_c(left: 36px; top: 645px; width: 390px; height: 390px; path: circle; background: $a; opacity: 0.06; main: breathe)
+shape#op_c(left: 36px; top: 645px; width: 390px; height: 390px; border-radius: 50%; background: $a; opacity: 0.06; main: breathe)
 kick#op_k(left: 108px; top: 225px) HOUSEHOLD FIXED COSTS
 shape#op_r(left: 108px; top: 279px; width: 144px; height: 4px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.7})
 h1#op_h(left: 108px; top: 321px; width: 960px) 固定費を見直すと、[br]{t}年間{/}いくら浮く?
@@ -117,7 +117,7 @@ p#tt_s(left: 1164px; top: 594px; font-size: 39px; color: $ink) うち 7 割が�
 section#month
 img#mo_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['40% 50%', '35% 50%']}) [photo]木の机の上の白い給与明細の封筒と電卓と観葉植物、窓からの柔らかな光
 veil#mo_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
-shape#mo_c(left: 36px; top: 36px; width: 360px; height: 360px; path: circle; background: $a; opacity: 0.06; main: breathe)
+shape#mo_c(left: 36px; top: 36px; width: 360px; height: 360px; border-radius: 50%; background: $a; opacity: 0.06; main: breathe)
 p#mo_k(left: 108px; top: 225px; font-size: 45px; font-family: m; color: $mute) 年 190,800 円は
 h1#mo_h(left: 108px; top: 300px; font-size: 108px) 月の手取りの[br]{m}1 か月分近く{/}
 div#mo_n(left: 108px; top: 630px; width: 630px; height: 96px)

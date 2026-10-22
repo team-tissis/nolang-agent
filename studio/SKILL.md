@@ -10,6 +10,7 @@ draft src はその動画の圧縮形で、書く物は同じです。圧縮の�
 
 1. **閉じタグは字下げ**。1 行 1 要素 `tag#id.class(css 宣言) 内容`。字下げ 2 空白 = 子。
 2. **style は要素の行**。`(…)` の中に CSS の宣言をそのまま (`left:72px; top:180px; font-size:48px; color:#fff; border:4px solid $a; box-shadow:0 0 36px $a`)。共通の見た目は `def` (= class) に 1 回・型ごとの既定は `tag { 宣言 }` (= CSS の要素の rule)。
+   font-size も CSS と同じ (書かない文字は親の値を継ぎ、根は 16px・`em` は親の比・`h1` は 2em)。hf と同じく字の要素に必ず書く — 目安 (1080): 字幕 40〜48 (縦 50〜60)・本文 34〜44・札 24〜30 (下限 26)・見出し 52〜84・hero / 数 100〜180・縦は ×1.3。
 3. **gsap.from / to は object のまま**。入場 `in:{y:45, opacity:0, duration:.5, ease:'power3.out'}`、退場 `out:{…}`、状態の変化 `to,{scale:1.1, duration:.4}`。秒は GSAP の秒。duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定。
 4. **時刻は秒ではなく台詞の語**。timeline.txt は台本で、tween はその語の前に置く: `[>#id]` 出す・`[!#id to,{…}]` 変える・`[<#id]` 消す。`tl.to(el, {…}, 2.3)` の 2.3 を書く場所は無く、声の実尺が時刻を決める。
 
@@ -33,7 +34,7 @@ cast n = "落ち着いた30代女性のナレーター"
 ```
 
 台本 (timeline.txt) と画面 (design.txt) を書き、check で欠陥と尺と配置を検査し、render で 1 回だけ描く。
-tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。`div` は CSS と同じ素の箱 (地・縁・角丸・影・余白は書いた物だけ) — 板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)` (繰り返すなら `def card = div(…)`)。
+tag は HTML の別名 (`div p h1〜h4 span img svg`) か NoLang の型 (`icon shape veil group link backdrop progress …`) か自分の `def` の名。札の行・横棒・流れ図などの組み込みの部品は無く、`def` + `×N` で書く (authoring.md「根の雛形」)。`div` は CSS と同じ素の箱 (地・縁・角丸・影・余白は書いた物だけ) — 板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)` (繰り返すなら `def card = div(…)`)。`border-radius: 50%` 以上は楕円 (CSS どおり)・pill は `999px`。
 `#id` が名 (字下げの子は相対名・印では `#親.子`)、`.class` は flag (`.hug` 中身の幅・`.sticky` cut を跨ぐ) か変種の tag (全面は宣言 `inset: 0`)、文字の内容は行の残り。
 CSS にあって engine に無い宣言 (`clip-path` `backdrop-filter` `transition` `display:none` … 表 `surface_table` の model の行) は落として check が warn で知らせる (止まらない)。`transform: translate()` は位置に畳む (px は left / top に足す・`-50%` は cx / cy)。`border` の線種は `solid` `dashed` `dotted` (破線 / 点線は Chromium と同じ模様・`double` などは DEFECT:CSS)。表に無い名の宣言は DEFECT:KEY。canvas の短辺は 1080 (`canvas 1920x1080` / `1080x1920` / `1080x1080`・px はそのまま layout の px) — 他の短辺は DEFECT:ARG。根の `run` に無い `{class}` は素の文字 (note で知らせる)・def の渡さない引数は空。
 

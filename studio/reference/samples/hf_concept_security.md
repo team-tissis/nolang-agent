@@ -131,8 +131,8 @@ svc#hk_s(left: "527;743;960"; height: 236px; t: "通販サイト;SNS;会社の�
 
 # title — 声のない題: 2 重の輪を描き、研修の札・2 行の題 (「使い回し」は赤字 + 琥珀の下帯)・流れの 4 札が順に
 section#title(out: {scale:1.03, opacity:0, duration:0.4, ease:'power2.in'})
-shape#tt_r1.ellipse(left: 630px; top: 170px; width: 660px; height: 660px; background: none; border: 3px solid $blue_m; in: draw {duration: 1.2})
-shape#tt_r2.ellipse(left: 698px; top: 237px; width: 525px; height: 525px; background: none; border: 3px solid $blue_m; in: draw {duration: 1.2})
+shape#tt_r1(left: 630px; top: 170px; width: 660px; height: 660px; border-radius: 50%; background: none; border: 3px solid $blue_m; in: draw {duration: 1.2})
+shape#tt_r2(left: 698px; top: 237px; width: 525px; height: 525px; border-radius: 50%; background: none; border: 3px solid $blue_m; in: draw {duration: 1.2})
 p#tt_chip(cx: 960px; cy: 279px; font-size: 28px; letter-spacing: .06em; color: #FFFFFF; background: $blue; border-radius: 148px; padding: 10px 26px; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) 新入社員向け 情報セキュリティ研修
 p#tt_l1(cx: 960px; cy: 411px; font-size: 96px; line-height: 1.28; letter-spacing: .03em; in: {y:44, opacity:0, duration:0.7, ease:'power3.out'}) パスワードの{u}使い回し{/}は、
 p#tt_l2(cx: 960px; cy: 534px; font-size: 96px; line-height: 1.28; letter-spacing: .03em; in: {y:44, opacity:0, duration:0.7, ease:'power3.out'}) なぜ危険か

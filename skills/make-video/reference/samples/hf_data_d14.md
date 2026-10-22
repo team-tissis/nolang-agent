@@ -130,7 +130,7 @@ div#teaser(left: 104px; top: 772px; width: 812px; height: 132px; background: #FB
   shape#zero(left: 152px; top: 40px; width: 3px; height: 54px; path: line_v; border: 2px solid $brick; dash: 4,3)
   p#l0(left: 112px; top: 93px; font-size: 20px; color: $ink2) 差なし 0
   p#l1(left: 676px; top: 93px; font-size: 20px; color: $ink2) 効果あり →
-  shape#dot.ellipse(left: "282;379;168;480;67;185"; top: 52px; width: 30px; height: 30px; background: $teal; border: 4px solid #FBF8F1F2; in: {scale:0, opacity:0, duration:0.4, ease:'back.out(2.5)', stagger:{each:0.13}}) ×6
+  shape#dot(left: "282;379;168;480;67;185"; top: 52px; width: 30px; height: 30px; border-radius: 50%; background: $teal; border: 4px solid #FBF8F1F2; in: {scale:0, opacity:0, duration:0.4, ease:'back.out(2.5)', stagger:{each:0.13}}) ×6
 # 研究デザインの図: 参加者 → 無作為に 2 群 → 運動群 / 対照群 → 記憶テスト (矢印は語で左から描く)
 div#dg(left: 96px; top: 210px; width: 1130px; height: 640px)
   dbox#pop(left: 0px; top: 250px; width: 230px; t: "参加者"; s: "研究ごとに募集")
@@ -306,8 +306,8 @@ panel#fp4(left: 1346px; top: 236px; width: 478px; height: 656px; hd: "0.34 を�
   p#v(left: .y.right+6; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $teal; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:63 start=0 roll ms=3890,4010 ease=ease_in_out]
   p#u(left: .v.right+6; top: 123px; font-size: 44px) %
   p#nt(left: 30px; top: 177px; width: 418px; font-size: 20px; font-family: m; line-height: 1.55; color: $ink2) 平均的な運動群の人は、対照群の約 63% の人より成績が良い
-  shape#dot.ellipse(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310;310;310;310;310;310;310;310;333;333;333;333;333;333;333;333;333;333;356;356;356;356;356;356;356;356;356;356;380;380;380;380;380;380;380;380;380;380"; width: 26px; height: 26px; background: $slate_l; border: 2px solid #C4CBD3) ×100
-  shape#fill.ellipse(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310"; width: 26px; height: 26px; background: $teal; in: {scale:0, duration:0.3, ease:'back.out(2)', stagger:{each:0.035}}) ×63
+  shape#dot(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310;310;310;310;310;310;310;310;333;333;333;333;333;333;333;333;333;333;356;356;356;356;356;356;356;356;356;356;380;380;380;380;380;380;380;380;380;380"; width: 26px; height: 26px; border-radius: 50%; background: $slate_l; border: 2px solid #C4CBD3) ×100
+  shape#fill(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310"; width: 26px; height: 26px; border-radius: 50%; background: $teal; in: {scale:0, duration:0.3, ease:'back.out(2)', stagger:{each:0.035}}) ×63
   p#cp(left: 30px; top: 603px; width: 418px; font-size: 16px; font-family: m; color: $ink3) ● ＝ 対照群 100 人のうち、平均的な運動群の人が上回る人
 # 右の板 5: まとめるときの重み (人数の多い順の横棒・棒の幅 = 重み ÷ 24% × 181 px)
 panel#fp5(left: 1346px; top: 236px; width: 478px; height: 422px; hd: "まとめるときの重み")
@@ -350,7 +350,7 @@ div#band1(left: 80px; top: 338px; width: 1100px; height: 176px; border-radius: 1
 group#lab1(in: up)
   p#t(left: 96px; top: 368px; font-size: 36px; color: $teal) 有酸素運動
   p#s(left: 96px; top: 422px; font-size: 20px; font-family: m; line-height: 1.45; color: $ink2) A・B・D ／ 232 人[br]ジョギング・早歩き・自転車こぎ
-shape#d1.ellipse(left: "482;545;612"; top: 372px; width: 16px; height: 16px; background: $card; border: 3px solid $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
+shape#d1(left: "482;545;612"; top: 372px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
 p#d1l(cx: "487;551;617"; top: 344px; font-size: 16px; font-family: n; color: $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 A;B;D
 shape#dia1(points: "457,287 530,272 603,287 530,301"; background: $teal; in: {scaleX:0, duration:0.9, ease:'power3.out'})
 group#big1(in: up)
@@ -360,7 +360,7 @@ div#band2(left: 80px; top: 548px; width: 1100px; height: 176px; border-radius: 1
 group#lab2(in: up)
   p#t(left: 96px; top: 578px; font-size: 36px; color: #4F5965) それ以外
   p#s(left: 96px; top: 632px; font-size: 20px; font-family: m; line-height: 1.45; color: $ink2) C・E・F ／ 450 人[br]筋トレ・組み合わせ・ヨガ
-shape#d2.ellipse(left: "407;341;418"; top: 582px; width: 16px; height: 16px; background: $card; border: 3px solid $slate; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
+shape#d2(left: "407;341;418"; top: 582px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $slate; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
 p#d2l(cx: "407;346;430"; top: 554px; font-size: 16px; font-family: n; color: #4F5965; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 C;E;F
 shape#dia2(points: "352,427 403,412 454,427 403,441"; background: $slate; in: {scaleX:0, duration:0.9, ease:'power3.out'})
 group#big2(in: up)
@@ -394,7 +394,7 @@ group#fr8(in: {opacity:0, duration:0.6})
   shape#z(left: 182px; top: 720px; width: 558px; height: 3px; path: line_h; border: 2px solid $brick; dash: 4,3)
   p#xn(left: 180px; top: 846px; width: 560px; text-align: center; font-size: 20px; color: $ink2) 参加者数（人）
   p#yn(left: 96px; top: 290px; font-size: 20px; color: $ink2) 効果量 g
-shape#sd.ellipse(left: "299;212;439;187;253;346"; top: "356;296;427;234;489;416"; width: 22px; height: 22px; background: $ink2; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.12}}) ×6
+shape#sd(left: "299;212;439;187;253;346"; top: "356;296;427;234;489;416"; width: 22px; height: 22px; border-radius: 50%; background: $ink2; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.12}}) ×6
 group#sl(in: {opacity:0, duration:0.4})
   p#l(left: "317;230;457;205;271;364"; top: "355;295;426;232;488;415"; font-size: 18px; color: $ink2) ×6 A;B;C;D;E;F
 p#db_d(left: 326px; top: 348px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 48 人・g 0.92

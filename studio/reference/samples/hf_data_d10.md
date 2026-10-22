@@ -149,7 +149,7 @@ section#b(stagger: {each:0})
 div#hdr.sticky(left: 96px; top: 34px; width: 1728px; height: 40px; z-index: front; delay: 100; in: {opacity:0, duration:0.6, ease:'power2.out'})
   svg#mk(left: 0px; cy: 50%; width: 30px; height: 30px; part: mark)
   p#br(left: 44px; cy: 50%; font-size: 21px; color: $fg2; font-family: r; white-space: nowrap) ワークノート サポート窓口{sp}　｜　{/}{sc}問い合わせ分析 7〜9 月{/}
-  shape#d.ellipse(left: "961;975;989;1003;1017;1031;1045;1059;1073"; cy: 50%; width: 10px; height: 10px; background: #2A3850) ×9
+  shape#d(left: "961;975;989;1003;1017;1031;1045;1059;1073"; cy: 50%; width: 10px; height: 10px; border-radius: 50%; background: #2A3850) ×9
   p#lbl(right: 0px; cy: 50%; width: 96px; text-align: right; font-size: 18px; font-family: m; color: $muted; letter-spacing: 0.06em) 01 / 09
 div#hdr_line.sticky(left: 96px; top: 92px; width: 1728px; height: 2px; background: #1C2840; z-index: front; delay: 100; in: {opacity:0, duration:0.6, ease:'power2.out'})
 progress#prog.sticky(left: 96px; top: 92px; width: 1728px; height: 2px; background: linear($teal,$teal2,90); until: end; z-index: front; overlap: hdr_line)
@@ -199,7 +199,7 @@ board#c_bd(left: 700px; top: 292px; width: 1124px; height: 676px; t: "月別の�
   p#bv(left: "127;337;545"; top: "145;129;117"; width: 170px; text-align: center; font-size: 46px; font-family: n; color: "$fg;$fg;#0A0F17"; delay: 950; in: {y:12, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.15}}) ×3 1,296;1,384;1,448
   p#bx(left: "127;337;545"; top: 576px; width: 170px; text-align: center; font-size: 24px; color: $fg2) ×3 7 月;8 月;9 月
   shape#trend(path: "M184 121 L393 105 L602 93"; background: none; border: 3px solid $teal2; dash: 5,5; delay: 1400; in: {opacity:0, duration:0.5})
-  shape#dot.ellipse(left: "179;388;597"; top: "116;100;88"; width: 15px; height: 15px; background: $teal2; delay: 1350; in: {scale:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×3
+  shape#dot(left: "179;388;597"; top: "116;100;88"; width: 15px; height: 15px; border-radius: 50%; background: $teal2; delay: 1350; in: {scale:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×3
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $muted; font-family: r; in: {opacity:0, duration:0.5}) ※ 3 か月の合計は 4,128 件。縦軸は 0 から。
 
 # d 構成: 構成比の帯 (7 色) が左から 1 枚ずつ開き、7 行の横棒が伸びて件数と % が出る・「ログイン」「操作方法」で行に枠が点き、他の 5 行を沈め、凡例
@@ -228,7 +228,7 @@ section#e(stagger: {each:0})
 head#e_h(n: "04"; k: "初回解決率"; t: "初回で解決するのは {t}59%{/}。カテゴリで大きく違う")
 # 輪 (地の輪 + 59% の弧を描く + 中央の数字)
 group#e_g(in: {scale:0.86, opacity:0, duration:0.6, ease:'power3.out'})
-  shape#track.ellipse(left: 126px; top: 346px; width: 410px; height: 410px; background: none; border: 28px solid #1D2A3E)
+  shape#track(left: 126px; top: 346px; width: 410px; height: 410px; border-radius: 50%; background: none; border: 28px solid #1D2A3E)
   # 59% の弧 (12 時から時計回りに 212°・線の中心が地の輪の中心に乗る枠)
   shape#arc(left: 140px; top: 360px; width: 381px; height: 381px; path: arc,start=0,to=212.4; background: none; border: 28px solid $teal2; in: draw {duration: 1.2})
   p#v(cx: 330px; cy: 528px; font-size: 150px; line-height: 0.95; font-family: n) [count:59 start=0 ms=1200]%
@@ -266,7 +266,7 @@ board#f_bd(left: 96px; top: 292px; width: 1150px; height: 676px; t: "受付か�
   p#labt(left: 704px; top: 374px; width: 417px; text-align: center; font-size: 21px; color: $coral; white-space: nowrap; in: {y:8, opacity:0, duration:0.4, ease:'power2.out'}) 3 日超：372 件（9%）
   # 中央値の札と、1〜4 時間の棒へ下りる破線の引き出し
   shape#lead(path: "M420.3 155.1 L235.3 191.1"; background: none; border: 2px solid $teal2; dash: 3,4; in: {opacity:0, duration:0.4})
-  shape#ldot.ellipse(left: 346px; top: 280px; width: 12px; height: 12px; background: $teal2; in: {opacity:0, duration:0.4})
+  shape#ldot(left: 346px; top: 280px; width: 12px; height: 12px; border-radius: 50%; background: $teal2; in: {opacity:0, duration:0.4})
   p#pin(left: 630px; top: 207px; font-size: 21px; background: $panel2; border: 2px solid $teal2; border-radius: 8px; padding: 6px 12px; white-space: nowrap; in: {y:-12, opacity:0, duration:0.45, ease:'back.out(1.8)'}) 中央値　1 時間 50 分
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $muted; font-family: r; in: {opacity:0, duration:0.5}) ※ 受付から解決までの経過時間で 6 区分。中央値は 1 時間 50 分。
 board#f_sd(left: 1280px; top: 292px; width: 544px; height: 676px; t: "長い尾（3 日超）の内訳"; u: "受付から 3 日超"; pc: $coral; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})

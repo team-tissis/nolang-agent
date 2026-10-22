@@ -141,8 +141,8 @@ panel#p2a(left: 112px; top: 232px; width: 720px; height: 648px; t: "有料契約
 panel#p2b(left: 872px; top: 232px; width: 936px; height: 648px; t: "毎月の出入り"; s: "7〜9月"; tk: $amber; delay: 220)
   shape#a1(left: 312px; top: 260px; width: 48px; height: 21px; path: arrow_r; background: $teal; border: 4px solid $teal; in: draw {duration: 0.5})
   shape#a2(left: 572px; top: 260px; width: 66px; height: 21px; path: arrow_r; background: $coral; border: 4px solid $coral; in: draw {duration: 0.5})
-  shape#fi.ellipse(left: "206;207;208"; top: "177;177;177"; width: 9px; height: 9px; background: #BFF5EA; in: {opacity:0, duration:0.3}) ×3
-  shape#fo.ellipse(left: "380;381;382"; top: "177;177;177"; width: 9px; height: 9px; background: #FFD0D0; in: {opacity:0, duration:0.3}) ×3
+  shape#fi(left: "206;207;208"; top: "177;177;177"; width: 9px; height: 9px; border-radius: 50%; background: #BFF5EA; in: {opacity:0, duration:0.3}) ×3
+  shape#fo(left: "380;381;382"; top: "177;177;177"; width: 9px; height: 9px; border-radius: 50%; background: #FFD0D0; in: {opacity:0, duration:0.3}) ×3
   div#node_in(left: 30px; top: 170px; width: 276px; height: 200px; border-radius: 18px; background: #35D3B512; border: 3px solid #35D3B58C; opacity: 0.32; delay: 450; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
     p#t(left: 0px; top: 22px; width: 276px; text-align: center; font-size: 26px; color: $teal) 新規課金
     p#v(left: 0px; top: 72px; width: 276px; text-align: center; font-size: 46px; line-height: 1.39; font-family: n; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) 170〜178
@@ -213,7 +213,7 @@ panel#p4a(left: 112px; top: 232px; width: 1060px; height: 648px; t: "週次の�
   # 線の下の面: hf は上 30% → 下 0% の縦グラデ。グラデの塗りの形は絵の段 (線・点・札の上) に上がるので、単色の 14% で塗る
   shape#area(path: "M127 113 L300 173 L473 213 L647 261 L647 365 L127 365 Z"; background: #FF6B6B24; in: wipe {dir: 'right', duration: 1.89, ease: 'power1.inOut'})
   shape#line(path: "M127 113 L300 173 L473 213 L647 261"; background: none; border: 4px solid $coral; in: draw {duration: 1.89})
-  shape#dot.ellipse(left: "120;293;466;639"; top: "106;166;206;253"; width: "13;13;13;16"; height: "13;13;13;16"; background: $coral; border: 4px solid #131B33; in: {scale:0, duration:0.35, ease:'back.out(2.5)'}) ×4
+  shape#dot(left: "120;293;466;639"; top: "106;166;206;253"; width: "13;13;13;16"; height: "13;13;13;16"; border-radius: 50%; background: $coral; border: 4px solid #131B33; in: {scale:0, duration:0.35, ease:'back.out(2.5)'}) ×4
   p#vl(left: "87;260;433;607"; top: "71;131;171;219"; width: 120px; text-align: center; font-size: 42px; line-height: 1.14; font-family: n; in: {y:10, opacity:0, duration:0.35, ease:'power3.out'}) ×4 63;48;38;26
   p#xl(left: "73;247;420;593"; top: "377;377;377;377"; width: 160px; text-align: center; font-size: 22px; color: $ink2; font-family: n; delay: 150; in: {opacity:0, duration:0.5, stagger:{each:0.08}}) ×4 8/31週;9/7週;9/14週;9/21週
   div#call(left: 640px; top: 104px; width: 380px; height: 112px; border-radius: 16px; background: #FF6B6B14; border: 2px solid #FF6B6B73; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.8)'})
@@ -282,7 +282,7 @@ panel#p6b(left: 972px; top: 232px; width: 836px; height: 648px; t: "解約率の
   div#band(left: 130px; top: 172px; width: 620px; height: 48px; border-radius: 8px; background: #FF6B6B33; border: 2px solid #FF6B6B8C; in: {scaleX:0, opacity:0, duration:0.8, ease:'power3.out', pivot:'left'})
   p#bandl(left: 132px; top: 126px; font-size: 24px; color: $coral; white-space: nowrap; in: {y:8, opacity:0, duration:0.4}) 3か月未満 {nn}20〜23%{/}
   shape#line(path: "M120 260 L293 269 L467 289"; background: none; border: 4px solid $teal; in: draw {duration: 1})
-  shape#dot.ellipse(left: "114;287;460"; top: "254;263;282"; width: "13;13;15"; height: "13;13;15"; background: $teal; border: 4px solid #131B33; in: {scale:0, duration:0.3, ease:'back.out(2.5)'}) ×3
+  shape#dot(left: "114;287;460"; top: "254;263;282"; width: "13;13;15"; height: "13;13;15"; border-radius: 50%; background: $teal; border: 4px solid #131B33; in: {scale:0, duration:0.3, ease:'back.out(2.5)'}) ×3
   p#pl(left: "80;253;427"; top: "217;227;246"; width: 120px; text-align: center; font-size: 34px; font-family: n; color: $teal; in: {y:8, opacity:0, duration:0.3}) ×3 9.4%;8.5%;6.7%
   p#xl(left: "87;260;433"; top: "371;371;371"; width: 100px; text-align: center; font-size: 24px; color: $ink2; delay: 550; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×3 7月;8月;9月
   div#leg(left: 522px; top: 92px; width: 285px; height: 30px; delay: 650; in: {opacity:0, duration:0.5})
@@ -313,12 +313,12 @@ chap#ch8(n: "07"; t: "期間別の理由")
 headline#hl8 解約理由は、利用期間で{a}変わる{/}
 panel#p8a(left: 112px; top: 232px; width: 1040px; height: 648px; t: "利用期間別の解約理由"; s: "9月"; delay: 100)
   div#cl(left: 32px; top: 96px; width: 472px; height: 452px; border-radius: 16px; border: 2px solid $line2; background: #FFFFFF06; delay: 50; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
-    shape#dot.ellipse(left: 26px; top: 34px; width: 12px; height: 12px; background: $coral)
+    shape#dot(left: 26px; top: 34px; width: 12px; height: 12px; border-radius: 50%; background: $coral)
     p#tg(left: 50px; cy: 40px; font-size: 27px; white-space: nowrap) 初回サイクルで解約
     reason#i1(left: 26px; top: 124px; l: "思い通りに作れない"; v: "34%"; w: 357px)
     reason#i2(left: 26px; top: 284px; l: "本数が足りない"; v: "15%"; w: 158px; c: #5A6B8F; vc: $ink2)
   div#cr(left: 536px; top: 96px; width: 472px; height: 452px; border-radius: 16px; border: 2px solid $line2; background: #FFFFFF06; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
-    shape#dot.ellipse(left: 26px; top: 34px; width: 12px; height: 12px; background: $teal)
+    shape#dot(left: 26px; top: 34px; width: 12px; height: 12px; border-radius: 50%; background: $teal)
     p#tg(left: 50px; cy: 40px; font-size: 27px; white-space: nowrap) 1か月以上使って解約
     reason#i3(left: 26px; top: 124px; l: "一時的に使わない"; v: "29%"; w: 304px)
     reason#i4(left: 26px; top: 284px; l: "クレジットが余る"; v: "17%"; w: 178px; c: #5A6B8F; vc: $ink2)
@@ -365,7 +365,7 @@ card#card1(left: 112px; n: "1"; t: "解約率は11%前後で[br]横ばい"; s: "
   p#cap(delay: 700)
   div#base(left: 32px; top: 525px; width: 472px; height: 3px; background: $line2)
   shape#ml(path: "M41 240 L134 273 L228 295 L321 322"; background: none; border: 4px solid $coral; in: draw {duration: 1.2})
-  shape#md.ellipse(left: "35;128;222;315"; top: "234;267;289;316"; width: "11;11;11;12"; height: "11;11;11;12"; background: $coral; border: 3px solid #141D37; in: {scale:0, duration:0.3, ease:'back.out(2.5)', stagger:{each:0.36}}) ×4
+  shape#md(left: "35;128;222;315"; top: "234;267;289;316"; width: "11;11;11;12"; height: "11;11;11;12"; border-radius: 50%; background: $coral; border: 3px solid #141D37; in: {scale:0, duration:0.3, ease:'back.out(2.5)', stagger:{each:0.36}}) ×4
   p#m63(left: 39px; top: 302px; font-size: 34px; font-family: n; in: {opacity:0, duration:0.3}) 63
   p#m26(left: 456px; top: 418px; font-size: 34px; font-family: n; in: {opacity:0, duration:0.3}) 26
 card#card2(left: 692px; n: "2"; t: "勝負は[br]最初の3か月"; s: "3か月未満の解約率が下がらない"; cap: "解約の53%が契約3か月未満"; c: $coral; g: "linear(#E0525C,#FF7A7A,90)"; opacity: 0.36; delay: 140)

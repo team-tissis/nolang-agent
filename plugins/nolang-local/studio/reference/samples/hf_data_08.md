@@ -102,8 +102,8 @@ div#after(left: 1060px; top: 236px; width: 760px; height: 500px; border-radius: 
   p#foot(left: 54px; bottom: 40px; font-size: 36px; color: $gray) 1日の受付{num_o}7{/}時間
 # 判子: 赤の二重丸が -14° に傾いて上から叩きつけ、板ごと沈む (timeline)
 group#hanko(left: 1692px; top: 615px; width: 178px; height: 178px; transform: rotate(-14deg); in: keys(at=0 scale=2.3 rotation=-18 opacity=0 | at=1 ease=power4.in),duration=220; out: {x:-140, duration:0.7, ease:'power3.inOut'})
-  shape#outer.ellipse(left: 0px; top: 0px; width: 178px; height: 178px; background: #FFFFFFDB; border: 9px solid $red)
-  shape#inner.ellipse(left: 18px; top: 18px; width: 142px; height: 142px; background: none; border: 3px solid $red)
+  shape#outer(left: 0px; top: 0px; width: 178px; height: 178px; border-radius: 50%; background: #FFFFFFDB; border: 9px solid $red)
+  shape#inner(left: 18px; top: 18px; width: 142px; height: 142px; border-radius: 50%; background: none; border: 3px solid $red)
   p#t(cx: 50%; cy: 50%; font-size: 58px; color: $red; letter-spacing: 0.04em) 変更
 
 # gaps — 差を図にする: 紙の地に目盛りと棒 2 本 → 差の枠と吹き出し → 斜線と × → 注意の帯 (図ごとゆっくり寄る)
@@ -154,7 +154,7 @@ half_photo#confirm_photo(left: 860px; focus_x: 100%; main: kb {scale: [1.02, 1.1
 chip#confirm_chip(left: 100px; top: 176px; delay: 350; in: {y:14, opacity:0, duration:0.45, ease:'power3.out'}) ご来庁の前に
 p#confirm_l1(left: 100px; top: 282px; font-size: 92px; color: $navy; line-height: 1.18; letter-spacing: 0.02em; in: {y:135, duration:0.6, ease:'power3.out', clip:true}) 開庁時間を
 p#confirm_l2(left: 100px; top: 398px; font-size: 92px; color: $orange; line-height: 1.18; letter-spacing: 0.02em; in: {y:135, duration:0.6, ease:'power3.out', clip:true}) チェック
-shape#confirm_dot.ellipse(left: confirm_l2.right+11; top: 405px; width: 84px; height: 84px; background: $orange; in: {scale:0, duration:0.4, ease:'back.out(2)'})
+shape#confirm_dot(left: confirm_l2.right+11; top: 405px; width: 84px; height: 84px; border-radius: 50%; background: $orange; in: {scale:0, duration:0.4, ease:'back.out(2)'})
 icon#confirm_tick(left: confirm_l2.right+19; top: 417px; font-size: 60px; name: check; weight: bold; color: #FFFFFF; in: draw {duration: 0.35, ease: 'power2.out'}; overlap: confirm_dot)
 div#via_web(left: 100px; top: 590px; width: 320px; height: 290px; border-radius: 26px; box-shadow: 0px 16px 40px #142A4721; in: {y:40, scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.7)'})
   img#pic(cx: 50%; top: 32px; width: 170px; height: 170px; object-fit: contain) [transparent]a single flat vector icon, soft rounded shapes, deep navy outlines and fills with warm orange and white highlights, subtle soft shadow: a smartphone showing a simple web page layout with an analog clock symbol on its screen, centered with generous padding, transparent background, no text

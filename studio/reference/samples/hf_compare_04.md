@@ -117,7 +117,7 @@ bumper#bumper1.sticky(s: "STEP 1"; t: "準備"; u: "ブレーキの確認")
 section#brake(stagger: {each:0})
 group#brake_zoom(main: keys(at=0 scale=1 | at=1 scale=1.2 ease=sine.inOut),window=100,7500,forwards; transform-origin: 48.7% 96.3%)
   img#photo(inset: 0; main: none) [ref:@hero]介護実習室。介護ベッドの横に置かれた自走式車椅子の横に介護スタッフがしゃがみ、後輪のすぐ前のブレーキレバーを右手でしっかり押してロックしている。スタッフは手元のブレーキを確認しながら、顔を少し上げて学生たちに語りかけている。背景で学生3人が身を乗り出して手元をのぞき込んでいる。
-  shape#ring.ellipse(left: 855px; top: 705px; width: 160px; height: 160px; background: none; border: 9px solid $orange; in: draw {duration: 0.45})
+  shape#ring(left: 855px; top: 705px; width: 160px; height: 160px; border-radius: 50%; background: none; border: 9px solid $orange; in: draw {duration: 0.45})
 heading#brake_head(s: "いちばん大切なこと"; t: "ブレーキの確認"; w: 288)
 p#click_word(left: 1006px; top: 556px; font-size: 76px; letter-spacing: 0.04em; color: $orange; stroke: #FFFFFF,7; transform: rotate(-8deg); in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(3)'}; out: {y:-16, opacity:0, duration:0.3, ease:'power2.in'}) カチッ
 img#brake_inset(left: 1360px; top: 196px; width: 400px; height: 400px; border-radius: 1498px; border: 10px solid #FFFFFF; box-shadow: 0px 14px 36px #192D464D; content: @closeup; main: kb {scale: [1.18, 1], ease:'power2.out'}; in: {scale:0.4, opacity:0, duration:0.55, ease:'back.out(2.2)'})
@@ -146,7 +146,7 @@ group#ng_chair(in: {x:980, duration:0.6, ease:'power3.out'}; out: {x:980, durati
   svg#seat(left: 1035px; top: 228px; width: 800px; height: 430px; part: ng_seat)
   svg#caster(left: 1311px; top: 561px; width: 52px; height: 52px; part: ng_caster)
   svg#brake_off(left: 1035px; top: 228px; width: 800px; height: 430px; part: ng_brake_off)
-shape#ok_circle.ellipse(left: 708px; top: 138px; width: 266px; height: 266px; background: none; border: 30px solid #E8762AEB; in: draw {duration: 0.45})
+shape#ok_circle(left: 708px; top: 138px; width: 266px; height: 266px; border-radius: 50%; background: none; border: 30px solid #E8762AEB; in: draw {duration: 0.45})
 bumper_back#bumper2_back.sticky(c: $mint_l)
 bumper#bumper2.sticky(s: "STEP 2"; t: "位置調整"; u: "ベッドと車椅子の角度")
 

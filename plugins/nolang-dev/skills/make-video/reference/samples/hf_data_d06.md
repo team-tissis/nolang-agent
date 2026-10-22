@@ -107,7 +107,7 @@ img#t_photo(inset: 0; subject: "60%,10%,40%,55%"; room: left 45%; main: kb {scal
 div#t_shade(inset: 0; background: linear(#100C09D6,#100C09A8@34%,#100C092E@62%,#100C0900@78%,90); in: {opacity:0, duration:1, ease:'power1.out'})
 div#t_shade_b(left: 0px; top: 660px; width: 1920px; height: 420px; background: linear(#100C09B8,#100C0900,0); in: none)
 # 湯気 8 つ (右端の 2 つは hf より 13 px 内へ寄せた・放射の白い斑が 5.6 秒の周期で上下しながら濃くなり薄れる・位相は粒ごと)
-shape#t_steam.ellipse(left: "787;947;867;1027;720;973;827;1080"; top: "347;400;280;313;407;253;427;373"; width: "280;240;200;253;227;187;267;200"; height: "280;240;200;253;227;187;267;200"; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: sine {y: -75, opacity: .45, period: 5.6, phase_offset: '0;.245;.489;.734;.979;.241;.486;.73'}) ×8
+shape#t_steam(left: "787;947;867;1027;720;973;827;1080"; top: "347;400;280;313;407;253;427;373"; width: "280;240;200;253;227;187;267;200"; height: "280;240;200;253;227;187;267;200"; border-radius: 50%; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: sine {y: -75, opacity: .45, period: 5.6, phase_offset: '0;.245;.489;.734;.979;.241;.486;.73'}) ×8
 div#t_grain(inset: 0; grain: 0.06; in: none)
 div#t_kick(left: 120px; top: 200px; height: 38px; display: flex; gap: 18px; align-items: center; delay: 250; in: {y:16, opacity:0, duration:.7, ease:'power2.out'})
   p#a(font-size: 26px; letter-spacing: .22em; color: $lt1) 湯ノ瀬町 観光課

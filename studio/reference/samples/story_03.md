@@ -39,7 +39,7 @@ sfx off
 section#hook
 img#hk_p(inset: 0; main: kb {scale: [1, 1.08], focus: '50% 60%'}) 真夜中の暗い部屋、ベッドの上で光るスマートフォンの画面、青と赤のネオンの反射
 neon#hk_v
-shape#hk_ring(left: 570px; top: 105px; width: 450px; height: 450px; path: circle; background: none; border: 4px solid $b; opacity: 0.35; main: pulse)
+shape#hk_ring(left: 570px; top: 105px; width: 450px; height: 450px; border-radius: 50%; background: none; border: 4px solid $b; opacity: 0.35; main: pulse)
 kick#hk_k(left: 60px; top: 132px) DEEP NIGHT
 p#hk_t(left: 54px; top: 186px; font-size: 255px; font-family: e; color: $ink; text-shadow: 0px 0px 36px #2EE8FFAA; in: big) 0:00
 div#hk_n(left: 60px; top: 1200px; width: 960px; height: 255px)

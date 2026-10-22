@@ -94,7 +94,7 @@ group#h_sun.bleed(left: 0px; top: 480px; width: 1080px; height: 1300px; transfor
   div#core(z-index: front; left: 380px; top: 490px; width: 320px; height: 320px; border-radius: 50%; background: radial(#FFFFFF,#FFF0C8F2@25%,#FFB45080@55%,#FF781400@72%,50%,50%); opacity: 0; in: none)
 img#h_bh(left: 228px; top: 818px; width: 624px; height: 624px; content: @bh_disc; object-fit: contain; in: {scale:.32, opacity:0, duration:.75, ease:'expo.out'})
 # 衝撃波の輪 (0.2 倍から 6.5 倍へ広がって消える)
-shape#h_ring.ellipse(left: 390px; top: 980px; width: 300px; height: 300px; background: none; border: 10px solid #FFE1AAF2; box-shadow: 0px 0px 40px #FFBE6EE6; in: {scale:.2, duration:.05, ease:'none'})
+shape#h_ring(left: 390px; top: 980px; width: 300px; height: 300px; border-radius: 50%; background: none; border: 10px solid #FFE1AAF2; box-shadow: 0px 0px 40px #FFBE6EE6; in: {scale:.2, duration:.05, ease:'none'})
 # 半径の札 (引き出し線 + 2 行)
 group#h_label(left: 514px; top: 1200px; width: 566px; height: 135px; in: {x:40, opacity:0, duration:.35, ease:'power2.out'}; out: {opacity:0, duration:.2})
   div#line(left: 0px; top: 40px; width: 86px; height: 4px; background: #FFFFFF; box-shadow: 0px 0px 10px #FFFFFFCC)
@@ -122,12 +122,12 @@ group#s_orb_b(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; ma
   group#oy_b(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: 0.024})
     img#earth_b(left: 468px; top: 938px; width: 146px; height: 146px; content: @earth; object-fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 img#s_bh(left: 276px; top: 746px; width: 528px; height: 528px; content: @bh_disc; object-fit: contain; in: {y:120, scale:1.18, duration:.9, ease:'power3.out'})
-shape#s_orbit.ellipse(left: 140px; top: 870px; width: 800px; height: 280px; background: none; border: 4px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
+shape#s_orbit(left: 140px; top: 870px; width: 800px; height: 280px; border-radius: 50%; background: none; border: 4px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
 #s_orbit.bold(border: 8px solid #BFF0FFE6)
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
 group#s_tr(left: 0px; top: 0px; stack: z; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
   group#ty(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: '0.010;0.983;0.956;0.929;0.902;0.875;0.848'})
-    shape#d.ellipse(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
+    shape#d(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; border-radius: 50%; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)
 group#s_orb(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: 0.024})
@@ -234,7 +234,7 @@ group#f_c(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity:0, du
   img#space(inset: 0; content: @space; opacity: .55; main: none)
   group#cam(left: 0px; top: 0px; width: 1080px; height: 1920px; transform-origin: 50% 53.7%; in: {scale:1.35, duration:4.63, ease:'power1.out'})
     img#bh(left: 372px; top: 862px; width: 336px; height: 336px; content: @bh_disc; object-fit: contain; opacity: .9)
-    shape#orbit.ellipse(left: 160px; top: 900px; width: 760px; height: 260px; background: none; border: 3px solid #A0D7FF47)
+    shape#orbit(left: 160px; top: 900px; width: 760px; height: 260px; border-radius: 50%; background: none; border: 3px solid #A0D7FF47)
     group#ox(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {x: 380, period: 6.17, phase_offset: 0.441})
       group#oy(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 130, period: 6.17, phase_offset: 0.191})
         img#earth(left: 462px; top: 952px; width: 156px; height: 156px; content: @earth_ice; object-fit: contain; main: sine {scale: 0.17, period: 6.17, phase_offset: 0.191})
@@ -290,7 +290,7 @@ div#c_card(left: 110px; top: 760px; width: 860px; height: 470px; border-radius: 
   p#handle(left: 292px; top: 170px; width: 510px; font-size: 36px; color: #AAB4C8; white-space: nowrap) @uchu_shiko_lab
   p#follow(left: 60px; top: 310px; width: 740px; font-size: 52px; line-height: 1.35; text-align: center; padding: 20px 0px; border-radius: 148px; background: linear(#FF4560,#E0002A,180); box-shadow: 0px 10px 26px #FF285073; out: {opacity:0, duration:.15}) フォローする
   p#following(left: 60px; top: 310px; width: 740px; font-size: 52px; line-height: 1.35; text-align: center; padding: 20px 0px; border-radius: 148px; background: #2B3242; color: #D9DFEB; in: {opacity:0, duration:.15}) フォロー中 ✓
-  shape#tap.ellipse(left: 370px; top: 304px; width: 120px; height: 120px; background: none; border: 8px solid #FFFFFFF2; in: {scale:.3, duration:.03, ease:'none'})
+  shape#tap(left: 370px; top: 304px; width: 120px; height: 120px; border-radius: 50%; background: none; border: 8px solid #FFFFFFF2; in: {scale:.3, duration:.03, ease:'none'})
 p#c_arrow(left: 150px; top: 1262px; width: 780px; font-size: 46px; text-align: center; color: $chip; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) ▲ アイコンからプロフィールへ
 telop#t_cta
   tl#a(top: 0px; s: 70px; w: 11) ほかの思考実験は

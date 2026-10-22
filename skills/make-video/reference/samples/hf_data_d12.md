@@ -129,7 +129,7 @@ board#b_board(left: 960px; top: 160px; width: 880px; height: 700px; delay: 550; 
   flow#back(left: 483px; i: users; l: "回答した人"; v: "[count:2,000 start=0 ms=900]"; u: "人"; n: "市と大学の研究室が集計")
   # 回収率の輪: 地の輪 + 上から右回りに半周の弧 (語で描く)・中に数える 50%
   div#ring(left: 50px; top: 360px; width: 290px; height: 290px; in: {scale:.85, opacity:0, duration:.5, ease:'power2.out'})
-    shape#bg.ellipse(left: 9px; top: 9px; width: 272px; height: 272px; background: none; border: 34px solid $ringbg)
+    shape#bg(left: 9px; top: 9px; width: 272px; height: 272px; border-radius: 50%; background: none; border: 34px solid $ringbg)
     shape#arc(left: 0px; top: 0px; width: 290px; height: 290px; path: "M 96.5 17.5 C 140.1 17.5 175.5 52.9 175.5 96.5 C 175.5 140.1 140.1 175.5 96.5 175.5"; background: none; border: 34px solid $teal; main: sine {rotation: 6, period: 1.6}; in: draw {duration: 1, ease: 'power2.inOut'})
     p#v(cx: 50%; top: 84px; font-size: 92px; font-family: s; line-height: 1; color: $teal) [count:50 start=0 ms=1000 delay=200]{pc}%{/}
     p#l(cx: 50%; top: 180px; font-size: 26px; color: $ink2) 回収率

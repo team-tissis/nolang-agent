@@ -60,7 +60,7 @@ div#gl_c(left: 120px; top: 390px; width: 840px; height: 225px; in: rise {y: 36, 
   icon#i(left: 69px; cy: 50%; font-size: 78px; name: cube; color: $a)
   p#t(left: 210px; cy: 50%; font-size: 51px; color: $ink; line-height: 1.3) パソコンの中の[br]部品の3Dデータ
 body#gl_q(left: 120px; top: 690px) ちがうのは {k}出発点{/}
-shape#gl_o(left: 1230px; top: 180px; width: 570px; height: 570px; path: circle; background: none; border: 3px solid $b; opacity: 0.25; main: breathe)
+shape#gl_o(left: 1230px; top: 180px; width: 570px; height: 570px; border-radius: 50%; background: none; border: 3px solid $b; opacity: 0.25; main: breathe)
 
 section#f_intro
 img#fi_bg(inset: 0; scrim: 0.5; main: kb {scale: [1, 1.06], focus: ['65% 50%', '68% 48%']}) [photo]方眼紙に描いた鉛筆のスケッチから、橙に光る線の L 字ブラケットの3Dモデルが立ち上がる様子、グラファイトの机

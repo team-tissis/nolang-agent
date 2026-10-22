@@ -152,7 +152,7 @@ def card(no, t1, t2, fig, sub, n1, n2) = div(top: 256px; width: 540px; height: 6
   p#sub(left: 36px; top: 360px; font-size: 22px; color: $ink2; white-space: nowrap; content: {sub})
   shape#rule(left: 36px; top: 480px; width: 468px; height: 3px; path: line_h; border: 2px solid #3A2A1E33; dash: 4,4)
   p#note(left: 36px; top: 504px; font-size: 26px; line-height: 1.45; white-space: nowrap; content: "{n1}[br]{n2}")
-  shape#ring.ellipse(left: 440px; top: 30px; width: 70px; height: 70px; background: none; border: 4px solid $terra_d; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)'})
+  shape#ring(left: 440px; top: 30px; width: 70px; height: 70px; border-radius: 50%; background: none; border: 4px solid $terra_d; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)'})
   icon#ck(left: 453px; top: 45px; font-size: 42px; name: check; weight: bold; color: $terra_d; in: draw {duration: 0.35})
 
 # 全編の地 (根): 紙の写真・左上から 93 秒かけて右下へ漂う暖色の光・周辺の陰

@@ -100,8 +100,8 @@ def crow(no, c, m, s) = div(left: 96px; width: 1728px; height: 196px; background
 div#bg_base(inset: 0; background: radial(#111823,#0A0E14@60%,#080B10,30%,20%); z-index: back; in: none; out: none)
 div#dots(inset: 0; pattern: dots,21,#FFFFFF0E; z-index: back; in: none; out: none)
 div#dots_fade(inset: 0; background: radial(#0A0E1400@35%,#0A0E14@80%,50%,45%); z-index: back; in: none; out: none)
-shape#glow1.ellipse(left: -250px; top: -350px; width: 940px; height: 940px; background: radial(#35D0BA13,#35D0BA13@36%,#35D0BA0A@57%,#35D0BA00@70%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=1 x=280 y=107 ease=sine.inOut),window=0,128000,forwards)
-shape#glow2.ellipse(left: 1269px; top: 530px; width: 1000px; height: 1000px; background: radial(#FFB5470D,#FFB5470D@38%,#FFB54707@58%,#FFB54700@70%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=1 x=-253 y=-93 ease=sine.inOut),window=0,128000,forwards)
+shape#glow1(left: -250px; top: -350px; width: 940px; height: 940px; border-radius: 50%; background: radial(#35D0BA13,#35D0BA13@36%,#35D0BA0A@57%,#35D0BA00@70%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=1 x=280 y=107 ease=sine.inOut),window=0,128000,forwards)
+shape#glow2(left: 1269px; top: 530px; width: 1000px; height: 1000px; border-radius: 50%; background: radial(#FFB5470D,#FFB5470D@38%,#FFB54707@58%,#FFB54700@70%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=1 x=-253 y=-93 ease=sine.inOut),window=0,128000,forwards)
 
 # title — 題: 夜の雑貨店の写真が 1.12 → 1.02 に引きながら明け、左の暗い空きに英字の小札 → 2 行の題 → 琥珀の短い線 → 副題 → 3 つの札
 section#title(stagger: {each:0}; out: {opacity:0, duration:0.35, ease:'power2.in'})
@@ -210,7 +210,7 @@ panel#wk(left: 96px; top: 230px; width: 1150px; height: 690px; delay: 200)
   p#bandl(right: 64px; top: 243px; font-size: 20px; font-family: c; color: $teal_l; in: {opacity:0, duration:0.4}) 32〜34% の帯
 # 折れ線・点・値は板の外 (canvas の座標の path は枠を持てない) に板の上へ重ねる
 shape#wk_line(path: "M211 335 L384 348 L557 335 L731 349"; background: none; border: 3px solid $teal; in: draw {duration: 1.4})
-shape#wk_dot.ellipse(left: "206;379;552;726"; top: "330;343;330;344"; width: 16px; height: 16px; background: #0F141B; border: 3px solid $teal; in: {scale:0.2, opacity:0, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.42}}) ×4
+shape#wk_dot(left: "206;379;552;726"; top: "330;343;330;344"; width: 16px; height: 16px; border-radius: 50%; background: #0F141B; border: 3px solid $teal; in: {scale:0.2, opacity:0, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.42}}) ×4
 p#wk_pl(cx: "211;384;557;731"; top: "303;367;303;368"; font-size: 28px; font-family: n; in: {y:8, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.42}}) ×4 34.0%;32.0%;34.0%;31.9%
 panel#wc1(left: 1278px; top: 230px; width: 546px; height: 196px; delay: 600; in: {x:24, opacity:0, duration:0.6, ease:'power3.out'})
   p#t(left: 30px; top: 26px; font-size: 21px; font-family: m; color: $ink2) カート投入（1週あたり）

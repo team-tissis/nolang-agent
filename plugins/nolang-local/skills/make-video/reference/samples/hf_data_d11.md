@@ -115,7 +115,7 @@ div#hdr.sticky(left: 0px; top: 0px; width: 1080px; height: 180px; z-index: front
   p#tl(cx: "40;116;192;268;343;419;495;571;647;680"; top: 153px; font-size: 20px; font-family: "n;n;n;n;n;n;n;n;n;j"; color: "#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;#7F8A9C;$lime") ×10 S;5;10;15;20;25;30;35;40;G
 # 進行: 黄緑の線が残りの全尺で伸び、光る点が線の先を走る
 progress#prog.sticky(left: 60px; top: 140px; width: 960px; height: 4px; background: $lime; border-radius: 3px; until: end; z-index: front; overlap: hdr)
-shape#runner.ellipse.sticky(left: 50px; top: 130px; width: 22px; height: 22px; background: $lime; box-shadow: 0px 0px 0px 6px #C6FF3D40; z-index: front; overlap: hdr; in: {opacity:0, duration:0.4}; main: ramp {x: 960})
+shape#runner.sticky(left: 50px; top: 130px; width: 22px; height: 22px; border-radius: 50%; background: $lime; box-shadow: 0px 0px 0px 6px #C6FF3D40; z-index: front; overlap: hdr; in: {opacity:0, duration:0.4}; main: ramp {x: 960})
 board#b2(k: "DATA"; t: "調べたデータ"; s: "申込時の目標タイム × 実際の走り"; fn: "※架空の市民マラソン1大会分のデータ（作例）")
   p#name(left: 48px; top: 228px; font-size: 50px; line-height: 1.2; white-space: nowrap; delay: 180; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) みなと湾岸シティマラソン
   p#tag(left: .name.right+14; top: 237px; font-size: 24px; font-family: m; color: #C9D2E0; background: #2A3345; border-radius: 10px; padding: 4px 14px 6px 14px; delay: 180; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) 架空の大会
@@ -130,7 +130,7 @@ board#b2(k: "DATA"; t: "調べたデータ"; s: "申込時の目標タイム × 
   div#ca(left: 48px; top: 762px; width: 392px; height: 228px; border-radius: 22px; background: #FFFFFF0B; border: 2px solid #FFFFFF14; in: {y:30, opacity:0, duration:0.35, ease:'power3.out'})
     p#ct(left: 24px; top: 20px; font-size: 30px; white-space: nowrap) 5kmごとの通過記録
     div#ln(left: 14px; top: 130px; width: 328px; height: 4px; border-radius: 3px; background: #FFFFFF40)
-    shape#dot.ellipse(left: "26;50;75;99;123;147;172;196;220"; top: 122px; width: 22px; height: 22px; background: "$lime;$lime;$lime;$lime;$lime;$lime;$lime;$lime;$gold"; in: {y:10, opacity:0, duration:0.18, ease:'back.out(2)', stagger:{each:0.07}}) ×9
+    shape#dot(left: "26;50;75;99;123;147;172;196;220"; top: 122px; width: 22px; height: 22px; border-radius: 50%; background: "$lime;$lime;$lime;$lime;$lime;$lime;$lime;$lime;$gold"; in: {y:10, opacity:0, duration:0.18, ease:'back.out(2)', stagger:{each:0.07}}) ×9
     p#dl(cx: "34;58;83;107;131;155;180;204;228"; top: 154px; font-size: 22px; font-family: n; color: $pale; in: {y:10, opacity:0, duration:0.18, ease:'back.out(2)', stagger:{each:0.07}}) ×9 5;10;15;20;25;30;35;40;G
   p#x(cx: 480px; top: 826px; font-size: 96px; line-height: 1; font-family: n; color: $lime; in: {scale:0.3, opacity:0, duration:0.38, ease:'back.out(2.4)'}) ×
   div#cb(left: 520px; top: 762px; width: 392px; height: 228px; border-radius: 22px; background: #FFFFFF0B; border: 2px solid #FFFFFF14; in: {y:30, opacity:0, duration:0.35, ease:'power3.out'})
@@ -195,9 +195,9 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   # 折れ線: 白の 0〜30km (1 秒で描く) と赤の 30km〜G (0.8 秒)
   shape#la(path: "M93 205.7 L154.7 193.7 L216.3 201.7 L278 213.7 L339.7 233.7 L401.3 269.7"; background: none; border: 9px solid $ink; in: draw {duration: 1, ease: 'power1.inOut'})
   shape#lb(path: "M401.3 269.7 L463 365.7 L524.7 461.7 L586.3 433.7"; background: none; border: 10px solid $fast; in: draw {duration: 0.8, ease: 'power2.in'})
-  shape#pa.ellipse(left: "84;146;208;269;331;393"; top: "197;185;193;205;225;261"; width: 26px; height: 26px; background: $lime; border: 4px solid #0B1020; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.19}}) ×6
+  shape#pa(left: "84;146;208;269;331;393"; top: "197;185;193;205;225;261"; width: 26px; height: 26px; border-radius: 50%; background: $lime; border: 4px solid #0B1020; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.19}}) ×6
   p#va(cx: "93;155;216;278;340;401"; cy: "179;167;175;187;207;243"; font-size: 30px; font-family: n; font-style: italic; delay: 40; in: {y:8, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
-  shape#pb.ellipse(left: "455;516;578"; top: "357;453;425"; width: 26px; height: 26px; background: $fast; border: 4px solid #0B1020; delay: 260; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
+  shape#pb(left: "455;516;578"; top: "357;453;425"; width: 26px; height: 26px; border-radius: 50%; background: $fast; border: 4px solid #0B1020; delay: 260; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
   p#vb(cx: "463;525;586"; cy: "400;496;407"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
   chipj#chip(left: 644px; top: 240px; font-size: 24px; color: #FFFFFF; background: $fast; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 崩れるのは30kmから
   p#d40(left: 726px; top: 512px; font-size: 34px; font-family: n; font-style: italic; color: $coral; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) +40秒
@@ -280,7 +280,7 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
   p#sub(cx: 480px; top: 368px; font-size: 28px; font-family: m; color: $pale; white-space: nowrap; in: {y:16, opacity:0, duration:0.3, ease:'power3.out'}) 設定どおり群のうち、目標より1〜2%遅く入った812人
   # 達成率の輪 (紺の輪の上に金の弧が 0 → 47% を 0.8 秒で描く)
   div#donut(left: 44px; top: 418px; width: 230px; height: 230px; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
-    shape#ring.ellipse(left: 22px; top: 22px; width: 183px; height: 183px; background: none; border: 28px solid #263047)
+    shape#ring(left: 22px; top: 22px; width: 183px; height: 183px; border-radius: 50%; background: none; border: 28px solid #263047)
     shape#arc(path: "M76.5 15.5 L91.4 17.3 L105.3 22.7 L117.6 31.4 L127.3 42.7 L134 56.1 L137.2 70.8 L136.8 85.7 L132.7 100.1 L125.3 113.1 L114.9 123.9 L102.2 131.8 L87.9 136.4"; background: none; border: 28px solid $gold; in: draw {duration: 0.8, ease: 'power2.out'})
     p#c(cx: 50%; top: 68px; font-size: 86px; line-height: 1; font-family: n; font-style: italic; color: $gold; white-space: nowrap) [count:47 start=0 ms=800]%
     p#cl(cx: 50%; top: 156px; font-size: 22px; white-space: nowrap) 目標達成率
