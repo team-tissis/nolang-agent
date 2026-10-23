@@ -19,8 +19,10 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 
 ## 0. どの作り方か
 
-- **標準は studio** (§S): シェル・`node` (20 以上)・`python3`・`claude` (Claude Code の CLI) があれば `nolang make` を 1 回。1〜2 分で再生できる。原稿はあなたが書かない。
-- `python3` か `claude` が無い・`nolang make` が使えないと言う時は、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
+- **標準は studio** (§S): シェル・`node` (20 以上)・`python3` と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
+- **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は従来どおり 1〜2 分。
+- **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
+- `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 - **接続先を変える** (「stg で作って」「本番につないで」「localhost で」と頼まれた時だけ): `nolang use <local|dev|stg|prod>` (URL も可・`nolang use` で今の接続先・`default` で戻す)。ログインは接続先ごとなので、切り替えた先が未ログインなら上と同じくログインする。MCP の接続先はプラグインごとに固定で、切り替えられるのは CLI だけ。
@@ -30,11 +32,12 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 1. **ログイン**: §L。
 2. **依頼から決める**: 型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)・縦横 (`16:9` / `9:16`)・長さ (既定 60 秒)。聞き返さず既定で進め、決めた値は最後に伝える。決まった素材 (この写真・この曲・この声) がある時だけ §M で `ref` を得る。
 3. **作る**: `nolang make ./nolang-videos/<英小文字の名> --type <型> --aspect <縦横> --seconds <秒> --request-text "<依頼文>"` (Bash の timeout は 600000)。
+   - Codex ではコマンドに `--engine codex` を追加する。Claude Code では追加しない。
    - 依頼文 = ユーザーの依頼をそのまま + 決めた値 + 素材の `ref` (`id=<uuid>` と使い所) + 台本やテロップの文言があればそのまま。題材の事実が要る時は先に調べて依頼文に書く (著者は調べない)。
    - 既定は studio と同じ (著者 `--effort low`・担当 medium)。速さを優先する時は `--staff low`、さらに速く (質は落ちる) は `--no-staff`。見本は型から自動 (`--samples a.md,b.md` で替えられる)。
-   - サーバーが再生できる状態になった時点で返る (担当 medium で 1〜2 分・担当なしで 1 分ほど)。生成はその後も裏で最後まで続く。
+   - サーバーが再生できる状態になった時点で返る (Claude の目安は担当 medium で 1〜2 分・担当なしで 1 分ほど。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。
 4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
-5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。`python3` / `claude` が無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
+5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 
 ## L. ログイン (「NoLang にログインして」と頼まれた時も、作る前も)
 

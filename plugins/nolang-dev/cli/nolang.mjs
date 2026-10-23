@@ -3,7 +3,7 @@
 // 依存なし (Node 20+)。結果は stdout に JSON、途中経過は stderr に出す。
 // 裏は NoLang API (`v1/unstable/drafts/…`) と OAuth (MCP と同じ認可サーバー・同じアカウント)。
 
-import { spawn } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import { chmod, mkdir, open, readFile, rm, stat, writeFile } from "node:fs/promises";
@@ -668,10 +668,23 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low] [--engine claude|codex]`, { exit: EXIT.USAGE });
   }
-  for (const name of ["python3", "claude"]) {
+  const engine = flags.engine || "claude";
+  if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
+  for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では作れない (skill の write-yourself.md の手順で、自分で書いて流す)`, { exit: EXIT.FAIL });
+  }
+  if (engine === "codex") {
+    const authFile = join(process.env.CODEX_HOME || join(homedir(), ".codex"), "auth.json");
+    if (!await stat(authFile).then((s) => s.isFile(), () => false)) {
+      throw new CliError("Codex の auth.json がありません。codex login で file 保存の認証を用意してください", { exit: EXIT.AUTH });
+    }
+    try {
+      execFileSync("codex", ["login", "status"], { stdio: "ignore", timeout: 15000 });
+    } catch {
+      throw new CliError("Codex の認証を確認できません。codex login を実行してください", { exit: EXIT.AUTH });
+    }
   }
   const root = resolve(dir);
   if (await stat(join(root, "stream")).then(() => true, () => false)) throw new CliError(`${root}/stream が既にある (別の dir で作る)`, { exit: EXIT.USAGE });
@@ -680,6 +693,7 @@ async function cmdMake(positionals, flags) {
   const token = await accessToken(api, { minValidMs: 20 * 60_000 });
   await mkdir(root, { recursive: true });
   const args = [join(studio, "scripts", "stream_make.sh"), root, "--type", flags.type, "--aspect", flags.aspect || "16:9", "--seconds", String(flags.seconds || 60)];
+  if (flags.engine) args.push("--engine", engine);
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.effort) args.push("--effort", flags.effort);
@@ -694,7 +708,7 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた (${flags.type}・担当 ${flags["no-staff"] ? "なし" : flags.staff || "medium"}・著者 ${flags.effort || "low"}) — 再生できるまで待つ (1〜3 分)`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags["no-staff"] ? "なし" : flags.staff || "medium"}・著者 ${flags.effort || "low"}) — 再生できるまで待つ (1〜3 分)`);
   const startedAt = Date.now();
   const deadline = startedAt + Number(flags.timeout || 420) * 1000;
   let watch = null;
@@ -703,6 +717,7 @@ async function cmdMake(positionals, flags) {
   let polledAt = 0;
   for (;;) {
     const runOut = await readFile(join(root, "stream", "run.out"), "utf8").catch(() => "");
+    const engineFailure = engine === "codex" ? await readFile(join(root, "stream", "engine.failed"), "utf8").catch(() => "") : "";
     watch = runOut.match(/^WATCH (\S+)/m)?.[1] || watch;
     const playableLine = runOut.match(/^PLAYABLE (\S+)/m)?.[1];
     const videoId = (playableLine || watch || "").match(/[0-9a-f-]{36}/)?.[0] || null;
@@ -714,7 +729,7 @@ async function cmdMake(positionals, flags) {
       if (st?.status === "failed" || st?.status === "expired") serverFailed = st.status;
     }
     const playable = playableLine || (serverPlayable ? watch : null);
-    if (playable) {
+    if (playable && !engineFailure) {
       log(`再生できる (${Math.round((Date.now() - startedAt) / 1000)} 秒)`);
       out({
         ok: true,
@@ -727,17 +742,17 @@ async function cmdMake(positionals, flags) {
       });
       return;
     }
-    if (exited !== null || serverFailed || Date.now() > deadline) {
+    if (engineFailure || exited !== null || serverFailed || Date.now() > deadline) {
       const tail = (await readFile(join(root, MAKE_LOG), "utf8").catch(() => "")).split("\n").slice(-12).join("\n");
       const author = (await readFile(join(root, "stream", "author.out"), "utf8").catch(() => "")).split("\n").slice(-4).join("\n");
-      const timedOut = exited === null && !serverFailed;
+      const timedOut = exited === null && !serverFailed && !engineFailure;
       out({
         ok: false,
         video_id: videoId,
         watch_url: watch,
         playable: false,
         ...(watch ? { tell_user: `動画の生成を始めましたが、まだ再生できません。このページで続きを確かめてください:\n${watch}`, next: `${TELL_FIRST}。error もユーザーに伝える` } : {}),
-        error: serverFailed
+        error: engineFailure ? `Codex の生成に失敗: ${engineFailure.trim()}` : serverFailed
           ? `サーバーで動画の生成が失敗した (status ${serverFailed})`
           : timedOut
             ? "再生できるまでの待ち時間を超えた (生成は裏で続いている事がある)"
@@ -964,8 +979,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low]
-                                        NoLang の studio と同じ段取りで作る (著者と担当は claude -p)。再生できたら URL を返す
+        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low] [--engine claude|codex]
+                                        NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
   nolang start [dir] --title "…" [--seconds N]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
@@ -998,6 +1013,7 @@ const OPTIONS = {
   type: { type: "string" },
   "request-text": { type: "string" },
   request: { type: "string" },
+  engine: { type: "string" },
   effort: { type: "string" },
   staff: { type: "string" },
   "no-staff": { type: "boolean" },

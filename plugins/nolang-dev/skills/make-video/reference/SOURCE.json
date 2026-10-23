@@ -13,5 +13,24 @@
     "samples/",
     "rules.md (SKILL.md から生成)",
     "../../../studio/ (skill 一式)"
-  ]
+  ],
+  "studio_override": {
+    "ref": "feat/studio/codex-engine",
+    "base_commit": "abbcc1899b192628ca0ffed97ddf30d2214b5af2",
+    "dirty": false,
+    "synced_at": "2026-10-23T02:37:37.715654+00:00",
+    "note": "Claude のプロンプト文書・見本は元の同期版を維持し、以下の studio ファイルだけを更新。",
+    "sha256": {
+      "scripts/stream_author.py": "2c08ab15eb2ab7c4cb57265d0fbb4d19424ac8eed1a48e97af819ac994e87d06",
+      "scripts/stream_run.py": "7764e71ef789c1ba882f2aad82b54076651be817ae6971bd97088b0723a0277c",
+      "scripts/stream_make.sh": "21741d999ebfcdf856c84e1049963790754bb11df2c55cbdfe986ad1e36a1dfa",
+      "scripts/stream_pipeline.sh": "17c536ee23a6379c17d1a1ae74dffe8f3ba76707e2c382a9d7cedb6035ef42fa",
+      "scripts/stream_codex.py": "2daf735683ca60ca986dc78ada5655e4a1628ac862ceb8c15ee9f47ba17dfde6",
+      "scripts/stream_codex_pipeline.py": "df666b5f09582eb3324e284d3ef43dcef28a31445e28729aed112e79ad9bb64b",
+      "scripts/README.md": "2c950e8443cf46ca83df9b1678d7b84a3ef78e0f61d51f5774f4db095458c2d1",
+      "tests/test_stream_engine.py": "3957b9db3fa7642dd0ce921298bf477f61aa91076a1581e665a9dfcca4846c96",
+      "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "commit": "08ca5ee914dbedf678190a9bb3784550062199ac"
+  }
 }

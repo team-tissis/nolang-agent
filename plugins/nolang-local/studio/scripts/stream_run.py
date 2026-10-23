@@ -870,6 +870,25 @@ class Run:
         remote は根が閉じた時点で先に流れる)。"""
         return c == self.first_live() and not self.root_submitted
 
+    def call_role(self, args: list[str], *, timeout: int) -> subprocess.CompletedProcess[str]:
+        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。"""
+        try:
+            result = subprocess.run(
+                args, cwd=REPO or HERE.parent, env=self.env, capture_output=True, text=True, timeout=timeout
+            )
+        except Exception as exc:
+            self.fail_engine(f"{args[2]}: {exc}")
+            raise
+        if result.returncode != 0:
+            self.fail_engine(f"{args[2]}: exit {result.returncode} — {result.stderr[-400:]}")
+        return result
+
+    def fail_engine(self, reason: str) -> None:
+        if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
+            temporary = self.st / f"engine.failed.{time.time_ns()}"
+            temporary.write_text(reason + "\n")
+            temporary.replace(self.st / "engine.failed")
+
     def run_fixer(self, c: str, ff: Path, *, review: bool = False, shots: list[Path] | None = None) -> tuple[bool, str]:
         """直し役 (claude -p) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。根の持ち主の cut なら根の 2 file も
         直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。review = 見直し (effort は --review)・shots = 見直しに見せる静止画。"""
@@ -877,7 +896,7 @@ class Run:
         src = self.solo / f"cut_{c}.txt"
         before = src.read_text()
         for attempt in (0, 1):
-            r = subprocess.run(
+            r = self.call_role(
                 [
                     PY,
                     str(AUTHOR),
@@ -891,13 +910,14 @@ class Run:
                     *(["--review"] if review else []),
                     *(["--shots", ",".join(str(x) for x in shots)] if shots else []),
                 ],
-                cwd=REPO or HERE.parent,
-                env=self.env,
-                capture_output=True,
-                text=True,
                 timeout=600,
             )
-            if r.returncode != 0 and "FileNotFoundError" in r.stderr and attempt == 0:
+            if (
+                os.environ.get("NOLANG_STUDIO_ENGINE") != "codex"
+                and r.returncode != 0
+                and "FileNotFoundError" in r.stderr
+                and attempt == 0
+            ):
                 time.sleep(2)  # claude の shim が一瞬見つからない事がある → 1 回だけやり直す
                 continue
             break
@@ -1221,12 +1241,8 @@ class Run:
         self.write_defs_before(c)
         before = src.read_text()  # 担当の前の block (著者の版 + 前方から移した定義) — 担当が消した定義を戻す基準
         t = time.time()
-        r = subprocess.run(
+        r = self.call_role(
             [PY, str(AUTHOR), "staff", str(self.project), c, str(ff), "--effort", self.staff_effort or "medium"],
-            cwd=REPO or HERE.parent,
-            env=self.env,
-            capture_output=True,
-            text=True,
             timeout=900,
         )
         if r.returncode == 0 and "---timeline---" in r.stdout:
@@ -1821,6 +1837,8 @@ class Run:
         playable_seen = False
         failures = 0
         while True:
+            if self.engine_failed():
+                return self.abort_engine()
             try:
                 r = self.remote_get(f"/v1/videos/{self.remote_video_id}/")
             except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
@@ -1867,7 +1885,9 @@ class Run:
         self.log(event="stream_launched", pid=self.stream_proc.pid)
 
     def stream_alive(self) -> bool:
-        return self.remote is not None or (self.stream_proc is not None and self.stream_proc.poll() is None)
+        return not self.engine_failed() and (
+            self.remote is not None or (self.stream_proc is not None and self.stream_proc.poll() is None)
+        )
 
     def intake_check(self, prefix: str, text: str, *, ended: bool) -> list[str]:
         """投入検査 (製品の API と同じ関数・常駐 server で回す): 投入済みの prefix の後ろに text を足して良いか → DEFECT の行。remote は
@@ -1894,6 +1914,12 @@ class Run:
         """cut の text を流す。remote は server の応答 (受理 {"sealed": True} / 拒否 {"rejected": 理由}) をそのまま返す。local の stream は
         file を置いた時点で {"queued": feed 番号} を返し、受理 / 拒否は `watch_acks` が後から記録する (受理を待たずに次の cut を流す —
         seal は organizer が順に処理するので順は守られる。拒否は欠陥 2 件を直してから 0 本)。None = 流す先が死んだ。"""
+        if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
+            # 著者が末尾まで成功したと確認してから end を送る。
+            while end and not (self.st / "src.done").exists() and not self.engine_failed():
+                time.sleep(0.1)
+            if self.engine_failed():
+                return None
         if self.remote is not None:
             try:
                 r = self.remote_post(f"/v1/unstable/drafts/{self.remote_video_id}/cuts/", {"text": text, "end": end})
@@ -2073,9 +2099,22 @@ class Run:
         (self.studio / "src.json").write_text(json.dumps(src, ensure_ascii=False, indent=1))
         self.log(event="written_back", cuts=cuts)
 
+    def engine_failed(self) -> bool:
+        return os.environ.get("NOLANG_STUDIO_ENGINE") == "codex" and (self.st / "engine.failed").exists()
+
+    def abort_engine(self) -> int:
+        self.log(event="engine_failed", reason=(self.st / "engine.failed").read_text()[:400])
+        if self.remote_video_id is not None:
+            self.remote_abort("Codex の生成に失敗")
+        elif self.stream_proc is not None:
+            self.stream_proc.terminate()
+        return 1
+
     def run(self) -> int:
         self.log(event="orchestrator_start")
         while not (self.solo / "order.txt").exists():
+            if self.engine_failed():
+                return self.abort_engine()
             if (
                 time.time() - self.t0 > 300 or (self.st / "src.done").exists()
             ):  # 根 call が死んだ (claude が無い等) → 待ち続けない
@@ -2085,6 +2124,8 @@ class Run:
         time.sleep(0.2)
         self.order = [l.strip() for l in (self.solo / "order.txt").read_text().splitlines() if l.strip()]
         self.log(event="plan_seen", cuts=self.order)
+        if self.engine_failed():
+            return self.abort_engine()
         if self.remote is not None:
             self.remote_start()
             for c in self.order:
@@ -2104,8 +2145,17 @@ class Run:
             threads.append(threading.Thread(target=self.watch_acks, daemon=True))
         for t in threads:
             t.start()
-        for t in threads:
-            t.join()
+        if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
+            while any(t.is_alive() for t in threads):
+                if self.engine_failed():
+                    return self.abort_engine()
+                for t in threads:
+                    t.join(timeout=0.1)
+            if self.engine_failed():
+                return self.abort_engine()
+        else:
+            for t in threads:
+                t.join()
         if self.remote is not None:
             return self.remote_wait()
         assert self.stream_proc is not None

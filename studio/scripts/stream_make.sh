@@ -9,7 +9,7 @@
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の <type>_NN 1 本 + hf_<type>_* 1 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
 # 出来上がり: <project>/studio/out/video.mp4 (再生開始の時点から製品の HLS (static/video_generate/<process>/) が伸びる)・stream/run.jsonl に時刻の記録。
-# 前提は SKILL.md の「前提 (環境)」。著者と担当は `claude -p` なので claude CLI の login が要る。
+# 前提は SKILL.md の「前提 (環境)」。--engine claude (既定) / codex の CLI と login が要る。
 set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../../../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
@@ -17,9 +17,11 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 [ $# -ge 1 ] || { sed -n 2,11p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
+ENGINE=claude
 TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; TEMPLATE=""; FIX=low; REVIEW=medium; LOOK=""
 while [ $# -gt 0 ]; do
   case "$1" in
+    --engine) ENGINE=$2; shift 2;;
     --type) TYPE=$2; shift 2;;
     --aspect) ASPECT=$2; shift 2;;
     --seconds) SECONDS_=$2; shift 2;;
@@ -38,6 +40,13 @@ while [ $# -gt 0 ]; do
     *) echo "unknown arg: $1" >&2; exit 2;;
   esac
 done
+case "$ENGINE" in claude|codex) ;; *) echo "--engine は claude / codex" >&2; exit 2;; esac
+export NOLANG_STUDIO_ENGINE="$ENGINE"
+if [ "$ENGINE" = codex ]; then
+  command -v codex >/dev/null || { echo "codex がありません" >&2; exit 2; }
+  [ -f "${CODEX_HOME:-$HOME/.codex}/auth.json" ] || { echo "Codex の auth.json がありません。codex login で file 保存の認証を用意してください" >&2; exit 3; }
+  codex login status >/dev/null 2>&1 || { echo "codex login を先に実行してください" >&2; exit 3; }
+fi
 [ -n "$TYPE" ] || { echo "--type が要る (concept|data|compare|story|cinematic)" >&2; exit 2; }
 [ -n "$REQ_FILE" ] || [ -n "$REQ_TEXT" ] || { echo "--request <file> か --request-text が要る" >&2; exit 2; }
 [ ! -e "$P/stream" ] || { echo "$P/stream が既にある (別の名にするか消す)" >&2; exit 2; }

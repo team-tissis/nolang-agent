@@ -12,6 +12,9 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
       # プラグインの中身が正本 (packages/cli・skills) どおりか + CLI の単体テスト
       - run: npm run check
       # npm に載る中身 (公開はしない)

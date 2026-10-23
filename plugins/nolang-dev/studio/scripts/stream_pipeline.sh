@@ -9,6 +9,9 @@ ROOT=$(cd "$S/../../../.." && pwd)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; RUN_ENV="PYTHONPATH=$ROOT STUDIO_SERVER_SOCK=$ROOT/tmp/studio/.server/sock"; else RUN_ENV=""; fi  # repo の外 (plugin) は --remote だけ
 mkdir -p "$P/stream"
+if [ "${NOLANG_STUDIO_ENGINE:-claude}" = codex ]; then
+  exec env $RUN_ENV "$PY" "$S/stream_codex_pipeline.py" "$P" "$@"
+fi
 $PY "$S/stream_author.py" run "$P" "$@" > "$P/stream/author.out" 2>&1 &
 A=$!
 sleep 1

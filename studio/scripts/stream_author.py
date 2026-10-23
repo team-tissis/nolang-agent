@@ -27,11 +27,13 @@ import json
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import threading
 import time
 import unicodedata
+from collections.abc import Callable
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -844,6 +846,37 @@ def stream_claude(
     return result
 
 
+def stream_model(
+    st: Path,
+    prompt: str,
+    on_text: Callable[[str], None],
+    *,
+    system_prompt: Path,
+    effort: str,
+    tag: str,
+    cache_ttl: str | None = None,
+    images: list[Path] | None = None,
+) -> dict[str, object]:
+    """制御と原稿形式は共通にし、明示された実行エンジンだけを切り替える。"""
+    engine = os.environ.get("NOLANG_STUDIO_ENGINE", "claude")
+    if engine == "claude":
+        return stream_claude(
+            st, prompt, on_text, system_prompt=system_prompt, effort=effort, tag=tag, cache_ttl=cache_ttl, images=images
+        )
+    if engine != "codex":
+        raise ValueError(f"unknown studio engine: {engine}")
+    from stream_codex import stream_codex
+
+    try:
+        stream_codex(st, prompt, on_text, system_prompt=system_prompt, effort=effort, tag=tag, images=images)
+    except BaseException as exc:
+        failure = st / f"engine.failed.{tag}.tmp"
+        failure.write_text(f"{tag}: {type(exc).__name__}: {exc}\n")
+        failure.replace(st / "engine.failed")
+        raise
+    return {}
+
+
 def warmup(st: Path, system_prompt: Path) -> None:
     """担当・直し役の system prompt (見本込み・84〜105k token) を著者の call と並んで 1 回だけ cache に書く。担当は cut が出始めると
     数秒差で 2 本以上起動し、まだ書けていないとそれぞれが全量を書く (nt03 は 2 本で $1.71 / nt04・nt10 も同じ)。著者が書いている間に
@@ -896,10 +929,11 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         if same := [n for n in samples if same_topic(n, request)]:
             log(st, event="samples_same_topic", samples=same)
     # 担当・直し役の system prompt (見本込み — 同じ見本の run どうしで cache を共有する)。著者の call と並んで 1 回だけ温める
-    warm = threading.Thread(
-        target=warmup, args=(st, build_system_prompt(st / "system_prompt.md", samples)), daemon=True
-    )
-    warm.start()
+    shared_prompt = build_system_prompt(st / "system_prompt.md", samples)
+    warm = None
+    if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
+        warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
+        warm.start()
     # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
     # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
     sp = build_system_prompt(st / "system_prompt_author.md", None)
@@ -919,13 +953,17 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     )
     prompt = author_prompt(typ, aspect, seconds, skeleton_d, skeleton_t, request, samples_text(samples))
     sp0 = Splitter(proj, st, "author")
-    stream_claude(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
+    stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     sp0.finish()
-    (st / "src.done").touch()
-    warm.join(timeout=30)  # warmup の記録を残してから終わる (著者の call の方が長いので普通は終わっている)
+    if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
+        (st / "src.done").touch()
+    if warm is not None:
+        warm.join(timeout=30)  # warmup の記録を残してから終わる (著者の call の方が長いので普通は終わっている)
     if not all((proj / f).exists() for f in ("order.txt", "root_design.txt", "root_timeline.txt")):
         log(st, event="root_failed", have=sorted(p.name for p in proj.iterdir()))
         return 1
+    if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
+        (st / "src.done").touch()
     log(st, event="src_done", cuts=sp0.order)
     return 0
 
@@ -977,7 +1015,7 @@ def fix(
     root_d, root_t = (proj / "root_design.txt").read_text(), (proj / "root_timeline.txt").read_text()
     block = (proj / f"cut_{name}.txt").read_text()
     out: list[str] = []
-    stream_claude(
+    stream_model(
         st,
         fix_prompt(
             name,
@@ -1048,7 +1086,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
     planned_s = sum(sec for _, sec in plan_names(plan))
     _typ, _aspect, target_s = (project / "params.txt").read_text().split()
     out: list[str] = []
-    stream_claude(
+    stream_model(
         st,
         staff_prompt(
             name,
@@ -1076,6 +1114,12 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
 
 
 def main(argv: list[str]) -> int:
+    if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
+
+        def interrupted(_signum: int, _frame: object) -> None:
+            raise SystemExit(143)
+
+        signal.signal(signal.SIGTERM, interrupted)
     if len(argv) < 2:
         print(__doc__)
         return 2

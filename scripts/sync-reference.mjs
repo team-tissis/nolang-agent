@@ -23,8 +23,11 @@ const STUDIO_SKIP = new Set(["__pycache__", ".DS_Store"]);
 // remote の段取りの script。check / 素材 / 描画はサーバーがするので、backend の repo の中でだけ動く script (studio.py・studio_lint.py …) は要らない
 const STUDIO_FILES = [
   "SKILL.md",
+  "scripts/README.md",
+  "tests/test_stream_engine.py",
+  "tests/__init__.py",
   ...["authoring.md", "capabilities.md", "looks.md", "sounds.md", "samples", "scaffolds"].map((name) => `reference/${name}`),
-  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_run.py", "studio_rules.py", "studio_new.py"].map((name) => `scripts/${name}`),
+  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_rules.py", "studio_new.py"].map((name) => `scripts/${name}`),
 ];
 
 const args = process.argv.slice(2);
