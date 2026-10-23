@@ -797,6 +797,29 @@ async function readStream(root) {
   }
 }
 
+// server が受理済みの cut 名 (真実) と手元の台帳 (stream.json) を照合する。応答を失った投入 (server は受理したのに
+// 台帳に無い) は原稿の cut を台帳へ回収する。server の名が原稿と食い違えば止める。status が読めない (古い server・
+// 一時的な失敗) ときは手元の台帳のまま続ける。
+async function resyncSubmitted(api, state, cuts) {
+  let server = null;
+  try {
+    server = (await callApi(api, "GET", `/v1/unstable/drafts/${state.video_id}/`)).submitted_cuts;
+  } catch {
+    return;
+  }
+  if (!Array.isArray(server) || server.length <= state.submitted.length) return;
+  for (const [index, name] of server.entries()) {
+    const cut = index < state.submitted.length ? state.submitted[index] : cuts[index];
+    if (!cut || cut.name !== name) {
+      throw new CliError(`server の投入済み cut (${server.join(" → ")}) と手元 (台帳 + 原稿) が食い違う — 投入した cut の順と名は変えられない`, { exit: EXIT.FAIL });
+    }
+    if (index >= state.submitted.length) {
+      state.submitted.push({ name: cut.name, text: cut.text });
+      log(`cut ${cut.name} は server が受理済み (応答を失った投入) — 台帳へ回収`);
+    }
+  }
+}
+
 async function cmdStart(positionals, flags) {
   const { root, design } = await readSrc(positionals[0]);
   if (await stat(join(root, STREAM_FILE)).then(() => true, () => false)) {
@@ -820,12 +843,14 @@ async function cmdStart(positionals, flags) {
 async function cmdSubmit(positionals, flags) {
   const { root, design, timeline } = await readSrc(positionals[0]);
   const state = await readStream(root);
-  const { pending, changed } = pendingCuts(splitCuts(design, timeline), state.submitted);
+  const api = flags.api ? apiUrl(flags.api) : state.api || (await resolveApi(flags));
+  const cuts = splitCuts(design, timeline);
+  await resyncSubmitted(api, state, cuts);
+  const { pending, changed } = pendingCuts(cuts, state.submitted);
   for (const name of changed) log(`注意: 投入済みの cut ${name} が手元で変わった — サーバーには送り直せない (出した物のまま続く)`);
   if (!pending.length && !flags.end) throw new CliError("まだ投入していない cut が無い (design.txt と timeline.txt に次の cut を書き足す)", { exit: EXIT.USAGE });
   const idle = Math.round((Date.now() - state.last_submit_at) / 1000);
   if (idle > IDLE_LIMIT_S) log(`注意: 前の投入から ${idle} 秒 — ${IDLE_LIMIT_S} 秒を超えるとサーバーが生成を失敗にしている事がある`);
-  const api = flags.api ? apiUrl(flags.api) : state.api || (await resolveApi(flags));
   const wasFirst = state.submitted.length === 0;
   const sent = [];
   const save = () => writeFile(join(root, STREAM_FILE), JSON.stringify(state, null, 2) + "\n");
@@ -833,6 +858,21 @@ async function cmdSubmit(positionals, flags) {
     try {
       await callApi(api, "POST", `/v1/unstable/drafts/${state.video_id}/cuts/`, { text: cut ? cut.text : "", end });
     } catch (error) {
+      // 409 = 投入の交錯 (検査した prefix が投入の前に動いた)。server が次の位置にちょうどこの cut を受理済みなら、
+      // 応答を失った投入の再送 — 台帳へ回収して続ける。それ以外は server の真実を見せて止める (再実行が照合して直す)
+      if (error.data?.status === 409) {
+        const server = error.data.submitted_cuts;
+        if (cut && Array.isArray(server) && server[state.submitted.length] === cut.name) {
+          state.submitted.push({ name: cut.name, text: cut.text });
+          state.last_submit_at = Date.now();
+          log(`cut ${cut.name} は server が受理済み (応答を失った投入) — 台帳へ回収して続ける`);
+          return true;
+        }
+        await save();
+        out({ ok: false, video_id: state.video_id, cut: cut?.name, error: error.data?.error || error.message, submitted: state.submitted.map((c) => c.name), server_cuts: server || [], fix: "もう一度 nolang submit (server の受理状態と照合して続きから投入する)" });
+        process.exitCode = EXIT.FAIL;
+        return false;
+      }
       await save();
       const defects = error.data?.defects || [];
       printDefects(defects);
