@@ -153,8 +153,8 @@ panel#ov_fee(left: 96px; top: 752px; width: 1728px; height: 168px; in: {y:30, op
     p#t(left: 0px; top: 0px; font-size: 22px; font-family: m; color: $ink2) 送料
     p#v(left: 0px; top: 28px; font-size: 64px; line-height: 1.05; font-family: n; color: $amber) 550{yen}円{/}
     p#n(left: 0px; top: 96px; font-size: 21px; font-family: m; color: $ink2) 5,000円以上で無料
-  node#nd(left: "347;489;665;807"; top: 84px; in: {x:-16, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.14}}; t: "カート;配送先入力;支払い;完了") ×4
   shape#ar(left: "439;615;757"; top: 108px; width: 64px; height: 15px; path: arrow_r; background: #FFFFFF4D; border: 3px solid #FFFFFF4D; in: {x:-16, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.14}}) ×3
+  node#nd(left: "347;489;665;807"; top: 84px; in: {x:-16, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.14}}; t: "カート;配送先入力;支払い;完了") ×4
   pill#first(left: 690px; top: 20px) ここで初めて送料が表示される
   div#stem(left: 864px; top: 62px; width: 2px; height: 22px; background: #FFB547B3; in: {opacity:0, duration:0.3})
 
@@ -299,15 +299,15 @@ panel#aba(left: 96px; top: 230px; width: 852px; height: 172px; in: {y:22, opacit
   p#bd(left: 28px; top: 24px; font-size: 22px; font-family: n; color: #0B1015; background: $slate; border-radius: 8px; padding: 4px 14px) A
   p#tt(left: 112px; top: 22px; font-size: 26px) 現行：配送先入力で送料を表示
   p#ppl(right: 30px; top: 18px; font-size: 22px; color: $ink2) {n23}1,500{/}人
-  node#nd(left: "19;118;245;344"; top: 84px; font-size: 21px; padding: 14px 18px; color: "$ink2;#FFE1B0;$ink2;$ink2"; background: "#FFFFFF0D;#FFB5471F;#FFFFFF0D;#FFFFFF0D"; border: "2px solid #FFFFFF24;2px solid #FFB547D9;2px solid #FFFFFF24;2px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   shape#ar(left: "90;217;316"; top: 104px; width: 34px; height: 15px; path: arrow_r; background: #FFFFFF4D; border: 3px solid #FFFFFF4D) ×3
+  node#nd(left: "19;118;245;344"; top: 84px; font-size: 21px; padding: 14px 18px; color: "$ink2;#FFE1B0;$ink2;$ink2"; background: "#FFFFFF0D;#FFB5471F;#FFFFFF0D;#FFFFFF0D"; border: "2px solid #FFFFFF24;2px solid #FFB547D9;2px solid #FFFFFF24;2px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   p#tag(left: 276px; top: 68px; font-size: 16px; color: #1A1206; background: $amber; border-radius: 148px; padding: 2px 10px; overlap: aba.nd[2]; in: {scale:0.5, opacity:0, duration:0.5, ease:'back.out(1.6)'}) 送料
 panel#abb(left: 972px; top: 230px; width: 852px; height: 172px; in: {y:22, opacity:0, duration:0.6, ease:'power3.out'})
   p#bd(left: 28px; top: 24px; font-size: 22px; font-family: n; color: #0B1015; background: $teal; border-radius: 8px; padding: 4px 14px) B
   p#tt(left: 112px; top: 22px; font-size: 26px) カートで送料を表示
   p#ppl(right: 30px; top: 18px; font-size: 22px; color: $ink2) {n23}1,500{/}人
-  node#nd(left: "19;118;245;344"; top: 84px; font-size: 21px; padding: 14px 18px; color: "#FFE1B0;$ink2;$ink2;$ink2"; background: "#FFB5471F;#FFFFFF0D;#FFFFFF0D;#FFFFFF0D"; border: "2px solid #FFB547D9;2px solid #FFFFFF24;2px solid #FFFFFF24;2px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   shape#ar(left: "90;217;316"; top: 104px; width: 34px; height: 15px; path: arrow_r; background: #FFFFFF4D; border: 3px solid #FFFFFF4D) ×3
+  node#nd(left: "19;118;245;344"; top: 84px; font-size: 21px; padding: 14px 18px; color: "#FFE1B0;$ink2;$ink2;$ink2"; background: "#FFB5471F;#FFFFFF0D;#FFFFFF0D;#FFFFFF0D"; border: "2px solid #FFB547D9;2px solid #FFFFFF24;2px solid #FFFFFF24;2px solid #FFFFFF24"; t: "カート;配送先入力;支払い;完了") ×4
   p#tag(left: 86px; top: 68px; font-size: 16px; color: #1A1206; background: $amber; border-radius: 148px; padding: 2px 10px; overlap: abb.nd[1]; in: {scale:0.5, opacity:0, duration:0.5, ease:'back.out(1.6)'}) 送料
 p#ab_note(cx: 960px; top: 412px; font-size: 20px; font-family: m; color: $ink3; in: {opacity:0, duration:0.5}) 4週の後の2週間 ｜ カートに入れた人を半分ずつ A・B に分けて比較
 panel#abr(left: 96px; top: 452px; width: 1170px; height: 468px)

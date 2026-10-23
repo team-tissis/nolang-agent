@@ -148,9 +148,9 @@ card#tr_sh(left: 1136px; top: 540px; width: 688px; height: 348px; in: {y:34, opa
   svg#w0(left: 32px; top: 74px; width: 158px; height: 158px; part: waf)
   svg#w1(left: 362px; top: 74px; width: 158px; height: 158px; part: waf)
   # 埋まるマス (2021 年は 2 マス + 2 割のマス・2025 年は 9 マス)・最下段の左から 1 マスずつ
-  div#f0(left: "21;31.7"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $ai; z-index: front; in: {opacity:0, duration:.03, stagger:{each:.08}}) ×2
-  div#f0p(left: 63px; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: linear($ai,$ai@20%,$paper3@20%,$paper3,90); z-index: front; in: {opacity:0, duration:.03})
-  div#f1(left: "241;251.7;262.3;273;283.7;294.3;305;315.7;326.3"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $shu; z-index: front; in: {opacity:0, duration:.03, stagger:{each:.07}}) ×9
+  div#f0(left: "21;31.7"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $ai; in: {opacity:0, duration:.03, stagger:{each:.08}}) ×2
+  div#f0p(left: 63px; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: linear($ai,$ai@20%,$paper3@20%,$paper3,90); in: {opacity:0, duration:.03})
+  div#f1(left: "241;251.7;262.3;273;283.7;294.3;305;315.7;326.3"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $shu; in: {opacity:0, duration:.03, stagger:{each:.07}}) ×9
   p#y0(left: 207px; top: 126px; font-size: 22px; font-family: b; color: $ink2) 2021年
   p#p0(left: 207px; top: 156px; font-size: 46px; line-height: 1.1; font-family: m; in: {opacity:0, duration:.25}) [count:2.2 start=0 ms=600]%
   p#d0(left: 207px; top: 210px; font-size: 18px; color: $ink2) 14万8,000人中
@@ -192,7 +192,7 @@ board#mx_bd(left: 96px; width: 1064px)
 shape#mx_arrow(path: "M306.3 528 H358.3 M349 520.7 L359.7 528 L349 535.3"; background: none; border: 3px solid $shu; in: draw {duration: 0.6})
 card#mx_cd(left: 1196px; top: 252px; width: 628px; height: 636px; delay: 1300; in: {x:40, opacity:0, duration:.7, ease:'power3.out'})
   img#ph(left: 0px; top: 0px; width: 628px; height: 195px; border-radius: 6px 6px 0px 0px; subject: center 60%; room: bottom 25%; main: kb {scale: [1.1, 1], focus: ['50% 60%', '50% 60%']}) [photo]Travelers from several different countries walking up a gentle stone-paved slope in a Japanese hot-spring town in soft daylight, pulling small suitcases and carrying backpacks, seen from behind at a moderate distance, the group in the middle of the frame, wooden inns on both sides and drifting steam around them, a mountain in the distance. Wide panoramic composition; the bottom fifth is plain stone pavement for a caption band.
-  div#cap(left: 0px; top: 142px; width: 628px; height: 52px; background: linear(#14100CCC,#14100C00,0); z-index: front; delay: 2000; in: {y:12, opacity:0, duration:.5, ease:'power2.out'})
+  div#cap(left: 0px; top: 142px; width: 628px; height: 52px; background: linear(#14100CCC,#14100C00,0); delay: 2000; in: {y:12, opacity:0, duration:.5, ease:'power2.out'})
     p#t(left: 22px; cy: 50%; font-size: 21px; letter-spacing: .04em; font-family: b; color: $lt6) 遠方からの旅行者が増えた
   ctitle#t(top: 219px; in: {opacity:0, duration:.5}) 人数の変化（2021年 → 2025年）
   div#r0(left: 32px; top: 252px; width: 566px; height: 124px; in: {y:18, opacity:0, duration:.5, ease:'power2.out'})
@@ -269,10 +269,10 @@ board#se_bd(left: 96px; width: 1728px)
   btitle#t {fg}図4{/}  {tt}月別の外国人宿泊者数{/}  （2025年・人）
   brule#r(width: 1665px)
   div#bar(left: "58;147.3;236.7;326;415.3;504.6;594;683.3;772.6;862;951.3;1040.6"; top: "175.3;188.7;250.9;219.8;268.7;306.9;292.7;282;305.1;210.9;179.8;205.6"; width: 80px; height: "186.7;173.3;111.1;142.2;93.3;55.1;69.3;80;56.9;151.1;182.2;156.4"; background: $mute; border-radius: 2px; delay: 1000; in: {scaleY:0, duration:.55, ease:'power3.out', pivot:'bottom', stagger:{each:.07}}) ×12
-  p#val(left: "40;129.3;218.7;308;397.3;486.6;576;665.3;754.6;844;933.3;1022.6"; top: "153;166.3;228.6;197.4;246.3;284.6;270.3;259.7;282.8;188.6;157.4;183.2"; width: 134px; font-size: 21px; line-height: 1.2; font-family: b; text-align: center; delay: 1250; in: {y:10, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.07}}) ×12 2,100;1,950;1,250;1,600;1,050;620;780;900;640;1,700;2,050;1,760
   p#mon(left: "40;129.3;218.7;308;397.3;486.6;576;665.3;754.6;844;933.3;1022.6"; top: 550px; width: 134px; font-size: 22px; text-align: center; color: $ink2; delay: 1000; in: {opacity:0, duration:.4, stagger:{each:.04}}) ×12 1月;2月;3月;4月;5月;6月;7月;8月;9月;10月;11月;12月
   thumb#ts(left: 36px; top: 100px) [photo]A steaming outdoor rock hot-spring bath at a Japanese mountain inn in deep winter, thick snow on the rocks and pine branches, snowflakes falling, cool blue morning light with warm steam, no people, the bath in the center of the frame.
   thumb#ta(left: 194px; top: 100px; in: {scale:.85, opacity:0, rotation:3, duration:.55, ease:'back.out(1.6)'}) [photo]A Japanese hot-spring town at the peak of autumn foliage, a small vermilion arched wooden bridge over a clear mountain river in the center of the frame, maple trees in crimson and orange covering the slopes, light steam over the water, soft overcast light, no people.
+  p#val(left: "40;129.3;218.7;308;397.3;486.6;576;665.3;754.6;844;933.3;1022.6"; top: "153;166.3;228.6;197.4;246.3;284.6;270.3;259.7;282.8;188.6;157.4;183.2"; width: 134px; font-size: 21px; line-height: 1.2; font-family: b; text-align: center; delay: 1250; in: {y:10, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.07}}) ×12 2,100;1,950;1,250;1,600;1,050;620;780;900;640;1,700;2,050;1,760
   p#c1(left: 351px; top: 99px; font-size: 72px; line-height: 1; font-family: m; color: $shu; in: {x:-12, opacity:0, duration:.5, ease:'power2.out'}) [count:37 start=0 ms=800]%
   p#l1(left: 351px; top: 174px; font-size: 21px; color: $ink2; white-space: nowrap; in: {x:-12, opacity:0, duration:.5, ease:'power2.out'}) 雪の{bk}1〜2月{/}＋紅葉の{bk}11月{/}（3か月）
   div#co2(left: 740px; top: 92px; width: 495px; height: 112px; in: {y:20, opacity:0, duration:.5, ease:'power2.out'})

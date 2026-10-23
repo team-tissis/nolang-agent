@@ -38,7 +38,7 @@ img#hk_p(inset: 0; main: kb {scale: [1, 1.12], focus: ['50% 65%', '50% 62%']}) [
 veil#hk_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.5)
 kick#hk_k(left: 72px; top: 132px) SHOWA ERA — JAPAN
 rule#hk_r(left: 72px; top: 192px)
-h1#hk_h(left: 72px; top: 234px) 昔、日本の{a}川{/}には
+h1#hk_h(left: 72px; top: 234px; font-weight: 700) 昔、日本の{a}川{/}には
 
 section#name
 img#nm_p(inset: 0) [ref:@otter]緑の澄んだ川を水中で体を伸ばして泳ぐニホンカワウソの全身の横からの引き、泡の筋、川底の小石、画面の左下寄り
@@ -54,14 +54,14 @@ img#lf_p(inset: 0; main: kb {scale: [1.08, 1], focus: '50% 55%'}) 昭和の田�
 veil#lf_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.45)
 kick#lf_k(left: 72px; top: 132px) NEIGHBORS
 rule#lf_r(left: 72px; top: 192px)
-h1#lf_h(left: 72px; top: 234px) 日本人の[br]{a}すぐそば{/}で
+h1#lf_h(left: 72px; top: 234px; font-weight: 700) 日本人の[br]{a}すぐそば{/}で
 
 section#vanish
 img#vn_p(inset: 0; main: kb {scale: [1, 1.06], focus: '40% 50%'}) 夕暮れの誰もいない川岸、葦と濡れた岩、水面に長い影、寂しい空気
 veil#vn_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.45)
 kick#vn_k(left: 72px; top: 132px) FADING
 rule#vn_r(left: 72px; top: 192px)
-h1#vn_h(left: 72px; top: 234px; font-size: 69px) その姿は[br]少しずつ{b}消えて{/}いく
+h1#vn_h(left: 72px; top: 234px; font-size: 69px; font-weight: 700) その姿は[br]少しずつ{b}消えて{/}いく
 
 section#causes
 img#cz_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}) コンクリートの護岸で固められた濁った川、遠くに工場の煙突と重機、灰色の空、生き物の気配のない水面
@@ -86,14 +86,14 @@ veil#mm_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.5)
 kick#mm_k(left: 72px; top: 132px) ONLY IN MEMORY
 rule#mm_r(left: 72px; top: 192px)
 p#mm_s(left: 72px; top: 234px; font-size: 48px; font-family: s; color: $mute; in: fade {duration: 0.7}) たった数十年で
-h1#mm_h(left: 72px; top: 318px; font-size: 75px) {b}記憶{/}の中だけの[br]存在に
+h1#mm_h(left: 72px; top: 318px; font-size: 75px; font-weight: 700) {b}記憶{/}の中だけの[br]存在に
 
 section#ending
 img#ed_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['50% 60%', '50% 55%']}) [ref:@otter]朝の光が差し込む澄んだ川を、背を向けて上流へ泳いでいくニホンカワウソ、水面のきらめき、緑の木々、希望のある静けさ
 veil#ed_v(color: #F4EEE2; opacity: 0.85; to: top; start: 0.45)
 kick#ed_k(left: 72px; top: 132px) IF WE COULD RETURN
 rule#ed_r(left: 72px; top: 192px)
-h1#ed_h(left: 72px; top: 234px; font-size: 69px) あの日の{a}川{/}に[br]戻れたなら
+h1#ed_h(left: 72px; top: 234px; font-size: 69px; font-weight: 700) あの日の{a}川{/}に[br]戻れたなら
 ```
 
 ```timeline.txt
@@ -118,14 +118,14 @@ se "夏の田舎の川辺の環境音、せせらぎと蝉の声" -8dB to=5s fad
 
 *** vanish
 se "夕暮れの川辺に吹く寂しい風の音" -8dB to=6s fade=300,1500
-@n: [silence:+0.3s]でも、いつからか、[>#vn_h]その姿は少しずつ[!#vn_p gray,duration=1800]消えていきます。[silence:0.6s]
+@n: [silence:+0.3s]でも、いつからか、[>#vn_h]その姿は少しずつ[!#vn_p to,{filter:'saturate(0)', duration:1.8}]消えていきます。[silence:0.6s]
 transition wipe,600,dir=left
 
 *** causes
 se "遠くの工事現場の重機の低い音" -10dB to=9s fade=300,1500
 @n: [silence:+0.3s][>#cz[1]]毛皮をとるために捕まえられ、
 @: [>#cz[2]]川は開発され、
-@: [>#cz[3]]水が汚れ、[>#cz[4]]餌となる魚も[!#cz_p gray,duration=1500]減っていきました。[silence:0.6s]
+@: [>#cz[3]]水が汚れ、[>#cz[4]]餌となる魚も[!#cz_p to,{filter:'saturate(0)', duration:1.5}]減っていきました。[silence:0.6s]
 transition dip,400
 [<#music -400]
 

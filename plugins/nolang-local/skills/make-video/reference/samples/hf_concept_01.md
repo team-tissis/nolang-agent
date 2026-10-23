@@ -158,8 +158,8 @@ img#cf_b(inset: 0; content: @conf; filter: blur(9px); delay: 3500; in: fade {dur
 tablet#tc(left: 429px; top: 136px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
   form_page#p1(left: 16px; top: 86px; scale: 0.9)
   help_panel#hp(left: 726px; top: 122px; scale: 0.9)
-  dropdown#dd(left: 56px; top: 392px; scale: 0.9; z-index: front; overlap: tc.p1)
-  shape#tch(left: 568px; top: 338px; width: 48px; height: 48px; border-radius: 50%; background: #0E2A4729; border: 3px solid #FFFFFFF2; z-index: front; in: {x:234, y:123, opacity:0, duration:0.9, ease:'power2.inOut'}; overlap: tc.p1,tc.hp)
+  dropdown#dd(left: 56px; top: 392px; scale: 0.9; overlap: tc.p1)
+  shape#tch(left: 568px; top: 338px; width: 48px; height: 48px; border-radius: 50%; background: #0E2A4729; border: 3px solid #FFFFFFF2; in: {x:234, y:123, opacity:0, duration:0.9, ease:'power2.inOut'}; overlap: tc.p1,tc.hp)
 telop#cf_tel 「{bb}誰かに聞きたい{/}」と思う瞬間
 
 # つなぐ: 画面を押す指の波紋 → 白地で 2 人の顔を弧で結び、点が渡って「つなぐ。」
@@ -267,12 +267,12 @@ div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22p
   div#vf(left: 72px; top: 372px; width: 3px; height: 3px; background: $a)
   div#s(left: 48px; top: "216;283;349;416"; width: 684px; height: 96px) ×4
     shape#d(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; border: 3px solid $line)
-    p#n(left: 20px; cy: 50%; font-size: 21px; font-family: e; color: $mute) 1;2;3;4
     p#nm(left: 76px; cy: 50%; font-size: 27px; color: $mute; letter-spacing: 0.05em) お客様情報の入力;ご契約プランの選択;お支払い方法の登録;内容の確認・完了
     p#st(left: 570px; cy: 50%; font-size: 16px; font-family: b; color: $a; in: fade {duration: 0.3}; out: fade {duration: 0.25}) サポート中
     shape#cur(left: -8px; cy: 50%; width: 68px; height: 68px; border-radius: 50%; background: none; border: 3px solid #1F6FE059; in: {scale:0.8, opacity:0, duration:0.35}; out: fade {duration: 0.25})
     shape#ck(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: $a; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     icon#ci(left: 12px; cy: 50%; font-size: 28px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
+    p#n(left: 20px; cy: 50%; font-size: 21px; font-family: e; color: $mute) 1;2;3;4
   div#done(left: 0px; top: 0px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; in: fade {duration: 0.5}; overlap: fl.s)
     shape#c(cx: 50%; top: 225px; width: 190px; height: 190px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 18px #1F6FE01F; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     icon#i(cx: 50%; top: 270px; font-size: 99px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})

@@ -3,6 +3,8 @@
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60] [--effort low] [--staff medium|low] [--no-staff]
+#        [--review medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が確認表で崩れも探す・の effort / 2 回目以降の直し役の effort /
+#                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の <type>_NN 1 本 + hf_<type>_* 1 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
@@ -12,10 +14,10 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../../../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,9p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,11p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; TEMPLATE=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; TEMPLATE=""; FIX=low; REVIEW=medium; LOOK=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --type) TYPE=$2; shift 2;;
@@ -24,6 +26,9 @@ while [ $# -gt 0 ]; do
     --effort) EFFORT=$2; shift 2;;
     --staff) STAFF=$2; shift 2;;
     --no-staff) STAFF=""; shift;;
+    --fix) FIX=$2; shift 2;;
+    --review) REVIEW=$2; shift 2;;
+    --look) LOOK=1; shift;;
     --request) REQ_FILE=$2; shift 2;;
     --request-text) REQ_TEXT=$2; shift 2;;
     --samples) SAMPLES=$2; shift 2;;
@@ -48,8 +53,8 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$S/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}${TEMPLATE:+ --template $TEMPLATE}"
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見本 ${SAMPLES:-type の既定})"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF} --review $REVIEW --fix $FIX${LOOK:+ --look}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}${TEMPLATE:+ --template $TEMPLATE}"
+echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $REVIEW${LOOK:+ (静止画)}・直し $FIX・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys

@@ -172,7 +172,7 @@ chap#s02_chap(n: "01"; t: "調査の概要"; w: 236px)
 board#b2(no: "01"; t: "調査の概要"; m: "株式会社ソラリンク ｜ 人事部 実施"; f: "出典：株式会社ソラリンク 人事部「働き方調査」（2026年9月実施）")
   # 回答率の輪 (淡い輪の上に紺の弧が 12 時から時計回りに描かれ、中の数字が同じ尺で数える)
   svg#ring(left: 96px; top: 156px; width: 400px; height: 400px; part: ring; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'})
-  shape#arc(path: "M197.5 130.8 L206.0 131.1 L214.4 132.1 L222.7 133.8 L230.9 136.2 L238.8 139.1 L246.5 142.7 L253.9 146.9 L260.9 151.7 L267.6 157.0 L273.7 162.8 L279.4 169.1 L284.6 175.9 L289.2 183.0 L293.3 190.5 L296.7 198.2 L299.5 206.2 L301.7 214.4 L303.2 222.8 L304.0 231.2 L304.2 239.7 L303.7 248.2 L302.5 256.6 L300.6 264.9 L298.1 273.0 L295.0 280.9 L291.2 288.5 L286.9 295.8 L281.9 302.7 L276.5 309.2 L270.5 315.3 L264.1 320.8 L257.3 325.9 L250.1 330.3 L242.5 334.2 L234.7 337.5 L226.6 340.1 L218.4 342.1 L210.0 343.5 L201.5 344.1 L193.0 344.1 L184.6 343.4 L176.2 342.1 L167.9 340.0 L159.9 337.4 L152.1 334.0 L144.5 330.1 L137.3 325.6 L130.5 320.6 L124.1 315.0 L118.2 308.9 L112.8 302.4 L107.9 295.4 L103.6 288.1 L99.8 280.5 L96.7 272.6 L94.3 264.5 L92.4 256.2 L91.3 247.8 L90.8 239.3 L91.0 230.8"; background: none; border: 44px solid $brand; z-index: front; in: draw {duration: 2.49})
+  shape#arc(path: "M197.5 130.8 L206.0 131.1 L214.4 132.1 L222.7 133.8 L230.9 136.2 L238.8 139.1 L246.5 142.7 L253.9 146.9 L260.9 151.7 L267.6 157.0 L273.7 162.8 L279.4 169.1 L284.6 175.9 L289.2 183.0 L293.3 190.5 L296.7 198.2 L299.5 206.2 L301.7 214.4 L303.2 222.8 L304.0 231.2 L304.2 239.7 L303.7 248.2 L302.5 256.6 L300.6 264.9 L298.1 273.0 L295.0 280.9 L291.2 288.5 L286.9 295.8 L281.9 302.7 L276.5 309.2 L270.5 315.3 L264.1 320.8 L257.3 325.9 L250.1 330.3 L242.5 334.2 L234.7 337.5 L226.6 340.1 L218.4 342.1 L210.0 343.5 L201.5 344.1 L193.0 344.1 L184.6 343.4 L176.2 342.1 L167.9 340.0 L159.9 337.4 L152.1 334.0 L144.5 330.1 L137.3 325.6 L130.5 320.6 L124.1 315.0 L118.2 308.9 L112.8 302.4 L107.9 295.4 L103.6 288.1 L99.8 280.5 L96.7 272.6 L94.3 264.5 L92.4 256.2 L91.3 247.8 L90.8 239.3 L91.0 230.8"; background: none; border: 44px solid $brand; in: draw {duration: 2.49})
   # 2 桁の数える数は語の count まで start の値 (0%) で止まる — 輪と一緒に「0%」で出し、弧を描く語で数える
   p#dv(cx: 296px; cy: 333px; font-size: 118px; font-family: n; line-height: 1; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'}) [count:76 start=0 ms=2490]{u46}%{/}
   p#dl(cx: 296px; cy: 416px; font-size: 26px; color: $ink2; delay: 300; in: {opacity:0, duration:0.4, ease:'power1.out'}) 回答率
@@ -211,11 +211,11 @@ board#b3(no: "02"; t: "いまの働き方"; m: "回答者 800人"; f: "出典：
     p#l(left: 34px; cy: 58px; font-size: 24px) 出社日数の実績
     p#s(left: 34px; cy: 88px; font-size: 20px; font-family: m; color: $ink2) 全体の平均
     p#w(left: 256px; cy: 82px; font-size: 30px; font-family: h) 週
-    p#v0(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1) 0.0
-    p#v(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1; in: none) [count:2.2 start=0 ms=900]
-    p#d(left: 414px; cy: 82px; font-size: 30px; font-family: h) 日
     div#wk(left: "387;435;483;531;579"; top: 36px; width: 64px; height: 42px; border-radius: 8px; background: #FFFFFF; border: 2px solid #CFD8E6) ×5
+    p#v0(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1) 0.0
+    p#d(left: 414px; cy: 82px; font-size: 30px; font-family: h) 日
     div#wf(left: "387;435;483"; top: 36px; width: "43;43;9"; height: 42px; border-radius: 8px; background: $brand; in: {scaleX:0, duration:0.3, ease:'none', pivot:'left'}) ×3
+    p#v(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1; in: none) [count:2.2 start=0 ms=900]
     p#wl(cx: "408.5;456.5;504.5;552.5;600.5"; cy: 98px; font-size: 16px; color: $ink2) ×5 月;火;水;木;金
 
 # s04 満足度: 左に全体の大きな数字 (数えて下の棒が 64% 伸びる)・右に目盛りと 3 本の横棒 (語ごとに伸びて数える)・全体 64% の破線・「最も高い」の札・フル出社とハイブリッドの差のかぎと 31 ポイント

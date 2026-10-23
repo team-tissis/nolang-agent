@@ -90,7 +90,7 @@ def stat(l, v, c) = div(width: 426px; height: 198px; background: #FFFFFF08; bord
 # 凡例の行: 色の角 + 札 + 点線の引き出し + % + 人数 (右揃え)
 def lg(t, v, p, c, ll, lw) = div(width: 880px; height: 51px; in: {x:-20, opacity:0, duration:.3, ease:'power2.out'})
   div#sq(left: 0px; cy: 50%; width: 26px; height: 26px; border-radius: 8px; background: {c})
-  p#t(left: 39px; cy: 50%; font-size: 28px; color: $ink2; white-space: nowrap; content: {t})
+  p#t(z-index: front; left: 39px; cy: 50%; font-size: 28px; color: $ink2; white-space: nowrap; content: {t})
   shape#ld(left: {ll}; cy: 50%; width: {lw}; height: 3px; path: line_h; border: 2px solid #33456A; dash: 2,3)
   p#v(right: 99px; cy: 50%; font-size: 34px; font-family: n; white-space: nowrap; content: {v})
   p#p(right: 0px; cy: 50%; width: 86px; font-size: 22px; font-family: r; color: $muted; text-align: right; content: {p})
@@ -108,8 +108,8 @@ p#src(left: 72px; top: 582px; font-size: 30px; font-family: r; color: $ink2; let
 # 結論の札 (暗い板 + 琥珀の縁)・人の形は 1 つ目だけ琥珀で弾む
 div#head(left: 66px; top: 690px; width: 948px; height: 240px; background: #080E1BD1; border: 2px solid #FFB21A8C; border-radius: 26px; in: {y:70, scale:.94, opacity:0, duration:.45, ease:'back.out(1.5)'})
   p#lbl(left: 36px; top: 33px; font-size: 30px; color: $ink2) 副業をしている会社員は
-  p#big(left: 36px; top: 96px; font-size: 74px; white-space: nowrap) {a}4人に1人{/}に近づく
   svg#ppl(left: "455;492;529;566"; top: 99px; width: 48px; height: 80px; part: "pa;pg;pg;pg"; in: {y:40, opacity:0, duration:.3, ease:'back.out(2)', stagger: {each: .07}}) ×4
+  p#big(left: 36px; top: 96px; font-size: 74px; white-space: nowrap) {a}4人に1人{/}に近づく
 
 # status — 01 副業の状況: 常設の枠が入り、1,000 点の地が左から敷かれ「23.4%」で琥珀の点と札が数え、続く語で淡い砂色、「38.5%」で空色、最後に灰
 section#status(stagger: {each:0})
@@ -141,15 +141,15 @@ board#b3(k: "02"; t: "副業をしている割合の推移"; n: "各年 {nb}1,00
   p#hr3_side(right: 42px; top: 207px; font-size: 26px; font-family: r; color: $muted; line-height: 1.45; text-align: right; in: {x:30, opacity:0, duration:.4}) {nw}14.1%{/} → {na2}23.4%{/}[br]2023年 → 2026年
   # 目盛り (横線 4 本 + 左の %)・年の札 (頭に 20 ms ずつ)
   div#gl(left: 135px; top: "631;511;391;271"; width: 770px; height: 2px; background: $bline; delay: 260; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4
-  p#gy(left: 44px; top: "620;500;380;260"; width: 76px; font-size: 26px; font-family: n; color: $muted; text-align: right; delay: 260; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 0%;10%;20%;30%
-  p#xl(cx: "136;249;362;476"; top: 972px; font-size: 32px; font-family: n; color: $ink2; delay: 260; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 2023;2024;2025;2026
   shape#ref(left: 135px; top: 496px; width: 770px; height: 3px; path: line_h; border: 3px solid #4FC3F7D9; dash: 6,5; delay: 410; in: {x:-30, opacity:0, duration:.4})
-  p#reflbl(left: 144px; top: 456px; font-size: 24px; color: $sky; background: $board; padding: 0px 12px 0px 0px; delay: 410; in: {x:-30, opacity:0, duration:.4}) 4人に1人（25%）
   # 折れ線は 1 枚の svg を 1.5 秒で左から (hf の linebox の幅 92 → 880・ease none)・点と値は線が着く時刻に (目盛りの文字の下に敷く)
   svg#line(left: 44px; top: 346px; width: 880px; height: 680px; part: trend; delay: 510; in: wipe {dir: 'right', duration: 1.5, ease: 'none'})
-  div#pt(z-index: front; left: "126;239;352;466"; top: "452;407;374;340"; width: 30px; height: 30px; border-radius: 148px; background: $amber; border: 6px solid $board; box-shadow: 0px 0px 0px 2px $amber; delay: "590;913;1237;1560"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
+  p#xl(cx: "136;249;362;476"; top: 972px; font-size: 32px; font-family: n; color: $ink2; delay: 260; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 2023;2024;2025;2026
+  p#reflbl(left: 144px; top: 456px; font-size: 24px; color: $sky; background: $board; padding: 0px 12px 0px 0px; delay: 410; in: {x:-30, opacity:0, duration:.4}) 4人に1人（25%）
+  p#gy(left: 44px; top: "620;500;380;260"; width: 76px; font-size: 26px; font-family: n; color: $muted; text-align: right; delay: 260; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 0%;10%;20%;30%
+  div#pt(left: "126;239;352;466"; top: "452;407;374;340"; width: 30px; height: 30px; border-radius: 148px; background: $amber; border: 6px solid $board; box-shadow: 0px 0px 0px 2px $amber; delay: "590;913;1237;1560"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
   p#pv(cx: "136;249;362;476"; top: "411;367;333;285"; font-size: "29;29;29;40"; font-family: n; delay: "640;963;1287;1610"; in: {y:16, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
-  shape#g141(z-index: front; left: 204px; top: 693px; width: 570px; height: 3px; path: line_h; border: 3px solid #C3CCDD73; dash: 5,4; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'})
+  shape#g141(left: 204px; top: 693px; width: 570px; height: 3px; path: line_h; border: 3px solid #C3CCDD73; dash: 5,4; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'})
   svg#brk(left: 765px; top: 525px; width: 30px; height: 168px; part: brk; in: {scaleY:0, duration:.35, ease:'power3.out', pivot:'bottom'})
   p#brkl(left: 807px; top: 586px; font-size: 26px; color: $bg; background: $amber; border-radius: 8px; padding: 6px 12px 4px 12px; white-space: nowrap; in: {x:-20, opacity:0, duration:.3}) +9.3pt
 
@@ -269,7 +269,7 @@ div#s8(left: 56px; top: 186px; width: 968px; height: 1110px; in: {x:1100, durati
     p#b(left: 132px; top: 93px; font-size: 26px; font-family: r; color: $ink2; white-space: nowrap) 副業をする会社員は、4人に1人に近づく;月の副業収入の中央値は約2万円;週20時間以上では47%が本業に悪影響
   div#cta(left: 0px; top: 615px; width: 968px; height: 420px; background: $cta; border: 2px solid #FFB21A99; border-radius: 26px; in: {y:60, scale:.96, opacity:0, duration:.5, ease:'power3.out'})
     img#img(left: 0px; top: 0px; width: 420px; height: 420px; main: kb {scale: [1.15, 1], ease:'power1.out'}) 机の上で両手が分厚い会社の就業規則のバインダーを開いている。色つきのインデックスのタブ、開いたページに置かれた虫眼鏡、暖かい琥珀色のデスクライトの光、暗い紺の背景。正方形の構図でバインダーを中央に大きく
-    div#fade(left: 250px; top: 0px; width: 170px; height: 420px; z-index: front; background: linear(#0E183000,$cta,90))
+    div#fade(left: 250px; top: 0px; width: 170px; height: 420px; background: linear(#0E183000,$cta,90))
     p#a(left: 430px; top: 75px; font-size: 32px; color: $ink2; in: {x:30, opacity:0, duration:.35}) 始めるなら、まずは
     p#b(left: 430px; top: 126px; font-size: 76px; color: $amber; line-height: 1.18; white-space: nowrap; in: {x:30, opacity:0, duration:.35}) 就業規則を
     p#c(left: 430px; top: 218px; font-size: 58px; line-height: 1.18; white-space: nowrap; in: {x:30, opacity:0, duration:.35}) 読むところから

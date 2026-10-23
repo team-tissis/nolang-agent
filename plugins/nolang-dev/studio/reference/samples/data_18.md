@@ -44,13 +44,13 @@ veil#op_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.45)
 shape#op_c(left: 36px; top: 645px; width: 390px; height: 390px; border-radius: 50%; background: $a; opacity: 0.06; main: breathe)
 kick#op_k(left: 108px; top: 225px) HOUSEHOLD FIXED COSTS
 shape#op_r(left: 108px; top: 279px; width: 144px; height: 4px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.7})
-h1#op_h(left: 108px; top: 321px; width: 960px) 固定費を見直すと、[br]{t}年間{/}いくら浮く?
+h1#op_h(left: 108px; top: 321px; width: 960px; font-weight: 700) 固定費を見直すと、[br]{t}年間{/}いくら浮く?
 sub#op_s(left: 108px; top: 570px) 30 代夫婦のモデルケース (架空) で試算
 
 section#model
 img#md_p(left: 990px; top: 0px; width: 930px; height: 1080px; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [photo]30代の夫婦がリビングのソファに並んでノートパソコンで家計を確認する横顔、穏やかな表情、自然光
 kick#md_k(left: 96px; top: 84px) MODEL CASE
-h1#md_h(left: 96px; top: 126px; font-size: 72px) 30 代の夫婦、3 つの固定費
+h1#md_h(left: 96px; top: 126px; font-size: 72px; font-weight: 700) 30 代の夫婦、3 つの固定費
 div#md_r(left: 96px; top: 276px; width: 840px; height: 396px; gap: 16; display: flex; flex-direction: column) ×3
   icon#i(left: 33px; cy: 50%; font-size: 51px; name: "device-mobile;lightning;television-simple"; color: $a)
   p#n(left: 114px; cy: 50%; font-size: 42px; color: $ink) スマホ (2 人);電気;サブスク (3 本)
@@ -63,7 +63,7 @@ section#phone
 img#ph_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '55% 50%']}) [photo]木の机の上に並べて置かれた2台のスマートフォン、画面は暗い、柔らかな自然光
 paper#ph_v
 num#ph_n(left: 96px; top: 66px) 01
-h1#ph_h(left: 228px; top: 78px; font-size: 78px) スマホ
+h1#ph_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) スマホ
 sub#ph_s(left: 96px; top: 192px) 大手キャリア 2 人 → 格安プラン
 hbar#ph_c(left: 96px; top: 360px; width: 1110px; height: 240px; display: flex; flex-direction: column; gap: 60px; v: "50;16"; t: "今 (大手キャリア);見直し後 (格安)"; n: "16,000 円;5,000 円"; c: "$mute;$a") ×2
 div#ph_d(left: 1290px; top: 294px; width: 534px; height: 375px)
@@ -76,7 +76,7 @@ section#power
 img#pw_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '45% 50%']}) [photo]明るい部屋の壁のスイッチと電気メーター、柔らかな自然光、すっきりした住まい
 paper#pw_v
 num#pw_n(left: 96px; top: 66px) 02
-h1#pw_h(left: 228px; top: 78px; font-size: 78px) 電気
+h1#pw_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) 電気
 div#pw_t(left: 96px; top: 186px; width: 720px; height: 78px; background: $a2; border: none; border-radius: 39px)
   icon#i(left: 27px; cy: 50%; font-size: 39px; name: check-circle; color: $a)
   p#t(left: 81px; cy: 50%; font-size: 36px; color: $a) 使用量はそのまま、契約先だけ変更
@@ -91,7 +91,7 @@ section#subs
 img#sb_p(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 55%']}) [photo]夜のリビングでテレビの前のソファに置かれたリモコンとヘッドホン、誰もいない、落ち着いた間接照明
 paper#sb_v
 num#sb_n(left: 96px; top: 66px) 03
-h1#sb_h(left: 228px; top: 78px; font-size: 78px) サブスク
+h1#sb_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) サブスク
 sub#sb_s(left: 96px; top: 192px) 使っていない動画・音楽の 3 本を解約
 div#sb_k(left: 96px; top: 294px; width: 1110px; height: 114px; gap: 16; display: flex) ×3
   icon#i(left: 27px; cy: 50%; font-size: 42px; name: "film-strip;film-strip;music-notes"; color: $mute)
@@ -107,7 +107,7 @@ section#total
 img#tt_p(inset: 0; main: kb {scale: [1, 1.04], focus: ['50% 50%', '50% 50%']}) [photo]整えられた家計簿のノートと電卓と万年筆を真上から、白い机、明るい自然光
 paper#tt_w
 kick#tt_k(left: 96px; top: 84px) ANNUAL SAVINGS
-h1#tt_h(left: 96px; top: 126px; font-size: 72px) 3 つ合わせると、1 年で
+h1#tt_h(left: 96px; top: 126px; font-size: 72px; font-weight: 700) 3 つ合わせると、1 年で
 hbar#tt_c(left: 96px; top: 310px; width: 960px; height: 324px; display: flex; flex-direction: column; gap: 45px; v: "40;12;6"; t: "スマホ;サブスク;電気"; n: "132,000 円;39,600 円;19,200 円"; c: "$a;$mute;$mute") ×3
 shape#tt_l(left: 1095px; top: 294px; width: 3px; height: 375px; path: line_v; background: $line; border: 3px solid $line)
 p#tt_lb(left: 1164px; top: 309px; font-size: 36px; font-family: m; color: $mute) 年間で浮く額
@@ -119,7 +119,7 @@ img#mo_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['40% 50%', '35% 50%']}) [
 veil#mo_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 shape#mo_c(left: 36px; top: 36px; width: 360px; height: 360px; border-radius: 50%; background: $a; opacity: 0.06; main: breathe)
 p#mo_k(left: 108px; top: 225px; font-size: 45px; font-family: m; color: $mute) 年 190,800 円は
-h1#mo_h(left: 108px; top: 300px; font-size: 108px) 月の手取りの[br]{m}1 か月分近く{/}
+h1#mo_h(left: 108px; top: 300px; font-size: 108px; font-weight: 700) 月の手取りの[br]{m}1 か月分近く{/}
 div#mo_n(left: 108px; top: 630px; width: 630px; height: 96px)
   icon#i(left: 30px; cy: 50%; font-size: 42px; name: arrows-clockwise; color: $a)
   p#t(left: 93px; cy: 50%; font-size: 39px; color: $ink) 一度の手続きで、毎年続く
@@ -128,7 +128,7 @@ section#close
 img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '65% 50%']}) [photo]朝の窓辺のテーブルでコーヒーを片手にスマートフォンを見る人の手元、明るい自然光、すがすがしい
 veil#cl_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 kick#cl_k(left: 108px; top: 180px) THIS WEEK
-h1#cl_h(left: 108px; top: 225px; font-size: 114px) まず 1 つだけ、[br]{u}今週やる。{/}
+h1#cl_h(left: 108px; top: 225px; font-size: 114px; font-weight: 700) まず 1 つだけ、[br]{u}今週やる。{/}
 div#cl_c(left: 108px; top: 570px; width: 900px; height: 105px; gap: 14; display: flex) ×3
   icon#i(left: 24px; cy: 50%; font-size: 39px; name: "device-mobile;lightning;television-simple"; color: $a)
   p#t(left: 75px; cy: 50%; font-size: 36px; color: $ink) スマホ;電気;サブスク

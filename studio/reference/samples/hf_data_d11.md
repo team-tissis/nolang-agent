@@ -64,7 +64,7 @@ def board(k, t, s="", fn="", c=$lime) = div(left: 60px; top: 230px; width: 960px
   div#acc(left: 0px; top: 0px; width: 10px; height: 100%; border-radius: 34px 0px 0px 34px; background: {c})
   chip#k(left: 48px; top: 36px; background: {c}; content: {k})
   p#t(left: 48px; top: 99px; font-size: 58px; line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap; content: {t})
-  p#s(left: 48px; top: 177px; font-size: 27px; font-family: m; color: $sub; white-space: nowrap; content: {s})
+  p#s(z-index: front; left: 48px; top: 177px; font-size: 27px; font-family: m; color: $sub; white-space: nowrap; content: {s})
   p#fn(left: 48px; bottom: 26px; font-size: 22px; font-family: r; color: $dim; white-space: nowrap; content: {fn})
 # 入り方の 3 群の札 (左の色の縦棒 + 群の名 + 定義 + 右に % と人数)
 def gcard(nm, df, pc, ct, c) = div(left: 48px; width: 864px; height: 164px; border-radius: 22px; background: #FFFFFF0D; border: 2px solid #FFFFFF14; in: {x:-60, opacity:0, duration:0.35, ease:'power3.out', stagger:{each:0.15}})
@@ -186,7 +186,6 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   # 目盛り (横の破線 4 本・縦軸のペース・横軸の区間・速い / 遅い)・cut 頭の 0.2 秒後に
   p#hint(left: 45px; top: "150;508"; font-size: 22px; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) ×2 ↑速い;↓遅い
   shape#grid(left: 120px; top: "213;293;373;453"; width: 790px; height: 3px; path: line_h; border: 2px solid #FFFFFF1A; dash: 4,5; delay: 200; in: {opacity:0, duration:0.3}) ×4
-  p#yl(left: 18px; cy: "214;294;374;454"; width: 90px; text-align: right; font-size: 26px; font-family: n; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) ×4 6′00″;6′20″;6′40″;7′00″
   p#xl(cx: "93;155;216;278;340;401;463;525;586"; cy: 794px; font-size: 26px; font-family: n; color: "$pale;$pale;$pale;$pale;$pale;$pale;$coral;$coral;$coral"; delay: 200; in: {opacity:0, duration:0.3}) ×9 0-5;5-10;10-15;15-20;20-25;25-30;30-35;35-40;40-G
   p#unit(right: 40px; top: 820px; font-size: 20px; font-family: m; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) 区間（km）
   # 30km からの赤い帯と縦の破線 (語で出る)
@@ -196,6 +195,7 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   shape#la(path: "M93 205.7 L154.7 193.7 L216.3 201.7 L278 213.7 L339.7 233.7 L401.3 269.7"; background: none; border: 9px solid $ink; in: draw {duration: 1, ease: 'power1.inOut'})
   shape#lb(path: "M401.3 269.7 L463 365.7 L524.7 461.7 L586.3 433.7"; background: none; border: 10px solid $fast; in: draw {duration: 0.8, ease: 'power2.in'})
   shape#pa(left: "84;146;208;269;331;393"; top: "197;185;193;205;225;261"; width: 26px; height: 26px; border-radius: 50%; background: $lime; border: 4px solid #0B1020; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.19}}) ×6
+  p#yl(left: 18px; cy: "214;294;374;454"; width: 90px; text-align: right; font-size: 26px; font-family: n; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) ×4 6′00″;6′20″;6′40″;7′00″
   p#va(cx: "93;155;216;278;340;401"; cy: "179;167;175;187;207;243"; font-size: 30px; font-family: n; font-style: italic; delay: 40; in: {y:8, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
   shape#pb(left: "455;516;578"; top: "357;453;425"; width: 26px; height: 26px; border-radius: 50%; background: $fast; border: 4px solid #0B1020; delay: 260; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
   p#vb(cx: "463;525;586"; cy: "400;496;407"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
@@ -276,7 +276,6 @@ chip#s8_chip(cx: 540px; top: 236px; background: $gold; in: {y:-30, opacity:0, du
 p#s8_q(cx: 540px; top: 302px; font-size: 60px; line-height: 1.2; stroke: #070B14,5; white-space: nowrap; in: {scale:1.3, opacity:0, duration:0.35, ease:'power3.out'}) いちばん目標を達成したのは？
 board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: $gold; top: 668px; height: 702px; background: #0A0F1CE6; delay: 0)
   chip#k(font-size: 27px; line-height: 1.3; font-family: j; font-style: normal; letter-spacing: 0.02em)
-  p#big(cx: 480px; top: 186px; font-size: 64px; line-height: 1; white-space: nowrap; in: {scale:1.6, opacity:0, duration:0.32, ease:'power4.out'}) キロ{gd}4〜7秒{/}ゆっくり
   p#sub(cx: 480px; top: 368px; font-size: 28px; font-family: m; color: $pale; white-space: nowrap; in: {y:16, opacity:0, duration:0.3, ease:'power3.out'}) 設定どおり群のうち、目標より1〜2%遅く入った812人
   # 達成率の輪 (紺の輪の上に金の弧が 0 → 47% を 0.8 秒で描く)
   div#donut(left: 44px; top: 418px; width: 230px; height: 230px; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
@@ -288,6 +287,7 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
     p#k(top: 4px; font-size: 26px)
     div#bar(left: 150px; height: 34px)
     p#v(top: -2px; font-size: 44px)
+  p#big(cx: 480px; top: 186px; font-size: 64px; line-height: 1; white-space: nowrap; in: {scale:1.6, opacity:0, duration:0.32, ease:'power4.out'}) キロ{gd}4〜7秒{/}ゆっくり
   p#note(left: 48px; top: 660px; font-size: 22px; font-family: m; color: $sub; white-space: nowrap; in: {y:14, opacity:0, duration:0.3, ease:'power3.out'}) 目標とのずれ {g}+2:10{/}（前半+1:30・後半+0:40）｜飛ばしと{g}5分30秒{/}の差
 
 # s9 まとめ: ゴールで両手を挙げる後ろ姿の逆光の写真に、まとめの札 3 枚が左から順に入る → 「前半は」とゴールテープが張られ → 「「少し遅い」が正解。」が叩きつけられ (閃光) テープが左右に切れて飛ぶ

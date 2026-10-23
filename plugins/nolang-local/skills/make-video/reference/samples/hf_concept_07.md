@@ -55,7 +55,7 @@ def effect_row(t) = div(left: 60px; width: 960px; height: 152px; background: #0A
   p#text(left: 162px; cy: 50%; font-size: 60px; line-height: 1.2; content: {t})
 # 理由の札 (黄の丸札 + 黒丸の ✓・札ごと弾んで出る)
 def reason_chip(t, w) = group(width: {w}; height: 144px; in: {scale:0.3, opacity:0, duration:0.26, ease:'back.out(2.2)'})
-  p#text(left: 0px; cy: 50%; font-size: 100px; line-height: 1.1; color: $k; background: $y; border-radius: 148px; padding: 16px 46px 18px 110px; box-shadow: 0px 16px 36px #00000073; content: {t})
+  p#text(z-index: front; left: 0px; cy: 50%; font-size: 100px; line-height: 1.1; color: $k; background: $y; border-radius: 148px; padding: 16px 46px 18px 110px; box-shadow: 0px 16px 36px #00000073; content: {t})
   svg#icon(left: 26px; cy: 50%; width: 62px; height: 62px; part: check)
 # 上下の暗幕 (上 78% → 40〜54% は素通し → 下 82%)
 def shade() = div(inset: 0; background: linear(#000000C7,#00000080@18%,#00000000@40%,#00000000@54%,#00000080@70%,#000000D1,180); border-radius: 24px; in: none)

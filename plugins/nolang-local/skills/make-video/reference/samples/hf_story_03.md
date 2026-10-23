@@ -93,7 +93,7 @@ subtitle.cool(font-size: 112px)
 # 部品: 写真カード (白の細い縁 + 青緑の光・下を暗く)・情報パネル (濃紺の半透明 + 薄い縁)・閃光の幕・字幕と同じ見た目の design の文字
 def card(p) = div(left: 80px; top: 250px; width: 920px; height: 800px; border-radius: 44px; background: #0A0630; border: 4px solid #FFFFFFEB; box-shadow: 0px 0px 46px 10px #00E5FF8C; in: none)
   img#p(inset: 0; content: {p})
-  div#shade(inset: 0; background: linear(#08042800@58%,#080428C7,180); z-index: front)
+  div#shade(inset: 0; background: linear(#08042800@58%,#080428C7,180))
 def panel(h) = div(left: 80px; top: 1230px; width: 920px; height: {h}; border-radius: 30px; background: #080526CC; border: 3px solid #FFFFFF47; box-shadow: 0px 0px 36px #00E5FF47; in: {y:80, scale:.92, opacity:0, duration:.28, ease:'power3.out'})
 def flash(o) = veil(color: #FFFFFF; opacity: {o}; z-index: curtain; in: none)
 def capword(t, s=107) = p(font-size: {s}; font-family: d; line-height: 1.12; stroke: #0B0730,9; text-shadow: 0px 0px 22px #FF28C8E6; content: {t})
@@ -133,8 +133,8 @@ section#hook
 card#c1(p: "[photo]真夜中の暗い寝室。ベッドのシーツの上に置かれたスマートフォンが画面を上にして強く発光している（画面は青白く光っているだけで文字やアイコンは無い）。画面の光が周囲をほのかに照らし、窓の外から赤いネオンの光が差し込む。縦構図、シネマティック、浅い被写界深度、青と赤の色調。")
   img#p(main: kb {scale: [1.18, 1], ease:'power1.out'})
   # 画面の光 (静止は 1.6 倍で消えた姿・入場で 0.4 倍の濃い光から広がる)
-  div#glow1(left: 141px; z-index: front; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFF2,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; delay: 120; in: {scale:.25, opacity:.95, duration:.9, ease:'power2.out'})
-  div#glow2(left: 141px; z-index: front; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFE6,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; in: {scale:.25, opacity:.9, duration:.9, ease:'power2.out'})
+  div#glow1(left: 141px; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFF2,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; delay: 120; in: {scale:.25, opacity:.95, duration:.9, ease:'power2.out'})
+  div#glow2(left: 141px; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFE6,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; in: {scale:.25, opacity:.9, duration:.9, ease:'power2.out'})
 # 通知のバナー (アプリの icon + 未読の赤丸 + 3 行)・題に黄の下帯が語で伸びる
 div#notif(left: 110px; top: 300px; width: 860px; height: 200px; border-radius: 36px; background: #F8F8FFF0; box-shadow: 0px 0px 40px #00E5FFBF; delay: 100; in: {y:-260, scale:.9, opacity:0, duration:.42, ease:'back.out(1.6)'})
   div#icon(left: 30px; cy: 50%; width: 120px; height: 120px; border-radius: 30px; background: linear(#00E5FF,#6A3BFF@50%,#FF2BD6,135))
@@ -162,9 +162,9 @@ img#gl(left: 20px; top: 250px; width: 920px; height: 800px; border-radius: 44px;
 img#gr(left: 140px; top: 250px; width: 920px; height: 800px; border-radius: 44px; content: @grounds; look: #000000/#FF2BD6; mix-blend-mode: screen; opacity: .55; in: {x:-60, opacity:0, duration:.5, ease:'power2.out'})
 card#c2(p: "@grounds")
   img#p(main: kb {scale: [1.12, 1], focus: ['47% 50%', '52% 50%'], ease:'sine.inOut'})
-  shape#dash(z-index: front; left: 160px; top: 374px; width: 600px; height: 8px; path: line_h; border: 8px solid #FFFFFF; dash: 17,12; in: {scaleX:0, duration:.45, ease:'power2.inOut', pivot:'left'})
-  pin#pinw(z-index: front; left: 100px; top: 320px; lab: WEST; c: #2B7BFF; glow: #3FB5FF)
-  pin#pine(z-index: front; left: 700px; top: 320px; lab: EAST; c: $red; glow: #FF4A6A)
+  shape#dash(left: 160px; top: 374px; width: 600px; height: 8px; path: line_h; border: 8px solid #FFFFFF; dash: 17,12; in: {scaleX:0, duration:.45, ease:'power2.inOut', pivot:'left'})
+  pin#pinw(left: 100px; top: 320px; lab: WEST; c: #2B7BFF; glow: #3FB5FF)
+  pin#pine(left: 700px; top: 320px; lab: EAST; c: $red; glow: #FF4A6A)
   p#dist(cx: 460px; top: 410px; font-size: 34px; background: #05031ED9; border: 3px solid #FFFFFF; border-radius: 148px; padding: 8px 22px; in: {scale:.4, opacity:0, duration:.22, ease:'back.out(1.7)'}) 徒歩25分
 panel#tt(h: 372px)
   p#hw(left: 120px; top: 12px; width: 380px; font-size: 27px; font-family: d; letter-spacing: .06em; text-align: center; background: #1D5DFF; border-radius: 12px; padding: 6px 0px) WEST STAGE
@@ -233,7 +233,7 @@ flash#fl_vic(o: 1)
 section#theory
 div#half_l(left: 70px; top: 250px; width: 440px; height: 800px; border-radius: 40px; background: #0A0630; border: 4px solid #BEE6FFE6; box-shadow: 0px 0px 50px 10px #3FB5FF99; in: {x:-300, scale:.9, opacity:0, duration:.3, ease:'power3.out'}; out: {opacity:0, duration:.2})
   img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]暗い部屋の机の上に置かれたワイヤレスイヤホンとそのケース、横に画面の消えたスマートフォン。冷たい青い光だけが当たる、静かでミニマルな構図。プロダクト写真、縦構図。
-  div#tint(z-index: front; inset: 0; background: #143CA059; mix-blend-mode: multiply)
+  div#tint(inset: 0; background: #143CA059; mix-blend-mode: multiply)
   p#lbl(cx: 220px; top: 30px; font-size: 40px; background: #1D5DFF; border-radius: 148px; padding: 8px 22px) 音源
 div#half_r(left: 570px; top: 250px; width: 440px; height: 800px; border-radius: 40px; background: #0A0630; border: 4px solid #FFDCEBF2; box-shadow: 0px 0px 60px 14px #FF2B78BF; delay: 80; in: {x:300, scale:.9, opacity:0, duration:.3, ease:'power3.out'})
   img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]野外フェスのステージ脇にそびえる巨大なスピーカーの壁（ラインアレイ）をローアングルで見上げた縦構図の写真。重低音で空気が震えるような迫力、赤とマゼンタのステージ照明、スモークと光の粒。

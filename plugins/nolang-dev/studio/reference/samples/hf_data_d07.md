@@ -110,7 +110,7 @@ def ccard(c, n, h, s) = div(out: leave; left: 96px; width: 1300px; height: 210px
   div#curl(right: 0px; bottom: 0px; width: 46px; height: 46px; border-radius: 0px 0px 18px 0px; background: linear(#00000000@45%,#0000001A@50%,#FFFFFFA6@57%,#FFFFFF00@78%,315))
   div#nb(left: 34px; top: 46px; width: 112px; height: 112px; border-radius: 148px; background: $ink)
     p#t(cx: 50%; cy: 50%; font-size: 64px; font-family: m; color: #FFFFFF; content: {n})
-  p#h(left: 182px; top: 40px; font-size: 56px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe {dir: 'right', duration: 0.7}; content: {h})
+  p#h(z-index: front; left: 182px; top: 40px; font-size: 56px; font-family: m; line-height: 1.05; white-space: nowrap; in: wipe {dir: 'right', duration: 0.7}; content: {h})
   p#s(left: 184px; top: 124px; font-size: 30px; color: $ink2; white-space: nowrap; in: {y:10, opacity:0, duration:.5, ease:'power3.out'}; content: {s})
 
 # 全編の地 (根・z back): 方眼の紙 + 周辺の焼け
@@ -204,8 +204,8 @@ note#w_med(left: 1234px; top: 300px; width: 590px; height: 520px; c: $yel; trans
   p#lbl(left: 52px; top: 40px; font-size: 32px; color: $ink2) やめるまでの期間
   p#mid(left: 52px; top: 87px; font-size: 30px; color: $ink2) 中央値
   p#n(left: 52px; top: 124px; font-size: 250px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:26 start=0 ms=900]
-  p#u(left: .n.right+3; top: 261px; font-size: 96px; font-family: m; line-height: 1) 日
   loop#ring(left: 9px; top: 153px; width: 363px; height: 220px; overlap: w_med.n)
+  p#u(left: .n.right+3; top: 261px; font-size: 96px; font-family: m; line-height: 1) 日
 
 # weekly — 白い板に方眼の軸を描き、「5.8日」から「1.3日」まで折れ線と面を左から描く (点と値が線の到着で弾む)・凡例の板・「2週目」で桃の付箋と赤い丸・「坂」で赤い矢印と斜めの手書き
 section#weekly(stagger: {each:0}; out: {x:-140, opacity:0, duration:.36, ease:'power2.in'})
@@ -280,9 +280,9 @@ cval#c_v4(left: 1050px; top: 774px; v: "6/6人")
 shape#c_q4(left: "855;883;911;939;967;995;855;883;911;939;967;995"; top: "502;502;502;502;502;502;531;531;531;531;531;531"; width: 34px; height: 34px; border-radius: 50%; background: "$cor_ink;$cor_ink;none;none;none;none;none;none;none;none;none;none"; border: 4px solid $cor_ink; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.035}}) ×12
 cval#c_w4(left: 1552px; top: 774px; v: "2/12人")
 note#c_quote(left: 360px; top: 866px; width: 1200px; height: 138px; c: $mnt; transform: rotate(-1deg); in: {y:-30, scale:1.14, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
-  p#q(left: 46px; top: 24px; font-size: 45px; font-family: h; line-height: 1; white-space: nowrap) {x2}「全部正確に」{/}より 「だいたい合っていればいい」
   p#w(left: 46px; top: 86px; font-size: 26px; color: $ink2; white-space: nowrap) ― 続けている人 6人中5人がこう話した
   shape#x(left: 52px; top: 44px; width: 303px; height: 9px; path: line_h; border: 6px solid $red; in: draw {duration: 0.4})
+  p#q(left: 46px; top: 24px; font-size: 45px; font-family: h; line-height: 1; white-space: nowrap) {x2}「全部正確に」{/}より 「だいたい合っていればいい」
   shape#u(left: 478px; top: 74px; width: 556px; height: 9px; path: line_h; border: 8px solid #1F8D62D9; in: draw {duration: 0.8})
 
 # moments — 波のジャーニーの線を左から描いて段階の札・「3日以上」「初めて」で谷に赤い丸と稲妻 + 白い付箋 (人数・内訳の四角・理由)・「11人」で橙の付箋

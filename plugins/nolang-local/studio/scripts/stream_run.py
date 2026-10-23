@@ -12,11 +12,16 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ)・根の先行解決・
 機械全体の warm の枠 (期限順) だけ。
 
-usage (repo root から): python stream_run.py <project> [--staff medium]
+usage (repo root から): python stream_run.py <project> [--staff medium] [--review medium|none] [--fix low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。--template <video_id>
     = 素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/` の 1 行・既定は server の空のテンプレ)。
   --staff = 担当 (Opus・判定役の 8 観点で cut を書き直す) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
+  --review = 見直しの effort (既定 medium・`none` で見直しなし): 全 cut の 1 回目の直し役を、確認表 (空き・揃い・重なり・主体・場面) で
+    指摘に出ない崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
+  --fix = 2 回目以降の直し役 (check の指摘だけを直す) の effort (既定 low)。
+  --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
+    prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
   直し役に回す規則は台帳 (`studio_rules.fixed_rules`)。最後の cut 以外の doc は OPEN_ENDED (後に cut が続く prefix) で check する。
 記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4 と、流した doc を
 studio/ (design.txt・timeline.txt・src.json) に書き戻した物。solo/ の cut は著者の版 author_cut_<名>・担当の版 staff_cut_<名>・最終
@@ -196,6 +201,12 @@ class WarmState:
     done: bool = False  # 段としての warm が終わった (feed が待つ旗)
 
 
+# 見直しの回数。既定は画像なしで 1 回 — 53 cut の盲検 (両順で一致した差) で今の直し役 (low・指摘のある cut だけ) に 9 対 3・
+# 投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)。--look は静止画を見せて 2 回 (2 回目は 1 回目の直しを描き直した絵を見る) — 5 cut の点で
+# 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5 (10-22・effort medium・low は直し役と差が出ない)
+REVIEW_ROUNDS = 1
+REVIEW_ROUNDS_LOOK = 2
+
 # 機械全体で同時に走らせる warm の数 (run を跨ぐ・期限の近い cut から)。4 core の機械で 3 本並列の run が check の直後に 4 本ずつ warm を
 # 起こすと 12 本が重なり、1 本 13 s の warm が 40〜64 s に伸びた (cur12・svg の描画と主体計測が CPU 待ち)
 WARM_MACHINE_SLOTS = min(4, os.cpu_count() or 4)
@@ -223,6 +234,9 @@ class Run:
         project: Path,
         *,
         staff: str | None = None,
+        fix: str = "low",
+        review: str | None = "medium",
+        look: bool = False,
         remote: str | None = None,
         token: str | None = None,
         template: str | None = None,
@@ -240,6 +254,11 @@ class Run:
         self.root_submitted = False
         self.fixed = fixed_rules()  # 直し役に回す規則 = 台帳の直しの列
         self.staff_effort = staff  # 担当 (8 観点で cut を書き直す) の effort。None = 担当なし
+        self.fix_effort = fix  # 直し役の effort
+        self.review_effort = (
+            review  # 見直し (確認表で指摘に出ない崩れも探す 1 回目の直し役) の effort。None = 見直しなし
+        )
+        self.look = look  # 見直しに cut の静止画も見せる (REVIEW_ROUNDS_LOOK 回)
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
         self.weave = project / "weave"
         self.weave.mkdir(parents=True, exist_ok=True)
@@ -851,15 +870,27 @@ class Run:
         remote は根が閉じた時点で先に流れる)。"""
         return c == self.first_live() and not self.root_submitted
 
-    def run_fixer(self, c: str, ff: Path) -> tuple[bool, str]:
-        """直し役 (claude -p・低 effort) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。根の持ち主の cut なら根の 2 file も
-        直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。"""
+    def run_fixer(self, c: str, ff: Path, *, review: bool = False, shots: list[Path] | None = None) -> tuple[bool, str]:
+        """直し役 (claude -p) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。根の持ち主の cut なら根の 2 file も
+        直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。review = 見直し (effort は --review)・shots = 見直しに見せる静止画。"""
         self.write_defs_before(c)
         src = self.solo / f"cut_{c}.txt"
         before = src.read_text()
         for attempt in (0, 1):
             r = subprocess.run(
-                [PY, str(AUTHOR), "fix", str(self.project), c, str(ff), *(["--root"] if self.owns_root(c) else [])],
+                [
+                    PY,
+                    str(AUTHOR),
+                    "fix",
+                    str(self.project),
+                    c,
+                    str(ff),
+                    *(["--root"] if self.owns_root(c) else []),
+                    "--effort",
+                    (self.review_effort or self.fix_effort) if review else self.fix_effort,
+                    *(["--review"] if review else []),
+                    *(["--shots", ",".join(str(x) for x in shots)] if shots else []),
+                ],
                 cwd=REPO or HERE.parent,
                 env=self.env,
                 capture_output=True,
@@ -910,6 +941,11 @@ class Run:
         prev_keys: set[tuple[str, str]] | None = (
             None  # 直し役を掛ける直前の check の指摘 (規則と層) — 直しが新しく作った指摘の判定
         )
+        # 見直し: 最初の reviews 回の直し役は確認表で指摘に出ない崩れも探す (--look なら静止画も・round ごとに撮り直す)。
+        # 見直しの call は直し役の 2 回の上限に数えない
+        reviews = 0
+        if self.review_effort is not None and not self.broken.get(c):
+            reviews = REVIEW_ROUNDS_LOOK if self.look else REVIEW_ROUNDS
         prev_findings: str | None = None
         reverted_fixes: list[str] = []  # 戻した直し役の出力 (cut の text) — 同じ edit が返ったら当てずに戻す
         failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
@@ -967,7 +1003,7 @@ class Run:
                     )
                     settled = True
                     continue
-            need = bool(defects) or (bool(fixes) and not settled)
+            need = bool(defects) or (bool(fixes) and not settled) or reviews > 0
             if not need:
                 break
             if fix_calls >= 2:
@@ -989,7 +1025,7 @@ class Run:
                     "\n\n前の直しの edit は DEFECT を消さなかったので戻した (`+` = 前の直し役が書いた行・`-` = 今の行)。"
                     f"同じ edit は返さず、別の直し方にする:\n{failed_edits}"
                 )
-            if findings == prev_findings and not defects:
+            if findings == prev_findings and not defects and not reviews:
                 # 直しても指摘が 1 つも変わらない — もう 1 回頼んでも同じ答え (直し役が触れない層・直し方の無い指摘)。打ち切る。
                 # DEFECT が残る時は打ち切らない: 2 回目 (か著者版への差し替え) で通る事があり、落とすと cut が台詞ごと消える
                 # (cur7_03 climax: `~` の順の DEFECT を 1 回で打ち切って落とした)
@@ -1005,6 +1041,9 @@ class Run:
                 fix_calls += 1
                 self.log(cut=c, event="revert_author", round=rnd, defect=len(defects))
                 continue
+            review = reviews > 0
+            reviews = max(reviews - 1, 0)
+            shots = self.shots(c) if review and self.look else None  # 撮れなければ (空) 画像なしで見直す
             before_fix = (self.solo / f"cut_{c}.txt").read_text()
             before_clean = not defects
             prev_keys = {
@@ -1012,10 +1051,19 @@ class Run:
                 for f in mine
                 if f.get("severity") in ("severe", "warn")
             }
-            ok, tail = self.run_fixer(c, ff)
+            ok, tail = self.run_fixer(c, ff, review=review, shots=shots)
             if ok:
-                fix_calls += 1
-                self.log(cut=c, event="fix", round=rnd, s=round(time.time() - t, 1), chars=len(tail))
+                if not review:
+                    fix_calls += 1
+                self.log(
+                    cut=c,
+                    event="fix",
+                    round=rnd,
+                    s=round(time.time() - t, 1),
+                    chars=len(tail),
+                    review=review,
+                    look=bool(shots),
+                )
                 if (self.solo / f"cut_{c}.txt").read_text() in reverted_fixes:
                     # 戻した edit をそのまま返した — 当てても同じ DEFECT で戻すだけなので当てない (次の round は 2 回の上限で最後の手段へ)
                     (self.solo / f"cut_{c}.txt").write_text(before_fix)
@@ -1026,6 +1074,37 @@ class Run:
                 if defects and not self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "fix call failed")
                 break
+
+    def shots(self, c: str) -> list[Path]:
+        """見直し役に見せる cut c の静止画 (`studio.py shots`)。prewarm (担当の直後に起きる) の絵と声を待ち、根 + c の doc (前の cut の
+        名のある定義は根の後ろ — warm_doc と同じ形) を描く。前の cut を入れないのは、その cut の直し中の DEFECT で build できず、
+        前の cut の声 (尺) がまだ無ければ TTS を待つから (前の cut の sticky な層は写らない)。c の DEFECT の行は落として描く。"""
+        w = self.warms[c]
+        if w.thread is not None:
+            w.thread.join()
+        t = time.time()
+        i = self.order.index(c)
+        extra = "".join(
+            text
+            for x in self.order[:i]
+            if not self.broken.get(x) and (blk := self.cut_block(x)) is not None
+            for _kind, _name, text in self.named_defs(blk[0])
+        )
+        dd = self.doc_dir(f"{c}.shot", [c], root_extra=extra)
+        out = ""
+        for _attempt in range(3):
+            (dd / "out/defects.json").unlink(missing_ok=True)  # 落とす行は今の attempt の DEFECT だけから
+            try:
+                out = self.studio_cmd("shots", str(dd), "--cut", c, timeout=120)
+            except subprocess.TimeoutExpired:
+                out = "TIMEOUT"
+                break
+            if "OK shots" in out or self.drop_defect_lines(dd, c) == 0:
+                break
+        (dd / "out/shots.txt").write_text(out)
+        paths = [Path(line.split()[1]) for line in out.splitlines() if line.startswith("SHOT ")]
+        self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=len(paths), ok="OK shots" in out)
+        return paths
 
     def revert_fixer_damage(self, c: str, cuts: list[str], before: str, defects: list[Defect]) -> int:
         """直し役の後の check で出た DEFECT が、直し役が変えた行にあれば、その変更の塊だけ直し前 (before) に戻す — 直し役を 2 回目に
@@ -2053,12 +2132,27 @@ def main(argv: list[str]) -> int:
         return 2
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
+    fix = argv[argv.index("--fix") + 1] if "--fix" in argv else "low"
+    review = argv[argv.index("--review") + 1] if "--review" in argv else "medium"
+    look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
     if token is None and remote is not None:
         token = claude_mcp_token(remote)
     template = argv[argv.index("--template") + 1] if "--template" in argv else None
-    run = Run(project, staff=staff, remote=remote, token=token, template=template)
+    if look and remote is not None:
+        print("--look は local だけ (静止画はこの機械の GPU で描く)", file=sys.stderr)
+        return 2
+    run = Run(
+        project,
+        staff=staff,
+        fix=fix,
+        review=None if review == "none" else review,
+        look=look,
+        remote=remote,
+        token=token,
+        template=template,
+    )
     launch = project / "stream/author.jsonl"
     if launch.exists():
         for l in launch.read_text().splitlines():

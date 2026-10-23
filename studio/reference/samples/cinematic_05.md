@@ -87,7 +87,7 @@ se "朝の森の鳥のさえずり、遠くの沢の音" -8dB to=9s fade=600,150
 
 *** cast
 se "渓流の水音と森の鳥の声" -8dB to=8s fade=400,1500
-@n: [silence:0.6s][♪"釣り竿を振るヒュッという風切り音" -4dB][>#cast_t]一投目。[>#cast_q][<#cast_t][<#cast_v][♪"小さな仕掛けが水面に落ちるポチャンという音" -6dB +600]糸が、[!#cast_q filter,duration=900,bright:1.2]光をひいた。[silence:1.5s]
+@n: [silence:0.6s][♪"釣り竿を振るヒュッという風切り音" -4dB][>#cast_t]一投目。[>#cast_q][<#cast_t][<#cast_v][♪"小さな仕掛けが水面に落ちるポチャンという音" -6dB +600]糸が、[!#cast_q to,{filter:'brightness(1.2)', duration:.9}]光をひいた。[silence:1.5s]
 
 *** light
 se "浅瀬を流れる澄んだ水の音、ときどき鳥の声" -8dB to=10s fade=400,1500

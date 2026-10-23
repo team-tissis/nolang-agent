@@ -108,8 +108,8 @@ p#foot(cx: 540px; top: 1578px; font-size: 24px; font-family: d; color: $ink2; in
 
 # 板: 白の角丸 + 淡い縁 + 柔らかい影・下から傾いて差し込み (y 1167・2.5°)、場面の終わりに奥へ縮んで消える
 def board(n, t) = div(left: 48px; top: 212px; width: 984px; height: 1100px; background: #FFFFFF; border-radius: 44px; border: 3px solid #F1E3CF; box-shadow: 0px 26px 60px #8C5A2829; in: {y:1750, rotation:2.5, duration:.55, ease:'power3.out'}; out: {y:-40, scale:.92, opacity:0, duration:.45, ease:'power1.in'})
-  p#tag(left: 40px; cy: 57px; font-size: 28px; line-height: 1; color: #FFFFFF; background: $a; border-radius: 18px; padding: 10px 16px 12px 16px; content: {n})
-  p#ttl(left: .tag.right+20; cy: 57px; font-size: 46px; line-height: 1.1; white-space: nowrap; content: {t})
+  p#tag(z-index: front; left: 40px; cy: 57px; font-size: 28px; line-height: 1; color: #FFFFFF; background: $a; border-radius: 18px; padding: 10px 16px 12px 16px; content: {n})
+  p#ttl(z-index: front; left: .tag.right+20; cy: 57px; font-size: 46px; line-height: 1.1; white-space: nowrap; content: {t})
   shape#hr(left: 0px; top: 114px; width: 984px; height: 3px; path: line_h; border: 3px solid $line; dash: 6,6)
 # 板の右肩の補足札
 def bsub(t) = p(right: 40px; cy: 57px; font-size: 26px; font-family: e; color: $ink2; background: #FFF3E2; border-radius: 148px; padding: 10px 20px 10px 20px; white-space: nowrap; content: {t})
@@ -153,14 +153,14 @@ board#st(n: "01"; t: "調査の舞台")
       p#v(left: 0px; top: 39px; font-size: 74px; line-height: 1.12; color: $a; white-space: nowrap) 151万8,500{yu}円分{/}
     p#note1(left: 440px; top: 518px; font-size: 22px; font-family: d; color: $ink2; in: {opacity:0, duration:.3}) ※売値で換算した金額
     shape#rule(left: 40px; top: 566px; width: 904px; height: 3px; path: line_h; border: 3px solid $line; dash: 6,6; in: {scaleX:0, duration:.4, pivot:'left'})
+    # ボトル 33 本 (11 列 × 3 段・下を軸に弾んで 52 ms ずつ)
+    svg#bt(left: "61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3"; top: "485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3"; width: 50px; height: 92px; part: bottle; in: {scale:0, y:24, opacity:0, duration:.32, ease:'back.out(2.2)', pivot:'bottom', stagger: {each: .052}}) ×33
     div#perday(left: 40px; top: 592px; width: 330px; height: 138px; in: {y:30, opacity:0, duration:.4, ease:'back.out(1.6)'})
       p#l(left: 0px; top: 0px; font-size: 32px; font-family: e; color: $ink2) 1日あたり
       p#v(left: 0px; top: 52px; font-size: 96px; line-height: 1; white-space: nowrap) 約66{k2}kg{/}
     p#eq(left: 384px; top: 640px; font-size: 72px; color: $ink2; in: {scale:.5, opacity:0, duration:.3}) ＝
-    p#bl(left: 470px; top: 592px; font-size: 32px; font-family: e; color: $ink2; in: {y:16, opacity:0, duration:.3}) 2Lペットボトル
     p#bv(left: 470px; top: 645px; font-size: 96px; line-height: 1; color: $sengyo; white-space: nowrap; in: {scale:.5, opacity:0, duration:.4, ease:'back.out(2)', pivot:'0% 70%'}) 33{k2}本分{/}
-    # ボトル 33 本 (11 列 × 3 段・下を軸に弾んで 52 ms ずつ)
-    svg#bt(left: "61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3"; top: "485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3"; width: 50px; height: 92px; part: bottle; in: {scale:0, y:24, opacity:0, duration:.32, ease:'back.out(2.2)', pivot:'bottom', stagger: {each: .052}}) ×33
+    p#bl(left: 470px; top: 592px; font-size: 32px; font-family: e; color: $ink2; in: {y:16, opacity:0, duration:.3}) 2Lペットボトル
     p#note2(left: 40px; top: 1046px; width: 904px; text-align: center; font-size: 22px; font-family: d; color: $ink2; in: {opacity:0, duration:.4}) ※1,840kg ÷ 28日 ≒ 66kg（2Lのボトル1本＝約2kgとして換算）
 
 # 02 棚ごとの廃棄: 7 本の横棒 (重さ) → 上位 3 つに黄の帯 → 3 つで 50.5% の帯 → 切替の札で金額へ (棒が縮み行が入れ替わり、順位の札・1kg あたりの札・POINT の札)
@@ -310,23 +310,22 @@ board#ex(n: "04"; t: "実験：値引きを2時間早く")
 section#home
 board#hm(n: "05"; t: "家庭でできる1つの工夫")
   p#ttl(font-size: 44px)
-  bsub#sub 来店客240人
   p#q(left: 40px; top: 130px; width: 904px; text-align: center; font-size: 32px; line-height: 1.32; in: {y:20, opacity:0, duration:.4}; delay: 50) 店頭アンケート：{mk}同じ物を二重に買って捨てた{/}ことが[br]月1回以上ある人の割合
   # 比べる 2 列 (題 3 段 + 100 マス + 大きい % + 人数)
   div#ga(left: 24px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #FFF1EC; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
     p#h2(left: 0px; top: 46px; width: 432px; text-align: center; font-size: 44px; color: $ai) 確かめない人
-    p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 140人（58%）
     div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118;118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×40
+    p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 140人（58%）
     div#doff(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×60
     p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $ai; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:40 start=0 ms=600 ease=cubic_out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 140人中 56人
   div#gb(left: 528px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #EEF8F1; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
     p#h2(left: 0px; top: 46px; width: 432px; text-align: center; font-size: 44px; color: $good) 確かめる人
-    p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 100人
     div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×17
     div#doff(left: "189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162;184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×83
+    p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 100人
     p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $good; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:17 start=0 ms=500 ease=cubic_out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 100人中 17人
   div#vs(left: 466px; top: 440px; width: 52px; height: 52px; border-radius: 148px; background: $ink; in: {scale:0, duration:.3, ease:'back.out(2)'})
@@ -340,6 +339,7 @@ board#hm(n: "05"; t: "家庭でできる1つの工夫")
     p#p(left: 300px; top: 138px; font-size: 30px; font-family: e; white-space: nowrap) 二重買いは {hb}半分以下{/} になりうる
   # シャッターの白い閃光 (板の上だけ)
   div#fl(inset: 0; border-radius: 44px; background: #FFFFFF; opacity: .85; overlap: hm.ga,hm.gb,hm.tip,hm.vs,hm.q; in: none)
+  bsub#sub 来店客240人
 
 # まとめ: 番号の丸つきの札 3 枚が右から語ごとに入り、最後の札で板がゆっくり 1.02 倍に寄る
 section#wrap
@@ -377,7 +377,7 @@ silence head=0 tail=220
 *** title
 [>#subtitle]
 bgm music
-@n: [silence:500][♪swoosh -5dB -380][>#kick -400][>#l1 -320][>#bd[*] -50]スーパーの食品ロス。その[>#l2 -80][♪perc -60]{e}半分{/}は、たった[>#l3 -100][!#l3{mk} marker +120][♪kira -9dB][!#bd[1] to,{opacity:1, duration:.2} +300][!#bd[1].img filter,duration=250,sat:1 +300][!#bd[1] punch,1.12,duration=320 +300][♪pop -2dB +300][!#bd[2] to,{opacity:1, duration:.2} +440][!#bd[2].img filter,duration=250,sat:1 +440][!#bd[2] punch,1.12,duration=320 +440][♪pop -2dB +440][!#bd[3] to,{opacity:1, duration:.2} +580][!#bd[3].img filter,duration=250,sat:1 +580][!#bd[3] punch,1.12,duration=320 +580][♪pop -2dB +580][!#bd[*].img to,{y:-8, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.15} +1000]{e}3つの棚{/}から出ていました。
+@n: [silence:500][♪swoosh -5dB -380][>#kick -400][>#l1 -320][>#bd[*] -50]スーパーの食品ロス。その[>#l2 -80][♪perc -60]{e}半分{/}は、たった[>#l3 -100][!#l3{mk} marker +120][♪kira -9dB][!#bd[1] to,{opacity:1, duration:.2} +300][!#bd[1].img to,{filter:'saturate(1)', duration:.25} +300][!#bd[1] punch,1.12,duration=320 +300][♪pop -2dB +300][!#bd[2] to,{opacity:1, duration:.2} +440][!#bd[2].img to,{filter:'saturate(1)', duration:.25} +440][!#bd[2] punch,1.12,duration=320 +440][♪pop -2dB +440][!#bd[3] to,{opacity:1, duration:.2} +580][!#bd[3].img to,{filter:'saturate(1)', duration:.25} +580][!#bd[3] punch,1.12,duration=320 +580][♪pop -2dB +580][!#bd[*].img to,{y:-8, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.15} +1000]{e}3つの棚{/}から出ていました。
 
 *** stage
 @n: [silence:200][♪scene -5dB -200]架空のスーパー「[>#st.a.plate -50][♪pophi -3dB]{まるみ屋 ひばり台店|まるみや ひばりだいてん}」で、[|][>#st.a.chips[*] -50][♪pop -3dB -50][♪pop -3dB +100][♪pop -3dB +250]{e}4週間{/}、廃棄を毎日[>#st.a.note]量りました。

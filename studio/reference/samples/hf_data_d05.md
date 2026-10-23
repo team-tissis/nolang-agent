@@ -112,7 +112,7 @@ def ccard(n, l, h, c) = div(top: 300px; width: 556px; height: 560px; border-radi
   div#top(left: 14px; top: 0px; width: 530px; height: 4px; border-radius: 3px; background: {c})
   p#no(left: 36px; top: 40px; font-size: 22px; font-family: c; letter-spacing: 0.12em; color: $tx3; content: {n})
   p#lb(left: 36px; top: 80px; font-size: 22px; font-family: b; color: $ink; background: {c}; border-radius: 148px; padding: 6px 16px; content: {l})
-  p#hd(left: 36px; top: 142px; font-size: 36px; font-family: b; line-height: 1.34; white-space: nowrap; content: {h})
+  p#hd(z-index: front; left: 36px; top: 142px; font-size: 36px; font-family: b; line-height: 1.34; white-space: nowrap; content: {h})
   div#dv(left: 36px; top: 268px; width: 484px; height: 2px; background: $line2)
 # 結論の札の行 (色の点 + 文・語の頭で下から上がる)
 def li(t, c) = div(left: 36px; width: 495px; height: 36px; in: {y:12, opacity:0, duration:0.45, ease:'power3.out'})
@@ -267,11 +267,11 @@ board#wk(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}03{/} ／
   pt#pa3(left: 702px; top: 516px; v: 3.08%; c: $va; lc: "#C3CDD9"; ly: 26)
   pt#pb4(left: 921px; top: 442px; v: 3.28%; c: $cyan; lc: $cyan; ly: -13)
   pt#pa4(left: 921px; top: 478px; v: 3.18%; c: $va; lc: "#C3CDD9"; ly: 26)
-  p#gl1(cx: 384px; cy: 462px; font-size: 46px; font-family: b; color: $cyan; white-space: nowrap; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'}) +0.88{pt16}pt{/}
-  p#gl2(cx: 552px; cy: 460px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.22
   p#gl3(cx: 772px; cy: 496px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.17
   p#gl4(cx: 992px; cy: 472px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.10
   shape#rb(path: "M313 460 L313 469 L660 469 L660 460"; background: none; border: 2px solid #3DD9EBB3; in: {scaleX:0.2, opacity:0, duration:0.5, ease:'power2.out'})
+  p#gl2(cx: 552px; cy: 460px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.22
+  p#gl1(cx: 384px; cy: 462px; font-size: 46px; font-family: b; color: $cyan; white-space: nowrap; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'}) +0.88{pt16}pt{/}
   p#rl(cx: 730px; top: 712px; font-size: 21px; color: $cyan; white-space: nowrap; in: {opacity:0, duration:0.5}) 2 週目以降の差は 0.1〜0.2pt
   callout#co(left: 1150px; top: 34px; width: 540px; height: 700px)
     img#ic(left: 330px; top: 26px; width: 180px; height: 180px; object-fit: contain; box-shadow: 0px 27px 45px #00000080; main: none; in: {scale:0.4, rotation:-20, opacity:0, duration:0.7, ease:'back.out(2.2)'}) [transparent]琥珀の金色に柔らかく光る、艶のある小さな 4 つの角の星形のきらめきと、その横の小さな 2 つのきらめき。クリーンでモダンな 3D の icon の質感、柔らかなスタジオの光、中央に 1 つだけ置く。文字なし
@@ -325,9 +325,9 @@ board#rv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}05{/} ／
   div#c2(left: 770px; top: 148px; width: 236px; height: 58px; border-radius: 148px; border: 2px solid $line2; background: #060A1180; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
     p#pl(left: 10px; cy: 50%; font-size: 20px; font-family: m; color: $ink; background: $amber; border-radius: 148px; padding: 4px 14px) 年額
     p#t(left: .pl.right+14; cy: 50%; font-size: 22px; white-space: nowrap) {b17}49,800{/} 円
-  p#lt(left: 44px; top: 236px; font-size: 26px; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) 課金者 1 人あたり{s13} 円{/}
   div#lbase(left: 44px; top: 600px; width: 760px; height: 2px; background: $line2; in: {opacity:0, duration:0.5})
   div#lb(left: "73;227;380"; top: "253;244;249"; width: 132px; height: "147;156;151"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
+  p#lt(left: 44px; top: 236px; font-size: 26px; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) 課金者 1 人あたり{s13} 円{/}
   p#lv(cx: "117;271;424"; top: "221;212;217"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.5, stagger: {each: 0.12}}) ×3 40,103;42,460;41,085
   p#lbd(left: 486px; top: 282px; font-size: 22px; font-family: m; color: $cyan; border: 2px solid $cyan; border-radius: 148px; padding: 4px 14px; white-space: nowrap; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'}) +5.9%
   p#lx(cx: "117;271;424"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
@@ -362,8 +362,8 @@ board#sl(left: 96px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 
     p#b2(left: 28px; top: 56px; font-size: 32px; font-family: b; color: #FFD5DC; white-space: nowrap) 「年額の途中解約・返金はできるか」
 board#sr(left: 972px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 副作用"; t: "年額の返金申請"; s: "14 日以内"; delay: 320)
   img#ic(left: 660px; top: 8px; width: 150px; height: 150px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]紙のレシートと、1 枚の金色の硬貨を回り込む曲がった戻りの矢印の、艶のある 3D の icon。柔らかな珊瑚のピンクと琥珀の色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。文字・数字なし
-  p#c(left: 44px; top: "131;211;291"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
   div#pa(left: "80;102;124"; top: 204px; width: 26px; height: 26px; border-radius: 6px; background: #8B99AD; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×3
+  p#c(left: 44px; top: "131;211;291"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
   div#pb(left: "80;102;124;146;168;190;212;234;256;278;300"; top: 324px; width: 26px; height: 26px; border-radius: 6px; background: $rose; box-shadow: 0px 0px 12px #FF6B8159; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×11
   div#pc(left: "80;102;124;146"; top: 444px; width: 26px; height: 26px; border-radius: 6px; background: $vc; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×4
   p#ra(left: 520px; top: 188px; font-size: 42px; font-family: b; line-height: 1.25; white-space: nowrap; in: {opacity:0, duration:0.5}) 3.4%[br]{s13}3 件 ／ 年額 88 人{/}

@@ -52,7 +52,7 @@ p#hk_q(right: 60px; top: 1530px; font-size: 165px; color: $a; text-shadow: 0px 0
 section#clash
 img#cs_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) 夜の野外フェス会場を高い所から見下ろす、遠く離れた2つのステージがネオンに光る、広い芝生
 neon#cs_v
-h1#cs_h(left: 60px; top: 135px) 推しAと推しB[br]{r}まさかの同時刻{/}
+h1#cs_h(left: 60px; top: 135px; font-weight: 900) 推しAと推しB[br]{r}まさかの同時刻{/}
 div#cs_c(in: {stagger: {each: 0.15}}; left: 60px; top: 1170px; width: 960px; height: 315px; gap: 24; display: flex) ×2
   p#s(left: 36px; top: 30px; font-size: 39px; font-family: e; color: $b; letter-spacing: 0.15em) MAIN STAGE;SUB STAGE
   p#t(left: 36px; top: 87px; font-size: 108px; font-family: e; color: $ink) 18:30;18:30
@@ -74,7 +74,7 @@ p#ht_s(right: 60px; top: 1590px; font-size: 72px; color: $deep; background: $b; 
 section#climax
 img#cx_p(inset: 0; main: kb {scale: [1, 1.1], focus: '50% 40%'}) 夜の野外フェスのメインステージ、強烈な赤と青のサーチライトとスモーク、宙を舞う紙吹雪、観客なし
 neon#cx_v
-h1#cx_h(left: 60px; top: 135px) イントロ一音目で[br]全部、飛んだ
+h1#cx_h(left: 60px; top: 135px; font-weight: 900) イントロ一音目で[br]全部、飛んだ
 p#cx_w(left: 60px; top: 390px; font-size: 192px; color: $a; text-shadow: 0px 0px 45px #FF2E63; in: punch; transform: rotate(-5deg)) 完全勝利
 div#cx_r(in: {stagger: {each: 0.12}}; left: 60px; top: 1185px; width: 960px; height: 300px; gap: 18; display: flex) ×3
   p#l(cx: 50%; top: 36px; font-size: 45px; color: $mute) 体力;声;足

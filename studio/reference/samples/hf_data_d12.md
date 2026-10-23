@@ -116,9 +116,9 @@ section#survey(stagger: {each:0})
 chap#ch1.sticky(n: "01"; t: "調査のあらまし")
 # 右上の進行 (sticky・8 段の小さな棒を章ごとに左から満たす)
 div#hdr_r.sticky(left: 1260px; top: 36px; width: 590px; height: 56px; background: #FFFBF3F0; border-radius: 18px; box-shadow: 0px 8px 22px #3C28141F; z-index: front; in: {y:-24, opacity:0, duration:.6, ease:'power3.out'}; out: {y:-20, opacity:0, duration:.4, ease:'power2.in'})
-  p#brand(left: 24px; cy: 50%; font-size: 21px; letter-spacing: .06em; color: $ink2) みなと野市 図書館利用調査
   div#seg(left: "210;231;252;273;294;315;336;357"; cy: 50%; width: 26px; height: 8px; border-radius: 4px; background: $segbg) ×8
     div#fill(left: 0px; top: 0px; width: 26px; height: 8px; border-radius: 4px; background: $amber; in: {scaleX:0, duration:.5, ease:'power2.out', pivot:'left'})
+  p#brand(left: 24px; cy: 50%; font-size: 21px; letter-spacing: .06em; color: $ink2) みなと野市 図書館利用調査
 card#b_photo(left: 90px; top: 150px; width: 800px; height: 500px; transform: rotate(-1.6deg); delay: 450; in: {y:40, rotation:-3.4, opacity:0, duration:.8, ease:'power3.out'})
   img#img(left: 16px; top: 16px; width: 766px; height: 466px; border-radius: 16px; main: kb {scale: [1.12, 1], ease:'sine.out'}) 大学の研究室の木の机を真上から見た構図。返送された紙の調査票と封筒がきちんと積まれ、鉛筆でチェックが入った調査票が数枚、簡単な棒グラフを映すノートパソコン、紅茶のマグ、鉛筆、温かい光のデスクランプ。机の上の物を画面いっぱいに配して余白を作らない。読める文字や数字は描かない
 fact#b_fact(top: "467;522;576"; i: "map-pin;bank;clock"; t: "みなと野市;市立図書館;平日の閉館"; e: "人口 18万人;本館 1・分館 3;19時"; c: "$teal;$teal;$amber"; bc: "$line;$line;$amber"; delay: 700) ×3

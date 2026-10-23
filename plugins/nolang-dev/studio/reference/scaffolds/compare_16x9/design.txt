@@ -6,13 +6,12 @@ palette a=#EE6A1F b=#22B8A7
 font "極太の角ゴシック体"
 fonts n="極太の欧文グロテスク、数字が大きくはっきり"
 
-# 役ごとの動き (題 title / 主役の語 big / 箱 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える
+# 役ごとの動き (題 title / 主役の語 big / 板 div / 本文 row / 注記 note)。変えたい役はこの行を書き換える。入場は書いた物だけ (書かなければ動かない) — 根の板には `in: div` を書く (def の板は書いてある・板の子は板と一緒に出る)
 motion title { in: {y:-60, scale:0.94, opacity:0, duration:0.55, ease:'back.out(1.6)'}; out: {y:-24, opacity:0, duration:0.24} }
 motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'}; out: fade {duration:0.22} }
 motion div { in: {y:36, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
 motion row { in: {x:-90, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
 motion note { in: {y:21, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
-div { in: div }
 # 印の無い文字と一覧 (×N・群) は cut 頭に積まず、1 つ目は頭・2 つ目からは 2 文目以降に 1 つずつ出る (絵・板は頭のまま・cut ごとに `section#名(stagger: {each: .12})` で頭の組み上がりに戻せる)
 # 一覧を頭に全部見せて強調を文で動かすなら `section#名(stagger: sentence,dim)` (2 つ目からは薄く出て、その文の頭で濃くなる)
 cut { stagger: sentence }
@@ -24,19 +23,19 @@ def sub(t) = p(font-size: 45px; color: $mute; in: note; content: {t})
 def body(t) = p(font-size: 48px; in: row; content: {t})
 def note(t) = p(font-size: 36px; color: $mute; in: note; content: {t})
 # 主役の数字 (count はこの段で): 題 l + 数字 v (書体 n) + 単位 u。`v: "[count:150]"` は出ると同時に数える (3 桁以上・小数)
-def stat(v, u, l) = div(width: 840px; height: 249px)
+def stat(v, u, l) = div(width: 840px; height: 249px; in: div)
   p#l(left: 0px; top: 0px; font-size: 45px; color: $mute; content: {l})
   p#v(left: 0px; top: 69px; font-size: 168px; font-family: n; color: $a; line-height: 1; content: {v})
   p#u(left: .v.right+18; top: 141px; font-size: 84px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
 def stamp(content) = p(font-size: 72px; color: $a; border: 4px solid $a; border-radius: 18px; padding: 15px 36px; text-align: center; in: pop; content: {content})
 # 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
-def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 36px; padding: 60px; box-shadow: 2)
-  p#t(left: 0px; top: 0px; font-size: 96px; content: {t})
-  div#i(left: 0px; top: 168px; width: 100%; height: 330px; gap: 24px; display: flex; flex-direction: column; background: $panel; border-radius: 24px; box-shadow: 2) ×3
+def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 36px; padding: 60px; box-shadow: 2; in: div)
+  p#t(left: 60px; top: 60px; font-size: 96px; content: {t})
+  div#i(left: 60px; top: 228px; right: 60px; height: 330px; gap: 24px; display: flex; flex-direction: column; background: $panel; border-radius: 24px; box-shadow: 2) ×3
     icon#ic(left: 0px; cy: 50%; font-size: 84px; name: {icons}; color: $b)
     p#t(left: 120px; cy: 50%; font-size: 57px; content: {items})
-  p#cta(left: 0px; bottom: 0px; font-size: 57px; color: $a; content: {cta})
+  p#cta(left: 60px; bottom: 60px; font-size: 57px; color: $a; content: {cta})
 image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
 # 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
 backdrop#bd(look: glow; vignette: 0.15)
@@ -44,11 +43,11 @@ bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセ�
 bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
 subtitle.hug(font-size: 45px; bottom: 36px; unit: phrase)
 # 比べる 2 列の板: 絵 + 名・値・判定 (×2 を stack で左右 / 上下に等分)
-def side(t, v, i, c, j) = div(background: $panel; border-radius: 24px; padding: 48px; box-shadow: 2)
-  icon#i(left: 0px; top: 0px; font-size: 108px; name: {i}; color: {c})
-  p#t(left: 144px; top: 12px; font-size: 66px; content: {t})
-  p#v(left: 0px; top: 180px; font-size: 54px; content: {v})
-  p#w(left: 0px; bottom: 0px; font-size: 60px; color: {c}; content: {j})
+def side(t, v, i, c, j) = div(background: $panel; border-radius: 24px; padding: 48px; box-shadow: 2; in: div)
+  icon#i(left: 48px; top: 48px; font-size: 108px; name: {i}; color: {c})
+  p#t(left: 192px; top: 60px; font-size: 66px; content: {t})
+  p#v(left: 48px; top: 228px; font-size: 54px; content: {v})
+  p#w(left: 48px; bottom: 48px; font-size: 60px; color: {c}; content: {j})
 
 section#title
 img#t_bg(inset: 0; content: @bg)

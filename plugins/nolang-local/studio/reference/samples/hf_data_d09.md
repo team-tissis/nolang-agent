@@ -101,7 +101,7 @@ def concl(n, h, c, big, s, b) = div(width: 560px; height: 690px; border-radius: 
   p#big(left: 28px; top: 144px; font-size: 96px; line-height: 1.15; letter-spacing: -0.02em; font-family: n; color: {c}; white-space: nowrap; content: {big})
   p#s(left: 30px; top: 262px; font-size: 21px; font-family: m; color: $mut; white-space: nowrap; content: {s})
   div#r(left: 28px; top: 306px; width: 504px; height: 2px; background: $line2)
-  p#b(left: 28px; top: 324px; width: 504px; font-size: 26px; line-height: 1.65; font-family: m; color: $ink2; content: {b})
+  p#b(z-index: front; left: 28px; top: 324px; width: 504px; font-size: 26px; line-height: 1.65; font-family: m; color: $ink2; content: {b})
 
 # s1 題: 淡い青の円が広がり破線の輪が回り込む・題の 2 行は mask の下から上がり「何倍」に橙の下帯・右の円に犬と猫の絵が浮かび上下に漂う・分解の式の札が 1 つずつ・出典の札
 section#s1(stagger: {each:0}; out: {x:-48, opacity:0, duration:0.3, ease:'power2.in'})
@@ -301,10 +301,10 @@ panel#s6cmp(left: 1290px; top: 286px; width: 534px; height: 610px; t: "高位シ
   p#dn(left: 26px; top: 200px; width: 80px; text-align: center; font-size: 26px; font-family: h) 犬
   img#ci(left: 4px; top: 288px; width: 96px; height: 96px; content: @cat; object-fit: contain)
   p#cn(left: 26px; top: 390px; width: 80px; text-align: center; font-size: 26px; font-family: h) 猫
-  p#l(left: 120px; top: "64;114.7;190.7;241.3"; font-size: 18px; color: $mut; white-space: nowrap) ×4 2036年 高位;北欧の先行市場;2036年 高位;北欧の先行市場
   div#da(left: 120px; top: 126px; width: 270px; height: 34px; border-radius: 0px 6px 6px 0px; background: $dog; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
   p#dav(left: 400px; cy: 143px; font-size: 26px; font-family: n; in: {opacity:0, duration:0.3, ease:'power3.out'}) 45%
   div#db(left: 120px; top: 202px; width: 312px; height: 34px; border-radius: 0px 6px 6px 0px; background: #C3CCD6; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
+  p#l(left: 120px; top: "64;114.7;190.7;241.3"; font-size: 18px; color: $mut; white-space: nowrap) ×4 2036年 高位;北欧の先行市場;2036年 高位;北欧の先行市場
   p#dbv(left: 442px; cy: 219px; font-size: 26px; font-family: n; color: $gl; in: {opacity:0, duration:0.3, ease:'power3.out'}) 52%
   div#ca(left: 120px; top: 316px; width: 180px; height: 34px; border-radius: 0px 6px 6px 0px; background: $cat; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
   p#cav(left: 310px; cy: 333px; font-size: 26px; font-family: n; in: {opacity:0, duration:0.3, ease:'power3.out'}) 30%
@@ -323,9 +323,9 @@ panel#s7pl(left: 96px; top: 206px; width: 1060px; height: 690px; t: "中位シ�
   div#b1(left: 310px; top: 256px; width: 170px; height: 142px; border-radius: 6px 6px 0px 0px; background: $dog; in: {y:-60, opacity:0, duration:0.55, ease:'bounce.out'})
   div#b2(left: 550px; top: 221px; width: 170px; height: 34px; border-radius: 6px 6px 0px 0px; background: $lift; in: {y:-50, opacity:0, duration:0.5, ease:'bounce.out'})
   div#b3(left: 790px; top: 221px; width: 170px; height: 379px; border-radius: 6px 6px 0px 0px; background: $ink; in: {scaleY:0, duration:0.7, ease:'power3.out', pivot:'bottom'})
-  p#v(left: "30;190;350;510"; top: "234.1;139.7;116.8;116.8"; width: 220px; text-align: center; font-size: 28px; font-family: n; color: "$ink2;$dog;$ink2;$ink2"; in: {y:8, opacity:0, duration:0.3, ease:'power3.out'}) ×4 1,014;+708;+172;1,894
   p#n(left: "30;190;350;510"; top: 612px; width: 220px; text-align: center; font-size: 22px; color: $ink2; white-space: nowrap; in: {y:6, opacity:0, duration:0.3, ease:'power3.out'}) ×4 2026年;加入率の上昇;保険料の値上げ;2036年（中位）
   shape#cn(left: "160;320;480"; top: "264;169.6;146.7"; width: 70px; height: 3px; path: line_h; border: 3px solid #94A2B3; dash: 4,3; in: {scaleX:0, duration:0.3, ease:'power3.out', pivot:'left'}) ×3
+  p#v(left: "30;190;350;510"; top: "234.1;139.7;116.8;116.8"; width: 220px; text-align: center; font-size: 28px; font-family: n; color: "$ink2;$dog;$ink2;$ink2"; in: {y:8, opacity:0, duration:0.3, ease:'power3.out'}) ×4 1,014;+708;+172;1,894
   div#base(left: 40px; top: 600px; width: 990px; height: 2px; background: $ink)
   shape#br(path: "M208 98.7 L208 89.3 L335.3 89.3 L343.3 81.3 L351.3 89.3 L478.7 89.3 L478.7 98.7"; background: none; border: 3px solid $ink; in: {y:8, opacity:0, duration:0.4, ease:'power3.out'})
   p#bl(left: 310px; top: 78px; width: 410px; text-align: center; font-size: 24px; white-space: nowrap; in: pp) 伸び {b7}880{/}億円

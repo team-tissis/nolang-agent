@@ -146,6 +146,12 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
         "台帳に書体の pin か TTF が無く既定 font で測った (DB のある所で check を回す)",
     ),
     _rule("font_version_mismatch", "warn", "record", "cache の TTF が catalog の版と違う (check が引き直す)"),
+    _rule(
+        "synthetic_bold",
+        "warn",
+        "fix",
+        "family に太い face が無い (browser の合成 bold は無い) → 太さのある family を `font-family:` で選ぶか font-weight を外す",
+    ),
     _rule("script_font_digits", "warn", "record", "数字は本文の書体に (font= を外す)"),
     # 時間 (出る時刻・動き・切替)
     _rule("spoiler", "warn", "fix", "見出しが台詞の語を先に見せる → 語の印で出す"),
@@ -235,6 +241,7 @@ SKILL_RULES: tuple[str, ...] = (
     "month_reading",
     "font_not_pinned",
     "font_version_mismatch",
+    "synthetic_bold",
     "ghost_dissolve",
     "photo_hidden",
 )

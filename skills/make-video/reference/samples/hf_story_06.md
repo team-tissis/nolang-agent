@@ -120,7 +120,7 @@ section#kochi
 group#kochi(main: keys(at=0 scale=1.03 | at=1 scale=1.16 ease=sine.inOut),window=0,7100,forwards; transform-origin: 47.6% 49%)
   img#empty(inset: 0; content: @kochi_empty; main: none)
   img#otter(inset: 0; content: @kochi; main: none)
-  shape#focus(left: 430px; top: 892px; width: 190px; height: 190px; border-radius: 50%; z-index: front; background: none; border: 3px solid $hl; box-shadow: 0px 0px 24px #F3C46A8C; in: {scale:1.6, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.9})
+  shape#focus(left: 430px; top: 892px; width: 190px; height: 190px; border-radius: 50%; background: none; border: 3px solid $hl; box-shadow: 0px 0px 24px #F3C46A8C; in: {scale:1.6, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.9})
 shade_b#kochi_shade
 # 場所の札: 金の縦棒 + 半透明の黒の板 (右だけ角丸) + ピン + 地名 / 年
 div#loc(left: 70px; top: 200px; width: 600px; height: 165px; background: #080A098C; border-radius: 0,9,9,0; in: {x:-24, opacity:0, duration:0.45, ease:'power2.out'})
@@ -175,7 +175,7 @@ transition dissolve,140,overlap=140
 *** life
 [>#subtitle]
 @n: [♪dive -3dB -90 to=1.6s fade=0,500]川を泳ぎ、[>#fish -50][♪splash -3dB -30][<#swim +100]魚を追いかけ、[|][>#village -70][♪swish -6dB -250][<#fish +350]日本人のすぐそばで[br]暮らしていました。
-@: [!#village.otter filter,duration=4400,sat:0.28,bright:0.72][!#village.empty filter,duration=4400,sat:0.28,bright:0.72]でも、いつからか、[|][!#village.otter to,{opacity:0, duration:2.3, ease:'sine.inOut'} +70][♪wind -6dB +120 to=3.5s fade=0,800]その姿は[br]少しずつ消えていきます。
+@: [!#village.otter to,{filter:'saturate(.28) brightness(.72)', duration:4.4}][!#village.empty to,{filter:'saturate(.28) brightness(.72)', duration:4.4}]でも、いつからか、[|][!#village.otter to,{opacity:0, duration:2.3, ease:'sine.inOut'} +70][♪wind -6dB +120 to=3.5s fade=0,800]その姿は[br]少しずつ消えていきます。
 transition dissolve,320,overlap=320
 
 *** causes

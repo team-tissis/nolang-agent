@@ -258,8 +258,8 @@ role_char#eng_char(img: eng; t: $eng_t)
 role_head#eng_head(n: "ROLE 05"; a: エンジニア; ja: 開発者; c: $eng; s: 75; et: 29; jt: 69)
   p#en Engineer
 group#eng_steps(in: {y:20, opacity:0, duration:.4, ease:'power3.out'})
-  p#st(left: "453;578;808"; top: 326px; font-size: 32px; font-family: h; color: #A29E94; background: #FFFFFF; border: 3px solid #D6D0C4; border-radius: 148px; padding: 8px 26px) ×3 設計;プログラミング;テスト
   icon#ar(left: "544;774"; top: 342px; font-size: 34px; name: arrow-right; color: #C8C2B6) ×2
+  p#st(left: "453;578;808"; top: 326px; font-size: 32px; font-family: h; color: #A29E94; background: #FFFFFF; border: 3px solid #D6D0C4; border-radius: 148px; padding: 8px 26px) ×3 設計;プログラミング;テスト
 #eng_steps.st.on(color: #FFFFFF; background: $eng; border: 3px solid $eng)
 # エディタ (紺の窓・上の帯に 3 つの点と file 名・コードは行ごとに左から拭いて出る)
 div#eng_ed(left: 680px; top: 404px; width: 590px; height: 344px; border-radius: 20px; background: $ink; box-shadow: 0px 14px 34px #1E2A4A40; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})

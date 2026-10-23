@@ -209,8 +209,8 @@ board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
   svg#ab(left: 158px; top: 368px; width: 720px; height: 502px; part: area_b; in: {opacity:0, duration:0.8})
   svg#la(left: 158px; top: 368px; width: 720px; height: 502px; part: line_a; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
   svg#lb(left: 158px; top: 368px; width: 720px; height: 502px; part: line_b; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
-  div#da(left: "102;219;336;452;569"; top: "440;405;349;273;243"; width: 34px; height: 34px; border-radius: 148px; background: $yellow; border: 6px solid $deep; z-index: front; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
-  div#db(left: "102;219;336;452;569"; top: "521;506;476;430;405"; width: 34px; height: 34px; border-radius: 148px; background: $pink; border: 6px solid $deep; z-index: front; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
+  div#da(left: "102;219;336;452;569"; top: "440;405;349;273;243"; width: 34px; height: 34px; border-radius: 148px; background: $yellow; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
+  div#db(left: "102;219;336;452;569"; top: "521;506;476;430;405"; width: 34px; height: 34px; border-radius: 148px; background: $pink; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
   p#va(cx: "113;230;347;463;580"; cy: "422;392;336;260;224"; font-size: "28;20;20;20;28"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 24%;31%;42%;57%;63%
   p#vb(cx: "113;230;347;463;580"; cy: "562;544;513;468;445"; font-size: "28;20;20;20;28"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 8%;11%;17%;26%;31%
   div#step(left: 44px; top: 962px; width: 408px; height: 68px; border-radius: 32px; background: #FFD23F24; border: 3px solid $yellow; in: {scale:0.5, y:10, opacity:0, duration:0.45, ease:'back.out(2.2)'})

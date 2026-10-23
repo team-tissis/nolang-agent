@@ -108,7 +108,7 @@ progress#prog.sticky(left: 0px; top: 0px; width: 1920px; height: 4px; background
 p#crumb.sticky(left: 80px; top: 32px; font-size: 20px; color: $fg3; letter-spacing: .06em; z-index: front; delay: 200; in: {y:-10, opacity:0, duration:.55, ease:'power3.out'}; out: {opacity:0, duration:.8}) 登録時アンケート{a}　｜　{/}1週間の結果
 idx#funnel_idx {ab}01 / 05{/}　回答のファネル
 snum#funnel_n 01
-h2#funnel_h 回答のファネル
+h2#funnel_h(font-weight: 700) 回答のファネル
 hsub#funnel_s アンケートに同意した人は、どこまで答えたか
 panel#fun(left: 80px; top: 219px; width: 1761px; height: 336px; delay: 200)
   ptitle#t 回答の状況{pn}　人数（同意した人に占める割合）{/}
@@ -132,7 +132,7 @@ panel#fun(left: 80px; top: 219px; width: 1761px; height: 336px; delay: 200)
 panel#time(left: 80px; top: 580px; width: 561px; height: 368px)
   ptitle#t 回答にかかった時間{pn}　中央値{/}
   svg#dial(left: 33px; top: 102px; width: 190px; height: 190px; part: dial)
-  shape#arc(path: "M 86 86.3 C 111.2 86.3 131.7 106.8 131.7 132 C 131.7 141.7 128.6 151.1 123 158.9"; z-index: front; background: none; border: 14px solid $amber; in: draw {duration: 0.9, ease: 'power2.out'})
+  shape#arc(path: "M 86 86.3 C 111.2 86.3 131.7 106.8 131.7 132 C 131.7 141.7 128.6 151.1 123 158.9"; background: none; border: 14px solid $amber; in: draw {duration: 0.9, ease: 'power2.out'})
   p#num(left: 254px; top: 138px; font-size: 104px; font-family: b; line-height: 1; in: {y:30, opacity:0, duration:.55, ease:'power3.out'}) [count:21 start=0 ms=900]{sec}秒{/}
   p#sub(left: 254px; top: 246px; font-size: 21px; color: $fg3) 目盛りは 1 分
 # 登録方法別の全部スキップ (横軸 0〜40%)
@@ -147,7 +147,7 @@ section#paid(stagger: {each:0})
 div#glow_p.bleed(left: 1299px; top: -250px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:-1599, y:630, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#paid_idx {ab}02 / 05{/}　課金率への影響
 snum#paid_n 02
-h2#paid_h 課金率は動いていない
+h2#paid_h(font-weight: 700) 課金率は動いていない
 hsub#paid_s アンケート開始前 → 開始後の比較
 panel#rate(left: 80px; top: 219px; width: 632px; height: 636px; delay: 300)
   ptitle#t 登録からの課金率
@@ -199,7 +199,7 @@ section#pred(stagger: {each:0})
 div#glow_r.bleed(left: 1350px; top: 420px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:-51, y:-670, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#pred_idx {ab}03 / 05{/}　課金を予告する回答
 snum#pred_n 03
-h2#pred_h 課金を予告する回答
+h2#pred_h(font-weight: 700) 課金を予告する回答
 hsub#pred_s 回答別に見た、登録から3日以内の課金率
 panel#pr(left: 80px; top: 219px; width: 1761px; height: 729px; delay: 300)
   ptitle#t 3日以内の課金率{pn}　回答別{/}
@@ -235,7 +235,7 @@ section#major(stagger: {each:0})
 div#glow_m.bleed(left: -250px; top: 500px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:1600, y:-80, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#major_idx {ab}04 / 05{/}　多数派の課金
 snum#major_n 04
-h2#major_h 多数派は課金しない
+h2#major_h(font-weight: 700) 多数派は課金しない
 hsub#major_s よく選ばれる用途と、その課金人数
 panel#top(left: 80px; top: 219px; width: 712px; height: 729px; delay: 300)
   ptitle#t 用途の上位{pn}　回答者に占める割合{/}
@@ -269,7 +269,7 @@ section#route(stagger: {each:0})
 div#glow_o.bleed(left: 1200px; top: 450px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:-1450, y:50, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#route_idx {ab}05 / 05{/}　流入経路のずれ
 snum#route_n 05
-h2#route_h 流入経路は、自己申告と計測がずれる
+h2#route_h(font-weight: 700) 流入経路は、自己申告と計測がずれる
 hsub#route_s 「どこで知ったか」の自己申告と、GA の計測
 panel#gap(left: 80px; top: 219px; width: 1008px; height: 216px; delay: 300)
   ptitle#t 「検索」経由の割合{pn}　計測と自己申告{/}
@@ -297,7 +297,7 @@ panel#ai(left: 1112px; top: 219px; width: 729px; height: 729px; in: {x:40, opaci
   p#share(left: 204px; top: 147px; font-size: 22px; line-height: 1.45; color: $fg2; opacity: .35) 自己申告の流入経路に[br]占める割合
   div#ln1(left: 33px; top: 240px; width: 664px; height: 2px; background: $line)
   svg#ring(left: 33px; top: 258px; width: 180px; height: 180px; part: ring)
-  shape#arc(path: "M 82 185.5 C 107.7 185.5 128.5 206.3 128.5 232 C 128.5 257.7 107.7 278.5 82 278.5 C 56.3 278.5 35.5 257.7 35.5 232 C 35.5 223.2 38 214.5 42.7 207.1"; z-index: front; background: none; border: 18px solid $amber; in: draw {duration: 1, ease: 'power2.out'})
+  shape#arc(path: "M 82 185.5 C 107.7 185.5 128.5 206.3 128.5 232 C 128.5 257.7 107.7 278.5 82 278.5 C 56.3 278.5 35.5 257.7 35.5 232 C 35.5 223.2 38 214.5 42.7 207.1"; background: none; border: 18px solid $amber; in: draw {duration: 1, ease: 'power2.out'})
   p#num(left: 240px; top: 296px; font-size: 72px; font-family: b; line-height: 1.15; in: {y:14, opacity:0, duration:.4, ease:'power3.out'}) [count:84 start=0 ms=1000]{pc}%{/}
   p#lab1(left: 240px; top: 382px; font-size: 22px; color: $fg2; opacity: .35) 24時間以内の生成到達
   div#ln2(left: 33px; top: 465px; width: 664px; height: 2px; background: $line)
@@ -311,7 +311,7 @@ section#sum(stagger: {each:0})
 div#glow_s.bleed(left: 519px; top: 300px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:681, y:150, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#sum_idx(out: {opacity:0, duration:.8}) {ab}まとめ{/}　1週間でわかったこと
 snum#sum_n(w: 59) まとめ
-h2#sum_h(x: 130) 1週間でわかったこと
+h2#sum_h(x: 130; font-weight: 700) 1週間でわかったこと
 hsub#sum_s(x: 130) 登録時アンケートの結果から
 panel#c1(left: 80px; top: 284px; width: 572px; height: 600px; in: {y:50, opacity:0, duration:.65, ease:'expo.out'})
   div#n(left: 36px; top: 32px; width: 54px; height: 54px; border-radius: 27px; border: 2px solid $amber; delay: 200; in: {y:14, opacity:0, duration:.4, ease:'power2.out'})

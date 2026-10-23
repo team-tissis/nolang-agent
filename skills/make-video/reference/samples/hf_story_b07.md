@@ -62,7 +62,7 @@ def stamp(n) = div(left: 36px; top: 452px; width: 340px; height: 340px; transfor
 # 見出しの板 (白地・黒の太い縁・硬い影・2 段目は大きく決め語は赤) + 左上に食み出す赤丸の番号 (丸い札の文字 1 つ・板の左端に位置の式で付ける)。群ごと -1.5° で 1.35 倍から着地
 def headline(c, n) = group(left: 0px; top: 1090px; width: 1080px; height: 255px; transform: rotate(-1.5deg); in: {scale:1.35, rotation:3.5, opacity:0, duration:.2, ease:'back.out(2.2)'}; out: {y:40, opacity:0, duration:.1, ease:'power1.in'})
   p#card(cx: 50%; top: 0px; font-size: 64px; line-height: 1.18; color: $ink; text-align: center; background: #FFFFFF; border: 8px solid $ink; border-radius: 20px; padding: 22px 46px 26px 104px; box-shadow: 12px 12px 0px $ink; content: {c})
-  p#num(left: .card.left-24; top: -38px; width: 98px; font-size: 70px; line-height: 1; padding: 14px 0px; text-align: center; color: #FFFFFF; background: $red; border: 8px solid $ink; border-radius: 148px; overlap: .card; z-index: front; content: {n})
+  p#num(left: .card.left-24; top: -38px; width: 98px; font-size: 70px; line-height: 1; padding: 14px 0px; text-align: center; color: #FFFFFF; background: $red; border: 8px solid $ink; border-radius: 148px; overlap: .card; content: {n})
 # 黒の縁取りの擬音 (スッ・ペタ・ズシッ)
 def ono(t, w, s=53, c=#FFFFFF) = p(width: {w}; font-size: {s}; line-height: 1.25; color: {c}; stroke: $ink,9; content: {t})
 # 場面の絵 (題の帯の裏 180 から下端までの枠・絵ごとに寄る kb — 語で下へ沈めても帯との間に隙が出ないよう帯の裏まで敷く)

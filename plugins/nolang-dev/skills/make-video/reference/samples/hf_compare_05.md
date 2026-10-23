@@ -243,9 +243,9 @@ chip#c_pt(t: "ポイント：測ったまま ≠ 本来の形"; c: $orange_d; bc
 # 測った形と本来の形の 2 枚の板: 波打つ面 → まっすぐ・ゆがんだ穴 → 真円 (points の変形 + 点線の理想形 + 札の文言の差し替え)
 group#worn(in: {y:24, opacity:0, duration:.6, ease:'power3.out'})
   div#lb(left: 190px; top: 316px; width: 440px; height: 430px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule)
-  p#lh(left: 220px; top: 348px; font-size: 30px) 面
-  p#ls(left: 262px; top: 352px; font-family: m; font-size: 24px; color: $sub) 測った形
   shape#wavy(path: "M151.3,335.7 M395.3,419.3 M153.3,340.1 L159.3,339.0 L165.3,342.3 L171.3,347.7 L177.3,349.9 L183.3,348.0 L189.3,345.9 L195.3,346.7 L201.3,348.0 L207.3,345.6 L213.3,340.4 L219.3,337.7 L225.3,339.8 L231.3,343.5 L237.3,344.8 L243.3,345.1 L249.3,348.6 L255.3,355.9 L261.3,362.3 L267.3,363.9 L273.3,362.7 L279.3,363.2 L285.3,365.1 L291.3,364.2 L297.3,358.7 L303.3,352.5 L309.3,350.5 L315.3,351.8 L321.3,351.8 L327.3,348.9 L333.3,346.9 L339.3,348.7 L345.3,351.6 L351.3,350.8 L357.3,346.0 L363.3,342.1 L369.3,342.1 L375.3,343.1 L381.3,341.3 L387.3,337.9 L393.3,337.8 L393.3,417.3 L153.3,417.3 Z"; background: #EF6A1A24; border: 4px solid $orange)
+  p#ls(left: 262px; top: 352px; font-family: m; font-size: 24px; color: $sub) 測った形
+  p#lh(left: 220px; top: 348px; font-size: 30px) 面
   shape#wideal(points: "144,344 402.7,344"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
   p#lk(cx: 410px; top: 650px; font-size: 30px; color: $orange_d) すり減り
   div#rb(left: 690px; top: 316px; width: 440px; height: 430px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule)
@@ -273,12 +273,12 @@ div#r(left: 130px; top: "208;304;400;496"; width: 1660px; height: 136px) ×4
 # s6 使い分け: 写真つきの 2 枚の板 (こんなとき → 手法の丸札) → 両方を薄め、組み合わせの流れ図 (実物 → スキャンデータ → 改良した形) を上に重ねる
 section#s6
 khead#s6_head(k: "USE CASE"; t: "どちらを使う？")
-card#u1(left: 130px; top: 196px; width: 800px; height: 690px; in: {y:40, opacity:0, duration:.7, ease:'power3.out'})
+card#u1(left: 130px; top: 196px; width: 800px; height: 690px; overflow: hidden; in: {y:40, opacity:0, duration:.7, ease:'power3.out'})
   img#p(left: 0px; top: 0px; width: 800px; height: 400px; main: kb {scale: [1.08, 1], ease:'power1.out'}) [photo]明るく現代的な製品デザインのオフィス、白い机の大きなモニターに青と白の機械部品のブラケットの3D CADモデル、机の上に小さな3Dプリントの試作部品とデジタルノギス、観葉植物、大きな窓から柔らかい昼の光、落ち着いて風通しのよい親しみのある雰囲気、読める文字なし
   p#q(left: 44px; top: 430px; font-family: m; font-size: 24px; color: $sub) こんなとき
   p#a(left: 44px; top: 466px; font-size: 40px; line-height: 1.3) 新しい製品を[br]一から考える
   pill#pl(left: 44px; bottom: 40px; t: "通常のCADモデリング"; c: $blue)
-card#u2(left: 990px; top: 196px; width: 800px; height: 690px; in: {y:40, opacity:0, duration:.7, ease:'power3.out'})
+card#u2(left: 990px; top: 196px; width: 800px; height: 690px; overflow: hidden; in: {y:40, opacity:0, duration:.7, ease:'power3.out'})
   img#p1(left: 0px; top: 0px; width: 398px; height: 400px; content: @old; object-fit: cover; object-position: center; main: kb {scale: [1.1, 1], ease:'power1.out'})
   img#p2(left: 402px; top: 0px; width: 398px; height: 400px; main: kb {scale: [1.1, 1], ease:'power1.out'}) [photo]手で削り出した工業デザインのクレイモデル、コンパクトで現代的な車、なめらかな艶消しの暖かい灰色の粘土の面、明るいデザインスタジオの白い机の上、そばにクレイ用のヘラが数本、柔らかく均一なスタジオの光、ミニマルで清潔な背景
   p#c1(left: 14px; top: 350px; font-size: 24px; color: #FFFFFF; background: #14213DC7; border-radius: 10px; padding: 6px 16px) 図面のない部品

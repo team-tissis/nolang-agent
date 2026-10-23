@@ -14,7 +14,9 @@ usage (repo root から):
                   `<type>_NN.md` 1 本 + hf max の写し `hf_<type>_*.md` 1 本 (どちらも依頼と同じ題材を外し、依頼と同じ向きの物を先に・pick_samples)。
                   stream/samples.txt に記録し fix も同じ見本を使う
   python stream_author.py staff <project> <cut> <findings>  [--effort medium]   # 担当: 8 観点で cut を見直して block を stdout へ
-  python stream_author.py fix  <project> <cut 名> <findings file> [--root]   → stdout に直した block (--root = 根の 2 file も直す)
+  python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
+      → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (確認表で指摘に出ない崩れも探す)・
+        --shots = 見直しに cut の静止画も見せる (stream_run の --look))
 project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
@@ -49,6 +51,8 @@ TLHEAD = re.compile(r"^\*\*\*\s+\S+")
 # claude を起動する cwd: CLAUDE.md の無い場所 (repo の CLAUDE.md を読ませない)
 CWD = Path("/tmp/nolang-stream-cwd")  # claude -p の cwd (repo の外 — project の CLAUDE.md / settings を読ませない)
 MODEL = "claude-opus-5-5"
+# 見直し役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
+SHOT_WIDTH = 960
 # 状態を運ぶ常設 (章番号・STEP の進み・累計) を根に置ける動画の長さ (plan の見込み秒の和)。1 分程度の動画には置かない (ユーザーの裁定 10-15)
 LONG_VIDEO_S = 180
 
@@ -360,10 +364,20 @@ def _numbered(text: str) -> str:
 
 
 def fix_prompt(
-    name: str, block: str, findings: str, root_d: str, root_t: str, *, own_root: bool = False, defs_before: str = ""
+    name: str,
+    block: str,
+    findings: str,
+    root_d: str,
+    root_t: str,
+    *,
+    own_root: bool = False,
+    defs_before: str = "",
+    review: bool = False,
+    shots: list[str] | None = None,
 ) -> str:
     """own_root = この cut が根の持ち主 (動画の最初の live な cut・根が流れる前) — 根の 2 block も直せる (`@ root_design 行`)。他の cut
-    の直し役は根と前の cut の定義を変えない (参考として見るだけ)。"""
+    の直し役は根と前の cut の定義を変えない (参考として見るだけ)。review = 見直し (確認表で指摘に出ない崩れも探す・指摘が無くても呼ぶ)。
+    shots = 見直しに見せる静止画の名 (無ければ block を読んで描いた姿を想像させる)。"""
     if own_root:
         root_part = f"""根 (この cut の持ち物 — 直してよい。ただし image・cast・read・photo_style・prompt_tail・art・canvas の行と、名のある定義の名は変えない):
 === root_design ===
@@ -381,7 +395,32 @@ def fix_prompt(
 """
         where = "`@ 行番号` は cut の block の行だけ (根・前の cut は変えられない — 前の cut の定義が合わなければ自分の block に別の名で定義して使う)"
     defs = f"前の cut の定義 (参考・変えない・使ってよい):\n{defs_before}\n" if defs_before.strip() else ""
-    return f"""cut `{name}` の block に check の指摘が出ました。直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない。
+    look = ""
+    if review or shots:
+        if shots:
+            names = "・".join(shots)
+            intro = f"""画像はこの cut を本番の renderer で描いた静止画です ({names}・時刻は cut 頭から。動画素材と立ち絵は止まった姿・口は閉じたまま・
+切替の窓は写らない)。check の指摘とは別に、画像を 1 枚ずつ見て、見る人が「未完成・崩れている」と感じる所を探して直す。"""
+        else:
+            intro = "check の指摘とは別に、block を読んで、描いた時に見る人が「未完成・崩れている」と感じる所を想像して探して直す。"
+        look = f"""
+{intro}必ず次を確かめる:
+- 空き: 板・枠・画面に中身の無い面が大きく残っていないか (板の下半分が空・cut の頭に見出しだけの板・画面の片側だけに寄って反対側が空)。
+  中身を大きくする・板を中身に合わせて縮める・置き場を変える・空いた面に図や札を置く
+- 揃い: 並んだ要素が中央や軸からずれていないか (左右の余白が違う・行の頭が揃わない)
+- 重なり・読みやすさ: 文字が絵・他の文字・字幕に重なる・背景に沈む・小さすぎる
+- 主体: 絵の主体 (顔・物) が文字や板の下に隠れる・切れる
+- 場面との食い違い: 絵の中身が台詞と合わない (説明文は変えられない — 置き方・大きさ・幕・入れ替えで避ける)
+配置は大きく組み替えてよい (行の置き換え・追加・削除。台詞の文字と絵の説明文だけは変えない)。
+まず `=== look ===` に{"画像ごとに" if shots else ""}見つけた崩れを 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ
+`=== edits ===` の直後に `=== end ===`。
+"""
+    head = (
+        f"cut `{name}` の block に check の指摘が出ました。"
+        if findings.strip() or not look
+        else f"cut `{name}` の block を見直して、崩れがあれば直してください (check の指摘はありません)。"
+    )
+    return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
 変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)。
 形式:
 === edits ===
@@ -393,8 +432,8 @@ def fix_prompt(
 {where}。block の末尾に行を足すなら `@ 最後の行番号+1`。行番号は下の `N|` の物 (指摘の file:行 は 根 + cut の順に並べた design.txt / timeline.txt の行で、別物)。`N|` は番号で、行の中身ではない。
 直しが新しい欠陥を作らないために: 印で使う変種 (`[!#名 .tag]`) は design にその `#名.tag(…)` の行がある物だけ・`size=` は文字と icon だけ (箱は w= h=)・
 1 行 1 要素のまま (要素の行を途中で割らない・字下げの子は親の直後)。
-check の指摘 (file:行 と直し方つき):
-{findings}
+{look}check の指摘 (file:行 と直し方つき):
+{findings or "なし"}
 
 {root_part}{defs}
 直す block:
@@ -655,11 +694,12 @@ class Splitter:
         self.close()
 
 
-def claude_args(system_prompt: Path, *, effort: str) -> list[str]:
+def claude_args(system_prompt: Path, *, effort: str, json_input: bool = False) -> list[str]:
     return [
         claude_bin(),
         "-p",
         "--verbose",
+        *(["--input-format", "stream-json"] if json_input else []),  # 画像を渡す時は user message を JSON で
         "--output-format",
         "stream-json",
         "--include-partial-messages",
@@ -682,15 +722,43 @@ def claude_args(system_prompt: Path, *, effort: str) -> list[str]:
     ]
 
 
+def image_message(prompt: str, images: list[Path]) -> str:
+    """画像 (幅 SHOT_WIDTH の JPEG に縮める) + prompt の user message 1 つ (`--input-format stream-json` の 1 行)。"""
+    import base64
+    import io
+
+    from PIL import Image
+
+    content: list[dict[str, object]] = []
+    for path in images:
+        image = Image.open(path).convert("RGB")
+        image.thumbnail((SHOT_WIDTH, SHOT_WIDTH))
+        buf = io.BytesIO()
+        image.save(buf, "JPEG", quality=85)
+        data = base64.b64encode(buf.getvalue()).decode()
+        content.append({"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": data}})
+    content.append({"type": "text", "text": prompt})
+    return json.dumps({"type": "user", "message": {"role": "user", "content": content}}, ensure_ascii=False) + "\n"
+
+
 def stream_claude(
-    st: Path, prompt: str, on_text, *, system_prompt: Path, effort: str, tag: str, cache_ttl: str | None = None
+    st: Path,
+    prompt: str,
+    on_text,
+    *,
+    system_prompt: Path,
+    effort: str,
+    tag: str,
+    cache_ttl: str | None = None,
+    images: list[Path] | None = None,
 ) -> dict[str, object]:
     """claude -p を stream-json で回し、text delta を on_text に流す。最初の thinking / text の時刻と費用を記録する。
+    images = prompt の前に見せる画像 (見直し役の cut の静止画)。
     text delta が 1 つも来ずに終わった応答 (長い思考の後、本文が最後の assistant message にだけ乗る — now7_10 の担当 hook・246 s で
     delta 0) は、最後の assistant message の text の block を本文として流す (`text_from_message`)。"""
     CWD.mkdir(parents=True, exist_ok=True)
     # prompt は stdin で渡す (argv だと見本 2 本で 120 KB を超えた時に E2BIG「Argument list too long」で著者が起動できない)
-    args = claude_args(system_prompt, effort=effort)
+    args = claude_args(system_prompt, effort=effort, json_input=bool(images))
     raw = (st / f"claude_{tag}.jsonl").open("a")
     t0 = time.time()
     first: dict[str, float] = {}
@@ -719,7 +787,7 @@ def stream_claude(
             time.sleep(2)
             args[0] = claude_bin()
     assert p.stdout is not None and p.stdin is not None
-    p.stdin.write(prompt)
+    p.stdin.write(image_message(prompt, images) if images else prompt)
     p.stdin.close()
     result: dict[str, object] = {}
     chars = 0
@@ -892,8 +960,18 @@ def defs_before_text(proj: Path, name: str) -> str:
     return path.read_text() if path.exists() else ""
 
 
-def fix(project: Path, name: str, findings_file: Path, *, own_root: bool = False) -> int:
-    """直し役。own_root = この cut が根の持ち主 (最初の live な cut・根が流れる前) — 根の 2 file も直せる (`@ root_design 行`) 。"""
+def fix(
+    project: Path,
+    name: str,
+    findings_file: Path,
+    *,
+    own_root: bool = False,
+    effort: str,
+    review: bool,
+    shots: list[Path],
+) -> int:
+    """直し役。own_root = この cut が根の持ち主 (最初の live な cut・根が流れる前) — 根の 2 file も直せる (`@ root_design 行`) 。
+    review = 見直し (確認表で指摘に出ない崩れも探す)・shots = 見直しに見せる cut の静止画。"""
     proj, st = project / "solo", project / "stream"
     sp = st / "system_prompt.md"
     root_d, root_t = (proj / "root_design.txt").read_text(), (proj / "root_timeline.txt").read_text()
@@ -909,20 +987,28 @@ def fix(project: Path, name: str, findings_file: Path, *, own_root: bool = False
             root_t,
             own_root=own_root,
             defs_before=defs_before_text(proj, name),
+            review=review,
+            shots=[path.stem for path in shots],
         ),
         out.append,
         system_prompt=sp,
-        effort="low",
-        tag=f"fix_{name}",
+        effort=effort,
+        tag=f"{'look' if shots else 'review' if review else 'fix'}_{name}",
         # 直し役の prompt は system prompt (担当と同じ file・担当が 1 時間の cache に書いた物を読む) の後ろが毎回変わる (cut・指摘)。
         # その末尾も cache に書かれ 2 度と読まれないので、書き込みを 1 時間 (入力の 2 倍) でなく 5 分 (1.25 倍) にする
         cache_ttl="5m",
+        images=shots,
     )
     text = "".join(out)
     blocks = {"cut": block, **({"root_design": root_d, "root_timeline": root_t} if own_root else {})}
     edits, dropped = parse_edits(text, blocks)
     if dropped:
         log(st, event="fix_edits_dropped", cut=name, edits=dropped)
+    if edits is None and not dropped and re.search(r"===\s*edits\s*===\s*\n\s*===\s*end\s*===", text):
+        # 直す所が無い (見直しで崩れが無かった) — block をそのまま返す
+        log(st, event="fix_no_edits", cut=name)
+        sys.stdout.write(block)
+        return 0
     if edits is not None:
         edited = apply_line_edits(block, edits["cut"]) if edits["cut"] else block
         if "---timeline---" not in edited:
@@ -1001,7 +1087,17 @@ def main(argv: list[str]) -> int:
             samples = tuple(x.strip() for x in argv[argv.index("--samples") + 1].split(",") if x.strip())
         return run(project, effort=eff, samples=samples)
     if cmd == "fix":
-        return fix(project, argv[2], Path(argv[3]), own_root="--root" in argv)
+        eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "low"
+        shots = [Path(x) for x in argv[argv.index("--shots") + 1].split(",") if x] if "--shots" in argv else []
+        return fix(
+            project,
+            argv[2],
+            Path(argv[3]),
+            own_root="--root" in argv,
+            effort=eff,
+            review="--review" in argv,
+            shots=shots,
+        )
     if cmd == "staff":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "medium"
         return staff(project, argv[2], Path(argv[3]), effort=eff)

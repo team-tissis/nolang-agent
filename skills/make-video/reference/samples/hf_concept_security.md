@@ -242,8 +242,8 @@ dcard#dm_c2(left: 690px; t: "SNS"; i: chat-circle; ic: $teal; bg: $teal_l; tag: 
       p#tm(left: 80px; top: 46px; font-size: 16px; color: $sub) たった今
       p#msg(left: 18px; top: 81px; font-size: 22px) このリンク、見てみて！
       p#link(left: 18px; top: 118px; font-size: 18px; font-family: m; color: $blue) https://example.com/xxxx
-    p#lbl(left: 24px; cy: 225px; font-size: 18px; color: $sub) 友人へ送信
     icon#fr(left: "85;127;169"; cy: 225px; font-size: 26px; name: user-circle; color: $sub; background: $gray; padding: 12px) ×3
+    p#lbl(left: 24px; cy: 225px; font-size: 18px; color: $sub) 友人へ送信
     icon#m(left: "107;149;191"; top: 190px; font-size: 15px; name: envelope; color: #FFFFFF; background: $red; padding: 6px; in: {scale:0.3, opacity:0, duration:0.45, ease:'power3.out'}) ×3
 dcard#dm_c3(left: 1284px; t: "会社のクラウド"; i: cloud; ic: $indigo; bg: $indigo_l; tag: "侵入")
   dbody#b
@@ -285,7 +285,7 @@ mcard#ms_c2(left: 690px; n: 2; t: "12文字以上の[br]長さにする"; f: "�
     p#ml(left: 356px; top: 14px; font-size: 22px; in: {y:8, opacity:0, duration:0.35, ease:'power3.out'}) 12文字
     div#mk(left: 388px; top: 50px; width: 4px; height: 82px; border-radius: 3px; background: $ink; in: {scale:0.4, opacity:0, duration:0.45, ease:'power3.out'})
     div#dots(left: 26px; top: 78px; width: 435px; height: 26px; display: flex; gap: 6px)
-      div#d(border-radius: 148px; background: "$red;$red;$red;$red;$red;$red;$red;$red;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7"; in: none) ×14
+      div#d(flex: 1; border-radius: 148px; background: "$red;$red;$red;$red;$red;$red;$red;$red;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7;#D5DDE7"; in: none) ×14
     p#len(left: 26px; top: 128px; font-size: 22px; color: $red_t; out: {opacity:0, duration:0.25}) 8文字：短い
     p#cmp(left: 26px; top: 114px; font-size: 46px; color: $green_t; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) {a}複雑さ　より{/}　{b}長さ{/}
 # 3: パスワード → スマホで確認・攻撃者の顔が間に入り込み × で止まる
@@ -309,8 +309,8 @@ card#ms_strip(left: 96px; top: 700px; width: 1728px; height: 150px)
   p#a(left: 134px; cy: 50%; font-size: 32px; color: $sub) パスワードは覚えずに
   icon#ar(left: 477px; cy: 50%; font-size: 34px; name: arrow-right; color: $arrow)
   icon#vault(left: 567px; cy: 50%; font-size: 50px; name: lock; color: #FFFFFF; background: $blue; padding: 22px; in: {x:20, opacity:0, duration:0.5, ease:'power3.out'})
-  p#b(left: 682px; cy: 50%; font-size: 40px; color: $blue; in: {x:20, opacity:0, duration:0.5, ease:'power3.out'}) パスワード管理ツールに任せる
   icon#kf(left: "923;976;1030;1083"; top: 40px; font-size: 26px; name: key; color: #FFFFFF; background: "$blue;$teal;$indigo;$amber"; padding: 12px; in: {x:40, scale:0.6, opacity:0, duration:0.4, ease:'power3.out'}) ×4
+  p#b(left: 682px; cy: 50%; font-size: 40px; color: $blue; in: {x:20, opacity:0, duration:0.5, ease:'power3.out'}) パスワード管理ツールに任せる
   p#kl(left: 1384px; top: 104px; font-size: 18px; color: $sub; in: {opacity:0, duration:0.4}) サービスごとの長いパスワードも
 
 # outro — 締め: 立った社員 + 「今日から、この3つ」の薄い 3 行を語ごとに濃くして ✓ を緑に → 青い帯の結び → 地の色へ溶ける

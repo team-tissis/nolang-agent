@@ -326,9 +326,9 @@ board#g_top(left: 950px; top: 292px; width: 874px; height: 676px; t: "時間を�
 # h ヘルプページ: 左にノートパソコンのヘルプページの写真 (寄り続ける) と条件・右の板に 2 本の斜線の帯が語で伸び、「655」で合計の枠が数え、「247」で時間が数える
 section#h(stagger: {each:0})
 head#h_h(n: "07"; k: "ヘルプページで減らせる問い合わせ"; t: "{t}655 件（全体の 16%）{/}は、ヘルプページで答えられる内容だった")
-div#h_fr(left: 96px; top: 300px; width: 760px; height: 470px; border-radius: 16px; border: 2px solid $line2; box-shadow: 0px 30px 70px #00000080; delay: 150; in: {y:30, opacity:0, duration:0.7, ease:'power3.out'})
+div#h_fr(left: 96px; top: 300px; width: 760px; height: 470px; border-radius: 16px; border: 2px solid $line2; overflow: hidden; box-shadow: 0px 30px 70px #00000080; delay: 150; in: {y:30, opacity:0, duration:0.7, ease:'power3.out'})
   img#p(inset: 0; subject: center 70%; main: kb {scale: [1, 1.08], focus: ['55% 45%', '55% 45%']}) [photo]夜の暗い木の机に置かれたノートパソコンを斜め前から。画面にはすっきりしたヘルプセンターのページが映り、上に検索欄、その下に整った FAQ の項目の列が光の線と角丸の塊で抽象的に並ぶ (読める文字はない)。項目の横に小さく光る鍵のアイコンがパスワード再設定をほのめかす。紺と青緑のほのかな光、柔らかな映画的な縁の光、落ち着いて整った雰囲気、周りは暗い。斜め前から寄った構図で、ノートパソコンの画面と本体が枠の横幅の 8 割を占めるほど大きく写り、机の奥の暗がりにぼけた観葉植物と街の灯り。余白を作らない。文字・数字・ロゴなし
-  div#fx(inset: 0; background: linear(#0A0F1700@55%,#0A0F178C,180); z-index: front)
+  div#fx(inset: 0; background: linear(#0A0F1700@55%,#0A0F178C,180))
 div#h_cap(left: 96px; top: 796px; width: 760px; height: 75px; delay: 600; in: {y:10, opacity:0, duration:0.5, ease:'power2.out'})
   p#q(left: 0px; top: 3px; font-size: 18px; font-family: m; color: $teal2; border: 2px solid #7ADFD380; border-radius: 4px; padding: 0px 8px) 条件
   p#t(left: 68px; top: 0px; width: 693px; font-size: 21px; line-height: 1.55; color: $fg2; font-family: r) 既存のヘルプページに答えがある、または 1 ページ足せば答えられる問い合わせを数えた

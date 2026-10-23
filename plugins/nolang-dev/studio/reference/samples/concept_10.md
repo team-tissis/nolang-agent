@@ -37,7 +37,7 @@ img#h_bg(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [
 veil#h_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#h_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#h_k(left: 72px; top: 144px) 選ぶ順番
-h1#h_h(left: 72px; top: 210px) この順番、[br]{a}逆{/}かもしれない
+h1#h_h(left: 72px; top: 210px; font-weight: 700) この順番、[br]{a}逆{/}かもしれない
 chip#h_o1(left: 72px; top: 1350px; width: 375px; text-align: center) 見つかる
 shape#h_ar(left: 480px; top: 1383px; width: 120px; height: 60px; path: arrow_r,head=line; background: none; border: 4px solid $ink; in: wipe {dir: 'right', duration: 0.5})
 chip#h_o2(left: 633px; top: 1350px; width: 375px; text-align: center) 選ぶ
@@ -48,7 +48,7 @@ img#w_bg(inset: 0; main: kb {scale: [1.04, 1], focus: '50% 45%'}) [ref:@yo]同�
 veil#w_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#w_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#w_k(left: 72px; top: 144px) 就職の迷い
-h1#w_h(left: 72px; top: 210px) やりたいことが[br]{a}ない{/}まま
+h1#w_h(left: 72px; top: 210px; font-weight: 700) やりたいことが[br]{a}ない{/}まま
 div#w_c(left: 72px; top: 1335px; width: 936px; height: 195px)
   icon#i(left: 48px; cy: 50%; font-size: 84px; name: question; color: $a)
   p#t(left: 165px; cy: 50%; font-size: 54px; font-family: m; color: $ink) 迷う人は、{m}多い{/}のでは
@@ -58,7 +58,7 @@ img#s_bg(inset: 0; main: kb {scale: [1, 1.05], focus: ['50% 50%', '40% 50%']}) [
 veil#s_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#s_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#s_k(left: 72px; top: 144px) JEAN-PAUL SARTRE
-h1#s_h(left: 72px; top: 210px) サルトル
+h1#s_h(left: 72px; top: 210px; font-weight: 700) サルトル
 div#s_q(left: 72px; top: 1170px; width: 630px; height: 144px)
   p#t(left: 42px; cy: 50%; font-size: 54px; color: $ink) {s}気持ちで決める{/}
 note#s_qn(left: 726px; top: 1218px) 教え子の言葉
@@ -72,7 +72,7 @@ img#st_bg(inset: 0; main: kb {scale: [1.05, 1], focus: '50% 55%'}) [ref:@yo]同�
 veil#st_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#st_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
 kick#st_k(left: 72px; top: 144px) ある研究
-h1#st_h(left: 72px; top: 210px) 興味は{a}見つけるもの{/}、[br]と考える人ほど
+h1#st_h(left: 72px; top: 210px; font-weight: 700) 興味は{a}見つけるもの{/}、[br]と考える人ほど
 note#st_l(left: 72px; top: 1320px) 興味の幅
 shape#st_bar(left: 72px; top: 1392px; width: 936px; height: 42px; path: rect,r=0.5; background: $sand; border: none; in: wipe {dir: 'right', duration: 0.7})
 shape#st_core(left: 441px; top: 1392px; width: 198px; height: 42px; path: rect,r=0.5; background: $a; border: none; in: fade {duration: 0.4})
@@ -83,7 +83,7 @@ img#c_bg(inset: 0; main: kb {scale: [1, 1.06], focus: ['50% 55%', '50% 50%']}) [
 veil#c_vt(color: $paper; opacity: 0.96; to: top; start: 0.65)
 veil#c_vb(color: $paper; opacity: 0.96; to: bottom; start: 0.55)
 kick#c_k(left: 72px; top: 144px) 結論
-h1#c_h(left: 72px; top: 210px) やりたいことは、[br]選ぶ前の{a}条件{/}にできない
+h1#c_h(left: 72px; top: 210px; font-weight: 700) やりたいことは、[br]選ぶ前の{a}条件{/}にできない
 div#c_r1(left: 72px; top: 1200px; width: 936px; height: 144px)
   p#t(left: 48px; cy: 50%; font-size: 51px; font-family: m; color: $mute) {x}意識が向く → 関わる{/}
 div#c_r2(left: 72px; top: 1374px; width: 936px; height: 165px; border: 4px solid $a)
@@ -94,7 +94,7 @@ section#close
 img#cl_bg(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '50% 45%']}) [ref:@yo]同じ若者が少し開いた扉の前で一歩を踏み出そうとしている、扉の向こうから柔らかい光、後ろ姿
 veil#cl_vt(color: $paper; opacity: 0.95; to: top; start: 0.7)
 veil#cl_vb(color: $paper; opacity: 0.95; to: bottom; start: 0.6)
-h1#cl_h(left: 72px; top: 180px) 見つかったら選ぶ、[br]で止めていませんか
+h1#cl_h(left: 72px; top: 180px; font-weight: 700) 見つかったら選ぶ、[br]で止めていませんか
 shape#cl_rule(left: 72px; top: 1380px; width: 180px; height: 4px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.7})
 body#cl_n(left: 72px; top: 1425px) まず一つ、{a}関わって{/}みる
 ```

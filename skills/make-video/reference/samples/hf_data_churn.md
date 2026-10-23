@@ -97,7 +97,7 @@ def card(n, t, s, cap, c, g) = div(top: 236px; width: 536px; height: 620px; bord
   div#no(left: 32px; top: 34px; width: 60px; height: 60px; border-radius: 148px; background: {c})
     p#t(cx: 50%; cy: 50%; font-size: 30px; font-family: n; color: #06122A; content: {n})
   p#t(left: 32px; top: 118px; width: 480px; font-size: 38px; line-height: 1.32; font-family: h; in: {y:14, opacity:0, duration:0.5, ease:'power3.out'}; content: {t})
-  p#s(left: 32px; top: 232px; font-size: 26px; line-height: 1.36; color: $ink2; white-space: nowrap; in: {y:10, opacity:0, duration:0.5, ease:'power3.out'}; content: {s})
+  p#s(z-index: front; left: 32px; top: 232px; font-size: 26px; line-height: 1.36; color: $ink2; white-space: nowrap; in: {y:10, opacity:0, duration:0.5, ease:'power3.out'}; content: {s})
   p#cap(left: 32px; top: 560px; font-size: 20px; color: $ink3; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}; content: {cap})
 
 # 全編の地 (根): 紺の写真が 119 秒かけて 1.08 → 1.16 に寄る + 周辺減光 + grain
@@ -219,9 +219,9 @@ panel#p4a(left: 112px; top: 232px; width: 1060px; height: 648px; t: "週次の�
   div#call(left: 640px; top: 104px; width: 380px; height: 112px; border-radius: 16px; background: #FF6B6B14; border: 2px solid #FF6B6B73; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.8)'})
     p#t(cx: 50%; cy: 50%; font-size: 58px; font-family: n; color: $ink2; white-space: nowrap) 63 {ar}→{/} {cr}26{/}{un}件{/}
 panel#p4b(left: 1212px; top: 232px; width: 596px; height: 648px; t: "解約の申請"; s: "件／週"; delay: 240)
-  p#bl(left: "24;24"; top: "64;144"; font-size: 24px; color: $ink2; white-space: nowrap) ×2 7月・8月の平均;9月
   div#trk(left: "24;24"; top: "88;168"; width: 400px; height: 42px; border-radius: 0px 8px 8px 0px; background: #AABEE612) ×2
   div#b1(left: 36px; top: 132px; width: 356px; height: 42px; border-radius: 0px 8px 8px 0px; background: $slate2; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
+  p#bl(left: "24;24"; top: "64;144"; font-size: 24px; color: $ink2; white-space: nowrap) ×2 7月・8月の平均;9月
   div#b2(left: 36px; top: 252px; width: 267px; height: 42px; background: $blue; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
   div#b2x(left: 303px; top: 252px; width: 27px; height: 42px; border-radius: 0px 8px 8px 0px; background: #5B9DFF61; in: {opacity:0, duration:0.4})
   p#bv1(left: 406px; top: 132px; font-size: 40px; line-height: 1.05; font-family: n; white-space: nowrap; in: {x:-10, opacity:0, duration:0.4}) 40{un}件{/}

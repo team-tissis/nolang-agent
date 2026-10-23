@@ -7,22 +7,22 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | field | 書き方 | 備考 |
 |---|---|---|
-| frame_layout x y w h | 根 `left top width height` / `inset: 0` · 子 `left top right bottom width height` (親の内側から) · 表 = 容器の `display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px` + 字下げの ×N 1 つ (CSS の grid: 各 instance が cell いっぱい・gap 既定 0・×N の行の `display: grid,3` と同じ) | 語で動かす = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
-| frame_layout rot | `transform: rotate(-8deg)` · `[!#名 to,rotation=-15,pivot=100%,0%]` · `[!#名 to,rotation=720]` (上限なし = 2 周) | `transform-origin` (印では `pivot=`) は回転・倍率の原点 (中心は原点のまわりの弧を辿る) |
+| frame_layout x y w h | 根 `left top width height` / `inset: 0` / `inset: 上 右 下 左` · 子 `left top right bottom width height` (親の内側から) · 表 = 容器の `display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px` + 字下げの ×N 1 つ (CSS の grid: 各 instance が cell いっぱい・gap 既定 0・×N の行の `display: grid,3` と同じ) | 語で動かす = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
+| frame_layout rot | `transform: rotate(-8deg)` · `[!#名 to,rotation=-15,pivot=100%,0%]` · `[!#名 to,rotation=720]` (上限なし = 2 周) | `transform-origin` (印では `pivot=`) は回転・倍率の原点 (中心は原点のまわりの弧を辿る・静止の rotate も原点のまわり — 中心の移動に畳む・原点つきの一周 (360° の倍数) は rotation だけの印なら engine が 180° ずつの key に割る (ease は半周ごと・他の変化と同じ印に書いた一周は DEFECT)・箱を書いた群の `transform-origin` と静止の `scale()` は書いた箱に対して解く (CSS どおり — engine の原点は member の合併なので写す・原点が合併の外の群に倍率 / 回転の入退場は DEFECT)) |
 | frame_layout rx ry perspective (静止の 3D の傾き) | `transform: rotateX(30deg); depth: 0.8` · `[!#名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main: constant {rotationX: 70, depth: 4, pivot: 'top'}`)・子は一緒に傾かない。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 780px → 高さ 660px・`depth: 0.85` = 440/520) |
 | frame_layout skx sky (静止の skew) | `transform: skewX(-12deg)` · `[!#名 to,skewX=12]` (補間) | CSS の skewX と同じ向き・±80°・素材も塗りも文字も枠ごと傾く (子を持つ要素には書けない — 子ごと 1 枚の群は平面) |
 | media_layout (cover の切り抜き) | `object-fit: cover; object-position: 60% 0%; zoom: 130%` · `main: kb {scale: [1.1, 1], focus: '40% 60%'}` · `[!#名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!#名 to,w=640]` (切り抜きごと補間) | zoom_media は枠が動かず素材だけ寄る (cover の絵だけ — 箱の中の絵は `[!#箱.子 zoom_media]`) |
 | media_layout x_flip y_flip | `img#名(flip: x\|y)` (写真・生成画像・svg の鏡像) · `icon#名(flip: x\|y)` (svg を焼き直す) · `avatar#名(flip: x)` | |
-| visual_filter opacity contrast brightness saturation | `filter: saturate(.3) brightness(1.2) contrast(1.1)` · `[!#名 filter,duration=600,sat:0]` / `[!#名 sat,0.3]` / `[!#名 gray]` | 素材 (絵・写真・svg) にだけ効く — 文字・図形の地には効かない・子を持つ div には書けない (中の絵に)・子を持つ絵は絵の素材だけ |
+| visual_filter opacity contrast brightness saturation | `filter: saturate(.3) brightness(1.2) contrast(1.1)` · 語で `[!#名 to,{filter: 'saturate(0)', duration: .6}]` (filter 全体を置き換える) | 絵・写真・svg は素材に掛かる・文字と図形 (div の塗り・縁・影も — svg に焼いた板は本体に掛かり地 / 縁 / 影を焼く) は engine が描かないので書いた色に焼く (同じ式・色を書いていない文字は DEFECT)・子を持つ div には書けない (中の絵に)・子を持つ絵は絵の素材だけ |
 | visual_filter blur (静止のぼかし px) | `filter: blur(6px)` · `[!#名 to,blur=8,duration=600]` (補間) | 層の raster 全体 (文字・板・絵) — 群と子を持つ要素には書けない |
-| visual_filter color_matrix | `filter: sepia(1)` / `grayscale(1)` / `invert(1)` · CSS に無い look は `look: cool\|warm\|faded\|polaroid\|kodachrome\|technicolor\|browni\|vintage` · 単色化 `look: #暗/#明` (duotone) · `look: #色` (絵の形 (alpha) だけ残して 1 色で塗る = CSS の `mask-image` + 単色) | **✕** 生の行列 |
-| (画面全体の色調) | `veil#名(filter: saturate(0))` (か `filter: grayscale(1)` / `look: #000000/#3366FF`) を `[>#名]` … `[<#名]` | 開いている間、下の層 (後から出る物も) を色調の変種へ — 文字と図形は look の行列と彩度を掛けた色の変種で写す |
+| visual_filter color_matrix | `filter: sepia(1)` / `invert(1)` / `hue-rotate(90deg)` (`grayscale(a)` は彩度 = `saturate(1 − a)`) · CSS に無い look は `look: cool\|warm\|faded\|polaroid\|kodachrome\|technicolor\|browni\|vintage` · 単色化 `look: #暗/#明` (duotone) · `look: #色` (絵の形 (alpha) だけ残して 1 色で塗る = CSS の `mask-image` + 単色) | **✕** 生の行列 |
+| (画面全体の色調) | `veil#名(filter: saturate(0))` (= `filter: grayscale(1)`・か `look: #000000/#3366FF`) を `[>#名]` … `[<#名]` | 開いている間、下の層 (後から出る物も) を色調の変種へ — 文字と図形は look の行列と彩度を掛けた色の変種で写す |
 | alpha | `opacity: .5` · `[!#名 dim,0.3,duration=900]` · `[!#名 to,opacity=0.5]` | 子孫にも掛かる |
 | (画面全体の閃光・暗転・揺れ) | 全面の `veil#fl(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)` を `[>#fl][!#fl to,{opacity:0, duration:.4}]` (閃光) / `[>#名]` … `[<#名]` (暗転)・揺れは出ている要素ごとの `[!#名 shake,6,duration=2200]` を同じ語に | 幕は veil・揺れは層ごとの一回きりの shake (画面全体を指す印は無い — CameraLayer は viewport だけで揺れの channel が無い) |
 | (写真の暗幕) | `img#名(scrim: right,0.45)` (`vignette,0.6` / 一様 `0.4`) | 絵の子の veil が絵の直上で一緒に出入り |
 | pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` も同じ) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
 | border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (箱・形・文字の札・楕円) · `border-radius:` (角ごと `border-radius: 0 33px 33px 0` は svg に焼く・全隅が同じ `50%` 以上は楕円 (CSS どおり・幅と高さの変化に追随)・pill は `999px`) | 50% 未満の %・角ごとの %・`a / b` (CSS の楕円の角) は短辺 × N% の円の角で描く (warn)・破線 / 点線は Chromium と同じ模様 (dashed: 幅 3 以上は線 2W・間 W・細い線は 3W / 2W、dotted: 幅 3 より太いと直径 W の丸い点を中心間 2W)・周に整数回で収まるよう間を詰める・線種は変種で切り替えられない・`double` / `groove` / `ridge` / `inset` / `outset` は DEFECT:CSS・辺の線 (`border-left:`) と吹き出しの形・字幕の帯は実線だけ |
-| border shape (形 70 種) path dash cap | `shape#名(path: arrow_r)` (形の名前 48 種) / 楕円は `border-radius: 50%` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (既定 round) · 文字の板・絵の mask 形は `p#名(shape: star)` / `img#名(shape: star)` | 形の変形 (morph): `points:` / `path:` の shape (単色の塗り) の変種 `#名.tag(path: …)` へ `[!#名 .tag]` で頂点を補間 (状態 key の `border_path`)。形の種類の違う変種は開き直し (切替) |
+| border shape (形 70 種) path dash cap | `shape#名(path: arrow_r)` (形の名前 48 種) / 楕円は `border-radius: 50%` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (`border:` の線は既定 round・SVG の綴り `stroke: 色; stroke-width: 6` の線は既定 butt) · `fill: 色` · `path: "M … A …"` (SVG の全文法・A は C に直す) · `filter: drop-shadow(0 8px 16px 色)` (= box-shadow) · 文字の板・絵の mask 形は `p#名(shape: star)` / `img#名(shape: star)` | 形の変形 (morph): `points:` / `path:` の shape (単色の塗り) の変種 `#名.tag(path: …)` へ `[!#名 .tag]` で頂点を補間 (状態 key の `border_path`)。形の種類の違う変種は開き直し (切替) |
 | start_offset end_offset | `delay: 320` · 印の `+N` / `cut-N` (印の `+N` が `delay:` に勝つ) | |
 | motion_in / motion_out / motion_main | `in:` `out:` `main:` (下の「Motion」) | 1 位相 3 本まで (後の語の一回きりの効果と `window=` を書いた `[!#名 main,…]` は同じ層の anchor 窓の main で別枠)・1 本の keyframe (`keys(at=…)`) は 24 個まで (at=1 は数えない) |
 | keys = 状態 key (同じ層の状態の補間) | 印の変種 (`to` `move` `scale` `fill` `dim` `glow` `filter` `zoom_media` `.tag`) · 変種の `move: 600,sine.inOut` | `to,x= y= scale= scaleX= scaleY=` は frame の transform (tx ty sx sy・箱は変えない)・path = `to,…,arc=0.3` / `via=(x,y)`・`to,skewX= rotationX= rotationY= depth=` (姿勢)・`to,glow=1.5` (発光の強さ)・1 語の中で拍を書き分けて続ける (`[!#a to,rotation=-30 -50][!#a to,rotation=-22 +750]`・前の移りが途中なら途中の値から) |
@@ -35,8 +35,8 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 | field | 書き方 | 備考 |
 |---|---|---|
-| font_id | `font-family: "family 太さ"` / 根の `font` `fonts` の短い名 `font-family: m` / `style: "書体の説明"` (意味検索) | `font-weight` は無い (落として warn・太さは family か説明文で) |
-| font_size | `font-size: 72px` (`hero h1 h2 body label note` も・CSS と同じく書かない文字は親の値を継ぎ根は 16px・`em` は親の比・箱の font-size は子が継ぐ) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
+| font_id | `font-family: "family 太さ"` / 根の `font` `fonts` の短い名 `font-family: m` / `style: "書体の説明"` (意味検索) | `font-weight: 900` (1〜1000・normal / bold) は family の中の face を CSS の照合で選ぶ (名や説明文の太さより優先・箱から継ぐ・`h1〜h4` は UA の 700)。1 face の family は変わらない (合成 bold は無い・warn) |
+| font_size | `font-size: 72px` (`hero h1 h2 body label note` も・CSS と同じく書かない文字は親の値を継ぎ根は 16px・`em` は親の比・箱の font-size は子が継ぐ — `font-family` `color` `letter-spacing` `white-space` も同じ継承) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
 | color | `color:` · `[!#名 fill,$色]` (補間) · `[!#名 recolor,$色]` (文字・図形・icon は補間) | |
 | color_gradient | `color: linear(#FFE58A,#F5A623@60%,#C2410C,180)` / `radial(#…,#…,30%,60%[,72%,62%])` | 角度は CSS と同じ・`@N%` は止まり位置・radial の後ろは中心 (と楕円の半径) の箱の比 |
 | stroke_color stroke_width | `stroke: #色,幅` (文字の px) | |
@@ -117,7 +117,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | origin / pose (zoom rotate) | `group#g(…)` + `[!#g to,x=,scale=,rotation=]` / `[!#g to,scale=0.8]` / 変種 `#g.small(left: …; top: …; scale: .8; rotate: -6deg)` を `[!#g .small]` |
 | alpha | `[!#g dim]` / `to,opacity=` |
 | 子を持つ要素 (div・絵・文字 … 型を問わず) | 子ごと 1 枚 (CSS の stacking context): `opacity:` `transform: rotate()`・入退場・`[!#名 to,x= scale= rotation=]` / `move` / `scale` / `dim`・一回きりの効果は群 (子ごと・原点は描いた箱の中心)・塗り / 縁 / 影 / 印の glow / tint / frame・絵の Ken Burns / 色調 / 素材の寄り・文字の 1 字ずつの入場は要素自身 (子には掛からない) |
-| clip (角丸の窓) | `group#g(clip: 24,g.bg)` / `clip: true` (窓は箱の枠線の外周まで・def の中 / 箱の子の群にも) · 要素の `clip-path: inset(8% 0 78% 0)` (要素を群 + 本体にして箱の内側の矩形で切る — 動きは切り口ごと)・窓は角丸の矩形だけで楕円の窓は無い (群の `border-radius: 50%` は warn で落とす・楕円の箱の中の `clip: true` も矩形で切る) |
+| clip (角丸の窓) | `group#g(clip: 24,g.bg)` / `clip: true` (窓は箱の枠線の外周まで・def の中 / 箱の子の群にも) · 要素の `clip-path: inset(8% 0 78% 0)` (要素を群 + 本体にして箱の内側の矩形で切る — 動きは切り口ごと) · 子を持つ要素の `overflow: hidden` (子だけを切る群 `名._clip` — 窓は縁の内側の角丸・板の縁と影は切らない)・窓は角丸の矩形だけで楕円の窓は無い (群の `border-radius: 50%` は warn で落とす・楕円の箱の中の `clip: true` も矩形で切る) |
 | motion_in / out / main | 群に `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out: {y: -14, blur: 8, opacity: 0, duration: .32}`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
 | camera viewport | `[!#名 zoom,1.4,duration=700]` / `[=#名]` · `camera#cam(left: 0px; top: 0px; zoom: 1)` + `#cam.tight(left: 300px; top: 150px; zoom: 1.4; move: 700)` + `[>#cam]` `[!#cam .tight]` |
 
@@ -137,7 +137,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 
 ## runtime に無い物 (判断待ち — v2 でも足さなかった)
 
-- **文字・図形への filter** (彩度・色行列): VisualFilter は素材だけ。色調の幕は文字と図形の書いた色 (文字色・縁取り・塗り・縁・文字の影・文字のグラデ) を look の行列と彩度を掛けた色の変種で写す (svg に焼いた箱は素材なので filter が効く・run の色は写さない)。
+- **文字・図形への filter** (彩度・色行列・contrast・明るさ): VisualFilter は素材だけ。文字と図形の filter と色調の幕は書いた色 (文字色・縁取り・塗り・縁・影・発光・地・文字のグラデ・filter は run の色も) に絵と同じ式で焼く (svg に焼いた箱は素材なので filter が効く・既定の文字色は焼けない — `color:` を書く)。
 - **mix-blend-mode の saturation / color / hue / luminosity**: BlendMode は normal / multiply / screen / add / overlay / soft-light (画面全体の彩度落ちは色調の幕)。
 - **拡大したまま保つ文字の一部 (run の scale)**: run の印は一回きり (punch / settle / shake / pop) と色・下帯だけ — 保つ拡大は別の文字に分けて `[!#t2 scale]`。
 - **子ごと傾く要素**: 子を持つ要素 (型を問わず) は子ごと 1 枚 (CSS の stacking context) で平面 — `rotateX` / `skewX` / `depth`・`filter:` / `mix-blend-mode:` / `glow:`・`to,skewX= blur=`・入退場の wipe は DEFECT。傾けるのは子の無い要素 (兄弟に重ねた板) か子の各要素 (回転 `transform: rotate()` と拡縮・移動・不透明度・入退場の `blur` は子ごと)。

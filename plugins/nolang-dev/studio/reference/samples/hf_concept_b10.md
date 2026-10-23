@@ -140,7 +140,7 @@ group#b3(in: {opacity:0, duration:.05, stagger:.03}; out: none)
 mini#c3a(left: 45px; src: "[ref:@hero]The young woman stands still holding a huge unrolled blueprint plan that is taller than she is, with a big wall clock and a large hourglass behind her, looking bored and tired of waiting for the perfect plan."; transform: rotate(-2.5deg); in: {x:-60, y:110, scale:.82, rotation:-7.5, opacity:0, duration:.6, ease:'back.out(1.5)'})
   ngx#ng(w: 187; h: 31)
 mini#c3b(left: 566px; src: "@bag"; transform: rotate(2.5deg); in: {x:80, y:110, scale:.82, rotation:7.5, opacity:0, duration:.6, ease:'back.out(1.5)'})
-  div#ok(cx: 50%; cy: 50%; width: 250px; height: 250px; border-radius: 148px; z-index: front; border: 36px solid $mintd; box-shadow: 0px 0px 0px 9px #FFFFFF; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
+  div#ok(cx: 50%; cy: 50%; width: 250px; height: 250px; border-radius: 148px; border: 36px solid $mintd; box-shadow: 0px 0px 0px 9px #FFFFFF; in: {scale:2.2, rotation:-25, opacity:0, duration:.32, ease:'back.out(2.6)'})
 icon#arrow3(left: 496px; top: 662px; font-size: 40px; name: play; weight: fill; color: #FFFFFF; background: $coral; border: 8px solid #FFFFFF; in: {scale:.2, opacity:0, duration:.45, ease:'back.out(2.2)'})
 p#l3a(left: 30px; top: 986px; width: 500px; font-size: 54px; font-family: m; line-height: 1.25; text-align: center; color: $neglabel; in: {y:20, scale:.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 完璧な計画を[br]待つ
 p#l3b(left: 550px; top: 986px; width: 500px; font-size: 54px; font-family: m; line-height: 1.25; text-align: center; color: $mintd; in: {y:20, scale:.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 今あるものから[br]始める
@@ -249,7 +249,7 @@ se pop_dry -5dB
 
 *** point
 [!#tint fill,#FFF7EC,duration=600]
-@n: [>#point][>#b3 +50][♪pop_high -4dB][<#b3 +600]{hl}ポイント{/}は、[|][!#point to,{y:-430, scale:.476, duration:.45, ease:'power3.inOut'} -300][>#c3a -80][♪whoosh -8dB -50][>#l3a +150]{ng}完璧な計画を待つ{/}のでは[>#c3a.ng][!#c3a.img filter,sat:0.15,duration=350][!#c3a to,{scale:.94, duration:.35}][♪buzz -6dB]なく、[|][>#arrow3 -150][>#c3b -50][♪pop_dry -5dB -50][>#l3b +200]{hl}今あるもの{/}から[>#c3b.ok][!#c3b to,{scale:1.04, duration:.5, ease:'sine.out'}][♪correct -3dB]始めること。[silence:0.85s]
+@n: [>#point][>#b3 +50][♪pop_high -4dB][<#b3 +600]{hl}ポイント{/}は、[|][!#point to,{y:-430, scale:.476, duration:.45, ease:'power3.inOut'} -300][>#c3a -80][♪whoosh -8dB -50][>#l3a +150]{ng}完璧な計画を待つ{/}のでは[>#c3a.ng][!#c3a.img to,{filter:'saturate(.15)', duration:.35}][!#c3a to,{scale:.94, duration:.35}][♪buzz -6dB]なく、[|][>#arrow3 -150][>#c3b -50][♪pop_dry -5dB -50][>#l3b +200]{hl}今あるもの{/}から[>#c3b.ok][!#c3b to,{scale:1.04, duration:.5, ease:'sine.out'}][♪correct -3dB]始めること。[silence:0.85s]
 
 *** means
 @n: [>#tl[1]][♪pop_high -4dB]知識や[>#tl[2] -60][♪pop_dry -4dB]経験、[>#tl[3] -60][♪pop_high -4dB]スキル、[>#tl[4] -60][♪pop_dry -4dB]人脈を使って、[|][<#tl[*] -340][>#c4 -20][♪whoosh -8dB -100]{hl}まず小さく{/}[>#st4 -50][♪xylo -4dB]動いてみる。[silence:0.85s]
@@ -260,12 +260,12 @@ se whoosh -8dB
 
 *** pilot
 se whoosh -8dB
-@n: 未来を[>#st6a -50]{ng}予測{/}するのでは[>#c6a.ng][!#c6a.img filter,sat:0.2,duration=350][♪buzz -6dB]なく、[|][<#c6a -200][<#st6a -200][!#tint fill,#EEF7FF,duration=600 -100][>#c6b -120][♪whoosh -8dB -150][>#tag6 +100]{hl}行動しながら{/}[br]未来を[>#st6b -250][♪xylo -4dB]つくっていく。[silence:0.85s]
+@n: 未来を[>#st6a -50]{ng}予測{/}するのでは[>#c6a.ng][!#c6a.img to,{filter:'saturate(.2)', duration:.35}][♪buzz -6dB]なく、[|][<#c6a -200][<#st6a -200][!#tint fill,#EEF7FF,duration=600 -100][>#c6b -120][♪whoosh -8dB -150][>#tag6 +100]{hl}行動しながら{/}[br]未来を[>#st6b -250][♪xylo -4dB]つくっていく。[silence:0.85s]
 
 *** now
 se whoosh -8dB
 [!#tint fill,#F3F1F7,duration=600]
-@n: 計画がないから[br][>#st7a -100]{ng}動けない{/}のでは[>#c7a.ng][!#c7a.img filter,sat:0.15,duration=350][♪buzz -6dB]なく、[|][<#c7a -200][<#st7a -200][!#tint fill,#EAF8F1,duration=600 -100][>#c7b -100][♪whoosh -8dB -100]手元にあるもので[>#st7b -300][!#c7b to,{y:-24, duration:.15, ease:'sine.out', repeat:3, yoyo:true}][♪correct -3dB]{hl}今すぐ動く{/}。[silence:1.0s]
+@n: 計画がないから[br][>#st7a -100]{ng}動けない{/}のでは[>#c7a.ng][!#c7a.img to,{filter:'saturate(.15)', duration:.35}][♪buzz -6dB]なく、[|][<#c7a -200][<#st7a -200][!#tint fill,#EAF8F1,duration=600 -100][>#c7b -100][♪whoosh -8dB -100]手元にあるもので[>#st7b -300][!#c7b to,{y:-24, duration:.15, ease:'sine.out', repeat:3, yoyo:true}][♪correct -3dB]{hl}今すぐ動く{/}。[silence:1.0s]
 
 *** recap
 [!#tint fill,#FFF4DC,duration=600]

@@ -237,8 +237,8 @@ board#b3(left: 110px; top: 262px; width: 1700px; height: 400px; t: "図2　1日�
 p#lead(left: 110px; top: 699px; font-size: 46px; font-family: h; white-space: nowrap; in: {x:-60, opacity:0, duration:0.6, ease:'power3.out'}) ところが、立地で分けると…
 div#tz(left: "73;323;553"; top: 782px; width: "232;213;232"; height: 81px; background: $card; border: 2px solid #3A2A1E1F; border-radius: 16px; box-shadow: 0px 8px 18px #5A3C1E1A; in: {y:30, scale:0.92, opacity:0, duration:0.5, ease:'back.out(1.8)', stagger: {each: 0.18}}) ×3
   div#sq(left: 24px; cy: 50%; width: 18px; height: 18px; border-radius: 4px; background: "$terra;$mustard;$sage")
-  p#t(left: 56px; cy: 50%; font-size: 30px; white-space: nowrap) 駅直結・地下街;路面・商店街;公園沿い・郊外
   icon#ar(left: "186;167;186"; cy: 50%; font-size: 26px; name: "arrow-up;arrow-down;arrow-down"; weight: bold; color: $card; background: "$terra_d;$rain_d;$rain_d")
+  p#t(left: 56px; cy: 50%; font-size: 30px; white-space: nowrap) 駅直結・地下街;路面・商店街;公園沿い・郊外
 
 # sc4 立地別: 右上に凡例・立地のカード 3 枚が語ごとに下から入り、絵が寄りから引き、2 本の棒が伸び、増減の数字が判子で着く (−31% は最後に沈む)
 section#sc4(stagger: {each:0})
@@ -371,13 +371,13 @@ hl#h8(a: "前日の予報で仕込みを変えると、"; b: "廃棄率"; c: "{t
 board#rule(left: 110px; top: 248px; width: 1700px; height: 258px; t: "試行　2026年6〜7月の8週間（56日）・3店"; in: {y:50, opacity:0, rotation:-1, duration:0.7, ease:'power3.out'})
   img#prep(left: 22px; top: 22px; width: 320px; height: 214px; border-radius: 14px; main: none; delay: 150; in: {scale:1.1, opacity:0, duration:0.8, ease:'power2.out'}) 夕方のカフェの奥の仕込み台。店員の手が翌日のサンドイッチと焼き菓子のトレイを並べ、台の上に立てたタブレットの画面には雨粒の付いた雲の簡単な絵だけ、罫線だけのクリップボード、暖かい灯り。横長の画面いっぱいに描き余白を作らない。温かく親しみやすいエディトリアルイラスト、リソグラフ印刷風 (平らな形・紙の粒子・少しずれたインク・手描きの縁)。色はテラコッタ・マスタード・コーヒーブラウン・セージグリーン、雨だけくすんだスレートブルー、生成りの紙の地。文字・数字・ロゴは一切入れない
   p#k(left: 372px; top: 34px; font-size: 22px; color: $card; background: $terra_d; border-radius: 8px; padding: 4px 14px 4px 14px; delay: 300; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'}) ルール
-  p#t(left: 372px; top: 74px; font-size: 36px; font-family: h; line-height: 1.32; white-space: nowrap; delay: 420; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'}) 前日17時の予報で、翌日の[br]{r}降水確率が60%以上{/}なら、仕込みを変える
   p#chip(left: "249;404;547"; top: 178px; font-size: 22px; color: "$terra_d;$mustard_d;$sage_d"; background: #F3EAD9; border: "2px solid $terra_d;2px solid $mustard_d;2px solid $sage_d"; border-radius: 12px; padding: 8px 16px 8px 16px; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.4, ease:'back.out(2)', stagger: {each: 0.25}}) ×3 駅直結 1店 {pb}+15%{/};路面 1店 {pb}−10%{/};公園沿い 1店 {pb}−25%{/}
   p#days(left: 1206px; top: 28px; font-size: 24px; line-height: 1.35; white-space: nowrap; in: {y:12, opacity:0, duration:0.6, ease:'power3.out'}) 対象日 {dd}21{/}日 ／ 56日
   p#dsub(left: 1206px; top: 80px; font-size: 20px; font-family: m; color: $ink2; white-space: nowrap; in: {y:12, opacity:0, duration:0.6, ease:'power3.out'}) 実際に雨 17日・予報の外れ 4日
   div#cell(left: "804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081;804;825;847;868;889;911;932;953;975;996;1017;1039;1060;1081"; top: "80;80;80;80;80;80;80;80;80;80;80;80;80;80;100;100;100;100;100;100;100;100;100;100;100;100;100;100;120;120;120;120;120;120;120;120;120;120;120;120;120;120;140;140;140;140;140;140;140;140;140;140;140;140;140;140"; width: 26px; height: 26px; border-radius: 6px; background: "#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#4E7896;#FBF6EC;#FBF6EC;#FBF6EC;#FBF6EC;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4;#E7DAC4"; in: {scale:0, opacity:0, duration:0.25, ease:'back.out(2)', stagger: {each: 0.022}}) ×56
   # 予報の外れの 4 日 (白抜きの縁)
   div#miss(left: "868;889;911;932"; top: 150px; width: 26px; height: 26px; border-radius: 6px; border: 3px solid $rain; in: {scale:0, opacity:0, duration:0.25, ease:'back.out(2)', stagger: {each: 0.022}}) ×4
+  p#t(left: 372px; top: 74px; font-size: 36px; font-family: h; line-height: 1.32; white-space: nowrap; delay: 420; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'}) 前日17時の予報で、翌日の[br]{r}降水確率が60%以上{/}なら、仕込みを変える
 board#res(left: 110px; top: 540px; width: 1060px; height: 376px; t: "廃棄率（仕込み額に対する廃棄額）"; in: {y:50, opacity:0, duration:0.6, ease:'power3.out'})
   div#avgbg(left: 30px; top: 272px; width: 1000px; height: 56px; border-radius: 14px; background: #EFB79F47)
   dbrow#r1(top: 78px; l: "駅直結"; va: "{dv}6.2{/}% →"; vb: "4.9"; ax: 561px; bx: 560px; sl: 494px; sw: 81px)
