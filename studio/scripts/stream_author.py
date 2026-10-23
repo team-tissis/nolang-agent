@@ -10,12 +10,11 @@
 
 usage (repo root から):
   python stream_author.py run  <project>   [--effort low] [--samples a.md,b.md]
-      --samples = system prompt に同梱する見本 (reference/samples/ の file 名・2 本以上)。省略時は reference/samples/ の NoLang の src
-                  `<type>_NN.md` 1 本 + hf max の写し `hf_<type>_*.md` 1 本 (どちらも依頼と同じ題材を外し、依頼と同じ向きの物を先に・pick_samples)。
-                  stream/samples.txt に記録し fix も同じ見本を使う
-  python stream_author.py staff <project> <cut> <findings>  [--effort medium]   # 担当: 8 観点で cut を見直して block を stdout へ
+      --samples = system prompt に同梱する見本 (reference/samples/ の file 名・2 本以上)。省略時は reference/samples/ の hf の写し
+                  `hf_<type>_*.md` 2 本 (依頼と同じ題材を外し、依頼と同じ向きの物を先に・pick_samples)。stream/samples.txt に記録し fix も同じ見本を使う
+  python stream_author.py staff <project> <cut> <findings>  [--effort medium]   # 担当: cut を仕上げて block を stdout へ
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
-      → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (確認表で指摘に出ない崩れも探す)・
+      → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
         --shots = 見直しに cut の静止画も見せる (stream_run の --look))
 project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
@@ -38,8 +37,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SKILL = HERE.parent
-# 見本の置き場。既定の見本は NoLang の src `<type>_NN.md` 1 本 + hf max の写し `hf_<type>_*.md` 1 本 (pick_samples)。自分の type の見本が
-# 足りない時に借りる近い type と、system prompt に同梱する見本 1 本の大きさの上限 (超える物は選ばない)
+# 見本の置き場。既定の見本は hf の写し `hf_<type>_*.md` 2 本 (pick_samples)。自分の type の見本が足りない時に借りる近い type と、
+# system prompt に同梱する見本 1 本の大きさの上限 (超える物は選ばない)
 SAMPLES_DIR = SKILL / "reference/samples"
 NEAR_TYPE = {"cinematic": "story", "compare": "concept", "data": "compare", "story": "cinematic", "concept": "compare"}
 SAMPLE_MAX_BYTES = 70_000
@@ -55,8 +54,6 @@ CWD = Path("/tmp/nolang-stream-cwd")  # claude -p の cwd (repo の外 — proje
 MODEL = "claude-opus-5-5"
 # 見直し役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
 SHOT_WIDTH = 960
-# 状態を運ぶ常設 (章番号・STEP の進み・累計) を根に置ける動画の長さ (plan の見込み秒の和)。1 分程度の動画には置かない (ユーザーの裁定 10-15)
-LONG_VIDEO_S = 180
 
 
 # claude の実体を起動時に解決する (PATH 上の shim が更新中だと一時的に見つからない)
@@ -105,63 +102,75 @@ def same_topic(name: str, request: str) -> bool:
 
 
 def pick_samples(typ: str, aspect: str, request: str) -> tuple[tuple[str, ...], list[str]]:
-    """reference/samples/ から 2 本 = NoLang の src (`<type>_NN.md`) 1 本 + hf max の写し (`hf_<type>_*.md`) 1 本 → ((NoLang, hf), 外した見本)。
-    両側とも規則は同じ 3 つ: SAMPLE_MAX_BYTES 以下の自分の type の見本から (後ろに NEAR_TYPE の見本を足す)・依頼と同じ題材の物を外す・
-    依頼と同じ向き (canvas の縦横) の物を先に。その中の順番は file 名順 (大きさ順だと見本を 1 行直すたびに選ばれる物が替わる)。
-    片側に 1 本も無ければもう片側の 2 本目を取る。自分の type の NoLang の見本に依頼と同じ向きの物が無ければ NoLang 側を使わず、hf の
-    写し 2 本 (同じ向きを先に) にする。NoLang の src は製品の文法で勝った書き方 (字幕・cut の組み方)、hf の写しは
-    絵と動きの作り込みの見本 — 10-16 の bs7 はこの混合で回していた。
-    著者は見本を逐語で写す (s1 で 50〜68%・pv で台詞と印ごと) ので、同じ題材の見本は既定でも渡さない。"""
+    """reference/samples/ から hf の写し (`hf_<type>_*.md`) 2 本 → (見本, 外した見本)。SAMPLE_MAX_BYTES 以下の自分の type の写しから
+    (後ろに NEAR_TYPE の写しを足す)・依頼と同じ題材の物を外す・依頼と同じ向き (canvas の縦横) の物を先に。その中の順番は file 名順
+    (大きさ順だと見本を 1 行直すたびに選ばれる物が替わる)。著者は見本を逐語で写す (s1 で 50〜68%・pv で台詞と印ごと) ので、同じ題材の
+    見本は渡さない。NoLang の src の見本 (`<type>_NN.md`) は stream では渡さない — hf の写し 2 本の方が両順の比べで勝った (10-23)。"""
     portrait = aspect == "9:16"
     skipped: list[str] = []
-
-    def ranked(pattern: str) -> list[str]:
-        out: list[str] = []
-        for t in (typ, NEAR_TYPE[typ]):
-            names = sorted(
-                p.name
-                for p in SAMPLES_DIR.iterdir()
-                if re.fullmatch(pattern.format(t=t), p.name) and p.stat().st_size <= SAMPLE_MAX_BYTES
-            )
-            same = [n for n in names if same_topic(n, request)]
-            skipped.extend(same)
-            out += sorted((n for n in names if n not in same), key=lambda n: sample_portrait(n) != portrait)
-        return out
-
-    nolang, hf = ranked(r"{t}_\d+\.md"), ranked(r"hf_{t}_.+\.md")
-    if not any(n.startswith(f"{typ}_") and sample_portrait(n) == portrait for n in nolang):
-        # 自分の type の NoLang の見本に依頼と同じ向きの物が無い — 向き違いの src は字幕・cut の組み方ごと写される (16:9 の concept に
-        # 縦の見本が付き、縦の配置で書いた) ので NoLang 側を諦め、hf の写し 2 本を同じ向き優先で取る
-        nolang, hf = [], sorted(hf, key=lambda n: sample_portrait(n) != portrait)
-    picked = nolang[:1] + hf[:1]
-    picked += (nolang[1:] + hf[1:])[: 2 - len(picked)]
+    picked: list[str] = []
+    for t in (typ, NEAR_TYPE[typ]):
+        names = sorted(
+            p.name
+            for p in SAMPLES_DIR.iterdir()
+            if re.fullmatch(rf"hf_{t}_.+\.md", p.name) and p.stat().st_size <= SAMPLE_MAX_BYTES
+        )
+        same = [n for n in names if same_topic(n, request)]
+        skipped.extend(same)
+        picked += [n for n in names if n not in same]
+    picked = sorted(picked, key=lambda n: sample_portrait(n) != portrait)[:2]
     if len(picked) < 2:
-        raise SystemExit(f"reference/samples/ に {typ} ({NEAR_TYPE[typ]}) の見本が 2 本無い: {picked}")
+        raise SystemExit(f"reference/samples/ に {typ} ({NEAR_TYPE[typ]}) の hf の写しが 2 本無い: {picked}")
     return (picked[0], picked[1]), skipped
 
 
+# 3 役の system prompt の冒頭 — プロの制作者への依頼の形 (hf の試行者に渡した依頼と同じ言い方)。作法の規則は渡さず、文法と機構の事実
+# と制作の作法の抜粋 (reference/craft.md) を渡す。規則の束 (plan の規則・担当の 8 観点・確認表・style の組) より両順の比べで勝った (10-23)
+SYSTEM_HEAD = (
+    "あなたはプロのモーションデザイナー兼動画編集者です。動画はいつもどおり HTML + CSS + GSAP で作ります (scene の DOM を書き、"
+    "class で見た目を揃え、GSAP の timeline で要素ごとの入場・状態変化・退場を打つ)。今回はその動画を NoLang の draft src "
+    "(HTML / CSS / GSAP の圧縮形) で書きます。声は NoLang の音声合成、画像は NoLang の画像生成、BGM・効果音・書体は NoLang の"
+    "カタログから、どれも説明文で注文します。動きと音 (BGM・出現の効果音) まで作り込むこと。仕上がりの目安は、プロが作った解説動画"
+    "として出せる密度と階層です。\n"
+    "作業は 3 つの役で分けます — 全体を書く著者・cut を仕上げる担当・check の指摘を直す直し役。どの役か、変えてよい物は user の指示に"
+    "従います。\n"
+    "この会話に道具はありません (file は読めず書けず、command も打てません)。下の文書が draft src の書き方の全部です — file を読もうと"
+    "しないでください。check と render は別の process が打ちます。あなたは本文に src を書くだけです。\n"
+)
+CRAFT_HEAD = (
+    "以下は HTML + GSAP で動画を作る制作ガイドの抜粋です。この会話には道具も file も無いので、command・file (SPEC.md など)・"
+    "人に確認する手順の話は読み飛ばし、作り方の考え方として読んでください。書き方 (綴り) は上の draft src の文書に従います。\n\n"
+)
+# SKILL.md のうち stream の役に渡す節 (文法)。工程・ループ・規則の一覧・stream の段取りは対話で skill を使う時の物なので渡さない
+SKILL_GRAMMAR = ("## 違い", "## 書き方の対応", "## 書けない物")
+
+
+def _skill_grammar() -> str:
+    """SKILL.md の冒頭 (圧縮の規則・素材の書き方) と文法の節だけ。frontmatter は落とす。"""
+    parts = re.split(r"(?m)^(## .*)$", (SKILL / "SKILL.md").read_text())
+    got = [parts[0].split("\n---\n", 1)[-1]]
+    got += [parts[i] + parts[i + 1] for i in range(1, len(parts), 2) if parts[i].startswith(SKILL_GRAMMAR)]
+    return "".join(got)
+
+
 def build_system_prompt(out: Path, samples: tuple[str, ...] | None) -> Path:
-    """SKILL + looks + sounds + authoring + capabilities + 見本 2 本 (道具の無い call は file を読めないので全部同梱)。samples=None は見本なし
-    (著者の静的な system prompt — 見本は user turn に置く)。担当と直し役は見本入り — 見本を外すと担当の組み上げ・状態の変化が半分に
-    減り、両順の比べで 6 題材中 4 題材負けた (10-22)。"""
-    head = (
-        "あなたは HTML + CSS + GSAP で動画を作るプロの制作者です (scene の DOM を書き、class で見た目を揃え、GSAP の timeline で"
-        "要素ごとの入場・状態変化・退場を打つ、いつもの作り方)。今回はその動画の設計図を NoLang の draft src (HTML / CSS / GSAP の圧縮形) で"
-        "書きます。役は 3 つ — 全体を書く著者・cut を見直す担当・check の指摘を直す直し役 — で、どの役か・変えてよい物は user の指示に従います。"
-        "見た目 (色・書体・構図・動き) は著者が題材から決め、担当と直し役は根 (palette・font・cast) をそのまま使います。"
-        "目標は、プロの制作会社が作った動画と並べて見劣りしない質です。\n"
-        "この会話に道具はありません (file は読めず書けず、command も打てません)。文法と作法は下の文書が全部です — file を読もうとしないでください。"
-        "文書の中の `studio.py check / render` の手順は別の process が代わりに打ちます。あなたは本文に src を書くだけです。\n"
-    )
-    parts = [head]
-    for rel in (
-        "SKILL.md",
-        "reference/looks.md",
-        "reference/sounds.md",
-        "reference/authoring.md",
-        "reference/capabilities.md",
-    ):
+    """役の冒頭 + SKILL の文法 + looks の罠 + sounds + authoring + capabilities + 制作の作法 + 見本 2 本 (道具の無い call は file を読めない
+    ので全部同梱)。samples=None は見本なし (著者の静的な system prompt — 見本は user turn に置く)。担当と直し役は見本入り — 見本を外すと
+    担当の組み上げ・状態の変化が半分に減り、両順の比べで 6 題材中 4 題材負けた (10-22)。"""
+    looks = (SKILL / "reference/looks.md").read_text()
+    parts = [
+        SYSTEM_HEAD,
+        "\n<!-- ===== draft src の書き方 ===== -->\n\n" + _skill_grammar(),
+        "\n<!-- ===== reference/looks.md (罠) ===== -->\n\n## 文法で書けなかった物・罠"
+        + looks.split("## 文法で書けなかった物・罠", 1)[1],
+    ]
+    for rel in ("reference/sounds.md", "reference/authoring.md", "reference/capabilities.md"):
         parts.append(f"\n<!-- ===== {rel} ===== -->\n\n" + (SKILL / rel).read_text())
+    parts.append(
+        "\n<!-- ===== 制作の作法 (英語の原文のまま) ===== -->\n\n"
+        + CRAFT_HEAD
+        + (SKILL / "reference/craft.md").read_text()
+    )
     parts.append(samples_text(samples or ()))
     out.write_text("".join(parts))
     return out
@@ -175,38 +184,35 @@ def samples_text(samples: tuple[str, ...]) -> str:
     )
 
 
-def author_prompt(
-    typ: str, aspect: str, seconds: str, skeleton_d: str, skeleton_t: str, request: str, samples: str = ""
-) -> str:
-    canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
-    return f"""下の依頼の動画の src を書きます。まず構成 (plan) と根、続けて cut を構成の順に上から一度に書きます。書いた端から別の process が
-cut ごとに check と描画を始めるので、書きながら前に戻って直さない。画面は {aspect} — 根の canvas は雛形と同じ `canvas {canvas}` (見本や
-辞書の例の canvas を写さない・要素の位置と大きさもこの画面で決める)。根に置く物は動画全体の設定だけ:
-palette / font / fonts / photo_style / cut の既定 / subtitle (開く印) / bgm / cast / transition= / read / 常設の層。
-palette・font・fonts は style の組 (looks.md) から題材に合わせて決める — 雛形の値を写さない (数字の書体 `fonts n` も組ごとに違える)。
-名のある定義 (def・motion・run・svg・sound・cue) は、それを初めて使う cut の design の行 (`section#名` の次) に書く — 後の cut もその名を
-使える (前の cut の定義は参照できる・同じ名を 2 度は定義しない・使う cut より後の cut に定義を書かない)。根の層 (`.sticky` の札・帯) には
-`out:` と `end` 基準の key を書かない (閉じる cut が来るまで描画が止まる)。
-常設の層 (cut を跨いで居続ける札・帯): 飾りの header (題の帯・番組名) は置かない。章番号・STEP の進み・累計のような状態を運ぶ常設は、動画が
-3 分以上 (plan の見込み秒の和が {LONG_VIDEO_S} 以上) の時だけ根に 1 つ (上端・`.sticky`)。それより短い動画 (1 分程度) には置かない。
-累計 (data の題材で数字が 2 cut 以上続いて合計になり、3 分以上の時だけ): plan の各行の見せ物に、その cut の後の累計 (`累計 151,200円`) を書き
-(和は plan で 1 回だけ計算する)、根の上端の札 `p#sum.sticky(…) 累計 [count:0]円` を各 cut で `[!#sum text,"累計 [count:151,200]円"]` に
-替える (plan の値を写す・数字は 3 桁区切りで書く・数え始めは前の値から自動)。印はその数字を言う語に (cut の頭に置くと台詞より先に和が見える)・
-上端の帯に他の cut の要素を置かない (札が押されて動く)。
+def author_prompt(aspect: str, seconds: str, canvas: str, request: str, samples: str = "") -> str:
+    """著者の user turn。構成の型・雛形・数字の規則は渡さない (台本と絵コンテは著者が依頼から決める)。雛形は 1 行目と canvas だけ —
+    役の入った雛形 (cut の役・定義済みの段・theme dark) を渡すと部品を写し、暗い地に揃った (10-23)。"""
+    return f"""あなたはこの動画の著者です。下のユーザーの依頼の動画を 0 から作ります。台本 (ナレーション文) は依頼から自分で書く
+(依頼に台本・テロップの文言があればそのまま使う)。動きと音 (BGM・出現の効果音) まで作り込むこと。仕上がりの目安は、プロが作った
+解説動画として出せる密度と階層です。
+
+まず構成 (plan) と根を書き、続けて cut を構成の順に上から一度に書きます。書いた端から別の process が cut ごとに check と描画を
+始めるので、書きながら前に戻って直さない。各 cut はこの後、別の担当が仕上げます。
+
+draft src の段取りの決まり (機構の事実):
+- 画面は {aspect} — 根の canvas は `canvas {canvas}` (見本の canvas を写さない・位置と大きさもこの画面で決める)。
+- 根に置く物は動画全体の設定 (palette / font / fonts / photo_style / cut の既定 / subtitle / bgm / cast / transition= / read / cut を跨ぐ層)。
+- 名のある定義 (def・motion・run・svg・sound・cue) は、それを初めて使う cut の design の行 (`section#名` の次) に書く — 後の cut も
+  その名を使える (同じ名を 2 度は定義しない・使う cut より後の cut に定義を書かない)。
+- 根の層 (`.sticky`) には `out:` と `end` 基準の key を書かない (閉じる cut が来るまで描画が止まる)。
+- 要素の名は cut の名を頭に (`hook` の cut なら `hook_t`・`hook_img`)。根の物を除き、cut を跨いで同じ名を使わない。
+- 絵の生成は時代・形・数の段階を守らない・1 枚の説明に 2 場面を書くと上下 2 枚の合成になる。同じ物を 2 枚以上に描くなら根に
+  `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。生成された絵は誰も見られないので、文字を置く所は `subject:` / `room:` で空けられる。
 
 出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
 === plan ===
-名: 台詞の要約 / 見せ物 (見込み秒)      ← 1 行 1 cut・名は英小文字 (hook / close など)・この順で cut が並ぶ・1 cut は 4〜25 秒
-                                         見せ物 = その cut で大きく見せる 1 つ (数字・図・比べる 2 つ・結論の一言のどれか・台本にある語から)。
-                                         台本に数字の無い「急・遅い・多い」は図で (数字は足さない)
-                                         冒頭の cut は題の語を最初の文で言い、見せ物は問いか主張の一言 (語ごとに組み上げる)・
-                                         最後の cut は主題の名と結論の一言で終える
+名: この cut で何を見せ、どう動かすか (見込み秒)      ← 1 行 1 cut・名は英小文字・この順で cut が並ぶ
 === root_design ===
-design.txt の `section#` より前の全部 (`#v2` から。計画の # 行・canvas・theme・palette・font・fonts・photo_style・cut の既定・subtitle・bgm・常設の層。def・motion・run は使う cut に)
+design.txt の `section#` より前の全部 (`#v2` から)
 === root_timeline ===
 timeline.txt の `***` より前の全部 (`#v2`・cast・transition=・read)
 === cut 名 ===
-section#名(…)            ← この cut の design の行 (字下げ 0。字下げ 2 空白は子だけ)。この cut で初めて使う def・motion・run はこの直後に
+section#名(…)            ← この cut の design の行 (字下げ 0。字下げ 2 空白は子だけ)。この cut で初めて使う定義はこの直後に
 …
 ---timeline---
 *** 名                    ← この cut の timeline の block (台詞・印・se・最後の行に transition)
@@ -215,72 +221,15 @@ section#名(…)            ← この cut の design の行 (字下げ 0。字�
 …
 === end ===
 
-書き方: 依頼の台本・テロップの文言はそのまま使う (途中で切れていれば依頼の構成に沿って残りを書く)。尺は合わせない (依頼の長さは目安)。素材は説明文で書く。
-絵の説明文: 時代・形・数の段階・前後の違い (「1950 年代の四角い窓」「乗客がまばら」) は写真に担わせず図か文字で言い、写真は場の雰囲気に (生成は時代や形を守らない)。
-1 枚に 1 場面 (「A と、B」の 2 場面は上下 2 枚の合成になる)。物語で同じ物 (人物・器・時計) が 2 枚以上に出るなら根に `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。
-各 cut の design は要素が全部出た時の位置と大きさ、timeline は台詞と語の印 (`[>#名]` 出す・`[!#名 …]` 変える・`[<#名]` 消す)。cut の切替は前の cut の
-timeline の最後の行に `transition …`。
-要素の名は cut の名を頭に (`hook` の cut なら `hook_t`・`hook_img`)。根の物を除き、cut を跨いで同じ名を使わない。
-
-雛形 (`new --type {typ} --aspect {aspect} --seconds {seconds}` の出力・根の形の参考・台詞と題材は架空の例):
+根も cut も 0 から書く (雛形は 1 行目と画面だけ):
 --- design.txt ---
-{skeleton_d}
+#v2
+canvas {canvas}
 --- timeline.txt ---
-{skeleton_t}
-{samples}{request}"""
-
-
-STAFF_VIEW = """1. 同期: 要素がその語の瞬間に出るか (先に全部見えている・語より何秒も遅れる、はどちらも減点。答えを待つ ? の箱や前後の板も、中身を言う語で)
-2. メリハリ: 溜め → 組み上がる → 主役が立つ → 次へ、と動くか (語の間の溜めは 3 秒まで・cut の頭は 1.2 秒以内に中身を出す)
-3. 主役: その瞬間に見るべき 1 つが分かるか (大きさ・色・前の札を沈める・動き)。全部が同じ強さの札の列は弱い。
-   構成の行の見せ物がその cut で一番大きく見えるか — 要の語 (数字・比べる 2 つ・結論) は横 96px・縦 108px 以上
-   (stat / big の段・根に無ければ大きな文字)。物 (道具・画面・通知) は icon か絵を画面の中ほどに大きく
-4. 読みやすさ: 写真の上に直接置いた細い文字・小さな札は沈む。大きく太い字でも、絵の主な色と同じ系統の色なら沈む (全面の閃光の直後も同じ)
-   — 文字の側に幕 (veil の `to:`・image の `scrim:` の向き) か板を敷く・絵を窓にして文字は地に置く (縁取りは最後の手段で blur の影)
-5. 図と変化: 内容に合った図か、同じ絵を長く使い回していないか、状態の変化 (色・数字・位置) が見えるか。絵の説明文は 1 枚 1 場面・時代 / 形 / 数の段階は
-   写真でなく図か文字に・根の `image 名 =` にある物を描く絵は `[ref:@名]` で派生 (別物になる)。比べる 2 つや前後の値は
-   片方ずつ語で出し、差は最後に大きく見せる (板を先に完成させない)。位置の小さなずれや揺れだけでは変化に見えない — 伸びる・数える・色が変わる・現れて消える
-6. so what と締め: 場面の結論の一言は、その cut で一番大きな字で (横 96px・縦 108px 以上。pill・札・板の中の小さな字にしない)。
-   最後の cut は結論か問いを画面の主役に (台詞が問いなら問いの文を見せる)。締めの無音の間にも 1 つ変化を (色を落とす・判子・名の札)
-7. 連続性: 黒 frame (暗い絵に濃い黒の幕を重ねた、ほぼ黒い画面も同じ)・突然の消失・位置の飛びを作らない
-8. 作り込み: 板と中身が一体で動くか (板は中身の最初の値と同じ語で出す — 板だけが 1 秒以上見えると空の板)・写真が素材として成立しているか・
-   章札や判子など番組としての質感"""
-
-# 担当の版で審査に多く出た欠陥の型 (新題材 12 本・Opus 審査 138 件のうち担当が作った 59 件・10-22)。数字は check の規則と同じ値
-STAFF_PITFALLS = """担当の版で多い欠陥 (どれも check にほぼ出ないので、書く時に避ける)。これは足し方の注意で、足す量を減らす理由ではない —
-語ごとの組み上げ・数える・前の札を沈める・場面を替える寄りの絵・結論の大きな一言は、今までどおり足す:
-- 空の板: 印の無い板は engine が中身の最初の語で出す (中身が全部 `[>#]` で出る時だけ — 印の無い子が 1 つでもあれば板ごと cut の頭に出る)。
-  板・名札・見出しの小札・地のある ×N の枠・棒の track は、中身の最初の値と同じ語で出す — 小札や枠だけを先に出して値を後の語に分けない
-  (板だけが 1 秒以上見えると empty_board)。例: `[>#c[1]]新NISAは、[>#c[1].v]いつでも` は板と名札だけが先に見える →
-  `新NISAは、[>#c[1]]いつでも` (板・名札・値を値の語で一緒に・名札の語を言う間は待ってよい)。書いた後、板に付けた `[>#板]` と
-  `[>#板.子]` が別の語に分かれていないかを見直す。中身は板の字下げの子に書く (`overlap:` の兄弟は中身に数えない)。比べる 2 行は行ごとの板に。
-- 小さい字: 画面の字は 54px 以上 (補足・ラベル・chip・凡例・kicker・小札も。check の small_text はそれより下の読める床)。54px で収まらない字は
-  足さず、著者の版の 54px 未満の字は上げるか消す (出典・注記の 1 行だけ 42px まで)。`$mute` の字に `dim` を重ねない。
-- 顔・主体に乗る板: 絵の上に不透明な板・帯・飾り線・ラベルを置くなら、絵に `subject:` と `room:` を書き、板と文字は room の中だけに置く
-  (`subject: right 40%` なら横 1280 で x < 768)。人物を大きく描かせた絵の上 1/3 に不透明な板を置かない (頭がそこに来る)。
-- 沈めた字・幕の上の字: 地と逆の明るさに (暗い幕に白・明るい板に濃い色)。沈めは `dim,0.6` 程度まで、溶けるなら `[<#名]` で閉じる。
-  全面の写真の幕 (`scrim:`・veil の opacity) は 0.7 未満 (0.7 以上が 3 秒続くと写真が消える — photo_hidden)。もっと濃くしたいなら写真を片側の
-  窓にして文字は地に。明るい空・白い地の絵に、中心の暗い radial の幕を敷かない (しみに見える)。
-- 字幕と同じ文: 画面の文字は台詞の要点の短い語 (字幕と同じ文が 2 か所に並ぶ)。`.hide_subtitle` は足さない。
-- 入場の時刻: 切替・fade out の 0.8 秒前より後に新しく出さない (締めの判子も)。前の切替の窓 (cut の頭の 0.3〜0.4 秒) にも出さない —
-  頭の要素は印なしで cut の頭に置くか、最初の台詞の頭に `[silence:+0.4s]`。
-- 絵: 場面を替える 2 枚目の絵 (寄り・別の角度) は良い — 2 枚目の in は 0.5 秒以下で、1 枚目をその語で閉じる (1 秒を超える溶け合いは
-  二重写し)。同じ物を 2 枚以上描くなら (この cut の中でも前の cut とでも) 色・服・画風・顔の有無を同じ語で書く。絵の一部を指す丸・矢印は
-  その部分の大きさに (絵全体を囲まない)。
-- 締め: 最後の変化の後の無音は 1.5 秒まで。答え (数字・結論) を閉じて新しい絵に替えない。
-- 書き方: `×N` の width / height は 1 枚の寸法 (枠全体ではない)。著者の版にある注記・依頼の数字は削らない。"""
-
-
-def cut_place(name: str, order: list[str]) -> str:
-    """cut の位置の 1 行 (担当の prompt) — 何番目か・最初 / 本題 / 最後のどれか。"""
-    k, m = (order.index(name) + 1, len(order)) if name in order else (0, len(order))
-    if k == 1:
-        role = "最初の cut — 最初の語で 1 つ立て、続く語ごとに 1 つずつ組み上げて、問いか主張の一言を一番大きく見せる (題や空の箱を先に全部出して止めない)"
-    elif k == m:
-        role = "最後の cut — 主題の名と結論の一言 (か問い) を画面の主役にして終える"
-    else:
-        role = "本題の cut"
-    return f"この cut は {k} 番目 / 全 {m} cut ({role})。"
+#v2
+{samples}{request}
+ユーザーの設定: 縦横比 {aspect} ({canvas})・長さの目安 {seconds} 秒
+"""
 
 
 def staff_prompt(
@@ -300,45 +249,34 @@ def staff_prompt(
     target_s: str = "",
     timing: str = "",
 ) -> str:
-    # 常設: 3 分未満の動画と最初の cut (再生開始の経路 — prompt を増やさない) は足さないだけ。3 分以上は根の常設の札への差し替えを許す
-    persistent = (
-        "常設の帯は足さない。"
-        if planned_s < LONG_VIDEO_S or prev_name is None
-        else f"常設の帯・飾りの header は足さない (常設は根の物だけ)。この動画は構成の見込みで {planned_s:.0f} 秒 (3 分以上) — 根の sticky の札"
-        ' (累計・章番号・STEP) には、構成の行の値で `[!#名 text,"…"]` を当ててよい (その数字・章を言う語に・値は構成のとおり・著者の版にあれば残す)。'
-    )
+    """担当の user turn — 著者の cut をプロの解説動画の密度と階層に仕上げる。見る観点・欠陥の型・字の大きさの規則は渡さず、機構の事実
+    (台詞・根・定義を変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
+    k, m = (order.index(name) + 1, len(order)) if order and name in order else (0, len(order or []))
     prev = (
-        f"前の cut `{prev_name}` (著者の版・参考。変えない。前の cut も別の担当が並列に書き換えるので、実際の画面はこの版と違う — "
-        f"揃えるのは根と定義の型と大きさ):\n=== cut {prev_name} ===\n{prev_block}=== end ===\n"
+        f"前の cut `{prev_name}` (著者の版・参考。変えない。前の cut も別の担当が並列に仕上げるので、実際の画面はこの版と違う):\n"
+        f"=== cut {prev_name} ===\n{prev_block}=== end ===\n"
         if prev_name and prev_block
         else ""
     )
-    length = (
-        f"動画の長さ: 依頼の目安 {target_s} 秒・構成の見込みの和 {planned_s:.0f} 秒 (構成の各行の末尾の `(数)` はその cut の見込み秒)。"
-        "尺は台詞で決まる — 無音で寄せない。"
-    )
-    return f"""あなたはこの動画のディレクターです。著者が書いた cut `{name}` の block を、視聴者として見たときの良さで見直し、必要なら作り替えて返してください。
-見るのは画面が埋まる速さや情報の量ではなく、次の 8 つです:
-{STAFF_VIEW}
+    return f"""あなたはプロのモーションデザイナー兼動画編集者で、この動画の cut `{name}` の担当です。著者が書いた block を受け取りました。
+この cut を、プロが作った解説動画として出せる密度と階層に仕上げてください。動きと音まで作り込むこと。必要なら作り替えてよい。
 
-守る事: 台詞 (`@` の行の文字) は一字も変えない (許すのは読点の追加と `{{表記|読み}}` の読みの指定だけ・依頼の台本の文言は声になる)。話者 (`@名:`) は保つ。
-根 (palette・font・cast) と前の cut の定義 (def・motion・run) は変えない (使ってよい)。この cut の block の定義も後の cut が同じ名で使っている — 名・引数の形・見た目 (大きさ・余白・色) を変えない。別の形や見た目が要るなら新しい名で定義してこの block で使う (後の cut が使う定義の見た目を変えると、元の定義が戻り、変えた版は `名_<cut>` に改名される)。
-板・札・見出しの台は、根と前の cut の定義があればそれを使う (手組みの div に替えない — 隣の cut と見た目が揃わなくなる)。新しい台が要るなら def にする。要素の名の接頭辞 (`{name}` の cut の名) は保つ。
-変えてよい事: 要素の追加と削除 (絵・図・板・札・判子・締めの 1 文)、大きさ・色・位置・下地、印の位置と動き、絵の説明文、`lint off=規則` (意図した先出しなど)。
-絵の説明文を書き換えるのはこの段だけ — この後の直し役は変えない (絵はこの版から作り始める・あなたは生成された絵を見られないので、文字を置く所は `subject:` / `room:` で空ける)。
-箱の書き方: 板は div (子は字下げで親の内側から置く・親の内側は border と padding の分だけ狭く、kb の絵は箱を越え、長い文字は折れる — 字数は check の目安を見る)。{persistent}
-key は authoring の「型」の表にある物だけ (無い key は DEFECT で cut が落ちる)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層にだけ付ける (他の cut の層は不可)。
-返す前に見直す 4 つ (DEFECT の常連): `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
-`名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` (例 `[!#a to,{{scale:1.1}} +300]`) /
-`filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ (`sepia(.45)` は DEFECT)。
+守る事 (機構の事実):
+- 台詞 (`@` の行の文字) は一字も変えない (声はもう作り始めている。許すのは読点の追加と `{{表記|読み}}` の読みの指定だけ)。話者 (`@名:`) は保つ。
+- 根 (palette・font・cast) と前の cut の定義 (def・motion・run) は変えない (使ってよい)。この cut の block の定義も後の cut が同じ名で
+  使っている — 名・引数の形・見た目を変えない。別の形や見た目が要るなら新しい名で定義してこの block で使う。要素の名の接頭辞 (`{name}`) は保つ。
+- 絵の説明文を書き換えられるのはこの段だけ (この後の直し役は変えない)。生成された絵は見られないので、文字を置く所は `subject:` / `room:` で空ける。
+- key は authoring の「型」の表にある物だけ (無い key は DEFECT で cut が落ちる)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層にだけ付ける。
+- DEFECT の常連: `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
+  `名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` /
+  `filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ。
 
-{STAFF_PITFALLS}
-
-依頼 (この動画の依頼文 — 対象・必須の語・数字・締めの一言はこれに従う):
+ユーザーの依頼:
 {request.strip() or "(なし)"}
+ユーザーの設定: 長さの目安 {target_s} 秒 (構成の見込みの和 {planned_s:.0f} 秒・尺は台詞で決まる)
 
-{cut_place(name, order or [])}{length}
-構成 (参考):
+この cut は {k} 番目 / 全 {m} cut。
+構成:
 {plan}
 根 (参考・変えない):
 === root_design ===
@@ -347,17 +285,17 @@ key は authoring の「型」の表にある物だけ (無い key は DEFECT �
 {root_t}
 {"前の cut の定義 (参考・変えない・使ってよい):" + chr(10) + defs_before if defs_before.strip() else ""}
 {prev}
-check の指摘 (著者の版・参考。消す事が目的ではない。判定で損をする物だけ直す):
+check の指摘 (著者の版・参考):
 {findings or "(なし)"}
 著者の版の時刻 (check の見積り — 秒は動画の頭から。印を動かせば変わる):
 {timing.strip() or "(なし)"}
 
-見直す block:
+仕上げる block:
 === cut {name} ===
 {block}
 === end ===
 
-出力は見直した block だけを同じ形式で (前置き・説明・code fence は書かない。`=== cut {name} ===` から `=== end ===` まで)。
+出力は仕上げた block だけを同じ形式で (前置き・説明・code fence は書かない。`=== cut {name} ===` から `=== end ===` まで)。
 """
 
 
@@ -378,7 +316,8 @@ def fix_prompt(
     shots: list[str] | None = None,
 ) -> str:
     """own_root = この cut が根の持ち主 (動画の最初の live な cut・根が流れる前) — 根の 2 block も直せる (`@ root_design 行`)。他の cut
-    の直し役は根と前の cut の定義を変えない (参考として見るだけ)。review = 見直し (確認表で指摘に出ない崩れも探す・指摘が無くても呼ぶ)。
+    の直し役は根と前の cut の定義を変えない (参考として見るだけ)。review = 見直し (厳しい監督として指摘に出ない弱い所・崩れも探す・
+    指摘が無くても呼ぶ)。
     shots = 見直しに見せる静止画の名 (無ければ block を読んで描いた姿を想像させる)。"""
     if own_root:
         root_part = f"""根 (この cut の持ち物 — 直してよい。ただし image・cast・read・photo_style・prompt_tail・art・canvas の行と、名のある定義の名は変えない):
@@ -401,21 +340,16 @@ def fix_prompt(
     if review or shots:
         if shots:
             names = "・".join(shots)
-            intro = f"""画像はこの cut を本番の renderer で描いた静止画です ({names}・時刻は cut 頭から。動画素材と立ち絵は止まった姿・口は閉じたまま・
-切替の窓は写らない)。check の指摘とは別に、画像を 1 枚ずつ見て、見る人が「未完成・崩れている」と感じる所を探して直す。"""
+            intro = (
+                f"画像はこの cut を本番の renderer で描いた静止画です ({names}・時刻は cut 頭から。動画素材と立ち絵は止まった姿・口は"
+                "閉じたまま・切替の窓は写らない)。check の指摘とは別に、厳しいモーションディレクターとして画像を 1 枚ずつ見て、"
+            )
         else:
-            intro = "check の指摘とは別に、block を読んで、描いた時に見る人が「未完成・崩れている」と感じる所を想像して探して直す。"
+            intro = "check の指摘とは別に、厳しいモーションディレクターとして block を読み、描いた姿を想像して、"
         look = f"""
-{intro}必ず次を確かめる:
-- 空き: 板・枠・画面に中身の無い面が大きく残っていないか (板の下半分が空・cut の頭に見出しだけの板・画面の片側だけに寄って反対側が空)。
-  中身を大きくする・板を中身に合わせて縮める・置き場を変える・空いた面に図や札を置く
-- 揃い: 並んだ要素が中央や軸からずれていないか (左右の余白が違う・行の頭が揃わない)
-- 重なり・読みやすさ: 文字が絵・他の文字・字幕に重なる・背景に沈む・小さすぎる
-- 主体: 絵の主体 (顔・物) が文字や板の下に隠れる・切れる
-- 場面との食い違い: 絵の中身が台詞と合わない (説明文は変えられない — 置き方・大きさ・幕・入れ替えで避ける)
+{intro}プロの解説動画として弱い所・崩れている所を探して直す。
 配置は大きく組み替えてよい (行の置き換え・追加・削除。台詞の文字と絵の説明文だけは変えない)。
-まず `=== look ===` に{"画像ごとに" if shots else ""}見つけた崩れを 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ
-`=== edits ===` の直後に `=== end ===`。
+まず `=== look ===` に見つけた所を 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ `=== edits ===` の直後に `=== end ===`。
 """
     head = (
         f"cut `{name}` の block に check の指摘が出ました。"
@@ -938,7 +872,8 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
     sp = build_system_prompt(st / "system_prompt_author.md", None)
     (st / "samples.txt").write_text(",".join(samples) + "\n")  # fix / fix-root も同じ見本で
-    skeleton_d, skeleton_t = (studio / "design.txt").read_text(), (studio / "timeline.txt").read_text()
+    skeleton_d = (studio / "design.txt").read_text()
+    canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
     if not request.lstrip().startswith("---- ユーザーの依頼 ----"):
         request = "---- ユーザーの依頼 ----\n" + request.rstrip("\n") + "\n---- ここまで ----\n"
     log(
@@ -951,7 +886,7 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         samples=list(samples),
         samples_skipped=skipped,
     )
-    prompt = author_prompt(typ, aspect, seconds, skeleton_d, skeleton_t, request, samples_text(samples))
+    prompt = author_prompt(aspect, seconds, canvas, request, samples_text(samples))
     sp0 = Splitter(proj, st, "author")
     stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     sp0.finish()
@@ -1009,7 +944,7 @@ def fix(
     shots: list[Path],
 ) -> int:
     """直し役。own_root = この cut が根の持ち主 (最初の live な cut・根が流れる前) — 根の 2 file も直せる (`@ root_design 行`) 。
-    review = 見直し (確認表で指摘に出ない崩れも探す)・shots = 見直しに見せる cut の静止画。"""
+    review = 見直し (指摘に出ない弱い所・崩れも探す)・shots = 見直しに見せる cut の静止画。"""
     proj, st = project / "solo", project / "stream"
     sp = st / "system_prompt.md"
     root_d, root_t = (proj / "root_design.txt").read_text(), (proj / "root_timeline.txt").read_text()
@@ -1065,7 +1000,7 @@ def fix(
 
 
 def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
-    """担当: 判定役の 8 観点で cut を見直して書き直す (前の cut は著者の版を参考に渡す = cut ごとに並列に走らせるため)。依頼文・cut の
+    """担当: 著者の cut を仕上げる (前の cut は著者の版を参考に渡す = cut ごとに並列に走らせるため)。依頼文・cut の
     位置・著者の版の時刻 (orchestrator が指摘の隣に置く `timing_author.txt`) も渡す。"""
     proj, st = project / "solo", project / "stream"
     sp = st / "system_prompt.md"

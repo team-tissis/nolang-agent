@@ -20,7 +20,7 @@
 
 組を決めたら、根に `palette` `font` `fonts` `motion` `transition` を書き、以後の cut はその差分だけ。 数字 / 強調の書体 (`fonts`) も組ごとに違える — 骨組みの値を写さない。欧文 (数字・英字) の記述なら欧文専用の書体も候補になる (和文の字は代わりの書体が描く)。切替は 1 本 1 種が基本 (章の境目だけ別の 1 種)。dissolve は 300 ms 以下 + `overlap=` 同じ尺が無難 — 窓が境界の前に掛かると退場中の文字が次の絵に重なり、400 ms を超える溶けは前の絵が残像に見える。`motion` は雛形の 5 行 (題 title・主役の語 big・箱 div・本文 row・注記 note — 締まる / 行き過ぎない) の値を気分に合わせて書き換える (弾む動きは見本 story_03 の根)。組は例で、題材に合わせて自分で作ってよい (名 → 色 2〜3 → 書体 2 → 動き → 切替 → しない事 2 つ)。前後の値は両方とも読める濃さで (前を灰で沈めるなら字は太く大きく)。
 
-## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の著者には NoLang の src 1 本 + hf の写し 1 本を同梱する (自分の type の src に依頼と同じ向きの物が無ければ hf の写し 2 本)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
+## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の 3 役には hf の写し 2 本を同梱する (`reference/stream.md`)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
 
 - `samples/story_03.md` — story・夏フェスのオタク語り (縦・構文風の一人語り)・1080x1920・44.5s・139 行・文法: count・×N・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/story_06.md` — story・ニホンカワウソ (縦・台本そのまま・絵本調)・1080x1920・57.8s・145 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替

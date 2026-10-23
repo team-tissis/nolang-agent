@@ -16,9 +16,9 @@ usage (repo root から): python stream_run.py <project> [--staff medium] [--rev
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。--template <video_id>
     = 素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/` の 1 行・既定は server の空のテンプレ)。
-  --staff = 担当 (Opus・判定役の 8 観点で cut を書き直す) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
-  --review = 見直しの effort (既定 medium・`none` で見直しなし): 全 cut の 1 回目の直し役を、確認表 (空き・揃い・重なり・主体・場面) で
-    指摘に出ない崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
+  --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
+  --review = 見直しの effort (既定 medium・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
+    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 2 回目以降の直し役 (check の指摘だけを直す) の effort (既定 low)。
   --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
     prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
@@ -253,10 +253,10 @@ class Run:
         self.remote_watch_url = ""  # 視聴 URL (`WATCH` / `PLAYABLE` の行に出す)
         self.root_submitted = False
         self.fixed = fixed_rules()  # 直し役に回す規則 = 台帳の直しの列
-        self.staff_effort = staff  # 担当 (8 観点で cut を書き直す) の effort。None = 担当なし
+        self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.fix_effort = fix  # 直し役の effort
         self.review_effort = (
-            review  # 見直し (確認表で指摘に出ない崩れも探す 1 回目の直し役) の effort。None = 見直しなし
+            review  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
         )
         self.look = look  # 見直しに cut の静止画も見せる (REVIEW_ROUNDS_LOOK 回)
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
@@ -687,8 +687,8 @@ class Run:
     # ---- check と直し ----
     def check(self, dd: Path, *, ended: bool) -> tuple[str, list[Defect], list[dict]]:
         """ended = 動画の終わりまで書いた doc (False = この prefix の後に cut が続く — 最後の cut だけの規則を掛けない)。
-        remote は server の check (`drafts/check/`・DEFECT と compile の注意と layout の監査の崩れ — studio の lint の他の規則は
-        local だけ)。local は studio の check (compile + layout + lint)。欠陥はどちらも `Defect.as_record()` の形
+        remote は server の check (`drafts/check/`・DEFECT と compile の注意と layout の監査の崩れ — 書体は本番と同じ・warm で解けた
+        絵は実画像で読めない文字と主体に乗った文字も・studio の lint の他の規則は local だけ)。local は studio の check (compile + layout + lint)。欠陥はどちらも `Defect.as_record()` の形
         (local は doc の out/defects.json — DEFECT の無い check はその file を消す)。"""
         if self.remote is not None:
             body = self.remote_post(
@@ -698,6 +698,8 @@ class Run:
                     "timeline": (dd / "timeline.txt").read_text(),
                     "open_ended": not ended,
                     "aspect_ratio": self.aspect,
+                    # 開始済みの run — server は warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
+                    **({"video_id": self.remote_video_id} if self.remote_video_id else {}),
                 },
             )
             defects = [Defect.read(d) for d in body.get("defects", []) if isinstance(d, dict)]
@@ -961,7 +963,7 @@ class Run:
         prev_keys: set[tuple[str, str]] | None = (
             None  # 直し役を掛ける直前の check の指摘 (規則と層) — 直しが新しく作った指摘の判定
         )
-        # 見直し: 最初の reviews 回の直し役は確認表で指摘に出ない崩れも探す (--look なら静止画も・round ごとに撮り直す)。
+        # 見直し: 最初の reviews 回の直し役は指摘に出ない弱い所・崩れも探す (--look なら静止画も・round ごとに撮り直す)。
         # 見直しの call は直し役の 2 回の上限に数えない
         reviews = 0
         if self.review_effort is not None and not self.broken.get(c):
@@ -1227,7 +1229,7 @@ class Run:
         return hit
 
     def staff(self, i: int, c: str) -> None:
-        """担当 (Opus・8 観点) が著者の cut を見直して書き直す。前の cut は著者の版を渡すので cut ごとに並列に走る。
+        """担当 (Opus) が著者の cut を仕上げる。前の cut は著者の版を渡すので cut ごとに並列に走る。
         著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当が台詞の文字を変えていたら著者の版の文字に
         戻す (`restore_speech`・読点の追加と読みの指定は許す — 声は担当の版から作るので後段では戻せない・`speech_restored`)。"""
         from stream_author import restore_speech  # noqa: PLC0415 — scripts dir を sys.path に足している

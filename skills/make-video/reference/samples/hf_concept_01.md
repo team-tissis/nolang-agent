@@ -74,8 +74,8 @@ def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; b
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
 def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back; border-radius: 24px)
 def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
-  shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
-  shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
+  shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
+  shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
 def wordmark(y) = p(cx: 960px; top: {y}; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
 
 # タブレット: 枠・上の帯・右の側板。中の page と側板の中身は場面ごとに子で差す (def の実体の scale で縮める)

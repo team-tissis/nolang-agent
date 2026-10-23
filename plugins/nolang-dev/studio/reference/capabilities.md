@@ -20,7 +20,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | alpha | `opacity: .5` · `[!#名 dim,0.3,duration=900]` · `[!#名 to,opacity=0.5]` | 子孫にも掛かる |
 | (画面全体の閃光・暗転・揺れ) | 全面の `veil#fl(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)` を `[>#fl][!#fl to,{opacity:0, duration:.4}]` (閃光) / `[>#名]` … `[<#名]` (暗転)・揺れは出ている要素ごとの `[!#名 shake,6,duration=2200]` を同じ語に | 幕は veil・揺れは層ごとの一回きりの shake (画面全体を指す印は無い — CameraLayer は viewport だけで揺れの channel が無い) |
 | (写真の暗幕) | `img#名(scrim: right,0.45)` (`vignette,0.6` / 一様 `0.4`) | 絵の子の veil が絵の直上で一緒に出入り |
-| pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` も同じ) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
+| pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` も同じ) · `pattern: grid,間隔,色,幅` (CSS の方眼 `background-image: linear-gradient(色 1px, transparent 1px), linear-gradient(90deg, 色 1px, transparent 1px); background-size: 60px 60px` も同じ — 縦横 1 枚ずつ・同じ色と幅) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
 | border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (箱・形・文字の札・楕円) · `border-radius:` (角ごと `border-radius: 0 33px 33px 0` は svg に焼く・全隅が同じ `50%` 以上は楕円 (CSS どおり・幅と高さの変化に追随)・pill は `999px`) | 50% 未満の %・角ごとの %・`a / b` (CSS の楕円の角) は短辺 × N% の円の角で描く (warn)・破線 / 点線は Chromium と同じ模様 (dashed: 幅 3 以上は線 2W・間 W・細い線は 3W / 2W、dotted: 幅 3 より太いと直径 W の丸い点を中心間 2W)・周に整数回で収まるよう間を詰める・線種は変種で切り替えられない・`double` / `groove` / `ridge` / `inset` / `outset` は DEFECT:CSS・辺の線 (`border-left:`) と吹き出しの形・字幕の帯は実線だけ |
 | border shape (形 70 種) path dash cap | `shape#名(path: arrow_r)` (形の名前 48 種) / 楕円は `border-radius: 50%` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (`border:` の線は既定 round・SVG の綴り `stroke: 色; stroke-width: 6` の線は既定 butt) · `fill: 色` · `path: "M … A …"` (SVG の全文法・A は C に直す) · `filter: drop-shadow(0 8px 16px 色)` (= box-shadow) · 文字の板・絵の mask 形は `p#名(shape: star)` / `img#名(shape: star)` | 形の変形 (morph): `points:` / `path:` の shape (単色の塗り) の変種 `#名.tag(path: …)` へ `[!#名 .tag]` で頂点を補間 (状態 key の `border_path`)。形の種類の違う変種は開き直し (切替) |
 | start_offset end_offset | `delay: 320` · 印の `+N` / `cut-N` (印の `+N` が `delay:` に勝つ) | |
@@ -37,7 +37,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 |---|---|---|
 | font_id | `font-family: "family 太さ"` / 根の `font` `fonts` の短い名 `font-family: m` / `style: "書体の説明"` (意味検索) | `font-weight: 900` (1〜1000・normal / bold) は family の中の face を CSS の照合で選ぶ (名や説明文の太さより優先・箱から継ぐ・`h1〜h4` は UA の 700)。1 face の family は変わらない (合成 bold は無い・warn) |
 | font_size | `font-size: 72px` (`hero h1 h2 body label note` も・CSS と同じく書かない文字は親の値を継ぎ根は 16px・`em` は親の比・箱の font-size は子が継ぐ — `font-family` `color` `letter-spacing` `white-space` も同じ継承) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
-| color | `color:` · `[!#名 fill,$色]` (補間) · `[!#名 recolor,$色]` (文字・図形・icon は補間) | |
+| color | `color:` (svg は本文の currentColor に焼く) · `[!#名 fill,$色]` (補間) · `[!#名 recolor,$色]` / `to,{color}` (文字・図形・icon・1 色の svg は補間 — svg は色行列) | |
 | color_gradient | `color: linear(#FFE58A,#F5A623@60%,#C2410C,180)` / `radial(#…,#…,30%,60%[,72%,62%])` | 角度は CSS と同じ・`@N%` は止まり位置・radial の後ろは中心 (と楕円の半径) の箱の比 |
 | stroke_color stroke_width | `stroke: #色,幅` (文字の px) | |
 | 影 kind=drop | `text-shadow: dx dy blur #色` / `text-shadow: 1..5` | |
@@ -79,7 +79,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | step duration delay | 入場の tween の `stagger: .04` (= step) · `in: pop {duration: .5}` · `delay: 320` / 印の `+N` | duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定 |
 | easing (bezier spring steps) | `ease: 'back.out(1.7)'` / `back(2.2)` / `bezier(.2/.8/.2/1)` / `spring(10/240)` / `steps(4)` · 名は GSAP の綴り (lowering が EffectEasing に写す: power1 = ease_* · power2 = cubic_* · power3 / circ = quart_* · power4 / expo = strong_ease_*) · keys の区間ごと `at=… ease=bezier(.33/1/.68/1)` (main の keys も・at=1 は静止へ戻る最後の区間) | 係数つきは preset の入場と keys の key だけ |
 | pivot_point | `transform-origin: left` / `transform-origin: 40% 60%` / tween の `pivot: 'left'` · `[!#名 punch,1.05,duration=600,pivot=left]` · `[!#名 to,rotation=,pivot=]` | |
-| target=media | `main: kb {…}` · `main: ramp {target: 'media', scaleX: 0.3, scaleY: 0.3}` · `[!#名 zoom_media]` | x y scaleX scaleY rotation だけ |
+| target=media | `main: kb {…}` · `main: ramp {target: 'media', scaleX: 1.3, scaleY: 1.3}` · `[!#名 zoom_media]` | x y scaleX scaleY rotation だけ |
 | path orient | `in: travel {start: '名', arc: 0.3}` / `via: '(x,y)(x,y)…'` (経由点をなめらかに通る・2 点で S 字) · 変種の `move: 600,sine.inOut,path="M…"` | path は quote |
 | main の waveform period (freq_ms) phase_step phase_offset window reverse | `main: sine\|triangle\|square\|noise\|sawtooth\|ramp\|constant {…, period: .9, phase_offset: 0.25, window: '0,2200', reverse: true}` | |
 | main start_ratio end_ratio | `main: kb {scale: [1, 1.06], start_ratio: 0.3}` / `main: ramp {…, start_ratio: 0.3}` · 進行バー `progress#名(until: cut\|end)` (ramp が層の実効の窓 = 尺を書かない) | |
@@ -145,4 +145,4 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 - **語を囲む手描きの丸・括弧** (rough-notation の Circle / Bracket / Box): 語の印は `highlight underline strike marker` (文字) と `frame` (要素の縁) だけ — 囲むなら文字の上に `shape#o(left: …; top: …; width: …; height: …; path: circle_hand; border: 6px solid $a; background: none; in: draw {duration: .5})` (`bracket` `brace` `corners` も) を重ねて `[>#o]`。
 - **motion blur** (移動の残像): 入退場の `blur` channel で代用 (`in: {x: -360, blur: 18, opacity: 0, duration: .45, ease: 'power3.out'}`)。印の `to,blur=` は静止のぼかしへ移る (移動の残像ではない)。
 - **音のピッチ変更** (Remotion の toneFrequency): BGM / SE / 声とも無い — 別の素材を探す (`se` の説明文で高さを書く)。
-- **画像の mask-image** (絵の mask は画像の alpha `mask:` だけ — 透過の絵か svg で。板 (div / shape) の `mask-image: linear-gradient(…)` / `radial-gradient(…)` は svg に焼く)・**chroma key** (draft の語彙に無い)。
+- **絵 (img / video) の mask-image** は DEFECT:CSS (絵の mask は画像の alpha `mask:` だけ — 透過の絵か svg で。地が単色なら絵の上に地の色のグラデの幕 `div#f(inset: 0; background: linear(#地色00,#地色,180))`)。板 (div / shape) の `mask-image: linear-gradient(…)` / `radial-gradient(…)` は svg に焼く — 子を持つ div は板だけが溶けて子の絵には効かない (warn `board_mask`)・**chroma key** (draft の語彙に無い)。

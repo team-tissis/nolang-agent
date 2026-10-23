@@ -110,7 +110,7 @@ group#hanko(left: 1692px; top: 615px; width: 178px; height: 178px; transform: ro
 section#gaps(stagger: {each:0}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
 div#bg_gaps(inset: 0; background: $paper; in: none; out: none; z-index: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
-group#chart(main: ramp {scale: 0.035, window: '700,20830', pivot: '50%,45%'})
+group#chart(main: ramp {scale: 1.035, window: '700,20830', pivot: '50%,45%'})
 shape#chart.head_bar(left: 130px; top: 136px; width: 12px; height: 60px; path: rect; background: $orange; delay: 350; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
 p#chart.head(left: 171px; top: 134px; font-size: 54px; color: $navy; line-height: 1.1; delay: 350; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'}) 窓口で受付できる時間帯
 shape#chart.grid(left: 264px; top: 330px; width: 1452px; height: 330px; gap: 0; path: line_v; border: 3px solid #1F3A5F29; dash: 4,4; in: fade {duration: 0.4, stagger: 0.03}; delay: 700; display: flex) ×11
@@ -207,7 +207,7 @@ se fuwan -4dB +950
 
 # change — 「8時15分」「17時15分」で前の時刻が光る・「変更後は」の前に板を入れ替え「9時」「16時」で新しい時刻・判子
 *** change
-@n: [silence:450]これまで{ |、}窓口は、[|][!#before.t{open} recolor,$orange,duration=250,back=400 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250,back=400 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} +600]17時15分まで、開いていました。
+@n: [silence:450]これまで{ |、}窓口は、[|][!#before.t{open} recolor,$orange,duration=250 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} duration=400 +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} duration=400 +600]17時15分まで、開いていました。
 subtitle "変更後は 9時から16時までとなります"
 @: [silence:850][!#before to,{x:-470, scale:0.92, duration:0.75, ease:'power3.inOut'} -450][♪swish -4dB -470][>#after -150][>#arrow_line][>#arrow_head +250][!#before to,{x:-470, scale:0.92, opacity:0.72, duration:0.4} +50]変更後は、[!#after.dial.mh to,{rotation:360, duration:0.9, ease:'power2.inOut'} -500][!#after.dial.hh to,{rotation:270, duration:0.9, ease:'power2.inOut'} -500][>#after.open -120][♪sparkle -3dB -80][>#after.sep +200]9時から、[>#after.close -120][>#hanko +450][♪stamp +2dB +650][!#after to,{y:8, duration:0.06, ease:'power1.out'} +670][!#hanko to,{y:8, duration:0.06, ease:'power1.out'} +670][!#after to,{y:0, duration:0.25, ease:'power2.out'} +730][!#hanko to,{y:0, duration:0.25, ease:'power2.out'} +730]16時までとなります。[silence:700]
 

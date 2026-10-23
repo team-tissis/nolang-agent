@@ -3,11 +3,11 @@
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60] [--effort low] [--staff medium|low] [--no-staff]
-#        [--review medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が確認表で崩れも探す・の effort / 2 回目以降の直し役の effort /
+#        [--review medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
 #                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
-#                                          省略時は reference/samples/ の <type>_NN 1 本 + hf_<type>_* 1 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
+#                                          省略時は reference/samples/ の hf_<type>_* 2 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
 # 出来上がり: <project>/studio/out/video.mp4 (再生開始の時点から製品の HLS (static/video_generate/<process>/) が伸びる)・stream/run.jsonl に時刻の記録。
 # 前提は SKILL.md の「前提 (環境)」。--engine claude (既定) / codex の CLI と login が要る。
 set -eu

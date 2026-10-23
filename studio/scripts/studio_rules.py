@@ -209,7 +209,8 @@ STUDIO_RULES: tuple[StudioRule, ...] = (
 )
 
 # 製品の規則のうち studio の直し役に回す物 (直しの列)。2 回直しても残れば severe のまま受け入れて描く (判断 16)
-PRODUCT_RULES_FIXED: frozenset[str] = frozenset({"overflow", "occluded", "shrunk", "text_over_subject"})
+# illegible は実画像で測る (remote は warm で解けた絵だけ・studio は描いた後) — 直し役が板 / 幕 / 縁取り / 置き場で直す
+PRODUCT_RULES_FIXED: frozenset[str] = frozenset({"overflow", "occluded", "shrunk", "text_over_subject", "illegible"})
 
 # SKILL.md の「規則の名と直し方」に載せる規則 (この順)
 SKILL_RULES: tuple[str, ...] = (
