@@ -27,7 +27,7 @@ const STUDIO_FILES = [
   "tests/test_stream_engine.py",
   "tests/__init__.py",
   ...["authoring.md", "capabilities.md", "craft.md", "craft.NOTICE.md", "looks.md", "sounds.md", "samples", "scaffolds"].map((name) => `reference/${name}`),
-  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_rules.py", "studio_new.py"].map((name) => `scripts/${name}`),
+  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_new.py"].map((name) => `scripts/${name}`),
 ];
 
 const args = process.argv.slice(2);

@@ -1,28 +1,29 @@
 """stream の orchestrator — 著者 (stream_author.py・1 call) が落とす cut を出た順に check → 直し (低 effort の claude -p) → warm (絵・声) →
-確定 → 投入。描画は製品の `DraftStreamRun` (`studio.py stream`・この機械の 1 process・studio_stream.py) が seal ごとに HLS を伸ばす
-(cut 0 が seal された時点から再生できる)。cut の段は全 cut 同じで、orchestrator は cut の index で分岐しない。
+確定 → 投入。描画は製品の外部の著者の run (`external_stream_run`) が seal ごとに HLS を伸ばす (cut 0 が seal された時点から再生
+できる)。run は local ならこの機械の 1 process (`studio.py stream`・studio_stream.py)・remote なら NoLang の server。投入・先行解決
+(warm)・check・改名・中断はどちらも nolang-api `drafts/` の同じ flow 関数を通る (`call` — remote は HTTP・local は `studio.py api`)。
+cut の段は全 cut 同じで、orchestrator は cut の index でも local / remote でも分岐しない。
 
 cut ごとの段 (全部 thread・cut ごとに並列):
   受け (前の cut が使う定義はそちらへ移す) → 著者版 check → 担当 (Opus medium) → check + 直し (2 回まで・担当の直後と最初の DEFECT 0 の
-  check で warm を起こす) → staged (ready) → 投入検査 (DEFECT は直し役を 1 回・別枠) → 投入 (構成の順・受理は watch_acks が記録する)。
+  check で warm を頼む) → staged (ready) → 投入 (構成の順・投入検査で弾かれた cut は直し役を 1 回・別枠)。
   直しきれない DEFECT は捨てる前に最後の手段 (著者版に差し替え → DEFECT の印を落として台詞を残す・last_resort) を掛ける。
 根の規則: 名のある定義 (def・motion・run・svg・sound・cue) は初めて使う cut の block に書き、その cut だけが直す。根 (設定・cast・字幕と
 BGM の開き・常設の層) の持ち主は最初の live な cut — その直し役だけが根を直し、根はその cut が受理された時に凍る。壊れた cut の定義は
 次の live な cut の block へ移る。
-cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ)・根の先行解決・
-機械全体の warm の枠 (期限順) だけ。
+cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
+run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
 usage (repo root から): python stream_run.py <project> [--staff medium] [--review medium|none] [--fix low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
-    の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。--template <video_id>
-    = 素材台帳のテンプレ (`GET /v1/unstable/drafts/templates/` の 1 行・既定は server の空のテンプレ)。
+    の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   --review = 見直しの effort (既定 medium・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 2 回目以降の直し役 (check の指摘だけを直す) の effort (既定 low)。
   --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
     prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
-  直し役に回す規則は台帳 (`studio_rules.fixed_rules`)。最後の cut 以外の doc は OPEN_ENDED (後に cut が続く prefix) で check する。
+  直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
 記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4 と、流した doc を
 studio/ (design.txt・timeline.txt・src.json) に書き戻した物。solo/ の cut は著者の版 author_cut_<名>・担当の版 staff_cut_<名>・最終
 cut_<名>。
@@ -31,7 +32,6 @@ cut_<名>。
 from __future__ import annotations
 
 import contextlib
-import fcntl
 import itertools
 import json
 import os
@@ -44,16 +44,13 @@ import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from uuid import NAMESPACE_URL, uuid5
 
-from studio_rules import fixed_rules
-
 HERE = Path(__file__).resolve().parent
-# repo の中の skill なら自 repo (studio の check・名の改名・台帳)。plugin で入れた skill (repo 無し) は --remote だけが動き、
-# check / 改名 / 台帳は NoLang API から受ける
+# repo の中の skill なら自 repo の製品で描ける (local)。plugin で入れた skill (repo 無し) は --remote だけが動く
 REPO = HERE.parents[3] if (HERE.parents[3] / "pyproject.toml").exists() else None
 sys.path.insert(0, str(HERE))
 if REPO is not None:
@@ -191,14 +188,19 @@ class Defect:
 
 @dataclass
 class WarmState:
-    """cut 1 つの warm の状態 (直しと並ぶ prewarm と staged 後の warm で 1 つ)。"""
+    """cut 1 つの先行解決の頼み (run の warm) の状態。"""
 
-    thread: threading.Thread | None = None  # 走っている / 走った prewarm
-    key: tuple[object, ...] | None = (
-        None  # prewarm が組んだ doc の素材の鍵 (asset_key)・同じなら staged 後の warm は要らない
-    )
-    ok: bool = False  # prewarm が行を落とさずに通った
-    done: bool = False  # 段としての warm が終わった (feed が待つ旗)
+    thread: threading.Thread | None = None  # 走っている / 走った頼み
+    key: tuple[object, ...] | None = None  # 頼んだ text の素材の鍵 (asset_key)・同じなら頼み直さない
+    ok: bool = False  # 頼みが投入と同じ検査を通った
+
+
+class Rejected(Exception):
+    """受け口が止めた頼み (HTTP の 400 と同じ中身)。defects = 投入検査の DEFECT の行 (無ければ error の文)。"""
+
+    def __init__(self, op: str, defects: list[str]) -> None:
+        super().__init__(f"{op}: " + " / ".join(defects)[:600])
+        self.defects = defects
 
 
 # 見直しの回数。既定は画像なしで 1 回 — 53 cut の盲検 (両順で一致した差) で今の直し役 (low・指摘のある cut だけ) に 9 対 3・
@@ -209,7 +211,6 @@ REVIEW_ROUNDS_LOOK = 2
 
 # 機械全体で同時に走らせる warm の数 (run を跨ぐ・期限の近い cut から)。4 core の機械で 3 本並列の run が check の直後に 4 本ずつ warm を
 # 起こすと 12 本が重なり、1 本 13 s の warm が 40〜64 s に伸びた (cur12・svg の描画と主体計測が CPU 待ち)
-WARM_MACHINE_SLOTS = min(4, os.cpu_count() or 4)
 
 
 def claude_mcp_token(remote: str) -> str | None:
@@ -239,20 +240,18 @@ class Run:
         look: bool = False,
         remote: str | None = None,
         token: str | None = None,
-        template: str | None = None,
     ) -> None:
         self.project = project
         # remote = NoLang API (nolang-api consumer) の base URL。著者・担当・直しはこの機械の claude -p のまま、確定した cut の stream の
         # text を `unstable/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server (製品の draft stream) に任せる。None = この機械の
-        # `studio.py stream` (同じ製品の DraftStreamRun) に流す。根は最初に受理される cut と一緒に流れ、以後凍る (remote は根が閉じた
-        # 時点で根だけを先に流す — `submit_root`)
+        # `studio.py stream` (同じ製品の外部の著者の run) に同じ flow 関数で流す (`call`)。根は閉じた時点で根だけを先に流し (`submit_root`)、
+        # 以後凍る
         self.remote = remote.rstrip("/") if remote else None
         self.token = token
-        self.remote_template = template  # 素材台帳のテンプレ (drafts/templates/ の 1 行)。None = server の空のテンプレ
-        self.remote_video_id: str | None = None
-        self.remote_watch_url = ""  # 視聴 URL (`WATCH` / `PLAYABLE` の行に出す)
+        self.video_id: str | None = None  # run の video (start で決まる)
+        self.watch_url = ""  # 視聴 URL (remote だけ・`WATCH` / `PLAYABLE` の行に出す)
         self.root_submitted = False
-        self.fixed = fixed_rules()  # 直し役に回す規則 = 台帳の直しの列
+        self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.fix_effort = fix  # 直し役の effort
         self.review_effort = (
@@ -268,7 +267,6 @@ class Run:
             # run で 1 つの素材の置き場 — prefetch・warm・stream の render が同じ dir を使い、落とした絵と音を引き直さない
             STUDIO_PROCESS_ID=f"studio-{uuid5(NAMESPACE_URL, str(project.resolve())).hex[:12]}",
         )
-        self.pin_lock = threading.Lock()
         self.name_lock = threading.Lock()
         self.warms: defaultdict[str, WarmState] = defaultdict(WarmState)
         self.root_renames: dict[str, str] = {}  # 根の予約名の改名 (normalize_root) — 後から届く cut の参照にも当てる
@@ -279,13 +277,7 @@ class Run:
         self.unlocated_owner: dict[str, str] = {}
         self.author_clean: set[str] = set()  # 著者の版 (担当が触る前) が check で DEFECT 0 だった cut
         self.staged: dict[str, bool] = {}
-        # 根だけの先行解決 (root_prefetch) の合図: 話者・書体 (cut の warm が要る・1〜5 s) → 残り全部 (基準画像・BGM の聴取・
-        # `[ref:` を使う cut の warm と最初の投入が待つ = root_done)
-        self.root_fast_done = threading.Event()
-        self.root_done = threading.Event()
         self.broken: dict[str, str] = {}
-        self.feed_n = 0  # 流した feed の file の数 (= 次の番号)
-        self.pending_acks: dict[int, str | None] = {}  # 流して受理 / 拒否が未だの feed 番号 → cut
         self.stream_proc: subprocess.Popen[bytes] | None = None
         self.t0 = time.time()
         self.order: list[str] = []
@@ -299,7 +291,7 @@ class Run:
             f.write(json.dumps(kw, ensure_ascii=False) + "\n")
         print(json.dumps(kw, ensure_ascii=False), flush=True)
 
-    def studio_cmd(self, *args: str, timeout: int = 1800) -> str:
+    def studio_cmd(self, *args: str, timeout: int = 1800, stdin: str | None = None) -> str:
         r = subprocess.run(
             [PY, str(STUDIO), *args],
             cwd=REPO or HERE.parent,
@@ -307,8 +299,57 @@ class Run:
             capture_output=True,
             text=True,
             timeout=timeout,
+            input=stdin,
         )
         return r.stdout + r.stderr
+
+    # ---- 受け口 (nolang-api `drafts/` の flow 関数) ----
+    _ROUTES = {  # op → (method, path) — {id} は run の video
+        "cut": ("POST", "/v1/unstable/drafts/{id}/cuts/"),
+        "warm": ("POST", "/v1/unstable/drafts/{id}/warm/"),
+        "check": ("POST", "/v1/unstable/drafts/check/"),
+        "rename": ("POST", "/v1/unstable/drafts/rename/"),
+        "rules": ("GET", "/v1/unstable/drafts/rules/"),
+        "abort": ("DELETE", "/v1/unstable/drafts/{id}/"),
+    }
+
+    def call(self, op: str, body: dict[str, object] | None = None) -> dict[str, object]:
+        """受け口を 1 回呼ぶ。remote は HTTP (`_ROUTES`)・local は同じ flow 関数を手元の user で (`studio.py api <op>`・body は stdin)。
+        止めた頼み (HTTP の 400) は `Rejected`・届かない時は RuntimeError。"""
+        body = dict(body or {})
+        if self.remote is None:
+            if self.video_id is not None:
+                body.setdefault("video_id", self.video_id)
+            out = self.studio_cmd("api", op, timeout=600, stdin=json.dumps(body, ensure_ascii=False))
+            last = next((l for l in reversed(out.strip().splitlines()) if l.startswith("{")), None)
+            if last is None:
+                raise RuntimeError(f"{op}: {out[-400:]}")
+            loaded = json.loads(last)
+        else:
+            method, path = self._ROUTES[op]
+            req = urllib.request.Request(
+                f"{self.remote}{path.format(id=self.video_id)}",
+                data=json.dumps(body).encode("utf-8") if method == "POST" else None,
+                headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+                method=method,
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=120) as resp:
+                    loaded = json.loads(resp.read().decode("utf-8") or "{}")
+            except urllib.error.HTTPError as e:
+                detail = e.read().decode("utf-8", "replace")
+                if e.code != 400:
+                    raise RuntimeError(f"{op} -> {e.code}: {detail[:600]}") from e
+                try:
+                    loaded = {"status": 400, **json.loads(detail)}
+                except ValueError:
+                    loaded = {"status": 400, "error": detail[:600]}
+        if loaded.get("status") == 500:
+            raise RuntimeError(f"{op} -> 500: {loaded.get('error')}")
+        if loaded.get("status") == 400:
+            defects = loaded.get("defects")
+            raise Rejected(op, [str(d) for d in defects] if isinstance(defects, list) else [str(loaded)[:600]])
+        return loaded
 
     # ---- 著者の file ----
     def cut_block(self, name: str) -> tuple[str, str] | None:
@@ -432,21 +473,13 @@ class Run:
         return next((c for c in self.order if not self.broken.get(c)), None)
 
     # ---- doc ----
-    def merged_pins(self, cuts: list[str]) -> dict:
-        with self.pin_lock:
-            base = self.studio / "src.json"
-            d = json.loads(base.read_text()) if base.exists() else {"asset_pins": {}}
-            pins = d.setdefault("asset_pins", {})
-            # 根だけの先行解決 (root_prefetch) の pin と、cut の check / warm の doc の pin — 全部の doc が写す (書く側は置き換えで
-            # 書くので書きかけは読まない)
-            paths = [self.weave / "_root/src.json"]
-            for c in cuts:
-                paths += [self.weave / c / "src.json", self.weave / f"{c}.img/src.json"]
-            for path in paths:
-                if path.exists():
-                    for k, v in json.loads(path.read_text()).get("asset_pins", {}).items():
-                        pins.setdefault(k, v)
-            return d
+    def doc_src(self, pins: dict[str, object] | None = None) -> dict:
+        """doc の src.json = studio/src.json (設定と著者の pin) + pins (run が解いた素材 — `--look` の静止画・書き戻し)。素材を解くのは
+        run (warm と投入) で、check は doc の pin を読まない。"""
+        base = self.studio / "src.json"
+        d = json.loads(base.read_text()) if base.exists() else {"asset_pins": {}}
+        d.setdefault("asset_pins", {}).update(pins or {})
+        return d
 
     def live_cuts(self, cuts: list[str]) -> list[str]:
         """壊れた cut (直しで通らなかった物) は後の doc から外す — 1 cut 欠けても残りは描ける方を取る。"""
@@ -529,15 +562,8 @@ class Run:
         self.log(event="rename_root", names=renames)
 
     def rename(self, txt: str, renames: dict[str, str]) -> str:
-        """cut の text の中の層の名を改名する (参照も文法どおりに)。remote は server の文法 (`drafts/rename/`)・local は自 repo。"""
-        if self.remote is not None:
-            return str(self.remote_post("/v1/unstable/drafts/rename/", {"text": txt, "renames": renames})["text"])
-        from domain.entities.video_draft import LayerPath  # noqa: PLC0415 — repo のある時だけ
-        from domain_services.video_draft.grammar.rename import rename_name  # noqa: PLC0415
-
-        for old, new in renames.items():
-            txt = rename_name(txt, LayerPath.parse(old), LayerPath.parse(new))
-        return txt
+        """cut の text の中の層の名を改名する (参照も文法どおりに・製品の文法 `drafts/rename/`)。"""
+        return str(self.call("rename", {"text": txt, "renames": renames})["text"])
 
     @property
     def language(self) -> str:
@@ -561,12 +587,12 @@ class Run:
 
     def note_cut_estimates(self, dd: Path) -> None:
         """check が書いた cut の時刻 (out/check_cuts.json・字数 × 話速 + 間・実尺 cache 込み) を cut ごとの見込み秒に写す。
-        著者の plan の秒は目分量で実尺の 1.4 倍にもなる (10-21 の監査) ので、期限・進行線の全長は check の値で数える。"""
+        著者の plan の秒は目分量で実尺の 1.4 倍にもなる (10-21 の監査) ので、進行線の全長は check の値で数える。"""
         f = dd / "out/check_cuts.json"
         if not f.exists():
             return
         try:
-            rows = json.loads(f.read_text()).get("cuts", [])
+            rows = json.loads(f.read_text()).get("cuts") or []
         except (OSError, ValueError):
             return
         for row in rows:
@@ -579,12 +605,6 @@ class Run:
         """cut ごとの見込み秒 = check が測った値 (あれば) → 著者の plan の秒 → 10 s。"""
         plan = self.plan_seconds()
         return {c: self.cut_estimate.get(c, plan.get(c, 10.0)) for c in dict.fromkeys([*plan, *self.order])}
-
-    def deadline(self, c: str) -> float:
-        """cut c の期限 = run の起点 + c より前の cut の見込み秒の和 (見る人がその cut に着く時刻の見込み)。"""
-        secs = self.estimated_seconds()
-        before = self.order[: self.order.index(c)] if c in self.order else []
-        return self.t0 + sum(secs.get(x, 10.0) for x in before)
 
     def planned_total_ms(self) -> int | None:
         """見込み秒の合計 (ms)。`until: end` の進行線の全長に使う — stream では動画の全長が最後の cut まで決まらないので、
@@ -638,9 +658,10 @@ class Run:
                 tls.append(blk[1])
         return "".join(des), "".join(tls)
 
-    def doc_dir(self, name: str, cuts: list[str], *, warm_cut: str | None = None, root_extra: str = "") -> Path:
-        """doc (根 + cuts) を weave/<name>/ に組む。warm_cut = cut ごとの warm の doc: 素材を作るのは cuts の最後の cut だけ (前の
-        cut の絵と声はその cut の warm が作る — `WARM_CUT`・studio_draft._warm_prefix)。"""
+    def doc_dir(
+        self, name: str, cuts: list[str], *, root_extra: str = "", pins: dict[str, object] | None = None
+    ) -> Path:
+        """doc (根 + cuts) を weave/<name>/ に組む。pins = doc の src.json に足す素材の pin (`--look` の静止画が warm の絵で撮る)。"""
         dd = self.weave / name
         (dd / "out").mkdir(parents=True, exist_ok=True)
         self.rename_collisions(cuts)
@@ -654,24 +675,11 @@ class Run:
             marker.touch()
         else:
             marker.unlink(missing_ok=True)
-        if warm_cut is not None:
-            (dd / "WARM_CUT").write_text(warm_cut)
-        else:
-            (dd / "WARM_CUT").unlink(missing_ok=True)
         # 同じ cut の doc を複数の thread が組み直す事があるので、読み手が書きかけを見ないよう置き換えで書く
         tmp = dd / f".src.json.{threading.get_ident()}"
-        tmp.write_text(json.dumps(self.merged_pins(cuts), ensure_ascii=False, indent=1))
+        tmp.write_text(json.dumps(self.doc_src(pins), ensure_ascii=False, indent=1))
         os.replace(tmp, dd / "src.json")
-        merged: dict = {}
-        for o in [self.studio / "out", *(self.weave / f"{c}.img/out" for c in cuts), dd / "out"]:
-            if (o / "tts_durations.json").exists():
-                try:
-                    merged.update(json.loads((o / "tts_durations.json").read_text()))
-                except Exception:
-                    pass
-        (dd / "out/tts_durations.json").write_text(json.dumps(merged, ensure_ascii=False))
-        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する — check は out/fonts の
-        # TTF で文字を測る (無い書体は既定 font で測り、送り幅の違う実書体で render が割れる)
+        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する (`--look` の静止画)
         shared = self.studio / "out/fonts"
         shared.mkdir(parents=True, exist_ok=True)
         fonts = dd / "out/fonts"
@@ -686,44 +694,35 @@ class Run:
 
     # ---- check と直し ----
     def check(self, dd: Path, *, ended: bool) -> tuple[str, list[Defect], list[dict]]:
-        """ended = 動画の終わりまで書いた doc (False = この prefix の後に cut が続く — 最後の cut だけの規則を掛けない)。
-        remote は server の check (`drafts/check/`・DEFECT と compile の注意と layout の監査の崩れ — 書体は本番と同じ・warm で解けた
-        絵は実画像で読めない文字と主体に乗った文字も・studio の lint の他の規則は local だけ)。local は studio の check (compile + layout + lint)。欠陥はどちらも `Defect.as_record()` の形
-        (local は doc の out/defects.json — DEFECT の無い check はその file を消す)。"""
-        if self.remote is not None:
-            body = self.remote_post(
-                "/v1/unstable/drafts/check/",
-                {
-                    "design": (dd / "design.txt").read_text(),
-                    "timeline": (dd / "timeline.txt").read_text(),
-                    "open_ended": not ended,
-                    "aspect_ratio": self.aspect,
-                    # 開始済みの run — server は warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
-                    **({"video_id": self.remote_video_id} if self.remote_video_id else {}),
-                },
-            )
-            defects = [Defect.read(d) for d in body.get("defects", []) if isinstance(d, dict)]
-            lint = [f for f in body.get("findings", []) if isinstance(f, dict)]
-            (dd / "out").mkdir(exist_ok=True)
-            (dd / "out/lint_check.json").write_text(json.dumps(lint, ensure_ascii=False))
-            return "\n".join(d.text for d in defects), defects, lint
-        # 前の check の結果を読まない — DEFECT で止まった check は lint を書かない (前の round の lint が残ると、直し役に無い指摘を
-        # 渡す)・途中で死んだ check は defects.json を書き換えない
-        for name in ("lint_check.json", "defects.json"):
-            (dd / "out" / name).unlink(missing_ok=True)
-        out = self.studio_cmd(
-            "check", str(dd), "--no-warm", "--no-def-probe"
-        )  # ended は doc の OPEN_ENDED marker が運ぶ
-        defects = [d for d in self.read_defects(dd) if d.level == "DEFECT"]
+        """ended = 動画の終わりまで書いた doc (False = この prefix の後に cut が続く — 最後の cut だけの規則を掛けない)。製品の check
+        (`drafts/check/` — compile・composer と layout の乾いた実行・lint の全規則・cut の時刻。書体は本番と同じ・run の warm で解けた絵は
+        実画像で判定) を doc の 2 file で 1 回。結果は doc の out/ に書く (defects.json = DEFECT の行・lint_check.json = 指摘・
+        check_cuts.json = cut の時刻) — 欠陥の行を落とす `drop_defect_lines` と期限の見込み (`note_cut_estimates`) が読む。返り値の
+        出力 = check の表 (担当に渡す時刻の行を含む)。"""
+        body = self.call(
+            "check",
+            {
+                "design": (dd / "design.txt").read_text(),
+                "timeline": (dd / "timeline.txt").read_text(),
+                "open_ended": not ended,
+                "aspect_ratio": self.aspect,
+                # 開始済みの run — warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
+                **({"video_id": self.video_id} if self.video_id else {}),
+            },
+        )
+        records = [d for d in body.get("defects", []) if isinstance(d, dict)]
+        defects = [Defect.read(d) for d in records]
+        lint = [f for f in body.get("findings", []) if isinstance(f, dict)]
+        out = dd / "out"
+        out.mkdir(exist_ok=True)
+        (out / "lint_check.json").write_text(json.dumps(lint, ensure_ascii=False))
+        if records:
+            (out / "defects.json").write_text(json.dumps(records, ensure_ascii=False))
+        else:
+            (out / "defects.json").unlink(missing_ok=True)
+        (out / "check_cuts.json").write_text(json.dumps({"cuts": body.get("cuts") or []}, ensure_ascii=False))
         self.note_cut_estimates(dd)
-        lint = []
-        p = dd / "out/lint_check.json"
-        if p.exists():
-            try:
-                lint = json.loads(p.read_text())
-            except Exception:
-                lint = []
-        return out, defects, lint
+        return str(body.get("report") or "\n".join(d.text for d in defects)), defects, lint
 
     @staticmethod
     def read_defects(dd: Path) -> list[Defect]:
@@ -829,7 +828,7 @@ class Run:
     def check_without(
         self, c: str, cuts: list[str], skip: frozenset[str], rnd: int | str
     ) -> tuple[Path, str, list[Defect], list[dict], set[str]]:
-        """skip の cut を除いた doc で c を check する。除いた cut の名のある定義は根の後ろに写す (warm_doc と同じ形) — c が使う名が
+        """skip の cut を除いた doc で c を check する。除いた cut の名のある定義は根の後ろに写す — c が使う名が
         除いた cut の block にあると、除いただけの doc では c の行に誤った DEFECT が出る (nt06 gold: hook の `motion title` を失って
         著者版が unclean になり、revert_author が効かずに落ちた)。"""
         extra = "".join(
@@ -1098,13 +1097,14 @@ class Run:
                 break
 
     def shots(self, c: str) -> list[Path]:
-        """見直し役に見せる cut c の静止画 (`studio.py shots`)。prewarm (担当の直後に起きる) の絵と声を待ち、根 + c の doc (前の cut の
-        名のある定義は根の後ろ — warm_doc と同じ形) を描く。前の cut を入れないのは、その cut の直し中の DEFECT で build できず、
-        前の cut の声 (尺) がまだ無ければ TTS を待つから (前の cut の sticky な層は写らない)。c の DEFECT の行は落として描く。"""
+        """見直し役に見せる cut c の静止画 (`studio.py shots`)。run の warm (担当の直後に頼む) が解いた絵を待ち、その pin を載せた根 + c
+        の doc (前の cut の名のある定義は根の後ろ) を描く。前の cut を入れないのは、その cut の直し中の DEFECT で build できず、前の
+        cut の声 (尺) がまだ無ければ TTS を待つから (前の cut の sticky な層は写らない)。c の DEFECT の行は落として描く。"""
         w = self.warms[c]
         if w.thread is not None:
             w.thread.join()
         t = time.time()
+        pins = self.warm_pins()
         i = self.order.index(c)
         extra = "".join(
             text
@@ -1112,7 +1112,7 @@ class Run:
             if not self.broken.get(x) and (blk := self.cut_block(x)) is not None
             for _kind, _name, text in self.named_defs(blk[0])
         )
-        dd = self.doc_dir(f"{c}.shot", [c], root_extra=extra)
+        dd = self.doc_dir(f"{c}.shot", [c], root_extra=extra, pins=pins)
         out = ""
         for _attempt in range(3):
             (dd / "out/defects.json").unlink(missing_ok=True)  # 落とす行は今の attempt の DEFECT だけから
@@ -1127,6 +1127,21 @@ class Run:
         paths = [Path(line.split()[1]) for line in out.splitlines() if line.startswith("SHOT ")]
         self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=len(paths), ok="OK shots" in out)
         return paths
+
+    def warm_pins(self) -> dict[str, object]:
+        """run の warm で解けた絵の pin — 頼んだ絵が解けるのを待つ (増えなくなって 3 s か 90 s まで・local だけ)。"""
+        seen: dict[str, object] = {}
+        stable_since = time.time()
+        deadline = time.time() + 90
+        while time.time() < deadline:
+            raw = self.call("warm_pins").get("pins")
+            now = raw if isinstance(raw, dict) else {}
+            if len(now) != len(seen):
+                seen, stable_since = now, time.time()
+            elif seen and time.time() - stable_since > 3:
+                break
+            time.sleep(1)
+        return seen
 
     def revert_fixer_damage(self, c: str, cuts: list[str], before: str, defects: list[Defect]) -> int:
         """直し役の後の check で出た DEFECT が、直し役が変えた行にあれば、その変更の塊だけ直し前 (before) に戻す — 直し役を 2 回目に
@@ -1429,27 +1444,21 @@ class Run:
         return (pictures, speech, frozenset(_SE.findall(text)), boxes)
 
     def start_prewarm(self, c: str) -> None:
-        """cut c の warm を staged を待たずに起こす (直しと並ぶ): 担当の直後と、check で DEFECT 0 を見た時点 (直後の warm が DEFECT で
-        落ちていれば起こし直す)。走っている / 通った prewarm があれば起こし直さない。remote は server に先行解決を頼む
-        (`remote_warm` — 素材は server が解く)。通った頼みでも直しで素材を決める物 (asset_key) が変わっていれば頼み直す。"""
+        """cut c の素材 (絵・声) を run に先に作らせる (staged を待たずに・直しと並ぶ): 担当の直後と、check で DEFECT 0 を見た時点。
+        頼みは返事を待たずに run が裏で解く (`warm` — 動画には入らない)。走っている頼み・通った頼みがあれば頼み直さない (直しで素材を
+        決める物 = asset_key が変わっていれば頼み直す)。"""
         w = self.warms[c]
-        if w.thread is not None and w.thread.is_alive():
+        f = self.solo / f"cut_{c}.txt"
+        if (w.thread is not None and w.thread.is_alive()) or self.video_id is None:
             return
-        if self.remote is not None:
-            f = self.solo / f"cut_{c}.txt"
-            if c in self.submitted or not f.exists() or (w.ok and w.key == self.asset_key(f.read_text())):
-                return
-            w.thread = threading.Thread(target=self.remote_warm, args=(c,), daemon=True)
-            w.thread.start()
+        if c in self.submitted or not f.exists() or (w.ok and w.key == self.asset_key(f.read_text())):
             return
-        if w.thread is not None and w.ok:
-            return
-        w.thread = threading.Thread(target=self.image_prewarm, args=(c,), daemon=True)
+        w.thread = threading.Thread(target=self.request_warm, args=(c,), daemon=True)
         w.thread.start()
 
-    def remote_warm(self, c: str) -> None:
-        """server に cut c の素材 (絵・声) を先に作らせる (`drafts/{id}/warm/` — 動画には入らない)。text = 根 (まだ流れていなければ)
-        + 構成の順で c までの未投入の cut。投入と同じ検査で弾かれた頼み (前の cut が直しの途中) は記録だけして、次の契機に頼み直す。"""
+    def request_warm(self, c: str) -> None:
+        """run に cut c の素材を先に作らせる (`drafts/{id}/warm/`)。text = 根 (まだ流れていなければ) + 構成の順で c までの未投入の
+        cut。投入と同じ検査で弾かれた頼み (前の cut が直しの途中) は記録だけして、次の契機に頼み直す。"""
         w = self.warms[c]
         w.key = self.asset_key((self.solo / f"cut_{c}.txt").read_text())
         parts: list[str] = []
@@ -1466,113 +1475,13 @@ class Run:
             text = rd.rstrip("\n") + "\n" + "\n".join(l for l in rt.splitlines() if l.strip() != "#v2") + "\n" + text
         t = time.time()
         try:
-            self.remote_post(f"/v1/unstable/drafts/{self.remote_video_id}/warm/", {"text": text})
-        except RuntimeError as e:
+            self.call("warm", {"text": text})
+        except (Rejected, RuntimeError) as e:
             w.ok = False
-            self.log(cut=c, event="remote_warm", ok=False, s=round(time.time() - t, 1), error=str(e)[:300])
+            self.log(cut=c, event="warm", ok=False, s=round(time.time() - t, 1), error=str(e)[:300])
             return
         w.ok = True
-        self.log(cut=c, event="remote_warm", ok=True, s=round(time.time() - t, 1), cuts=len(parts))
-
-    @contextlib.contextmanager
-    def machine_warm_slot(self, c: str) -> Iterator[float]:
-        """機械全体の warm の枠 (flock の file・`tmp/studio/.warm_slots/<k>`)。空いた枠は期限 (見る人がその cut に着く時刻の見込み) の
-        近い待ち手から取る — 待ち手は期限を名にした札を置き、自分より期限の近い札の数が空いた枠の数より少ない時だけ枠を取りに行く。
-        枠を取るまで待った秒を渡す (warm の event の `warm_slot_wait` — warm の s と枠待ちを分けて読む)。"""
-        t = time.time()
-        d = (REPO or HERE.parent) / "tmp/studio/.warm_slots"
-        (d / "queue").mkdir(parents=True, exist_ok=True)
-        ticket = d / "queue" / f"{int(self.deadline(c) * 1000):016d}_{os.getpid()}_{c}"
-        ticket.touch()
-        handles = [(d / str(k)).open("a") for k in range(WARM_MACHINE_SLOTS)]
-        held = None
-        try:
-            while held is None:
-                free = []
-                for h in handles:
-                    try:
-                        fcntl.flock(h, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    except OSError:
-                        continue
-                    free.append(h)
-                if free:
-                    ahead = sum(1 for p in sorted((d / "queue").iterdir()) if p.name < ticket.name and p.exists())
-                    if ahead < len(free):
-                        held = free[0]
-                        free = free[1:]
-                for h in free:  # 取らない枠は戻す (期限の近い待ち手に)
-                    fcntl.flock(h, fcntl.LOCK_UN)
-                if held is None:
-                    time.sleep(0.3)
-            ticket.unlink(missing_ok=True)
-            yield time.time() - t
-        finally:
-            ticket.unlink(missing_ok=True)
-            if held is not None:
-                fcntl.flock(held, fcntl.LOCK_UN)
-            for h in handles:
-                h.close()
-
-    def warm_doc(self, c: str) -> Path:
-        """cut c の warm の doc = 根 + ready (staged) で live な前の cut + c (check と同じ組み合わせ — cut を跨ぐ状態 (開いた字幕・sticky)
-        を含む) で、素材を作るのは c の分だけ (`WARM_CUT`)。まだ ready でない前の cut は入れない — その cut の直し中の DEFECT で c の
-        warm の doc が build できず、c の絵と声を製品が作る事になる (o3_05: 3 cut)。前の cut の絵と声はその cut の warm が作り、pin は
-        merged_pins が写す。"""
-        i = self.order.index(c)
-        earlier = [x for x in self.order[:i] if not self.broken.get(x) and self.cut_block(x)]
-        ready = [x for x in earlier if self.staged.get(x)]
-        # ready でない前の cut は block ごとは入れない (直し中の DEFECT で doc が build できない) が、その block の定義 (def・motion …) は
-        # c が使うので根の後ろに写す (定義は根にも書ける)
-        pending_defs = "".join(
-            text
-            for x in earlier
-            if not self.staged.get(x)
-            for _kind, _name, text in self.named_defs(self.cut_block(x)[0])
-        )
-        return self.doc_dir(f"{c}.img", [*ready, c], warm_cut=c, root_extra=pending_defs)
-
-    def image_prewarm(self, c: str) -> None:
-        """cut c の warm の doc で `warm` (絵の生成と TTS 込み・c の分だけ)。根の素材 (書体・話者・BGM・基準画像) は root_prefetch の
-        pin を写すので作らない (root_done を待つ)。担当の直後に起こすので c の block に DEFECT が残っている事がある — その行 (と字下げの
-        子) を doc から落として残りの絵と声を先に作る (2 回まで)。落とした時は `ok` を立てず、staged 後の warm が差分 (直した行の
-        絵と声) だけ作る (済んだ物は台帳の hit)。素材の鍵は doc を組む時の text から取る (thread を起こした時の text だと、直し役の
-        書き戻しが間に入って鍵と doc が食い違う)。"""
-        w = self.warms[c]
-        self.wait_root_for((self.solo / f"cut_{c}.txt").read_text())
-        with self.machine_warm_slot(c) as waited:
-            w.key = self.asset_key((self.solo / f"cut_{c}.txt").read_text())
-            dd = self.warm_doc(c)
-            t = time.time()
-            dropped = 0
-            out = ""
-            for _attempt in range(4):
-                if self.broken.get(c):
-                    # 壊れた cut は流れない — 試行を止めて枠を返す (nt06 gold: broken の後も 22 s 枠を握り、次の cut の warm が待った)
-                    out = "BROKEN"
-                    break
-                try:
-                    out = self.studio_cmd("warm", str(dd), timeout=150)
-                except subprocess.TimeoutExpired:
-                    out = "TIMEOUT"
-                if "OK warm" in out:
-                    break
-                n = self.drop_defect_lines(dd, c)
-                if (
-                    n == 0
-                ):  # c の行でない DEFECT (根・前の cut) か DEFECT 以外の失敗 — check が DEFECT 0 を見た時に起こし直す
-                    break
-                dropped += n
-            (dd / "out/warm.txt").write_text(out)
-            w.ok = "OK warm" in out and dropped == 0
-            self.log(
-                cut=c,
-                event="image_prewarm",
-                s=round(time.time() - t, 1),
-                warm_slot_wait=round(waited, 1),
-                ok="OK warm" in out,
-                dropped=dropped,
-                **({"broken": True} if out == "BROKEN" else {}),
-            )
+        self.log(cut=c, event="warm", ok=True, s=round(time.time() - t, 1), cuts=len(parts))
 
     @staticmethod
     def drop_defect_lines(dd: Path, c: str) -> int:
@@ -1676,102 +1585,6 @@ class Run:
             )
         return ff
 
-    def root_prefetch(self) -> None:
-        """根が閉じた時点 (著者が cut 0 を書く前) で根だけの素材を先に解決する: 書体の TTF・基準画像 (`image 名 =`) の生成・話者と
-        立ち絵・BGM の聴取 (`studio prefetch` → `root_asset_refs`)。基準画像を派生 (`[ref:@名]`) の前に作っておくので、cut の
-        派生の絵は基準を待たない。pin は `weave/_root/src.json` に入り、merged_pins が全部の doc へ写す。"""
-        try:
-            while not ((self.solo / "root_design.txt").exists() and (self.solo / "root_timeline.txt").exists()):
-                if (self.st / "src.done").exists():
-                    return
-                time.sleep(0.3)
-            time.sleep(0.2)  # 書きかけを読まない (著者は section が閉じてから置く)
-            dd = self.doc_dir("_root", [])
-            # 2 段を 1 process で: 話者・書体 (1〜5 s・cut の warm が待つ) → 残り全部 (基準画像 10 s と BGM の聴取 7〜9 s を並べて・
-            # `[ref:` を使う cut の warm と最初の投入が待つ)。1 段目の終わりは `out/prefetch_fast.done` で知る
-            fast_done = dd / "out/prefetch_fast.done"
-            fast_done.unlink(missing_ok=True)
-            t = time.time()
-            proc = subprocess.Popen(
-                [PY, str(STUDIO), "prefetch", str(dd)],
-                cwd=REPO or HERE.parent,
-                env=self.env,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-            )
-            while proc.poll() is None:
-                if not self.root_fast_done.is_set() and fast_done.exists():
-                    self.root_fast_done.set()
-                    self.log(event="root_prefetch", phase="fast", s=round(time.time() - t, 1), ok=True)
-                if time.time() - t > 300:
-                    proc.kill()
-                    break
-                time.sleep(0.2)
-            out = (proc.stdout.read() if proc.stdout else "") or ""
-            (dd / "out/prefetch.txt").write_text(out)
-            lines = out.strip().splitlines()
-            self.log(
-                event="root_prefetch",
-                phase="all",
-                s=round(time.time() - t, 1),
-                ok=bool(lines) and lines[-1].startswith("OK prefetch"),
-                tail="" if lines and lines[-1].startswith("OK prefetch") else out[-160:],
-            )
-        finally:
-            self.root_fast_done.set()
-            self.root_done.set()
-
-    def wait_root_for(self, text: str) -> None:
-        """cut の warm の前に待つ根の先読み: 話者・書体は常に、残り (基準画像) は cut が `[ref:` で使う時だけ。"""
-        self.root_fast_done.wait(timeout=90)
-        if "[ref:" in text:
-            self.root_done.wait(timeout=90)
-
-    def warm(self, i: int, c: str) -> None:  # noqa: ARG002 — 段の thread は (i, c) で呼ばれる
-        """cut c の素材 (絵・効果音・書体の pin と TTS) を warm の doc (`<c>.img`・根 + live な cut 0..c・作るのは c の分) で作る。prewarm
-        (直しと並行) が同じ doc で作り始めていれば、素材を決める物 (絵の説明文・台詞・効果音) が変わっていない限りその結果を使う。"""
-        while not self.staged.get(c):
-            time.sleep(0.3)
-        w = self.warms[c]
-        try:
-            if self.broken.get(c):  # 直しで通らなかった cut は流れない — 素材を作らない
-                return
-            t = time.time()
-            key = self.asset_key((self.solo / f"cut_{c}.txt").read_text())
-            if w.thread is not None:
-                w.thread.join()
-                if w.ok and w.key == key:
-                    self.log(cut=c, event="warm", s=round(time.time() - t, 1), ok=True, reused="prewarm")
-                    return
-            with self.machine_warm_slot(c) as waited:
-                dd = self.warm_doc(c)
-                out = ""
-                for attempt in (
-                    0,
-                    1,
-                ):  # TTS の応答待ちで止まる事がある → 150 s で切って 1 回やり直す (済んだ scene は cache)
-                    if self.broken.get(c):  # 壊れた cut は流れない — 枠を返す
-                        break
-                    try:
-                        out = self.studio_cmd("warm", str(dd), timeout=150)
-                    except subprocess.TimeoutExpired:
-                        out = "TIMEOUT"
-                        self.log(cut=c, event="warm_timeout", attempt=attempt)
-                        continue
-                    break
-                (dd / "out/warm.txt").write_text(out)
-                # warm が落ちても壊れ扱いにしない — 製品の organizer が足りない素材を自分で作る
-                self.log(
-                    cut=c,
-                    event="warm",
-                    s=round(time.time() - t, 1),
-                    warm_slot_wait=round(waited, 1),
-                    ok="OK warm" in out,
-                )
-        finally:
-            w.done = True
-
     def guarded(self, fn, i: int, c: str) -> None:
         """段の thread が例外で死んだ cut は壊れ扱い (旗は段 (stage / warm) が finally で立てる)。"""
         try:
@@ -1780,57 +1593,50 @@ class Run:
             self.broken[c] = f"{fn.__name__} crashed: {exc!r}"[:200]
             self.log(cut=c, event="stage_crashed", stage=fn.__name__, error=repr(exc)[:300])
 
-    # ---- remote (NoLang API) ----
-    def remote_post(self, path: str, body: dict[str, object]) -> dict[str, object]:
-        req = urllib.request.Request(
-            f"{self.remote}{path}",
-            data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")[:600]
-            raise RuntimeError(f"{path} -> {e.code}: {detail}") from e
-
+    # ---- run の開始と終わり ----
     def remote_get(self, path: str) -> dict[str, object]:
         req = urllib.request.Request(f"{self.remote}{path}", headers={"Authorization": f"Bearer {self.token}"})
         with urllib.request.urlopen(req, timeout=60) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
-    def remote_start(self) -> None:
-        """draft を開く — 視聴 URL はこの時点で出る (server の video page が追いかけ再生する)。"""
+    def start(self) -> None:
+        """run を開く (plan が閉じた時点)。remote は `drafts/` (視聴 URL はこの時点で出る — server の video page が追いかけ再生する)・
+        local は `studio.py stream` (API の start と同じ行を作り、video の id を stream/video.json に書く)。"""
+        t = time.time()
+        if self.remote is None:
+            self.start_stream()
+            video = self.st / "video.json"
+            while not video.exists() and self.stream_alive():
+                time.sleep(0.2)
+            if video.exists():
+                self.video_id = str(json.loads(video.read_text())["video_id"])
+            self.log(event="started", s=round(time.time() - t, 1), video_id=self.video_id)
+            return
         kind, aspect, seconds = (self.project / "params.txt").read_text().split()[:3]
         title = (self.project / "request.txt").read_text().strip().splitlines()[0][:200]
-        t = time.time()
         body: dict[str, object] = {"title": title, "aspect_ratio": aspect, "duration_s": int(seconds), "language": "ja"}
-        if self.remote_template:
-            body["template_video_id"] = self.remote_template
-        r = self.remote_post("/v1/unstable/drafts/", body)
-        self.remote_video_id = str(r["video_id"])
-        self.remote_watch_url = str(r["watch_url"])
-        self.log(
-            event="remote_started",
-            s=round(time.time() - t, 1),
-            video_id=self.remote_video_id,
-            watch_url=self.remote_watch_url,
-        )
-        print(f"WATCH {self.remote_watch_url}", flush=True)
-
-    def remote_abort(self, reason: str) -> None:
         req = urllib.request.Request(
-            f"{self.remote}/v1/unstable/drafts/{self.remote_video_id}/",
-            headers={"Authorization": f"Bearer {self.token}"},
-            method="DELETE",
+            f"{self.remote}/v1/unstable/drafts/",
+            data=json.dumps(body).encode("utf-8"),
+            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+            method="POST",
         )
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            r = json.loads(resp.read().decode("utf-8"))
+        self.video_id = str(r["video_id"])
+        self.watch_url = str(r["watch_url"])
+        self.log(event="started", s=round(time.time() - t, 1), video_id=self.video_id, watch_url=self.watch_url)
+        print(f"WATCH {self.watch_url}", flush=True)
+
+    def abort(self, reason: str) -> None:
+        """run を中断する (`drafts/{id}/` の DELETE — run を即解放する)。"""
+        if self.video_id is None:
+            return
         try:
-            with urllib.request.urlopen(req, timeout=60):
-                pass
-            self.log(event="remote_aborted", reason=reason)
-        except (urllib.error.HTTPError, urllib.error.URLError) as e:
-            self.log(event="remote_abort_failed", reason=reason, error=str(e)[:200])
+            self.call("abort")
+            self.log(event="aborted", reason=reason)
+        except (Rejected, RuntimeError, urllib.error.URLError) as e:
+            self.log(event="abort_failed", reason=reason, error=str(e)[:200])
 
     def remote_wait(self) -> int:
         """server の完成 (status completed) を待つ。途中、見る人が再生を始められる時点 (status の `playable` = 公開 manifest が S3 に
@@ -1842,7 +1648,7 @@ class Run:
             if self.engine_failed():
                 return self.abort_engine()
             try:
-                r = self.remote_get(f"/v1/videos/{self.remote_video_id}/")
+                r = self.remote_get(f"/v1/videos/{self.video_id}/")
             except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
                 failures += 1
                 self.log(event="remote_poll_failed", n=failures, error=str(e)[:200])
@@ -1853,8 +1659,8 @@ class Run:
             failures = 0
             if not playable_seen and r.get("playable"):
                 playable_seen = True
-                self.log(event="playable", video_id=self.remote_video_id)
-                print(f"PLAYABLE {self.remote_watch_url}", flush=True)
+                self.log(event="playable", video_id=self.video_id)
+                print(f"PLAYABLE {self.watch_url}", flush=True)
             st = str(r.get("status"))
             if st in ("completed", "failed", "expired"):
                 if st == "completed":
@@ -1868,13 +1674,30 @@ class Run:
                 return 0 if st == "completed" else 1
             time.sleep(3)
 
-    # ---- 製品の stream (この機械の DraftStreamRun) ----
+    def local_wait(self) -> int:
+        """この機械の run (`studio.py stream`) の完走を待つ。"""
+        assert self.stream_proc is not None
+        try:
+            code = self.stream_proc.wait(timeout=1800)
+        except subprocess.TimeoutExpired:
+            self.stream_proc.kill()
+            code = -9
+        if code == 0 and (self.studio / "out/video.mp4").exists():
+            self.write_back()
+            (self.studio / "DONE").touch()
+            self.log(event="final_ready", since_launch=round(time.time() - self.t0, 1), broken=self.broken)
+            self.log(event="length_gap", **self.length_gap())
+            return 0
+        # 製品の run が完走しなかった (seal 後の worker の失敗など) — 製品の失敗はそのまま失敗にする (solo の render で描き直す
+        # fallback は製品の bug を 2 件隠し、視聴者が見た HLS とも別物だった)
+        self.log(event="final_failed", code=code, broken=self.broken)
+        return 1
+
     def start_stream(self) -> None:
         """`studio.py stream <project>` を起こす (plan が閉じた時点 — Django と GPU の初期化を最初の cut の経路の外に置く)。
         常駐 server には委ねない (run の間ずっと生きる GPU の process)。"""
         env = {k: v for k, v in self.env.items() if k != "STUDIO_SERVER_SOCK"}
-        (self.st / "feed").mkdir(exist_ok=True)
-        # stream (organizer + 描画) は check / warm / claude CLI と同じ機械で CPU を取り合う (4 core で load 3〜4.5)。止まりを決めるのは
+        # stream (organizer + 描画) は check / claude CLI と同じ機械で CPU を取り合う (4 core で load 3〜4.5)。止まりを決めるのは
         # stream の尾なので、こちらを優先する (root でなければ nice は上げられない — その時は素のまま)
         self.stream_proc = subprocess.Popen(
             [PY, str(STUDIO), "stream", str(self.project)],
@@ -1891,83 +1714,28 @@ class Run:
             self.remote is not None or (self.stream_proc is not None and self.stream_proc.poll() is None)
         )
 
-    def intake_check(self, prefix: str, text: str, *, ended: bool) -> list[str]:
-        """投入検査 (製品の API と同じ関数・常駐 server で回す): 投入済みの prefix の後ろに text を足して良いか → DEFECT の行。remote は
-        server が投入の時に同じ検査を掛ける (弾かれれば submit が rejected)。"""
-        if self.remote is not None:
-            return []
-        d = self.st / "feed"
-        d.mkdir(exist_ok=True)
-        (d / "_prefix.txt").write_text(prefix)
-        (d / "_text.txt").write_text(text)
-        out = self.studio_cmd(
-            "intake",
-            str(d / "_prefix.txt"),
-            str(d / "_text.txt"),
-            *(["--end"] if ended else []),
-            "--language",
-            self.language,
-            "--aspect",
-            self.aspect,
-        )
-        return [l for l in out.splitlines() if l.startswith("DEFECT")]
-
-    def submit(self, c: str | None, text: str, *, end: bool, pins: dict) -> dict[str, object] | None:
-        """cut の text を流す。remote は server の応答 (受理 {"sealed": True} / 拒否 {"rejected": 理由}) をそのまま返す。local の stream は
-        file を置いた時点で {"queued": feed 番号} を返し、受理 / 拒否は `watch_acks` が後から記録する (受理を待たずに次の cut を流す —
-        seal は organizer が順に処理するので順は守られる。拒否は欠陥 2 件を直してから 0 本)。None = 流す先が死んだ。"""
+    # ---- 投入 ----
+    def submit(self, c: str | None, text: str, *, end: bool) -> dict[str, object] | None:
+        """cut の text を流す (`drafts/{id}/cuts/` — 投入検査を通れば run に流れる) → {"sealed": True} か {"rejected": 理由,
+        "defects": [DEFECT の行]}。None = 流す先が死んだ。"""
         if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
             # 著者が末尾まで成功したと確認してから end を送る。
             while end and not (self.st / "src.done").exists() and not self.engine_failed():
                 time.sleep(0.1)
             if self.engine_failed():
                 return None
-        if self.remote is not None:
-            try:
-                r = self.remote_post(f"/v1/unstable/drafts/{self.remote_video_id}/cuts/", {"text": text, "end": end})
-            except RuntimeError as e:
-                return {"rejected": str(e)[:400]}
-            return {"sealed": True, "lines": r.get("lines")}
-        from studio_stream import feed_path, write_atomic  # noqa: PLC0415 — scripts dir を sys.path に足している
-
         if not self.stream_alive():
             return None
-        n = self.feed_n
-        self.feed_n += 1
-        write_atomic(feed_path(self.st, n), {"cut": c, "text": text, "end": end, "pins": pins})
-        self.pending_acks[n] = c
-        self.log(cut=c, event="submitted", feed=n, end=end, pins=len(pins))
-        return {"queued": n}
-
-    def watch_acks(self) -> None:
-        """流した feed の受理 / 拒否 (`NNN.ack.json`) を記録する。拒否された cut は壊れ扱い (その定義は次の live な cut へ)。"""
-        from studio_stream import ack_path  # noqa: PLC0415
-
-        while True:
-            for n, c in list(self.pending_acks.items()):
-                path = ack_path(self.st, n)
-                if not path.exists():
-                    continue
-                try:
-                    loaded = json.loads(path.read_text())
-                except ValueError:
-                    continue
-                ack = loaded if isinstance(loaded, dict) else {}
-                del self.pending_acks[n]
-                if "rejected" in ack:
-                    if c is not None:
-                        self.mark_broken(c, "rejected: " + str(ack["rejected"])[:160])
-                    self.log(cut=c, event="submit_rejected", feed=n, reason=str(ack["rejected"])[:300])
-                else:
-                    self.log(cut=c, event="sealed_ack", feed=n)
-            if not self.stream_alive():
-                if self.pending_acks:
-                    self.log(event="ack_missing", feeds=sorted(self.pending_acks))
-                return
-            time.sleep(0.2)
+        try:
+            r = self.call("cut", {"text": text, "end": end})
+        except Rejected as e:
+            return {"rejected": str(e)[:400], "defects": e.defects}
+        except RuntimeError as e:
+            return {"rejected": str(e)[:400], "defects": []}
+        return {"sealed": True, "lines": r.get("lines")}
 
     def feed_text(self, c: str) -> str | None:
-        """cut c の投入の text (design の block + timeline の block)。根がまだ流れていなければ根を前に付ける (最初に受理される cut が運ぶ)。"""
+        """cut c の投入の text (design の block + timeline の block)。根がまだ流れていなければ根を前に付ける (根の先行投入が弾かれた時)。"""
         blk = self.cut_block(c)
         if blk is None:
             return None
@@ -1978,9 +1746,8 @@ class Run:
         return text
 
     def submit_root(self) -> str:
-        """remote: 根が閉じた時点で根だけを先に流す (server は cut を待たずに cast の素材の解決と cut の先行解決を始める)。根は
-        ここで凍る (cut 0 の直し役は根を直さない)。server の投入検査で弾かれた根は最初の cut と一緒に流す (従来の形)。返り値 = 流した
-        text ("" = 流さなかった)。"""
+        """根が閉じた時点で根だけを先に流す (run は cut を待たずに cast の素材の解決と cut の先行解決を始める)。根はここで凍る (cut 0
+        の直し役は根を直さない)。投入検査で弾かれた根は最初の cut と一緒に流す。返り値 = 流した text ("" = 流さなかった)。"""
         while not ((self.solo / "root_design.txt").exists() and (self.solo / "root_timeline.txt").exists()):
             if (self.st / "src.done").exists():
                 return ""
@@ -1991,7 +1758,7 @@ class Run:
             rd, rt = self.root()
         text = rd.rstrip("\n") + "\n" + "\n".join(l for l in rt.splitlines() if l.strip() != "#v2") + "\n"
         t = time.time()
-        ack = self.submit(None, text, end=False, pins={})
+        ack = self.submit(None, text, end=False)
         if ack is None or "rejected" in ack:
             self.log(event="root_submit_rejected", reason=str((ack or {}).get("rejected"))[:300])
             return ""
@@ -2000,33 +1767,32 @@ class Run:
         return text
 
     def feed(self) -> None:
-        """staged かつ warm 済みの cut を構成の順に流す。根は最初に受理される cut と一緒に (以後凍結)。各 cut は投入検査 (prefix との
-        compile・出し済みの item が変わらない事・composer の乾いた実行) を通してから流す。投入検査の DEFECT は、落とす前にその cut の
-        直し役を 1 回だけ呼び (DEFECT の文と、流した前の cut の定義 `defs_before` を渡す)、直した text で掛け直す (`fix` の
-        `round: "intake"`)。この 1 回は stage の直し (2 回まで・`fix_calls`) とは別枠 — stage は staged で終わっていて、投入検査の DEFECT は
-        stage の check に出なかった物 (前の cut の担当 / 直しが後から定義を変えた・流した prefix との食い違い) だから。それでも DEFECT なら
-        stage と同じ最後の手段 (last_resort: 著者版 → DEFECT の印を落とす) を掛け、通らなければ落とす (`intake_rejected`)。local の stream は受理を待たずに次へ (seal は organizer が順に処理する・拒否は `watch_acks` が記録して
-        壊れ扱い)。最後の cut は end と一緒に。"""
-        prefix = ""  # 流した stream の text (根 + cut)
-        if self.remote is not None:
-            prefix = self.submit_root()
+        """staged の cut を構成の順に流す。根は閉じた時点で先に流す (以後凍結)。投入検査 (prefix との compile・出し済みの item が
+        変わらない事・composer の乾いた実行・読めない素材) は投入そのもの — 弾かれたら、落とす前にその cut の直し役を 1 回だけ呼び
+        (DEFECT の文と、流した前の cut の定義 `defs_before` を渡す)、直した text で流し直す (`fix` の `round: "intake"`)。この 1 回は stage
+        の直し (2 回まで・`fix_calls`) とは別枠 — stage は staged で終わっていて、投入検査の DEFECT は stage の check に出なかった物 (前の
+        cut の担当 / 直しが後から定義を変えた・流した prefix との食い違い) だから。それでも弾かれたら stage と同じ最後の手段
+        (last_resort: 著者版 → DEFECT の印を落とす) を掛け、通らなければ落とす (`intake_rejected`)。最後の cut は end と一緒に。"""
+        prefix = self.submit_root()  # 流した stream の text (根 + cut)
         for i, c in enumerate(self.order):
-            while not (self.staged.get(c) and self.warms[c].done):
+            while not self.staged.get(c):
                 if not self.stream_alive():
                     self.log(event="stream_died", code=self.stream_proc.returncode if self.stream_proc else None)
                     return
                 time.sleep(0.3)
             last = i == len(self.order) - 1
-            if not self.root_submitted:
-                self.root_done.wait(timeout=180)  # 根の pin (BGM の聴取まで) を最初の投入に載せる
             text = None if self.broken.get(c) else self.feed_text(c)
             if text is None:
                 self.log(cut=c, event="submit_skipped", broken=self.broken.get(c))
                 continue
             t = time.time()
-            defects = self.intake_check(prefix, text, ended=last)
-            if defects:
-                ff = self.st / "feed" / f"intake_{c}.txt"
+            ack = self.submit(c, text, end=last)
+            if ack is None:
+                self.log(cut=c, event="stream_died", code=self.stream_proc.returncode if self.stream_proc else None)
+                return
+            defects = [str(d) for d in ack.get("defects", [])] if "rejected" in ack else []
+            if "rejected" in ack and defects:
+                ff = self.st / f"intake_{c}.txt"
                 ff.write_text(
                     "投入検査 (流した前の cut + この cut) の DEFECT。前の cut はもう流れていて変えられない — 前の cut の定義の形"
                     " (参考の定義) に合わせてこの cut を直す:\n" + "\n".join(defects[:40])
@@ -2044,27 +1810,19 @@ class Run:
                 fixed = self.feed_text(c) if ok else None
                 if fixed is not None:
                     text = fixed
-                    defects = self.intake_check(prefix, text, ended=last)
-            if defects and self.last_resort(
-                c,
-                [x for x in self.order if x in self.submitted] + [c],
-                "intake",
-                lambda: not self.intake_check(prefix, self.feed_text(c) or "", ended=last),
-            ):
-                text, defects = self.feed_text(c) or text, []
-            if defects:
-                self.mark_broken(c, "intake: " + defects[0][:160])
-                self.log(
-                    cut=c, event="intake_rejected", s=round(time.time() - t, 1), n=len(defects), first=defects[0][:300]
-                )
-                continue
-            ack = self.submit(c, text, end=last, pins=self.merged_pins([c]).get("asset_pins", {}))
-            if ack is None:
-                self.log(cut=c, event="stream_died", code=self.stream_proc.returncode if self.stream_proc else None)
-                return
-            if "rejected" in ack:  # remote だけ (local は受理を待たない — 拒否は watch_acks が後から記録する)
+                    ack = self.submit(c, text, end=last) or ack
+
+            def accepted() -> bool:
+                nonlocal ack, text
+                text = self.feed_text(c) or text
+                ack = self.submit(c, text, end=last) or ack
+                return "rejected" not in ack
+
+            if "rejected" in ack and defects:
+                self.last_resort(c, [x for x in self.order if x in self.submitted] + [c], "intake", accepted)
+            if "rejected" in ack:
                 self.mark_broken(c, "rejected: " + str(ack["rejected"])[:160])
-                self.log(cut=c, event="submit_rejected", reason=str(ack["rejected"])[:300])
+                self.log(cut=c, event="intake_rejected", s=round(time.time() - t, 1), reason=str(ack["rejected"])[:300])
                 continue  # 根を運んでいたなら次の cut が運ぶ (root_submitted のまま False)
             self.root_submitted = True
             prefix += text
@@ -2073,29 +1831,23 @@ class Run:
             if last:
                 return
         if not self.root_submitted:
-            # 1 cut も流せなかった — stream を待たせない
-            if self.remote is not None:
-                self.remote_abort("no cut submitted")
-            else:
-                from studio_stream import feed_path, write_atomic  # noqa: PLC0415
-
-                write_atomic(feed_path(self.st, self.feed_n), {"abort": True})
-                self.feed_n += 1
+            # 1 cut も流せなかった — run を待たせない
+            self.abort("no cut submitted")
             self.log(event="feed_aborted", reason="no cut submitted")
             return
         # 最後の cut が壊れて飛んだ時の閉じ (`#end` だけ)
-        ack = self.submit(None, "", end=True, pins={})
+        ack = self.submit(None, "", end=True)
         if ack is None or "rejected" in ack:
             self.log(event="end_rejected", ack=ack)
-            if self.remote is not None:
-                self.remote_abort("end rejected")
+            self.abort("end rejected")
 
     def write_back(self) -> None:
         """流した最終の doc (根 + 流した cut・構成の順) を studio/ に書き戻す — studio/ に `new` の骨組みが残り、動画と doc が食い違って
-        いた (nt01〜10 全部)。src.json は全部の doc の pin を写した物。"""
+        いた (nt01〜10 全部)。src.json は run が解いた素材の pin (local の run が stream/asset_pins.json に書く) を写した物。"""
         cuts = [c for c in self.order if c in self.submitted]
         design, timeline = self.doc_texts(cuts)
-        src = self.merged_pins(cuts)
+        pins_file = self.st / "asset_pins.json"
+        src = self.doc_src(json.loads(pins_file.read_text()) if pins_file.exists() else None)
         (self.studio / "design.txt").write_text(design)
         (self.studio / "timeline.txt").write_text(timeline)
         (self.studio / "src.json").write_text(json.dumps(src, ensure_ascii=False, indent=1))
@@ -2106,9 +1858,8 @@ class Run:
 
     def abort_engine(self) -> int:
         self.log(event="engine_failed", reason=(self.st / "engine.failed").read_text()[:400])
-        if self.remote_video_id is not None:
-            self.remote_abort("Codex の生成に失敗")
-        elif self.stream_proc is not None:
+        self.abort("Codex の生成に失敗")
+        if self.stream_proc is not None:
             self.stream_proc.terminate()
         return 1
 
@@ -2128,23 +1879,20 @@ class Run:
         self.log(event="plan_seen", cuts=self.order)
         if self.engine_failed():
             return self.abort_engine()
-        if self.remote is not None:
-            self.remote_start()
-            for c in self.order:
-                self.warms[c].done = True  # 素材は server が解く
-            self.root_fast_done.set()  # 根の先読みも server が解く — 最初の投入が root_done を待たない
-            self.root_done.set()
-            stages = [self.stage]
-        else:
-            self.start_stream()
-            stages = [self.stage, self.warm]
-        threads = [threading.Thread(target=self.root_prefetch, daemon=True)] if self.remote is None else []
-        for i, c in enumerate(self.order):
-            for fn in stages:
-                threads.append(threading.Thread(target=self.guarded, args=(fn, i, c), daemon=True))
+        self.fixed = frozenset(
+            str(row["name"])
+            for row in self.call("rules").get("rules", [])
+            if isinstance(row, dict) and row.get("fixed")
+        )
+        self.start()
+        if self.video_id is None:
+            self.log(event="start_failed")
+            return 1
+        threads = [
+            threading.Thread(target=self.guarded, args=(self.stage, i, c), daemon=True)
+            for i, c in enumerate(self.order)
+        ]
         threads.append(threading.Thread(target=self.feed, daemon=True))
-        if self.remote is None:
-            threads.append(threading.Thread(target=self.watch_acks, daemon=True))
         for t in threads:
             t.start()
         if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
@@ -2158,24 +1906,7 @@ class Run:
         else:
             for t in threads:
                 t.join()
-        if self.remote is not None:
-            return self.remote_wait()
-        assert self.stream_proc is not None
-        try:
-            code = self.stream_proc.wait(timeout=1800)
-        except subprocess.TimeoutExpired:
-            self.stream_proc.kill()
-            code = -9
-        if code == 0 and (self.studio / "out/video.mp4").exists():
-            self.write_back()
-            (self.studio / "DONE").touch()
-            self.log(event="final_ready", since_launch=round(time.time() - self.t0, 1), broken=self.broken)
-            self.log(event="length_gap", **self.length_gap())
-            return 0
-        # 製品の stream が完走しなかった (seal 後の worker の失敗など) — 製品の失敗はそのまま失敗にする (solo の render で描き直す
-        # fallback は製品の bug を 2 件隠し、視聴者が見た HLS とも別物だった)
-        self.log(event="final_failed", code=code, broken=self.broken)
-        return 1
+        return self.remote_wait() if self.remote is not None else self.local_wait()
 
 
 def main(argv: list[str]) -> int:
@@ -2191,7 +1922,6 @@ def main(argv: list[str]) -> int:
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
     if token is None and remote is not None:
         token = claude_mcp_token(remote)
-    template = argv[argv.index("--template") + 1] if "--template" in argv else None
     if look and remote is not None:
         print("--look は local だけ (静止画はこの機械の GPU で描く)", file=sys.stderr)
         return 2
@@ -2203,7 +1933,6 @@ def main(argv: list[str]) -> int:
         look=look,
         remote=remote,
         token=token,
-        template=template,
     )
     launch = project / "stream/author.jsonl"
     if launch.exists():
