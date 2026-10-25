@@ -130,6 +130,16 @@ def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None
     return "\n".join(out) if hit else None
 
 
+# 直し役・見直しの 1 回の待ちの上限 — server は投入の行が 180 秒届かないと run を落とすので、その内側で諦めて直す前の版で続ける
+FIX_TIMEOUT_S = 120
+_CUT_HEAD = re.compile(r"^(?:section#[A-Za-z0-9_\-]+|\*\*\*\s+\S+)")
+
+
+def cut_heads(block: str) -> list[str]:
+    """cut の block の見出し (design の `section#名` と timeline の `*** 名` の行) の並び — 直し役は cut を分けない・改名しない。"""
+    return [m.group(0).split("(")[0].strip() for line in block.splitlines() if (m := _CUT_HEAD.match(line))]
+
+
 def edit_lines(now: str, fixed: str) -> str:
     """戻した直し役の edit の本文 (now = 戻した後の cut の text・fixed = 直し役の出力) — `+` は直し役が書いた行・`-` は今の行。"""
     import difflib  # noqa: PLC0415
@@ -1050,16 +1060,18 @@ class Run:
         remote は根が閉じた時点で先に流れる)。"""
         return c == self.first_live() and not self.root_submitted
 
-    def call_role(self, args: list[str], *, timeout: int) -> subprocess.CompletedProcess[str]:
-        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。"""
+    def call_role(self, args: list[str], *, timeout: int, fatal: bool = True) -> subprocess.CompletedProcess[str]:
+        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。fatal=False (直し役・見直し) は伝えない — 直しは cut を良くする
+        だけの段で、失敗しても直す前の版で続けられる (止めると動画ごと落ちる)。"""
         try:
             result = subprocess.run(
                 args, cwd=REPO or HERE.parent, env=self.env, capture_output=True, text=True, timeout=timeout
             )
         except Exception as exc:
-            self.fail_engine(f"{args[2]}: {exc}")
+            if fatal:
+                self.fail_engine(f"{args[2]}: {exc}")
             raise
-        if result.returncode != 0:
+        if result.returncode != 0 and fatal:
             self.fail_engine(f"{args[2]}: exit {result.returncode} — {result.stderr[-400:]}")
         return result
 
@@ -1076,22 +1088,29 @@ class Run:
         src = self.solo / f"cut_{c}.txt"
         before = src.read_text()
         for attempt in (0, 1):
-            r = self.call_role(
-                [
-                    PY,
-                    str(AUTHOR),
-                    "fix",
-                    str(self.project),
-                    c,
-                    str(ff),
-                    *(["--root"] if self.owns_root(c) else []),
-                    "--effort",
-                    (self.review_effort or self.fix_effort) if review else self.fix_effort,
-                    *(["--review"] if review else []),
-                    *(["--shots", ",".join(str(x) for x in shots)] if shots else []),
-                ],
-                timeout=600,
-            )
+            try:
+                r = self.call_role(
+                    [
+                        PY,
+                        str(AUTHOR),
+                        "fix",
+                        str(self.project),
+                        c,
+                        str(ff),
+                        *(["--root"] if self.owns_root(c) else []),
+                        "--effort",
+                        (self.review_effort or self.fix_effort) if review else self.fix_effort,
+                        *(["--review"] if review else []),
+                        *(["--shots", ",".join(str(x) for x in shots)] if shots else []),
+                    ],
+                    timeout=FIX_TIMEOUT_S,
+                    fatal=False,
+                )
+            except subprocess.TimeoutExpired:
+                # 直し役が返らない (codex の turn が止まる等) — 待ち続けると後の cut の投入が止まり、server の待ちの上限 (180 秒) で
+                # 動画ごと落ちる。直す前の版で続ける
+                self.log(cut=c, event="fix_timeout", s=FIX_TIMEOUT_S, review=review)
+                return False, f"timeout {FIX_TIMEOUT_S}s"
             if (
                 os.environ.get("NOLANG_STUDIO_ENGINE") != "codex"
                 and r.returncode != 0
@@ -1101,6 +1120,10 @@ class Run:
                 time.sleep(2)  # claude の shim が一瞬見つからない事がある → 1 回だけやり直す
                 continue
             break
+        if r.returncode == 0 and "---timeline---" in r.stdout and cut_heads(r.stdout) != cut_heads(before):
+            # 直し役が cut を分けた・改名した — 片方だけ戻ると design と timeline の cut が食い違って組み立てで落ちるので受け取らない
+            self.log(cut=c, event="fix_structure_changed", before=cut_heads(before), after=cut_heads(r.stdout))
+            return False, "the fix changed the cut's headings (split or renamed the cut)"
         if r.returncode == 0 and "---timeline---" in r.stdout:
             # 担当の書き戻しと同じ門: 基準は書き戻す直前の file (直し役が走る間に後の cut の thread が c の block へ移した定義
             # — move_forward_defs — も含む)。直し役が消した定義・後の cut が使う定義の形を変えた物を戻す

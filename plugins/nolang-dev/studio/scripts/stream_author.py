@@ -490,6 +490,7 @@ def fix_prompt(
     )
     return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
 変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)。
+直しで悪くしない (直さない方が良かった直しに多い型): 題・見出し・最初の札は cut の頭に出したまま (印を足して出を遅らせない — cut の頭を背景だけにしない)・字幕を文の途中で割らない・札や図の文字・項目・数字を減らさない・人物の顔に札や題を重ねない・cut を分けない (`section#` と `***` の見出しは足さない・変えない)。
 {editable_note()}{reference_note}{trim}形式:
 === edits ===
 @ 行番号
@@ -680,6 +681,16 @@ def apply_line_edits(body: str, edits: dict[int, list[str]]) -> str:
     return "\n".join(out) + "\n"
 
 
+SPEAKER = re.compile(r"^@([^\s:|.@]+)[.:]")
+
+
+def fallback_root_timeline(cut_block: str) -> str:
+    """著者が `=== root_timeline ===` を書き落とした時の根の timeline: 最初の cut の台詞の話者 (`@名:`) を既定のナレーターの声で
+    宣言するだけ (声の解決は後段)。無いと根が組めず全 cut が落ちる (10-25 cinematic の実走)。"""
+    names = list(dict.fromkeys(m.group(1) for line in cut_block.splitlines() if (m := SPEAKER.match(line.strip()))))
+    return "#v2\n" + "".join(f'cast {name} = "ナレーター"\n' for name in names or ["n"])
+
+
 class Splitter:
     """stream の本文を `=== … ===` と `section#` / `*** ` の境目で section に割り、閉じた順に solo/ へ書く。"""
 
@@ -737,6 +748,11 @@ class Splitter:
         if kind == "cut":
             if "---timeline---" not in body:
                 body += "---timeline---\n"
+            if "root_design" in self.out and "root_timeline" not in self.out:
+                rt = fallback_root_timeline(body)
+                (self.proj / "root_timeline.txt").write_text(rt)
+                self.out["root_timeline"] = rt
+                log(self.st, event="root_timeline_missing", cut=name, root_timeline=rt, tag=self.tag)
             key, f = f"cut_{name}", self.proj / f"cut_{name}.txt"
             if name not in self.order:
                 self.order.append(name)
