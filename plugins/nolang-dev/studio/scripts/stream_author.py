@@ -16,7 +16,7 @@ usage (repo root から):
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
       → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
         --shots = 見直しに cut の静止画も見せる (stream_run の --look))
-project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds"・studio/ = `new` の雛形)。
+project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [editable]"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
 
@@ -113,6 +113,23 @@ def pick_samples(typ: str, aspect: str, request: str) -> tuple[tuple[str, ...], 
     portrait = aspect == "9:16"
     skipped: list[str] = []
     picked: list[str] = []
+    if os.environ.get("NOLANG_STUDIO_PROFILE") == "editable":
+        # 編集可能モードは editable 準拠の見本 (`editable_*.md`) を使う — hf の見本は keys / group / count を多用していて、
+        # 著者が違反を写す (bench 10-25 の違反 19〜37/run の根)。type の合う物を先に、足りなければ他の editable で埋める
+        names = sorted(
+            p.name
+            for p in SAMPLES_DIR.iterdir()
+            if re.fullmatch(r"editable_.+\.md", p.name) and p.stat().st_size <= SAMPLE_MAX_BYTES
+        )
+        same = [n for n in names if same_topic(n, request)]
+        skipped.extend(same)
+        rest = [n for n in names if n not in same]
+        by_type = [n for t in (typ, NEAR_TYPE[typ]) for n in rest if n.startswith(f"editable_{t}_")]
+        ordered = by_type + [n for n in rest if n not in by_type]
+        picked = sorted(ordered, key=lambda n: (ordered.index(n) >= len(by_type), sample_portrait(n) != portrait))[:2]
+        if len(picked) == 2:
+            return (picked[0], picked[1]), skipped
+        skipped, picked = [], []  # editable の見本が足りない時だけ hf へ (無言で違反の見本に落ちるより良い)
     for t in (typ, NEAR_TYPE[typ]):
         names = sorted(
             p.name
@@ -194,7 +211,7 @@ def samples_text(samples: tuple[str, ...]) -> str:
     )
 
 
-def author_prompt(aspect: str, seconds: str, canvas: str, request: str, samples: str = "") -> str:
+def author_prompt(aspect: str, seconds: str, canvas: str, request: str, samples: str = "", reference: str = "") -> str:
     """著者の user turn。構成の型・雛形・数字の規則は渡さない (台本と絵コンテは著者が依頼から決める)。雛形は 1 行目と canvas だけ —
     役の入った雛形 (cut の役・定義済みの段・theme dark) を渡すと部品を写し、暗い地に揃った (10-23)。"""
     if seconds == AUTO_SECONDS:
@@ -227,7 +244,7 @@ draft src の段取りの決まり (機構の事実):
 - 絵の生成は時代・形・数の段階を守らない・1 枚の説明に 2 場面を書くと上下 2 枚の合成になる。同じ物を 2 枚以上に描くなら根に
   `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。生成された絵は誰も見られないので、文字を置く所は `subject:` / `room:` で空けられる。
 {length_rule}
-出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
+{editable_note()}{editable_author_note(referenced=bool(reference))}出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
 === plan ===
 名: この cut で何を見せ、どう動かすか (目標秒・N 文)      ← 1 行 1 cut・名は英小文字・この順で cut が並ぶ
 === root_design ===
@@ -252,7 +269,7 @@ transition …
 canvas {canvas}
 --- timeline.txt ---
 #v2
-{samples}{request}
+{samples}{reference}{request}
 ユーザーの設定: 縦横比 {aspect} ({canvas})・長さの目安 {"指定なし" if seconds == AUTO_SECONDS else f"{seconds} 秒"}
 """
 
@@ -273,6 +290,7 @@ def staff_prompt(
     order: list[str] | None = None,
     target_s: str = "",
     timing: str = "",
+    reference_note: str = "",
 ) -> str:
     """担当の user turn — 著者の cut をプロの解説動画の密度と階層に仕上げる。見る観点・欠陥の型・字の大きさの規則は渡さず、機構の事実
     (台詞・根・定義を変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
@@ -296,7 +314,7 @@ def staff_prompt(
 - DEFECT の常連: `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
   `名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` /
   `filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ。
-
+{editable_note()}{reference_note}
 ユーザーの依頼:
 {request.strip() or "(なし)"}
 ユーザーの設定: 長さの目安 {"指定なし" if target_s == AUTO_SECONDS else f"{target_s} 秒"} (構成の目標秒の和 {planned_s:.0f} 秒・尺は台詞で決まる)
@@ -340,6 +358,70 @@ LENGTH_RULE = "cut_length"
 DECLARED_SECONDS = re.compile(r"^#\s*台詞[^\n]*?[~〜約]\s*(\d+(?:\.\d+)?)\s*(?:s|秒)", re.M)
 
 
+def editable_note() -> str:
+    """編集可能モード (env NOLANG_STUDIO_PROFILE=editable・stream_make.sh --editable) の作法の節。著者・担当・直し役の
+    prompt に同じ節を入れる — 投入の門 (intake) が同じ規則 (`editable_*`) を DEFECT にするので、書く前に守る方が速い。
+    閾値の正本は server の台帳 (`GET drafts/rules/` の profiles.editable) — この文は既定値を写した作法。"""
+    if os.environ.get("NOLANG_STUDIO_PROFILE") != "editable":
+        return ""
+    return """
+編集可能モード (この動画はユーザーが編集画面で自分で調整する — 編集できる語彙だけで書く。破ると投入で DEFECT `editable_*` になり、
+その cut は直しの往復で再生が遅れるか、動きを機械で fade に置き換えられる):
+- 1 cut の要素は 6 個まで (×N は N と数える)・絵 (img) は 2 枚まで (全面の地 + 挿絵 1 枚)。情報は札 1 枚に束ね、多ければ cut を分ける。
+- 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う。
+- group / camera / svg / 数える数字 (`[count:]`) / `{tok}` の run は使わない。`.sticky` は立ち絵 (avatar) だけ。
+- 動きはこの形だけで書く (正の例 — これで十分な画面になる):
+  `in: fade`・`in: pop`・`in:{y:40, opacity:0, duration:.5}`・`in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`・
+  `out: fade`・`out:{opacity:0, duration:.3}`・絵の常時は `main: kb {scale: [1, 1.06]}`。
+  使えない形 (門で弾かれて cut が遅れる): `keys(at=…)` の keyframe 列・`path:`・波形の main (`main:{y:4, repeat:-1}` 等)・
+  filter の tween・`ease:'back.out(1.7)'` などの係数つき easing (語の ease だけ可)。
+- 書体は 3 種まで・影 (box-shadow) は 1 種を def で使い回す (flat な板を既定に)。文字の段は見出し / 本文 / 札の 3 段を def で揃える。
+- ユーザーが選んだ参照の動画がある時は、上の数と `.sticky` の線は参照が使っている量まで緩む — 参照の根・常設の層 (枠・ロゴの札・
+  マスコット・字幕の箱) をそのまま写す (下の「ユーザーが選んだ形」の節)。
+"""
+
+
+def editable_author_note(*, referenced: bool = False) -> str:
+    """著者だけに足す editable の段取り (設計を軽くして plan を早く出す) — stream は plan が早いほど再生開始が早い。referenced =
+    参照の動画がある run — 根と cut の型は参照から写すので、定型の根・画面の段は言わない (参照の型より定型が勝つため)。"""
+    if os.environ.get("NOLANG_STUDIO_PROFILE") != "editable":
+        return ""
+    if referenced:
+        return """
+編集可能モードの段取り (参照あり・plan を先に):
+- 全体の長考をしない — まず plan と根を出す。根 (palette・font・def・字幕・常設の層) は参照の根をそのまま写す。
+- cut の画面は参照の cut の型 (表紙・事例・ポイント・まとめ …) から選び、依頼の内容で埋める。参照の順と場面の型を保つ。
+"""
+    return """
+編集可能モードの段取り (設計を軽く・plan を先に):
+- 全体の長考をしない — まず plan と根を出し、cut は書きながら決める。根は最小の design system を定型で即決してよい:
+  palette 2〜3 色・font 1〜2 種・文字の段の def (見出し / 本文 / 札) と card の def 1 つ。凝った根 (質感層・多段の def) は作らない。
+- cut の画面は定型から選ぶ: 「見出し + 札 (または図) + 強調 1 つ」・「全面の絵 + 帯の札」・「hero の数字 + 補足」級 —
+  この級で十分で、編集画面でユーザーが動かせる形になる。
+"""
+
+
+def reference_of(project: Path) -> dict[str, object] | None:
+    """参照の動画 (`stream_make.sh --ref` / 依頼の `[video:id]`) — project/reference.json (`GET drafts/templates/{id}/` の応答:
+    src・題・「ユーザーが選んだ形」の節 `brief`)。無ければ None。"""
+    path = project / "reference.json"
+    if not path.exists():
+        return None
+    loaded = json.loads(path.read_text())
+    return loaded if isinstance(loaded, dict) and loaded.get("brief") else None
+
+
+def reference_role_note(project: Path) -> str:
+    """担当・直し役への参照の注記 (src は渡さない — 根は著者が参照から写した物)。"""
+    ref = reference_of(project)
+    if ref is None:
+        return ""
+    return (
+        f"\nこの動画はユーザーが選んだ参照の動画「{ref['title']}」の形 (根の palette / font / def と cut の組み) を土台にしている —"
+        " 根の design system と cut の組みの型を保つ。参照から台詞・文言は持ち込まない。\n"
+    )
+
+
 def _numbered(text: str) -> str:
     return "\n".join(f"{k}| {line}" for k, line in enumerate(text.rstrip("\n").split("\n"), start=1))
 
@@ -355,6 +437,7 @@ def fix_prompt(
     defs_before: str = "",
     review: bool = False,
     shots: list[str] | None = None,
+    reference_note: str = "",
 ) -> str:
     """own_root = この cut が根の持ち主 (動画の最初の live な cut・根が流れる前) — 根の 2 block も直せる (`@ root_design 行`)。他の cut
     の直し役は根と前の cut の定義を変えない (参考として見るだけ)。review = 見直し (厳しい監督として指摘に出ない弱い所・崩れも探す・
@@ -407,7 +490,7 @@ def fix_prompt(
     )
     return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
 変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)。
-{trim}形式:
+{editable_note()}{reference_note}{trim}形式:
 === edits ===
 @ 行番号
 その行の新しい中身 (複数行にしてよい・行を消すなら空のまま次の `@` へ)
@@ -903,7 +986,8 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     proj, st, studio = project / "solo", project / "stream", project / "studio"
     proj.mkdir(exist_ok=True)
     st.mkdir(exist_ok=True)
-    typ, aspect, seconds = (project / "params.txt").read_text().split()
+    # params は "型 縦横 秒" + 任意の flag token (`editable` — stream_make.sh --editable が足す)
+    typ, aspect, seconds = (project / "params.txt").read_text().split()[:3]
     request = (project / "request.txt").read_text()
     if samples is None:
         samples, skipped = pick_samples(typ, aspect, request)
@@ -938,7 +1022,13 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         samples=list(samples),
         samples_skipped=skipped,
     )
-    prompt = author_prompt(aspect, seconds, canvas, request, samples_text(samples))
+    ref = reference_of(project)
+    if ref is not None:  # 依頼の `[video:<id>]` は参照の題に (製品の入口が題へ置換するのと同じ)
+        request = re.sub(rf"\[video:{re.escape(str(ref['template_video_id']))}\]", f"「{ref['title']}」", request)
+        log(st, event="reference", video_id=ref["template_video_id"], source=ref.get("source"), title=ref.get("title"))
+    prompt = author_prompt(
+        aspect, seconds, canvas, request, samples_text(samples), str(ref["brief"]) if ref is not None else ""
+    )
     sp0 = Splitter(proj, st, "author")
     stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     sp0.finish()
@@ -1014,6 +1104,7 @@ def fix(
             defs_before=defs_before_text(proj, name),
             review=review,
             shots=[path.stem for path in shots],
+            reference_note=reference_role_note(project),
         ),
         out.append,
         system_prompt=sp,
@@ -1071,7 +1162,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
     timing_file = findings_file.with_name("timing_author.txt")
     # 動画の長さの門 = plan の目標秒の和 (orchestrator の進行線の total と同じ値)
     planned_s = sum(sec for _, sec in plan_names(plan))
-    _typ, _aspect, target_s = (project / "params.txt").read_text().split()
+    _typ, _aspect, target_s = (project / "params.txt").read_text().split()[:3]
     out: list[str] = []
     stream_model(
         st,
@@ -1090,6 +1181,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
             order=order,
             target_s=target_s,
             timing=timing_file.read_text() if timing_file.exists() else "",
+            reference_note=reference_role_note(project),
         ),
         out.append,
         system_prompt=sp,

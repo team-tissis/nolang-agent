@@ -1,5 +1,5 @@
 """stream の orchestrator — 著者 (stream_author.py・1 call) が落とす cut を出た順に check → 直し (低 effort の claude -p) → warm (絵・声) →
-確定 → 投入。描画は製品の外部の著者の run (`external_stream_run`) が seal ごとに HLS を伸ばす (cut 0 が seal された時点から再生
+確定 → 投入。描画は製品の外部の著者の run (`authored_stream_run`) が seal ごとに HLS を伸ばす (cut 0 が seal された時点から再生
 できる)。run は local ならこの機械の 1 process (`studio.py stream`・studio_stream.py)・remote なら NoLang の server。投入・先行解決
 (warm)・check・改名・中断はどちらも nolang-api `drafts/` の同じ flow 関数を通る (`call` — remote は HTTP・local は `studio.py api`)。
 cut の段は全 cut 同じで、orchestrator は cut の index でも local / remote でも分岐しない。
@@ -43,6 +43,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections import defaultdict
 from collections.abc import Callable
@@ -143,6 +144,103 @@ _MARK_NOT_SE = re.compile(
 )  # 台詞行の印 (効果音の `[♪…]` を除く) — 先行 warm が DEFECT の印を落とす
 # cut の block に書ける名のある定義 (grammar の CUT_DEFINITION_ROOTS) — 持ち主はその block の cut。字下げの子の行も定義の一部
 _NAMED_DEF = re.compile(r"^(def|svg|sound|image|motion|run|cue)\s+([A-Za-z_][\w-]*)\b")
+# 投入検査の render 文から editable_motion の的 (層の dotted path) と slot を引く (機械 degrade の的)
+_EDITABLE_MOTION_RE = re.compile(
+    r"DEFECT:editable_motion\b.*?#(?P<name>[\w.\[\]]+) の (?P<slot>motion_in|motion_out|motion_main|in|out|main)\b"
+)
+_MOTION_SLOT_GROUP = {
+    "in": "in",
+    "motion_in": "in",
+    "out": "out",
+    "motion_out": "out",
+    "main": "main",
+    "motion_main": "main",
+}
+
+
+def _split_top_level(body: str) -> list[str]:
+    """`(宣言)` の中身を top-level の `;` で割る (括弧 `(){}[]` と quote の中は割らない)。"""
+    parts: list[str] = []
+    depth = 0
+    quote: str | None = None
+    start = 0
+    for k, ch in enumerate(body):
+        if quote is not None:
+            if ch == quote:
+                quote = None
+            continue
+        if ch in "'\"":
+            quote = ch
+        elif ch in "({[":
+            depth += 1
+        elif ch in ")}]":
+            depth -= 1
+        elif ch == ";" and depth == 0:
+            parts.append(body[start:k])
+            start = k + 1
+    parts.append(body[start:])
+    return parts
+
+
+def _degrade_motion_decls(line: str, slots: set[str] | None) -> tuple[str, int]:
+    """行の `(宣言)` の中の動きの宣言を編集可能 profile の preset へ機械で寄せる (editable_motion の最後の網 — 層を落とさない)。
+
+    slots = 書き換える slot ({"in","out","main"})。None = blanket (的の行が引けなかった時): object 形の `in:`/`out:` を
+    `fade` に・custom 形 (`{…}`/keys/波形) の `main:` を落とす (named の `main: kb {…}` は残す)。戻り = (行, 書き換えた数)。"""
+    open_at = line.find("(")
+    if open_at < 0:
+        return line, 0
+    depth = 0
+    quote: str | None = None
+    close_at = -1
+    for k in range(open_at, len(line)):
+        ch = line[k]
+        if quote is not None:
+            if ch == quote:
+                quote = None
+            continue
+        if ch in "'\"":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                close_at = k
+                break
+    if close_at < 0:
+        return line, 0
+    changed = 0
+    kept: list[str] = []
+    for part in _split_top_level(line[open_at + 1 : close_at]):
+        head = re.match(r"\s*(in|out|main)\s*:", part)
+        if head is None:
+            kept.append(part)
+            continue
+        key = head.group(1)
+        value = part[head.end() :]
+        if slots is not None and key not in slots:
+            kept.append(part)
+            continue
+        if slots is None and key in ("in", "out") and "{" not in value:
+            kept.append(part)  # preset 語のまま
+            continue
+        if (
+            slots is None
+            and key == "main"
+            and not (value.lstrip().startswith("{") or "keys" in value or "waveform" in value)
+        ):
+            kept.append(part)  # named の main (kb 等) は残す
+            continue
+        changed += 1
+        if key in ("in", "out"):
+            kept.append(f"{part[: head.start(1)]}{key}: fade")
+        # main は decl ごと落とす (常時の custom は preset に写せない)
+    if not changed:
+        return line, 0
+    return line[: open_at + 1] + ";".join(kept).strip("; ") + line[close_at:], changed
+
+
 ROOT = ""  # 行の無い DEFECT の持ち主が根 (Run.unlocated_owner の値)
 _DEF_CHILD = re.compile(r"^[ \t]+[A-Za-z_][\w-]*#([A-Za-z_][\w-]*)", re.M)  # 定義の字下げの子の行 `  icon#i(…` → 子の名
 
@@ -260,8 +358,12 @@ class Run:
         look: bool = False,
         remote: str | None = None,
         token: str | None = None,
+        editable: bool = False,
     ) -> None:
         self.project = project
+        # 編集可能モード: start に editable を立て、check に profile=editable を渡す (投入の門は server が video の
+        # create_setting から読む)。著者・担当・直しの prompt の節は env NOLANG_STUDIO_PROFILE (stream_make.sh が立てる)
+        self.editable = editable
         # remote = NoLang API (nolang-api consumer) の base URL。著者・担当・直しはこの機械の claude -p のまま、確定した cut の stream の
         # text を `unstable/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server (製品の draft stream) に任せる。None = この機械の
         # `studio.py stream` (同じ製品の外部の著者の run) に同じ flow 関数で流す (`call`)。根は閉じた時点で根だけを先に流し (`submit_root`)、
@@ -783,6 +885,8 @@ class Run:
                 "aspect_ratio": self.aspect,
                 # 開始済みの run — warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
                 **({"video_id": self.video_id} if self.video_id else {}),
+                # 編集可能モードの run — 違反は warn の findings (投入の門は同じ台帳で DEFECT にする)
+                **({"profile": "editable"} if self.editable else {}),
             },
         )
         records = [d for d in body.get("defects", []) if isinstance(d, dict)]
@@ -1336,11 +1440,48 @@ class Run:
                     self.add_defs(c, text)
             return src.read_text() != now
 
-    def last_resort(self, c: str, cuts: list[str], rnd: int | str, passes: Callable[[], bool]) -> bool:
+    def degrade_editable_motion(self, c: str, defects: list[str], *, drop_marks: bool = False) -> int:
+        """editable_motion の機械 degrade (最後の網): 違反した層の `in:`/`out:` を `fade` に書き換え、custom の `main:` を落として
+        層と台詞を残す — motion 違反だけで cut が落ちない受け入れ条件の実装。的は投入検査の render 文 (`#名 の slot`) から引き、
+        cut の design の行 (def の行を含む) を書き換える。的の行が引けなければ cut の design 全行を blanket で寄せる。drop_marks = その層を
+        的にした `[!#層 …]` / `[=#層 …]` の印も落とす (台詞と効果音は残す) — 動きが timeline の印から来た時 (engine が `!` の効果を
+        層の motion に畳む) の網。戻り = 書き換えた宣言と落とした印の数 (0 = editable_motion が無い・直す物が無い)。"""
+        rows = [m for d in defects if (m := _EDITABLE_MOTION_RE.search(d)) is not None]
+        if not any("editable_motion" in d for d in defects):
+            return 0
+        src = self.solo / f"cut_{c}.txt"
+        text = src.read_text()
+        design, sep, rest = text.partition("---timeline---")
+        lines = design.split("\n")
+        changed = 0
+        targets = [(m.group("name").split(".")[-1], _MOTION_SLOT_GROUP[m.group("slot")]) for m in rows]
+        for idx, line in enumerate(lines):
+            hits = {slot for leaf, slot in targets if re.search(rf"#{re.escape(leaf)}(?=[(.\s]|$)", line)}
+            if hits:
+                lines[idx], k = _degrade_motion_decls(line, hits)
+                changed += k
+        if changed == 0:  # 的の行が引けない (def の実体名と定義名の揺れ等) — blanket で object 形だけ寄せる
+            for idx, line in enumerate(lines):
+                lines[idx], k = _degrade_motion_decls(line, None)
+                changed += k
+        if drop_marks and targets:
+            leaves = {re.escape(leaf) for leaf, _slot in targets}
+            mark = re.compile(rf"\[[!=]#(?:{'|'.join(sorted(leaves))})(?=[\s\],.{{\[]|$)[^\]]*\]")
+            rest, n = mark.subn("", rest)
+            changed += n
+        if changed:
+            src.write_text("\n".join(lines) + sep + rest)
+        return changed
+
+    def last_resort(
+        self, c: str, cuts: list[str], rnd: int | str, passes: Callable[[], bool], defects: list[str] | None = None
+    ) -> bool:
         """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順)。(a) 著者の版に差し替えて passes() で通れば
-        取る (`revert_author`)。(b) doc (根 + cuts・c が最後) の check で c の block の行を指す DEFECT を doc から落とし (warm の
+        取る (`revert_author`)。(a2) 投入検査の defects (呼び手が ack から直接渡す — check の defects.json に出ない editable も
+        ここで受かる) に editable_motion があれば機械 degrade (`degrade_editable_motion`) → passes() で通れば取る。(b) doc (根 +
+        cuts・c が最後) の check で c の block の行を指す DEFECT を doc から落とし (warm の
         drop_defect_lines と同じ — 台詞は残して印だけ落とす) c の block を書き戻す → passes() で通れば取る (`defect_lines_dropped`)。
-        どちらも通らなければ元の text に戻して False (捨てるのは呼び手)。"""
+        どれも通らなければ元の text に戻して False (捨てるのは呼び手)。"""
         src = self.solo / f"cut_{c}.txt"
         current = src.read_text()
         if self.revert_to_author(c):
@@ -1348,6 +1489,22 @@ class Run:
                 self.log(cut=c, event="revert_author", round=rnd, last_resort=True)
                 return True
             src.write_text(current)
+        if defects:
+            # 1 段目 = 違反した層の宣言を preset へ・2 段目 = それでも通らなければその層の `!` / `=` の印も落とす (動きが印から
+            # 畳まれた形 — design に直す行が無い時の網)
+            for drop_marks in (False, True):
+                degraded = self.degrade_editable_motion(c, defects, drop_marks=drop_marks)
+                if degraded and passes():
+                    self.log(
+                        cut=c,
+                        event="editable_motion_degraded",
+                        round=rnd,
+                        n=degraded,
+                        marks=drop_marks,
+                        last_resort=True,
+                    )
+                    return True
+                src.write_text(current)
         dropped = 0
         for _attempt in range(4):
             dd = self.doc_dir(f"{c}.drop", cuts)
@@ -1747,6 +1904,37 @@ class Run:
         with urllib.request.urlopen(req, timeout=60) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
+    def fetch_reference(self, video_id: str) -> int:
+        """参照の動画 (`--ref` / 依頼の `[video:id]`) の src と「ユーザーが選んだ形」の節を受けて project/reference.json に書く
+        (著者が読む)。local は同じ flow 関数 (`studio.py api reference`)・remote は `GET drafts/templates/{id}/`。節の文は server が
+        組む (正本 `reference_brief.py`) — 依頼の秒数と editable を渡す。取れなければ参照なしで続ける (戻り 1)。"""
+        _kind, _aspect, seconds = (self.project / "params.txt").read_text().split()[:3]
+        profile = "editable" if self.editable else None
+        try:
+            if self.remote is None:
+                body: dict[str, object] = {"video_id": video_id, "profile": profile}
+                if seconds.isdigit():
+                    body["seconds"] = int(seconds)
+                out = self.studio_cmd("api", "reference", timeout=600, stdin=json.dumps(body, ensure_ascii=False))
+                last = next((l for l in reversed(out.strip().splitlines()) if l.startswith("{")), None)
+                if last is None:
+                    raise RuntimeError(out[-400:])
+                got = json.loads(last)
+            else:
+                query = urllib.parse.urlencode(
+                    {k: v for k, v in (("profile", profile), ("seconds", seconds if seconds.isdigit() else None)) if v}
+                )
+                got = self.remote_get(f"/v1/unstable/drafts/templates/{video_id}/" + (f"?{query}" if query else ""))
+        except (RuntimeError, urllib.error.URLError, ValueError) as e:
+            self.log(event="reference_failed", video_id=video_id, error=str(e)[:300])
+            return 1
+        if got.get("status") == 400 or not got.get("brief"):
+            self.log(event="reference_failed", video_id=video_id, error=str(got.get("error") or got)[:300])
+            return 1
+        (self.project / "reference.json").write_text(json.dumps(got, ensure_ascii=False))
+        self.log(event="reference", video_id=video_id, source=got.get("source"), title=got.get("title"))
+        return 0
+
     def start(self) -> None:
         """run を開く (plan が閉じた時点)。remote は `drafts/` (視聴 URL はこの時点で出る — server の video page が追いかけ再生する)・
         local は `studio.py stream` (API の start と同じ行を作り、video の id を stream/video.json に書く)。"""
@@ -1765,6 +1953,11 @@ class Run:
         body: dict[str, object] = {"title": title, "aspect_ratio": aspect, "language": "ja"}
         if seconds.isdigit():  # `auto` (長さの指定なし) は送らない
             body["duration_s"] = int(seconds)
+        if self.editable:
+            body["editable"] = True
+        reference = self.project / "reference.json"
+        if reference.is_file():  # 参照から作る run — editable の線を参照の量まで緩める (server が参照を測る)
+            body["reference_video_id"] = json.loads(reference.read_text())["template_video_id"]
         req = urllib.request.Request(
             f"{self.remote}/v1/unstable/drafts/",
             data=json.dumps(body).encode("utf-8"),
@@ -1969,7 +2162,10 @@ class Run:
                 return "rejected" not in ack
 
             if "rejected" in ack and defects:
-                self.last_resort(c, [x for x in self.order if x in self.submitted] + [c], "intake", accepted)
+                # 投入検査の defects (直し 1 回の後の最新) を直接渡す — check の defects.json に出ない規則 (editable は check で
+                # warn) も救済路に乗る
+                latest = [str(d) for d in ack.get("defects", [])] or defects
+                self.last_resort(c, [x for x in self.order if x in self.submitted] + [c], "intake", accepted, latest)
             if "rejected" in ack:
                 self.mark_broken(c, "rejected: " + str(ack["rejected"])[:160])
                 self.log(cut=c, event="intake_rejected", s=round(time.time() - t, 1), reason=str(ack["rejected"])[:300])
@@ -2086,7 +2282,13 @@ def main(argv: list[str]) -> int:
         look=look,
         remote=remote,
         token=token,
+        editable="--editable" in argv,
     )
+    if (
+        "--fetch-ref" in argv
+    ):  # 参照の動画の src を project/reference.json に (stream_make.sh が著者の起動前に 1 回呼ぶ)
+        (project / "stream").mkdir(parents=True, exist_ok=True)
+        return run.fetch_reference(argv[argv.index("--fetch-ref") + 1])
     launch = project / "stream/author.jsonl"
     if launch.exists():
         for l in launch.read_text().splitlines():
