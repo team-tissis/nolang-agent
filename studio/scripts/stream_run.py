@@ -317,6 +317,10 @@ class WarmState:
     ok: bool = False  # 頼みが投入と同じ検査を通った
 
 
+class FixerUnavailable(Exception):
+    """直し役が返らない・process が落ちた — 呼び直しても同じなので、直す前の版で続ける (出力が使えないだけなら呼び直す)。"""
+
+
 class Rejected(Exception):
     """受け口が止めた頼み (HTTP の 400 と同じ中身)。defects = 投入検査の DEFECT の行 (無ければ error の文)。"""
 
@@ -1082,7 +1086,8 @@ class Run:
             temporary.replace(self.st / "engine.failed")
 
     def run_fixer(self, c: str, ff: Path, *, review: bool = False, shots: list[Path] | None = None) -> tuple[bool, str]:
-        """直し役 (claude -p) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。根の持ち主の cut なら根の 2 file も
+        """直し役 (claude -p) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。通らない = 出力が使えない (読めない・
+        cut を分けた) — 呼び直せば通り得る。返らない・process が落ちた時は FixerUnavailable。根の持ち主の cut なら根の 2 file も
         直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。review = 見直し (effort は --review)・shots = 見直しに見せる静止画。"""
         self.write_defs_before(c)
         src = self.solo / f"cut_{c}.txt"
@@ -1110,7 +1115,7 @@ class Run:
                 # 直し役が返らない (codex の turn が止まる等) — 待ち続けると後の cut の投入が止まり、server の待ちの上限 (180 秒) で
                 # 動画ごと落ちる。直す前の版で続ける
                 self.log(cut=c, event="fix_timeout", s=FIX_TIMEOUT_S, review=review)
-                return False, f"timeout {FIX_TIMEOUT_S}s"
+                raise FixerUnavailable(f"timeout {FIX_TIMEOUT_S}s") from None
             if (
                 os.environ.get("NOLANG_STUDIO_ENGINE") != "codex"
                 and r.returncode != 0
@@ -1132,7 +1137,9 @@ class Run:
                 src.write_text(r.stdout)
             self.restore_defs(c, latest if "---timeline---" in latest else before, who="fixer")
             return True, r.stdout
-        return False, (r.stdout + r.stderr)[-200:]
+        if r.returncode != 0:
+            raise FixerUnavailable((r.stdout + r.stderr)[-200:])
+        return False, r.stdout[-200:]
 
     def stage(self, i: int, c: str) -> None:
         """cut c が出たら doc (根 + live な cut 0..i) を組んで check → 直し (2 回まで) → staged (ready)。段の thread が死んでも旗は
@@ -1314,10 +1321,16 @@ class Run:
                 for f in mine
                 if f.get("severity") in ("severe", "warn")
             }
-            ok, tail = self.run_fixer(c, ff, review=review, shots=shots)
+            try:
+                ok, tail = self.run_fixer(c, ff, review=review, shots=shots)
+            except FixerUnavailable as error:
+                self.log(cut=c, event="fix_failed", round=rnd, s=round(time.time() - t, 1), tail=str(error))
+                if defects and not self.rescue_stage(i, c, rnd, defects):
+                    self.mark_broken(c, "fix call failed")
+                break
+            if not review:
+                fix_calls += 1
             if ok:
-                if not review:
-                    fix_calls += 1
                 self.log(
                     cut=c,
                     event="fix",
@@ -1333,10 +1346,9 @@ class Run:
                     before_fix = None
                     self.log(cut=c, event="fix_same_edits", round=rnd)
             else:
-                self.log(cut=c, event="fix_failed", round=rnd, s=round(time.time() - t, 1), tail=tail)
-                if defects and not self.rescue_stage(i, c, rnd, defects):
-                    self.mark_broken(c, "fix call failed")
-                break
+                # 出力が使えなかった (読めない・cut を分けた) — 直しの回数が残っていれば呼び直す (尽きれば次の round で最後の手段)
+                self.log(cut=c, event="fix_unusable", round=rnd, s=round(time.time() - t, 1), tail=tail)
+                before_fix = None
         self.drop_unshown(c, i, last)
 
     def drop_unshown(self, c: str, i: int, last: tuple[str, list[dict[str, object]]] | None) -> None:
@@ -2162,7 +2174,10 @@ class Run:
                     "投入検査 (流した前の cut + この cut) の DEFECT。前の cut はもう流れていて変えられない — 前の cut の定義の形"
                     " (参考の定義) に合わせてこの cut を直す:\n" + "\n".join(defects[:40])
                 )
-                ok, tail = self.run_fixer(c, ff)
+                try:
+                    ok, tail = self.run_fixer(c, ff)
+                except FixerUnavailable as error:
+                    ok, tail = False, str(error)
                 self.log(
                     cut=c,
                     event="fix" if ok else "fix_failed",
