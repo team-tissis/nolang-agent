@@ -668,7 +668,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low] [--engine claude|codex]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -697,8 +697,10 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.effort) args.push("--effort", flags.effort);
-  if (flags["no-staff"]) args.push("--no-staff");
-  else if (flags.staff) args.push("--staff", flags.staff);
+  // 既定は担当なし (速さ優先) — 担当で仕上げたい時だけ --staff medium|low で opt-in する (--no-staff は既定と同じで受けるだけ)
+  if (flags.staff && !flags["no-staff"]) args.push("--staff", flags.staff);
+  else args.push("--no-staff");
+  if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
   args.push("--remote", api, "--token", token);
   // macOS の bash は UTF-8 の locale で `$VAR・` の全角文字を変数名に含めて読む — bash は C・python は UTF-8 で動かす
@@ -708,7 +710,7 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags["no-staff"] ? "なし" : flags.staff || "medium"}・著者 ${flags.effort || "low"}) — 再生できるまで待つ (1〜3 分)`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags.staff && !flags["no-staff"] ? flags.staff : "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}) — 再生できるまで待つ (1〜3 分)`);
   const startedAt = Date.now();
   const deadline = startedAt + Number(flags.timeout || 420) * 1000;
   let watch = null;
@@ -979,8 +981,9 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--effort low] [--engine claude|codex]
+        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
+                                        --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
   nolang start [dir] --title "…" [--seconds N]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
@@ -1017,6 +1020,7 @@ const OPTIONS = {
   effort: { type: "string" },
   staff: { type: "string" },
   "no-staff": { type: "boolean" },
+  editable: { type: "boolean" },
   samples: { type: "string" },
   mine: { type: "boolean" },
   limit: { type: "string" },

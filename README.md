@@ -26,7 +26,7 @@ Claude Code に「〇〇の動画を作って」と頼むと、NoLang が台本�
 - GitHub の `team-tissis` の repo を読めること (プラグインはこの repo から入る)。
 - **Claude Code** (ログイン済み)・**Node.js 20 以上**・**python3** (macOS 標準の 3.9 で動く)。
   台本は手元の Claude Code (`claude -p`・Opus) が書くので、Claude の利用量を使います (1 本で API 換算 約 1〜3 ドル)。
-- Codex では `nolang make ... --engine codex` で著者・担当・修正役を Codex が自動実行します (codex-cli 0.162.0 で検証)。Claude のインストールは不要です。Codex のローカル認証 (`auth.json`) と NoLang のログインが必要です。リンクはエージェントが返し、Claude Code の hook 通知は使いません。
+- Codex では `nolang make ... --engine codex` で著者・修正役 (と `--staff` の担当) を Codex が自動実行します (codex-cli 0.162.0 で検証)。Claude のインストールは不要です。Codex のローカル認証 (`auth.json`) と NoLang のログインが必要です。リンクはエージェントが返し、Claude Code の hook 通知は使いません。
 
 ### 1. 入れる (1 回だけ・端末で)
 
@@ -160,8 +160,9 @@ Host ubik-nolang
 nolang auth login [--background | --no-browser] | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
 nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
-nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low] [--no-staff] [--engine claude|codex]
+nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--engine claude|codex]
                                       NoLang の studio と同じ段取りで作る (engine 未指定は従来どおり Claude、codex は全役割を Codex)。再生できたら URL を返す (スキルの標準)
+                                      --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
 nolang check [dir]                    dir の design.txt / timeline.txt を検査
 nolang start [dir] --title "…" [--seconds N]   cut ごとに流す: 開始だけ (dir に stream.json)
 nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
@@ -181,7 +182,7 @@ nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画
 
 ### studio の実行エンジン
 
-`nolang make ... --engine codex` は、手元の `codex app-server` を著者・担当・修正役の各呼出しで起動し、本文を受け取ったカットから検査・投入します。既定の Claude のモデル・effort・プロンプト・キャッシュ予熱は変わりません。
+`nolang make ... --engine codex` は、手元の `codex app-server` を著者・修正役 (と `--staff` の担当) の各呼出しで起動し、本文を受け取ったカットから検査・投入します。既定の Claude のモデル・effort・プロンプト・キャッシュ予熱は変わりません。
 
 Codex は元の `CODEX_HOME` (既定 `~/.codex`) の `auth.json` のみを共有し、ユーザーの設定・hook・plugin・MCP・会話履歴を読み込まない一時環境で動きます。モデルはその Codex CLI の既定を使い、使用モデルと effort を `stream/author.jsonl` に記録します。API key の環境変数だけの認証や keyring だけの認証は現在対象外です。Codex の本文・usage イベントは `stream/codex_*.jsonl`、エラーは `.err` に残ります。途中失敗は投入側へ伝えて中断し、Claude に自動で切り替えません。
 

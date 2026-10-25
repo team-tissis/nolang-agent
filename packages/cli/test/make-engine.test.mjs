@@ -49,11 +49,18 @@ test("Codex は Claude なしで起動し、engine を studio に明示する", 
   assert.equal(args[args.indexOf("--engine") + 1], "codex");
 });
 
-test("既定の Claude は従来の studio 引数と effort の既定を維持する", async (t) => {
+test("既定の Claude は担当なしが既定で、effort の既定を維持する", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明"], { env });
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "60", "--request-text", "短い説明", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "60", "--request-text", "短い説明", "--no-staff", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+});
+
+test("--staff は担当を opt-in し、--editable を studio へ渡す", async (t) => {
+  const { project, env } = await fixture(t, { claude: true, codex: true });
+  await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--staff", "medium", "--editable"], { env });
+  const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "60", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("Codex があっても engine 未指定なら Claude の不足を報告する", async (t) => {
