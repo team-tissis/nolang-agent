@@ -12,12 +12,12 @@ bgm music
 
 *** parts
 # TODO 役割 = 定義と構造 — 見出し行は頭・要素 3 つを板ごと語で 1 枚ずつ (印は要素の語の前)
-@narrator: [silence:+0.4s][>#pa[1]]手元の手段から始めること、[>#pa[2]]許容できる損失で動くこと、[>#pa[3]]偶然を味方にすることです。
+@narrator: [silence:+0.4s][>#cards.pa[1]]手元の手段から始めること、[>#cards.pa[2]]許容できる損失で動くこと、[>#cards.pa[3]]偶然を味方にすることです。
 @| [>#pa_h]共通するのは、手元から始めることです。
 
 *** flow
 # TODO 役割 = 流れ — 札の並びは頭・札は語で (印は手順の語の前)
-@narrator: [silence:+0.4s][>#fl[1]]まず持っている物を数え、[>#fl[2]]小さく試してみて、[>#fl[3]]反応を見て学び、[>#fl[4]]次の一歩を決めます。
+@narrator: [silence:+0.4s][>#flow.fl[1]]まず持っている物を数え、[>#flow.fl[2]]小さく試してみて、[>#flow.fl[3]]反応を見て学び、[>#flow.fl[4]]次の一歩を決めます。
 
 *** example
 # TODO 役割 = 例 — 主役の絵 + 板 1 枚 (絵は頭・文は語で)・例の数字は stat で 1 つ (語で出す・3 桁以上は出ると同時に数える)
@@ -33,5 +33,5 @@ bgm music2 -1500
 
 *** close
 # TODO 役割 = 締め — まとめ札は 3 つまで大きく + 次の一歩 1 つ・絵は新しい 1 枚 (冒頭の使い回しにしない)・末尾は書かなければ 3 秒残る (fade out は頼まれた時だけ)
-@narrator: [silence:+0.4s][>#cl.i[1] check]手段、[>#cl.i[2] check]損失、[>#cl.i[3] check]偶然。
+@narrator: [silence:+0.4s][>#cl.items.i[1] check]手段、[>#cl.items.i[2] check]損失、[>#cl.items.i[3] check]偶然。
 @narrator: [>#cl.cta]明日の一歩は、手元の物を数えることから。[silence:3.0s]

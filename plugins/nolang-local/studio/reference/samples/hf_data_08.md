@@ -110,10 +110,11 @@ group#hanko(left: 1692px; top: 615px; width: 178px; height: 178px; transform: ro
 section#gaps(stagger: {each:0}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
 div#bg_gaps(inset: 0; background: $paper; in: none; out: none; z-index: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
-group#chart(main: ramp {scale: 0.035, window: '700,20830', pivot: '50%,45%'})
+group#chart(main: ramp {scale: 1.035, window: '700,20830', pivot: '50%,45%'})
 shape#chart.head_bar(left: 130px; top: 136px; width: 12px; height: 60px; path: rect; background: $orange; delay: 350; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
 p#chart.head(left: 171px; top: 134px; font-size: 54px; color: $navy; line-height: 1.1; delay: 350; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'}) 窓口で受付できる時間帯
-shape#chart.grid(left: 264px; top: 330px; width: 1452px; height: 330px; gap: 0; path: line_v; border: 3px solid #1F3A5F29; dash: 4,4; in: fade {duration: 0.4, stagger: 0.03}; delay: 700; display: flex) ×11
+group#chart.grids(left: 264px; top: 330px; width: 1452px; height: 330px; display: grid; grid-template-columns: repeat(11, 1fr); gap: 0px)
+  shape#grid(width: 132px; height: 330px; path: line_v; border: 3px solid #1F3A5F29; dash: 4,4; in: fade {duration: 0.4, stagger: 0.03}; delay: 700) ×11
 p#chart.label_before(left: 70px; top: 382px; width: 230px; font-size: 40px; color: $navy; text-align: right; in: {y:16, opacity:0, duration:0.4, ease:'power3.out'}; delay: 700) これまで
 p#chart.label_after(left: 70px; top: 554px; width: 230px; font-size: 40px; color: $navy; text-align: right; in: {y:16, opacity:0, duration:0.4, ease:'power3.out'}) 変更後
 div#chart.bar_before(left: 363px; top: 360px; width: 1188px; height: 100px; border-radius: 14px; background: $slate; box-shadow: 0px 10px 24px #142A4724; in: {scaleX:0, duration:0.8, ease:'power3.inOut', pivot:'left'}; delay: 800)
@@ -131,7 +132,8 @@ div#chart.gap_pm(left: 1386px; top: 330px; width: 165px; height: 330px; border-r
 p#chart.balloon_am(cx: 412px; top: 246px; font-size: 38px; line-height: 1; color: $red; background: #FFFFFF; border: 3px solid $red; border-radius: 14px; padding: 10px 20px 9px 20px; pointer: below; in: {y:16, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 45分 遅く
 p#chart.balloon_pm(cx: 1468px; top: 246px; font-size: 38px; line-height: 1; color: $red; background: #FFFFFF; border: 3px solid $red; border-radius: 14px; padding: 10px 20px 9px 20px; pointer: below; in: {y:16, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 1時間15分 早く
 shape#chart.axis(left: 330px; top: 680px; width: 1320px; height: 4px; path: rect,r=0.5; background: $navy; in: {scaleX:0, duration:0.7, ease:'power2.inOut', pivot:'left'}; delay: 450)
-p#chart.tick(left: 264px; top: 696px; width: 1452px; gap: 0; font-size: 30px; text-align: center; color: "$gray;$navy;$gray;$gray;$gray;$gray;$gray;$gray;$navy;$gray;$gray"; in: {y:10, opacity:0, duration:0.3, ease:'power3.out', stagger: {each: 0.04}}; delay: 600; display: flex) ×11 8時;9時;10時;11時;12時;13時;14時;15時;16時;17時;18時
+group#chart.ticks(left: 264px; top: 696px; width: 1452px; height: 39px; display: grid; grid-template-columns: repeat(11, 1fr); gap: 0px)
+  p#tick(font-size: 30px; text-align: center; color: "$gray;$navy;$gray;$gray;$gray;$gray;$gray;$gray;$navy;$gray;$gray"; in: {y:10, opacity:0, duration:0.3, ease:'power3.out', stagger: {each: 0.04}}; delay: 600) ×11 8時;9時;10時;11時;12時;13時;14時;15時;16時;17時;18時
 div#chart.caution(left: 258px; top: 789px; width: 1404px; height: 112px; border-radius: 22px; background: $red_t; border: 4px solid $red; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'})
   icon#sign(left: 30px; cy: 50%; font-size: 64px; name: warning; weight: fill; color: $red)
   p#t(left: 120px; cy: 50%; font-size: 44px; color: $ink; nowrap: true) {r}8:15〜9:00{/} と {r}16:00〜17:15{/} は、窓口で手続きできません
@@ -207,7 +209,7 @@ se fuwan -4dB +950
 
 # change — 「8時15分」「17時15分」で前の時刻が光る・「変更後は」の前に板を入れ替え「9時」「16時」で新しい時刻・判子
 *** change
-@n: [silence:450]これまで{ |、}窓口は、[|][!#before.t{open} recolor,$orange,duration=250,back=400 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250,back=400 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} +600]17時15分まで、開いていました。
+@n: [silence:450]これまで{ |、}窓口は、[|][!#before.t{open} recolor,$orange,duration=250 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} duration=400 +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} duration=400 +600]17時15分まで、開いていました。
 subtitle "変更後は 9時から16時までとなります"
 @: [silence:850][!#before to,{x:-470, scale:0.92, duration:0.75, ease:'power3.inOut'} -450][♪swish -4dB -470][>#after -150][>#arrow_line][>#arrow_head +250][!#before to,{x:-470, scale:0.92, opacity:0.72, duration:0.4} +50]変更後は、[!#after.dial.mh to,{rotation:360, duration:0.9, ease:'power2.inOut'} -500][!#after.dial.hh to,{rotation:270, duration:0.9, ease:'power2.inOut'} -500][>#after.open -120][♪sparkle -3dB -80][>#after.sep +200]9時から、[>#after.close -120][>#hanko +450][♪stamp +2dB +650][!#after to,{y:8, duration:0.06, ease:'power1.out'} +670][!#hanko to,{y:8, duration:0.06, ease:'power1.out'} +670][!#after to,{y:0, duration:0.25, ease:'power2.out'} +730][!#hanko to,{y:0, duration:0.25, ease:'power2.out'} +730]16時までとなります。[silence:700]
 

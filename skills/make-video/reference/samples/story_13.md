@@ -62,9 +62,10 @@ section#rage
 img#rg_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 40%'}) [ref:@ogai]ガタガタ揺れる客車の中で鼻をつまみ顔を真っ赤にして怒る文豪の男性、帽子がずり落ちる、誇張された表情、車内が傾く、窓の外に馬の尻
 veil#rg_v(color: #2A1E17; opacity: 0.5; to: top; start: 0.45)
 tel#rg_t(left: 72px; top: 180px) 臭いと揺れが{a}最悪{/}
-div#rg_k(left: 72px; top: 1170px; width: 936px; height: 300px; gap: 24; in: rise {y: 45, duration: 0.45, stagger: 0.15}; display: flex) ×2
-  icon#i(cx: 50%; cy: 34%; font-size: 108px; name: "wind;wave-sine"; color: "$b;$a")
-  p#t(cx: 50%; cy: 76%; font-size: 51px; color: $ink) 馬の臭い;大揺れ
+group#rg_row(left: 72px; top: 1170px; width: 936px; height: 300px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px)
+  div#rg_k(in: rise {y: 45, duration: 0.45, stagger: 0.15}) ×2
+    icon#i(cx: 50%; cy: 34%; font-size: 108px; name: "wind;wave-sine"; color: "$b;$a")
+    p#t(cx: 50%; cy: 76%; font-size: 51px; color: $ink) 馬の臭い;大揺れ
 tag#rg_s(left: 645px; top: 450px; font-size: 72px) 激怒
 
 section#slow
@@ -129,9 +130,9 @@ se "古い木造の客車が軋む音" -8dB to=5s fade=300,1200
 
 *** rage
 se "ガタガタと激しく揺れる木の車輪の音" -8dB to=7s fade=200,1500
-@narrator: [silence:+0.3s]ところが車内は、[>#rg_k[1]]馬の臭いと、[>#rg_k[2]]ガタガタの[!#rg_p shake][!#rg_v shake][!#rg_k[1] shake][!#rg_k[2] shake]大揺れ。
+@narrator: [silence:+0.3s]ところが車内は、[>#rg_row.rg_k[1]]馬の臭いと、[>#rg_row.rg_k[2]]ガタガタの[!#rg_p shake][!#rg_v shake][!#rg_row.rg_k[1] shake][!#rg_row.rg_k[2] shake]大揺れ。
 @ogai: [>#rg_t]臭いと揺れが、[!#rg_t{a} recolor,$a][>#rg_s][♪"打撃　パンチ03-1(ドライ)"]最悪だ!
-@narrator: [!#rg_k[*] tint,$a]文豪、大激怒です。
+@narrator: [!#rg_row.rg_k[*] tint,$a]文豪、大激怒です。
 
 *** slow
 se "のどかな山道の環境音、遠くの鳥" -8dB to=8s fade=300,1500

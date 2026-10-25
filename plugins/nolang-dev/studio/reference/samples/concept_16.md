@@ -48,16 +48,18 @@ p#hk_q(left: 60px; top: 1290px; font-size: 69px; color: $paper; background: $a; 
 section#map
 img#mp_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.6,#2A1A14) [photo]夜の街に赤い提灯が灯る麻辣湯の店先、店の前に並ぶ若者たち、ぼけた背景
 p#mp_h(left: 60px; top: 120px; font-size: 78px; color: $paper; text-shadow: 0px 3px 12px #00000080) この動画でわかること
-div#mp_l(left: 60px; top: 285px; width: 960px; height: 840px; gap: 16; box-shadow: 6px 6px 0px $ink; display: flex; flex-direction: column) ×5
-  p#n(left: 33px; cy: 50%; font-size: 48px; font-family: e; color: $a) 01;02;03;04;05
-  p#t(left: 150px; cy: 50%; font-size: 54px; color: $ink) 中身;ルーツ;流行の理由;体への影響;具材の選び方
+group#mp_col(left: 60px; top: 285px; width: 960px; height: 840px; display: flex; flex-direction: column; gap: 16px; out: fade {duration: .2})
+  div#mp_l(flex: 1; in: div; box-shadow: 6px 6px 0px $ink) ×5
+    p#n(left: 33px; cy: 50%; font-size: 48px; font-family: e; color: $a) 01;02;03;04;05
+    p#t(left: 150px; cy: 50%; font-size: 54px; color: $ink) 中身;ルーツ;流行の理由;体への影響;具材の選び方
 
 section#parts
 img#pt_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]ステンレスのトレーにずらりと並んだ麻辣湯の具材、青菜、きのこ、豆腐、春雨、肉団子、明るい店内
 head#pt_h(n: "01 構成要素"; t: "麻辣湯は4つでできる")
-div#pt_c(left: 60px; top: 375px; width: 960px; height: 900px; gap: 20; display: grid) ×4
-  icon#i(cx: 50%; cy: 36%; font-size: 144px; name: "cooking-pot;pepper;carrot;bowl-food"; color: "$a;$a;$b;$b")
-  p#t(cx: 50%; cy: 74%; font-size: 57px; color: $ink) スープ;麻辣タレ;具材;麺
+group#pt_grid(left: 60px; top: 375px; width: 960px; height: 900px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px)
+  div#pt_c(in: div) ×4
+    icon#i(cx: 50%; cy: 36%; font-size: 144px; name: "cooking-pot;pepper;carrot;bowl-food"; color: "$a;$a;$b;$b")
+    p#t(cx: 50%; cy: 74%; font-size: 57px; color: $ink) スープ;麻辣タレ;具材;麺
 
 section#soup
 img#sp_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}; scrim: 0.3) [photo]大きな寸胴鍋で白く濁った豚骨と鶏ガラのスープがぐつぐつ煮立つ、立ちのぼる湯気、中華の厨房
@@ -85,9 +87,10 @@ section#spice
 img#sc_p(inset: 0; main: kb {scale: [1, 1.1], focus: ['50% 50%', '']}; scrim: 0.35) [photo]中華鍋の熱い油で八角、クローブ、シナモンスティック、草果、唐辛子を炒める、立ちのぼる香りの煙
 head#sc_h(n: "01 薬膳・香辛料"; t: "香りの決め手")
 p#sc_s(left: 570px; top: 705px; font-size: 54px; color: $paper; background: $a; border-radius: 18px; padding: 12px 30px; border: 4px solid $ink; box-shadow: 8px 8px 0px $ink; in: pop; transform: rotate(-4deg)) 数十種類！
-div#sc_c(left: 60px; top: 900px; width: 960px; height: 570px; gap: 16; box-shadow: 6px 6px 0px $ink; display: grid) ×4
-  p#t(cx: 50%; cy: 38%; font-size: 66px; color: $ink) 八角;丁香;桂皮;草果
-  p#s(cx: 50%; cy: 74%; font-size: 36px; color: $mute) スターアニス;クローブ;シナモン;ソウカ
+group#sc_grid(left: 60px; top: 900px; width: 960px; height: 570px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px)
+  div#sc_c(in: div; box-shadow: 6px 6px 0px $ink) ×4
+    p#t(cx: 50%; cy: 38%; font-size: 66px; color: $ink) 八角;丁香;桂皮;草果
+    p#s(cx: 50%; cy: 74%; font-size: 36px; color: $mute) スターアニス;クローブ;シナモン;ソウカ
 
 section#roots
 img#rt_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]中国四川省の夜の屋台、串に刺した具材を赤いスープの大鍋で煮る、湯気と裸電球、庶民的な雰囲気
@@ -107,7 +110,8 @@ div#rt_c(left: 60px; top: 1137px; width: 960px; height: 255px)
 section#trend
 img#tr_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.4) [photo]明るい店内で真っ赤な麻辣湯の丼をスマートフォンで撮影する若い女性の手元、背景はぼけた店内
 head#tr_h(n: "03 流行の背景"; t: "ヒットの3つの理由")
-feat#tr_c(left: 54px; top: 375px; height: 990px; gap: 20; i: "camera;sliders-horizontal;heartbeat"; c: "$a;$a;$b"; d: "$rt;$rt;$gt"; t: "SNS映え;カスタマイズ性;健康・ダイエット"; s: "真っ赤な見た目;具材も辛さも自由;野菜たっぷり"; display: flex; flex-direction: column) ×3
+group#tr_col(left: 54px; top: 375px; height: 990px; display: flex; flex-direction: column; gap: 20px)
+  feat#tr_c(flex: 1; in: div; i: "camera;sliders-horizontal;heartbeat"; c: "$a;$a;$b"; d: "$rt;$rt;$gt"; t: "SNS映え;カスタマイズ性;健康・ダイエット"; s: "真っ赤な見た目;具材も辛さも自由;野菜たっぷり") ×3
 
 section#merit
 img#me_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.35) [photo]湯気の立つ赤いスープをれんげですくう手元、温かい光、木のテーブル
@@ -137,17 +141,19 @@ section#order
 img#or_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.3) [photo]青菜ときのこがたっぷり、豆腐と鶏肉、春雨が入った赤い麻辣湯の一杯を真上から、木のテーブル
 head#or_h(n: "おすすめ"; t: "注文の組み立て例")
 p#or_s(left: 570px; top: 375px; font-size: 48px; color: $ink; background: $gold; border-radius: 18px; padding: 12px 27px; border: 4px solid $ink; in: pop; transform: rotate(5deg)) 辛さは控えめから
-div#or_c(left: 60px; top: 870px; width: 960px; height: 600px; gap: 16; box-shadow: 6px 6px 0px $ink; display: flex; flex-direction: column) ×3
-  p#n(left: 36px; cy: 50%; font-size: 39px; color: $paper; background: $b; border-radius: 148px; padding: 6px 21px) 野菜;たんぱく質;麺
-  p#t(left: 315px; cy: 50%; font-size: 51px; color: $ink) 青菜ときのこたっぷり;豆腐か鶏肉を1品;春雨
+group#or_col(left: 60px; top: 870px; width: 960px; height: 600px; display: flex; flex-direction: column; gap: 16px)
+  div#or_c(flex: 1; in: div; box-shadow: 6px 6px 0px $ink) ×3
+    p#n(left: 36px; cy: 50%; font-size: 39px; color: $paper; background: $b; border-radius: 148px; padding: 6px 21px) 野菜;たんぱく質;麺
+    p#t(left: 315px; cy: 50%; font-size: 51px; color: $ink) 青菜ときのこたっぷり;豆腐か鶏肉を1品;春雨
 
 section#outro
 img#ou_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 50%', '']}; scrim: 0.25) [photo]夜の明るい麻辣湯の店で、湯気の立つ赤い丼を囲んで笑う若者たち、温かい光
 veil#ou_v(color: #2A1A14; opacity: 0.75; to: top; start: 0.6)
 p#ou_t(left: 60px; top: 165px; font-size: 96px; color: $paper; line-height: 1.25; text-shadow: 0px 3px 12px #00000080) あなただけの[br]{g}一杯{/}を組もう
 p#ou_s(left: 66px; top: 450px; font-size: 45px; color: $paper) 仕組みを知れば、もっとおいしい
-div#ou_c(left: 60px; top: 1245px; width: 960px; height: 180px; gap: 14; box-shadow: 6px 6px 0px $ink; display: flex) ×3
-  p#t(cx: 50%; cy: 50%; font-size: 45px; color: $ink) 薬膳スープ;自由に組む;スープは残す
+group#ou_row(left: 60px; top: 1245px; width: 960px; height: 180px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px)
+  div#ou_c(in: div; box-shadow: 6px 6px 0px $ink) ×3
+    p#t(cx: 50%; cy: 50%; font-size: 45px; color: $ink) 薬膳スープ;自由に組む;スープは残す
 ```
 
 ```timeline.txt
@@ -165,12 +171,12 @@ se "鍋のスープがぐつぐつ煮立つ音" -8dB to=10s fade=300,1500
 
 *** map
 se "夜の繁華街のにぎやかなざわめき" -8dB to=9s fade=300,1500
-@narrator: [silence:+0.3s]この動画では、[>#mp_l[1]]中身、[>#mp_l[2]]ルーツ、[>#mp_l[3]]流行の理由、[>#mp_l[4]]体への影響、[>#mp_l[5]]そして具材の選び方まで、まるごと解説します。
+@narrator: [silence:+0.3s]この動画では、[>#mp_col.mp_l[1]]中身、[>#mp_col.mp_l[2]]ルーツ、[>#mp_col.mp_l[3]]流行の理由、[>#mp_col.mp_l[4]]体への影響、[>#mp_col.mp_l[5]]そして具材の選び方まで、まるごと解説します。
 transition wipe,600,dir=right,overlap=600
 
 *** parts
-@narrator: [silence:+0.3s]麻辣湯のベースは、[>#pt_c[1]]スープ、[>#pt_c[2]]麻辣タレ、[>#pt_c[3]]具材、[>#pt_c[4]]麺の、
-@: [!#pt_c[*] punch]4つの要素で成り立っています。
+@narrator: [silence:+0.3s]麻辣湯のベースは、[>#pt_grid.pt_c[1]]スープ、[>#pt_grid.pt_c[2]]麻辣タレ、[>#pt_grid.pt_c[3]]具材、[>#pt_grid.pt_c[4]]麺の、
+@: [!#pt_grid.pt_c[*] punch]4つの要素で成り立っています。
 
 *** soup
 se "大きな寸胴鍋がぐつぐつ煮える音" -8dB to=9s fade=300,1500
@@ -184,7 +190,7 @@ se "大きな寸胴鍋がぐつぐつ煮える音" -8dB to=9s fade=300,1500
 
 *** spice
 se "中華鍋で油とスパイスをジュージュー炒める音" -8dB to=10s fade=300,1500
-@narrator: [silence:+0.3s]さらに[>#sc_c[1]]八角、[>#sc_c[2]]丁香、[>#sc_c[3]]桂皮、[>#sc_c[4]]草果など、
+@narrator: [silence:+0.3s]さらに[>#sc_grid.sc_c[1]]八角、[>#sc_grid.sc_c[2]]丁香、[>#sc_grid.sc_c[3]]桂皮、[>#sc_grid.sc_c[4]]草果など、
 @: [>#sc_s]数十種類の生薬やスパイスを油で炒めて、香りを引き出します。
 transition wipe,600,dir=right,overlap=600
 
@@ -200,9 +206,9 @@ transition wipe,600,dir=right,overlap=600
 *** trend
 bgm music2 -1500
 @narrator: [silence:+0.3s]流行の理由は3つ。
-@: [>#tr_c[1]][♪"カメラのシャッター音" -2dB]真っ赤な見た目が[!#tr_c[1] check]SNS映えすること。
-@: [>#tr_c[2]]具材も辛さも[!#tr_c[2] check]自分好みにカスタマイズできること。
-@: [>#tr_c[3]]そして野菜たっぷりで、[!#tr_c[3] check]健康・ダイエット需要に合うことです。
+@: [>#tr_col.tr_c[1]][♪"カメラのシャッター音" -2dB]真っ赤な見た目が[!#tr_col.tr_c[1] check]SNS映えすること。
+@: [>#tr_col.tr_c[2]]具材も辛さも[!#tr_col.tr_c[2] check]自分好みにカスタマイズできること。
+@: [>#tr_col.tr_c[3]]そして野菜たっぷりで、[!#tr_col.tr_c[3] check]健康・ダイエット需要に合うことです。
 transition wipe,600,dir=right,overlap=600
 
 *** merit
@@ -223,12 +229,12 @@ se "店内のにぎやかな環境音、トングが触れる音" -8dB to=14s fa
 @: [>#ch_t]トッピング形式なら、[>#ch_t.ok][!#ch_t.ok recolor,$b +500]たんぱく質を一品足すのが賢い選び方。
 
 *** order
-@narrator: [silence:+0.3s]おすすめは、[>#or_c[1]]青菜ときのこをたっぷり、[>#or_c[2]]豆腐か鶏肉を一品、[>#or_c[3]]麺は春雨。
+@narrator: [silence:+0.3s]おすすめは、[>#or_col.or_c[1]]青菜ときのこをたっぷり、[>#or_col.or_c[2]]豆腐か鶏肉を一品、[>#or_col.or_c[3]]麺は春雨。
 @: [>#or_s]辛さは控えめから試してみてください。
 transition dissolve,300,overlap=300
 
 *** outro
 se "にぎやかな店内の笑い声と食器の音" -9dB to=10s fade=300,2000
 @narrator: [silence:+0.3s][>#ou_t]仕組みを知れば、[>#ou_s +600]麻辣湯はもっと楽しくなります。
-@: [>#ou_c[*] {stagger:{each:0.15}}]あなただけの一杯を、組んでみてください。[silence:2.0s]
+@: [>#ou_row.ou_c[*] {stagger:{each:0.15}}]あなただけの一杯を、組んでみてください。[silence:2.0s]
 ```

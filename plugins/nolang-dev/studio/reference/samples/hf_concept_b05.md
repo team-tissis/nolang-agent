@@ -125,7 +125,7 @@ img#s_bh(left: 276px; top: 746px; width: 528px; height: 528px; content: @bh_disc
 shape#s_orbit(left: 140px; top: 870px; width: 800px; height: 280px; border-radius: 50%; background: none; border: 4px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
 #s_orbit.bold(border: 8px solid #BFF0FFE6)
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
-group#s_tr(left: 0px; top: 0px; stack: z; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
+group#s_tr(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
   group#ty(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: '0.010;0.983;0.956;0.929;0.902;0.875;0.848'})
     shape#d(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; border-radius: 50%; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)

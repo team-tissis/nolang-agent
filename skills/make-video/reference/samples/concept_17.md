@@ -45,8 +45,8 @@ section#ing
 img#ig_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) [photo]木のテーブルの上に並べたパスタの材料を真上から、乾麺のスパゲッティ、しめじ、えのき、バター、醤油の小瓶、にんにく、刻みのり、青ねぎ
 veil#ig_v(color: #2B2118; opacity: 0.35)
 p#ig_h(left: 60px; top: 96px; font-size: 60px; color: $paper; background: $a; border-radius: 148px; padding: 12px 36px; border: 4px solid $ink; in: pop) 材料（2人分）
-div#ig_c(left: 60px; top: 225px; width: 960px; height: 1290px)
-p#ig_i(left: 108px; top: 270px; width: 864px; height: 1200px; overlap: ig_c; gap: 14; font-size: 54px; color: $ink; in: {x:-36, opacity:0, duration:0.4, ease:'power3.out'}; display: flex; flex-direction: column) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
+div#ig_c(left: 60px; top: 225px; width: 960px; height: 1290px; padding: 45px 48px; display: flex; flex-direction: column; gap: 102px)
+  p#ig_i(font-size: 54px; color: $ink; in: {x:-36, opacity:0, duration:0.4, ease:'power3.out'}; out: fade {duration: .3}) ×7 スパゲッティ　200g;しめじ　1パック;えのき　1/2袋;バター　20g;醤油　大さじ1.5;にんにく　1片;刻みのり・青ねぎ　適量
 
 section#s1
 img#s1_p(inset: 0; main: kb {scale: [1, 1.07], focus: ['50% 35%', '50% 30%']}) [photo]大きな鍋で沸騰した湯の中にスパゲッティを放射状に入れる手元、湯気、ガスの火
@@ -120,9 +120,9 @@ se "キッチンで湯気が立つ静かな環境音、食器が軽く触れる�
 transition dissolve,300,overlap=300
 
 *** ing
-@narrator: [silence:+0.3s][>#ig_h]材料はこちら。[>#ig_i[1]]スパゲッティ200グラム、[>#ig_i[2]]しめじ1パック、[>#ig_i[3]]えのき半袋。
-@: [>#ig_i[4]]バター20グラム、[>#ig_i[5]]醤油[!#ig_i[5] recolor,$a]大さじ1.5、[>#ig_i[6]]にんにく1片。
-@: 仕上げに、刻みのりと青ねぎを[>#ig_i[7]]適量です。
+@narrator: [silence:+0.3s][>#ig_h]材料はこちら。[>#ig_c.ig_i[1]]スパゲッティ200グラム、[>#ig_c.ig_i[2]]しめじ1パック、[>#ig_c.ig_i[3]]えのき半袋。
+@: [>#ig_c.ig_i[4]]バター20グラム、[>#ig_c.ig_i[5]]醤油[!#ig_c.ig_i[5] recolor,$a]大さじ1.5、[>#ig_c.ig_i[6]]にんにく1片。
+@: 仕上げに、刻みのりと青ねぎを[>#ig_c.ig_i[7]]適量です。
 
 *** s1
 se "大きな鍋でお湯がぐつぐつ沸騰する音" -8dB to=6s fade=300,1500

@@ -60,7 +60,7 @@ def shade_b() = div(left: 0px; top: 1160px; width: 1080px; height: 760px; backgr
 def shade_t() = div(left: 0px; top: 0px; width: 1080px; height: 640px; background: linear(#060807B8,#06080759@50%,#06080700,bottom); border-radius: 24px; in: none)
 # 消えた理由の札: 写真 (ゆっくり寄る・左からの暗幕 scrim) + 金の番号 + 太いゴシックの題。右から滑り込む
 def card(n, t, pic) = div(left: 70px; width: 940px; height: 290px; border-radius: 18px; background: $dark; border: 2px solid #FFFFFF1F; box-shadow: 0px 18px 40px #00000080; in: {x:140, opacity:0, duration:0.5, ease:'power3.out'})
-  img#ph(inset: 0; content: {pic}; filter: saturate(0.85) brightness(1.18) contrast(1.05); scrim: left,0.86; main: kb {scale: [1, 1.12]})
+  img#ph(inset: 0; content: {pic}; filter: saturate(0.85) contrast(1.05) brightness(1.18); scrim: left,0.86; main: kb {scale: [1, 1.12]})
   p#num(left: 40px; top: 30px; font-size: 92px; font-family: mb; color: $gold; line-height: 1; palt: off; content: {n})
   p#lab(left: 44px; bottom: 40px; font-size: 52px; font-family: gh; letter-spacing: 0.04em; white-space: nowrap; content: {t})
 # 全編の質感: 周辺減光 (中央 55% は素通し) + grain (最前面)

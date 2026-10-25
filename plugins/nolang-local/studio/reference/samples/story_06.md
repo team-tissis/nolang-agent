@@ -68,9 +68,10 @@ img#cz_p(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 60%', '']}) コン�
 veil#cz_v(color: #F4EEE2; opacity: 0.9; to: top; start: 0.55)
 kick#cz_k(left: 72px; top: 132px) WHY THEY VANISHED
 rule#cz_r(left: 72px; top: 192px)
-div#cz(left: 72px; top: 240px; width: 660px; height: 516px; gap: 12; background: #F4EEE2F0; border-radius: 12px; box-shadow: 0px 6px 18px #2A262233; in: {x:-45, opacity:0, duration:0.5, ease:'power3.out'}; display: flex; flex-direction: column) ×4
-  p#n(left: 30px; cy: 50%; font-size: 39px; font-family: e; color: $b) 01;02;03;04
-  p#t(left: 108px; cy: 50%; font-size: 48px; font-family: s; color: $ink) 毛皮をとるために;川の開発;水の汚れ;餌の魚が減る
+group#cz_col(left: 72px; top: 240px; width: 660px; height: 516px; display: flex; flex-direction: column; gap: 12px)
+  div#cz(flex: 1; width: 660px; background: #F4EEE2F0; border-radius: 12px; box-shadow: 0px 6px 18px #2A262233; in: {x:-45, opacity:0, duration:0.5, ease:'power3.out'}) ×4
+    p#n(left: 30px; cy: 50%; font-size: 39px; font-family: e; color: $b) 01;02;03;04
+    p#t(left: 108px; cy: 50%; font-size: 48px; font-family: s; color: $ink) 毛皮をとるために;川の開発;水の汚れ;餌の魚が減る
 
 section#last
 img#ls_p(inset: 0; main: kb {scale: [1, 1.05], focus: '50% 45%'}) 夕暮れの高知の山あいの清流、青い山並みと赤く染まる空、静かな淵、誰もいない
@@ -123,9 +124,9 @@ transition wipe,600,dir=left
 
 *** causes
 se "遠くの工事現場の重機の低い音" -10dB to=9s fade=300,1500
-@n: [silence:+0.3s][>#cz[1]]毛皮をとるために捕まえられ、
-@: [>#cz[2]]川は開発され、
-@: [>#cz[3]]水が汚れ、[>#cz[4]]餌となる魚も[!#cz_p to,{filter:'saturate(0)', duration:1.5}]減っていきました。[silence:0.6s]
+@n: [silence:+0.3s][>#cz_col.cz[1]]毛皮をとるために捕まえられ、
+@: [>#cz_col.cz[2]]川は開発され、
+@: [>#cz_col.cz[3]]水が汚れ、[>#cz_col.cz[4]]餌となる魚も[!#cz_p to,{filter:'saturate(0)', duration:1.5}]減っていきました。[silence:0.6s]
 transition dip,400
 [<#music -400]
 

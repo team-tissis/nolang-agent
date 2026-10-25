@@ -27,7 +27,8 @@ const STUDIO_FILES = [
   "tests/test_stream_engine.py",
   "tests/__init__.py",
   ...["authoring.md", "capabilities.md", "looks.md", "sounds.md", "samples", "scaffolds"].map((name) => `reference/${name}`),
-  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_rules.py", "studio_new.py"].map((name) => `scripts/${name}`),
+  // studio_rules.py は backend 1874c9ecd5 で server 側 (`GET drafts/rules/`) へ移った — stream_run は台帳を API から受ける
+  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_new.py"].map((name) => `scripts/${name}`),
 ];
 
 const args = process.argv.slice(2);

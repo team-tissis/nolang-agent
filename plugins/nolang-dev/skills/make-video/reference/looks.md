@@ -20,7 +20,7 @@
 
 組を決めたら、根に `palette` `font` `fonts` `motion` `transition` を書き、以後の cut はその差分だけ。 数字 / 強調の書体 (`fonts`) も組ごとに違える — 骨組みの値を写さない。欧文 (数字・英字) の記述なら欧文専用の書体も候補になる (和文の字は代わりの書体が描く)。切替は 1 本 1 種が基本 (章の境目だけ別の 1 種)。dissolve は 300 ms 以下 + `overlap=` 同じ尺が無難 — 窓が境界の前に掛かると退場中の文字が次の絵に重なり、400 ms を超える溶けは前の絵が残像に見える。`motion` は雛形の 5 行 (題 title・主役の語 big・箱 div・本文 row・注記 note — 締まる / 行き過ぎない) の値を気分に合わせて書き換える (弾む動きは見本 story_03 の根)。組は例で、題材に合わせて自分で作ってよい (名 → 色 2〜3 → 書体 2 → 動き → 切替 → しない事 2 つ)。前後の値は両方とも読める濃さで (前を灰で沈めるなら字は太く大きく)。
 
-## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の著者には NoLang の src 1 本 + hf の写し 1 本を同梱する (自分の type の src に依頼と同じ向きの物が無ければ hf の写し 2 本)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
+## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の 3 役には hf の写し 2 本を同梱する (`reference/stream.md`)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
 
 - `samples/story_03.md` — story・夏フェスのオタク語り (縦・構文風の一人語り)・1080x1920・44.5s・139 行・文法: count・×N・stack・manner・se・sticky・def・run・bgm 切替
 - `samples/story_06.md` — story・ニホンカワウソ (縦・台本そのまま・絵本調)・1080x1920・57.8s・145 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
@@ -46,9 +46,9 @@
 
 1. **字幕の語の印は色と地だけ** — `run m { marker: 色 }` は字幕では字の高さいっぱいの地 (比は効かない)・語の下の細い帯は字幕に敷けない (design の文字なら `[!#名{m} marker]` で伸ばせる)。
 2. **`path: "M…"` / `points:` の shape は枠 (left top width height) を持てない** (点は canvas px) → `×N` で並べられず 1 本ずつ書く (名の形 `path: zigzag` などは枠を持てる)。
-4. **箱の影は 1 本** — CSS の重ねた影 (硬い影 + 柔らかい影) は `box-shadow:` 1 本で近い方を選ぶ (`,` で重ねない)。硬い影は blur 0 (`box-shadow: 12px 12px 0 $ink`)。
+4. **箱の影は 2 本まで** — CSS と同じく `box-shadow: a, b` で重ねる (輪 + 落ち影・光彩 + 落ち影)。3 本目は近い影にまとめる。硬い影は blur 0 (`box-shadow: 12px 12px 0 $ink`)。
 5. **組み込みの部品は無い**: 人物の舞台 (箱 + 地の形 + 透過の人物 = 3〜4 行)・結論の帯 (地つき icon + 文 + tag = 3 行)・手順の札 (番号 + 文 = 3 行)・lockup (3 行) は繰り返すなら `def` に畳む (authoring.md「根の雛形」)。
-6. **icon の地は 1 行** — `icon#i(font-size: 60px; name: leaf; background: $a)` で丸い地 (`border-radius: 18px` で角丸の四角・`padding:` は既定 size の 0.3・icon の色は地と反対の ink)。地の箱は size + 2 × padding で、書いた left / top と位置の式の辺もこの箱。地は名前の icon だけ (`in: draw` の線の icon と著述の icon は `shape` を重ねる)。
+6. **icon の地は 1 行** — `icon#i(font-size: 60px; name: leaf; background: $a)` で丸い地 (`border-radius: 18px` で角丸の四角・`padding:` は既定 size の 0.3・icon の色は地と反対の ink)。地の箱は size + 2 × padding で、書いた left / top と位置の式の辺もこの箱。線の icon (Lucide の名・`in: draw`) と著述の icon の地も同じ書き方 (描き出しは線だけ・地は fade で出る)。
 7. **`run` に letter-spacing が無い** — 小見出しの字間は文字ごとに `letter-spacing:`。
 8. **`div` は素の箱** — CSS の div と同じく地・縁・影・角丸・余白を持たない (容器はそのまま書く)。板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)`・繰り返すなら `def card = div(…)` か根の `div { … }`。暗い theme の塗りの板は glass (淡い縁つき — 縁を消すなら `border: none`)。
 9. **縦書きの主文は 1 列 600 px まで** (8 字 × 76 は入らない・`height` を超えると offcanvas) — 字数か size を落とす。

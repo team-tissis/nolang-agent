@@ -51,10 +51,11 @@ section#model
 img#md_p(left: 990px; top: 0px; width: 930px; height: 1080px; main: kb {scale: [1, 1.05], focus: ['50% 50%', '50% 45%']}) [photo]30代の夫婦がリビングのソファに並んでノートパソコンで家計を確認する横顔、穏やかな表情、自然光
 kick#md_k(left: 96px; top: 84px) MODEL CASE
 h1#md_h(left: 96px; top: 126px; font-size: 72px; font-weight: 700) 30 代の夫婦、3 つの固定費
-div#md_r(left: 96px; top: 276px; width: 840px; height: 396px; gap: 16; display: flex; flex-direction: column) ×3
-  icon#i(left: 33px; cy: 50%; font-size: 51px; name: "device-mobile;lightning;television-simple"; color: $a)
-  p#n(left: 114px; cy: 50%; font-size: 42px; color: $ink) スマホ (2 人);電気;サブスク (3 本)
-  p#v(right: 36px; cy: 50%; font-size: 54px; font-family: e; color: $ink) 16,000{y}円 / 月{/};11,000{y}円 / 月{/};3,300{y}円 / 月{/}
+group#md_col(left: 96px; top: 276px; width: 840px; height: 396px; display: flex; flex-direction: column; gap: 16px)
+  div#md_r(flex: 1; in: div) ×3
+    icon#i(left: 33px; cy: 50%; font-size: 51px; name: "device-mobile;lightning;television-simple"; color: $a)
+    p#n(left: 114px; cy: 50%; font-size: 42px; color: $ink) スマホ (2 人);電気;サブスク (3 本)
+    p#v(right: 36px; cy: 50%; font-size: 54px; font-family: e; color: $ink) 16,000{y}円 / 月{/};11,000{y}円 / 月{/};3,300{y}円 / 月{/}
 shape#md_l(left: 96px; top: 714px; width: 840px; height: 3px; path: line_h; background: $ink; border: 3px solid $ink; in: wipe {dir: 'right', duration: 0.6})
 p#md_t(left: 96px; top: 741px; font-size: 42px; color: $ink) 3 つの合計
 p#md_v(right: 984px; top: 723px; font-size: 84px; font-family: e; color: $a; text-align: right) [count:30,300]{y}円 / 月{/}
@@ -65,7 +66,8 @@ paper#ph_v
 num#ph_n(left: 96px; top: 66px) 01
 h1#ph_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) スマホ
 sub#ph_s(left: 96px; top: 192px) 大手キャリア 2 人 → 格安プラン
-hbar#ph_c(left: 96px; top: 360px; width: 1110px; height: 240px; display: flex; flex-direction: column; gap: 60px; v: "50;16"; t: "今 (大手キャリア);見直し後 (格安)"; n: "16,000 円;5,000 円"; c: "$mute;$a") ×2
+group#ph_col(left: 96px; top: 360px; width: 1110px; height: 240px; display: flex; flex-direction: column; gap: 60px)
+  hbar#ph_c(flex: 1; in: div; v: "50;16"; t: "今 (大手キャリア);見直し後 (格安)"; n: "16,000 円;5,000 円"; c: "$mute;$a") ×2
 div#ph_d(left: 1290px; top: 294px; width: 534px; height: 375px)
   p#l(left: 42px; top: 39px; font-size: 33px; font-family: m; color: $mute) 年間の差
   p#v(left: 42px; top: 105px; font-size: 96px; font-family: e; color: $a) [count:132,000]{y}円{/}
@@ -80,7 +82,8 @@ h1#pw_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) 電気
 div#pw_t(left: 96px; top: 186px; width: 720px; height: 78px; background: $a2; border: none; border-radius: 39px)
   icon#i(left: 27px; cy: 50%; font-size: 39px; name: check-circle; color: $a)
   p#t(left: 81px; cy: 50%; font-size: 36px; color: $a) 使用量はそのまま、契約先だけ変更
-hbar#pw_c(left: 96px; top: 360px; width: 1110px; height: 240px; display: flex; flex-direction: column; gap: 60px; v: "50;43"; t: "今の契約;新しい契約"; n: "11,000 円;9,400 円"; c: "$mute;$a") ×2
+group#pw_col(left: 96px; top: 360px; width: 1110px; height: 240px; display: flex; flex-direction: column; gap: 60px)
+  hbar#pw_c(flex: 1; in: div; v: "50;43"; t: "今の契約;新しい契約"; n: "11,000 円;9,400 円"; c: "$mute;$a") ×2
 div#pw_d(left: 1290px; top: 294px; width: 534px; height: 375px)
   p#l(left: 42px; top: 39px; font-size: 33px; font-family: m; color: $mute) 年間の差
   p#v(left: 42px; top: 105px; font-size: 96px; font-family: e; color: $a) [count:19,200]{y}円{/}
@@ -93,10 +96,12 @@ paper#sb_v
 num#sb_n(left: 96px; top: 66px) 03
 h1#sb_h(left: 228px; top: 78px; font-size: 78px; font-weight: 700) サブスク
 sub#sb_s(left: 96px; top: 192px) 使っていない動画・音楽の 3 本を解約
-div#sb_k(left: 96px; top: 294px; width: 1110px; height: 114px; gap: 16; display: flex) ×3
-  icon#i(left: 27px; cy: 50%; font-size: 42px; name: "film-strip;film-strip;music-notes"; color: $mute)
-  p#t(left: 84px; cy: 50%; font-size: 36px; color: $ink) 動画配信 A;動画配信 B;音楽配信
-hbar#sb_c(left: 96px; top: 465px; width: 1110px; height: 195px; display: flex; flex-direction: column; gap: 45px; v: "50;1"; t: "今;解約後"; n: "3,300 円;0 円"; c: "$mute;$a") ×2
+group#sb_row(left: 96px; top: 294px; width: 1110px; height: 114px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px)
+  div#sb_k(in: div) ×3
+    icon#i(left: 27px; cy: 50%; font-size: 42px; name: "film-strip;film-strip;music-notes"; color: $mute)
+    p#t(left: 84px; cy: 50%; font-size: 36px; color: $ink) 動画配信 A;動画配信 B;音楽配信
+group#sb_col(left: 96px; top: 465px; width: 1110px; height: 195px; display: flex; flex-direction: column; gap: 45px)
+  hbar#sb_c(flex: 1; in: div; v: "50;1"; t: "今;解約後"; n: "3,300 円;0 円"; c: "$mute;$a") ×2
 div#sb_d(left: 1290px; top: 294px; width: 534px; height: 375px)
   p#l(left: 42px; top: 39px; font-size: 33px; font-family: m; color: $mute) 年間の差
   p#v(left: 42px; top: 105px; font-size: 96px; font-family: e; color: $a) [count:39,600]{y}円{/}
@@ -108,7 +113,8 @@ img#tt_p(inset: 0; main: kb {scale: [1, 1.04], focus: ['50% 50%', '50% 50%']}) [
 paper#tt_w
 kick#tt_k(left: 96px; top: 84px) ANNUAL SAVINGS
 h1#tt_h(left: 96px; top: 126px; font-size: 72px; font-weight: 700) 3 つ合わせると、1 年で
-hbar#tt_c(left: 96px; top: 310px; width: 960px; height: 324px; display: flex; flex-direction: column; gap: 45px; v: "40;12;6"; t: "スマホ;サブスク;電気"; n: "132,000 円;39,600 円;19,200 円"; c: "$a;$mute;$mute") ×3
+group#tt_col(left: 96px; top: 310px; width: 960px; height: 324px; display: flex; flex-direction: column; gap: 45px)
+  hbar#tt_c(flex: 1; width: 960px; in: div; v: "40;12;6"; t: "スマホ;サブスク;電気"; n: "132,000 円;39,600 円;19,200 円"; c: "$a;$mute;$mute") ×3
 shape#tt_l(left: 1095px; top: 294px; width: 3px; height: 375px; path: line_v; background: $line; border: 3px solid $line)
 p#tt_lb(left: 1164px; top: 309px; font-size: 36px; font-family: m; color: $mute) 年間で浮く額
 p#tt_v(left: 1155px; top: 369px; font-size: 156px; font-family: e; color: $a) [count:190,800]{y}円{/}
@@ -129,9 +135,10 @@ img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '65% 50%']}) [
 veil#cl_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 kick#cl_k(left: 108px; top: 180px) THIS WEEK
 h1#cl_h(left: 108px; top: 225px; font-size: 114px; font-weight: 700) まず 1 つだけ、[br]{u}今週やる。{/}
-div#cl_c(left: 108px; top: 570px; width: 900px; height: 105px; gap: 14; display: flex) ×3
-  icon#i(left: 24px; cy: 50%; font-size: 39px; name: "device-mobile;lightning;television-simple"; color: $a)
-  p#t(left: 75px; cy: 50%; font-size: 36px; color: $ink) スマホ;電気;サブスク
+group#cl_row(left: 108px; top: 570px; width: 900px; height: 105px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px)
+  div#cl_c(in: div) ×3
+    icon#i(left: 24px; cy: 50%; font-size: 39px; name: "device-mobile;lightning;television-simple"; color: $a)
+    p#t(left: 75px; cy: 50%; font-size: 36px; color: $ink) スマホ;電気;サブスク
 ```
 
 ```timeline.txt
@@ -147,31 +154,31 @@ se "静かな朝の室内の環境音、遠くの鳥の声" -8dB to=8s fade=300,
 @: [>#op_h]見直すと、[!#op_h{t} underline,$a]一年でいくら浮くのでしょうか。[silence:0.6s]
 
 *** model
-@narrator: [silence:+0.3s]架空の30代夫婦をモデルに、[>#md_r[1]]スマホ、[>#md_r[2]]電気、[>#md_r[3]]サブスクの三つを見直します。
+@narrator: [silence:+0.3s]架空の30代夫婦をモデルに、[>#md_col.md_r[1]]スマホ、[>#md_col.md_r[2]]電気、[>#md_col.md_r[3]]サブスクの三つを見直します。
 @: [>#md_l][>#md_t][>#md_v]三つ合わせて、今は毎月3万300円です。[silence:0.5s]
 transition wipe,600,dir=left,overlap=600
 
 *** phone
-@narrator: [silence:+0.3s]まずはスマホ。[>#ph_c[1]]大手キャリアで2人、月1万6000円。
-@: これを[>#ph_c[2]]格安プランにすると、月5000円。
+@narrator: [silence:+0.3s]まずはスマホ。[>#ph_col.ph_c[1]]大手キャリアで2人、月1万6000円。
+@: これを[>#ph_col.ph_c[2]]格安プランにすると、月5000円。
 @: 差は月1万1000円、[>#ph_d][!#ph_d.v count][♪"お金・財宝・アイテムゲット" -6dB]一年で13万2000円です。[silence:0.5s]
 
 *** power
 @narrator: [silence:+0.3s]次に電気。[!#pw_t check]使う量はそのままで、契約先だけを変えます。
-@: [>#pw_c[1]]月1万1000円が、[>#pw_c[2]]9400円に。
+@: [>#pw_col.pw_c[1]]月1万1000円が、[>#pw_col.pw_c[2]]9400円に。
 @: 一年で、[>#pw_d][!#pw_d.v count]1万9200円です。[silence:0.5s]
 
 *** subs
-@narrator: [silence:+0.3s]最後はサブスク。[>#sb_k[*] {stagger:{each:0.12}}]使っていない動画と音楽の三本を、
-@: [!#sb_k[1].t strike,$b][!#sb_k[2].t strike,$b +150][!#sb_k[3].t strike,$b +300]解約して、[>#sb_c[1]]月3300円が、[>#sb_c[2]]0円に。
+@narrator: [silence:+0.3s]最後はサブスク。[>#sb_row.sb_k[*] {stagger:{each:0.12}}]使っていない動画と音楽の三本を、
+@: [!#sb_row.sb_k[1].t strike,$b][!#sb_row.sb_k[2].t strike,$b +150][!#sb_row.sb_k[3].t strike,$b +300]解約して、[>#sb_col.sb_c[1]]月3300円が、[>#sb_col.sb_c[2]]0円に。
 @: 一年で、[>#sb_d][!#sb_d.v count]3万9600円です。[silence:0.5s]
 transition dip,400
 [<#music]
 
 *** total
 bgm music2 -1500
-@narrator: [silence:+0.4s][>#tt_c[*] {stagger:{each:0.12}}]三つを合わせると、[>#tt_lb][>#tt_v][♪"キラリン 21" -2dB]一年で19万800円。
-@: [!#tt_c[1] focus][>#tt_s]スマホだけで、その7割を占めます。[silence:0.6s]
+@narrator: [silence:+0.4s][>#tt_col.tt_c[*] {stagger:{each:0.12}}]三つを合わせると、[>#tt_lb][>#tt_v][♪"キラリン 21" -2dB]一年で19万800円。
+@: [!#tt_col.tt_c[1] focus][>#tt_s]スマホだけで、その7割を占めます。[silence:0.6s]
 
 *** month
 @narrator: [silence:+0.4s][>#mo_h]これは、[!#mo_h{m} marker,$a2]月の手取りの{1か月|いっかげつ}分近く。
@@ -179,7 +186,7 @@ bgm music2 -1500
 
 *** close
 @narrator: [silence:+0.4s]全部を一度にやる必要はありません。
-@: [>#cl_h]まず1つだけ、[!#cl_c[1] check][♪"決定音" -6dB]今週やってみませんか。[silence:2.5s]
+@: [>#cl_h]まず1つだけ、[!#cl_row.cl_c[1] check][♪"決定音" -6dB]今週やってみませんか。[silence:2.5s]
 ```
 
 ## 3 分以上の data の時だけ: 累計の札

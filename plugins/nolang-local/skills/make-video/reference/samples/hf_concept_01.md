@@ -74,8 +74,8 @@ def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; b
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
 def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back; border-radius: 24px)
 def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
-  shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
-  shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 0.08})
+  shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
+  shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
 def wordmark(y) = p(cx: 960px; top: {y}; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
 
 # タブレット: 枠・上の帯・右の側板。中の page と側板の中身は場面ごとに子で差す (def の実体の scale で縮める)
@@ -87,15 +87,17 @@ def tablet() = div(width: 1180px; height: 800px; border-radius: 46px; background
   p#us(left: 960px; top: 44px; font-size: 20px; color: $gray) 佐藤 美咲 様
   div#sd(left: 778px; top: 94px; width: 384px; height: 688px; background: #EEF3F9; border-radius: 0,0,20,0)
     p#br(left: 28px; top: 645px; font-size: 16px; font-family: e; color: $a) Live {nv}Assist{/}
-# 1 枚目の page: 契約変更の form (段の札 4 つ・項目 3 行・次へ)。×N は 1 枠 + flex で等分し、×N の子は 1 段まで (入力の字は入力枠の兄弟)
+# 1 枚目の page: 契約変更の form (段の札 4 つ・項目 3 行・次へ)。×N は親の grid / flex の箱で等分し、×N の子は 1 段まで (入力の字は入力枠の兄弟)
 def form_page() = div(width: 760px; height: 688px)
   p#t(left: 44px; top: 30px; font-size: 34px; font-family: b; letter-spacing: 0.05em) ご契約内容の変更
-  div#st(left: 44px; top: 92px; width: 662px; height: 38px; display: flex; gap: 10px; border-radius: 20px; background: "#DBE9FB;$a;#E9EEF5;#E9EEF5") ×4
-    p#t(cx: 50%; cy: 50%; font-size: 16px; color: "$a;#FFFFFF;#8A97A6;#8A97A6") 1 お客様情報;2 プラン選択;3 お支払い;4 確認
-  div#row(left: 44px; top: 150px; width: 672px; height: 306px; display: flex; flex-direction: column; gap: 0px) ×3
-    p#lb(left: 0px; top: 0px; font-size: 18px; color: $gray) ご契約者名;ご契約プラン;ご利用開始日
-    div#in(left: 0px; top: 26px; width: 672px; height: 58px; border-radius: 10px; background: #FFFFFF; border: 2px solid #D5DEE9)
-    p#v(left: 20px; top: 40px; font-size: 22px) 佐藤 美咲;{ph}選択してください{/};2026年11月1日
+  div#sts(left: 44px; top: 92px; width: 662px; height: 38px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px)
+    div#st(border-radius: 20px; background: "#DBE9FB;$a;#E9EEF5;#E9EEF5") ×4
+      p#t(cx: 50%; cy: 50%; font-size: 16px; color: "$a;#FFFFFF;#8A97A6;#8A97A6") 1 お客様情報;2 プラン選択;3 お支払い;4 確認
+  div#rows(left: 44px; top: 150px; width: 672px; height: 306px; display: flex; flex-direction: column; gap: 0px)
+    div#row(flex: 1; width: 672px) ×3
+      p#lb(left: 0px; top: 0px; font-size: 18px; color: $gray) ご契約者名;ご契約プラン;ご利用開始日
+      div#in(left: 0px; top: 26px; width: 672px; height: 58px; border-radius: 10px; background: #FFFFFF; border: 2px solid #D5DEE9)
+      p#v(left: 20px; top: 40px; font-size: 22px) 佐藤 美咲;{ph}選択してください{/};2026年11月1日
   icon#cv(left: 678px; top: 296px; font-size: 15px; name: caret-down; color: #7D8A99)
   div#btn(left: 44px; top: 474px; width: 300px; height: 62px; border-radius: 32px; background: $a; box-shadow: 0px 8px 18px #1F6FE040)
     p#t(cx: 50%; cy: 50%; font-size: 22px; font-family: b; color: #FFFFFF; letter-spacing: 0.1em) 次へ進む
@@ -103,17 +105,19 @@ def form_page() = div(width: 760px; height: 688px)
 def plan_page() = div(width: 760px; height: 688px)
   p#t(left: 44px; top: 30px; font-size: 34px; font-family: b; letter-spacing: 0.05em) ご契約内容の確認
   p#s(left: 44px; top: 84px; font-size: 18px; color: $gray) 現在のご契約内容をご確認いただけます
-  div#ic(left: 44px; top: 130px; width: 672px; height: 399px; display: flex; flex-direction: column; gap: 15px; border-radius: 12px; background: #FFFFFF; border: 2px solid #E3E9F1) ×4
-    p#k(left: 24px; top: 14px; font-size: 16px; color: $gray) 現在のご契約プラン;オプション;お支払い方法;次回更新日
-    p#v(left: 24px; top: 40px; font-size: 26px; font-family: b) スタンダードプラン;安心サポートパック;クレジットカード（**** 1234）;2027年3月31日
+  div#ics(left: 44px; top: 130px; width: 672px; height: 399px; display: flex; flex-direction: column; gap: 15px)
+    div#ic(flex: 1; width: 672px; border-radius: 12px; background: #FFFFFF; border: 2px solid #E3E9F1) ×4
+      p#k(left: 24px; top: 14px; font-size: 16px; color: $gray) 現在のご契約プラン;オプション;お支払い方法;次回更新日
+      p#v(left: 24px; top: 40px; font-size: 26px; font-family: b) スタンダードプラン;安心サポートパック;クレジットカード（**** 1234）;2027年3月31日
 # 画面に差す部品: 通話中の側板 (スタッフの映像・名の帯・通話の釦 3 つ)・操作の案内・form の上に開くプランの一覧・スタッフのメッセージ
 def call_panel() = div(width: 384px; height: 495px)
   img#fd(left: 28px; top: 28px; width: 328px; height: 236px; border-radius: 14px; content: @staff; object-fit: cover; object-position: 50% 30%)
   p#lv(left: 40px; top: 40px; font-size: 14px; color: #FFFFFF; background: #0E2A478C; border-radius: 148px; padding: 6px 12px) {gn}●{/} 通話中
   p#nm(left: 28px; top: 225px; width: 328px; padding: 9px 14px 9px 14px; font-size: 15px; color: #FFFFFF; letter-spacing: 0.05em; background: #0E2A4773; border-radius: 14px) 高橋（サポート担当）
-  div#b(left: 82px; top: 282px; width: 225px; height: 52px; display: flex; gap: 0px) ×3
-    shape#c(cx: 50%; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: "#FFFFFF;#FFFFFF;$red")
-    icon#i(cx: 50%; cy: 50%; font-size: 30px; name: "microphone;video-camera;phone-x"; color: "$ink2;$ink2;#FFFFFF")
+  div#bs(left: 82px; top: 282px; width: 225px; height: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0px)
+    div#b ×3
+      shape#c(cx: 50%; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: "#FFFFFF;#FFFFFF;$red")
+      icon#i(cx: 50%; cy: 50%; font-size: 30px; name: "microphone;video-camera;phone-x"; color: "$ink2;$ink2;#FFFFFF")
 def help_panel() = div(width: 328px; height: 330px; border-radius: 16px; background: #FFFFFF; box-shadow: 0px 10px 26px #0E2A471A)
   shape#c(left: 28px; top: 30px; width: 64px; height: 64px; border-radius: 50%; background: $sky)
   icon#i(left: 45px; top: 46px; font-size: 30px; name: headset; color: $a)
@@ -155,7 +159,7 @@ telop#in_tel オンラインで{bb}完結する{/}時代
 section#confused
 img#cf_p(inset: 0; content: @conf; main: kb {scale: [1, 1.09], focus: '67% 29%'})
 img#cf_b(inset: 0; content: @conf; filter: blur(9px); delay: 3500; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
-tablet#tc(left: 429px; top: 136px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
+tablet#tc(left: 370px; top: 96px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
   form_page#p1(left: 16px; top: 86px; scale: 0.9)
   help_panel#hp(left: 726px; top: 122px; scale: 0.9)
   dropdown#dd(left: 56px; top: 392px; scale: 0.9; overlap: tc.p1)
@@ -204,7 +208,7 @@ telop#fc_tel {bb}顔を見ながら{/}、状況に合わせてサポート
 section#share_screen
 div#sc_bg(inset: 0; background: $paper; border-radius: 24px)
 img#pn_s(left: 0px; top: 0px; width: 860px; height: 1080px; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
-tablet#ts(left: 918px; top: 220px; scale: 0.8; delay: 200; in: {x:440, duration:0.9, ease:'power3.out'})
+tablet#ts(left: 800px; top: 140px; scale: 0.8; delay: 200; in: {x:440, duration:0.9, ease:'power3.out'})
   form_page#p1(left: 15px; top: 75px; scale: 0.8)
   call_panel#cp(left: 622px; top: 75px; scale: 0.8)
   share_badge#sh(top: 28px; scale: 0.8)
@@ -225,7 +229,7 @@ telop#rl_tel 迷いを、{bb}その場で解消{/}
 # STEP 03: スタッフのメッセージ → カーソルがリンクを押し、確認の page へ送る
 section#navigate
 img#nv_b(inset: 0; content: @tabtbl; filter: blur(9px); main: kb {scale: [1, 1.05]})
-tablet#tn(left: 429px; top: 190px; scale: 0.9)
+tablet#tn(left: 370px; top: 150px; scale: 0.9)
   form_page#p1(left: 16px; top: 86px; scale: 0.9; out: {x:-45, opacity:0, duration:0.45, ease:'power3.in'})
   plan_page#p2(left: 16px; top: 86px; scale: 0.9; in: {x:45, opacity:0, duration:0.6, ease:'power3.out'})
   call_panel#cp(left: 700px; top: 86px; scale: 0.9)

@@ -53,10 +53,11 @@ section#clash
 img#cs_p(inset: 0; main: kb {scale: [1.06, 1], focus: '50% 50%'}) 夜の野外フェス会場を高い所から見下ろす、遠く離れた2つのステージがネオンに光る、広い芝生
 neon#cs_v
 h1#cs_h(left: 60px; top: 135px; font-weight: 900) 推しAと推しB[br]{r}まさかの同時刻{/}
-div#cs_c(in: {stagger: {each: 0.15}}; left: 60px; top: 1170px; width: 960px; height: 315px; gap: 24; display: flex) ×2
-  p#s(left: 36px; top: 30px; font-size: 39px; font-family: e; color: $b; letter-spacing: 0.15em) MAIN STAGE;SUB STAGE
-  p#t(left: 36px; top: 87px; font-size: 108px; font-family: e; color: $ink) 18:30;18:30
-  p#n(left: 36px; bottom: 27px; font-size: 48px; color: $mute) 推しA;推しB
+group#cs_row(left: 60px; top: 1170px; width: 960px; height: 315px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px)
+  div#cs_c(in: {scale:0.85, y:45, opacity:0, duration:0.45, ease:'back.out(1.8)', stagger: {each: 0.15}}; out: fade {duration:0.2}) ×2
+    p#s(left: 36px; top: 30px; font-size: 39px; font-family: e; color: $b; letter-spacing: 0.15em) MAIN STAGE;SUB STAGE
+    p#t(left: 36px; top: 87px; font-size: 108px; font-family: e; color: $ink) 18:30;18:30
+    p#n(left: 36px; bottom: 27px; font-size: 48px; color: $mute) 推しA;推しB
 shape#cs_l(left: 60px; top: 1545px; width: 960px; height: 6px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.6})
 p#cs_s(right: 60px; top: 1590px; font-size: 72px; font-family: e; color: $paper; background: $a; border-radius: 18px; padding: 12px 33px; in: pop; transform: rotate(-4deg)) ⇄ 20 MIN
 
@@ -66,9 +67,10 @@ neon#ht_v
 shape#ht_sun(left: 495px; top: 75px; width: 540px; height: 540px; path: sunburst,n=16; background: #FF2E6326; border: none; main: spin {period: 40})
 p#ht_n(right: 60px; top: 105px; font-size: 315px; font-family: e; color: $ink; text-align: right; text-shadow: 0px 0px 39px #FF2E63CC; in: big) [count:36]{u}℃{/}
 p#ht_l(right: 66px; top: 480px; font-size: 48px; color: $mute; text-align: right; in: note) 当日の最高気温
-div#ht_r(in: {stagger: {each: 0.15}}; left: 60px; top: 1170px; width: 960px; height: 375px; gap: 18; display: flex; flex-direction: column) ×2
-  icon#i(left: 36px; cy: 50%; font-size: 72px; name: "drop;t-shirt"; color: "$b;$a")
-  p#t(left: 144px; cy: 50%; font-size: 57px; color: $ink) 日焼け止め、汗で消滅;タオル、絞れる
+group#ht_col(left: 60px; top: 1170px; width: 960px; height: 375px; display: flex; flex-direction: column; gap: 18px)
+  div#ht_r(flex: 1; width: 960px; in: {scale:0.85, y:45, opacity:0, duration:0.45, ease:'back.out(1.8)', stagger: {each: 0.15}}; out: fade {duration:0.2}) ×2
+    icon#i(left: 36px; cy: 50%; font-size: 72px; name: "drop;t-shirt"; color: "$b;$a")
+    p#t(left: 144px; cy: 50%; font-size: 57px; color: $ink) 日焼け止め、汗で消滅;タオル、絞れる
 p#ht_s(right: 60px; top: 1590px; font-size: 72px; color: $deep; background: $b; border-radius: 18px; padding: 12px 33px; in: pop; transform: rotate(4deg)) 最前死守
 
 section#climax
@@ -76,9 +78,10 @@ img#cx_p(inset: 0; main: kb {scale: [1, 1.1], focus: '50% 40%'}) 夜の野外フ
 neon#cx_v
 h1#cx_h(left: 60px; top: 135px; font-weight: 900) イントロ一音目で[br]全部、飛んだ
 p#cx_w(left: 60px; top: 390px; font-size: 192px; color: $a; text-shadow: 0px 0px 45px #FF2E63; in: punch; transform: rotate(-5deg)) 完全勝利
-div#cx_r(in: {stagger: {each: 0.12}}; left: 60px; top: 1185px; width: 960px; height: 300px; gap: 18; display: flex) ×3
-  p#l(cx: 50%; top: 36px; font-size: 45px; color: $mute) 体力;声;足
-  p#v(cx: 50%; bottom: 45px; font-size: 78px; color: $ink) ゼロ;ガラガラ;棒
+group#cx_row(left: 60px; top: 1185px; width: 960px; height: 300px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px)
+  div#cx_r(in: {scale:0.85, y:45, opacity:0, duration:0.45, ease:'back.out(1.8)', stagger: {each: 0.12}}; out: fade {duration:0.2}) ×3
+    p#l(cx: 50%; top: 36px; font-size: 45px; color: $mute) 体力;声;足
+    p#v(cx: 50%; bottom: 45px; font-size: 78px; color: $ink) ゼロ;ガラガラ;棒
 confetti#cx_cf
 veil#cx_fl(color: #FFFFFF; opacity: 0.6; z-index: curtain; in: none)
 
@@ -112,14 +115,14 @@ bgm music
 @: [!#hk_n.title text,"タイムテーブル解禁"][!#hk_n.body text,"全ステージの出演時刻を公開"]タイテ解禁。[silence:0.3s][>#hk_q][♪"ジャン！・驚き" +3dB][!#hk_p shake][!#hk_v shake][!#hk_ring shake][!#hk_k shake][!#hk_t shake][!#hk_n shake][!#hk_q shake]……は？[silence:0.8s]
 
 *** clash
-@n: [silence:+0.2s][>#cs_c[*] {stagger:{each:0.15}}]推しAと推しB、まさかの[!#cs_c[*] punch]同時刻。
+@n: [silence:+0.2s][>#cs_row.cs_c[*] {stagger:{each:0.15}}]推しAと推しB、まさかの[!#cs_row.cs_c[*] punch]同時刻。
 @: [>#cs_l]メインからサブまで、[>#cs_s]徒歩20分。[♪"クイズ　ブザー02-2(短)"][!#cs_s shake]物理的に無理。
-@: [!#cs_c[2] dim]分身の術を習得していない自分を呪った。[silence:0.4s]
+@: [!#cs_row.cs_c[2] dim]分身の術を習得していない自分を呪った。[silence:0.4s]
 
 *** heat
 se "真夏の野外の蝉の声と熱気、遠くのサウンドチェックの音" -8dB to=9s fade=300,1500
 @n: [silence:+0.2s]そして当日、[>#ht_n count]気温36度。
-@: [>#ht_r[1]]日焼け止めは汗で流れ、[>#ht_r[2]]タオルは絞れる。
+@: [>#ht_col.ht_r[1]]日焼け止めは汗で流れ、[>#ht_col.ht_r[2]]タオルは絞れる。
 @: それでも、[>#ht_s][!#ht_s punch]最前は譲らない。[silence:0.6s]
 [<#music -400]
 
@@ -127,8 +130,8 @@ se "真夏の野外の蝉の声と熱気、遠くのサウンドチェックの�
 bgm music2
 se "野外フェスの大歓声とライブの轟音" -8dB to=10s fade=200,1500
 @n: [silence:+0.2s]イントロの一音目で、[>#cx_fl][!#cx_fl to,{opacity:0, duration:.4}]全部飛んだ。
-@: [>#cx_r[1]]体力ゼロ、[>#cx_r[2]]声ガラガラ、[>#cx_r[3]]足は棒。
-@: [!#cx_r[*] dim]でも、[>#cx_w][>#cx_cf][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0,800]完全勝利。俺たちが、[!#cx_w pulse]夏そのものだった。[silence:0.6s]
+@: [>#cx_row.cx_r[1]]体力ゼロ、[>#cx_row.cx_r[2]]声ガラガラ、[>#cx_row.cx_r[3]]足は棒。
+@: [!#cx_row.cx_r[*] dim]でも、[>#cx_w][>#cx_cf][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0,800]完全勝利。俺たちが、[!#cx_w pulse]夏そのものだった。[silence:0.6s]
 transition wipe,500,dir=left
 
 *** phil

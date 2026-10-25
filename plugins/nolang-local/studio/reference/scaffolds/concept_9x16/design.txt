@@ -29,12 +29,13 @@ def stat(v, u, l) = div(width: 936px; height: 303px; in: div)
   p#u(left: .v.right+18; top: 183px; font-size: 96px; line-height: 1; content: {u})
 # 札は飾りの 2 語まで (判子・タグ)。要の語 (数字・比べる 2 つ・結論) は stat / big の段に
 def stamp(content) = p(font-size: 72px; color: $a; border: 4px solid $a; border-radius: 18px; padding: 15px 36px; text-align: center; in: pop; content: {content})
-# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.i[k] check]` で語ごとに
+# 締めの一覧の板: 題 + 項目 ×N (絵 + 語) + 行動 — 項目は `[>#名.items.i[k] check]` で語ごとに
 def wrap(t, items, icons, cta) = div(background: $panel; border-radius: 36px; padding: 60px; box-shadow: 2; in: div)
   p#t(left: 60px; top: 60px; font-size: 84px; content: {t})
-  div#i(left: 60px; top: 339px; right: 60px; height: 495px; gap: 24px; display: flex; flex-direction: column; background: $panel; border-radius: 24px; box-shadow: 2) ×3
-    icon#ic(left: 0px; cy: 50%; font-size: 96px; name: {icons}; color: $b)
-    p#t(left: 132px; cy: 50%; font-size: 66px; content: {items})
+  div#items(left: 60px; top: 339px; right: 60px; height: 495px; gap: 24px; display: flex; flex-direction: column)
+    div#i(flex: 1; width: 100%; background: $panel; border-radius: 24px; box-shadow: 2) ×3
+      icon#ic(left: 0px; cy: 50%; font-size: 96px; name: {icons}; color: $b)
+      p#t(left: 132px; cy: 50%; font-size: 66px; content: {items})
   p#cta(left: 60px; bottom: 60px; font-size: 66px; color: $a; content: {cta})
 image bg = "[photo]暗い濃紺の空間に橙と青緑の光の筋が斜めに流れる抽象的な背景、柔らかいぼけ、文字なし"
 # 背景の層 (3 層の 1 つ目): どの cut も絵を 1 枚 (全面の絵 + 幕の下に板) — 文字と板だけの cut は lint text_only_cut
@@ -42,7 +43,7 @@ backdrop#bd(look: glow; vignette: 0.15)
 bgm#music ミニマルで落ち着いたエレクトロニカ、低いシンセパッドと軽いビート、解説動画向け
 bgm#music2 同じ系統で力強く高揚するエレクトロニカ、ビートを強めてシンセが重なる、山場向け
 subtitle.hug(font-size: 48px; width: 960px; height: 225px; unit: phrase)
-# 流れの札: 絵 + 名 (×N で並べ、枠は stack で等分)。札の名は本文より大きく
+# 流れの札: 絵 + 名 (×N を親の flex / grid で等分に並べる)。札の名は本文より大きく
 def node(t, i) = div(background: $panel; border-radius: 24px; box-shadow: 2; in: div)
   icon#i(cx: 50%; top: 36px; font-size: 96px; name: {i}; color: $b)
   p#t(left: 0px; cy: 60%; width: 100%; font-size: 60px; text-align: center; content: {t})
@@ -55,15 +56,17 @@ sub#t_m(left: 72px; top: 914px; width: 936px) 起業家が実際に使ってい�
 section#parts
 # 板の cut にも絵: 全面の写真 + scrim の上に板 (文字と板だけの cut は lint text_only_cut)
 img#pa_bg(inset: 0; scrim: 0.6) [photo]作業台に並べた手持ちの道具と材料を上から、落ち着いた木の色、文字なし
-div#pa(left: 72px; top: 192px; width: 936px; height: 926px; gap: 36px; background: $panel; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; box-shadow: 2; in: div) ×3
-  icon#ic(left: 36px; top: 36px; font-size: 225px; name: "hand;shield-check;shuffle"; color: $b)
-  body#t(left: 291px; top: 66px) 手段から始める;許せる損失で動く;偶然を味方にする
-  note#s(left: 291px; top: 156px) 今あるもので始める;失っていい分だけ賭ける;予想外を取り込む
+div#cards(left: 72px; top: 192px; width: 936px; height: 984px; gap: 36px; display: flex; flex-direction: column)
+  div#pa(flex: 1; width: 100%; background: $panel; border-radius: 24px; padding: 36px; box-shadow: 2; in: div) ×3
+    icon#ic(left: 36px; top: 36px; font-size: 225px; name: "hand;shield-check;shuffle"; color: $b)
+    body#t(left: 291px; top: 66px) 手段から始める;許せる損失で動く;偶然を味方にする
+    note#s(left: 291px; top: 156px) 今あるもので始める;失っていい分だけ賭ける;予想外を取り込む
 big#pa_h(left: 72px; top: 1154px; width: 936px) 共通するのは「手元から」
 
 section#flow
 img#fl_bg(inset: 0; scrim: 0.6) [photo]白い壁に貼った付箋とメモを指さす手、斜めの自然光、文字なし
-node#fl(left: 72px; top: 192px; width: 936px; height: 1407px; gap: 36px; t: "持っている物を数える;小さく試す;反応を見て学ぶ;次の一歩を決める"; i: "list-checks;flask;eye;signpost"; display: flex; flex-direction: column) ×4
+div#flow(left: 72px; top: 192px; width: 936px; height: 1407px; gap: 36px; display: flex; flex-direction: column)
+  node#fl(flex: 1; width: 100%; t: "持っている物を数える;小さく試す;反応を見て学ぶ;次の一歩を決める"; i: "list-checks;flask;eye;signpost") ×4
 
 section#example
 # 主役の絵 + 例の数字 (stat) + 板 1 枚 (縦は上から順に・横は絵の右に数字と板)

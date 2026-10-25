@@ -49,6 +49,6 @@ def new(path: Path, kind: str, aspect: str, seconds: int | None) -> list[str]:
 
 if __name__ == "__main__":  # python studio_new.py <project/studio> <型> <縦横> [秒]
     target, kind, aspect = Path(sys.argv[1]), sys.argv[2], sys.argv[3]
-    seconds = int(sys.argv[4]) if len(sys.argv) > 4 else None
+    seconds = int(sys.argv[4]) if len(sys.argv) > 4 and sys.argv[4].isdigit() else None  # `auto` = 指定なし
     names = new(target, kind, aspect, seconds)
     print(f"OK new ({kind} {aspect}): {target} に {', '.join(names) or '何も書かず (既にある)'}。# TODO を埋めて check")

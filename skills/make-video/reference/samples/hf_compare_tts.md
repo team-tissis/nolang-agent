@@ -320,9 +320,10 @@ box#b8b(left: 690px; top: 250px; width: 540px; height: 660px; t: "話者"; rw: 4
   p#bw(cx: 270px; cy: 448px; font-size: 56px; in: fups) 単一話者
   p#ft(left: 0px; top: 591px; width: 540px; font-size: 24px; font-family: r; color: $t2; text-align: center; in: fin) 1 本のナレーションを 1 人の声で読む
 box#b8c(left: 1292px; top: 250px; width: 540px; height: 660px; t: "{f}Flash{/} の売り"; rw: 471px)
-  div#fe(left: 34px; top: 146px; width: 471px; height: 330px; display: flex; flex-direction: column; gap: 20px; border-radius: 14px; background: #4DA3FF14; border: 2px solid #4DA3FF59; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.12}}) ×3
-    p#n(left: 26px; cy: 50%; font-size: 34px) 多話者;タグ;方言
-    p#un(right: 26px; cy: 50%; font-size: 22px; font-family: sb; color: $t2; border: 2px solid #FFFFFF2E; border-radius: 8px; padding: 4px 12px; in: {scale:0.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 未使用
+  group#fes(left: 34px; top: 146px; width: 471px; height: 330px; display: flex; flex-direction: column; gap: 20px)
+    div#fe(flex: 1; width: 471px; border-radius: 14px; background: #4DA3FF14; border: 2px solid #4DA3FF59; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.12}}) ×3
+      p#n(left: 26px; cy: 50%; font-size: 34px) 多話者;タグ;方言
+      p#un(right: 26px; cy: 50%; font-size: 22px; font-family: sb; color: $t2; border: 2px solid #FFFFFF2E; border-radius: 8px; padding: 4px 12px; in: {scale:0.6, opacity:0, duration:.45, ease:'back.out(2.2)'}) 未使用
   p#ft(left: 0px; top: 591px; width: 540px; font-size: 24px; font-family: r; color: $t2; text-align: center; in: fin) いずれも現在の使い方では使っていない
 note#n8 ※ 使い方の実態: 日本語 97%、単一話者。Flash の売り (多話者・タグ・方言) は使っていない。
 
@@ -447,7 +448,7 @@ se pad -2.5dB
 # usage — 「日本語」でドーナツ・「単一話者」で人の形と売りの板・「使っていません」で取り消し線と未使用の札
 *** usage
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[6] #prog.lab[7] -500]使い方は、[>#b8a -450][>#arc97 -50][>#b8a.p97 +250][>#b8a.ft +800]日本語が97%で、[>#b8b -450][>#b8b.pr -150][>#b8b.bw][>#b8b.ft +350][>#b8c +190][>#b8c.fe[*] +440]単一話者。フラッシュの売りは、[!#b8c.fe[1].n strike,#B6BFCE][!#b8c.fe[2].n strike,#B6BFCE +140][!#b8c.fe[3].n strike,#B6BFCE +280][>#b8c.fe[1].un +100][>#b8c.fe[2].un +240][>#b8c.fe[3].un +380][!#b8c.fe[1].n recolor,#EEF2F873 +150][!#b8c.fe[2].n recolor,#EEF2F873 +290][!#b8c.fe[3].n recolor,#EEF2F873 +430][>#b8c.ft +500][♪pop -3.1dB +150]使っていません。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[6] #prog.lab[7] -500]使い方は、[>#b8a -450][>#arc97 -50][>#b8a.p97 +250][>#b8a.ft +800]日本語が97%で、[>#b8b -450][>#b8b.pr -150][>#b8b.bw][>#b8b.ft +350][>#b8c +190][>#b8c.fes.fe[*] +440]単一話者。フラッシュの売りは、[!#b8c.fes.fe[1].n strike,#B6BFCE][!#b8c.fes.fe[2].n strike,#B6BFCE +140][!#b8c.fes.fe[3].n strike,#B6BFCE +280][>#b8c.fes.fe[1].un +100][>#b8c.fes.fe[2].un +240][>#b8c.fes.fe[3].un +380][!#b8c.fes.fe[1].n recolor,#EEF2F873 +150][!#b8c.fes.fe[2].n recolor,#EEF2F873 +290][!#b8c.fes.fe[3].n recolor,#EEF2F873 +430][>#b8c.ft +500][♪pop -3.1dB +150]使っていません。[silence:0.3s]
 
 # retry — 「35%」「フラッシュ」「ライト」で縦棒・「63本」で 63 マス・「4本」で矢印と 4、59 マスが下から沈み 4 マスが濃い琥珀で残る
 *** retry

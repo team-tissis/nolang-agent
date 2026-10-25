@@ -5,7 +5,8 @@
 - `empty_cut` 絵か札を置く
 - `shrunk` 幅か文字の大きさを変える (枠を広げる / `width:` を外して文字幅にする / 文言を短く)
 - `offcanvas` (severe) 位置を内側に
-- `duplicate_text` 字幕と同文の札 → 画面は要点の短い語に (`.hide_subtitle` は字幕の代わりに台詞を見せる札だけ)
+- `duplicate_text` 字幕と同文の札 → 画面は要点の短い語に。台詞そのものを見せる札 (リリックビデオの歌詞・吹き出し) は札に `.hide_subtitle` (見えている間は字幕を描かない
+- `lint off` では 2 つ並んだまま)
 - `spoiler` 見出しが台詞の語を先に見せる → 語の印で出す
 - `still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す
 - `long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印
@@ -30,8 +31,7 @@
 - `se_dense` 効果音が密 (`sfx off`)
 - `running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す
 - `month_reading` 月日に読み `{9月5日|くがついつか}`
-- `font_not_pinned` 台帳に書体の pin か TTF が無く既定 font で測った (DB のある所で check を回す)
-- `font_version_mismatch` cache の TTF が catalog の版と違う (check が引き直す)
+- `font_not_pinned` 書体を本番の解決で引けず既定 font で測った (DB のある所で check を回す・書体の説明を catalog の書体に寄せる)
 - `synthetic_bold` family に太い face が無い (browser の合成 bold は無い) → 太さのある family を `font-family:` で選ぶか font-weight を外す
 - `ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`
 - `photo_hidden` 全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側) か、幕を 0.6 までにして文字の下にだけ帯 / 板。

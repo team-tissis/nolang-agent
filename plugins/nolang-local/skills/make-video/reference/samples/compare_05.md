@@ -74,8 +74,9 @@ section#f_flow
 img#ff_bg(inset: 0; scrim: 0.6) [photo][ref:@part]同じ部品が工場の CNC 加工機で削り出される様子、金属の切り粉、暗い工場
 num#ff_n(left: 120px; top: 135px) FORWARD  FLOW
 h1#ff_h(left: 120px; top: 192px; font-size: 72px; font-weight: 700) 描いて、決めて、{a}形にする{/}
-node#ff_f(left: 120px; top: 420px; width: 1680px; height: 330px; display: flex; gap: 120px; t: "スケッチ;寸法を決める;立体にする;製品をつくる"; i: "pencil-simple;ruler;cube;factory") ×4
-shape#ff_a(left: "ff_f[1].right+18;ff_f[2].right+18;ff_f[3].right+18"; cy: ff_f[1].cy; width: 84px; height: 54px; path: arrow_r; background: $a; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
+group#ff_row(left: 120px; top: 420px; width: 1680px; height: 330px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 120px)
+  node#ff_f(in: div; t: "スケッチ;寸法を決める;立体にする;製品をつくる"; i: "pencil-simple;ruler;cube;factory") ×4
+shape#ff_a(left: "ff_row.ff_f[1].right+18;ff_row.ff_f[2].right+18;ff_row.ff_f[3].right+18"; cy: ff_row.ff_f[1].cy; width: 84px; height: 54px; path: arrow_r; background: $a; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
 
 section#f_dim
 img#fd_bg(inset: 0; scrim: 0.6; main: kb {scale: [1.04, 1], focus: '70% 50%'}) [photo][ref:@part]同じ部品の橙の線のワイヤーフレーム、設計図のような寸法線が添えられている、グラファイト
@@ -125,9 +126,10 @@ img#rc_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '
 pill#rc_t(left: 120px; top: 135px; background: $b) STEP 3  当てはめる
 h1#rc_h(left: 120px; top: 219px; font-size: 72px; font-weight: 700) メッシュに{b}形の意味{/}を与える
 note#rc_w(left: 120px; top: 339px) メッシュ = {x}表面の形だけ{/}
-div#rc_c(left: 120px; top: 435px; width: 1140px; height: 165px; gap: 24; display: flex) ×2
-  icon#i(left: 36px; cy: 50%; font-size: 66px; name: "square;cylinder"; color: $b)
-  p#t(left: 126px; cy: 50%; font-size: 45px; color: $ink) 平らな所 → 平面;丸い所 → 円筒
+group#rc_row(left: 120px; top: 435px; width: 1140px; height: 165px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px)
+  div#rc_c(in: div) ×2
+    icon#i(left: 36px; cy: 50%; font-size: 66px; name: "square;cylinder"; color: $b)
+    p#t(left: 126px; cy: 50%; font-size: 45px; color: $ink) 平らな所 → 平面;丸い所 → 円筒
 p#rc_st(left: 120px; top: 675px; font-size: 48px; color: $ink; background: $b_t; border: 3px solid $b; border-radius: 15px; padding: 15px 33px; in: pop) 編集できる CAD データへ
 
 section#r_dim
@@ -141,31 +143,35 @@ p#rd_m(left: 120px; top: 705px; font-size: 45px; color: $ink) 実物の{w}ズレ
 section#r_use
 img#ru_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]棚に並んだ古い機械部品と、手で削った木の試作品、柔らかい光の作業場
 note#ru_n(left: 120px; top: 144px) リバースが活きる場面
-div#ru_c(left: 120px; top: 225px; width: 1050px; height: 600px; gap: 20; display: flex; flex-direction: column) ×3
-  shape#bg(left: 30px; cy: 50%; width: 96px; height: 96px; path: rect,r=0.5; background: $b_t)
-  icon#i(left: 51px; cy: 50%; font-size: 54px; name: "clock-counter-clockwise;hand;puzzle-piece"; color: $b)
-  p#t(left: 162px; cy: 50%; font-size: 48px; color: $ink) 図面のない古い部品;手作りの試作品;実物どうしの合わせ
+group#ru_col(left: 120px; top: 225px; width: 1050px; height: 600px; display: flex; flex-direction: column; gap: 20px)
+  div#ru_c(flex: 1; in: div) ×3
+    shape#bg(left: 30px; cy: 50%; width: 96px; height: 96px; path: rect,r=0.5; background: $b_t)
+    icon#i(left: 51px; cy: 50%; font-size: 54px; name: "clock-counter-clockwise;hand;puzzle-piece"; color: $b)
+    p#t(left: 162px; cy: 50%; font-size: 48px; color: $ink) 図面のない古い部品;手作りの試作品;実物どうしの合わせ
 
 section#cmp
 img#cm_bg(inset: 0; scrim: 0.6) [photo][ref:@part]同じ部品が 2 つ向かい合う、左は橙に光る線のワイヤーフレーム、右は青緑の光の点群
 num#cm_n(left: 120px; top: 90px; color: $ink) 03  COMPARE
 div#cm_l(left: 120px; top: 165px; width: 810px; height: 705px; border: 3px solid $a)
   p#t(left: 48px; top: 42px; font-size: 60px; color: $a) 通常の CAD
-  div#r(left: 36px; top: 156px; width: 738px; height: 510px; border: none; background: $a_t; display: flex; flex-direction: column; gap: 21px) ×3
-    p#k(left: 36px; cy: 50%; font-size: 36px; font-family: m; color: $mute) 出発点;寸法;得意
-    p#v(left: 192px; cy: 50%; font-size: 51px; color: $ink) アイデア・図面;狙った値;新しくつくる
+  group#rows(left: 36px; top: 156px; width: 738px; height: 510px; display: flex; flex-direction: column; gap: 21px)
+    div#r(flex: 1; border: none; background: $a_t) ×3
+      p#k(left: 36px; cy: 50%; font-size: 36px; font-family: m; color: $mute) 出発点;寸法;得意
+      p#v(left: 192px; cy: 50%; font-size: 51px; color: $ink) アイデア・図面;狙った値;新しくつくる
 div#cm_r(left: 990px; top: 165px; width: 810px; height: 705px; border: 3px solid $b)
   p#t(left: 48px; top: 42px; font-size: 60px; color: $b) リバース
-  div#r(left: 36px; top: 156px; width: 738px; height: 510px; border: none; background: $b_t; display: flex; flex-direction: column; gap: 21px) ×3
-    p#k(left: 36px; cy: 50%; font-size: 36px; font-family: m; color: $mute) 出発点;寸法;得意
-    p#v(left: 192px; cy: 50%; font-size: 51px; color: $ink) 実物;測った値;今あるものを写す
+  group#rows(left: 36px; top: 156px; width: 738px; height: 510px; display: flex; flex-direction: column; gap: 21px)
+    div#r(flex: 1; border: none; background: $b_t) ×3
+      p#k(left: 36px; cy: 50%; font-size: 36px; font-family: m; color: $mute) 出発点;寸法;得意
+      p#v(left: 192px; cy: 50%; font-size: 51px; color: $ink) 実物;測った値;今あるものを写す
 
 section#combo
 img#cb_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品の実物の隣で、改良された新しい形の部品の3Dモデルがモニターに映る、作業机
 num#cb_n(left: 120px; top: 135px) IN PRACTICE
 h1#cb_h(left: 120px; top: 192px; font-size: 72px; font-weight: 700) {b}写して{/}、{a}描き足す{/}
-node#cb_f(left: 120px; top: 420px; width: 1680px; height: 330px; display: flex; gap: 120px; t: "実物;スキャン;CAD で改良;新しい製品"; i: "package;scan;pencil-simple;rocket-launch"; c: "$b;$b;$a;$a") ×4
-shape#cb_a(left: "cb_f[1].right+18;cb_f[2].right+18;cb_f[3].right+18"; cy: cb_f[1].cy; width: 84px; height: 54px; path: arrow_r; background: "$b;$a;$a"; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
+group#cb_row(left: 120px; top: 420px; width: 1680px; height: 330px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 120px)
+  node#cb_f(in: div; t: "実物;スキャン;CAD で改良;新しい製品"; i: "package;scan;pencil-simple;rocket-launch"; c: "$b;$b;$a;$a") ×4
+shape#cb_a(left: "cb_row.cb_f[1].right+18;cb_row.cb_f[2].right+18;cb_row.cb_f[3].right+18"; cy: cb_row.cb_f[1].cy; width: 84px; height: 54px; path: arrow_r; background: "$b;$a;$a"; border: 6px solid $a; in: wipe {dir: 'right', duration: 0.3}) ×3
 
 section#close
 img#cl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.06], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品が、橙の線のワイヤーフレームと青緑の点群から一つの完成品に重なっていく、明るく澄んだ光
@@ -199,8 +205,8 @@ transition wipe,600,dir=left
 @: 頭の中のイメージや図面をもとに、[>#fi_s]ゼロから[!#fi_s{k} recolor,$a +300]形を組み立てる方法です。[>#fi_p]
 
 *** f_flow
-@narrator: [silence:+0.3s]流れはシンプルです。[>#ff_f[1]]スケッチを描き、[>#ff_a[1]][>#ff_f[2]]寸法を決めて、[>#ff_a[2]][>#ff_f[3]]押し出しや穴あけで立体にします。
-@: [>#ff_a[3]][>#ff_f[4]]そのデータをもとに、[!#ff_f[4] tint,$a]製品を作ります。
+@narrator: [silence:+0.3s]流れはシンプルです。[>#ff_row.ff_f[1]]スケッチを描き、[>#ff_a[1]][>#ff_row.ff_f[2]]寸法を決めて、[>#ff_a[2]][>#ff_row.ff_f[3]]押し出しや穴あけで立体にします。
+@: [>#ff_a[3]][>#ff_row.ff_f[4]]そのデータをもとに、[!#ff_row.ff_f[4] tint,$a]製品を作ります。
 
 *** f_dim
 @narrator: [silence:+0.3s]ポイントは、寸法がすべて「狙った値」だということ。
@@ -226,7 +232,7 @@ se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fa
 
 *** r_cad
 @narrator: [silence:+0.3s]ただし、[>#rc_w]メッシュは、あくまで[!#rc_w{x} recolor,$b]表面の形だけ。
-@: そこで、[>#rc_c[1]]平らな所には平面、[>#rc_c[2]]丸い所には円筒を[>#rc_t]当てはめて、[>#rc_st]編集できるCADデータに作り直します。
+@: そこで、[>#rc_row.rc_c[1]]平らな所には平面、[>#rc_row.rc_c[2]]丸い所には円筒を[>#rc_t]当てはめて、[>#rc_st]編集できるCADデータに作り直します。
 @: [!#rc_st punch]ここが、リバースモデリングの中心です。
 
 *** r_dim
@@ -235,22 +241,22 @@ se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fa
 @: [>#rd_m]実物のわずかな[!#rd_m{w} marker,$b]ズレや摩耗も、データに入ってきます。
 
 *** r_use
-@narrator: [silence:+0.3s][>#ru_n]リバースモデリングが役立つのは、[>#ru_c[1] check]図面が残っていない、古い部品の復元。
-@: [>#ru_c[2] check]手で作った試作品のデータ化。[>#ru_c[3] check]そして、実物どうしの合わせの確認です。[silence:+0.6s]
+@narrator: [silence:+0.3s][>#ru_n]リバースモデリングが役立つのは、[>#ru_col.ru_c[1] check]図面が残っていない、古い部品の復元。
+@: [>#ru_col.ru_c[2] check]手で作った試作品のデータ化。[>#ru_col.ru_c[3] check]そして、実物どうしの合わせの確認です。[silence:+0.6s]
 transition wipe,600,dir=left
 
 *** cmp
 @narrator: [silence:+0.3s]二つを並べてみましょう。
-@: 出発点は、[>#cm_l.r[1]]アイデアと、[>#cm_r.r[1]]実物。
-@: 寸法は、[>#cm_l.r[2]]狙った値と、[>#cm_r.r[2]]測った値。
-@: 得意なのは、[>#cm_l.r[3]]新しくつくることと、[>#cm_r.r[3]]今あるものを写し取ることです。
+@: 出発点は、[>#cm_l.rows.r[1]]アイデアと、[>#cm_r.rows.r[1]]実物。
+@: 寸法は、[>#cm_l.rows.r[2]]狙った値と、[>#cm_r.rows.r[2]]測った値。
+@: 得意なのは、[>#cm_l.rows.r[3]]新しくつくることと、[>#cm_r.rows.r[3]]今あるものを写し取ることです。
 [<#music]
 
 *** combo
 bgm music2 -1500
 @narrator: [silence:+0.3s]実際の現場では、二つを組み合わせることも多いです。
-@: [>#cb_f[1]]実物を[>#cb_a[1]][>#cb_f[2]]スキャンして形を取り込み、[>#cb_a[2]][>#cb_f[3]]そこに新しい設計を足していく。
-@: [>#cb_a[3]][>#cb_f[4]][!#cb_f[4] tint,$a]良いところ取りの使い方です。
+@: [>#cb_row.cb_f[1]]実物を[>#cb_a[1]][>#cb_row.cb_f[2]]スキャンして形を取り込み、[>#cb_a[2]][>#cb_row.cb_f[3]]そこに新しい設計を足していく。
+@: [>#cb_a[3]][>#cb_row.cb_f[4]][!#cb_row.cb_f[4] tint,$a]良いところ取りの使い方です。
 
 *** close
 @narrator: [silence:+0.3s]まとめると、[>#cl_a]通常のCADは、アイデアから形へ。

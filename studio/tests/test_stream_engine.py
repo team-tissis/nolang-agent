@@ -263,11 +263,12 @@ class SubmissionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             run = runner.Run.__new__(runner.Run)
             run.st = Path(directory)
-            run.remote_video_id = "video"
+            run.video_id = "video"
+            run.stream_proc = None
             (run.st / "engine.failed").write_text("中断")
             with (
                 patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": "codex"}),
-                patch.object(run, "remote_abort") as abort,
+                patch.object(run, "abort") as abort,
                 patch.object(run, "remote_get") as poll,
                 patch.object(run, "log"),
             ):
@@ -281,15 +282,13 @@ class SubmissionTest(unittest.TestCase):
                 run = runner.Run.__new__(runner.Run)
                 run.st = Path(directory)
                 run.remote = "http://unused.invalid"
-                run.remote_video_id = "video"
+                run.video_id = "video"
                 result: list[object] = []
                 with (
                     patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": "codex"}),
-                    patch.object(run, "remote_post", return_value={"lines": 3}) as post,
+                    patch.object(run, "call", return_value={"lines": 3}) as post,
                 ):
-                    thread = threading.Thread(
-                        target=lambda: result.append(run.submit("one", "原稿", end=True, pins={}))
-                    )
+                    thread = threading.Thread(target=lambda: result.append(run.submit("one", "原稿", end=True)))
                     thread.start()
                     try:
                         time.sleep(0.15)
