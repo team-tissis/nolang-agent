@@ -1,9 +1,9 @@
 {
   "from": "nolang-backend/.agents/skills/nolang-draft-studio",
   "ref": null,
-  "commit": "f869124412",
+  "commit": "12695a49f1",
   "dirty": false,
-  "synced_at": "2026-10-25T07:32:23.982Z",
+  "synced_at": "2026-10-25T08:09:53.831Z",
   "files": [
     "authoring.md",
     "capabilities.md",
