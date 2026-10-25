@@ -14,7 +14,7 @@
 - `entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ
 - `entrance_in_transition` 語の印の入場が前の切替の窓の中で済む → 最初の台詞の頭に `[silence:+0.4s]` を足して語を窓の後へ (要る秒は check が言う)
 - `no_closer` 最後の cut に大きな締めの一言が無い
-- `same_picture` 同じ絵が 15 秒以上 → 場面ごとに絵を替える
+- `same_picture` 同じ絵が 15 秒以上 → cut の中で語に合わせて別の絵・図・札へ替える (cut は分けない)
 - `blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を
 - `dip_black_frame` dip は黒 frame → dissolve か wipe
 - `double_exit` 切替で終わる cut に cut 全体の out も掛かり、場面が fade してから切替が走る (二度消える) → 切替が場面を運ぶので section の out を外す (fade で消えたいなら切替を `transition cut` に)
