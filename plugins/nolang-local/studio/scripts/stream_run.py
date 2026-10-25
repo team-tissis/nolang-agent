@@ -1261,7 +1261,7 @@ class Run:
                 # 捨てるのは描けない cut (DEFECT・文法と実行) だけ — 2 回直しても残る severe (配置の重なり・はみ出し …) は受け入れて
                 # 描く (判断 16・描画は best effort で続く: 字の床まで縮める・そのまま描く — layout/report.py)。DEFECT も捨てる前に
                 # 最後の手段 (著者版・DEFECT の印を落とす) を掛ける — 落とすと cut が台詞ごと動画から消える
-                if defects and not self.rescue_stage(i, c, rnd):
+                if defects and not self.rescue_stage(i, c, rnd, defects):
                     self.mark_broken(c, "DEFECT after 2 fixes")
                 break
             findings = "\n".join(d.text for d in defects[:40])
@@ -1334,7 +1334,7 @@ class Run:
                     self.log(cut=c, event="fix_same_edits", round=rnd)
             else:
                 self.log(cut=c, event="fix_failed", round=rnd, s=round(time.time() - t, 1), tail=tail)
-                if defects and not self.rescue_stage(i, c, rnd):
+                if defects and not self.rescue_stage(i, c, rnd, defects):
                     self.mark_broken(c, "fix call failed")
                 break
         self.drop_unshown(c, i, last)
@@ -1500,8 +1500,7 @@ class Run:
         self, c: str, cuts: list[str], rnd: int | str, passes: Callable[[], bool], defects: list[str] | None = None
     ) -> bool:
         """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順)。(a) 著者の版に差し替えて passes() で通れば
-        取る (`revert_author`)。(a2) 投入検査の defects (呼び手が ack から直接渡す — check の defects.json に出ない editable も
-        ここで受かる) に editable_motion があれば機械 degrade (`degrade_editable_motion`) → passes() で通れば取る。(b) doc (根 +
+        取る (`revert_author`)。(a2) 呼び手が渡す defects (stage の check か投入検査の ack の DEFECT) に editable_motion があれば機械 degrade (`degrade_editable_motion`) → passes() で通れば取る。(b) doc (根 +
         cuts・c が最後) の check で c の block の行を指す DEFECT を doc から落とし (warm の
         drop_defect_lines と同じ — 台詞は残して印だけ落とす) c の block を書き戻す → passes() で通れば取る (`defect_lines_dropped`)。
         どれも通らなければ元の text に戻して False (捨てるのは呼び手)。"""
@@ -1544,14 +1543,14 @@ class Run:
         src.write_text(current)
         return False
 
-    def rescue_stage(self, i: int, c: str, rnd: int | str) -> bool:
+    def rescue_stage(self, i: int, c: str, rnd: int | str, defects: list[Defect]) -> bool:
         """stage の最後の手段 — 通ったか = doc (根 + live な cut 0..i) の check で c の DEFECT も止める持ち主も無い。"""
 
         def passes() -> bool:
             res = self.check_settled(c, i, rnd)
             return not res[2] and not res[4]
 
-        return self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes)
+        return self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes, [d.text for d in defects])
 
     def revert_new_findings(self, c: str, before: str, findings: list[dict[str, object]]) -> int:
         """直しが新しく作った指摘の層を指す行 (section の `#名(`・印の `#名`) のうち、直し役が変えた塊にある物を直す前 (before) に
