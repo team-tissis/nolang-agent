@@ -23,7 +23,7 @@
 - `recolor` の後も) → 沈める濃さを上げる
 - `overlap` 同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す
 - `title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)
-- `leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (根の要素は engine が既定の fade で揃える — 残るのは子・写し・自分で閉じた層) → cut 末に `[<#名 fade]`
+- `leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (既定は全員が生きたまま切替に乗る — 残すか消すかを割るのは著者の out だけ) → 揃えるなら他の層にも out を書くか、その out を外す
 - `orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく
 - `[br]` で切る
 - `overridden` engine が書いた値を変えた (cause つき) — subject_clear: 文字を絵の主体の外に置く / icon_square と late_admission: engine の揃え (直さなくてよい)

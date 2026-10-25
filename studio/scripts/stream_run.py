@@ -260,12 +260,8 @@ class Run:
         look: bool = False,
         remote: str | None = None,
         token: str | None = None,
-        editable: bool = False,
     ) -> None:
         self.project = project
-        # 編集可能モード: start に editable を立て、check に profile=editable を渡す (投入の門は server が video の
-        # create_setting から読む)。著者・担当・直しの prompt の節は env NOLANG_STUDIO_PROFILE (stream_make.sh が立てる)
-        self.editable = editable
         # remote = NoLang API (nolang-api consumer) の base URL。著者・担当・直しはこの機械の claude -p のまま、確定した cut の stream の
         # text を `unstable/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server (製品の draft stream) に任せる。None = この機械の
         # `studio.py stream` (同じ製品の外部の著者の run) に同じ flow 関数で流す (`call`)。根は閉じた時点で根だけを先に流し (`submit_root`)、
@@ -787,8 +783,6 @@ class Run:
                 "aspect_ratio": self.aspect,
                 # 開始済みの run — warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
                 **({"video_id": self.video_id} if self.video_id else {}),
-                # 編集可能モードの run — 違反は warn の findings (投入の門は同じ台帳で DEFECT にする)
-                **({"profile": "editable"} if self.editable else {}),
             },
         )
         records = [d for d in body.get("defects", []) if isinstance(d, dict)]
@@ -1771,8 +1765,6 @@ class Run:
         body: dict[str, object] = {"title": title, "aspect_ratio": aspect, "language": "ja"}
         if seconds.isdigit():  # `auto` (長さの指定なし) は送らない
             body["duration_s"] = int(seconds)
-        if self.editable:
-            body["editable"] = True
         req = urllib.request.Request(
             f"{self.remote}/v1/unstable/drafts/",
             data=json.dumps(body).encode("utf-8"),
@@ -2094,7 +2086,6 @@ def main(argv: list[str]) -> int:
         look=look,
         remote=remote,
         token=token,
-        editable="--editable" in argv,
     )
     launch = project / "stream/author.jsonl"
     if launch.exists():

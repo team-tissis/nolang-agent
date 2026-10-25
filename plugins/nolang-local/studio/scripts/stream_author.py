@@ -16,7 +16,7 @@ usage (repo root から):
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
       → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
         --shots = 見直しに cut の静止画も見せる (stream_run の --look))
-project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [editable]"・studio/ = `new` の雛形)。
+project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
 
@@ -41,6 +41,10 @@ SKILL = HERE.parent
 # system prompt に同梱する見本 1 本の大きさの上限 (超える物は選ばない)
 SAMPLES_DIR = SKILL / "reference/samples"
 NEAR_TYPE = {"cinematic": "story", "compare": "concept", "data": "compare", "story": "cinematic", "concept": "compare"}
+# 担当・直しの system に見本を同梱する type。10-25 の著者固定 A/B (4 題材・Opus 盲検両順 + ユーザーの盲検視聴) で、
+# 見本の効きが残るのは craft 的な type だけだった — cinematic は見本あり側が両順一致で勝ち・data は微・compare / concept は
+# 見本なしが小勝ち (craft.md が見本の教えを肩代わり)。著者の user turn の見本は全 type で据え置き (外す検証はしていない)
+STAFF_SAMPLE_TYPES = ("cinematic", "story")
 SAMPLE_MAX_BYTES = 70_000
 # 題の語: 漢字・片仮名の続き 2 字以上 (`カゴ落` `麻辣湯` のように混ざって良い)・英字で始まる英数 3 字以上。平仮名だけの語は数えない
 # (「きている」「れない」のような活用の切れ端が題の語になる) — 1 字の漢字と助詞も数えない
@@ -155,8 +159,9 @@ def _skill_grammar() -> str:
 
 def build_system_prompt(out: Path, samples: tuple[str, ...] | None) -> Path:
     """役の冒頭 + SKILL の文法 + looks の罠 + sounds + authoring + capabilities + 制作の作法 + 見本 2 本 (道具の無い call は file を読めない
-    ので全部同梱)。samples=None は見本なし (著者の静的な system prompt — 見本は user turn に置く)。担当と直し役は見本入り — 見本を外すと
-    担当の組み上げ・状態の変化が半分に減り、両順の比べで 6 題材中 4 題材負けた (10-22)。"""
+    ので全部同梱)。samples=None は見本なし (著者の静的な system prompt — 見本は user turn に置く)。担当と直し役の見本は
+    STAFF_SAMPLE_TYPES だけ — hf2 (craft.md) 採用前は外すと大敗した (10-22) が、採用後の再検証 (10-25) では密度ほぼ同等・
+    品質 2-2 で、効きが残るのは craft 的な type だけだった。"""
     looks = (SKILL / "reference/looks.md").read_text()
     parts = [
         SYSTEM_HEAD,
@@ -222,7 +227,7 @@ draft src の段取りの決まり (機構の事実):
 - 絵の生成は時代・形・数の段階を守らない・1 枚の説明に 2 場面を書くと上下 2 枚の合成になる。同じ物を 2 枚以上に描くなら根に
   `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。生成された絵は誰も見られないので、文字を置く所は `subject:` / `room:` で空けられる。
 {length_rule}
-{editable_note()}出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
+出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
 === plan ===
 名: この cut で何を見せ、どう動かすか (目標秒・N 文)      ← 1 行 1 cut・名は英小文字・この順で cut が並ぶ
 === root_design ===
@@ -291,7 +296,7 @@ def staff_prompt(
 - DEFECT の常連: `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
   `名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` /
   `filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ。
-{editable_note()}
+
 ユーザーの依頼:
 {request.strip() or "(なし)"}
 ユーザーの設定: 長さの目安 {"指定なし" if target_s == AUTO_SECONDS else f"{target_s} 秒"} (構成の目標秒の和 {planned_s:.0f} 秒・尺は台詞で決まる)
@@ -333,23 +338,6 @@ VERBATIM_REQUEST = re.compile(
 LENGTH_RULE = "cut_length"
 # 著者が cut の timeline の最後の台詞の次に書く、文の数と台詞を読む秒の目安の注記 (`# 台詞 4 文 ~20 s`)
 DECLARED_SECONDS = re.compile(r"^#\s*台詞[^\n]*?[~〜約]\s*(\d+(?:\.\d+)?)\s*(?:s|秒)", re.M)
-
-
-def editable_note() -> str:
-    """編集可能モード (env NOLANG_STUDIO_PROFILE=editable・stream_make.sh --editable) の作法の節。著者・担当・直し役の
-    prompt に同じ節を入れる — 投入の門 (intake) が同じ規則 (`editable_*`) を DEFECT にするので、書く前に守る方が速い。
-    閾値の正本は server の台帳 (`GET drafts/rules/` の profiles.editable) — この文は既定値を写した作法。"""
-    if os.environ.get("NOLANG_STUDIO_PROFILE") != "editable":
-        return ""
-    return """
-編集可能モード (この動画はユーザーが編集画面で自分で調整する — 編集できる語彙だけで書く。破ると投入で DEFECT `editable_*`):
-- 1 cut の要素は 6 個まで (×N は N と数える)・絵 (img) は 2 枚まで (全面の地 + 挿絵 1 枚)。情報は札 1 枚に束ね、多ければ cut を分ける。
-- 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う。
-- group / camera / svg / 数える数字 (`[count:]`) / `{tok}` の run は使わない。`.sticky` は立ち絵 (avatar) だけ。
-- 入退場は preset 語 (`in: fade` `in: pop` …) か {x y scale opacity duration ease} だけの単純 object。ease は語 (`power2.out` 等) —
-  `back.out(1.7)` のような係数つきは不可。常時の動きは `main: kb {…}` 等の語だけ — keys / 波形 / path / filter の動きは使わない。
-- 書体は 3 種まで・影 (box-shadow) は 1 種を def で使い回す (flat な板を既定に)。文字の段は見出し / 本文 / 札の 3 段を def で揃える。
-"""
 
 
 def _numbered(text: str) -> str:
@@ -419,7 +407,7 @@ def fix_prompt(
     )
     return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
 変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)。
-{editable_note()}{trim}形式:
+{trim}形式:
 === edits ===
 @ 行番号
 その行の新しい中身 (複数行にしてよい・行を消すなら空のまま次の `@` へ)
@@ -915,17 +903,19 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     proj, st, studio = project / "solo", project / "stream", project / "studio"
     proj.mkdir(exist_ok=True)
     st.mkdir(exist_ok=True)
-    # params は "型 縦横 秒" + 任意の flag token (`editable` — stream_make.sh --editable が足す)
-    typ, aspect, seconds = (project / "params.txt").read_text().split()[:3]
+    typ, aspect, seconds = (project / "params.txt").read_text().split()
     request = (project / "request.txt").read_text()
     if samples is None:
         samples, skipped = pick_samples(typ, aspect, request)
-    else:  # 明示の見本はそのまま使う (同じ題材なら記録だけ)
+        staff_samples = samples if typ in STAFF_SAMPLE_TYPES else ()
+    else:  # 明示の見本はそのまま使う (同じ題材なら記録だけ)・明示なら担当・直しにも type を問わず入れる
         skipped = []
+        staff_samples = samples
         if same := [n for n in samples if same_topic(n, request)]:
             log(st, event="samples_same_topic", samples=same)
-    # 担当・直し役の system prompt (見本込み — 同じ見本の run どうしで cache を共有する)。著者の call と並んで 1 回だけ温める
-    shared_prompt = build_system_prompt(st / "system_prompt.md", samples)
+    # 担当・直し役の system prompt (STAFF_SAMPLE_TYPES は見本込み — 同じ見本の run どうしで cache を共有する)。
+    # 著者の call と並んで 1 回だけ温める
+    shared_prompt = build_system_prompt(st / "system_prompt.md", staff_samples or None)
     warm = None
     if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
         warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
@@ -933,7 +923,7 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
     # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
     sp = build_system_prompt(st / "system_prompt_author.md", None)
-    (st / "samples.txt").write_text(",".join(samples) + "\n")  # fix / fix-root も同じ見本で
+    (st / "samples.txt").write_text(",".join(samples) + "\n")  # 記録 (--samples で再投入 = 明示扱いで全役に入る)
     skeleton_d = (studio / "design.txt").read_text()
     canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
     if not request.lstrip().startswith("---- ユーザーの依頼 ----"):
@@ -1081,7 +1071,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
     timing_file = findings_file.with_name("timing_author.txt")
     # 動画の長さの門 = plan の目標秒の和 (orchestrator の進行線の total と同じ値)
     planned_s = sum(sec for _, sec in plan_names(plan))
-    _typ, _aspect, target_s = (project / "params.txt").read_text().split()[:3]
+    _typ, _aspect, target_s = (project / "params.txt").read_text().split()
     out: list[str] = []
     stream_model(
         st,

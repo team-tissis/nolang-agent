@@ -5,7 +5,6 @@
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|low] [--no-staff]
 #        [--review medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
 #                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
-#        [--editable]   (編集可能モード = 編集画面で調整できる文法サブセットに収める — 著者の作法 + check の profile + 投入の門の DEFECT)
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の hf_<type>_* 2 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
@@ -15,15 +14,14 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../../../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,12p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,11p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=low; REVIEW=medium; LOOK=""; EDITABLE=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=low; REVIEW=medium; LOOK=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
-    --editable) EDITABLE=1; shift;;
     --type) TYPE=$2; shift 2;;
     --aspect) ASPECT=$2; shift 2;;
     --seconds) SECONDS_=$2; shift 2;;
@@ -57,17 +55,14 @@ if [ -n "$SAMPLES" ]; then
   for f in ${SAMPLES//,/ }; do [ -f "$S/../reference/samples/$f" ] || { echo "--samples: reference/samples/$f が無い" >&2; exit 2; }; done
 fi
 mkdir -p "$P"
-echo "$TYPE $ASPECT $SECONDS_${EDITABLE:+ editable}" > "$P/params.txt"
-# 編集可能モード: 著者・担当・直しの prompt に editable の節が入り (stream_author.py が env を読む)、check と投入の門が
-# profile=editable の規則を効かせる
-[ -n "$EDITABLE" ] && export NOLANG_STUDIO_PROFILE=editable
+echo "$TYPE $ASPECT $SECONDS_" > "$P/params.txt"
 if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' "$REQ_TEXT" > "$P/request.txt"; fi
 [ -n "$IN_REPO" ] && export PYTHONPATH=$ROOT
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$S/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF} --review $REVIEW --fix $FIX${LOOK:+ --look}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $REVIEW${LOOK:+ (静止画)}・直し $FIX${EDITABLE:+・編集可能モード}・見本 ${SAMPLES:-type の既定})"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF} --review $REVIEW --fix $FIX${LOOK:+ --look}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
+echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $REVIEW${LOOK:+ (静止画)}・直し $FIX・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
