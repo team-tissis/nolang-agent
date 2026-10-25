@@ -16,7 +16,7 @@ usage (repo root から):
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
       → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
         --shots = 見直しに cut の静止画も見せる (stream_run の --look))
-project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds"・studio/ = `new` の雛形)。
+project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [editable]"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
 
@@ -915,7 +915,8 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     proj, st, studio = project / "solo", project / "stream", project / "studio"
     proj.mkdir(exist_ok=True)
     st.mkdir(exist_ok=True)
-    typ, aspect, seconds = (project / "params.txt").read_text().split()
+    # params は "型 縦横 秒" + 任意の flag token (`editable` — stream_make.sh --editable が足す)
+    typ, aspect, seconds = (project / "params.txt").read_text().split()[:3]
     request = (project / "request.txt").read_text()
     if samples is None:
         samples, skipped = pick_samples(typ, aspect, request)
@@ -1080,7 +1081,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
     timing_file = findings_file.with_name("timing_author.txt")
     # 動画の長さの門 = plan の目標秒の和 (orchestrator の進行線の total と同じ値)
     planned_s = sum(sec for _, sec in plan_names(plan))
-    _typ, _aspect, target_s = (project / "params.txt").read_text().split()
+    _typ, _aspect, target_s = (project / "params.txt").read_text().split()[:3]
     out: list[str] = []
     stream_model(
         st,

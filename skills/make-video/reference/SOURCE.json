@@ -1,9 +1,9 @@
 {
   "from": "nolang-backend/.agents/skills/nolang-draft-studio",
   "ref": "feat/draft_src/editable-profile",
-  "commit": "e707bc4483",
+  "commit": "e8a847f183",
   "dirty": false,
-  "synced_at": "2026-10-25T05:15:11.412Z",
+  "synced_at": "2026-10-25T05:22:08.107Z",
   "files": [
     "authoring.md",
     "capabilities.md",
