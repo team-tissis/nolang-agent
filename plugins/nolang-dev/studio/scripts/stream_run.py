@@ -14,13 +14,14 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix defect|none|low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
-  --fix = 直し役の範囲。既定 `defect` = DEFECT と隠れる文字 (severe の occluded) だけ直し役 (low) を呼ぶ (見直しなし・他の severe / warn は直さない)。`none` = 直し役も
+  --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
+    直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`none` = 直し役も
     呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
   担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
     作る。--staff-edits-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
@@ -378,7 +379,7 @@ class Run:
         staff: str | None = None,
         fix: str | None = "low",
         review: str | None = "low",
-        defects_only: bool = True,
+        fix_scope: str = "severe",
         keep_assets: bool = True,
         look: bool = False,
         remote: str | None = None,
@@ -401,10 +402,10 @@ class Run:
         self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.fix_effort = fix  # 直し役の effort。None = 直し役なし (見直しもなし)
-        # 直し役は DEFECT の時だけ (見直しなし・severe / warn の指摘は直さない)
-        self.defects_only = defects_only
+        # 直し役の範囲: "defect" = DEFECT と隠れる文字だけ・"severe" = + severe 全部・"warn" = 見直しと台帳の指摘の直し
+        self.fix_scope = fix_scope
         self.review_effort = (
-            review if fix is not None and not defects_only else None
+            review if fix is not None and fix_scope == "warn" else None
         )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
         # 担当は絵と台詞を変えない — 絵と声は著者の版から担当と並列に作る (`_stage` が担当の前に warm を頼む)
         self.keep_assets = keep_assets
@@ -968,10 +969,14 @@ class Run:
         """fix を回す指摘か: 台帳の直しの列の規則の severe / warn (level では決めない — docs/draft_src_v2/quality.md)。"""
         return f.get("severity") in ("severe", "warn") and f.get("rule") in self.fixed
 
-    @staticmethod
-    def hidden_text_fix(f: dict[str, object]) -> bool:
-        """DEFECT だけ直す run (--fix defect) でも直し役に回す指摘 = 隠れる文字 (severe の occluded)。一番避けたい崩れで、
-        機械の直し (move_after) は字の札どうしに届かない (字を持つ側が隠す重なりは入れ替えでは直らない)。"""
+    def fix_finding(self, f: dict[str, object]) -> bool:
+        """直し役に回す指摘か (`fix_scope`): defect = 隠れる文字だけ (一番避けたい崩れで、機械の直し move_after は字の札どうしに
+        届かない)・severe = severe 全部 (担当後の severe は cut の 9%・大半は担当が作る — 隠れる文字 / 画面の外)・warn = 台帳の
+        直しの列の severe / warn (`to_fix`)。"""
+        if self.fix_scope == "warn":
+            return self.to_fix(f)
+        if self.fix_scope == "severe":
+            return f.get("severity") == "severe"
         return f.get("rule") == "occluded" and f.get("severity") == "severe"
 
     def attribute_unlocated(
@@ -1237,7 +1242,7 @@ class Run:
                 autofixes += 1
                 continue  # 直した text を check し直す (直し役の回数に数えない)
             last = ((self.solo / f"cut_{c}.txt").read_text(), mine)
-            fixes = [f for f in mine if (self.hidden_text_fix(f) if self.defects_only else self.to_fix(f))]
+            fixes = [f for f in mine if self.fix_finding(f)]
             self.log(
                 cut=c,
                 event="check",
@@ -1311,10 +1316,10 @@ class Run:
                 break
             findings = "\n".join(d.text for d in defects[:40])
             rest = (
-                []
-                if self.defects_only
-                else [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
-            )  # 直し役にはその cut の severe / warn も全部見せる (DEFECT だけ直す run は DEFECT と隠れる文字だけ)
+                [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
+                if self.fix_scope == "warn"
+                else []
+            )  # warn も直す直し役にはその cut の severe / warn を全部見せる (defect / severe の run は直す指摘だけ — warn を見せると直しに行く)
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
@@ -2014,7 +2019,7 @@ class Run:
     @property
     def warn_fixer(self) -> bool:
         """warn も直す直し役がいる (`--fix low`)。いなければ担当の後の check からは LLM が warn を見ない。"""
-        return self.fix_effort is not None and not self.defects_only
+        return self.fix_effort is not None and self.fix_scope == "warn"
 
     def autofix(self, c: str, findings: list[dict], rnd: int | str, *, sure_only: bool) -> list[dict]:
         """check の指摘のうち直し方が一つに決まる物 (`autofix`) を cut c の block に機械で当てる → 当てた指摘 (LLM に渡さない)。
@@ -2472,8 +2477,8 @@ def main(argv: list[str]) -> int:
         return 2
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
-    fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "defect"
-    fix = {"none": None, "defect": "low"}.get(fix_arg, fix_arg)
+    fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "severe"
+    fix = {"none": None, "defect": "low", "severe": "low"}.get(fix_arg, fix_arg)
     review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
     look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
@@ -2488,7 +2493,7 @@ def main(argv: list[str]) -> int:
         staff=staff,
         fix=fix,
         review=None if review == "none" else review,
-        defects_only=fix_arg == "defect",
+        fix_scope=fix_arg if fix_arg in ("defect", "severe") else "warn",
         keep_assets="--staff-edits-assets" not in argv,
         look=look,
         remote=remote,

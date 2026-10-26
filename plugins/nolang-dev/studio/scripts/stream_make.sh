@@ -3,9 +3,10 @@
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|low] [--no-staff]
-#        [--review low|medium|none] [--fix defect|none|low] [--staff-edits-assets] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
+#        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
 #                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
-#        (既定 --fix defect = DEFECT の時だけ直し役 (low)・見直しなし・--fix none で直し役も無し・--fix low で見直しと指摘の直し。既定では担当は絵と台詞を変えず、絵と声は著者の版から担当と
+#        (既定 --fix severe = DEFECT と severe の指摘 (隠れる文字・画面の外 …) の時だけ直し役 (low)・見直しなし・warn は直さない・--fix defect = DEFECT と隠れる文字だけ・
+#         --fix none で直し役も無し・--fix low で見直しと指摘の直し。既定では担当は絵と台詞を変えず、絵と声は著者の版から担当と
 #         並列に作る・--staff-edits-assets で担当が絵と台詞も変える)
 #        [--editable]   (編集可能モード = 編集画面で調整できる文法サブセットに収める — 著者の作法 + check の profile + 投入の門の DEFECT)
 #        [--ref <video_id>]   (参照の動画 = ユーザーが選んだテンプレか自分の動画。その src を著者に「ユーザーが選んだ形」として渡す・
@@ -25,7 +26,7 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=defect; REVIEW=low; ASSETS=""; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
