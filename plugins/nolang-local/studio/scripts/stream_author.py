@@ -1114,6 +1114,11 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
     # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
     sp = build_system_prompt(st / "system_prompt_author.md", None)
+    # 比べ用: 著者の user turn の見本を減らす — `none` = 置かない・`1` = 先頭の 1 本だけ (担当・直し役の見本は STAFF_SAMPLE_TYPES のまま)
+    author_samples = {"none": (), "1": samples[:1]}.get(os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLES", ""), samples)
+    # 比べ用: 著者の見本だけ別の type から選ぶ (製品は type を決めず concept の見本 = `concept`)
+    if sample_type := os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLE_TYPE"):
+        author_samples = pick_samples(sample_type, aspect, request)[0]
     (st / "samples.txt").write_text(",".join(samples) + "\n")  # 記録 (--samples で再投入 = 明示扱いで全役に入る)
     skeleton_d = (studio / "design.txt").read_text()
     canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
@@ -1126,25 +1131,34 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         aspect=aspect,
         seconds=seconds,
         effort=effort,
-        samples=list(samples),
+        samples=list(author_samples),
         samples_skipped=skipped,
     )
     ref = reference_of(project)
     if ref is not None:  # 依頼の `[video:<id>]` は参照の題に (製品の入口が題へ置換するのと同じ)
         request = re.sub(rf"\[video:{re.escape(str(ref['template_video_id']))}\]", f"「{ref['title']}」", request)
         log(st, event="reference", video_id=ref["template_video_id"], source=ref.get("source"), title=ref.get("title"))
+    if extra := os.environ.get("NOLANG_STUDIO_AUTHOR_EXTRA"):  # 比べ用: 依頼の後ろに足す著者だけの注意 (file の path)
+        request += "\n" + Path(extra).read_text()
     speech = speech_of(project)
     prompt = author_prompt(
         aspect,
         seconds,
         canvas,
         request,
-        samples_text(samples),
+        samples_text(author_samples),
         str(ref["brief"]) if ref is not None else "",
         f"\n{speech['brief']}\n" if speech is not None else "",
     )
     sp0 = Splitter(proj, st, "author")
-    stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
+    if author_model := os.environ.get(
+        "NOLANG_STUDIO_AUTHOR_MODEL"
+    ):  # 著者だけ別の model (担当・直し役は engine のまま)
+        from stream_gemini import stream_gemini
+
+        stream_gemini(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", model=author_model, log=log)
+    else:
+        stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     sp0.finish()
     if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
         (st / "src.done").touch()
