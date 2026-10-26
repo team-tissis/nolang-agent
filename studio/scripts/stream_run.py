@@ -20,7 +20,7 @@ usage (repo root から): python stream_run.py <project> [--staff medium] [--sta
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
-  --fix = 直し役の範囲。既定 `defect` = DEFECT の時だけ直し役 (low) を呼ぶ (見直しなし・severe / warn の指摘は直さない)。`none` = 直し役も
+  --fix = 直し役の範囲。既定 `defect` = DEFECT と隠れる文字 (severe の occluded) だけ直し役 (low) を呼ぶ (見直しなし・他の severe / warn は直さない)。`none` = 直し役も
     呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
   担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
     作る。--staff-edits-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
@@ -968,6 +968,12 @@ class Run:
         """fix を回す指摘か: 台帳の直しの列の規則の severe / warn (level では決めない — docs/draft_src_v2/quality.md)。"""
         return f.get("severity") in ("severe", "warn") and f.get("rule") in self.fixed
 
+    @staticmethod
+    def hidden_text_fix(f: dict[str, object]) -> bool:
+        """DEFECT だけ直す run (--fix defect) でも直し役に回す指摘 = 隠れる文字 (severe の occluded)。一番避けたい崩れで、
+        機械の直し (move_after) は字の札どうしに届かない (字を持つ側が隠す重なりは入れ替えでは直らない)。"""
+        return f.get("rule") == "occluded" and f.get("severity") == "severe"
+
     def attribute_unlocated(
         self, c: str, cuts: list[str], unlocated: list[Defect], *, root_extra: str = ""
     ) -> tuple[list[Defect], list[Defect]]:
@@ -1198,14 +1204,12 @@ class Run:
             time.sleep(0.3)
         self.log(cut=c, event="cut_seen")
         self.move_forward_defs(c)
-        if self.staff_effort and self.keep_assets:
-            # 担当は絵と台詞を変えない — 著者の版のまま素材を頼み、担当と並列に作る
-            self.start_prewarm(c)
         if self.staff_effort:
             self.staff(i, c)
         # 絵と声は担当が書き終えた瞬間に作り始める (check と直しに並ぶ・DEFECT の行は落として残りを作り、直しの後に差分だけ作る)
         self.start_prewarm(c)
         fix_calls = 0  # 直し役を呼んだ回数 (著者版への差し戻しも 1 回と数える)・2 回まで
+        autofixes = 0  # 機械の直しを当てた回数 (check し直す)・2 回まで
         before_fix: str | None = None  # 直し役を掛ける直前の cut の text (直し役が作った DEFECT の行を戻す元)
         settled = False  # 直し役の壊した行を戻した — DEFECT が消えれば残りの指摘で直し役をもう呼ばない
         before_clean = False  # before_fix の版の check が DEFECT 0 だったか (直しが DEFECT を作ったら版ごと戻せる)
@@ -1229,8 +1233,11 @@ class Run:
             dd, out, defects, lint, _blockers = self.check_settled(c, i, rnd)
             cuts = self.live_cuts(self.order[: i + 1])
             mine = [f for f in lint if f.get("cut") == c]
+            if autofixes < 2 and self.autofix(c, mine, rnd, sure_only=self.warn_fixer):
+                autofixes += 1
+                continue  # 直した text を check し直す (直し役の回数に数えない)
             last = ((self.solo / f"cut_{c}.txt").read_text(), mine)
-            fixes = [] if self.defects_only else [f for f in mine if self.to_fix(f)]
+            fixes = [f for f in mine if (self.hidden_text_fix(f) if self.defects_only else self.to_fix(f))]
             self.log(
                 cut=c,
                 event="check",
@@ -1307,7 +1314,7 @@ class Run:
                 []
                 if self.defects_only
                 else [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
-            )  # 直し役にはその cut の severe / warn も全部見せる (DEFECT だけ直す run は DEFECT だけ)
+            )  # 直し役にはその cut の severe / warn も全部見せる (DEFECT だけ直す run は DEFECT と隠れる文字だけ)
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
@@ -1382,7 +1389,23 @@ class Run:
                 # 出力が使えなかった (読めない・cut を分けた) — 直しの回数が残っていれば呼び直す (尽きれば次の round で最後の手段)
                 self.log(cut=c, event="fix_unusable", round=rnd, s=round(time.time() - t, 1), tail=tail)
                 before_fix = None
+        if self.warn_fixer:
+            self.final_autofix(c, i, last)
         self.drop_unshown(c, i, last)
+
+    def final_autofix(self, c: str, i: int, last: tuple[str, list[dict[str, object]]] | None) -> None:
+        """warn を直す直し役が回り終えた cut c に、消極的な機械の直しも当てる (LLM がもう見ない)。指摘は最後の check の物 (text が
+        その時のままの時だけ)・当てた後の check に DEFECT が出たら戻す。"""
+        if last is None or self.broken.get(c):
+            return
+        src = self.solo / f"cut_{c}.txt"
+        checked, findings = last
+        if src.read_text() != checked or not self.autofix(c, [dict(f) for f in findings], "final", sure_only=False):
+            return
+        if self.check_settled(c, i, "final")[2]:
+            with self.name_lock:
+                src.write_text(checked)
+            self.log(cut=c, event="autofix_reverted", round="final")
 
     def drop_unshown(self, c: str, i: int, last: tuple[str, list[dict[str, object]]] | None) -> None:
         """直しの後まで残った `dropped` (compile が外して描いた記述・綴りは指摘の `drop`) を cut の src から消す — 描いている物と
@@ -1628,10 +1651,14 @@ class Run:
 
         src = self.solo / f"cut_{c}.txt"
         keep = self.solo / f"author_cut_{c}.txt"
+        # 著者版の check は担当の前に回し、指摘を担当に渡す (check の 1.6 s を浮かせる並走は担当後の DEFECT を増やした)。直し方が
+        # 一つに決まる指摘は check が機械で直してから (著者の版 = 直した版)
+        ff = self.author_check(i, c)
         if not keep.exists():
             keep.write_text(src.read_text())
-        # 著者版の check は担当の前に回し、指摘を担当に渡す (check の 1.6 s を浮かせる並走は担当後の DEFECT を増やした)
-        ff = self.author_check(i, c)
+        if self.keep_assets:
+            # 担当は絵と台詞を変えない — 著者の版のまま素材を頼み、担当と並列に作る
+            self.start_prewarm(c)
         self.write_defs_before(c)
         before = src.read_text()  # 担当の前の block (著者の版 + 前方から移した定義) — 担当が消した定義を戻す基準
         t = time.time()
@@ -1965,6 +1992,8 @@ class Run:
         if clean:
             self.author_clean.add(c)
         mine = [f for f in lint if f.get("cut") == c]
+        fixed = self.autofix(c, mine, "author", sure_only=True)  # 担当がこの後に見る
+        mine = [f for f in mine if f not in fixed]  # 機械で直した指摘は担当に渡さない
         findings = "\n".join(d.text for d in defects[:20]) + "".join(
             f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             for f in mine[:30]
@@ -1981,6 +2010,34 @@ class Run:
                 estimate_s=round(self.cut_estimate[c], 1),
             )
         return ff
+
+    @property
+    def warn_fixer(self) -> bool:
+        """warn も直す直し役がいる (`--fix low`)。いなければ担当の後の check からは LLM が warn を見ない。"""
+        return self.fix_effort is not None and not self.defects_only
+
+    def autofix(self, c: str, findings: list[dict], rnd: int | str, *, sure_only: bool) -> list[dict]:
+        """check の指摘のうち直し方が一つに決まる物 (`autofix`) を cut c の block に機械で当てる → 当てた指摘 (LLM に渡さない)。
+        sure_only = 積極的な直しだけ (後に担当か warn を直す直し役が残る時 — 消極的な物は指摘のまま LLM へ)。"""
+        from stream_author import apply_autofix  # noqa: PLC0415 — scripts dir を sys.path に足している
+
+        src = self.solo / f"cut_{c}.txt"
+        with self.name_lock:
+            text, applied = apply_autofix(
+                src.read_text(), [f for f in findings if f.get("autofix")], sure_only=sure_only
+            )
+            if applied:
+                src.write_text(text)
+        if applied:
+            self.log(
+                cut=c,
+                event="autofix",
+                round=rnd,
+                sure_only=sure_only,
+                n=len(applied),
+                fixes=[str(f.get("autofix")) for f in applied],
+            )
+        return applied
 
     def guarded(self, fn, i: int, c: str) -> None:
         """段の thread が例外で死んだ cut は壊れ扱い (旗は段 (stage / warm) が finally で立てる)。"""

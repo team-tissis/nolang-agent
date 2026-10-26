@@ -97,7 +97,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | override_speaker / indicator | `cast` / `manner=` / `[manner:…]` (台詞ごとは Fish Audio の声だけ) · キャラの声色 `@名.style:` | |
 | override_display_texts | `subtitle "…"` | |
 | yomi_edits | 根の `read 表記 = 読み` (全出現) / 台詞の `{表記\|読み}` (1 か所) | |
-| audio_filter volume_db (声) | `voice#名(volume: +3dB; filter: echo\|radio[,scale=,freq_ms=])` · 変種 `voice#名.tag(…)` を `@名 .tag:` で | |
+| audio_filter volume_db (声) | `voice#名(volume: +3dB; filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate[,scale=,freq_ms=])` · 変種 `voice#名.tag(…)` を `@名 .tag:` で | |
 
 ## 字幕 (ScriptLayer・ScriptLayout・SpeechWindow)
 
@@ -130,7 +130,7 @@ HTML + GSAP の表現を書くとき「書けない」と思ったら、まず�
 | ducking | 既定で掛かる (−4 / 200 / 500 / 600 / 200)。`bgm#名(duck: -6; duck_attack: …; duck_release: …; duck_merge: …; duck_lead: …)`・`duck: off` |
 | keys の volume_db (音量の点列) align_end lowpass_hz | `keys: "0:+3\|15s:0\|end-3s:+2"; align: end; lowpass: 650` (`align: end` = 曲の末尾を層の末尾に・文字の寄せでないので `text-align` ではない) · 区間だけ `lowpass_keys: "20s:650\|28s:off"` |
 | keys の volume_db (変種の音量へ移る)・飛び (jump) | 変種 `#名.tag(volume: -6dB)` を `[!#名 .tag]` · `jump: 91.6s>166.8s; xfade: 1300` / `jump: at_cut:名>166.8s` |
-| BGM audio_filter | `bgm#名(filter: echo\|radio,scale=,freq_ms=)` |
+| BGM audio_filter | `bgm#名(filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate,scale=,freq_ms=)` |
 | SE volume offset crop fade | `se "…" -4.5dB -200 start=0.2s to=1.2s fade=100,800` (台詞の `[♪… -4.5dB peak=4.02s to=1.2s]` — start = 素材の頭出し・peak = 素材の山を語に) |
 | master lufs true_peak | 根の `master lufs=-15 tp=-1` |
 | 素材の再生 (mute loop fit_duration crop) | `img#名(play: loop\|stretch,start=500,to=1500,speed=150%,mute)` (img の footage・`stretch` = fit_duration・`start` = crop_start。bgm は常に loop — 書かない) |

@@ -671,6 +671,163 @@ def _bare_speech(line: str) -> str:
 _PICTURE_LINE = re.compile(r"^(\s*)img#([^\s(]+)\((?:[^()]|\([^()]*\))*\)\s*(.*)$")
 
 
+_ELEMENT_LINE = re.compile(r"^(\s*)[a-z][\w-]*#([\w-]+)")  # design の要素の行 (`  p#名(` — 字下げで親子)
+_SILENCE_TAIL = re.compile(r"\[silence:\+([\d.]+)s\]\s*$")
+_SILENCE_AT = re.compile(r"\[silence:\+([\d.]+)s\]")
+
+
+def _split_top(text: str, sep: str) -> list[str]:
+    """括弧・引用符の外の sep で割る (`out: fade {duration: .4}; main: spin {period: 9, dir: 'ccw'}` を宣言ごとに)。"""
+    parts, depth, quote, start = [], 0, "", 0
+    for at, ch in enumerate(text):
+        if quote:
+            quote = "" if ch == quote else quote
+        elif ch in "'\"":
+            quote = ch
+        elif ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif ch == sep and depth == 0:
+            parts.append(text[start:at])
+            start = at + 1
+    return [*parts, text[start:]]
+
+
+def _add_silence(line: str, seconds: float, *, head: bool) -> str:
+    """台詞の行の頭 (話者の後) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。"""
+    if head:
+        speaker = _SPEAKER.match(line)
+        cut = speaker.end() if speaker else 0
+        rest = line[cut:]
+        lead = rest[: len(rest) - len(rest.lstrip())]
+        if (old := _SILENCE_AT.match(rest[len(lead) :])) is not None:
+            total = float(old.group(1)) + seconds
+            return line[:cut] + lead + f"[silence:+{total:.2f}s]" + rest[len(lead) + old.end() :]
+        return line[:cut] + lead + f"[silence:+{seconds:.2f}s]" + rest[len(lead) :]
+    if (old := _SILENCE_TAIL.search(line)) is not None:
+        return line[: old.start()] + f"[silence:+{float(old.group(1)) + seconds:.2f}s]"
+    return line.rstrip() + f"[silence:+{seconds:.2f}s]"
+
+
+def _with_reading(line: str, token: str, kana: str) -> str:
+    """台詞の行の token (印 `[…]`・読みの指定 `{…|…}` の外の最初の 1 つ) を `{token|kana}` に。"""
+    pattern = re.compile(r"\[[^\]]*\]|\{[^{}]*\}|(?<![\d.])" + re.escape(token) + r"(?!\d)")
+    for hit in pattern.finditer(line):
+        if hit.group(0) == token:
+            return line[: hit.start()] + f"{{{token}|{kana}}}" + line[hit.end() :]
+    return line
+
+
+def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
+    """design の行 → 要素の path (字下げで親の名を `.` で繋ぐ) → (行の始め, 子を含む終わり, 親の path)。"""
+    spans: dict[str, tuple[int, int, str]] = {}
+    stack: list[tuple[int, str]] = []
+    for at, line in enumerate(lines):
+        hit = _ELEMENT_LINE.match(line)
+        if hit is None:
+            continue
+        indent = len(hit.group(1))
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        parent = stack[-1][1] if stack else ""
+        path = f"{parent}.{hit.group(2)}" if parent else hit.group(2)
+        end = at + 1
+        while end < len(lines) and lines[end].strip() and len(lines[end]) - len(lines[end].lstrip()) > indent:
+            end += 1
+        spans[path] = (at, end, parent)
+        stack.append((indent, path))
+    return spans
+
+
+# 積極的に当てる機械の直し — 直し方が正解として一つに決まり、問題を隠さない (月の読み・切替が運ぶ場面の余計な out・言い切って
+# から切り替える / 切替が済んでから話し始める 0.5 秒以下の間)。他 (0.5 秒を超える間・切替を短く溶かす・文字を板の上に出す) は
+# 消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種) を選べる — 後に担当や warn を直す直し役が残る間は当てずに
+# 指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は
+# 40-74 で負け)
+AUTOFIX_SURE = frozenset({"reading", "drop_out", "br"})
+AUTOFIX_SURE_SILENCE_S = 0.5
+
+
+def apply_autofix(
+    block: str, findings: list[dict[str, str]], *, sure_only: bool = False
+) -> tuple[str, list[dict[str, str]]]:
+    """check の指摘のうち直し方が一つに決まる物 (`autofix` — lint が計算した `操作:引数`) を cut の block (design
+    `---timeline---` timeline) に当てる → (直した block, 当てた指摘)。当たらない指摘 (行が見つからない・形が違う) は飛ばす。
+    - `silence_tail:秒` 最後の台詞の末尾の無音 (切替が台詞に掛かる) / `silence_head:秒` 最初の台詞の頭の無音 (入場が切替の窓に入る)
+    - `drop_out:名` `section#名(…)` の `out:` を外す (切替との二重掛け)
+    - `transition:種,尺,overlap=…` cut の切替の行の種・尺・overlap を替える (他の引数 — 効果音・向き — は残す)
+    - `reading:語=読み,…` 台詞の語に読みを書く (`{9月|くがつ}`)
+    - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
+    - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
+    sure_only = 積極的な直し (`AUTOFIX_SURE`) だけ当てる (後に LLM が残る時)。"""
+    design, sep, timeline = block.partition("---timeline---")
+    if not sep:
+        return block, []
+    dlines, tlines = design.split("\n"), timeline.split("\n")
+    speech = [at for at, line in enumerate(tlines) if line.lstrip().startswith("@")]
+    applied: list[dict[str, str]] = []
+    for finding in findings:
+        op, _, arg = str(finding.get("autofix") or "").partition(":")
+        sure = op in AUTOFIX_SURE or (op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S)
+        if sure_only and not sure:
+            continue
+        before = (list(dlines), list(tlines))
+        if op in ("silence_tail", "silence_head") and speech:
+            at = speech[-1] if op == "silence_tail" else speech[0]
+            tlines[at] = _add_silence(tlines[at], float(arg), head=op == "silence_head")
+        elif op == "drop_out":
+            for at, line in enumerate(dlines):
+                head = re.match(rf"^(\s*section#{re.escape(arg)}\()(.*)(\)\s*)$", line)
+                if head is not None:
+                    kept = [part for part in _split_top(head.group(2), ";") if not part.strip().startswith("out:")]
+                    props = ";".join(kept).strip()
+                    dlines[at] = (
+                        head.group(1) + props + head.group(3)
+                        if props
+                        else head.group(1)[:-1] + head.group(3).lstrip(")")
+                    )
+        elif op == "transition":
+            spec = _split_top(arg, ",")
+            lines = [at for at, line in enumerate(tlines) if line.lstrip().startswith("transition ")]
+            if lines:
+                old = _split_top(tlines[lines[-1]].strip().removeprefix("transition ").strip(), ",")
+                extra = [part for part in old[1:] if "=" in part and not part.strip().startswith(("overlap=",))]
+                tlines[lines[-1]] = "transition " + ",".join([*spec, *(part.strip() for part in extra)])
+            else:
+                last = max(at for at, line in enumerate(tlines) if line.strip())
+                tlines.insert(last + 1, "transition " + arg)
+        elif op == "reading":
+            for pair in arg.split(","):
+                token, _, kana = pair.partition("=")
+                for at in speech:
+                    if token in tlines[at]:
+                        tlines[at] = _with_reading(tlines[at], token, kana)
+        elif op == "br":
+            fence = False
+            for at, line in enumerate(dlines):
+                if '"""' in line:
+                    fence = fence if line.count('"""') % 2 == 0 else not fence
+                    continue
+                if not fence and "\\n" in line:
+                    dlines[at] = line.replace("\\n", "[br]")
+        elif op == "move_after":
+            mine, _, theirs = arg.partition(":")
+            spans = _element_spans(dlines)
+            if (
+                mine in spans
+                and theirs in spans
+                and spans[mine][2] == spans[theirs][2]
+                and spans[mine][0] < spans[theirs][0]
+            ):
+                (start, end, _), (_, over_end, _) = spans[mine], spans[theirs]
+                moved = dlines[start:end]
+                dlines = dlines[:start] + dlines[end:over_end] + moved + dlines[over_end:]
+        if (dlines, tlines) != before:
+            applied.append(finding)
+    return "\n".join(dlines) + sep + "\n".join(tlines), applied
+
+
 def restore_pictures(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
     """担当が素材を変えない run で、担当の block の絵 (`img#`) を著者の版の説明文に戻す → (戻した block, 記録)。著者の版にある名の
     絵は説明文を著者の物に書き戻し (`mode: text`)、著者の版に無い説明文の新しい絵は行 (と字下げの子) ごと消して timeline の
