@@ -14,13 +14,18 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium] [--review low|medium|none] [--fix low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix none|low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
-  --fix = 2 回目以降の直し役 (check の指摘だけを直す) の effort (既定 low)。
+  --fix = 直し役 (check の指摘を直す・2 回目以降) の effort。既定 `none` = 直し役も見直しも呼ばない (DEFECT は機械の直しと
+    最後の手段 — 著者の版・DEFECT の印を落とす — だけ・指摘は直さない)。`low` で直し役と見直し (--review) を呼ぶ。
+  担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
+    作る。--staff-edits-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
+  既定 (担当 medium・素材は著者の版・直しなし) の根拠: 10-26 の 4 題材 bench で、担当 + 見直し + 直しに Opus 両順 3 勝 1 分・
+    担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。
   --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
     prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
   直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
@@ -370,8 +375,9 @@ class Run:
         project: Path,
         *,
         staff: str | None = None,
-        fix: str = "low",
+        fix: str | None = None,
         review: str | None = "low",
+        keep_assets: bool = True,
         look: bool = False,
         remote: str | None = None,
         token: str | None = None,
@@ -392,10 +398,12 @@ class Run:
         self.root_submitted = False
         self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
-        self.fix_effort = fix  # 直し役の effort
+        self.fix_effort = fix  # 直し役の effort。None = 直し役なし (見直しもなし)
         self.review_effort = (
-            review  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
-        )
+            review if fix is not None else None
+        )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
+        # 担当は絵と台詞を変えない — 絵と声は著者の版から担当と並列に作る (`_stage` が担当の前に warm を頼む)
+        self.keep_assets = keep_assets
         self.look = look  # 見直しに cut の静止画も見せる (REVIEW_ROUNDS_LOOK 回)
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
         self.weave = project / "weave"
@@ -1186,6 +1194,9 @@ class Run:
             time.sleep(0.3)
         self.log(cut=c, event="cut_seen")
         self.move_forward_defs(c)
+        if self.staff_effort and self.keep_assets:
+            # 担当は絵と台詞を変えない — 著者の版のまま素材を頼み、担当と並列に作る
+            self.start_prewarm(c)
         if self.staff_effort:
             self.staff(i, c)
         # 絵と声は担当が書き終えた瞬間に作り始める (check と直しに並ぶ・DEFECT の行は落として残りを作り、直しの後に差分だけ作る)
@@ -1272,6 +1283,11 @@ class Run:
                     )
                     settled = True
                     continue
+            if self.fix_effort is None:
+                # 直し役なし: DEFECT は最後の手段 (著者の版・DEFECT の印を落とす) だけ・指摘は直さない
+                if defects and not self.rescue_stage(i, c, rnd, defects):
+                    self.mark_broken(c, "DEFECT (no fixer)")
+                break
             need = bool(defects) or (bool(fixes) and not settled) or reviews > 0
             if not need:
                 break
@@ -1597,8 +1613,12 @@ class Run:
         """担当 (Opus) が著者の cut を仕上げる。前の cut は著者の版を渡すので cut ごとに並列に走る。
         著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当は台詞も直してよい (声は担当の版から作る)。
         逐語の台本の動画だけ、担当が台詞の文字を変えていたら著者の版の文字に戻す (`restore_speech`・読点の追加と読みの指定は許す —
-        後段では戻せない・`speech_restored`)。"""
-        from stream_author import restore_speech  # noqa: PLC0415 — scripts dir を sys.path に足している
+        後段では戻せない・`speech_restored`)。keep_assets の run は台詞を読点・行の割り方まで、絵を説明文まで著者の版に戻す
+        (`restore_pictures`・`pictures_restored` — 素材は著者の版から先に作っている)。"""
+        from stream_author import (  # noqa: PLC0415 — scripts dir を sys.path に足している
+            restore_pictures,
+            restore_speech,
+        )
 
         src = self.solo / f"cut_{c}.txt"
         keep = self.solo / f"author_cut_{c}.txt"
@@ -1610,13 +1630,31 @@ class Run:
         before = src.read_text()  # 担当の前の block (著者の版 + 前方から移した定義) — 担当が消した定義を戻す基準
         t = time.time()
         r = self.call_role(
-            [PY, str(AUTHOR), "staff", str(self.project), c, str(ff), "--effort", self.staff_effort or "medium"],
+            [
+                PY,
+                str(AUTHOR),
+                "staff",
+                str(self.project),
+                c,
+                str(ff),
+                "--effort",
+                self.staff_effort or "medium",
+                *(["--keep-assets"] if self.keep_assets else []),
+            ],
             timeout=900,
         )
         if r.returncode == 0 and "---timeline---" in r.stdout:
             # 戻す基準は書き戻す直前の file — 担当の裏で前方から移された定義 (move_forward_defs) も含める (担当開始時の text だと
             # その定義が担当の出力に無いまま上書きされて消える)
-            text, restored = restore_speech(keep.read_text(), r.stdout) if self.verbatim else (r.stdout, [])
+            author = keep.read_text()
+            text, restored = (
+                restore_speech(author, r.stdout, exact=self.keep_assets)
+                if self.verbatim or self.keep_assets
+                else (r.stdout, [])
+            )
+            pictures: list[dict[str, str]] = []
+            if self.keep_assets:
+                text, pictures = restore_pictures(author, text)
             # 担当の版を分けて残す (cut_<名>.txt は直し役が上書きする最終の版)
             (self.solo / f"staff_cut_{c}.txt").write_text(text)
             with self.name_lock:
@@ -1625,6 +1663,8 @@ class Run:
             self.log(cut=c, event="staff", s=round(time.time() - t, 1), chars=len(r.stdout))
             if restored:
                 self.log(cut=c, event="speech_restored", n=len(restored), lines=restored)
+            if pictures:
+                self.log(cut=c, event="pictures_restored", n=len(pictures), pictures=pictures)
             self.restore_defs(c, latest if "---timeline---" in latest else before, who="staff")
         else:
             self.log(cut=c, event="staff_failed", s=round(time.time() - t, 1), tail=(r.stdout + r.stderr)[-200:])
@@ -2236,7 +2276,7 @@ class Run:
                 self.log(cut=c, event="stream_died", code=self.stream_proc.returncode if self.stream_proc else None)
                 return
             defects = [str(d) for d in ack.get("defects", [])] if "rejected" in ack else []
-            if "rejected" in ack and defects:
+            if "rejected" in ack and defects and self.fix_effort is not None:
                 ff = self.st / f"intake_{c}.txt"
                 ff.write_text(
                     "投入検査 (流した前の cut + この cut) の DEFECT。前の cut はもう流れていて変えられない — 前の cut の定義の形"
@@ -2369,7 +2409,8 @@ def main(argv: list[str]) -> int:
         return 2
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
-    fix = argv[argv.index("--fix") + 1] if "--fix" in argv else "low"
+    fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "none"
+    fix = None if fix_arg == "none" else fix_arg
     review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
     look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
@@ -2384,6 +2425,7 @@ def main(argv: list[str]) -> int:
         staff=staff,
         fix=fix,
         review=None if review == "none" else review,
+        keep_assets="--staff-edits-assets" not in argv,
         look=look,
         remote=remote,
         token=token,

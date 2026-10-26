@@ -5,7 +5,7 @@
   timeline の block) → `=== end ===`。plan が閉じた時点で solo/order.txt を書く (orchestrator が cut を待ち始める)。
   low は書き始めるまで数秒で、書く速さ (約 180 字/s・1 cut 約 3.5 s) が再生より速いので、cut を分けて並行に書かせる理由が無い。質は cut ごとの
   担当 (medium) が運ぶ (docs/draft_src_v2/stream-evidence-261013.md s9 / s10)。1 人が全 cut を書くので、cut を跨ぐ名の衝突・型のばらつきも出ない。
-直し (low) は stream_run.py が cut ごとに頼む (`fix` subcommand: block + check の指摘 → 直した block)。
+直し (`--fix low` の時) は stream_run.py が cut ごとに頼む (`fix` subcommand: block + check の指摘 → 直した block)。
 担当・直し役の system prompt (見本込み) は著者の call と並んで 1 回だけ温める (`warmup`・author.jsonl の `warmup` event)。
 
 usage (repo root から):
@@ -294,6 +294,7 @@ def staff_prompt(
     timing: str = "",
     reference_note: str = "",
     verbatim: bool = False,
+    keep_assets: bool = False,
 ) -> str:
     """担当の user turn — 著者の cut をプロの解説動画の密度と階層に仕上げる。見る観点・欠陥の型・字の大きさの規則は渡さず、機構の事実
     (依頼の遵守・根・定義を変えない・台詞は直してよいが逐語の台本は変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
@@ -304,11 +305,22 @@ def staff_prompt(
         if prev_name and prev_block
         else ""
     )
-    speech_rule = (
-        "台詞 (`@` の行の文字) は一字も変えない (依頼の台本をそのまま読む動画。許すのは読点の追加と `{表記|読み}` の読みの指定だけ)。"
-        if verbatim
-        else "台詞 (`@` の行の文字) も直してよい (声と字幕はこの版から作る・この後の直し役は変えない)。構成のこの cut の中身と文の数は保つ。"
-    )
+    if keep_assets:
+        speech_rule = "台詞 (`@` の行) は文字も行の割り方も変えない (声は著者の版からもう作っている。印は足してよい)。"
+        picture_rule = (
+            "絵 (`img#` の説明文と `subject:` / `room:`) は著者の版のまま — 説明文を変えない・新しい説明文の絵を足さない (絵は著者の版から"
+            "もう作っている。同じ説明文の絵の置き直し・位置と大きさは変えてよい)。文字は絵の `room:` の空きに置く。"
+        )
+    else:
+        speech_rule = (
+            "台詞 (`@` の行の文字) は一字も変えない (依頼の台本をそのまま読む動画。許すのは読点の追加と `{表記|読み}` の読みの指定だけ)。"
+            if verbatim
+            else "台詞 (`@` の行の文字) も直してよい (声と字幕はこの版から作る・この後の直し役は変えない)。構成のこの cut の中身と文の数は保つ。"
+        )
+        picture_rule = (
+            "絵の説明文を書き換えられるのはこの段だけ (この後の直し役は変えない)。生成された絵は見られないので、文字を置く所は"
+            " `subject:` / `room:` で空ける。"
+        )
     return f"""あなたはプロのモーションデザイナー兼動画編集者で、この動画の cut `{name}` の担当です。著者が書いた block を受け取りました。
 この cut を、プロが作った解説動画として出せる密度と階層に仕上げてください。動きと音まで作り込むこと。必要なら作り替えてよい。
 
@@ -318,7 +330,7 @@ def staff_prompt(
 - 根 (palette・font・cast) と前の cut の定義 (def・motion・run) は変えない (使ってよい)。この cut の block の定義も後の cut が同じ名で
   使っている — 名・引数の形・見た目を変えない。別の形や見た目が要るなら新しい名で定義してこの block で使う。要素の名の接頭辞 (`{name}`) は保つ。
 - 文ごとの絵を「タイトル + 写真」で済ませず、結論の札か状態の変化を主役として立てる (章の入りに題と写真だけの溜めを作らない)。
-- 絵の説明文を書き換えられるのはこの段だけ (この後の直し役は変えない)。生成された絵は見られないので、文字を置く所は `subject:` / `room:` で空ける。
+- {picture_rule}
 - key は authoring の「型」の表にある物だけ (無い key は DEFECT で cut が落ちる)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層と根の要素 (跨いで出る札・字幕 — 著者が出す語を決めた `[>#名]` は残す) に付ける。前の cut の層には付けない・根の要素を写した別の要素を作らない。
 - DEFECT の常連: `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
   `名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` /
@@ -605,19 +617,21 @@ def _author_words_staff_marks(staff_line: str, author_line: str) -> str:
     return head + "".join(out) + bare_a[last:]
 
 
-def restore_speech(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
+def restore_speech(author: str, staff: str, *, exact: bool = False) -> tuple[str, list[dict[str, str]]]:
     """逐語の台本の動画で、担当の block の台詞 (`@` の行) を著者の版の文字に戻す → (戻した block, 戻した行の記録)。比べるのは `spoken` (読点の追加と読みの
     指定は許す)。台詞の行の数が同じ区間は行ごとに著者の文字へ担当の印を載せ (`marks`)、行を足した / 消した区間は著者の行ごと
     戻す (`author_line`・印も著者の物)。台詞の行の割り方だけ変えた (文字の並びは同じ) なら戻さない。声は担当の版から作るので、ここで
-    戻さないと後段では戻せない。"""
+    戻さないと後段では戻せない。exact = 読点・読みの指定・行の割り方も著者の版に揃える (担当が素材を変えない run — 声は著者の版から
+    先に作っていて、文字が 1 つでも違うと合成し直しになる)。"""
     import difflib  # noqa: PLC0415
 
     def speech_rows(text: str) -> list[str]:  # timeline の台詞の行 (design の `@#名` は定義の見出し)
         return [l for l in text.split("---timeline---", 1)[-1].splitlines() if l.lstrip().startswith("@")]
 
     rows_a, rows_s = speech_rows(author), speech_rows(staff)
-    norm_a, norm_s = [spoken(l) for l in rows_a], [spoken(l) for l in rows_s]
-    if "".join(norm_a) == "".join(norm_s):
+    norm = _bare_speech if exact else spoken
+    norm_a, norm_s = [norm(l) for l in rows_a], [norm(l) for l in rows_s]
+    if (norm_a == norm_s) if exact else ("".join(norm_a) == "".join(norm_s)):
         return staff, []
     replace: dict[int, list[str]] = {}  # 担当の台詞の行の番号 → 置き換える行 (空 = 消す)
     insert: dict[int, list[str]] = {}  # 担当の台詞の行の番号 → その前に足す著者の行 (行の数 = 最後の台詞の行の後ろ)
@@ -647,6 +661,55 @@ def restore_speech(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
     if not rows_s:  # 担当が台詞を全部消した — 著者の台詞を block の後ろに戻す
         out += insert.get(0, [])
     return design + sep + "\n".join(out) + "\n", log
+
+
+def _bare_speech(line: str) -> str:
+    """台詞の行の声の元の文字 (印と空白だけを除く — 読点と読みの指定は残す)。担当が素材を変えない run の台詞の比較。"""
+    return re.sub(r"\s", "", _without_marks(_SPEAKER.sub("", line, count=1)))
+
+
+_PICTURE_LINE = re.compile(r"^(\s*)img#([^\s(]+)\((?:[^()]|\([^()]*\))*\)\s*(.*)$")
+
+
+def restore_pictures(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
+    """担当が素材を変えない run で、担当の block の絵 (`img#`) を著者の版の説明文に戻す → (戻した block, 記録)。著者の版にある名の
+    絵は説明文を著者の物に書き戻し (`mode: text`)、著者の版に無い説明文の新しい絵は行 (と字下げの子) ごと消して timeline の
+    その名の印も落とす (`mode: dropped`)。同じ説明文の絵の置き直し (新しい名) はそのまま (同じ素材)。"""
+    by_name: dict[str, str] = {}
+    for line in author.split("---timeline---", 1)[0].splitlines():
+        if m := _PICTURE_LINE.match(line):
+            by_name[m.group(2)] = m.group(3).strip()
+    known = set(by_name.values())
+    design, sep, timeline = staff.partition("---timeline---")
+    out: list[str] = []
+    dropped: list[str] = []
+    log: list[dict[str, str]] = []
+    skip_indent: int | None = None
+    for line in design.split("\n"):
+        indent = len(line) - len(line.lstrip())
+        if skip_indent is not None:
+            if line.strip() and indent > skip_indent:
+                continue
+            skip_indent = None
+        m = _PICTURE_LINE.match(line)
+        if m is None:
+            out.append(line)
+            continue
+        name, desc = m.group(2), m.group(3).strip()
+        if name in by_name and desc != by_name[name]:
+            out.append(line[: m.start(3)] + by_name[name])
+            log.append({"mode": "text", "name": name, "staff": desc[:80]})
+        elif name not in by_name and desc not in known:
+            dropped.append(name)
+            skip_indent = indent
+            log.append({"mode": "dropped", "name": name, "staff": desc[:80]})
+        else:
+            out.append(line)
+    if dropped and sep:
+        names = "|".join(re.escape(n) for n in dropped)
+        mark = re.compile(r"\[[^\[\]]*#(?:" + names + r")(?![\w.-])[^\[\]]*\]")
+        timeline = "\n".join(mark.sub("", l) if l.lstrip().startswith("@") else l for l in timeline.split("\n"))
+    return "\n".join(out) + sep + timeline, log
 
 
 def touched_fixed(before: str, after: str) -> tuple[int, int]:
@@ -1193,7 +1256,7 @@ def fix(
     return _emit_block(st, name, text, event="fix_unparsed")  # block 全体を返した出力もそのまま受ける
 
 
-def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
+def staff(project: Path, name: str, findings_file: Path, *, effort: str, keep_assets: bool = False) -> int:
     """担当: 著者の cut を仕上げる (前の cut は著者の版を参考に渡す = cut ごとに並列に走らせるため)。依頼文・cut の
     位置・著者の版の時刻 (orchestrator が指摘の隣に置く `timing_author.txt`) も渡す。"""
     proj, st = project / "solo", project / "stream"
@@ -1235,6 +1298,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
             timing=timing_file.read_text() if timing_file.exists() else "",
             reference_note=reference_role_note(project),
             verbatim=is_verbatim(plan, request),
+            keep_assets=keep_assets,
         ),
         out.append,
         system_prompt=sp,
@@ -1276,7 +1340,7 @@ def main(argv: list[str]) -> int:
         )
     if cmd == "staff":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "medium"
-        return staff(project, argv[2], Path(argv[3]), effort=eff)
+        return staff(project, argv[2], Path(argv[3]), effort=eff, keep_assets="--keep-assets" in argv)
     print(__doc__)
     return 2
 
