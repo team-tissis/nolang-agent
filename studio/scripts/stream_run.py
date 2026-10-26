@@ -14,18 +14,19 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix none|low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix defect|none|low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
-  --fix = 直し役 (check の指摘を直す・2 回目以降) の effort。既定 `none` = 直し役も見直しも呼ばない (DEFECT は機械の直しと
-    最後の手段 — 著者の版・DEFECT の印を落とす — だけ・指摘は直さない)。`low` で直し役と見直し (--review) を呼ぶ。
+  --fix = 直し役の範囲。既定 `defect` = DEFECT の時だけ直し役 (low) を呼ぶ (見直しなし・severe / warn の指摘は直さない)。`none` = 直し役も
+    呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
   担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
     作る。--staff-edits-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
-  既定 (担当 medium・素材は著者の版・直しなし) の根拠: 10-26 の 4 題材 bench で、担当 + 見直し + 直しに Opus 両順 3 勝 1 分・
-    担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。
+  既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + 見直し +
+    直しに Opus 両順 3 勝 1 分・担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。DEFECT だけの
+    直し役は、落ちる cut を減らす網 (DEFECT が無ければ呼ばれない)。
   --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
     prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
   直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
@@ -375,8 +376,9 @@ class Run:
         project: Path,
         *,
         staff: str | None = None,
-        fix: str | None = None,
+        fix: str | None = "low",
         review: str | None = "low",
+        defects_only: bool = True,
         keep_assets: bool = True,
         look: bool = False,
         remote: str | None = None,
@@ -399,8 +401,10 @@ class Run:
         self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.fix_effort = fix  # 直し役の effort。None = 直し役なし (見直しもなし)
+        # 直し役は DEFECT の時だけ (見直しなし・severe / warn の指摘は直さない)
+        self.defects_only = defects_only
         self.review_effort = (
-            review if fix is not None else None
+            review if fix is not None and not defects_only else None
         )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
         # 担当は絵と台詞を変えない — 絵と声は著者の版から担当と並列に作る (`_stage` が担当の前に warm を頼む)
         self.keep_assets = keep_assets
@@ -1226,7 +1230,7 @@ class Run:
             cuts = self.live_cuts(self.order[: i + 1])
             mine = [f for f in lint if f.get("cut") == c]
             last = ((self.solo / f"cut_{c}.txt").read_text(), mine)
-            fixes = [f for f in mine if self.to_fix(f)]
+            fixes = [] if self.defects_only else [f for f in mine if self.to_fix(f)]
             self.log(
                 cut=c,
                 event="check",
@@ -1299,9 +1303,11 @@ class Run:
                     self.mark_broken(c, "DEFECT after 2 fixes")
                 break
             findings = "\n".join(d.text for d in defects[:40])
-            rest = [
-                f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes
-            ]  # 直し役にはその cut の severe / warn も全部見せる
+            rest = (
+                []
+                if self.defects_only
+                else [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
+            )  # 直し役にはその cut の severe / warn も全部見せる (DEFECT だけ直す run は DEFECT だけ)
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
@@ -2409,8 +2415,8 @@ def main(argv: list[str]) -> int:
         return 2
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
-    fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "none"
-    fix = None if fix_arg == "none" else fix_arg
+    fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "defect"
+    fix = {"none": None, "defect": "low"}.get(fix_arg, fix_arg)
     review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
     look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
@@ -2425,6 +2431,7 @@ def main(argv: list[str]) -> int:
         staff=staff,
         fix=fix,
         review=None if review == "none" else review,
+        defects_only=fix_arg == "defect",
         keep_assets="--staff-edits-assets" not in argv,
         look=look,
         remote=remote,
