@@ -211,7 +211,9 @@ def samples_text(samples: tuple[str, ...]) -> str:
     )
 
 
-def author_prompt(aspect: str, seconds: str, canvas: str, request: str, samples: str = "", reference: str = "") -> str:
+def author_prompt(
+    aspect: str, seconds: str, canvas: str, request: str, samples: str = "", reference: str = "", speech: str = ""
+) -> str:
     """著者の user turn。構成の型・雛形・数字の規則は渡さない (台本と絵コンテは著者が依頼から決める)。雛形は 1 行目と canvas だけ —
     役の入った雛形 (cut の役・定義済みの段・theme dark) を渡すと部品を写し、暗い地に揃った (10-23)。"""
     if seconds == AUTO_SECONDS:
@@ -269,7 +271,7 @@ transition …
 canvas {canvas}
 --- timeline.txt ---
 #v2
-{samples}{reference}{request}
+{samples}{reference}{speech}{request}
 ユーザーの設定: 縦横比 {aspect} ({canvas})・長さの目安 {"指定なし" if seconds == AUTO_SECONDS else f"{seconds} 秒"}
 """
 
@@ -291,9 +293,10 @@ def staff_prompt(
     target_s: str = "",
     timing: str = "",
     reference_note: str = "",
+    verbatim: bool = False,
 ) -> str:
     """担当の user turn — 著者の cut をプロの解説動画の密度と階層に仕上げる。見る観点・欠陥の型・字の大きさの規則は渡さず、機構の事実
-    (台詞・根・定義を変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
+    (依頼の遵守・根・定義を変えない・台詞は直してよいが逐語の台本は変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
     k, m = (order.index(name) + 1, len(order)) if order and name in order else (0, len(order or []))
     prev = (
         f"前の cut `{prev_name}` (著者の版・参考。変えない。前の cut も別の担当が並列に仕上げるので、実際の画面はこの版と違う):\n"
@@ -301,11 +304,17 @@ def staff_prompt(
         if prev_name and prev_block
         else ""
     )
+    speech_rule = (
+        "台詞 (`@` の行の文字) は一字も変えない (依頼の台本をそのまま読む動画。許すのは読点の追加と `{表記|読み}` の読みの指定だけ)。"
+        if verbatim
+        else "台詞 (`@` の行の文字) も直してよい (声と字幕はこの版から作る・この後の直し役は変えない)。構成のこの cut の中身と文の数は保つ。"
+    )
     return f"""あなたはプロのモーションデザイナー兼動画編集者で、この動画の cut `{name}` の担当です。著者が書いた block を受け取りました。
 この cut を、プロが作った解説動画として出せる密度と階層に仕上げてください。動きと音まで作り込むこと。必要なら作り替えてよい。
 
 守る事 (機構の事実):
-- 台詞 (`@` の行の文字) は一字も変えない (声はもう作り始めている。許すのは読点の追加と `{{表記|読み}}` の読みの指定だけ)。話者 (`@名:`) は保つ。
+- 下のユーザーの依頼の指示 (見せ方・色・文字・入れる物 / 入れない物など) は守る — 仕上げで作り替えても依頼から外れない。
+- {speech_rule}話者 (`@名:`) は保つ。
 - 根 (palette・font・cast) と前の cut の定義 (def・motion・run) は変えない (使ってよい)。この cut の block の定義も後の cut が同じ名で
   使っている — 名・引数の形・見た目を変えない。別の形や見た目が要るなら新しい名で定義してこの block で使う。要素の名の接頭辞 (`{name}`) は保つ。
 - 文ごとの絵を「タイトル + 写真」で済ませず、結論の札か状態の変化を主役として立てる (章の入りに題と写真だけの溜めを作らない)。
@@ -351,6 +360,13 @@ VERBATIM_MARK = "# 台本: 依頼の文のまま"
 VERBATIM_REQUEST = re.compile(
     r"そのまま(?:読み上げ|読んで|読む|使って|ナレーション)|一字一句|原文のまま|台本(?:どおり|通り)|原稿(?:どおり|通り)"
 )
+
+
+def is_verbatim(plan: str, request: str) -> bool:
+    """依頼の台本をそのまま読む動画か — 著者が plan に逐語の注記を書いた・依頼文が逐語の読み上げを求める言い回しを含む。"""
+    return VERBATIM_MARK in plan or VERBATIM_REQUEST.search(request) is not None
+
+
 # 台詞の尺の指摘 (orchestrator の stage が check の見積りと plan の目標秒から出す — `stream_run.Run.length_finding`)。直し役はこの
 # 指摘がある時だけ台詞の行を文ごと消す / 足してよい
 LENGTH_RULE = "cut_length"
@@ -367,10 +383,10 @@ def editable_note() -> str:
     return """
 編集可能モード (この動画はユーザーが編集画面で自分で調整する — 編集できる語彙だけで書く。破ると投入で DEFECT `editable_*` になり、
 その cut は直しの往復で再生が遅れるか、動きを機械で fade に置き換えられる):
-- 1 cut の要素は 12 個まで (×N は N と数える)・絵 (img) は 2 枚まで (全面の地 + 挿絵 1 枚)。情報は札 1 枚 (×N の項目・箇条) に束ねる (cut を増やすのは構成を書く時だけ — 直しでは cut を分けない)。
-- 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う。
-- group / camera / svg / 数える数字 (`[count:]`) は使わない。`.sticky` は立ち絵 (avatar) だけ。部分の色・大きさの `{tok}` の run は
-  使ってよい (語の印 `[!…]` の的には取らない)。
+- 1 cut の要素は 25 個まで (×N は N と数える)。情報は札 1 枚 (×N の項目・箇条) に束ねる (cut を増やすのは構成を書く時だけ — 直しでは cut を分けない)。
+- 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う (立ち絵の表情・動作の切替は数えない)。
+- group / camera / svg / 数える数字 (`[count:]`) は使わない。部分の色・大きさの `{tok}` の run と、cut を跨いで残す `.sticky`
+  の層 (常設の帯・ロゴの札) は使ってよい (語の印 `[!…]` の的に run は取らない)。
 - 動きはこの形だけで書く (正の例 — これで十分な画面になる):
   `in: fade`・`in: pop`・`in:{y:40, opacity:0, duration:.5}`・`in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`・
   `out: fade`・`out:{opacity:0, duration:.3}`・絵の常時は `main: kb {scale: [1, 1.06]}`・札や文字の常時は `main: float`
@@ -378,7 +394,7 @@ def editable_note() -> str:
   使えない形 (門で弾かれて cut が遅れる): `keys(at=…)` の keyframe 列・`path:`・float / pulse 以外の常時の動き (`main: sway`・文字単位の `wave` 等)・
   filter の tween・`ease:'back.out(1.7)'` などの係数つき easing (語の ease だけ可)。
 - 書体は 3 種まで・影 (box-shadow) は 1 種を def で使い回す (flat な板を既定に)。文字の段は見出し / 本文 / 札の 3 段を def で揃える。
-- ユーザーが選んだ参照の動画がある時は、上の数と `.sticky` の線は参照が使っている量まで緩む — 参照の根・常設の層 (枠・ロゴの札・
+- ユーザーが選んだ参照の動画がある時は、上の数の線は参照が使っている量まで緩む — 参照の根・常設の層 (枠・ロゴの札・
   マスコット・字幕の箱) をそのまま写す (下の「ユーザーが選んだ形」の節)。
 """
 
@@ -407,6 +423,16 @@ def reference_of(project: Path) -> dict[str, object] | None:
     """参照の動画 (`stream_make.sh --ref` / 依頼の `[video:id]`) — project/reference.json (`GET drafts/templates/{id}/` の応答:
     src・題・「ユーザーが選んだ形」の節 `brief`)。無ければ None。"""
     path = project / "reference.json"
+    if not path.exists():
+        return None
+    loaded = json.loads(path.read_text())
+    return loaded if isinstance(loaded, dict) and loaded.get("brief") else None
+
+
+def speech_of(project: Path) -> dict[str, object] | None:
+    """持ち込み音声 (`stream_make.sh --speech`) — project/speech.json (`POST drafts/speeches/` の ready の応答: clip 台帳と `@clip` の
+    書き方の節 `brief`・音声の id `sources`)。無ければ None。"""
+    path = project / "speech.json"
     if not path.exists():
         return None
     loaded = json.loads(path.read_text())
@@ -580,7 +606,7 @@ def _author_words_staff_marks(staff_line: str, author_line: str) -> str:
 
 
 def restore_speech(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
-    """担当の block の台詞 (`@` の行) を著者の版の文字に戻す → (戻した block, 戻した行の記録)。比べるのは `spoken` (読点の追加と読みの
+    """逐語の台本の動画で、担当の block の台詞 (`@` の行) を著者の版の文字に戻す → (戻した block, 戻した行の記録)。比べるのは `spoken` (読点の追加と読みの
     指定は許す)。台詞の行の数が同じ区間は行ごとに著者の文字へ担当の印を載せ (`marks`)、行を足した / 消した区間は著者の行ごと
     戻す (`author_line`・印も著者の物)。台詞の行の割り方だけ変えた (文字の並びは同じ) なら戻さない。声は担当の版から作るので、ここで
     戻さないと後段では戻せない。"""
@@ -1044,8 +1070,15 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
     if ref is not None:  # 依頼の `[video:<id>]` は参照の題に (製品の入口が題へ置換するのと同じ)
         request = re.sub(rf"\[video:{re.escape(str(ref['template_video_id']))}\]", f"「{ref['title']}」", request)
         log(st, event="reference", video_id=ref["template_video_id"], source=ref.get("source"), title=ref.get("title"))
+    speech = speech_of(project)
     prompt = author_prompt(
-        aspect, seconds, canvas, request, samples_text(samples), str(ref["brief"]) if ref is not None else ""
+        aspect,
+        seconds,
+        canvas,
+        request,
+        samples_text(samples),
+        str(ref["brief"]) if ref is not None else "",
+        f"\n{speech['brief']}\n" if speech is not None else "",
     )
     sp0 = Splitter(proj, st, "author")
     stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
@@ -1181,6 +1214,7 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
     # 動画の長さの門 = plan の目標秒の和 (orchestrator の進行線の total と同じ値)
     planned_s = sum(sec for _, sec in plan_names(plan))
     _typ, _aspect, target_s = (project / "params.txt").read_text().split()[:3]
+    request = (project / "request.txt").read_text()
     out: list[str] = []
     stream_model(
         st,
@@ -1195,11 +1229,12 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str) -> int:
             prev_block,
             planned_s,
             defs_before_text(proj, name),
-            request=(project / "request.txt").read_text(),
+            request=request,
             order=order,
             target_s=target_s,
             timing=timing_file.read_text() if timing_file.exists() else "",
             reference_note=reference_role_note(project),
+            verbatim=is_verbatim(plan, request),
         ),
         out.append,
         system_prompt=sp,

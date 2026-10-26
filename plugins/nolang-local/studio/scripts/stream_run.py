@@ -14,11 +14,11 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium] [--review medium|none] [--fix low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium] [--review low|medium|none] [--fix low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
-  --review = 見直しの effort (既定 medium・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
+  --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 2 回目以降の直し役 (check の指摘だけを直す) の effort (既定 low)。
   --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
@@ -132,6 +132,9 @@ def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None
 
 # 直し役・見直しの 1 回の待ちの上限 — server は投入の行が 180 秒届かないと run を落とすので、その内側で諦めて直す前の版で続ける
 FIX_TIMEOUT_S = 120
+# 持ち込み音声の転写を待つ上限 (`drafts/speeches/` が ready になるまで — 1 時間の音声で数分) と問い合わせの間隔
+SPEECH_WAIT_S = 15 * 60
+SPEECH_POLL_S = 5
 _CUT_HEAD = re.compile(r"^(?:section#[A-Za-z0-9_\-]+|\*\*\*\s+\S+)")
 
 
@@ -368,7 +371,7 @@ class Run:
         *,
         staff: str | None = None,
         fix: str = "low",
-        review: str | None = "medium",
+        review: str | None = "low",
         look: bool = False,
         remote: str | None = None,
         token: str | None = None,
@@ -763,14 +766,20 @@ class Run:
         from stream_author import (  # noqa: PLC0415 — scripts dir を sys.path に足している
             VERBATIM_MARK,
             VERBATIM_REQUEST,
+            is_verbatim,
         )
 
         plan = self.solo / "plan.txt"
-        marked = plan.exists() and VERBATIM_MARK in plan.read_text()
-        asked = VERBATIM_REQUEST.search((self.project / "request.txt").read_text()) is not None
-        if marked or asked:
-            self.log(event="verbatim", plan_mark=marked, request_phrase=asked)
-        return marked or asked
+        plan_text = plan.read_text() if plan.exists() else ""
+        request = (self.project / "request.txt").read_text()
+        if not is_verbatim(plan_text, request):
+            return False
+        self.log(
+            event="verbatim",
+            plan_mark=VERBATIM_MARK in plan_text,
+            request_phrase=VERBATIM_REQUEST.search(request) is not None,
+        )
+        return True
 
     def cut_budget(self, c: str) -> float | None:
         """cut c の台詞の尺の予算 (秒) = plan の目標秒。締めの cut は弾性: 依頼の目安から前の live な cut の見込み (check の値か目標秒)
@@ -899,8 +908,10 @@ class Run:
                 "aspect_ratio": self.aspect,
                 # 開始済みの run — warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
                 **({"video_id": self.video_id} if self.video_id else {}),
-                # 編集可能モードの run — 違反は warn の findings (投入の門は同じ台帳で DEFECT にする)
+                # 編集可能モードの run — 違反は DEFECT (投入の門と同じ答え)
                 **({"profile": "editable"} if self.editable else {}),
+                # 持ち込み音声 — clip 台帳で `@clip` の話者と `[trim:]` を解く (開始済みの run は server が run の音声を使う)
+                **({"speech_file_ids": self.speech_file_ids()} if self.speech_file_ids() else {}),
             },
         )
         records = [d for d in body.get("defects", []) if isinstance(d, dict)]
@@ -1277,7 +1288,7 @@ class Run:
             ]  # 直し役にはその cut の severe / warn も全部見せる
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
-            # 見直し (全 cut 1 回目・effort medium) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (low) に文を足させると
+            # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
             # 画面の変化の無い文が増えて静止が伸びた (10-24 の両順の比べ)
             if reviews > 0 and (length := self.length_finding(c)):
                 findings += "\n" + length
@@ -1584,8 +1595,9 @@ class Run:
 
     def staff(self, i: int, c: str) -> None:
         """担当 (Opus) が著者の cut を仕上げる。前の cut は著者の版を渡すので cut ごとに並列に走る。
-        著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当が台詞の文字を変えていたら著者の版の文字に
-        戻す (`restore_speech`・読点の追加と読みの指定は許す — 声は担当の版から作るので後段では戻せない・`speech_restored`)。"""
+        著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当は台詞も直してよい (声は担当の版から作る)。
+        逐語の台本の動画だけ、担当が台詞の文字を変えていたら著者の版の文字に戻す (`restore_speech`・読点の追加と読みの指定は許す —
+        後段では戻せない・`speech_restored`)。"""
         from stream_author import restore_speech  # noqa: PLC0415 — scripts dir を sys.path に足している
 
         src = self.solo / f"cut_{c}.txt"
@@ -1604,7 +1616,7 @@ class Run:
         if r.returncode == 0 and "---timeline---" in r.stdout:
             # 戻す基準は書き戻す直前の file — 担当の裏で前方から移された定義 (move_forward_defs) も含める (担当開始時の text だと
             # その定義が担当の出力に無いまま上書きされて消える)
-            text, restored = restore_speech(keep.read_text(), r.stdout)
+            text, restored = restore_speech(keep.read_text(), r.stdout) if self.verbatim else (r.stdout, [])
             # 担当の版を分けて残す (cut_<名>.txt は直し役が上書きする最終の版)
             (self.solo / f"staff_cut_{c}.txt").write_text(text)
             with self.name_lock:
@@ -1938,6 +1950,60 @@ class Run:
         with urllib.request.urlopen(req, timeout=60) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
+    def remote_post(self, path: str, body: dict[str, object]) -> dict[str, object]:
+        """remote の POST (止めた頼み = HTTP の 400 は応答の中身に `status: 400` を足して返す)。"""
+        req = urllib.request.Request(
+            f"{self.remote}{path}",
+            data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code != 400:
+                raise
+            return {"status": 400, "error": e.read().decode("utf-8", "replace")[:600]}
+
+    def speech_file_ids(self) -> list[str]:
+        """持ち込み音声 (`--speech` — project/speech.json の sources) の id。無ければ空。"""
+        path = self.project / "speech.json"
+        if not path.is_file():
+            return []
+        return [str(source["file_id"]) for source in json.loads(path.read_text()).get("sources", [])]
+
+    def fetch_speech(self, speech_ids: str) -> int:
+        """持ち込み音声 (`--speech <id>[,<id>]`) の clip 台帳と著者に貼る節 (製品の著者と同じ文 — 正本は server) を受けて
+        project/speech.json に書く (著者が読む)。`POST drafts/speeches/` が未転写の音声の転写を起こすので、ready になるまで待つ。
+        remote だけ (手元の描画はまだ持ち込み音声の lane を持たない)。取れなければ止める (戻り 1)。"""
+        if self.remote is None:
+            self.log(event="speech_failed", error="--speech は --remote (NoLang API) だけ")
+            return 1
+        _kind, _aspect, seconds = (self.project / "params.txt").read_text().split()[:3]
+        body: dict[str, object] = {"speech_file_ids": [x for x in speech_ids.split(",") if x], "language": "ja"}
+        if seconds.isdigit():
+            body["seconds"] = int(seconds)
+        deadline = time.time() + SPEECH_WAIT_S
+        transcribing = False
+        while True:
+            try:
+                got = self.remote_post("/v1/unstable/drafts/speeches/", body)
+            except (urllib.error.URLError, ValueError) as e:
+                self.log(event="speech_failed", error=str(e)[:300])
+                return 1
+            if got.get("status") == "ready":
+                (self.project / "speech.json").write_text(json.dumps(got, ensure_ascii=False))
+                self.log(event="speech", sources=got.get("sources"), target_seconds=got.get("target_seconds"))
+                return 0
+            if got.get("status") != "transcribing" or time.time() > deadline:
+                self.log(event="speech_failed", error=str(got)[:300])
+                return 1
+            if not transcribing:
+                print("持ち込み音声を文字起こし中 …", flush=True)
+                transcribing = True
+            time.sleep(SPEECH_POLL_S)
+
     def fetch_reference(self, video_id: str) -> int:
         """参照の動画 (`--ref` / 依頼の `[video:id]`) の src と「ユーザーが選んだ形」の節を受けて project/reference.json に書く
         (著者が読む)。local は同じ flow 関数 (`studio.py api reference`)・remote は `GET drafts/templates/{id}/`。節の文は server が
@@ -1992,6 +2058,8 @@ class Run:
         reference = self.project / "reference.json"
         if reference.is_file():  # 参照から作る run — editable の線を参照の量まで緩める (server が参照を測る)
             body["reference_video_id"] = json.loads(reference.read_text())["template_video_id"]
+        if speech_ids := self.speech_file_ids():  # 持ち込み音声 — 投入検査と worker が同じ clip 台帳で `@clip` を解く
+            body["speech_file_ids"] = speech_ids
         req = urllib.request.Request(
             f"{self.remote}/v1/unstable/drafts/",
             data=json.dumps(body).encode("utf-8"),
@@ -2302,7 +2370,7 @@ def main(argv: list[str]) -> int:
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
     fix = argv[argv.index("--fix") + 1] if "--fix" in argv else "low"
-    review = argv[argv.index("--review") + 1] if "--review" in argv else "medium"
+    review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
     look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
@@ -2326,6 +2394,11 @@ def main(argv: list[str]) -> int:
     ):  # 参照の動画の src を project/reference.json に (stream_make.sh が著者の起動前に 1 回呼ぶ)
         (project / "stream").mkdir(parents=True, exist_ok=True)
         return run.fetch_reference(argv[argv.index("--fetch-ref") + 1])
+    if (
+        "--fetch-speech" in argv
+    ):  # 持ち込み音声の clip 台帳を project/speech.json に (stream_make.sh が著者の起動前に 1 回呼ぶ)
+        (project / "stream").mkdir(parents=True, exist_ok=True)
+        return run.fetch_speech(argv[argv.index("--fetch-speech") + 1])
     launch = project / "stream/author.jsonl"
     if launch.exists():
         for l in launch.read_text().splitlines():

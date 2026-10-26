@@ -3,11 +3,13 @@
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|low] [--no-staff]
-#        [--review medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
+#        [--review low|medium|none] [--fix low] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
 #                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
 #        [--editable]   (編集可能モード = 編集画面で調整できる文法サブセットに収める — 著者の作法 + check の profile + 投入の門の DEFECT)
 #        [--ref <video_id>]   (参照の動画 = ユーザーが選んだテンプレか自分の動画。その src を著者に「ユーザーが選んだ形」として渡す・
 #                              依頼文の `[video:<id>]` でも同じ。長さは --seconds が優先)
+#        [--speech <speech_file_id>[,<id>]]   (持ち込み音声 = upload 済みの音声。server が文字起こしし、その clip を切って使う動画を作る・
+#                                              --remote だけ)
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の hf_<type>_* 2 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
@@ -17,16 +19,17 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../../../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,14p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,16p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=low; REVIEW=medium; LOOK=""; EDITABLE=""; REF=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=low; REVIEW=low; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
     --editable) EDITABLE=1; shift;;
     --ref) REF=$2; shift 2;;
+    --speech) SPEECH=$2; shift 2;;
     --type) TYPE=$2; shift 2;;
     --aspect) ASPECT=$2; shift 2;;
     --seconds) SECONDS_=$2; shift 2;;
@@ -76,7 +79,12 @@ if [ -n "$REF" ]; then
   # shellcheck disable=SC2086
   env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-ref "$REF" $STREAM_RUN_ARGS || echo "参照 $REF の src を取れない — 参照なしで書く (stream/run.jsonl の reference_failed)" >&2
 fi
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $REVIEW${LOOK:+ (静止画)}・直し $FIX${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}・見本 ${SAMPLES:-type の既定})"
+# 持ち込み音声: server の文字起こしの clip 台帳と `@clip` の書き方を project/speech.json に (著者が読む・転写を待つ)。取れなければ止める
+if [ -n "$SPEECH" ]; then
+  # shellcheck disable=SC2086
+  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
+fi
+echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $REVIEW${LOOK:+ (静止画)}・直し $FIX${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys

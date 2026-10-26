@@ -5,7 +5,7 @@
 ```design.txt
 #v2
 # 計画: 明るい台所の地 (cream) に、賞味 = 緑 (a)・消費 = 赤 (b)。縦なので文字は上 1/3 に寄せ、下 1/4 は字幕の帯のために空ける
-# editable: 要素 12/cut・絵 2 枚/cut・動きは preset と単純 object・書体 3 種
+# editable: 要素 25/cut・動きは preset と単純 object・書体 3 種
 # 書体 太い丸ゴシック (見出し) + 太い等幅 (数字) + 細い角ゴシック (注記)
 canvas 1080x1920 bg=#FBF7EF
 palette a=#2E9E6A b=#D9483B bg=#FBF7EF ink=#2B2622 mute=#7A6F66 line=#E6DCCD card=#FFFFFF a_t=#2E9E6A1F b_t=#D9483B1F

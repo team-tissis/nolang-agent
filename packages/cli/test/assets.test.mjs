@@ -3,11 +3,13 @@ import { test } from "node:test";
 
 import { mimeOf, uploadKind } from "../lib/assets.mjs";
 
-test("mp4 / webm / mov は動画素材、それ以外は画像として送る (大文字の拡張子も)", () => {
+test("mp4 / webm / mov は動画素材・mp3 / m4a などは持ち込み音声・それ以外は画像として送る (大文字の拡張子も)", () => {
   assert.equal(uploadKind("clip.mp4"), "footage");
   assert.equal(uploadKind("/tmp/a/CLIP.MOV"), "footage");
   assert.equal(uploadKind("b.webm"), "footage");
   assert.equal(uploadKind("photo.JPG"), "image");
+  assert.equal(uploadKind("talk.mp3"), "speech");
+  assert.equal(uploadKind("/tmp/a/Interview.M4A"), "speech");
   assert.equal(uploadKind("noext"), "image");
 });
 

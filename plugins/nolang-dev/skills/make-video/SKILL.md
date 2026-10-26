@@ -36,6 +36,7 @@ description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。
    - 依頼文 = ユーザーの依頼をそのまま + 決めた値 + 素材の `ref` (`id=<uuid>` と使い所) + 台本やテロップの文言があればそのまま。題材の事実が要る時は先に調べて依頼文に書く (著者は調べない)。
    - 既定は担当なし (著者 `--effort low`・速さ優先)。担当に cut を仕上げさせたい (密度を上げる・時間が掛かってよい) 時だけ `--staff medium` (軽くは `--staff low`)。見本は型から自動 (`--samples a.md,b.md` で替えられる)。
    - 生成後にユーザーが NoLang の編集画面で自分で調整したい動画は `--editable` — 編集画面で扱える文法サブセット (要素数・動きの preset など) に収めて書く (表現の密度は下がる)。
+   - 話している音声 (トーク・インタビュー・講演の録音) から作る動画 (切り抜き・要点の紹介・ショート) は `--speech <音声の file か id>` (話者の人数が分かれば `--speakers N`)。サーバーが文字起こしし、その音声を切って使う (声は録音のまま)。長さは音声から決まる (目安があれば `--seconds`)。文字起こしを待つので、再生までは数分かかる。依頼文には「どこを使うか・何を切るか (フィラー・言い直し)」を書く。
    - サーバーが再生できる状態になった時点で返る (Claude の目安は既定の担当なしで 1 分ほど・`--staff medium` で 1〜2 分。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。
 4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
 5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
@@ -52,7 +53,7 @@ description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。
 
 ## M. 決まった素材を使う (依頼に「この写真・この動画」「この曲」「この声」がある・手元の file を渡された時だけ)
 
-- 手元の file → `nolang assets upload <file>…` で自分の素材に送り、`ref` (`id=<uuid>`) を得る (動画は仕上げを待つので数十秒)。MCP は file の中身を運べないので、upload は CLI で。
+- 手元の file → `nolang assets upload <file>…` で自分の素材に送り、`ref` (`id=<uuid>`) を得る (動画は仕上げを待つので数十秒)。MCP は file の中身を運べないので、upload は CLI で。音声 (mp3・m4a・wav…) は持ち込み音声として送られ、`nolang make --speech <id>` で使う (§S)。
 - NoLang の素材から選ぶ → `nolang assets search <kind> "<説明か名前>"` (MCP なら `nolang_assets_search(kind, q)`)。自分が送った物は `--mine` (`scope="mine"`)。kind = `image` `footage` `bgm` `soundeffect` `speaker` `avatar` `font`。`preview_url` で中身を確かめられる。
 - studio で作る時は、`ref` と使い所を依頼文に書く。自分で書く時は、`ref` を応答の `usage` の位置に書く: 画像・動画素材 = 根に `image 名 = id=…`、置く所に `content: @名` (動画素材は `play: loop` も)・BGM = `bgm#名 id=…`・効果音 = `sound 名 = id=…` か台詞に `[♪id=…]`・話者 = `cast 名 = id=…`・立ち絵 = `cast 名 = "声の説明" avatar="名"`・書体 = `font "名 太さ"`。
 - id は全桁の `id=<uuid>` だけ (8 桁の id と `file=名` はこの経路では使えない)。読めない id は check が `DEFECT:ASSET_UNREADABLE` で止める。

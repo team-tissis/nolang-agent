@@ -640,6 +640,10 @@ const MAKE_POLL_MS = 1000;
 // studio の一式 (backend の .agents/skills/nolang-draft-studio の写し) を --remote で動かす。著者と担当は `claude -p`。
 const STUDIO_TYPES = ["concept", "data", "compare", "story", "cinematic"];
 const MAKE_LOG = "make.log";
+// 再生できるまで待つ上限 (秒)。持ち込み音声は文字起こしを待つ分だけ長い
+const MAKE_TIMEOUT_S = 420;
+const MAKE_SPEECH_TIMEOUT_S = 1500;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function studioDir() {
   const here = dirname(new URL(import.meta.url).pathname);
@@ -668,7 +672,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -692,7 +696,17 @@ async function cmdMake(positionals, flags) {
   const api = await resolveApi(flags);
   const token = await accessToken(api, { minValidMs: 20 * 60_000 });
   await mkdir(root, { recursive: true });
-  const args = [join(studio, "scripts", "stream_make.sh"), root, "--type", flags.type, "--aspect", flags.aspect || "16:9", "--seconds", String(flags.seconds || 60)];
+  // 持ち込み音声: file なら upload して id に (id ならそのまま)。文字起こしは stream_make.sh が server に頼んで待ち、長さは音声から決まる
+  let speechId = null;
+  if (flags.speech) {
+    if (UUID_RE.test(flags.speech)) speechId = flags.speech;
+    else {
+      log(`${basename(flags.speech)} を持ち込み音声として送る…`);
+      speechId = await uploadSpeech(api, resolve(flags.speech), { speakers: flags.speakers, language: flags.language });
+    }
+  }
+  const seconds = String(flags.seconds || (speechId ? "auto" : 60));
+  const args = [join(studio, "scripts", "stream_make.sh"), root, "--type", flags.type, "--aspect", flags.aspect || "16:9", "--seconds", seconds];
   if (flags.engine) args.push("--engine", engine);
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
@@ -702,6 +716,7 @@ async function cmdMake(positionals, flags) {
   else args.push("--no-staff");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
+  if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
   // macOS の bash は UTF-8 の locale で `$VAR・` の全角文字を変数名に含めて読む — bash は C・python は UTF-8 で動かす
   const logFile = await open(join(root, MAKE_LOG), "a");
@@ -710,9 +725,9 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags.staff && !flags["no-staff"] ? flags.staff : "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}) — 再生できるまで待つ (1〜3 分)`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags.staff && !flags["no-staff"] ? flags.staff : "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
   const startedAt = Date.now();
-  const deadline = startedAt + Number(flags.timeout || 420) * 1000;
+  const deadline = startedAt + Number(flags.timeout || (speechId ? MAKE_SPEECH_TIMEOUT_S : MAKE_TIMEOUT_S)) * 1000;
   let watch = null;
   let serverPlayable = false;
   let serverFailed = null;
@@ -900,10 +915,11 @@ async function uploadImage(api, path, name) {
   return String(row.image_id);
 }
 
-// 動画素材: 分割 upload を始める → 各 part を S3 の presigned URL へ PUT → 確定 → 仕上げの job (尺・codec の検査と thumbnail) を待つ
-async function uploadFootage(api, path, name) {
+// 動画素材・持ち込み音声: 分割 upload を始める → 各 part を S3 の presigned URL へ PUT → 確定 → 仕上げの job (尺・codec の検査と
+// 変換) を待つ。route = `footages` / `speeches`・extra = 確定に足す項目・idKey = 確定の応答の素材の id の欄
+async function uploadMultipart(api, path, { route, extra, idKey }) {
   const { size } = await stat(path);
-  const started = await callApi(api, "POST", "/v1/unstable/assets/footages/uploads/", { filename: basename(path), total_size: size });
+  const started = await callApi(api, "POST", `/v1/unstable/assets/${route}/uploads/`, { filename: basename(path), total_size: size });
   const chunk = Number(started.chunk_size);
   const partUrls = [...started.part_urls].sort((a, b) => a.part_number - b.part_number);
   const parts = [];
@@ -921,17 +937,17 @@ async function uploadFootage(api, path, name) {
   } finally {
     await file.close();
   }
-  const done = await callApi(api, "PATCH", `/v1/unstable/assets/footages/uploads/${started.upload_id}/`, {
+  const done = await callApi(api, "PATCH", `/v1/unstable/assets/${route}/uploads/${started.upload_id}/`, {
     upload_id: started.upload_id,
     object_key: started.object_key,
     filename: basename(path),
     parts,
-    ...(name ? { name } : {}),
+    ...extra,
   });
   const deadline = Date.now() + 600_000;
   for (;;) {
     const job = await callApi(api, "GET", `/v1/unstable/jobs/${done.job_id}/`);
-    if (job.status === "succeeded") return String(done.footage_id);
+    if (job.status === "succeeded") return String(done[idKey]);
     if (job.status === "failed" || job.status === "canceled") {
       throw new CliError(`${basename(path)}: 仕上げの job が ${job.status} (${job.error_code || ""})`, { exit: EXIT.FAIL, data: job });
     }
@@ -940,8 +956,18 @@ async function uploadFootage(api, path, name) {
   }
 }
 
+function uploadFootage(api, path, name) {
+  return uploadMultipart(api, path, { route: "footages", extra: name ? { name } : {}, idKey: "footage_id" });
+}
+
+// 持ち込み音声 (音声だけのファイル): speakers = 話者の人数のヒント (無ければ自動)。文字起こしは `nolang make --speech` の時に server が行う
+function uploadSpeech(api, path, { speakers, language } = {}) {
+  const extra = { ...(speakers ? { speaker_num: Number(speakers) } : {}), ...(language ? { language } : {}) };
+  return uploadMultipart(api, path, { route: "speeches", extra, idKey: "file_id" });
+}
+
 async function cmdAssetsUpload(positionals, flags) {
-  if (!positionals.length) throw new CliError("使い方: nolang assets upload <file>… [--name 表示名]", { exit: EXIT.USAGE });
+  if (!positionals.length) throw new CliError("使い方: nolang assets upload <file>… [--name 表示名] [--speakers N (音声の話者の人数)]", { exit: EXIT.USAGE });
   const api = await resolveApi(flags);
   const uploaded = [];
   for (const file of positionals) {
@@ -952,15 +978,21 @@ async function cmdAssetsUpload(positionals, flags) {
       throw new CliError(`${file}: file が無い`, { exit: EXIT.USAGE });
     }
     const kind = uploadKind(path);
-    log(`${basename(path)} を${kind === "footage" ? "動画素材" : "画像"}として送る…`);
-    const id = kind === "footage" ? await uploadFootage(api, path, flags.name) : await uploadImage(api, path, flags.name);
+    log(`${basename(path)} を${{ footage: "動画素材", speech: "持ち込み音声", image: "画像" }[kind]}として送る…`);
+    const id =
+      kind === "footage"
+        ? await uploadFootage(api, path, flags.name)
+        : kind === "speech"
+          ? await uploadSpeech(api, path, { speakers: flags.speakers, language: flags.language })
+          : await uploadImage(api, path, flags.name);
     log(`REF ${file} id=${id}`);
     uploaded.push({ file, kind, id, ref: `id=${id}` });
   }
   out({
     ok: true,
     uploaded,
-    usage: "画像も動画素材も根に `image 名 = <ref>` を書き、置く所に `content: @名` (動画素材は `play: loop` も)",
+    usage:
+      "画像も動画素材も根に `image 名 = <ref>` を書き、置く所に `content: @名` (動画素材は `play: loop` も)。持ち込み音声は `nolang make --speech <id>` で使う",
   });
 }
 
@@ -984,6 +1016,9 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
+        [--speech <音声の file か id> [--speakers N]]
+                                        持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
+                                        (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
   nolang start [dir] --title "…" [--seconds N]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
@@ -991,8 +1026,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang abort <video_id>
   nolang assets search <kind> "<説明か名前>" [--mine] [--limit N]
                                         NoLang の素材を探す (kind: image|footage|bgm|soundeffect|speaker|avatar|font)
-  nolang assets upload <file>… [--name 表示名]
-                                        手元の画像 / 動画 (mp4・webm・mov) を自分の素材に送る → ref (id=<uuid>)
+  nolang assets upload <file>… [--name 表示名] [--speakers N]
+                                        手元の画像 / 動画 (mp4・webm・mov) / 音声 (mp3・m4a・wav…) を自分の素材に送る → ref (id=<uuid>)
 
 共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → ${FALLBACK_API})
 接続先の名前: ${Object.entries(TARGETS).map(([name, url]) => `${name} = ${url}`).join("・")}
@@ -1025,6 +1060,8 @@ const OPTIONS = {
   mine: { type: "boolean" },
   limit: { type: "string" },
   name: { type: "string" },
+  speech: { type: "string" },
+  speakers: { type: "string" },
   help: { type: "boolean", short: "h" },
   version: { type: "boolean", short: "v" },
 };
