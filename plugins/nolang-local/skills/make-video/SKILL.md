@@ -20,8 +20,8 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 ## 0. どの作り方か
 
 - **標準は studio** (§S): シェル・`node` (20 以上)・`python3` と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
-- **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・修正役 (と `--staff` の担当) は Claude。再生開始の目安は 1 分ほど。
-- **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・修正役 (と `--staff` の担当) をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
+- **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は 1 分半ほど。
+- **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役 をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
 - `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
@@ -34,10 +34,10 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 3. **作る**: `nolang make ./nolang-videos/<英小文字の名> --type <型> --aspect <縦横> --seconds <秒> --request-text "<依頼文>"` (Bash の timeout は 600000)。
    - Codex ではコマンドに `--engine codex` を追加する。Claude Code では追加しない。
    - 依頼文 = ユーザーの依頼をそのまま + 決めた値 + 素材の `ref` (`id=<uuid>` と使い所) + 台本やテロップの文言があればそのまま。題材の事実が要る時は先に調べて依頼文に書く (著者は調べない)。
-   - 既定は担当なし (著者 `--effort low`・速さ優先)。担当に cut を仕上げさせたい (密度を上げる・時間が掛かってよい) 時だけ `--staff medium` (軽くは `--staff low`)。見本は型から自動 (`--samples a.md,b.md` で替えられる)。
+   - 既定は著者 `--effort low`・担当 `--staff medium` (担当は絵と台詞を変えず、絵と声は著者の版から担当と並列に作る)・直し役は DEFECT の時だけ。急ぐ時だけ `--no-staff` (担当なし・質は落ちる)。見本は型から自動 (`--samples a.md,b.md` で替えられる)。
    - 生成後にユーザーが NoLang の編集画面で自分で調整したい動画は `--editable` — 編集画面で扱える文法サブセット (要素数・動きの preset など) に収めて書く (表現の密度は下がる)。
    - 話している音声 (トーク・インタビュー・講演の録音) から作る動画 (切り抜き・要点の紹介・ショート) は `--speech <音声の file か id>` (話者の人数が分かれば `--speakers N`)。サーバーが文字起こしし、その音声を切って使う (声は録音のまま)。長さは音声から決まる (目安があれば `--seconds`)。文字起こしを待つので、再生までは数分かかる。依頼文には「どこを使うか・何を切るか (フィラー・言い直し)」を書く。
-   - サーバーが再生できる状態になった時点で返る (Claude の目安は既定の担当なしで 1 分ほど・`--staff medium` で 1〜2 分。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。
+   - サーバーが再生できる状態になった時点で返る (Claude の目安は既定で 1 分半ほど・`--no-staff` で 1 分ほど。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。
 4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
 5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 

@@ -672,7 +672,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -711,8 +711,9 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.effort) args.push("--effort", flags.effort);
-  // 既定は担当なし (速さ優先) — 担当で仕上げたい時だけ --staff medium|low で opt-in する (--no-staff は既定と同じで受けるだけ)
-  if (flags.staff && !flags["no-staff"]) args.push("--staff", flags.staff);
+  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 速さ優先なら --no-staff
+  const staff = flags["no-staff"] ? null : flags.staff || "medium";
+  if (staff) args.push("--staff", staff);
   else args.push("--no-staff");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
@@ -725,7 +726,7 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${flags.staff && !flags["no-staff"] ? flags.staff : "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${staff || "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
   const startedAt = Date.now();
   const deadline = startedAt + Number(flags.timeout || (speechId ? MAKE_SPEECH_TIMEOUT_S : MAKE_TIMEOUT_S)) * 1000;
   let watch = null;
@@ -1053,7 +1054,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定は担当なし)] [--editable] [--effort low] [--engine claude|codex]
+        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--speech <音声の file か id> [--speakers N]]
