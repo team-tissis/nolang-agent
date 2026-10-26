@@ -1999,9 +1999,12 @@ class Run:
         mine = [f for f in lint if f.get("cut") == c]
         fixed = self.autofix(c, mine, "author", sure_only=True)  # 担当がこの後に見る
         mine = [f for f in mine if f not in fixed]  # 機械で直した指摘は担当に渡さない
+        # 担当には DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・warn は後段の機械の直しが
+        # 当たる物だけ直る。品質は揺れの縁: C 33-34 / C2 47-68・10-26 の 2 bench)
+        staffed = [f for f in mine if f.get("severity") == "severe"]
         findings = "\n".join(d.text for d in defects[:20]) + "".join(
             f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
-            for f in mine[:30]
+            for f in staffed[:30]
         )
         ff = dd / "out/findings_author.txt"
         ff.write_text(findings)
