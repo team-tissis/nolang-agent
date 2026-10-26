@@ -367,13 +367,15 @@ def editable_note() -> str:
     return """
 編集可能モード (この動画はユーザーが編集画面で自分で調整する — 編集できる語彙だけで書く。破ると投入で DEFECT `editable_*` になり、
 その cut は直しの往復で再生が遅れるか、動きを機械で fade に置き換えられる):
-- 1 cut の要素は 6 個まで (×N は N と数える)・絵 (img) は 2 枚まで (全面の地 + 挿絵 1 枚)。情報は札 1 枚 (×N の項目・箇条) に束ねる (cut を増やすのは構成を書く時だけ — 直しでは cut を分けない)。
+- 1 cut の要素は 12 個まで (×N は N と数える)・絵 (img) は 2 枚まで (全面の地 + 挿絵 1 枚)。情報は札 1 枚 (×N の項目・箇条) に束ねる (cut を増やすのは構成を書く時だけ — 直しでは cut を分けない)。
 - 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う。
-- group / camera / svg / 数える数字 (`[count:]`) / `{tok}` の run は使わない。`.sticky` は立ち絵 (avatar) だけ。
+- group / camera / svg / 数える数字 (`[count:]`) は使わない。`.sticky` は立ち絵 (avatar) だけ。部分の色・大きさの `{tok}` の run は
+  使ってよい (語の印 `[!…]` の的には取らない)。
 - 動きはこの形だけで書く (正の例 — これで十分な画面になる):
   `in: fade`・`in: pop`・`in:{y:40, opacity:0, duration:.5}`・`in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`・
-  `out: fade`・`out:{opacity:0, duration:.3}`・絵の常時は `main: kb {scale: [1, 1.06]}`。
-  使えない形 (門で弾かれて cut が遅れる): `keys(at=…)` の keyframe 列・`path:`・波形の main (`main:{y:4, repeat:-1}` 等)・
+  `out: fade`・`out:{opacity:0, duration:.3}`・絵の常時は `main: kb {scale: [1, 1.06]}`・札や文字の常時は `main: float`
+  (上下の揺れ)・図の常時は `main: pulse` (脈動)。
+  使えない形 (門で弾かれて cut が遅れる): `keys(at=…)` の keyframe 列・`path:`・float / pulse 以外の常時の動き (`main: sway`・文字単位の `wave` 等)・
   filter の tween・`ease:'back.out(1.7)'` などの係数つき easing (語の ease だけ可)。
 - 書体は 3 種まで・影 (box-shadow) は 1 種を def で使い回す (flat な板を既定に)。文字の段は見出し / 本文 / 札の 3 段を def で揃える。
 - ユーザーが選んだ参照の動画がある時は、上の数と `.sticky` の線は参照が使っている量まで緩む — 参照の根・常設の層 (枠・ロゴの札・

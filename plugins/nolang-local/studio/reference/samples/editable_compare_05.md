@@ -4,7 +4,7 @@
 
 ```design.txt
 #v2
-# 計画: 端正な格子を少し柔らかく — 地は graphite + grid・通常の CAD = 橙 (a)・リバース = 青緑 (b)。editable: 要素 6/cut・動きは preset と単純 object
+# 計画: 端正な格子を少し柔らかく — 地は graphite + grid・通常の CAD = 橙 (a)・リバース = 青緑 (b)。editable: 要素 12/cut・動きは preset と単純 object
 # 全編の主役は同じ 1 つの L 字ブラケット (基準画像 part) — ワイヤーフレーム / 実物 / 点群 / メッシュ と姿を変えて「向き」の違いを見せる
 # 書体 太い角ゴシック (見出し) + 太い等幅 (数字・英字の小見出し) + 細い角ゴシック (注記)
 canvas 1920x1080 bg=#12161C
