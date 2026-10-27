@@ -14,10 +14,11 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
+    値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
@@ -1643,6 +1644,14 @@ class Run:
         (self.solo / f"cut_{c}.txt").write_text(new_text)
         return hit
 
+    def staff_effort_for(self, i: int) -> str:
+        """cut i の担当の effort。`balanced` = cut 1・2 だけ low・他は medium — 止まらない開始を決めるのは余裕の薄い cut 1・2
+        (cut 0 は再生の頭まで余裕がある)。2 題材群 16 本で止まらない開始 中央 117〜144 → 84〜95 s・質は 16 判定あたり約 -12 区間
+        (差は小・10-27)。cut 3 以降まで low にすると質ははっきり落ちる。"""
+        if self.staff_effort == "balanced":
+            return "low" if i in (1, 2) else "medium"
+        return self.staff_effort or "medium"
+
     def staff(self, i: int, c: str) -> None:
         """担当 (Opus) が著者の cut を仕上げる。前の cut は著者の版を渡すので cut ごとに並列に走る。
         著者の版は solo/author_cut_<名>.txt に残す (次の cut の参考・差分の検証)。担当は台詞も直してよい (声は担当の版から作る)。
@@ -1676,7 +1685,7 @@ class Run:
                 c,
                 str(ff),
                 "--effort",
-                self.staff_effort or "medium",
+                self.staff_effort_for(i),
                 *(["--keep-assets"] if self.keep_assets else []),
             ],
             timeout=900,

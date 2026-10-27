@@ -160,7 +160,7 @@ Host ubik-nolang
 nolang auth login [--background | --no-browser] | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
 nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
-nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定 medium) | --no-staff] [--editable] [--engine claude|codex]
+nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--engine claude|codex]
                                       NoLang の studio と同じ段取りで作る (engine 未指定は従来どおり Claude、codex は全役割を Codex)。再生できたら URL を返す (スキルの標準)
                                       --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
 nolang check [dir]                    dir の design.txt / timeline.txt を検査

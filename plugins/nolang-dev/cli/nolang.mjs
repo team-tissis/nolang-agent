@@ -672,7 +672,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -711,7 +711,7 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.effort) args.push("--effort", flags.effort);
-  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 速さ優先なら --no-staff
+  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 再生開始を早めるなら --staff balanced (cut 1・2 だけ担当 low)・速さ最優先なら --no-staff
   const staff = flags["no-staff"] ? null : flags.staff || "medium";
   if (staff) args.push("--staff", staff);
   else args.push("--no-staff");
@@ -1054,7 +1054,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex]
+        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--speech <音声の file か id> [--speakers N]]
