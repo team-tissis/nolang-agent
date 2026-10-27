@@ -14,11 +14,12 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-warn] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
     値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
+  --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
@@ -381,6 +382,7 @@ class Run:
         project: Path,
         *,
         staff: str | None = None,
+        staff_warn: bool = False,
         fix: str | None = "low",
         review: str | None = "low",
         fix_scope: str = "severe",
@@ -405,6 +407,7 @@ class Run:
         self.root_submitted = False
         self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
+        self.staff_warn = staff_warn  # 担当に warn の指摘も渡す (`--staff-warn`・既定は DEFECT と severe だけ)
         self.fix_effort = fix  # 直し役の effort。None = 直し役なし (見直しもなし)
         # 直し役の範囲: "defect" = DEFECT と隠れる文字だけ・"severe" = + severe 全部・"warn" = 見直しと台帳の指摘の直し
         self.fix_scope = fix_scope
@@ -2147,9 +2150,10 @@ class Run:
         mine = [f for f in lint if f.get("cut") == c]
         fixed = self.autofix(c, mine, "author", sure_only=True)  # 担当がこの後に見る
         mine = [f for f in mine if f not in fixed]  # 機械で直した指摘は担当に渡さない
-        # 担当には DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・warn は後段の機械の直しが
-        # 当たる物だけ直る。品質は揺れの縁: C 33-34 / C2 47-68・10-26 の 2 bench)
-        staffed = [f for f in mine if f.get("severity") == "severe"]
+        # 担当には既定で DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・warn は後段の機械の直しが
+        # 当たる物だけ直る。品質は揺れの縁: C 33-34 / C2 47-68・10-26 の 2 bench)。`--staff-warn` が warn も渡す
+        levels = ("severe", "warn") if self.staff_warn else ("severe",)
+        staffed = [f for f in mine if f.get("severity") in levels]
         findings = "\n".join(d.text for d in defects[:20]) + "".join(
             f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             for f in staffed[:30]
@@ -2639,6 +2643,7 @@ def main(argv: list[str]) -> int:
     run = Run(
         project,
         staff=staff,
+        staff_warn="--staff-warn" in argv,
         fix=fix,
         review=None if review == "none" else review,
         fix_scope=fix_arg if fix_arg in ("defect", "severe") else "warn",

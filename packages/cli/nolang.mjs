@@ -715,7 +715,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--review low|medium --fix low [--look]] [--staff-edits-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--staff-warn] [--editable] [--effort low] [--engine claude|codex] [--review low|medium --fix low [--look]] [--staff-edits-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -758,6 +758,7 @@ async function cmdMake(positionals, flags) {
   const staff = flags["no-staff"] ? null : flags.staff || "medium";
   if (staff) args.push("--staff", staff);
   else args.push("--no-staff");
+  if (flags["staff-warn"]) args.push("--staff-warn");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
   // 質を取りに行く時: 見直し (--review medium と --fix low)・見直しに cut の静止画 (--look — server の GPU が描く)・担当が絵と台詞も変える
@@ -1103,7 +1104,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex]
+        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--staff-warn (担当に warn の指摘も渡す)] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--review low|medium --fix low [--look]] [--staff-edits-assets]
@@ -1152,6 +1153,7 @@ const OPTIONS = {
   effort: { type: "string" },
   staff: { type: "string" },
   "no-staff": { type: "boolean" },
+  "staff-warn": { type: "boolean" },
   editable: { type: "boolean" },
   samples: { type: "string" },
   review: { type: "string" },

@@ -2,7 +2,7 @@
 # 依頼文 1 つから stream (製品と同じ段取り: 著者 low 1 call → cut ごとの担当 medium → check / 直し → 素材 → 確定 → 投入 → 製品の DraftStreamRun が描く) で動画を作る。
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
-#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|balanced|low] [--no-staff]
+#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|balanced|low] [--no-staff] [--staff-warn (担当に warn の指摘も渡す・既定は DEFECT と severe だけ)]
 #        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
 #                                                        見直しに cut の静止画も見せて 2 回 (質を取りに行く mode・--fix low と — remote は server の GPU が描く))
 #        (既定 --fix severe = DEFECT と severe の指摘 (隠れる文字・画面の外 …) の時だけ直し役 (low)・見直しなし・warn は直さない・--fix defect = DEFECT と隠れる文字だけ・
@@ -26,7 +26,7 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
@@ -39,6 +39,7 @@ while [ $# -gt 0 ]; do
     --effort) EFFORT=$2; shift 2;;
     --staff) STAFF=$2; shift 2;;
     --no-staff) STAFF=""; shift;;
+    --staff-warn) STAFF_WARN=1; shift;;
     --fix) FIX=$2; shift 2;;
     --review) REVIEW=$2; shift 2;;
     --look) LOOK=1; shift;;
@@ -76,7 +77,7 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$S/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF} --review $REVIEW --fix $FIX${ASSETS:+ --staff-edits-assets}${LOOK:+ --look}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --review $REVIEW --fix $FIX${ASSETS:+ --staff-edits-assets}${LOOK:+ --look}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
 # 参照の動画: --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
 [ -n "$REF" ] || REF=$(grep -oE '\[video:[0-9a-fA-F-]{36}\]' "$P/request.txt" | head -1 | sed -E 's/^\[video:(.*)\]$/\1/' || true)
 if [ -n "$REF" ]; then
