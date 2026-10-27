@@ -4,7 +4,7 @@
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|balanced|low] [--no-staff]
 #        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
-#                                                        見直しに cut の静止画も見せて 2 回 (local だけ・質を取りに行く mode))
+#                                                        見直しに cut の静止画も見せて 2 回 (質を取りに行く mode・--fix low と — remote は server の GPU が描く))
 #        (既定 --fix severe = DEFECT と severe の指摘 (隠れる文字・画面の外 …) の時だけ直し役 (low)・見直しなし・warn は直さない・--fix defect = DEFECT と隠れる文字だけ・
 #         --fix none で直し役も無し・--fix low で見直しと指摘の直し。既定では担当は絵と台詞を変えず、絵と声は著者の版から担当と
 #         並列に作る・--staff-edits-assets で担当が絵と台詞も変える)

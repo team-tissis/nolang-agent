@@ -29,8 +29,9 @@ usage (repo root から): python stream_run.py <project> [--staff medium|balance
   既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + 見直し +
     直しに Opus 両順 3 勝 1 分・担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。DEFECT だけの
     直し役は、落ちる cut を減らす網 (DEFECT が無ければ呼ばれない)。
-  --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (local だけ・質を取りに行く mode — 速さの枠の外): 担当の後、
-    prewarm の絵で cut を GPU で描き (`studio.py shots`)、round ごとに撮り直す。
+  --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (質を取りに行く mode — 速さの枠の外): 担当の後、
+    prewarm の絵で cut を GPU で描き (local は `studio.py shots`・remote は server の GPU の worker `drafts/{id}/stills/`)、round ごとに
+    撮り直す。
   直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
 記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4 と、流した doc を
 studio/ (design.txt・timeline.txt・src.json) に書き戻した物。solo/ の cut は著者の版 author_cut_<名>・担当の版 staff_cut_<名>・最終
@@ -345,6 +346,8 @@ class Rejected(Exception):
 # 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5 (10-22・effort medium・low は直し役と差が出ない)
 REVIEW_ROUNDS = 1
 REVIEW_ROUNDS_LOOK = 2
+# remote の静止画 (`drafts/{id}/stills/`) を待つ上限 — server は warm の絵を 90 s まで待ってから実現・描画する
+REMOTE_SHOTS_TIMEOUT_S = 240
 
 # 台詞の尺の指摘 (`Run.length_finding`): check の見積りが cut の予算から ±20% (短い cut は ±2.5 s — 文 1 本より細かく寄せない) を
 # 超えたら直し役に文の刈り込み / 足しを頼む。締めの cut の予算は依頼の残りを 10〜30 s の範囲で (弾性)
@@ -460,15 +463,17 @@ class Run:
     _ROUTES = {  # op → (method, path) — {id} は run の video
         "cut": ("POST", "/v1/unstable/drafts/{id}/cuts/"),
         "warm": ("POST", "/v1/unstable/drafts/{id}/warm/"),
+        "stills": ("POST", "/v1/unstable/drafts/{id}/stills/"),
+        "stills_status": ("GET", "/v1/unstable/drafts/{id}/stills/{job}/"),
         "check": ("POST", "/v1/unstable/drafts/check/"),
         "rename": ("POST", "/v1/unstable/drafts/rename/"),
         "rules": ("GET", "/v1/unstable/drafts/rules/"),
         "abort": ("DELETE", "/v1/unstable/drafts/{id}/"),
     }
 
-    def call(self, op: str, body: dict[str, object] | None = None) -> dict[str, object]:
-        """受け口を 1 回呼ぶ。remote は HTTP (`_ROUTES`)・local は同じ flow 関数を手元の user で (`studio.py api <op>`・body は stdin)。
-        止めた頼み (HTTP の 400) は `Rejected`・届かない時は RuntimeError。"""
+    def call(self, op: str, body: dict[str, object] | None = None, **path_args: str) -> dict[str, object]:
+        """受け口を 1 回呼ぶ。remote は HTTP (`_ROUTES`・path_args は path の `{名}`)・local は同じ flow 関数を手元の user で
+        (`studio.py api <op>`・body は stdin)。止めた頼み (HTTP の 400) は `Rejected`・届かない時は RuntimeError。"""
         body = dict(body or {})
         if self.remote is None:
             if self.video_id is not None:
@@ -481,7 +486,7 @@ class Run:
         else:
             method, path = self._ROUTES[op]
             req = urllib.request.Request(
-                f"{self.remote}{path.format(id=self.video_id)}",
+                f"{self.remote}{path.format(id=self.video_id, **path_args)}",
                 data=json.dumps(body).encode("utf-8") if method == "POST" else None,
                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
                 method=method,
@@ -1505,7 +1510,7 @@ class Run:
         if w.thread is not None:
             w.thread.join()
         t = time.time()
-        pins = self.warm_pins()
+        pins = self.warm_pins() if self.remote is None else None  # remote の warm の絵は server が待って使う
         i = self.order.index(c)
         extra = "".join(
             text
@@ -1514,6 +1519,8 @@ class Run:
             for _kind, _name, text in self.named_defs(blk[0])
         )
         dd = self.doc_dir(f"{c}.shot", [c], root_extra=extra, pins=pins)
+        if self.remote is not None:
+            return self.remote_shots(c, dd, t)
         out = ""
         for _attempt in range(3):
             (dd / "out/defects.json").unlink(missing_ok=True)  # 落とす行は今の attempt の DEFECT だけから
@@ -1527,6 +1534,58 @@ class Run:
         (dd / "out/shots.txt").write_text(out)
         paths = [Path(line.split()[1]) for line in out.splitlines() if line.startswith("SHOT ")]
         self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=len(paths), ok="OK shots" in out)
+        return paths
+
+    def remote_shots(self, c: str, dd: Path, t: float) -> list[Path]:
+        """`shots` の remote 版: doc (根 + c) を server の GPU の worker に描かせ (`drafts/{id}/stills/` — warm の絵の pin は server が
+        待つ)、出来た絵を dd/out/shots/ に落とす。c の DEFECT の行は check で引いて落としてから頼む (local と同じ)。頼みの失敗・時間切れは
+        空 (画像なしで見直す)。"""
+        out = dd / "out/shots"
+        shutil.rmtree(out, ignore_errors=True)
+        out.mkdir(parents=True)
+        try:
+            for _attempt in range(3):
+                _report, defects, _lint = self.check(dd, ended=not (dd / "OPEN_ENDED").exists(), focus=c)
+                if not any(d.level == "DEFECT" for d in defects) or self.drop_defect_lines(dd, c) == 0:
+                    break
+        except (Rejected, RuntimeError, OSError) as e:
+            self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=0, ok=False, error=str(e)[:300])
+            return []
+        body: dict[str, object] = {
+            "design": (dd / "design.txt").read_text(),
+            "timeline": (dd / "timeline.txt").read_text(),
+            "cut": c,
+            "open_ended": (dd / "OPEN_ENDED").exists(),
+        }
+        try:
+            job = str(self.call("stills", body)["job_id"])
+            deadline = time.time() + REMOTE_SHOTS_TIMEOUT_S
+            state: dict[str, object] = {"status": "pending"}
+            while state.get("status") == "pending" and time.time() < deadline:
+                time.sleep(3)
+                state = self.call("stills_status", job=job)
+        except (Rejected, RuntimeError, OSError) as e:
+            self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=0, ok=False, error=str(e)[:300])
+            return []
+        raw = state.get("shots")
+        paths: list[Path] = []
+        for shot in raw if isinstance(raw, list) else []:
+            path = out / str(shot["name"])
+            try:
+                with urllib.request.urlopen(str(shot["url"]), timeout=60) as resp:
+                    path.write_bytes(resp.read())
+            except OSError:
+                continue
+            paths.append(path)
+        self.log(
+            cut=c,
+            event="shots",
+            s=round(time.time() - t, 1),
+            n=len(paths),
+            ok=state.get("status") == "done",
+            error=str(state.get("error") or "")[:300] or None,
+            unwarmed=state.get("unwarmed") or None,
+        )
         return paths
 
     def warm_pins(self) -> dict[str, object]:
@@ -2552,9 +2611,6 @@ def main(argv: list[str]) -> int:
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
     if token is None and remote is not None:
         token = claude_mcp_token(remote)
-    if look and remote is not None:
-        print("--look は local だけ (静止画はこの機械の GPU で描く)", file=sys.stderr)
-        return 2
     run = Run(
         project,
         staff=staff,

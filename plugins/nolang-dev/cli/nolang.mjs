@@ -686,7 +686,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex] [--review low|medium --fix low [--look]] [--staff-edits-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -731,6 +731,11 @@ async function cmdMake(positionals, flags) {
   else args.push("--no-staff");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
+  // 質を取りに行く時: 見直し (--review medium と --fix low)・見直しに cut の静止画 (--look — server の GPU が描く)・担当が絵と台詞も変える
+  if (flags.review) args.push("--review", flags.review);
+  if (flags.fix) args.push("--fix", flags.fix);
+  if (flags.look) args.push("--look");
+  if (flags["staff-edits-assets"]) args.push("--staff-edits-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
   // macOS の bash は UTF-8 の locale で `$VAR・` の全角文字を変数名に含めて読む — bash は C・python は UTF-8 で動かす
@@ -1072,6 +1077,9 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--effort low] [--engine claude|codex]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
+        [--review low|medium --fix low [--look]] [--staff-edits-assets]
+                                        質を取りに行く時 (遅くなる): --fix low で見直し役を入れ (--review は その effort)、--look で
+                                        見直しに cut の静止画も見せて 2 回 (server の GPU が描く)・--staff-edits-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
@@ -1117,6 +1125,10 @@ const OPTIONS = {
   "no-staff": { type: "boolean" },
   editable: { type: "boolean" },
   samples: { type: "string" },
+  review: { type: "string" },
+  fix: { type: "string" },
+  look: { type: "boolean" },
+  "staff-edits-assets": { type: "boolean" },
   mine: { type: "boolean" },
   limit: { type: "string" },
   name: { type: "string" },
