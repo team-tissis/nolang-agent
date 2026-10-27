@@ -437,7 +437,7 @@ se hit -2dB +280
 
 *** s02
 se whoosh -3dB
-@n: [silence:0.25s][>#b2.fact[1] -150]調査[>#b2.ql +50][>#b2.chip[*] +170][♪tick -6dB +50]は[>#b2.fact[2] +100][♪pop_hi -6dB +100]2026年{9月|くがつ}。[|][>#b2.fact[3]][♪pop_hi -6dB]社員1,050人のうち[>#b2.fact[4] -100][♪pop_hi -6dB -100][!#b2.dv count +200][>#b2.arc +200][♪graph -8dB +200][>#b2.cap +150]800人が回答し、[|]回答率は76%でした。[silence:0.45s]
+@n: [silence:0.25s][>#b2.fact[1] -150]調査[>#b2.ql +50][>#b2.chip[*] +170][♪tick -6dB +50]は[>#b2.fact[2] +100][♪pop_hi -6dB +100]2026年9月。[|][>#b2.fact[3]][♪pop_hi -6dB]社員1,050人のうち[>#b2.fact[4] -100][♪pop_hi -6dB -100][!#b2.dv count +200][>#b2.arc +200][♪graph -8dB +200][>#b2.cap +150]800人が回答し、[|]回答率は76%でした。[silence:0.45s]
 
 *** s03
 se whoosh -3dB
@@ -464,7 +464,7 @@ se whoosh -3dB
 *** s07
 se whoosh -3dB
 @n: [silence:0.25s][♪graph -8dB -100]希望する出社日数は[!#b7.h[3] fill,$brand,duration=300 +300][>#b7.med +450][♪tick -6dB +300]週2日が最多で、[|][!#b7.h[2] fill,$mid,duration=300 -250][!#b7.h[4] fill,$mid,duration=300 -250][>#b7.brk -150][>#b7.brl1][♪shwip -4dB -250]週1日から3日が[>#b7.brl2 count +70]68%を占めます。
-@: [>#b7.pa -150]希望の平均[>#b7.pa.b1][>#b7.pa.v1 +100][♪pop_hi -6dB]は週{1.7日|1.7にち}。[|][>#b7.pa.b2 +100][>#b7.pa.v2 +200][♪pop_hi -6dB +100]実績の{2.2日|2.2にち}[>#b7.pa.dl +150][♪bell -3dB +150]より{0.5日|0.5にち}少なめです。
+@: [>#b7.pa -150]希望の平均[>#b7.pa.b1][>#b7.pa.v1 +100][♪pop_hi -6dB]は週1.7日。[|][>#b7.pa.b2 +100][>#b7.pa.v2 +200][♪pop_hi -6dB +100]実績の2.2日[>#b7.pa.dl +150][♪bell -3dB +150]より0.5日少なめです。
 @: [>#b7.pb -150]週3日以上の希望は、[|][>#b7.pb.b1 -100][>#b7.pb.v1 count][♪pop_mid -8dB -100]全体の25%に対し、20代[>#b7.pb.b2 +70][>#b7.pb.v2 count +170][♪pop_mid -8dB +70]では31%です。[silence:0.45s]
 
 *** s08
@@ -480,7 +480,7 @@ se whoosh -3dB
 se whoosh -3dB
 @n: [silence:0.25s]施策は三つです。
 @: [card #b10.p1 -100][♪pop_hi -6dB -100]まず、部署ごとに週2日の「チーム出社[>#b10.p1.bt +80][♪tick -6dB +80]日」を固定する。
-@: [card #b10.p2 -100][♪pop_hi -6dB -100]次に、入社3年以内の社員に先輩の伴走役を付け、[|][>#b10.p2.bt -100][♪tick -6dB -100]週1回の{1on1|ワンオンワン}を組む。
+@: [card #b10.p2 -100][♪pop_hi -6dB -100]次に、入社3年以内の社員に先輩の伴走役を付け、[|][>#b10.p2.bt -100][♪tick -6dB -100]週1回の1on1を組む。
 @: [card #b10.p3 -100][>#b10.p3.rm -100][>#b10.p3.n30 -100][>#b10.p3.d3 -100][♪pop_hi -6dB -100]そして、オンライン会議用の個室を12室[!#b10.p3.n30 count]から[♪bell -3dB +70]30室に増やし、[|][>#b10.p3.bt -100][♪tick -6dB -100]評価基準を成果ベースで明文化します。[silence:0.45s]
 
 *** s11

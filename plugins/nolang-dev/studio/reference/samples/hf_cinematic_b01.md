@@ -127,10 +127,10 @@ transition dissolve,600,overlap=600
 
 *** water
 se stream -6dB to=4.5s fade=400,700
-@n: [silence:0.8s][>#copy2 -50]{米|こめ}が[>#pour_photo +430][<#stream_photo +530][♪tub -4dB +390 to=1.7s fade=100,450]育ち、水が育て[<#copy2 +120][>#ladle_photo +220][<#pour_photo +320][♪drop +970]る。[silence:1.34s]
+@n: [silence:0.8s][>#copy2 -50]米が[>#pour_photo +430][<#stream_photo +530][♪tub -4dB +390 to=1.7s fade=100,450]育ち、水が育て[<#copy2 +120][>#ladle_photo +220][<#pour_photo +320][♪drop +970]る。[silence:1.34s]
 
 *** brew
-@n: [silence:1.92s][>#hands_photo -380][<#steam_photo -280][<#steam_a -280][<#steam_b -280][>#copy3 -50]そして、[>#koji_photo +140][<#hands_photo +240][♪rice -6dB +190 to=1.5s fade=100,400]人の手が{醸|かも}してい[<#copy3 +270][>#moromi_photo +310][<#koji_photo +410][♪bubbles -8dB +270 to=1.8s fade=200,500][>#brewer_photo +1820][<#moromi_photo +1920]く。[silence:3.41s]
+@n: [silence:1.92s][>#hands_photo -380][<#steam_photo -280][<#steam_a -280][<#steam_b -280][>#copy3 -50]そして、[>#koji_photo +140][<#hands_photo +240][♪rice -6dB +190 to=1.5s fade=100,400]人の手が醸してい[<#copy3 +270][>#moromi_photo +310][<#koji_photo +410][♪bubbles -8dB +270 to=1.8s fade=200,500][>#brewer_photo +1820][<#moromi_photo +1920]く。[silence:3.41s]
 transition dissolve,600,overlap=600
 
 *** drip
@@ -142,10 +142,10 @@ fade in,1100
 
 *** pour
 se pour -4dB to=3.3s fade=150,600
-@n: [silence:0.53s][>#copy5 -50]{田|た}の恵みを、あなたの{杯|さかずき}[>#toast_photo +170][<#glass_photo +270][<#copy5 +330]に。[silence:3.48s]
+@n: [silence:0.53s][>#copy5 -50]田の恵みを、あなたの杯[>#toast_photo +170][<#glass_photo +270][<#copy5 +330]に。[silence:3.48s]
 transition dissolve,800,overlap=800
 
 *** brand
-@n: [!#mist3 to,{x:240, duration:8.3, ease:'none'}][!#mist4 to,{x:-260, duration:8.3, ease:'none'}][!#mist5 to,{x:-120, duration:8.3, ease:'none'}][silence:1.8s][>#logo -1400][♪taiko -2dB -1420 fade=0,300][>#seal -300][>#rule -200][>#latin +100][>#sub +700]日本酒、{田恵|でんえい}。[silence:4.42s]
+@n: [!#mist3 to,{x:240, duration:8.3, ease:'none'}][!#mist4 to,{x:-260, duration:8.3, ease:'none'}][!#mist5 to,{x:-120, duration:8.3, ease:'none'}][silence:1.8s][>#logo -1400][♪taiko -2dB -1420 fade=0,300][>#seal -300][>#rule -200][>#latin +100][>#sub +700]日本酒、田恵。[silence:4.42s]
 fade out,1000
 ```

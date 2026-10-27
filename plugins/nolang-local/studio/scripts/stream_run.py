@@ -431,6 +431,9 @@ class Run:
         self.submitted: set[str] = set()  # 流した cut — その text は変えない (後の doc も同じ text で組む)
         # 行の無い DEFECT の sig → 持ち主の cut (根は ROOT)。attribute_unlocated が書く
         self.unlocated_owner: dict[str, str] = {}
+        self.shot_unwarmed: dict[
+            str, list[str]
+        ] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (remote の `--look`)
         self.author_clean: set[str] = set()  # 著者の版 (担当が触る前) が check で DEFECT 0 だった cut
         self.staged: dict[str, bool] = {}
         self.broken: dict[str, str] = {}
@@ -1291,6 +1294,9 @@ class Run:
         reverted_fixes: list[str] = []  # 戻した直し役の出力 (cut の text) — 同じ edit が返ったら当てずに戻す
         failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
         last: tuple[str, list[dict[str, object]]] | None = None  # 最後の check の (cut の text, その cut の指摘)
+        # look の直しが絵の説明文を変えた (作り直しが warm で裏に走る) — 次の見直しの前に、直す指摘があれば画像を見ない直しを挟み、
+        # 作り直しの生成と重ねる (次の見直しの静止画は server が新しい絵を待って描く)
+        pictures_pending = False
         for rnd in itertools.count():
             t = time.time()
             dd, out, defects, lint, _blockers = self.check_settled(c, i, rnd)
@@ -1414,9 +1420,19 @@ class Run:
                 fix_calls += 1
                 self.log(cut=c, event="revert_author", round=rnd, defect=len(defects))
                 continue
-            review = reviews > 0
-            reviews = max(reviews - 1, 0)
+            interleave = pictures_pending and reviews > 0 and bool(defects or fixes)
+            pictures_pending = False
+            review = reviews > 0 and not interleave
+            if review:
+                reviews -= 1
+            if interleave:
+                self.log(cut=c, event="look_interleave", round=rnd, defect=len(defects), fix=len(fixes))
             shots = self.shots(c) if review and self.look else None  # 撮れなければ (空) 画像なしで見直す
+            if shots and self.shot_unwarmed.get(c):
+                # warm が間に合わず意味検索で引いた仮の絵 — 見直し役に中身を判定させない (作り直しの連鎖を作らない)
+                ff.write_text(
+                    ff.read_text() + "\n\n生成中 (仮の絵 — 中身は判定しない): " + "・".join(self.shot_unwarmed[c])
+                )
             before_fix = (self.solo / f"cut_{c}.txt").read_text()
             before_clean = not defects
             prev_keys = {
@@ -1443,6 +1459,13 @@ class Run:
                     review=review,
                     look=bool(shots),
                 )
+                if shots:
+                    from stream_author import touched_fixed  # noqa: PLC0415 — scripts dir を sys.path に足している
+
+                    changed = touched_fixed(before_fix, (self.solo / f"cut_{c}.txt").read_text())[1]
+                    if changed:
+                        pictures_pending = True
+                        self.log(cut=c, event="look_pictures", round=rnd, n=changed)
                 if (self.solo / f"cut_{c}.txt").read_text() in reverted_fixes:
                     # 戻した edit をそのまま返した — 当てても同じ DEFECT で戻すだけなので当てない (次の round は 2 回の上限で最後の手段へ)
                     (self.solo / f"cut_{c}.txt").write_text(before_fix)
@@ -1586,6 +1609,8 @@ class Run:
             error=str(state.get("error") or "")[:300] or None,
             unwarmed=state.get("unwarmed") or None,
         )
+        raw_unwarmed = state.get("unwarmed")
+        self.shot_unwarmed[c] = [str(name) for name in raw_unwarmed] if isinstance(raw_unwarmed, list) else []
         return paths
 
     def warm_pins(self) -> dict[str, object]:

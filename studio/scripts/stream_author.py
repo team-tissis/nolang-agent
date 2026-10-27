@@ -466,6 +466,17 @@ def _numbered(text: str) -> str:
     return "\n".join(f"{k}| {line}" for k, line in enumerate(text.rstrip("\n").split("\n"), start=1))
 
 
+# 見直しの静止画 (`--look`) で絵の説明文を変えてよい時。作り直しは再生を待たせるので、文脈を取り違えさせる誤りだけ (些細な違いは放置)
+PICTURE_FIX_NOTE = """絵の重い誤り (画像を見て判断し、この時だけ絵を直す): 絵が台詞・説明の中身を取り違えさせる時 — 説明している物と別の物に
+見える (球が原子の模型に見える・地図が別の国)・話の要になる数や形が違う (穴の数・矢印の向き・グラフの増減)・台詞と食い違う (人物・時代・
+場所・出来事)・重ねた図形 (輪・矢印・印) が指す対象に乗っていない。直し方は 1 つ選ぶ: (a) その img の説明文を書き直す (形と数をはっきり
+書き、説明に無い物は描かないと書く) (b) 幾何・図式の対象 (球・輪・曲面・グラフ・図解) は生成画像をやめて shape / svg の図で描き直す
+(c) 根の `image` (使い回しの絵) が誤っている時は根を変えず、この cut の `content: @名` をこの cut だけの説明文の img に替える。
+些細な違い (画風・色味・細部・構図・想像と少し違う) は直さない — 絵の作り直しは再生を待たせる。絵を直したら `=== look ===` のその行の
+頭に `絵:` を付ける。「生成中 (仮の絵)」と添えた絵は中身を判定しない。
+"""
+
+
 def fix_prompt(
     name: str,
     block: str,
@@ -518,18 +529,28 @@ def fix_prompt(
             )
         else:
             intro = "check の指摘とは別に、厳しいモーションディレクターとして block を読み、描いた姿を想像して、"
+        kept = (
+            "台詞の文字は変えない・絵の説明文は下の「絵の重い誤り」の時だけ"
+            if shots
+            else "台詞の文字と絵の説明文だけは変えない"
+        )
         look = f"""
 {intro}プロの解説動画として弱い所・崩れている所を探して直す。
-配置は大きく組み替えてよい (行の置き換え・追加・削除。台詞の文字と絵の説明文だけは変えない{" — 尺の指摘の文の消し / 足しは上のとおり" if trim else ""})。
-まず `=== look ===` に見つけた所を 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ `=== edits ===` の直後に `=== end ===`。
+配置は大きく組み替えてよい (行の置き換え・追加・削除。{kept}{" — 尺の指摘の文の消し / 足しは上のとおり" if trim else ""})。
+{PICTURE_FIX_NOTE if shots else ""}まず `=== look ===` に見つけた所を 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ `=== edits ===` の直後に `=== end ===`。
 """
     head = (
         f"cut `{name}` の block に check の指摘が出ました。"
         if findings.strip() or not look
         else f"cut `{name}` の block を見直して、崩れがあれば直してください (check の指摘はありません)。"
     )
+    pictures = (
+        "絵の説明文は「絵の重い誤り」の時だけ (img の行の内容。宣言は直してよい・絵を足すのは可)"
+        if shots
+        else "絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)"
+    )
     return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
-変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)。
+変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・{pictures}。
 直しで悪くしない (直さない方が良かった直しに多い型): 題・見出し・最初の札は cut の頭に出したまま (印を足して出を遅らせない — cut の頭を背景だけにしない)・字幕を文の途中で割らない・札や図の文字・項目・数字を減らさない・人物の顔に札や題を重ねない・cut を分けない (`section#` と `***` の見出しは足さない・変えない)。
 {editable_note()}{reference_note}{trim}形式:
 === edits ===
@@ -710,15 +731,6 @@ def _add_silence(line: str, seconds: float, *, head: bool) -> str:
     return line.rstrip() + f"[silence:+{seconds:.2f}s]"
 
 
-def _with_reading(line: str, token: str, kana: str) -> str:
-    """台詞の行の token (印 `[…]`・読みの指定 `{…|…}` の外の最初の 1 つ) を `{token|kana}` に。"""
-    pattern = re.compile(r"\[[^\]]*\]|\{[^{}]*\}|(?<![\d.])" + re.escape(token) + r"(?!\d)")
-    for hit in pattern.finditer(line):
-        if hit.group(0) == token:
-            return line[: hit.start()] + f"{{{token}|{kana}}}" + line[hit.end() :]
-    return line
-
-
 def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
     """design の行 → 要素の path (字下げで親の名を `.` で繋ぐ) → (行の始め, 子を含む終わり, 親の path)。"""
     spans: dict[str, tuple[int, int, str]] = {}
@@ -745,7 +757,7 @@ def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
 # 消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種) を選べる — 後に担当や warn を直す直し役が残る間は当てずに
 # 指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は
 # 40-74 で負け)
-AUTOFIX_SURE = frozenset({"reading", "drop_out", "br"})
+AUTOFIX_SURE = frozenset({"drop_out", "br"})
 AUTOFIX_SURE_SILENCE_S = 0.5
 
 
@@ -757,7 +769,6 @@ def apply_autofix(
     - `silence_tail:秒` 最後の台詞の末尾の無音 (切替が台詞に掛かる) / `silence_head:秒` 最初の台詞の頭の無音 (入場が切替の窓に入る)
     - `drop_out:名` `section#名(…)` の `out:` を外す (切替との二重掛け)
     - `transition:種,尺,overlap=…` cut の切替の行の種・尺・overlap を替える (他の引数 — 効果音・向き — は残す)
-    - `reading:語=読み,…` 台詞の語に読みを書く (`{9月|くがつ}`)
     - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
     - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
     sure_only = 積極的な直し (`AUTOFIX_SURE`) だけ当てる (後に LLM が残る時)。"""
@@ -797,12 +808,6 @@ def apply_autofix(
             else:
                 last = max(at for at, line in enumerate(tlines) if line.strip())
                 tlines.insert(last + 1, "transition " + arg)
-        elif op == "reading":
-            for pair in arg.split(","):
-                token, _, kana = pair.partition("=")
-                for at in speech:
-                    if token in tlines[at]:
-                        tlines[at] = _with_reading(tlines[at], token, kana)
         elif op == "br":
             fence = False
             for at, line in enumerate(dlines):

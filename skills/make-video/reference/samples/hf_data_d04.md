@@ -299,11 +299,11 @@ silence head=0 tail=0
 bgm music
 @n: [silence:350][>#glow -350][♪vibe -1.4dB -300][>#bz_l -300][>#bz_r -300][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} -300][!#bz_l to,{opacity:0, duration:0.3} +250][!#bz_r to,{opacity:0, duration:0.3} +250][!#bz_l to,{opacity:1, duration:0.18} +600][!#bz_r to,{opacity:1, duration:0.18} +600][♪vibe -5.2dB +600][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} +600][!#bz_l to,{opacity:0, duration:0.3} +1150][!#bz_r to,{opacity:0, duration:0.3} +1150][!#glow to,{opacity:0.55, scale:0.92, duration:0.6, repeat:5, yoyo:true, ease:'sine.inOut'} +1250][>#q.l1][♪pop_hi -5.2dB +20][>#q.l2 +280]寝る前のスマホ、何時に手放してる？[silence:250]
 [>#subtitle]
-@: [<#q -350][>#heroshade -150][♪whoosh_swing -6dB -100][>#ttl.kicker -50][!#glow to,{opacity:0.35, duration:0.5} -50][>#ttl.t1 +30][♪rise_pop -6dB +130][>#ttl.t2 +150][>#ttl.t3 +310][>#ttl.ul +650][>#ttl.ch1 +700][>#ttl.ch2 +820][>#ttl.ch3 +940][>#ttl.fict +1150]全国の高校生{　|、}[br][♪tick -9dB -50 to=1.4s]{y}1,236人{/}に聞きました。[silence:80]
+@: [<#q -350][>#heroshade -150][♪whoosh_swing -6dB -100][>#ttl.kicker -50][!#glow to,{opacity:0.35, duration:0.5} -50][>#ttl.t1 +30][♪rise_pop -6dB +130][>#ttl.t2 +150][>#ttl.t3 +310][>#ttl.ul +650][>#ttl.ch1 +700][>#ttl.ch2 +820][>#ttl.ch3 +940][>#ttl.fict +1150]全国の高校生、[br][♪tick -9dB -50 to=1.4s]{y}1,236人{/}に聞きました。[silence:80]
 
 *** dist
 se whoosh_short -4.4dB
-@: [silence:320][!#pd[1] .on -120][♪pop_soft -6dB +230][♪pop_soft -7dB +380][♪pop_soft -7dB +530]平日の睡眠は{　|、}[br][♪tick -10dB to=1.4s]平均[!#b2.hero.h count +110][!#b2.hero.m count +110]{y}6時間21分{/}[♪sparkle -7dB +500]。
+@: [silence:320][!#pd[1] .on -120][♪pop_soft -6dB +230][♪pop_soft -7dB +380][♪pop_soft -7dB +530]平日の睡眠は、[br][♪tick -10dB to=1.4s]平均[!#b2.hero.h count +110][!#b2.hero.m count +110]{y}6時間21分{/}[♪sparkle -7dB +500]。
 @: [silence:220]6時間未満の人が[>#b2.hot[*] -100][!#b2.col[3] to,{opacity:0.4, duration:0.3} -100][!#b2.col[4] to,{opacity:0.4, duration:0.3} -100][!#b2.col[5] to,{opacity:0.4, duration:0.3} -100][!#b2.colv[3] to,{opacity:0.62, duration:0.3} -100][!#b2.colv[4] to,{opacity:0.62, duration:0.3} -100][!#b2.colv[5] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[3] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[4] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[5] to,{opacity:0.62, duration:0.3} -100][>#b2.brk -50][>#b2.pill][♪pop_hi -6dB -50][♪sparkle -8dB +150][>#fx2 +150][<#fx2 +400]{y}35%{/}と、[|][>#b2.stamp -50][♪rise_pop -6dB]{y}3人に1人{/}を超えます。[silence:80]
 
 *** phone
@@ -318,13 +318,13 @@ se whoosh_short -4.4dB
 
 *** exp
 se whoosh_short -4.4dB
-@: [silence:420][=#pd[3] -220][!#pd[4] .on -220]そこで、[>#b5.parta.rule -150][>#b5.parta.rule.time -50][♪pop_hi -6dB]{y}22時30分{/}に[br]スマホを[>#b5.parta.pinphone -50][>#b5.parta.pinbed +300][♪chime_soft -8dB +100]別の部屋で充電する{　|、}[|][>#b5.parta.part +100][>#b5.parta.part.fill +300][♪click -8dB]{y}2週間{/}の実験。
+@: [silence:420][=#pd[3] -220][!#pd[4] .on -220]そこで、[>#b5.parta.rule -150][>#b5.parta.rule.time -50][♪pop_hi -6dB]{y}22時30分{/}に[br]スマホを[>#b5.parta.pinphone -50][>#b5.parta.pinbed +300][♪chime_soft -8dB +100]別の部屋で充電する、[|][>#b5.parta.part +100][>#b5.parta.part.fill +300][♪click -8dB]{y}2週間{/}の実験。
 @: [silence:300][<#b5.parta -250][>#b5.res -100][♪whoosh_short -6dB -100]続けた[♪pop_soft -7dB]76人は、[br]睡眠が[!#b5.res.rr[2].aft punch,1.12,duration=400 -50][>#b5.res.dl2 -50][♪chime_ok -7dB][>#fx5 +50][<#fx5 +300]{y}37分{/}増え、[|]朝とても眠い人は[br][♪sparkle -7dB +250]{y}58%{/}から[>#b5.res.mbb[*] -100][!#b5.res.rr[3].aft punch,1.12,duration=400 -50]{y}34%{/}に減りました。[silence:100]
 
 *** tip
 se whoosh_short -4.4dB
 @: [silence:350][=#pd[4] -150][!#pd[5] .on -150][♪pop_soft -7dB +200][♪pop_soft -8dB +350]続かなかった理由は[br][!#b6.rsn[1] to,{scale:1.07, duration:0.18, yoyo:true, repeat:1, ease:'power2.out'} -50][!#b6.rsn[1].ic to,{rotation:8, duration:0.08, repeat:7, yoyo:true, ease:'none'} +200][♪pop_hi -7dB]「目覚ましがスマホ」。
-@: [>#b6.alarm -100][!#b6.alarm to,{rotation:6, duration:0.06, repeat:13, yoyo:true, ease:'none'} +450][>#b6.tip +50][♪alarm -6dB to=1.5s][♪rise_pop -9dB +50][>#fx6 +250][<#fx6 +500]{y}目覚まし時計{/}を用意するのが{　|、}[br][>#b6.tipline]続けるコツです。[silence:80]
+@: [>#b6.alarm -100][!#b6.alarm to,{rotation:6, duration:0.06, repeat:13, yoyo:true, ease:'none'} +450][>#b6.tip +50][♪alarm -6dB to=1.5s][♪rise_pop -9dB +50][>#fx6 +250][<#fx6 +500]{y}目覚まし時計{/}を用意するのが、[br][>#b6.tipline]続けるコツです。[silence:80]
 
 *** summary
 se whoosh_short -4.4dB

@@ -209,13 +209,13 @@ se fuwan -4dB +950
 
 # change — 「8時15分」「17時15分」で前の時刻が光る・「変更後は」の前に板を入れ替え「9時」「16時」で新しい時刻・判子
 *** change
-@n: [silence:450]これまで{ |、}窓口は、[|][!#before.t{open} recolor,$orange,duration=250 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} duration=400 +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} duration=400 +600]17時15分まで、開いていました。
+@n: [silence:450]これまで、窓口は、[|][!#before.t{open} recolor,$orange,duration=250 -50][!#before.t{open} punch,1.08,duration=1000 -50][=#before.t{open} duration=400 +600][♪pop -5dB -50]8時15分から、[!#before.t{close} recolor,$orange,duration=250 -50][!#before.t{close} punch,1.08,duration=1000 -50][=#before.t{close} duration=400 +600]17時15分まで、開いていました。
 subtitle "変更後は 9時から16時までとなります"
 @: [silence:850][!#before to,{x:-470, scale:0.92, duration:0.75, ease:'power3.inOut'} -450][♪swish -4dB -470][>#after -150][>#arrow_line][>#arrow_head +250][!#before to,{x:-470, scale:0.92, opacity:0.72, duration:0.4} +50]変更後は、[!#after.dial.mh to,{rotation:360, duration:0.9, ease:'power2.inOut'} -500][!#after.dial.hh to,{rotation:270, duration:0.9, ease:'power2.inOut'} -500][>#after.open -120][♪sparkle -3dB -80][>#after.sep +200]9時から、[>#after.close -120][>#hanko +450][♪stamp +2dB +650][!#after to,{y:8, duration:0.06, ease:'power1.out'} +670][!#hanko to,{y:8, duration:0.06, ease:'power1.out'} +670][!#after to,{y:0, duration:0.25, ease:'power2.out'} +730][!#hanko to,{y:0, duration:0.25, ease:'power2.out'} +730]16時までとなります。[silence:700]
 
 # gaps — 「朝の」で 2 本目の棒・「45分遅く」「1時間15分早く」で差の枠と吹き出し・時間帯を言う所で斜線と ×・「窓口での」で注意の帯
 *** gaps
-@n: [silence:450][>#chart.label_after +300][>#chart.bar_after +400][>#chart.bar_after.t +1000]朝の受付開始は{ |、}これまでより、[>#chart.gap_am -150][>#chart.balloon_am -100][♪pop -5dB -100]45分遅く、
+@n: [silence:450][>#chart.label_after +300][>#chart.bar_after +400][>#chart.bar_after.t +1000]朝の受付開始は、これまでより、[>#chart.gap_am -150][>#chart.balloon_am -100][♪pop -5dB -100]45分遅く、
 subtitle "夕方の受付終了は 1時間15分早くなります"
 @| 夕方の受付終了は、[>#chart.gap_pm -150][>#chart.balloon_pm -100][♪pop -5dB -100]1時間15分早くなります。
 @: [silence:600][>#chart.gap_am.hatch][>#chart.gap_am.xmark +50][!#chart.gap_am to,{scale:1.06, duration:0.18, yoyo:true, repeat:1, ease:'power1.inOut'} +60][♪down -4dB -50]8時15分から、9時まで。[>#chart.gap_pm.hatch +300][>#chart.gap_pm.xmark +350][!#chart.gap_pm to,{scale:1.04, duration:0.18, yoyo:true, repeat:1, ease:'power1.inOut'} +360][♪down -4dB +250]そして、16時から、17時15分までは、[|][>#chart.caution -200]窓口での手続きができなくなりますので、[|][!#chart.caution to,{scale:1.04, duration:0.2, yoyo:true, repeat:1, ease:'power1.inOut'}][♪ting -6dB -50]ご注意ください。[silence:600]

@@ -278,12 +278,12 @@ silence head=0 tail=0
 bgm music
 se "拍子木をカンと打つ場面転換の音" -3dB
 se hooves -9dB to=3.2s fade=0,600 +100
-@n: [manner:ワクワクした調子で、元気いっぱいに早口で][silence:350][>#hook_band -300][>#ht1 +280][♪pon -3dB +300][>#ht2 +620][!#ht2 to,{rotation:-3, duration:0.12, yoyo:true, repeat:5, ease:'power1.inOut'} +1900]{9月5日|くがついつか}は、馬が電車を引っ張った[!#ht1 punch,1.1,duration=430][♪jan -5dB]日！[silence:180]
+@n: [manner:ワクワクした調子で、元気いっぱいに早口で][silence:350][>#hook_band -300][>#ht1 +280][♪pon -3dB +300][>#ht2 +620][!#ht2 to,{rotation:-3, duration:0.12, yoyo:true, repeat:5, ease:'power1.inOut'} +1900]9月5日は、馬が電車を引っ張った[!#ht1 punch,1.1,duration=430][♪jan -5dB]日！[silence:180]
 transition panel,500,color=#D23F2A,skew=-14,dir=right,se=swish -6dB
 
 *** pass
 [>#subtitle]
-@n: [silence:120][>#ch1][>#date_plate -50][♪taiko -4dB -50][!#pass_bg shake,7,duration=250 -20][>#pin +1850][♪pon_hi -6dB +1850]1888年のこの日、{碓氷|うすい}峠に、[|]ある鉄道が開業しました。[silence:40]
+@n: [silence:120][>#ch1][>#date_plate -50][♪taiko -4dB -50][!#pass_bg shake,7,duration=250 -20][>#pin +1850][♪pon_hi -6dB +1850]1888年のこの日、碓氷峠に、[|]ある鉄道が開業しました。[silence:40]
 
 *** loco
 @n: [silence:40][>#loco_t +350][♪whistle -10dB +50 to=0.95s fade=0,250]でも、坂が急すぎて[|]汽車は登れ[!#loco_t to,{y:40, rotation:4, duration:0.4, ease:'power2.in'} -100][♪"ヒューンと落ちていく落下音" -9dB -50]ない。[silence:100]
@@ -296,7 +296,7 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=swish -6dB
 @n: [manner:勢いよく、得意げに言い切る][silence:50][>#horse_pop -20][♪"ピーンとひらめく音" -6dB -20][>#answer_t +120][!#horse_pop to,{rotation:4, duration:0.18, yoyo:true, repeat:3, ease:'sine.inOut'} +480][♪"馬がヒヒーンといななく声" -3dB +480]馬に引かせる！[silence:270]
 
 *** name
-@n: [silence:150][>#sonna +20]その名も、[>#cartouche -60][♪taiko -3dB -60][!#name_bg shake,8,duration=300 +120]{碓氷|うすい}馬車鉄道。[silence:60]
+@n: [silence:150][>#sonna +20]その名も、[>#cartouche -60][♪taiko -3dB -60][!#name_bg shake,8,duration=300 +120]碓氷馬車鉄道。[silence:60]
 
 *** side1
 [>#subtitle]
@@ -306,14 +306,14 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=swish -6dB
 transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
 
 *** ogai1
-@n: [silence:250][>#ch2 -130][>#ogai_pop +80][♪pon -5dB +100]乗客には、あの文豪{・|、}[>#nameplate +280][♪pon_hi -5dB +280]森鴎外も。[silence:50]
+@n: [silence:250][>#ch2 -130][>#ogai_pop +80][♪pon -5dB +100]乗客には、あの文豪、[>#nameplate +280][♪pon_hi -5dB +280]森鴎外も。[silence:50]
 
 *** scroll
 @n: [manner:早口で、もったいぶるように][silence:30][>#paper -30][♪swish -10dB +20][>#youyaku +1340][♪pon_hi -4dB +1340][!#paper shake,4,duration=200 +1500]書き残した感想を、[|]ざっくりまとめると……[silence:160]
 [<#subtitle]
 
 *** rage
-@ogai: [silence:100][♪impact -5dB -60 to=2.5s fade=0,800][♪"ハエがブーンと飛び回る音" -13dB +100 to=4.6s fade=300,800][>#brush1 +50]{臭い|におい}と揺れが、[>#brush2 +180][♪"ガーンとショックを受けた時の短い音" -7dB +180][!#rage_bg shake,15,duration=550 +220][!#brush2 shake,7,duration=400 +300]最悪！[silence:340]
+@ogai: [silence:100][♪impact -5dB -60 to=2.5s fade=0,800][♪"ハエがブーンと飛び回る音" -13dB +100 to=4.6s fade=300,800][>#brush1 +50]臭いと揺れが、[>#brush2 +180][♪"ガーンとショックを受けた時の短い音" -7dB +180][!#rage_bg shake,15,duration=550 +220][!#brush2 shake,7,duration=400 +300]最悪！[silence:340]
 @n: [manner:あきれ半分に、面白がって早口で][<#brush1 -50][<#brush2 -50]文豪、[>#gekido +140][♪taiko -2dB +140][!#rage_bg shake,12,duration=450 +160][♪hyoshigi -4dB +740 to=0.7s]大激怒。[silence:150]
 [<#ch2 cut-0]
 transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
@@ -349,7 +349,7 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -6dB
 
 *** bridge
 bgm music_b
-@n: [silence:300][>#ch5 -180][>#tline +50][>#tline.bar +550][>#tline.mid +1100][♪whistle -14dB +1200 start=1.6s to=2.9s fade=0,400][>#tline.n2 +1850][>#tline.ev2 +1850]結局、わずか{5年|ごねん}足らずで[|]本格的な鉄道が開通し、[br]馬車鉄道は[>#intai][♪taiko -7dB]引退。[silence:260]
+@n: [silence:300][>#ch5 -180][>#tline +50][>#tline.bar +550][>#tline.mid +1100][♪whistle -14dB +1200 start=1.6s to=2.9s fade=0,400][>#tline.n2 +1850][>#tline.ev2 +1850]結局、わずか5年足らずで[|]本格的な鉄道が開通し、[br]馬車鉄道は[>#intai][♪taiko -7dB]引退。[silence:260]
 [<#subtitle]
 @n: [manner:心をこめて、ねぎらうように、テンポよく][>#warm -300][<#tline -250][<#intai -250][>#otsukare +100]馬たち、本当におつかれさまでした。[silence:220]
 [<#ch5 cut-0]

@@ -26,8 +26,6 @@ lint off=palette_drift
 lint off=text_only_cut,same_picture
 # hf の作り: 合計の場面の題は結論の全文を場面の頭に出す・題の出典行と締めの出典の注記は短く出る
 lint off=all_at_once,flash_text
-# hf の作り: 台詞の「8月」「1月」は依頼の数字の語のまま (読みは後段の読み検査が直す)
-lint off=month_reading
 art "清潔感のある現代的なフラットのベクターイラスト、やわらかいグラデーションと控えめな影、丸みのある親しみやすい形、企業のインフォグラフィック調、輪郭がくっきり"
 prompt_tail "文字・数字・ロゴ・透かしは一切入れない"
 sound title = "ソナーのような澄んだ高いサイン波の単音、深い残響のある企業向けの合図"
@@ -365,7 +363,7 @@ se whoosh -2dB +550
 
 *** s2
 se swish -3dB +20
-@n: [silence:0.3s]社員200人のオフィスで1年分の電力データを[>#s2_k1 -200][>#s2_k3 -40][>#s2_k4 +120][♪multi -2dB +50]分析すると、[|]電気代は年[>#s2_k2 -550][♪ping -2dB +50][!#s2_k2 glow,#0E9F6E47,blur=29 +600]{1,171万円|1171万円}でした。[silence:0.26s]
+@n: [silence:0.3s]社員200人のオフィスで1年分の電力データを[>#s2_k1 -200][>#s2_k3 -40][>#s2_k4 +120][♪multi -2dB +50]分析すると、[|]電気代は年[>#s2_k2 -550][♪ping -2dB +50][!#s2_k2 glow,#0E9F6E47,blur=29 +600]1,171万円でした。[silence:0.26s]
 
 *** s3
 se swish -3dB +20
@@ -379,17 +377,17 @@ se soft -2dB +400
 
 *** s5
 se swish -3dB +20
-@n: [silence:0.35s][chap #chap.ch[3] #chap.ch[4] 235 87 -300]ピークは[>#s5_r1 -150][>#s5_r1.bar][>#s5_r1.val +450][♪pop -3dB]夏が{186kW|186キロワット}。[>#s5_r2 -150][>#s5_r2.bar][>#s5_r2.val +450][♪pop -3dB]冬は{158kW|158キロワット}で、[|][>#s5_r3 -750][>#s5_r3.bar -600][>#s5_r3.val -150][>#s5_r4 -450][>#s5_r4.bar -300][>#s5_r4.val +150][>#s5_call][♪chime -2dB]暖房が一斉に立ち上がる始業時の[!#s5_call glow,#2FA4E72E,blur=0,spread=7][=#s5_call +500]朝に来ます。[silence:0.22s]
+@n: [silence:0.35s][chap #chap.ch[3] #chap.ch[4] 235 87 -300]ピークは[>#s5_r1 -150][>#s5_r1.bar][>#s5_r1.val +450][♪pop -3dB]夏が186kW。[>#s5_r2 -150][>#s5_r2.bar][>#s5_r2.val +450][♪pop -3dB]冬は158kWで、[|][>#s5_r3 -750][>#s5_r3.bar -600][>#s5_r3.val -150][>#s5_r4 -450][>#s5_r4.bar -300][>#s5_r4.val +150][>#s5_call][♪chime -2dB]暖房が一斉に立ち上がる始業時の[!#s5_call glow,#2FA4E72E,blur=0,spread=7][=#s5_call +500]朝に来ます。[silence:0.22s]
 
 *** s6
 se swish -3dB +20
-@n: [silence:0.4s][chap #chap.ch[4] #chap.ch[5] 325 112 -350]そして、[♪low -1dB -250]誰もいない夜と休日も平均[>#s6_a1 -350][♪pop -3dB]{19kW|19キロワット}。この時間だけで全体の[>#s6_a2 -450][>#s6_a2.fill -200][♪pop -3dB]31%、[|]電気代にして[>#s6_a3 -500][♪chime -2dB]363万円です。[silence:0.5s]
+@n: [silence:0.4s][chap #chap.ch[4] #chap.ch[5] 325 112 -350]そして、[♪low -1dB -250]誰もいない夜と休日も平均[>#s6_a1 -350][♪pop -3dB]19kW。この時間だけで全体の[>#s6_a2 -450][>#s6_a2.fill -200][♪pop -3dB]31%、[|]電気代にして[>#s6_a3 -500][♪chime -2dB]363万円です。[silence:0.5s]
 @: [<#s6_a1 -700][<#s6_a2 -700][<#s6_a3 -700][<#s6_ta -650][>#s6_tb -350][>#s6_b -350][>#s6_b.seg1 -100][>#s6_b.lg[1]]その[♪soft -2dB -100]59%は、[>#s6_b.seg2 -150][>#s6_b.lg[2] -100]待機電力と[>#s6_b.seg3 -150][>#s6_b.lg[3] -100]消し忘れ。[>#s6_b.brk -200][>#s6_b.brk_l -50][♪ping -2dB]止められる電気です。[silence:0.45s]
 [<#s6_bg -20][<#s6_glow -20]
 
 *** s8
 se swish -3dB +20
-@n: [silence:0.4s][chap #chap.ch[5] #chap.ch[6] 439 75 -350]試算では、[>#s8_c1 -350][♪pop -3dB]設定温度の{1℃|1度}見直しで年[>#s8_c1.res -400][>#s8_c1.kwh -280]51.5万円、[|][>#s8_c2 -350][♪pop -3dB]待機と消し忘れ対策で[>#s8_c2.res -400][>#s8_c2.kwh -280]142.8万円、[|][>#s8_c3 -350][♪pop -3dB]LED化で[>#s8_c3.res -400][>#s8_c3.kwh -280]148.2万円。[silence:0.28s]
+@n: [silence:0.4s][chap #chap.ch[5] #chap.ch[6] 439 75 -350]試算では、[>#s8_c1 -350][♪pop -3dB]設定温度の1℃見直しで年[>#s8_c1.res -400][>#s8_c1.kwh -280]51.5万円、[|][>#s8_c2 -350][♪pop -3dB]待機と消し忘れ対策で[>#s8_c2.res -400][>#s8_c2.kwh -280]142.8万円、[|][>#s8_c3 -350][♪pop -3dB]LED化で[>#s8_c3.res -400][>#s8_c3.kwh -280]148.2万円。[silence:0.28s]
 
 *** s9
 se swish -3dB +20

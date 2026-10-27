@@ -113,7 +113,7 @@ transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
 [>#subtitle]
 bgm music
 se "山の峠の環境音、風と遠くの鳥の声" -8dB to=6s fade=300,1500
-@narrator: [silence:+0.3s][>#op_y][>#op_d]1888年、{9月5日|くがついつか}。
+@narrator: [silence:+0.3s][>#op_y][>#op_d]1888年、9月5日。
 @: 群馬と長野の境、[>#op_r]碓氷峠で、[>#op_t]とんでもない鉄道が[!#op_t punch]開業しました。
 
 *** horse
@@ -159,5 +159,5 @@ transition dissolve,300,overlap=300
 bgm music3 -1500
 se "夕暮れの山の環境音、ひぐらしと風" -8dB to=10s fade=500,2000
 @narrator: [silence:+0.4s]その5年後、[>#cl_y]アプト式の鉄道が開通し、[>#cl_n]馬車鉄道は、あっさり引退。
-@: {9月5日|くがついつか}は、[>#cl_t]馬が峠を越えた、ちょっと笑える記念日なのです。[silence:3.0s]
+@: 9月5日は、[>#cl_t]馬が峠を越えた、ちょっと笑える記念日なのです。[silence:3.0s]
 ```

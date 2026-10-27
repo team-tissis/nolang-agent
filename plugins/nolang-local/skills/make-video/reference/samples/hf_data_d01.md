@@ -418,13 +418,13 @@ se title -2dB +120
 
 *** overview
 se whoosh -5dB +20
-@n: [silence:0.35s][♪pop -6dB +230]直近4週間で、カートに入った[>#k2 -150][>#k3 +700][♪pop -6dB][♪pop -6dB +715]{7,200|7200}件のうち、[|][>#ov_stat -350][>#ov_waf -200][>#ov_waf.sq[*] +100][♪accent -3dB]67%、[>#k4 -150][>#ov_stat.side -50][>#ov_stat.note -50][♪pop -6dB]{4,824|4824}件が買わずに去っています。[silence:0.35s]
+@n: [silence:0.35s][♪pop -6dB +230]直近4週間で、カートに入った[>#k2 -150][>#k3 +700][♪pop -6dB][♪pop -6dB +715]7,200件のうち、[|][>#ov_stat -350][>#ov_waf -200][>#ov_waf.sq[*] +100][♪accent -3dB]67%、[>#k4 -150][>#ov_stat.side -50][>#ov_stat.note -50][♪pop -6dB]4,824件が買わずに去っています。[silence:0.35s]
 @: [>#ov_fee -100]送料は[>#ov_fee.parcel -200][>#ov_fee.fl -100][>#ov_fee.nd[*] +600][>#ov_fee.ar[*] +670][♪pop -6dB]550円。いまは[!#ov_fee.nd[2] tint,$amber][♪tick -7dB]配送先入力の画面で、[>#ov_fee.first -100][>#ov_fee.stem -100][♪accent -3dB]初めて表示されます。[silence:0.2s]
 
 *** funnel
 se whoosh -5dB +20
 @n: [silence:0.35s]カートから先の通過率は[frow fn.fr[1]][♪tick -7dB]55%、[frow fn.fr[2]][♪tick -7dB]75%、[frow fn.fr[3]][♪tick -7dB]80%。購入率は[>#fn.cvt -400][>#fn.cvv -400][♪accent -3dB]33%です。[silence:0.35s]
-@: [>#brk -100]カゴ落ちの[>#brk.seg[*] -50][>#brk.sl1 +300][>#brk.sl2 +300][>#brk.sl3 +300][♪pop -6dB]3分の2、[|][>#fn.fr[1].lv -200][>#fn.fr[2].lv -200][>#fn.fr[3].lv -200][!#brk.sl1{k} recolor,$coral_l,duration=300]{3,240|3240}件はカートで去っています。[>#fn.hole -150][>#fn.holetag][♪accent -3dB]最大の穴は、カートの直後です。[silence:0.2s]
+@: [>#brk -100]カゴ落ちの[>#brk.seg[*] -50][>#brk.sl1 +300][>#brk.sl2 +300][>#brk.sl3 +300][♪pop -6dB]3分の2、[|][>#fn.fr[1].lv -200][>#fn.fr[2].lv -200][>#fn.fr[3].lv -200][!#brk.sl1{k} recolor,$coral_l,duration=300]3,240件はカートで去っています。[>#fn.hole -150][>#fn.holetag][♪accent -3dB]最大の穴は、カートの直後です。[silence:0.2s]
 
 *** weekly
 se whoosh -5dB +20
@@ -436,7 +436,7 @@ se whoosh -5dB +20
 
 *** value
 se whoosh -5dB +20
-@n: [silence:0.35s]金額帯別では、[>#vc.col[*] -200][>#vc.cv[*] +350]送料がかかる帯はどれも[>#vc.bk -150][>#vc.bkl -50][>#vr.l2][♪pop -6dB]3割前後。無料になる[>#vc.dv -200][>#vc.dvl][>#vc.c4 +300][♪tick -7dB]{5,000円|5000円}以上だけが、[|][>#vc.cv4 -100][>#vr.l3 +200][♪accent -3dB]50.3%と倍近くです。[silence:0.2s]
+@n: [silence:0.35s]金額帯別では、[>#vc.col[*] -200][>#vc.cv[*] +350]送料がかかる帯はどれも[>#vc.bk -150][>#vc.bkl -50][>#vr.l2][♪pop -6dB]3割前後。無料になる[>#vc.dv -200][>#vc.dvl][>#vc.c4 +300][♪tick -7dB]5,000円以上だけが、[|][>#vc.cv4 -100][>#vr.l3 +200][♪accent -3dB]50.3%と倍近くです。[silence:0.2s]
 
 *** abtest
 se whoosh -5dB +20

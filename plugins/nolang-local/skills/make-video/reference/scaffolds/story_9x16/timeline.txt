@@ -1,7 +1,7 @@
 #v2
 cast narrator = "明るくテンポのいい30代のナレーター、はっきりした発音で聞き手に語りかける" speed=110% manner="語りかけるように、要点は少し熱を込めて"
 transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
-# TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える (読みを直す語は {表記|読み})
+# TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える
 # 台詞のある人物は声を分ける (cast を 1 人ずつ・話し方は cast の manner= で) — 1 人の語りで読むと平坦に聞こえる
 cast owner = "50 代の男性のパン職人、低めで温かい声、少し訛りのある素朴な話し方"
 
@@ -36,14 +36,14 @@ transition wipe,600,dir=left
 *** action
 # TODO 役割 = 行動 (shot 6) — 動きのある絵 + 語で出す数字 (stat・山場なので切替を強く)・動作の音 (foley) を絵に結ぶ
 se "自転車のペダルと車輪の回る音、朝の住宅街" -8dB to=5s fade=200,1200
-@narrator: [silence:+0.3s][>#ac_v]配達を始めると、[>#ac_st]三か月で[!#ac_st punch]百二十件。[silence:0.8s]
+@narrator: [silence:+0.3s][>#ac_v]配達を始めると、[>#ac_st]3か月で[!#ac_st punch]120件。[silence:0.8s]
 transition flash,300
 
 *** turn
 # TODO 役割 = 結果 (shot 7) — 結果の絵 + 数字を 1 つ大きく (語で出す)
-@narrator: [silence:+0.3s]売上は、[>#tn_v]元の九割まで戻りました。
+@narrator: [silence:+0.3s]売上は、[>#tn_v]元の9割まで戻りました。
 
 *** close
 # TODO 役割 = 締め (shot 8) — その後どうなったか 1 文 + 余韻の 1 文・絵は冒頭と別の新しい 1 枚 (末尾は書かなければ 3 秒残る・fade out は頼まれた時だけ)
 se "夕方の商店街の賑わい、遠くの話し声と自転車のベル" -8dB to=6s fade=500,2000
-@narrator: [silence:+0.4s]いまでは配達が、売上の三割を支えています。[>#cl_v]店は、動いた。[silence:3.0s]
+@narrator: [silence:+0.4s]いまでは配達が、売上の3割を支えています。[>#cl_v]店は、動いた。[silence:3.0s]

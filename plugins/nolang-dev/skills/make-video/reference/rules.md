@@ -32,7 +32,6 @@
 - `transition_over_speech` 切替が台詞に掛かる
 - `se_dense` 効果音が密 (`sfx off`)
 - `running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す
-- `month_reading` 月日に読み `{9月5日|くがついつか}`
 - `font_not_pinned` 書体を本番の解決で引けず既定 font で測った (DB のある所で check を回す・書体の説明を catalog の書体に寄せる)
 - `synthetic_bold` family に太い face が無い (browser の合成 bold は無い) → 太さのある family を `font-family:` で選ぶか font-weight を外す
 - `ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`

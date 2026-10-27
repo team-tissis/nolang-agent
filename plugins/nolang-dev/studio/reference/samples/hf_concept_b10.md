@@ -235,7 +235,7 @@ silence head=0 tail=0
 *** title
 bgm music
 se whoosh -8dB +100
-@n: [silence:0.45s][>#t_chip -50][♪pop_high -4dB]{1分|いっぷん}でわかる、[>#t_title -60][>#t_gems][♪sparkle -2dB to=2.1s][>#t_sub +910]エフェクチュエーション。[silence:0.7s]
+@n: [silence:0.45s][>#t_chip -50][♪pop_high -4dB]1分でわかる、[>#t_title -60][>#t_gems][♪sparkle -2dB to=2.1s][>#t_sub +910]エフェクチュエーション。[silence:0.7s]
 
 *** start
 [>#subtitle]

@@ -394,7 +394,7 @@ se pop -10dB +550
 se pop -10dB +750
 se pop -10dB +950
 se pop -10dB +1150
-@n: [silence:0.5s][!#grid to,{x:-288, duration:.9, ease:'power3.inOut'} -450][!#hdr.hl to,{x:118, duration:.55, ease:'back.inOut'} -400][!#bt2.t{hl} marker +120]やめた時期の[>#w_med -250][>#w_med.n +100][!#w_med.n count +100][♪note -6dB -250]中央値は[>#w_med.ring +150][♪ding -6dB +150]26日。[>#w_brace -100][>#w_brace_l +150][♪marker -8dB to=0.8s -100]12人中7人が、[!#c1[*] to,{y:-10, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}][!#c2[*] to,{y:-10, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}]最初の{1か月|いっかげつ}でやめています。[silence:+0.15s]
+@n: [silence:0.5s][!#grid to,{x:-288, duration:.9, ease:'power3.inOut'} -450][!#hdr.hl to,{x:118, duration:.55, ease:'back.inOut'} -400][!#bt2.t{hl} marker +120]やめた時期の[>#w_med -250][>#w_med.n +100][!#w_med.n count +100][♪note -6dB -250]中央値は[>#w_med.ring +150][♪ding -6dB +150]26日。[>#w_brace -100][>#w_brace_l +150][♪marker -8dB to=0.8s -100]12人中7人が、[!#c1[*] to,{y:-10, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}][!#c2[*] to,{y:-10, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}]最初の1か月でやめています。[silence:+0.15s]
 
 # weekly — 頭で白い板と軸・「5.8日」から線と面を左から描き点と値が順に弾む・「2週目」で桃の付箋と丸・「坂」で矢印と斜めの字
 *** weekly
@@ -445,7 +445,7 @@ se tape -8dB +300
 *** concl
 se swish -10dB
 se tape -8dB +300
-@n: [silence:0.5s][!#grid to,{x:-1152, duration:.9, ease:'power3.inOut'} -450][!#hdr.hl to,{x:708, duration:.55, ease:'back.inOut'} -400][!#bt8.t{hl} marker +120][>#cs1 -150][>#cs1.u +750][>#cs1.s +700][♪note -6dB -150]やめる人の半分以上は、最初の{1か月|いっかげつ}。記録は[>#ck[1] +150][♪check -4dB +200]2週目から減り始めます。
+@n: [silence:0.5s][!#grid to,{x:-1152, duration:.9, ease:'power3.inOut'} -450][!#hdr.hl to,{x:708, duration:.55, ease:'back.inOut'} -400][!#bt8.t{hl} marker +120][>#cs1 -150][>#cs1.u +750][>#cs1.s +700][♪note -6dB -150]やめる人の半分以上は、最初の1か月。記録は[>#ck[1] +150][♪check -4dB +200]2週目から減り始めます。
 @: [>#cs2 -150][>#cs2.u +750][>#cs2.s +700][♪note -6dB -150]離脱は2つの瞬間に集まる。[>#ck[2] +150][♪check -4dB]機能より、その瞬間の体験を直しましょう。
 @: [>#cs3 -150][>#cs3.u +750][>#cs3.s +700][♪note -6dB -150]続く人は『だいたいでいい』。[>#ck[3] +150][>#e_sign +3050][♪check -4dB][♪ding -6dB +3100]正確さを求める設計が、離脱を生んでいます。[silence:2.7s]
 ```

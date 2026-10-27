@@ -29,8 +29,6 @@ lint off=text_only_cut,empty_cut,blank_band
 lint off=flash_text,entrance_in_fadeout
 # hf の作り: ヘルプページの場面は 2 本の帯が伸びた後「合わせて」の枠まで 6 秒ほど画面が止まる・締めの場面は引き継ぎの絵 1 枚を濃い幕の下に 16 秒敷く
 lint off=still_stretch,photo_hidden,same_picture
-# hf の作り: 台詞の「7月から9月」「3か月」は hf の台詞のまま (読みは後段の読み検査に任せる)
-lint off=month_reading
 run t { color: $teal2 }
 run a { color: $amber }
 run c { color: $coral }

@@ -181,7 +181,7 @@ bgm music2 -1500
 @: [!#tt_col.tt_c[1] focus][>#tt_s]スマホだけで、その7割を占めます。[silence:0.6s]
 
 *** month
-@narrator: [silence:+0.4s][>#mo_h]これは、[!#mo_h{m} marker,$a2]月の手取りの{1か月|いっかげつ}分近く。
+@narrator: [silence:+0.4s][>#mo_h]これは、[!#mo_h{m} marker,$a2]月の手取りの1か月分近く。
 @: [>#mo_n]一度手続きをすれば、毎年この差が続きます。[silence:0.6s]
 
 *** close

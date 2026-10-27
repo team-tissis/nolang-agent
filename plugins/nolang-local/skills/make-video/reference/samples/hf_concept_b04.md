@@ -403,26 +403,26 @@ transition panel,800,color=#2B3A63,label="はじめに",skew=-12,label_skew=0,di
 transition panel,800,color=$pdm,label="{lsm}01{/}  PdM",skew=-12,label_skew=0,dir=left,se=whoosh -760
 
 *** pdm
-@n: [silence:300][!#hdr.c[1] .on -300]{kpdm}PdM{/}は[>#pdm_head.en][>#pdm_head.ja +180]{Product Manager|プロダクトマネージャー}の略です。
+@n: [silence:300][!#hdr.c[1] .on -300]{kpdm}PdM{/}は[>#pdm_head.en][>#pdm_head.ja +180]Product Managerの略です。
 @: [>#pdm_q[1] -50][♪pop_soft -1dB]「どんなプロダクトをつくるのか」[|][>#pdm_q[2] -50][♪pop_soft -1dB]「誰のどんな課題を解決するのか」[|][>#pdm_q[3] -50][♪pop_soft -1dB]「どうすれば事業として成長するのか」など、[|][>#pdm_frame -50][>#pdm_ftag +100][!#pdm_ftag.i to,{rotation:360, duration:1.2, ease:'power2.inOut'} +300][♪click -2dB]プロダクト全体の方向性を考える役割です。
 @: [silence:100]まとめると、{kpdm}PdM{/}は[>#pdm_sum -100][♪chime -1dB]「プロダクトの価値と方向性を考える人」です。[silence:+310]
 transition panel,800,color=$pm,label="{lsm}02{/}  PM",skew=-12,label_skew=0,dir=left,se=whoosh -760
 
 *** pm
-@n: [silence:300][!#hdr.c[1] .done -300][!#hdr.c[2] .on -300]{kpm}PM{/}は[>#pm_a.head.en][>#pm_a.head.often][>#pm_a.head.ja +180]{Project Manager|プロジェクトマネージャー}を指すことが多くあります。
+@n: [silence:300][!#hdr.c[1] .done -300][!#hdr.c[2] .on -300]{kpm}PM{/}は[>#pm_a.head.en][>#pm_a.head.often][>#pm_a.head.ja +180]Project Managerを指すことが多くあります。
 @: プロジェクトの[>#pm_a.m[1] -50][♪pop_soft -2dB]スケジュール、[>#pm_a.m[2] -50][♪pop_soft -2dB]予算、[>#pm_a.m[3] -50][♪pop_soft -2dB]人員、[>#pm_a.m[4] -50][♪pop_soft -2dB]進捗などを管理し、[|][>#pm_a.gantt -250][>#pm_a.gantt.bar[*] +100][>#pm_a.gantt.ok +1600][>#pm_a.sum +300][♪chime -2dB]計画通りにプロジェクトを進める役割です。
 @: [silence:150][<#pm_a -450][>#pm_vs_title -200][>#pm_vl][♪pop -2dB]{kpdm}PdM{/}が「何を、なぜつくるか」を考えるのに対し、[|][>#pm_vr -100][♪pop -2dB]{kpm}PM{/}は「どうやって計画通りにつくるか」を管理する、[|][>#pm_vs -100][!#pm_vl.kv{mk} marker][!#pm_vr.kv{mk} marker +250][♪click -1dB]という違いがあります。
-@: [>#pm_note -50][!#pm_vr.a to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +900][♪ping 0dB]なお、{kpm}PM{/}という略称が[|]{Product Manager|プロダクトマネージャー}を指す企業もあります。[silence:+310]
+@: [>#pm_note -50][!#pm_vr.a to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +900][♪ping 0dB]なお、{kpm}PM{/}という略称が[|]Product Managerを指す企業もあります。[silence:+310]
 transition panel,800,color=$po,label="{lsm}03{/}  PO",skew=-12,label_skew=0,dir=left,se=whoosh -760
 
 *** po
-@n: [silence:300][!#hdr.c[2] .done -300][!#hdr.c[3] .on -300]{kpo}PO{/}は[>#po_head.en][>#po_head.ja +180]{Product Owner|プロダクトオーナー}の略です。
+@n: [silence:300][!#hdr.c[2] .done -300][!#hdr.c[3] .on -300]{kpo}PO{/}は[>#po_head.en][>#po_head.ja +180]Product Ownerの略です。
 @: [>#po_p1 -50][!#po_p1.i to,{rotation:360, duration:1.4, ease:'power2.inOut'} +300][♪pop_soft -2dB]スクラム開発などで使われる役割で、[|][>#po_p2 -50][♪pop_soft -2dB]プロダクトの価値が最大になるように、[|][>#po_blog -150][>#po_it[*] +100][♪pop -2dB]やることの一覧である「プロダクトバックログ」の[|][!#po_it[1] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[2] to,{y:-64, duration:.55, ease:'power3.inOut'}][!#po_it[3] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[4] to,{y:-129, duration:.55, ease:'power3.inOut'}][!#po_it[5] to,{y:-64, duration:.55, ease:'power3.inOut'}][>#po_arrow +200][>#po_it[*].no +500][>#po_top +800][!#po_it[2] .first +500][♪click -1dB][♪click -2dB +350]優先順位を決めます。
 @: つまり{kpo}PO{/}は、[>#po_sum -100][♪chime -1dB]「何から先につくるかを決める人」です。[silence:+310]
 transition panel,800,color=$bo,label="{lsm}04{/}  BO",skew=-12,label_skew=0,dir=left,se=whoosh -760
 
 *** bo
-@n: [silence:300][!#hdr.c[3] .done -300][!#hdr.c[4] .on -300]{kbo}BO{/}は[>#bo_head.en][>#bo_head.ja +180]{Business Owner|ビジネスオーナー}の略です。
+@n: [silence:300][!#hdr.c[3] .done -300][!#hdr.c[4] .on -300]{kbo}BO{/}は[>#bo_head.en][>#bo_head.ja +180]Business Ownerの略です。
 @: [>#bo_c1 -50][♪pop_soft -2dB]事業の責任者として、[|][>#bo_c2 -50][>#bo_c2.bar[*] +250][♪pop_soft -2dB]売上や利益などの目標を持ち、[|][>#bo_c3 -50][>#bo_c3.stamp][>#bo_c3.coin +100][♪click 0dB +250]予算や投資を判断します。
 @: [>#bo_rel.n2 -100][>#bo_rel.ln[*] +100][>#bo_rel.n1 +300][>#bo_rel.n3 +400][>#bo_rel.lab +450][♪pop_soft -2dB]{kpdm}PdM{/}や{kpo}PO{/}と連携しながら、[|][>#bo_sum -100][♪chime -1dB]「事業の成果に責任を持つ人」です。[silence:+310]
 transition panel,800,color=$eng,label="{lsm}05{/}  エンジニア",skew=-12,label_skew=0,dir=left,se=whoosh -760

@@ -323,7 +323,7 @@ transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
 
 *** s2
 [>#subtitle]
-@n: [silence:220][>#b2.lbl -50]完走者[>#b2.big -120][>#b2.unit -120][♪pop -5dB -50][>#b2.rate +450][>#b2.bar +450]{hl}8,214人{/}の、[|][>#b2.ca -80][>#b2.ca.dot[*] +50][>#b2.ca.dl[*] +85][♪pop -8dB]5kmごとの記録と[>#b2.x -150][>#b2.cb -50][♪pop -8dB]目標タイムを[>#b2.match -100][♪bell -3dB]{突き合わせ|突き合わせました}。
+@n: [silence:220][>#b2.lbl -50]完走者[>#b2.big -120][>#b2.unit -120][♪pop -5dB -50][>#b2.rate +450][>#b2.bar +450]{hl}8,214人{/}の、[|][>#b2.ca -80][>#b2.ca.dot[*] +50][>#b2.ca.dl[*] +85][♪pop -8dB]5kmごとの記録と[>#b2.x -150][>#b2.cb -50][♪pop -8dB]目標タイムを[>#b2.match -100][♪bell -3dB]突き合わせました。
 transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
 
 *** s3
@@ -337,7 +337,7 @@ transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
 transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
 
 *** s5
-@n: [silence:220][>#b5.g[*] +50]目標より2%以上速く入った[|][!#b5.g[2] to,{opacity:0.45, duration:0.25} -50][!#b5.g[3] to,{opacity:0.45, duration:0.25} -50][!#b5.g[1] to,{scale:1.04, duration:0.25} -50][!#b5.g[1] glow,#FF4D2E73,blur=33 -50][♪pop -5dB]「飛ばし」{は|は、}[!#b5.g[1].pc to,{scale:1.18, duration:0.3, ease:'back.out', pivot:'100% 20%'} -50][!#b5.sa to,{scaleY:1.12, duration:0.2} -50][!#b5.sa to,{scaleY:1, duration:0.2} +150][♪impact -4dB]{hl}36%{/}。
+@n: [silence:220][>#b5.g[*] +50]目標より2%以上速く入った[|][!#b5.g[2] to,{opacity:0.45, duration:0.25} -50][!#b5.g[3] to,{opacity:0.45, duration:0.25} -50][!#b5.g[1] to,{scale:1.04, duration:0.25} -50][!#b5.g[1] glow,#FF4D2E73,blur=33 -50][♪pop -5dB]「飛ばし」は、[!#b5.g[1].pc to,{scale:1.18, duration:0.3, ease:'back.out', pivot:'100% 20%'} -50][!#b5.sa to,{scaleY:1.12, duration:0.2} -50][!#b5.sa to,{scaleY:1, duration:0.2} +150][♪impact -4dB]{hl}36%{/}。
 transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
 
 *** s6
@@ -357,5 +357,5 @@ transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
 
 *** s9
 @n: [silence:220][♪pop -8dB -70][♪pop -8dB +230][♪pop -8dB +530]最初の5kmは我慢して、30kmに余力を。
-@: [>#s9_a -100][>#tape_l][>#tape_r]前半{は|は、}[>#s9_b -80][flash 0.4 -60][<#tape_l -40][<#tape_r -40][♪impact -4dB -50][♪sparkle -3dB +20][!#s9_b glow,$gold +300][=#s9_b +700]「少し遅い」が正解[♪sw_start -4dB +1290]です。[silence:1.4s]
+@: [>#s9_a -100][>#tape_l][>#tape_r]前半は、[>#s9_b -80][flash 0.4 -60][<#tape_l -40][<#tape_r -40][♪impact -4dB -50][♪sparkle -3dB +20][!#s9_b glow,$gold +300][=#s9_b +700]「少し遅い」が正解[♪sw_start -4dB +1290]です。[silence:1.4s]
 ```

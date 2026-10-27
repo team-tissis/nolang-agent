@@ -306,7 +306,7 @@ subtitle "始めたいけど、していない人も{a}38.5%{/}"
 
 # kinds — 頭で 6 行と棒 →「ウェブライター」で 1 行目の地が灯り「1位」・値が弾む
 *** kinds
-@n: [silence:60]中身の1位は、[|][!#b4.k4[1] fill,#FFB21A1A,duration=300 -100][>#b4.badge4][♪hit -3dB -20][!#b4.k4[1].v punch,1.15,duration=320 +200]{Webライター|ウェブライター}・ブログで{a}26%{/}。[silence:0.2s]
+@n: [silence:60]中身の1位は、[|][!#b4.k4[1] fill,#FFB21A1A,duration=300 -100][>#b4.badge4][♪hit -3dB -20][!#b4.k4[1].v punch,1.15,duration=320 +200]Webライター・ブログで{a}26%{/}。[silence:0.2s]
 
 # income — 頭で 6 本の縦棒 →「6割」で左 2 本が琥珀・括弧と札 →「中央値」で破線・札・上の「約 2 万円」
 *** income

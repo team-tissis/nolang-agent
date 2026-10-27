@@ -424,18 +424,18 @@ silence head=0 tail=0
 *** title
 [>#subtitle]
 bgm music
-@n: [silence:0.85s][♪whoosh -1dB -800]料金ページで、年額を先に見せたら、[|]どうなるのか。[>#sub -150][>#st[*] +450]タスク管理 {SaaS|サース}「ノートレイル」の{　|、}[♪tick -3.6dB +50][♪tick -4.2dB +250][♪tick -4.2dB +450]{A/B|エービー} テストで[♪whoosh2 -1.2dB +260]す。[silence:0.05s]
+@n: [silence:0.85s][♪whoosh -1dB -800]料金ページで、年額を先に見せたら、[|]どうなるのか。[>#sub -150][>#st[*] +450]タスク管理 SaaS「ノートレイル」の、[♪tick -3.6dB +50][♪tick -4.2dB +250][♪tick -4.2dB +450]A/B テストで[♪whoosh2 -1.2dB +260]す。[silence:0.05s]
 
 *** setup
-@n: [silence:0.45s][>#price.y +50][>#price.mo.lab +300][>#price.mo.pay[*] +350][♪pop -5.3dB +150]年額プランは{　|、}[>#price.mo.free[*] -50][>#price.mo.fl +50][♪bell -2.1dB +100]{2 か月|にかげつ}分お得。[>#vh -200][>#ca -50][>#cb +100][>#cc +250][♪pop -5.3dB +50][♪pop -5.6dB +200][♪pop -5.6dB +350]4 週間、訪問者を [>#info +100]3 つの案に振り分けました。
+@n: [silence:0.45s][>#price.y +50][>#price.mo.lab +300][>#price.mo.pay[*] +350][♪pop -5.3dB +150]年額プランは、[>#price.mo.free[*] -50][>#price.mo.fl +50][♪bell -2.1dB +100]2 か月分お得。[>#vh -200][>#ca -50][>#cb +100][>#cc +250][♪pop -5.3dB +50][♪pop -5.6dB +200][♪pop -5.6dB +350]4 週間、訪問者を [>#info +100]3 つの案に振り分けました。
 @: [>#ca.glow][!#ca to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][♪tick -4dB]A は月額が先、[<#ca.glow][>#cb.glow][!#cb to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][!#cb.mock.seg.on glow,#F5B54740,blur=0,spread=5 +150][=#cb.mock.seg.on +850][♪click -3.2dB +50]B は年額が先、[|][!#cb.glow to,{opacity:0.45, duration:0.3}][>#cc.glow][!#cc to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][>#cc.mock.col[*] +50][♪tick -4dB]C は 3 段の比較表で[♪whoosh2 -1.2dB +240]す。[silence:0.05s]
 
 *** conv
-@n: [silence:0.45s][>#cv.la -50][>#cv.lb +100][>#cv.lc +250]有料転換率は{　|、}[>#cv.cia][>#cv.da][♪pop -5.3dB +50]A が [>#cv.va -100][>#cv.ca +200]{3.10%|3.1パーセント}、[>#cv.cib][>#cv.db][♪pop -5.3dB +50]B が [>#cv.vb -100][>#cv.cb +200][>#cv.cic +600][>#cv.dc +600][>#cv.vc +750][>#cv.cc +850][♪tick -4.8dB +700]3.44%。
+@n: [silence:0.45s][>#cv.la -50][>#cv.lb +100][>#cv.lc +250]有料転換率は、[>#cv.cia][>#cv.da][♪pop -5.3dB +50]A が [>#cv.va -100][>#cv.ca +200]3.10%、[>#cv.cib][>#cv.db][♪pop -5.3dB +50]B が [>#cv.vb -100][>#cv.cb +200][>#cv.cic +600][>#cv.dc +600][>#cv.vc +750][>#cv.cc +850][♪tick -4.8dB +700]3.44%。
 @: [>#cv.df -100][♪pop -5.6dB +50]ただ、[>#cv.df.ci -50][>#cv.df.ax][>#cv.df.dp +200][>#cv.df.dd +200]差の信頼区間は[>#cv.df.dn][!#cv.df.ax.zero to,{scaleY:1.25, duration:0.2, ease:'power1.inOut'}][!#cv.df.ax.zero to,{scaleY:1, duration:0.2, ease:'power1.inOut'} +200]ゼロをまたぎ、[|][>#cv.df.vd]統計的には[>#cv.df.nt +300]言い[♪burst -4dB +30]切れませ[♪whoosh2 -1.2dB +250]ん。[silence:0.1s]
 
 *** weekly
-@n: [silence:0.45s][>#wk.pb1][>#wk.pa1 +120]差は [>#wk.g1][>#wk.gl1 +100][♪bell -2.1dB +50]1 週目に集中し、[|][>#wk.lb][>#wk.la][>#wk.pb2 +250][>#wk.pa2 +300][>#wk.g2 +400][>#wk.gl2 +400][>#wk.pb3 +550][>#wk.pa3 +600][>#wk.g3 +700][>#wk.gl3 +700][>#wk.pb4 +850][>#wk.pa4 +900][>#wk.g4 +1000][>#wk.gl4 +1000][>#wk.area +1000][♪tick -4.4dB +250][♪tick -4.4dB +550][♪tick -4.4dB +850]その後は {0.1〜0.2|0.1から0.2} ポイントに[>#wk.rb -200][>#wk.rl]縮小。
+@n: [silence:0.45s][>#wk.pb1][>#wk.pa1 +120]差は [>#wk.g1][>#wk.gl1 +100][♪bell -2.1dB +50]1 週目に集中し、[|][>#wk.lb][>#wk.la][>#wk.pb2 +250][>#wk.pa2 +300][>#wk.g2 +400][>#wk.gl2 +400][>#wk.pb3 +550][>#wk.pa3 +600][>#wk.g3 +700][>#wk.gl3 +700][>#wk.pb4 +850][>#wk.pa4 +900][>#wk.g4 +1000][>#wk.gl4 +1000][>#wk.area +1000][♪tick -4.4dB +250][♪tick -4.4dB +550][♪tick -4.4dB +850]その後は 0.1〜0.2 ポイントに[>#wk.rb -200][>#wk.rl]縮小。
 @: [>#wk.co -200][>#wk.co.ic][!#wk.co.ic to,{y:-10, rotation:6, duration:1.4, ease:'sine.inOut', yoyo:true, repeat:1} +700][♪blip -2.8dB +50]物珍しさの効果かもしれませ[♪whoosh2 -1.2dB +190]ん。[silence:0.05s]
 
 *** share
@@ -443,21 +443,21 @@ bgm music
 @: [>#sh.co -200][>#sh.co.k]A の [>#sh.tr[1].yl -50][>#sh.co.p1][♪tick -4.2dB]22% に対し、[>#sh.co.ar -100]B は [>#sh.tr[2].yl -50][>#sh.co.p2][>#sh.tr[3].yl +450][>#sh.co.mon +550][>#sh.nt +800][♪bell -2.1dB +50]41% と、[>#sh.co.bd]ほぼ倍で[♪whoosh2 -1.2dB +600]す。[silence:0.4s]
 
 *** revenue
-@n: [silence:0.45s][>#rv.c1 +50][>#rv.c2 +250][>#rv.lt +350][>#rv.lbase +390][>#rv.lx[*] +430][>#rv.lb[*] +500][>#rv.lv[*] +900][>#rv.lbd +1300][♪pop -5.6dB +100]初年度の売上を推計すると、[|][>#rv.rt -300][>#rv.rbase -260][>#rv.rx[*] -220][>#rv.rb[*]][>#rv.rv[*]][♪rise -6.8dB +50]訪問者 {1 人|ひとり}あたりで{　|、}B が A より [>#rv.rbd][♪blip -2.8dB +50]17.6% 多い。
+@n: [silence:0.45s][>#rv.c1 +50][>#rv.c2 +250][>#rv.lt +350][>#rv.lbase +390][>#rv.lx[*] +430][>#rv.lb[*] +500][>#rv.lv[*] +900][>#rv.lbd +1300][♪pop -5.6dB +100]初年度の売上を推計すると、[|][>#rv.rt -300][>#rv.rbase -260][>#rv.rx[*] -220][>#rv.rb[*]][>#rv.rv[*]][♪rise -6.8dB +50]訪問者 1 人あたりで、B が A より [>#rv.rbd][♪blip -2.8dB +50]17.6% 多い。
 @: [>#rv.bn -100]効いたのは転換率より、[>#rv.bn.ul][♪tick -4.2dB]年額の割合で[♪whoosh2 -1.2dB +350]す。[silence:0.15s]
 
 *** side
 @n: [silence:0.45s][♪tension -0.6dB +50]ただし、副作用も。
 @: [>#sl.ic -100]料金の問い合わせは[>#sl.b[*]]訪問 1,000 人あたり、[|][>#sl.la -50][>#sl.lc +200][♪pop -5.6dB]4.0 件から [>#sl.lb -50][!#sl.b[2] glow,#FF859799,blur=20][=#sl.b[2] +600][>#sl.bub +450][♪pop -5dB]6.8 件に。
-@: [>#sr.ic -100][>#sr.pa[*] +150][>#sr.pb[*] +300][>#sr.pc[*] +450][♪tick -4.7dB +200]年額の返金申請も{　|、}[>#sr.ra -50]3.4% から [>#sr.rb -50][>#sr.rc +400][♪tick -4.2dB]6.1% に[>#sr.nt +200]上がりまし[♪whoosh2 -1.2dB +150]た。[silence:0.05s]
+@: [>#sr.ic -100][>#sr.pa[*] +150][>#sr.pb[*] +300][>#sr.pc[*] +450][♪tick -4.7dB +200]年額の返金申請も、[>#sr.ra -50]3.4% から [>#sr.rb -50][>#sr.rc +400][♪tick -4.2dB]6.1% に[>#sr.nt +200]上がりまし[♪whoosh2 -1.2dB +150]た。[silence:0.05s]
 
 *** net
-@n: [silence:0.45s]それでも、[>#nt.g[*]][!#nt.b[1] to,{scaleX:0.99, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[2] to,{scaleX:0.971, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[3] to,{scaleX:0.987, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.v[1] text,"[count:1,231]{s15} 円{/}" +200][!#nt.v[2] text,"[count:1,419]{s15} 円{/}" +200][!#nt.v[3] text,"[count:1,237]{s15} 円{/}" +200][!#nt.sw[1] text,"返金後 ／ 返金前 1,243" +350][!#nt.sw[2] text,"返金後 ／ 返金前 1,462" +350][!#nt.sw[3] text,"返金後 ／ 返金前 1,253" +350][♪whoosh -2.4dB +100]返金を差し引いた売上で、[|][>#nt.co -250]B は A を{　|、}[>#nt.co.big -50][♪bell -2.1dB +50]15.2% [>#nt.nn][>#nt.co.pre]上回ります。
-@: [>#nt.co.cn -50][♪tick -4.4dB +50]C は{　|、}A と[!#nt.b[3] glow,#71819A99,blur=18][=#nt.b[3] +600]ほぼ同じでし[♪whoosh2 -1.2dB +370]た。[silence:0.2s]
+@n: [silence:0.45s]それでも、[>#nt.g[*]][!#nt.b[1] to,{scaleX:0.99, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[2] to,{scaleX:0.971, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[3] to,{scaleX:0.987, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.v[1] text,"[count:1,231]{s15} 円{/}" +200][!#nt.v[2] text,"[count:1,419]{s15} 円{/}" +200][!#nt.v[3] text,"[count:1,237]{s15} 円{/}" +200][!#nt.sw[1] text,"返金後 ／ 返金前 1,243" +350][!#nt.sw[2] text,"返金後 ／ 返金前 1,462" +350][!#nt.sw[3] text,"返金後 ／ 返金前 1,253" +350][♪whoosh -2.4dB +100]返金を差し引いた売上で、[|][>#nt.co -250]B は A を、[>#nt.co.big -50][♪bell -2.1dB +50]15.2% [>#nt.nn][>#nt.co.pre]上回ります。
+@: [>#nt.co.cn -50][♪tick -4.4dB +50]C は、A と[!#nt.b[3] glow,#71819A99,blur=18][=#nt.b[3] +600]ほぼ同じでし[♪whoosh2 -1.2dB +370]た。[silence:0.2s]
 
 *** conc
 @n: [silence:0.45s][>#ttl -200][♪chime -2.4dB +50]結論です。
 @: [>#c1 -150][>#c1.li[*] +250][♪pop -5.3dB +50]B を採用し、[|][>#c2 -150][>#c2.li[*] +250][♪pop -5.3dB +50]年額の途中解約と返金の条件を、料金ページに明記。
-@: [>#c3 -150][♪pop -5.3dB +50]次は、明記した B と現行の B を{　|、}[>#c3.li[1] -100]4 週間比べ、[|][>#c3.li[2] -100]1 週目を除いた転換率と、[>#c3.li[3] -100]90 日後の{返金・継続|返金と継続}で判定しま[♪chime -3.2dB +740]す。[silence:2.3s]
+@: [>#c3 -150][♪pop -5.3dB +50]次は、明記した B と現行の B を、[>#c3.li[1] -100]4 週間比べ、[|][>#c3.li[2] -100]1 週目を除いた転換率と、[>#c3.li[3] -100]90 日後の返金・継続で判定しま[♪chime -3.2dB +740]す。[silence:2.3s]
 fade out,900
 ```

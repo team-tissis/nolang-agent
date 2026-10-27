@@ -425,7 +425,7 @@ se rain -1.9dB to=8.6s fade=600,1600
 @n: [silence:1.0s][♪paper -1.9dB -850][♪fuwan -5.8dB -450]雨の日、[!#t2{up} marker +50][♪pen -5.8dB +50]売れる店と、[!#t3{dn} marker +50][♪pen -5.8dB +50]売れない店。こもれび珈琲24店の、1年分の[>#sub -600]データで見ていきます。[silence:0.12s]
 
 *** sc2
-@n: [silence:0.5s][!#tb_dot[1] to,{x:-20, w:30, fill:'#A8432A', duration:0.4, ease:'power2.out'} -250][♪paper -3.5dB -380][♪m_up -6.4dB +500]雨の日は、1年で[♪stamp -2.9dB -330]112日。[>#b2.band -50][>#b2.br][>#b2.bt +200][♪pen -6.4dB]{6月|ろくがつ}と{7月|しちがつ}の{2か月|にかげつ}に、その[>#b2.p27][♪pop -4.3dB]27%が集まります。[silence:0.12s]
+@n: [silence:0.5s][!#tb_dot[1] to,{x:-20, w:30, fill:'#A8432A', duration:0.4, ease:'power2.out'} -250][♪paper -3.5dB -380][♪m_up -6.4dB +500]雨の日は、1年で[♪stamp -2.9dB -330]112日。[>#b2.band -50][>#b2.br][>#b2.bt +200][♪pen -6.4dB]6月と7月の2か月に、その[>#b2.p27][♪pop -4.3dB]27%が集まります。[silence:0.12s]
 
 *** sc3
 @n: [silence:0.5s][<#ch2 -500][!#tb_dot[1] to,{x:-20, w:10, fill:'#A8432A73', duration:0.4, ease:'power2.out'} -250][!#tb_dot[2] to,{x:-20, w:30, fill:'#A8432A', duration:0.4, ease:'power2.out'} -250][♪paper -3.5dB -380][♪m2 -6.9dB +250][♪m4 -6.9dB +750]チェーン全体では、雨の日の売上は[>#b3.badge][♪stamp -2.2dB]6%減。[>#lead +100][>#tz +550][♪piron -5.3dB +100]ところが立地で分けると、向きが[!#tz[1].ar to,{y:-6, duration:0.4, ease:'sine.inOut', repeat:5, yoyo:true}][!#tz[2].ar to,{y:6, duration:0.4, ease:'sine.inOut', repeat:5, yoyo:true} +180][!#tz[3].ar to,{y:6, duration:0.4, ease:'sine.inOut', repeat:5, yoyo:true} +360]逆になります。[silence:0.12s]
@@ -449,7 +449,7 @@ transition cut
 transition cut
 
 *** sc9
-@n: [silence:0.5s][<#sheet2 -380][<#ch8 -500][!#tb_dot[7] to,{x:-20, w:10, fill:'#A8432A73', duration:0.4, ease:'power2.out'} -250][!#tb_dot[8] to,{x:-20, w:30, fill:'#A8432A', duration:0.4, ease:'power2.out'} -250][>#cc1 -450][>#cc1.ring -50][>#cc1.ck +20][♪check -2.9dB -100]雨の日の手は、店ごとに逆向き。[>#cc2 -450][>#cc2.ring -50][>#cc2.ck +20][♪check -2.9dB -100]メニューの切り替えは、最高気温22度、[|]雨の日は24度が目安。[>#cc3 -450][>#cc3.ring -50][>#cc3.ck +20][♪check -2.9dB -100]そして雨の多い{6月|ろくがつ}、{7月|しちがつ}を前に、[|]予報で仕込みを変える運用を、全店へ広げましょう。
+@n: [silence:0.5s][<#sheet2 -380][<#ch8 -500][!#tb_dot[7] to,{x:-20, w:10, fill:'#A8432A73', duration:0.4, ease:'power2.out'} -250][!#tb_dot[8] to,{x:-20, w:30, fill:'#A8432A', duration:0.4, ease:'power2.out'} -250][>#cc1 -450][>#cc1.ring -50][>#cc1.ck +20][♪check -2.9dB -100]雨の日の手は、店ごとに逆向き。[>#cc2 -450][>#cc2.ring -50][>#cc2.ck +20][♪check -2.9dB -100]メニューの切り替えは、最高気温22度、[|]雨の日は24度が目安。[>#cc3 -450][>#cc3.ring -50][>#cc3.ck +20][♪check -2.9dB -100]そして雨の多い6月、7月を前に、[|]予報で仕込みを変える運用を、全店へ広げましょう。
 [<#subtitle]
 @: [silence:0.2s][>#signoff][♪chime -2.9dB][silence:2.2s]
 # 終わりの 0.85 秒で見出し・札・帯・署名が消え、紙の地だけが残る

@@ -245,7 +245,7 @@ transition dissolve,300,overlap=300
 @narrator: [silence:0.45s]現在は、国の[>#seal -200][!#seal shake,3,duration=280 +20][♪wadaiko -1dB peak=0.018s]重要無形民俗文化財に指定されています。[silence:0.55s]
 
 *** schedule
-@narrator: [silence:0.55s][♪wind -10dB peak=0.35s -550][>#schedule_head -300]祭りは毎年{5月|ごがつ}下旬の3日間。[|][!#schedule_head to,{x:-454, y:-309, scale:0.667, duration:0.75, ease:'power3.inOut'} -950][>#schedule_rule -200][>#day_card[1] -180][♪kodaiko -6dB peak=0.012s]出陣と宵乗り、[>#day_card[2] -180][♪kodaiko -6dB peak=0.012s]本祭り、そして[>#day_card[3] -180][♪kodaiko -6dB peak=0.012s]野馬懸へと続きます。[silence:0.5s]
+@narrator: [silence:0.55s][♪wind -10dB peak=0.35s -550][>#schedule_head -300]祭りは毎年5月下旬の3日間。[|][!#schedule_head to,{x:-454, y:-309, scale:0.667, duration:0.75, ease:'power3.inOut'} -950][>#schedule_rule -200][>#day_card[1] -180][♪kodaiko -6dB peak=0.012s]出陣と宵乗り、[>#day_card[2] -180][♪kodaiko -6dB peak=0.012s]本祭り、そして[>#day_card[3] -180][♪kodaiko -6dB peak=0.012s]野馬懸へと続きます。[silence:0.5s]
 transition dissolve,300,overlap=300
 
 *** procession
