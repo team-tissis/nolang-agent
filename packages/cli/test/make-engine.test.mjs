@@ -49,18 +49,45 @@ test("Codex は Claude なしで起動し、engine を studio に明示する", 
   assert.equal(args[args.indexOf("--engine") + 1], "codex");
 });
 
-test("既定の Claude は担当 medium が既定で、effort の既定を維持する", async (t) => {
+test("既定は担当 medium・長さ auto で、effort の既定を維持する", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明"], { env });
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "60", "--request-text", "短い説明", "--staff", "medium", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("--staff は担当を opt-in し、--editable を studio へ渡す", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--staff", "medium", "--editable"], { env });
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "60", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+});
+
+test("役割の新名 (--author / --staff none / --review-look / --staff-assets) を studio の旧名へ写す", async (t) => {
+  const { project, env } = await fixture(t, { claude: true, codex: true });
+  await execute(
+    process.execPath,
+    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--fix", "low", "--review-look", "--staff-assets"],
+    { env },
+  );
+  const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--effort", "medium", "--no-staff", "--review", "medium", "--fix", "low", "--look", "--staff-edits-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+});
+
+test("--seconds は秒数か auto だけを受ける", async (t) => {
+  const { project, env } = await fixture(t, { claude: true });
+  await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--seconds", "60s"], { env }), (error) => {
+    assert.equal(error.code, 2);
+    return true;
+  });
+});
+
+test("--staff は medium / balanced / low / none 以外を拒否する", async (t) => {
+  const { project, env } = await fixture(t, { claude: true });
+  await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--staff", "high"], { env }), (error) => {
+    assert.equal(error.code, 2);
+    return true;
+  });
 });
 
 test("Codex があっても engine 未指定なら Claude の不足を報告する", async (t) => {

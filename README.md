@@ -58,7 +58,7 @@ Claude Code に **「NoLang にログインして」** と頼む (頼まなく�
 ```
 
 - 1〜2 分で視聴 URL (`https://dev.no-lang.com/video/…`) が出る。Claude Code では、エージェントの返事より先に `PostToolUse:Bash says:` で始まる通知にもリンクが出る。生成中から再生でき、続きは見ている間に伸びる。
-- 縦長・長さ・型 (解説 / 数字 / 比較 / 物語 / 映像寄り) は言えばその通りに、言わなければ 16:9・60 秒前後で作る。
+- 縦長・長さ・型 (解説 / 数字 / 比較 / 物語 / 映像寄り) は言えばその通りに、言わなければ 16:9 で、長さは内容に合わせて決まる (auto)。
 - 手元の写真・動画は自分の素材として送られて動画に入る。声・BGM・効果音・書体は説明文から選ばれる (決めたい時は「〇〇な声の候補を探して」)。
 - 完成した mp4 が欲しい時は「完成したら mp4 のリンクをちょうだい」。
 
@@ -160,13 +160,13 @@ Host ubik-nolang
 nolang auth login [--device | --browser] [--background] | login --no-browser | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
 nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
-nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--editable] [--engine claude|codex]
+nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low] [--staff medium|balanced|low|none (既定 medium)] [--editable] [--engine claude|codex]
                                       NoLang の studio と同じ段取りで作る (engine 未指定は従来どおり Claude、codex は全役割を Codex)。再生できたら URL を返す (スキルの標準)
                                       --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
 nolang check [dir]                    dir の design.txt / timeline.txt を検査
-nolang start [dir] --title "…" [--seconds N]   cut ごとに流す: 開始だけ (dir に stream.json)
+nolang start [dir] --title "…" [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
 nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
-nolang create [dir] --title "…" [--seconds N] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
+nolang create [dir] --title "…" [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
 nolang status <video_id> [--wait] [--until playable|completed]
 nolang abort <video_id>
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)

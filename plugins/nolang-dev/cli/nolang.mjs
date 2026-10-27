@@ -608,14 +608,22 @@ async function cmdCheck(positionals, flags) {
   if (!ok) process.exitCode = EXIT.FAIL;
 }
 
+// --seconds は秒数か auto (= 指定なし・台本の分量と内容に合わせる)。数字でも auto でもなければ使い方エラー
+function parseSeconds(value) {
+  if (value === undefined || value === "auto") return null;
+  if (!/^[1-9]\d*$/.test(value)) throw new CliError(`--seconds は秒数か auto: ${value}`, { exit: EXIT.USAGE });
+  return Number(value);
+}
+
 async function cmdCreate(positionals, flags) {
   const { root, design, timeline } = await readSrc(positionals[0]);
   const cuts = splitCuts(design, timeline);
+  const durationS = parseSeconds(flags.seconds);
   const params = {
     title: flags.title || basename(root),
     aspect_ratio: flags.aspect || aspectOf(design),
     language: flags.language || "ja",
-    ...(flags.seconds ? { duration_s: Number(flags.seconds) } : {}),
+    ...(durationS ? { duration_s: durationS } : {}),
   };
   if (flags["dry-run"]) {
     // サーバーに触れず、開始の引数と cut ごとの投入 text だけを見せる
@@ -715,10 +723,14 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--staff-warn] [--editable] [--effort low] [--engine claude|codex] [--review low|medium --fix low [--look]] [--staff-edits-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low (著者)] [--staff medium|balanced|low|none (既定 medium)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low [--review-look]] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
+  parseSeconds(flags.seconds); // 形だけ検査 (studio へは文字列のまま渡す)
+  const seconds = String(flags.seconds || "auto"); // 既定 auto = 台本の分量と内容に合わせる
+  const staff = flags.staff || "medium";
+  if (!["medium", "balanced", "low", "none"].includes(staff)) throw new CliError("--staff は medium / balanced / low / none", { exit: EXIT.USAGE });
   for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では作れない (skill の write-yourself.md の手順で、自分で書いて流す)`, { exit: EXIT.FAIL });
   }
@@ -748,24 +760,22 @@ async function cmdMake(positionals, flags) {
       speechId = await uploadSpeech(api, resolve(flags.speech), { speakers: flags.speakers, language: flags.language });
     }
   }
-  const seconds = String(flags.seconds || (speechId ? "auto" : 60));
   const args = [join(studio, "scripts", "stream_make.sh"), root, "--type", flags.type, "--aspect", flags.aspect || "16:9", "--seconds", seconds];
   if (flags.engine) args.push("--engine", engine);
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
-  if (flags.effort) args.push("--effort", flags.effort);
-  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 再生開始を早めるなら --staff balanced (cut 1・2 だけ担当 low)・速さ最優先なら --no-staff
-  const staff = flags["no-staff"] ? null : flags.staff || "medium";
-  if (staff) args.push("--staff", staff);
-  else args.push("--no-staff");
+  if (flags.author) args.push("--effort", flags.author);
+  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 再生開始を早めるなら --staff balanced (cut 1・2 だけ担当 low)・速さ最優先なら --staff none
+  if (staff === "none") args.push("--no-staff");
+  else args.push("--staff", staff);
   if (flags["staff-warn"]) args.push("--staff-warn");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
-  // 質を取りに行く時: 見直し (--review medium と --fix low)・見直しに cut の静止画 (--look — server の GPU が描く)・担当が絵と台詞も変える
+  // 質を取りに行く時: 見直し (--review medium と --fix low)・見直しに cut の静止画 (--review-look — server の GPU が描く)・担当が絵と台詞も変える
   if (flags.review) args.push("--review", flags.review);
   if (flags.fix) args.push("--fix", flags.fix);
-  if (flags.look) args.push("--look");
-  if (flags["staff-edits-assets"]) args.push("--staff-edits-assets");
+  if (flags["review-look"]) args.push("--look");
+  if (flags["staff-assets"]) args.push("--staff-edits-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
   // macOS の bash は UTF-8 の locale で `$VAR・` の全角文字を変数名に含めて読む — bash は C・python は UTF-8 で動かす
@@ -775,7 +785,7 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・担当 ${staff || "なし"}・著者 ${flags.effort || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}・担当 ${staff === "none" ? "なし" : staff}・著者 ${flags.author || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
   const startedAt = Date.now();
   const deadline = startedAt + Number(flags.timeout || (speechId ? MAKE_SPEECH_TIMEOUT_S : MAKE_TIMEOUT_S)) * 1000;
   let watch = null;
@@ -875,11 +885,12 @@ async function cmdStart(positionals, flags) {
   if (await stat(join(root, STREAM_FILE)).then(() => true, () => false)) {
     throw new CliError(`${join(root, STREAM_FILE)} がある (この原稿はもう開始した — 作り直すなら stream.json を消す)`, { exit: EXIT.USAGE });
   }
+  const durationS = parseSeconds(flags.seconds);
   const params = {
     title: flags.title || basename(root),
     aspect_ratio: flags.aspect || aspectOf(design),
     language: flags.language || "ja",
-    ...(flags.seconds ? { duration_s: Number(flags.seconds) } : {}),
+    ...(durationS ? { duration_s: durationS } : {}),
   };
   const api = await resolveApi(flags);
   const started = await callApi(api, "POST", "/v1/unstable/drafts/", params);
@@ -1101,19 +1112,20 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang doctor                         接続先とログインを確かめる
   nolang check [dir]                    dir の design.txt / timeline.txt を検査 (DEFECT があれば終了コード 1)
   nolang create [dir] --title "…"       check → 開始 → cut を順に投入 → 再生できるまで待つ → watch_url
-        [--aspect 16:9|9:16] [--seconds N] [--language ja] [--wait (完成まで)]
+        [--aspect 16:9|9:16] [--seconds 秒|auto (既定)] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
-        [--aspect 16:9|9:16] [--seconds 60] [--staff medium|balanced|low (既定 medium) | --no-staff] [--staff-warn (担当に warn の指摘も渡す)] [--editable] [--effort low] [--engine claude|codex]
+        [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 内容に合わせる)] [--engine claude|codex]
+        [--author low (著者の effort・既定 low)] [--staff medium|balanced|low|none (担当・既定 medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
-        [--review low|medium --fix low [--look]] [--staff-edits-assets]
-                                        質を取りに行く時 (遅くなる): --fix low で見直し役を入れ (--review は その effort)、--look で
-                                        見直しに cut の静止画も見せて 2 回 (server の GPU が描く)・--staff-edits-assets で担当が絵と台詞も変える
+        [--review low|medium --fix low [--review-look]] [--staff-assets]
+                                        質を取りに行く時 (遅くなる): --fix low で見直し役を入れ (--review は その effort)、--review-look で
+                                        見直しに cut の静止画も見せて 2 回 (server の GPU が描く)・--staff-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
-  nolang start [dir] --title "…" [--seconds N]
+  nolang start [dir] --title "…" [--seconds 秒|auto (既定)]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
   nolang status <video_id> [--wait] [--until playable|completed] [--timeout 秒]
@@ -1150,16 +1162,15 @@ const OPTIONS = {
   "request-text": { type: "string" },
   request: { type: "string" },
   engine: { type: "string" },
-  effort: { type: "string" },
+  author: { type: "string" },
   staff: { type: "string" },
-  "no-staff": { type: "boolean" },
   "staff-warn": { type: "boolean" },
+  "staff-assets": { type: "boolean" },
   editable: { type: "boolean" },
   samples: { type: "string" },
   review: { type: "string" },
   fix: { type: "string" },
-  look: { type: "boolean" },
-  "staff-edits-assets": { type: "boolean" },
+  "review-look": { type: "boolean" },
   mine: { type: "boolean" },
   limit: { type: "string" },
   name: { type: "string" },
