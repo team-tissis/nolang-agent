@@ -1,39 +1,36 @@
-# check の findings の規則名と直し方
+# Rule names and fixes for check findings
 
-`nolang check` / `nolang_draft_check` が返す `findings[].rule` (と描画時の lint) の名前ごとの直し方。型に合わない規則は根の `lint off=規則,…` で切れる。
+The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
-- `empty_cut` 絵か札を置く
-- `shrunk` 幅か文字の大きさを変える (枠を広げる / `width:` を外して文字幅にする / 文言を短く)
-- `offcanvas` (severe) 位置を内側に
-- `duplicate_text` 字幕と同文の札 → 画面は要点の短い語に。台詞そのものを見せる札 (リリックビデオの歌詞・吹き出し) は札に `.hide_subtitle` (見えている間は字幕を描かない
-- `lint off` では 2 つ並んだまま)
-- `text_overload` cut の尺で読み切れない文字量 → 文言を要点の短い語に刈る・一度に見せず語に合わせて札を入れ替える (前の札は `[<#名]` で閉じる・cut は分けない)
-- `spoiler` 見出しが台詞の語を先に見せる → 語の印で出す
-- `still_stretch` 6 秒以上動かない (絵の kb は動きに数えない) → 語に印を足す
-- `long_still` (info) 台詞が 3 秒以上続く間に画面が変わらない → その間の語に印
-- `cut_head_gap` cut 頭が 1.2 秒以上空く → 頭の要素は印なしで置く
-- `entrance_in_fadeout` 切替や fade out の 0.8 秒前より後に出す → 語を前へ
-- `entrance_in_transition` 語の印の入場が前の切替の窓の中で済む → 最初の台詞の頭に `[silence:+0.4s]` を足して語を窓の後へ (要る秒は check が言う)
-- `no_closer` 最後の cut に大きな締めの一言が無い
-- `same_picture` 同じ絵が 15 秒以上 → cut の中で語に合わせて別の絵・図・札へ替える (cut は分けない)
-- `blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を
-- `dip_black_frame` dip は黒 frame → dissolve か wipe
-- `double_exit` 切替で終わる cut に cut 全体の out も掛かり、場面が fade してから切替が走る (二度消える) → fade で消えたいなら切替を `transition cut` に・切替が場面を運ぶなら section の out を外す (根から継いだ切替なら機械が切替を cut にする)
-- `persistent_chrome` 常設の層 (progress / 章番号 / 累計) は 3 分以上の動画だけ — 短い動画では画面の端を 1 本占有する損の方が大きいので外す
-- `sparse_cut` 4 秒以上で要素が少ない → 絵か札を足す
-- `palette_drift` palette 外の色が多い
-- `low_contrast` 文字と地の差が小さい (沈めた `dim` / focus の兄弟
-- `recolor` の後も) → 沈める濃さを上げる
-- `overlap` 同じ族の文字どうしが重なる (`overlap:` を宣言しても warn・別の族の文字を隠すのは severe の occluded) → 判子・札を相手の文字から外す
-- `title_on_close` 最初の cut の題が閉じられず最後の frame に残る → `[<#名]` (締めで名を言い直すなら締めの cut に新しい層)
-- `leaks_into_next_cut` (info) 切替の前に他が out で消え、out の無い層だけが次の cut の頭に残る (既定は全員が生きたまま切替に乗る — 残すか消すかを割るのは著者の out だけ) → 揃えるなら他の層にも out を書くか、その out を外す
-- `orphan_line` 折り返しの最後の行が 1〜2 字 (「本気だっ / た。」) → 文言を詰める・字を小さく
-- `[br]` で切る
-- `overridden` engine が書いた値を変えた (cause つき) — subject_clear: 文字を絵の主体の外に置く / icon_square と late_admission: engine の揃え (直さなくてよい)
-- `transition_over_speech` 切替が台詞に掛かる
-- `se_dense` 効果音が密 (`sfx off`)
-- `running_total` 累計の札の値が cut を跨いで減る → plan に書いた累計を写す
-- `font_not_pinned` 書体を本番の解決で引けず既定 font で測った (DB のある所で check を回す・書体の説明を catalog の書体に寄せる)
-- `synthetic_bold` family に太い face が無い (browser の合成 bold は無い) → 太さのある family を `font-family:` で選ぶか font-weight を外す
-- `ghost_dissolve` 400 ms 以上の dissolve で前の cut の大きな文字・絵が次の cut に透ける (out の無い層か、境界より前から溶ける切替) → `overlap=` を尺と同じに (out のある文字は境界までに消え終わる)・out の無い絵や札は cut 末の `[<#名 fade]`
-- `photo_hidden` 全面の写真の 9 割以上に濃さ 0.7 以上の幕が 3 秒以上掛かる (写真が白く飛ぶ / 暗く沈む) → 写真を片側の枠へ (文字は地の側) か、幕を 0.6 までにして文字の下にだけ帯 / 板。
+- `empty_cut` place a picture or a card
+- `shrunk` change the width or the text size (widen the frame / drop `width:` to fit the text / shorten the wording)
+- `offcanvas` (severe) move the position inward
+- `duplicate_text` a card with the same text as the subtitle → put short key words on screen instead. A card that shows the speech itself (lyric-video lines, speech bubbles) takes `.hide_subtitle` (the subtitle is not drawn while it shows; with `lint off` the two stay side by side)
+- `text_overload` more text than the cut's length lets the viewer read → trim the wording to short key words; show it in turns on the words instead of all at once (close the earlier card with `[<#name]`; do not split the cut)
+- `spoiler` a heading shows a speech word early → bring it in on its word's mark
+- `still_stretch` nothing moves for 6+ seconds (a picture's kb does not count as motion) → add marks on words
+- `long_still` (info) the screen does not change while speech runs 3+ seconds → mark a word in that span
+- `cut_head_gap` the cut's head is empty for 1.2+ seconds → place the head elements without marks
+- `entrance_in_fadeout` it enters after 0.8 s before the transition or fade out → move the word earlier
+- `entrance_in_transition` a word mark's entrance finishes inside the previous transition's window → add `[silence:+0.4s]` at the head of the first speech to push the word past the window (check says the seconds needed)
+- `no_closer` the last cut has no big closing line
+- `same_picture` the same picture for 15+ seconds → swap to another picture, diagram or card on a word inside the cut (do not split the cut)
+- `blank_band` a third of the screen is bare ground at the cut's head → lay a full-bleed picture, or put a card on the band
+- `dip_black_frame` dip means black frames → dissolve or wipe
+- `double_exit` a cut that ends on a transition also has a whole-cut out, so the scene fades and then the transition runs (it dies twice) → to end on a fade, make the transition `transition cut`; if the transition carries the scene, drop the section's out (for a transition inherited from the root, the machine turns it into a cut)
+- `persistent_chrome` persistent layers (progress / chapter numbers / running totals) belong only in videos of 3+ minutes — in a short video the cost of occupying a screen edge outweighs them, so drop it
+- `sparse_cut` 4+ seconds with few elements → add a picture or a card
+- `palette_drift` many colors outside the palette
+- `low_contrast` little contrast between text and its ground (also after a dimmed `dim` / focus sibling or `recolor`) → dim deeper
+- `overlap` text of the same family overlaps (warn even with `overlap:` declared; hiding another family's text is the severe occluded) → move the stamp / card off the other text
+- `title_on_close` the first cut's title is never closed and remains in the last frame → `[<#name]` (to restate the name at the close, make a new layer in the closing cut)
+- `leaks_into_next_cut` (info) other layers exit before the transition and only the out-less layer remains into the next cut's head (the default is that everyone rides the transition alive — only the author's out divides who stays and who goes) → to align them, write out on the other layers too, or drop this one's out
+- `orphan_line` the wrap's last line is 1–2 characters (「本気だっ / た。」) → tighten the wording, shrink the text, or break with `[br]`
+- `overridden` the engine changed a written value (with a cause) — subject_clear: place the text off the picture's subject / icon_square and late_admission: the engine's alignment (no fix needed)
+- `transition_over_speech` the transition overlaps speech
+- `se_dense` sound effects are dense (`sfx off`)
+- `running_total` a running-total card's value decreases across cuts → copy the totals written in the plan
+- `font_not_pinned` the font could not be resolved as in production and was measured with the default font (run check where the DB is; bring the font description closer to a catalog font)
+- `synthetic_bold` the family has no bold face (there is no browser synthetic bold) → pick a family with weights via `font-family:` or drop the font-weight
+- `ghost_dissolve` in a 400 ms+ dissolve, the previous cut's large text or picture shows through into the next cut (a layer without out, or a transition dissolving from before the boundary) → set `overlap=` equal to the duration (text with out finishes fading by the boundary); pictures and cards without out take `[<#name fade]` at the cut's end
+- `photo_hidden` a veil of opacity 0.7+ covers 90%+ of a full-bleed photo for 3+ seconds (the photo washes out / sinks dark) → move the photo to one side (text on the ground side), or cap the veil at 0.6 and put a band / board only under the text。

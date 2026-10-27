@@ -50,16 +50,16 @@ function gitCommit(dir) {
   }
 }
 
-// 規則の台帳 (SKILL.md の「規則の名と直し方」の 1 段落) を 1 規則 1 行に
+// 規則の台帳 (SKILL.md の「Rule names and fixes」の 1 段落) を 1 規則 1 行に
 function rulesMarkdown(skillMd) {
-  const line = skillMd.split("\n").find((l) => l.startsWith("規則の名と直し方"));
-  if (!line) throw new Error("SKILL.md に「規則の名と直し方」の段落が無い");
+  const line = skillMd.split("\n").find((l) => l.startsWith("Rule names and fixes"));
+  if (!line) throw new Error('SKILL.md に「Rule names and fixes」の段落が無い');
   const body = line.slice(line.indexOf("): ") + 3);
   const items = body.split("・`").map((item, i) => (i === 0 ? item : "`" + item));
   return [
-    "# check の findings の規則名と直し方",
+    "# Rule names and fixes for check findings",
     "",
-    "`nolang check` / `nolang_draft_check` が返す `findings[].rule` (と描画時の lint) の名前ごとの直し方。型に合わない規則は根の `lint off=規則,…` で切れる。",
+    "The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.",
     "",
     ...items.map((item) => `- ${item}`),
     "",

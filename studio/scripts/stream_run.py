@@ -109,15 +109,15 @@ def rows_naming_layers(text: str, layers: list[str]) -> tuple[set[int], int]:
 
 
 def cut_timing(check_out: str, cut: str) -> str:
-    """check の出力から担当に渡す時刻の行を取る: 動画全体の `cut の見積り` と、cut の `scene の尺` と `出る時刻` の行 (見出しを頭に付ける)。"""
+    """check の出力から担当に渡す時刻の行を取る: 動画全体の `cut times` と、cut の `scene lengths` と `showing times` の行 (見出しを頭に付ける)。"""
     keep: list[str] = []
     header = ""
     for line in check_out.splitlines():
-        if line.startswith("  cut の見積り"):
+        if line.startswith("  cut times"):
             keep.append(line.strip())
         elif line.startswith("  ") and not line.startswith("    "):
             header = line.strip().split(" (", 1)[0].rstrip(":")
-        elif line.startswith(f"    {cut}:") and header in ("scene の尺", "出る時刻"):
+        elif line.startswith(f"    {cut}:") and header in ("scene lengths", "showing times"):
             keep.append(f"{header} — {line.strip()}")
     return "\n".join(keep)
 
@@ -835,10 +835,11 @@ class Run:
         lines = max(sum(1 for line in blk[1].splitlines() if line.lstrip().startswith("@")), 1)
         per = estimate / lines
         n = min(max(round(abs(gap) / per), 1), 2)
-        verb = "消す" if gap > 0 else "足す"
+        verb = "delete" if gap > 0 else "add"
         return (
-            f"warn {LENGTH_RULE} (cut): 台詞の見積り {estimate:.0f} 秒 / この cut の目標 {budget:.0f} 秒 ({gap:+.0f} 秒・台詞の行 1 本 ≈ "
-            f"{per:.0f} 秒) — 台詞の行を文ごと {n} 本{verb} (文単位・早口や間の詰めで合わせない)"
+            f"warn {LENGTH_RULE} (cut): estimated speech {estimate:.0f} s / this cut's target {budget:.0f} s ({gap:+.0f} s;"
+            f" one speech line ≈ {per:.0f} s) — {verb} {n} whole speech line(s) (whole sentences; do not meet it with fast"
+            " talking or packed pauses)"
         )
 
     def length_gap(self) -> dict[str, float | None]:
@@ -1404,8 +1405,8 @@ class Run:
             if failed_edits and defects:
                 # 直し役は前の round と同じ edit を返しがち (nt06 gold: 戻した edit を 1 文字も違わずにもう 1 回)。効かなかった edit を見せる
                 findings += (
-                    "\n\n前の直しの edit は DEFECT を消さなかったので戻した (`+` = 前の直し役が書いた行・`-` = 今の行)。"
-                    f"同じ edit は返さず、別の直し方にする:\n{failed_edits}"
+                    "\n\nThe previous fix's edits did not clear the DEFECT and were reverted (`+` = the line the previous"
+                    f" fixer wrote, `-` = the current line). Do not return the same edits — fix it another way:\n{failed_edits}"
                 )
             if findings == prev_findings and not defects and not reviews:
                 # 直しても指摘が 1 つも変わらない — もう 1 回頼んでも同じ答え (直し役が触れない層・直し方の無い指摘)。打ち切る。
@@ -1434,7 +1435,9 @@ class Run:
             if shots and self.shot_unwarmed.get(c):
                 # warm が間に合わず意味検索で引いた仮の絵 — 見直し役に中身を判定させない (作り直しの連鎖を作らない)
                 ff.write_text(
-                    ff.read_text() + "\n\n生成中 (仮の絵 — 中身は判定しない): " + "・".join(self.shot_unwarmed[c])
+                    ff.read_text()
+                    + "\n\nstill generating (placeholder pictures — do not judge their content): "
+                    + "・".join(self.shot_unwarmed[c])
                 )
             before_fix = (self.solo / f"cut_{c}.txt").read_text()
             before_clean = not defects

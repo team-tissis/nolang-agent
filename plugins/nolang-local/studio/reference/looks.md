@@ -1,57 +1,57 @@
-# 見た目の組と見本 (判定で勝った実 src・check を通る design + timeline)
+# Looks and samples (real srcs that won judgments — design + timeline that pass check)
 
-色・書体・文字の段・板・地は題材ごとに決める物で、値は見本。
-素材 (話者・BGM・書体・絵) は説明文で書いている。
+Colors, fonts, the text scale, boards and the ground are decided per subject; the values here are samples.
+Assets (speaker, BGM, fonts, pictures) are written as descriptions.
 
-## style の組 (気分で 1 つ選び、根の 4 行に写す)
+## Style kits (pick one by mood and copy it into the root's four lines)
 
-| 組 | 気分 / 向く題材 | `palette` | `font` / `fonts` | 動き (`motion`) / `transition` | しない事 |
+| Kit | Mood / suited subjects | `palette` | `font` / `fonts` | Motion (`motion`) / `transition` | Never |
 |---|---|---|---|---|---|
-| 端正な格子 | 精密・SaaS・data・開発 | 暗 `#141414`・accent 1 色 (電気の青 / 琥珀) | 太い角ゴシック / 細い角ゴシック・数字は等幅寄りの欧文グロテスクで 80〜180px | 締まる / `dissolve,300,overlap=300` か hard cut | 飾りの切替・丸い角 |
-| 静かな高級 | 高級品・企業・基調講演 | 黒 + 白 + 濃紺か金 1 色 | 細い角ゴシックの大文字 + 字間広め / 明朝・数字は細めの欧文セリフ | 行き過ぎない / `dissolve,300,overlap=300,ease=power2.inOut` | 速い動き・詰め込み |
-| 分解 | 技術の発表・警告・反骨 | 黒 + 赤か黄 1 色 | 極太の角ゴシック + 等幅・数字は極太の欧文グロテスク | 締まる / `wipe,400,dir=left` か hard cut | 柔らかい ease・中央揃え |
-| 大型の文字 | 発表・告知・音楽 | 鮮やかな 2 色 + 黒 | 極太の角ゴシック (画面幅の 8 割)・数字も極太の欧文サンセリフ | 弾む / `push,300` | 小さい字・余白の多さ |
-| 流れる data | AI・未来・科学 | 濃紺 + 青緑の光 | 細い角ゴシック + 等幅・数字は欧文の等幅 | ゆっくり溶ける / `dissolve,300,overlap=300,zoom=1.06` | 定規の目盛り・凡例 |
-| やわらかい信号 | 健康・個人の話・ブランド | 明 (生成りか淡い色) + 暖色 1 色 | 明朝 + 細い角ゴシック・数字は丸みのある欧文サンセリフ | 行き過ぎない / `dissolve,300,overlap=300` | 角張った札・黒 |
-| 民藝の色 | 食・地域・祭・消費者向け | 明 + 鮮やか 2〜3 色 | 太い丸ゴシック + 筆の見出し・数字は太い丸ゴシック | 弾む / `wipe,600,dir=right` | 無彩色・薄い字 |
-| 影と切れ | 事件・暴露・映画 | 黒 + 白 + 赤 1 色 | 極太の明朝 + 細い欧文・数字はクラシックな欧文セリフ | ゆっくり溶ける / `dip,400` `zoom` | 明るい地・丸い角 |
+| Precise grid | precision · SaaS · data · dev | dark `#141414` · one accent (electric blue / amber) | 太い角ゴシック / 細い角ゴシック・数字は等幅寄りの欧文グロテスクで 80〜180px | tight / `dissolve,300,overlap=300` or hard cut | decorative transitions · rounded corners |
+| Quiet luxury | luxury goods · corporate · keynotes | black + white + one navy or gold | 細い角ゴシックの大文字 + 字間広め / 明朝・数字は細めの欧文セリフ | no overshoot / `dissolve,300,overlap=300,ease=power2.inOut` | fast motion · crowding |
+| Teardown | tech launches · warnings · defiance | black + one red or yellow | 極太の角ゴシック + 等幅・数字は極太の欧文グロテスク | tight / `wipe,400,dir=left` or hard cut | soft eases · centered alignment |
+| Giant type | launches · announcements · music | two vivid colors + black | 極太の角ゴシック (画面幅の 8 割)・数字も極太の欧文サンセリフ | bouncy / `push,300` | small text · too much whitespace |
+| Flowing data | AI · the future · science | navy + a teal glow | 細い角ゴシック + 等幅・数字は欧文の等幅 | slow dissolves / `dissolve,300,overlap=300,zoom=1.06` | ruler ticks · legends |
+| Soft signal | health · personal stories · brand | light (unbleached or pale) + one warm color | 明朝 + 細い角ゴシック・数字は丸みのある欧文サンセリフ | no overshoot / `dissolve,300,overlap=300` | hard-cornered cards · black |
+| Folk-craft colors | food · regions · festivals · consumer | light + 2–3 vivid colors | 太い丸ゴシック + 筆の見出し・数字は太い丸ゴシック | bouncy / `wipe,600,dir=right` | grays · thin text |
+| Shadow and cut | incidents · exposés · film | black + white + one red | 極太の明朝 + 細い欧文・数字はクラシックな欧文セリフ | slow dissolves / `dip,400` `zoom` | bright grounds · rounded corners |
 
-全面の絵に文字を重ねる cut で、文字が絵の主体に乗りそうな時だけ、主体の置き場を文字の反対側に宣言する — `img#p(inset: 0; subject: top 35%; room: bottom 55%) 説明` + 文字は下 55% に。宣言は「重心をそちらへ・文字の側は静かな背景に」の希望で、主体の大きさや寄り引きは本文の prompt が決める。`face=` か `room=` を書いた絵は、生成した絵の顔 (主体) が文字の側に掛かれば範囲に収める文で 1 回だけ作り直す (2 枚目は通らなくても採る — check の表に「作り直し 1 回」)。文字が主体に乗らない絵 (小さな札・帯の上の文字・絵の外の文字) には書かない — 全部に書くと絵が同じ構図に揃う。
+Only in cuts where text overlays a full-bleed picture and might land on the picture's subject, declare the subject's place on the side opposite the text — `img#p(inset: 0; subject: top 35%; room: bottom 55%) 説明` with the text in the bottom 55%. The declaration is a wish ("weight over there; the text side stays a quiet background") — the subject's size and framing are decided by the body prompt. A picture with `face=` or `room=` is redone once, with a sentence pulling it into range, when the generated picture's face (subject) lands on the text side (the second take is kept even if it misses — check's table shows「作り直し 1 回」). Do not write it on pictures whose text never sits on the subject (small cards, text on bands, text outside the picture) — written everywhere, the pictures settle into one identical composition.
 
-組を決めたら、根に `palette` `font` `fonts` `motion` `transition` を書き、以後の cut はその差分だけ。 数字 / 強調の書体 (`fonts`) も組ごとに違える — 骨組みの値を写さない。欧文 (数字・英字) の記述なら欧文専用の書体も候補になる (和文の字は代わりの書体が描く)。切替は 1 本 1 種が基本 (章の境目だけ別の 1 種)。dissolve は 300 ms 以下 + `overlap=` 同じ尺が無難 — 窓が境界の前に掛かると退場中の文字が次の絵に重なり、400 ms を超える溶けは前の絵が残像に見える。`motion` は雛形の 5 行 (題 title・主役の語 big・箱 div・本文 row・注記 note — 締まる / 行き過ぎない) の値を気分に合わせて書き換える (弾む動きは見本 story_03 の根)。組は例で、題材に合わせて自分で作ってよい (名 → 色 2〜3 → 書体 2 → 動き → 切替 → しない事 2 つ)。前後の値は両方とも読める濃さで (前を灰で沈めるなら字は太く大きく)。
+Once the kit is set, write `palette` `font` `fonts` `motion` `transition` in the root; from then on each cut carries only its differences. Vary the number / emphasis fonts (`fonts`) per kit too — do not copy the scaffold's values. For Latin-only content (numbers, letters) a Latin-only font is a candidate (Japanese glyphs are drawn by a substitute family). One transition kind per video is the rule (one different kind at chapter breaks only). dissolve is safest at ≤300 ms with `overlap=` of the same length — when the window reaches before the boundary, exiting text overlaps the next picture, and a dissolve over 400 ms makes the previous picture read as an afterimage. `motion` rewrites the scaffold's five lines (heading title · lead word big · box div · body row · note note — tight / no overshoot) to the mood (bouncy motion is in sample story_03's root). The kits are examples; build your own per subject (a name → 2–3 colors → 2 fonts → motion → a transition → 2 nevers). Both sides of a change must stay readable (if the old value sinks to gray, make its text bolder and bigger).
 
-## 見本 (reference/samples/ — 自分の type の 2 本を読む。stream の著者には hf の写し 2 本を user turn に、担当・直しの system には cinematic / story だけ同梱する (`reference/stream.md`・10-25 A/B)。story → story_*・concept → concept_*・data / compare → data_* と compare_*・cinematic → cinematic_*。題材が同じ見本は読まない)
+## Samples (reference/samples/ — read the two of your type. The stream author gets the two hf ports in the user turn; the staff's and the fixer's systems bundle only cinematic / story (`reference/stream.md` · 10-25 A/B). story → story_* · concept → concept_* · data / compare → data_* and compare_* · cinematic → cinematic_*. Never read a sample on the request's own topic)
 
-- `samples/story_03.md` — story・夏フェスのオタク語り (縦・構文風の一人語り)・1080x1920・44.5s・139 行・文法: count・×N・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/story_06.md` — story・ニホンカワウソ (縦・台本そのまま・絵本調)・1080x1920・57.8s・145 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/story_13.md` — story・碓氷馬車鉄道 (縦・語り + 2 人の役・錦絵調)・1080x1920・69.8s・159 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替・2 cast+
-- `samples/concept_10.md` — concept・サルトルと「やりたいこと」(縦・線画・静かな語り)・1080x1920・49.8s・133 行・文法: manner・se・sticky・def・run・bgm 切替
-- `samples/concept_16.md` — concept・麻辣湯の解説 (縦・章立て 13 cut・写真 + 板)・1080x1920・125.0s・231 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/concept_17.md` — concept・和風きのこパスタ (縦・手順 + コツ)・1080x1920・72.3s・153 行・文法: ×N・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/compare_05.md` — compare・通常 CAD とリバース (横・比較 + 流れ図)・1920x1080・170.2s・256 行・文法: 流れ図の札 (def node ×N + 位置の式の矢印)・比べる 2 列 (div の段 ×N)・count・×N・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/cinematic_05.md` — cinematic・奥多摩の渓流の朝 (横・実写調・台詞 5 文の観光 PR)・1920x1080・33.0s・99 行・文法: 常設の質感 (根の veil の周辺減光と grain)・絵の置き場 (subject / room)・同じ cut で絵を重ねて替える・count・recolor・filter・hide_subtitle・read・場の音・bgm
-- `samples/data_18.md` — data・家計の固定費 (横・前後の数字 + 棒グラフ)・1920x1080・74.3s・180 行・文法: 横棒の段の def (hbar・幅は %)・count・×N・focus・stack・manner・se・sticky・def・run・bgm 切替
-- `samples/hf_compare_04.md` — compare・care-transfer・1920x1080・230 行・hf (全力版) の全量の写しを見本の形に: 常設の章札と進行 3 本・色の板で払う章の区切り・話者札つきの字幕・svg 部品の図
-- `samples/hf_concept_01.md` — concept・b2b-support・1920x1080・392 行・hf (全力版) の全量の写しを見本の形に: 写真が主役の場面ごとの絵替え・左下のテロップ札と STEP 章札・def の部品で組むタブレットの画面 (カーソル・強調枠・吹き出し・page 送り)・cue で段を送る進行の板・1 字ずつ上がるロゴ
-- `samples/hf_concept_07.md` — concept・black-tire・1080x1920・191 行・hf (全力版) の全量の写しを見本の形に: 常設の上下の暗幕と上端の進行線・場面ごとの全面写真 (動く cam・黒から溶ける切替・文の途中の絵替え)
-- `samples/hf_story_02.md` — story・office-comedy・1080x1920・164 行・hf (全力版) の全量の写しを見本の形に: 常設の題の帯・冒頭の組織図・台詞ごとの絵替え・2 行テロップの def
-- `samples/hf_data_08.md` — data・cityhall-hours・1920x1080・241 行・hf (全力版) の全量の写しを見本の形に: 常設の帯 (紺の丸札・sticky)・時計の盤の def (針は回した細い箱)・濃紺の札の字幕・題の札と mask から上がる 2 行と下線
-- `samples/hf_story_09.md` — story・soma-nomaoi・1920x1080・270 行・hf (全力版) の全量の写しを見本の形に: 黒からの開幕と全編の周辺減光・grain・字幕の下の陰・漂う塵
-- `samples/hf_story_03.md` — story・fes-otaku・1080x1920・330 行・hf (全力版) の全量の写しを見本の形に: 常設のネオンの地 (グラデ・光の柱・透視の格子の床)・画面中央に 1 句ずつ叩きつける極太の大字幕 (句の型ごとの札の変種)・写真カードの場面
-- `samples/hf_compare_05.md` — compare・cad-reverse・1920x1080・386 行・hf (全力版) の全量の写しを見本の形に: 方眼の地と 2 色で通す比較・語ごとに埋める 2 段の流れ図・工程の板の点灯 (cue)・path の形が変形する図・点群とメッシュ
-- `samples/hf_story_06.md` — story・river-otter・1080x1920・202 行・hf (全力版) の全量の写しを見本の形に: 全編の質感 (黒から明ける頭・周辺減光・grain・明朝の字幕)・台詞の中で語ごとに溶けて替わる全面写真・「居ない版」の差分で 1 匹だけ溶かす
-- `samples/hf_concept_10.md` — concept・find-interest・1080x1920・215 行・hf (全力版) の全量の写しを見本の形に: 生成りの紙の地と上端の章札・場面ごとの中央の線画・要素が一斉に左へ抜ける場面替え・3 段の文字 (前置き → 主文 + 下線 → 注記)・番号つきの札
+- `samples/story_03.md` — story · a summer-fes otaku monologue (vertical · meme-form solo narration) · 1080x1920 · 44.5s · 139 lines · grammar: count · ×N · stack · manner · se · sticky · def · run · bgm switch
+- `samples/story_06.md` — story · the Japanese river otter (vertical · script as given · picture-book tone) · 1080x1920 · 57.8s · 145 lines · grammar: ×N · stack · manner · se · sticky · def · run · bgm switch
+- `samples/story_13.md` — story · the Usui horse tramway (vertical · narration + two roles · nishiki-e tone) · 1080x1920 · 69.8s · 159 lines · grammar: ×N · stack · manner · se · sticky · def · run · bgm switch · 2 cast+
+- `samples/concept_10.md` — concept · Sartre and "what you want to do" (vertical · line art · quiet narration) · 1080x1920 · 49.8s · 133 lines · grammar: manner · se · sticky · def · run · bgm switch
+- `samples/concept_16.md` — concept · a malatang explainer (vertical · 13 chaptered cuts · photos + boards) · 1080x1920 · 125.0s · 231 lines · grammar: ×N · stack · manner · se · sticky · def · run · bgm switch
+- `samples/concept_17.md` — concept · Japanese-style mushroom pasta (vertical · steps + tips) · 1080x1920 · 72.3s · 153 lines · grammar: ×N · stack · manner · se · sticky · def · run · bgm switch
+- `samples/compare_05.md` — compare · ordinary CAD vs reverse engineering (horizontal · comparison + flow chart) · 1920x1080 · 170.2s · 256 lines · grammar: flow-chart cards (def node ×N + position-expression arrows) · two compared columns (×N div tiers) · count · ×N · stack · manner · se · sticky · def · run · bgm switch
+- `samples/cinematic_05.md` — cinematic · morning on an Okutama mountain stream (horizontal · live-action tone · a 5-sentence tourism PR) · 1920x1080 · 33.0s · 99 lines · grammar: persistent texture (the root veil's vignette and grain) · picture placement (subject / room) · pictures layered and swapped within one cut · count · recolor · filter · hide_subtitle · read · ambience · bgm
+- `samples/data_18.md` — data · household fixed costs (horizontal · before/after numbers + a bar chart) · 1920x1080 · 74.3s · 180 lines · grammar: a def for horizontal-bar tiers (hbar · widths in %) · count · ×N · focus · stack · manner · se · sticky · def · run · bgm switch
+- `samples/hf_compare_04.md` — compare · care-transfer · 1920x1080 · 230 lines · a full port of hf (full effort) in sample form: persistent chapter cards and three progress lines · chapter breaks swept by colored boards · subtitles with speaker chips · svg-part diagrams
+- `samples/hf_concept_01.md` — concept · b2b-support · 1920x1080 · 392 lines · a full port of hf (full effort) in sample form: photo-led picture changes per scene · a lower-left caption card and STEP chapter cards · a tablet screen built from def parts (cursor · highlight frame · speech bubble · page turns) · a progress board advanced by cues · a logo rising character by character
+- `samples/hf_concept_07.md` — concept · black-tire · 1080x1920 · 191 lines · a full port of hf (full effort) in sample form: persistent top and bottom veils with a top progress line · full-bleed photos per scene (a moving cam · transitions dissolving from black · picture changes mid-sentence)
+- `samples/hf_story_02.md` — story · office-comedy · 1080x1920 · 164 lines · a full port of hf (full effort) in sample form: a persistent title band · an org chart up front · picture changes per speech line · a def for two-line captions
+- `samples/hf_data_08.md` — data · cityhall-hours · 1920x1080 · 241 lines · a full port of hf (full effort) in sample form: a persistent band (navy round chips · sticky) · a def clock face (the hands are rotated thin boxes) · navy-card subtitles · a title card with two mask-rise lines and an underline
+- `samples/hf_story_09.md` — story · soma-nomaoi · 1920x1080 · 270 lines · a full port of hf (full effort) in sample form: an opening from black with vignette and grain throughout · shadow under the subtitles · drifting dust
+- `samples/hf_story_03.md` — story · fes-otaku · 1080x1920 · 330 lines · a full port of hf (full effort) in sample form: a persistent neon ground (gradients · light pillars · a perspective grid floor) · huge bold subtitles slammed one phrase at a time at screen center (card variants per phrase type) · photo-card scenes
+- `samples/hf_compare_05.md` — compare · cad-reverse · 1920x1080 · 386 lines · a full port of hf (full effort) in sample form: a grid-paper ground with a two-color comparison throughout · a two-tier flow chart filled word by word · process boards lighting up (cue) · a diagram whose path morphs · a point cloud and mesh
+- `samples/hf_story_06.md` — story · river-otter · 1080x1920 · 202 lines · a full port of hf (full effort) in sample form: whole-video texture (an opening from black · vignette · grain · Mincho subtitles) · full-bleed photos dissolving word by word within speech · an "absent" variant that dissolves away one otter
+- `samples/hf_concept_10.md` — concept · find-interest · 1080x1920 · 215 lines · a full port of hf (full effort) in sample form: an unbleached-paper ground with top chapter chips · a central line drawing per scene · scene changes where everything sweeps out to the left · three text tiers (lead-in → main + underline → note) · numbered cards
 
-## 文法で書けなかった物・罠
+## Beyond the grammar (traps)
 
-1. **字幕の語の印は色と地だけ** — `run m { marker: 色 }` は字幕では字の高さいっぱいの地 (比は効かない)・語の下の細い帯は字幕に敷けない (design の文字なら `[!#名{m} marker]` で伸ばせる)。
-2. **`path: "M…"` / `points:` の shape は枠 (left top width height) を持てない** (点は canvas px) → `×N` で並べられず 1 本ずつ書く (名の形 `path: zigzag` などは枠を持てる)。
-4. **箱の影は 2 本まで** — CSS と同じく `box-shadow: a, b` で重ねる (輪 + 落ち影・光彩 + 落ち影)。3 本目は近い影にまとめる。硬い影は blur 0 (`box-shadow: 12px 12px 0 $ink`)。
-5. **組み込みの部品は無い**: 人物の舞台 (箱 + 地の形 + 透過の人物 = 3〜4 行)・結論の帯 (地つき icon + 文 + tag = 3 行)・手順の札 (番号 + 文 = 3 行)・lockup (3 行) は繰り返すなら `def` に畳む (authoring.md「根の雛形」)。
-6. **icon の地は 1 行** — `icon#i(font-size: 60px; name: leaf; background: $a)` で丸い地 (`border-radius: 18px` で角丸の四角・`padding:` は既定 size の 0.3・icon の色は地と反対の ink)。地の箱は size + 2 × padding で、書いた left / top と位置の式の辺もこの箱。線の icon (Lucide の名・`in: draw`) と著述の icon の地も同じ書き方 (描き出しは線だけ・地は fade で出る)。
-7. **`run` に letter-spacing が無い** — 小見出しの字間は文字ごとに `letter-spacing:`。
-8. **`div` は素の箱** — CSS の div と同じく地・縁・影・角丸・余白を持たない (容器はそのまま書く)。板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)`・繰り返すなら `def card = div(…)` か根の `div { … }`。暗い theme の塗りの板は glass (淡い縁つき — 縁を消すなら `border: none`)。板は役目 (複数の子を束ねる・写真や模様の上で読ませる・場を区切る) がある時だけ — 文字 1 つを乗せるだけの板は書かず、文字は地に直接置く。
-9. **縦書きの主文は 1 列 600 px まで** (8 字 × 76 は入らない・`height` を超えると offcanvas) — 字数か size を落とす。
-11. **棒の長さは著者が計算する** — 横棒は `width: {v}%` (段の内側の幅の比) で、値 ÷ 最大 × 棒に使える比 (段の幅 − 札 − 値の札) を書く。値 0 は `1%` の切れ端で見せる。行の色は ×N の `;` の列 (`c: "$mute;$a"`)・語で替えるなら `[!#名[k].b fill,$c]`。
-13. **記述の書体は字ごと幅の詰め組み書体に当たりにくい** (「詰めて組める」と書いても等幅かなのゴシックに解決) — 行頭の「 が空くので見出しは括弧を使わず `run` の色で強調する。欧文の記述は代替字形の癖の強い family に当たることがあり、「細い / 細身」は写真の上で読めない Light になる — render の frame で字形を見て記述を替える。
-14. **縦の字幕は 34 px で 18 字を超えると札の余白が潰れて縁に付く** (warn は出ない) — 台詞に `[|]` を置いて札を割る。
+1. **Word marks in subtitles are color and ground only** — `run m { marker: 色 }` in subtitles is a ground the full height of the glyphs (the ratio has no effect); a thin band under a word cannot be laid in subtitles (on design text, `[!#名{m} marker]` can stretch one).
+2. **A `path: "M…"` / `points:` shape cannot hold a frame (left top width height)** (points are canvas px) → it cannot be laid out with `×N`; write each one by hand (named shapes such as `path: zigzag` can hold a frame).
+4. **Box shadows: two at most** — stack with `box-shadow: a, b` as in CSS (ring + drop shadow · glow + drop shadow). Fold a third into the nearer shadow. A hard shadow is blur 0 (`box-shadow: 12px 12px 0 $ink`).
+5. **There are no built-in parts**: a character stage (box + ground shape + transparent figure = 3–4 lines), a conclusion band (grounded icon + sentence + tag = 3 lines), step cards (number + sentence = 3 lines), lockups (3 lines) — fold them into a `def` when repeated (authoring.md "Root templates").
+6. **An icon's ground is one line** — `icon#i(font-size: 60px; name: leaf; background: $a)` gives a round ground (`border-radius: 18px` for a rounded square · `padding:` defaults to 0.3 of size · the icon's color is the ink opposite the ground). The ground box is size + 2 × padding, and the written left / top and position-expression edges use this box. Line icons (Lucide names · `in: draw`) and described icons take their grounds the same way (the draw-in is the line only; the ground fades in).
+7. **`run` has no letter-spacing** — space a kicker's letters per text with `letter-spacing:`.
+8. **`div` is a bare box** — like a CSS div it has no ground, border, shadow, rounding or padding (containers are written as-is). Write a board with declarations: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)` · repeated, `def card = div(…)` or the root's `div { … }`. On a dark theme a filled board is glass (a faint border — remove it with `border: none`). A board exists only for a job (grouping several children · making text readable over a photo or pattern · dividing the stage) — never write a board that merely carries one text; put the text straight on the ground.
+9. **Vertical main text runs one column up to 600 px** (8 chars × 76 do not fit; exceeding `height` goes offcanvas) — cut the character count or the size.
+11. **The author computes bar lengths** — a horizontal bar is `width: {v}%` (a ratio of the tier's inner width): write value ÷ max × the ratio available to the bar (tier width − card − value card). Show a 0 value as a `1%` sliver. Row colors are the ×N `;` list (`c: "$mute;$a"`); to change one on a word, `[!#名[k].b fill,$c]`.
+13. **Font descriptions rarely land on per-glyph tight-set fonts** (even「詰めて組める」resolves to a monospaced-kana gothic) — a line-leading 「 leaves a gap, so avoid brackets in headings and emphasize with `run` colors. Latin descriptions can land on families with strong alternate-glyph quirks, and「細い / 細身」becomes a Light unreadable over photos — look at the glyphs in the render frames and change the description.
+14. **Vertical subtitles past 18 chars at 34 px crush the card's padding against its border** (no warn fires) — put `[|]` in the speech to split the card.

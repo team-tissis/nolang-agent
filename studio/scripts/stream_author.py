@@ -148,22 +148,25 @@ def pick_samples(typ: str, aspect: str, request: str) -> tuple[tuple[str, ...], 
 # 3 役の system prompt の冒頭 — プロの制作者への依頼の形 (hf の試行者に渡した依頼と同じ言い方)。作法の規則は渡さず、文法と機構の事実
 # と制作の作法の抜粋 (reference/craft.md) を渡す。規則の束 (plan の規則・担当の 8 観点・確認表・style の組) より両順の比べで勝った (10-23)
 SYSTEM_HEAD = (
-    "あなたはプロのモーションデザイナー兼動画編集者です。動画はいつもどおり HTML + CSS + GSAP で作ります (scene の DOM を書き、"
-    "class で見た目を揃え、GSAP の timeline で要素ごとの入場・状態変化・退場を打つ)。今回はその動画を NoLang の draft src "
-    "(HTML / CSS / GSAP の圧縮形) で書きます。声は NoLang の音声合成、画像は NoLang の画像生成、BGM・効果音・書体は NoLang の"
-    "カタログから、どれも説明文で注文します。動きと音 (BGM・出現の効果音) まで作り込むこと。仕上がりの目安は、プロが作った解説動画"
-    "として出せる密度と階層です。\n"
-    "作業は 3 つの役で分けます — 全体を書く著者・cut を仕上げる担当・check の指摘を直す直し役。どの役か、変えてよい物は user の指示に"
-    "従います。\n"
-    "この会話に道具はありません (file は読めず書けず、command も打てません)。下の文書が draft src の書き方の全部です — file を読もうと"
-    "しないでください。check と render は別の process が打ちます。あなたは本文に src を書くだけです。\n"
+    "You are a professional motion designer and video editor. You normally build videos with HTML + CSS + GSAP (write the"
+    " scene's DOM, align the look with classes, and drive each element's entrance, state changes and exit on a GSAP"
+    " timeline). This time you write that video as NoLang draft src, a compressed form of HTML / CSS / GSAP. Voices come"
+    " from NoLang's speech synthesis, pictures from NoLang's image generation, and BGM, sound effects and fonts from"
+    " NoLang's catalog — you order each with a short description. Build it out to the motion and the sound (BGM, entrance"
+    " sound effects). The bar is the density and hierarchy of an explainer video a professional studio could ship.\n"
+    "The work is split into three roles — the author who writes the whole video, the staff who finishes a cut, and the"
+    " fixer who repairs what check flags. Which role you are, and what you may change, follow the user's instructions.\n"
+    "This conversation has no tools (you cannot read or write files, and cannot run commands). The documents below are"
+    " everything there is about writing draft src — do not try to read files. check and render are run by another"
+    " process. You only write src in your reply.\n"
 )
 CRAFT_HEAD = (
-    "以下は HTML + GSAP で動画を作る制作ガイドの抜粋です。この会話には道具も file も無いので、command・file (SPEC.md など)・"
-    "人に確認する手順の話は読み飛ばし、作り方の考え方として読んでください。書き方 (綴り) は上の draft src の文書に従います。\n\n"
+    "The following is an excerpt from a production guide for making videos with HTML + GSAP. This conversation has no"
+    " tools and no files, so skip anything about commands, files (SPEC.md and the like) or confirming with a person, and"
+    " read it for the craft. For spelling, follow the draft src documents above.\n\n"
 )
 # SKILL.md のうち stream の役に渡す節 (文法)。工程・ループ・規則の一覧・stream の段取りは対話で skill を使う時の物なので渡さない
-SKILL_GRAMMAR = ("## 違い", "## 書き方の対応", "## 書けない物")
+SKILL_GRAMMAR = ("## Differences", "## Spelling map", "## What cannot be written")
 
 
 def _skill_grammar() -> str:
@@ -182,21 +185,21 @@ def build_system_prompt(out: Path, samples: tuple[str, ...] | None) -> Path:
     looks = (SKILL / "reference/looks.md").read_text()
     parts = [
         SYSTEM_HEAD,
-        "\n<!-- ===== draft src の書き方 ===== -->\n\n" + _skill_grammar(),
-        "\n<!-- ===== reference/looks.md (罠) ===== -->\n\n## 文法で書けなかった物・罠"
-        + looks.split("## 文法で書けなかった物・罠", 1)[1],
+        "\n<!-- ===== how to write draft src ===== -->\n\n" + _skill_grammar(),
+        "\n<!-- ===== reference/looks.md (traps) ===== -->\n\n## Beyond the grammar (traps)"
+        + looks.split("## Beyond the grammar (traps)", 1)[1],
     ]
     # sounds.md のうち道具の節 (listen / engine の聴き比べ) は落とす — 3 役は command を打てない (SYSTEM_HEAD と矛盾する)
     sounds = re.sub(
-        r"(?ms)^## (?:BGM は候補を聴いて選ぶ|聴取 check).*?(?=^## |\Z)", "", (SKILL / "reference/sounds.md").read_text()
+        r"(?ms)^## (?:BGM: listen to candidates|Listening check).*?(?=^## |\Z)",
+        "",
+        (SKILL / "reference/sounds.md").read_text(),
     )
     parts.append("\n<!-- ===== reference/sounds.md ===== -->\n\n" + sounds)
     for rel in ("reference/authoring.md", "reference/capabilities.md"):
         parts.append(f"\n<!-- ===== {rel} ===== -->\n\n" + (SKILL / rel).read_text())
     parts.append(
-        "\n<!-- ===== 制作の作法 (英語の原文のまま) ===== -->\n\n"
-        + CRAFT_HEAD
-        + (SKILL / "reference/craft.md").read_text()
+        "\n<!-- ===== production craft ===== -->\n\n" + CRAFT_HEAD + (SKILL / "reference/craft.md").read_text()
     )
     parts.append(samples_text(samples or ()))
     out.write_text("".join(parts))
@@ -206,7 +209,7 @@ def build_system_prompt(out: Path, samples: tuple[str, ...] | None) -> Path:
 def samples_text(samples: tuple[str, ...]) -> str:
     """見本 2 本の本文 (著者の user turn に置く)。"""
     return "".join(
-        f"\n<!-- ===== 見本 reference/samples/{name} ===== -->\n\n" + (SAMPLES_DIR / name).read_text()
+        f"\n<!-- ===== sample reference/samples/{name} ===== -->\n\n" + (SAMPLES_DIR / name).read_text()
         for name in samples
     )
 
@@ -217,62 +220,64 @@ def author_prompt(
     """著者の user turn。構成の型・雛形・数字の規則は渡さない (台本と絵コンテは著者が依頼から決める)。雛形は 1 行目と canvas だけ —
     役の入った雛形 (cut の役・定義済みの段・theme dark) を渡すと部品を写し、暗い地に揃った (10-23)。"""
     if seconds == AUTO_SECONDS:
-        allot = "長さの指定は無い — 内容に合う長さを自分で決め、cut ごとに目標秒を置く"
+        allot = "No length was specified — decide a length that fits the content and give every cut a target"
         closing = ""
     else:
-        allot = f"plan で長さの目安 {seconds} 秒を cut へ配り (目標秒の和 = {seconds})"
-        closing = "締めの cut は 10〜30 秒の弾性 (前の cut の伸び縮みを締めで吸う)。"
-    length_rule = f"""- 尺は台詞の量で決まり、書いた後に測って直す往復は無い。{allot}、
-  目標秒を文の数に直す: 台詞の 1 文 (`@` の 1 行) ≈ 5 秒 (25〜30 字) なので、cut の文の数 = 目標秒 ÷ 5 (plan の行に `(目標秒・N 文)`)。
-  cut にはその数の文を書く — 長い動画ほど文が足りなくなりやすい (秒の目分量は実際より長く見積もる)。文ごとに画面の変化 (出る要素・
-  状態の変化・絵の切替) を 1 つ以上結ぶ。{closing}各 cut の timeline の最後の台詞の行の次 (transition の前) に、書いた文の数と秒の目安を
-  注記で書く: `# 台詞 N 文 ~M s`。
-- 依頼が読み上げる台本・原稿の文を渡している (そのまま読む) なら、その文を一字も変えずに台詞にし、目標秒は台本の量から出す (長さの目安に
-  合わせて文を足さない・削らない)。その時は plan の最初の行に `{VERBATIM_MARK}` と書く。"""
-    return f"""あなたはこの動画の著者です。下のユーザーの依頼の動画を 0 から作ります。台本 (ナレーション文) は依頼から自分で書く
-(依頼に台本・テロップの文言があればそのまま使う)。動きと音 (BGM・出現の効果音) まで作り込むこと。仕上がりの目安は、プロが作った
-解説動画として出せる密度と階層です。
+        allot = (
+            f"Spread the target length of {seconds} seconds over the cuts in the plan (the targets sum to {seconds})"
+        )
+        closing = "The closing cut is elastic, 10–30 seconds (it absorbs the other cuts' stretch). "
+    length_rule = f"""- Length is set by the amount of speech; there is no write-measure-revise loop. {allot},
+  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ 5 seconds (25–30 characters), so a cut's sentences = target seconds ÷ 5 (write `(target seconds · N sentences)` on the plan line).
+  Write that many sentences in the cut — long videos tend to run short on sentences (eyeballed seconds read longer than they are). Tie at least one screen change (an element entering, a
+  state change, a picture swap) to every sentence. {closing}Right after the last speech line of each cut's timeline (before the transition), note the sentence count and the
+  estimated seconds: `# speech N sentences ~M s`.
+- If the request hands over a script to read aloud (verbatim), use its sentences as the speech without changing a character, and derive the target seconds from the script's
+  amount (do not add or cut sentences to meet the target length). In that case write `{VERBATIM_MARK}` as the first line of the plan."""
+    return f"""You are the author of this video. You build the video in the user request below from scratch. Write the script (the narration)
+yourself from the request (if the request carries a script or on-screen wording, use it as is). Build it out to the motion and the sound
+(BGM, entrance sound effects). The bar is the density and hierarchy of an explainer video a professional studio could ship.
 
-まず構成 (plan) と根を書き、続けて cut を構成の順に上から一度に書きます。書いた端から別の process が cut ごとに check と描画を
-始めるので、書きながら前に戻って直さない。各 cut はこの後、別の担当が仕上げます。
+Write the plan and the root first, then the cuts in the plan's order, top to bottom, in one pass. Another process starts checking and
+rendering each cut as soon as it is written, so never go back and revise while writing. Each cut is finished afterwards by its own staff.
 
-draft src の段取りの決まり (機構の事実):
-- 画面は {aspect} — 根の canvas は `canvas {canvas}` (見本の canvas を写さない・位置と大きさもこの画面で決める)。
-- 根に置く物は動画全体の設定 (palette / font / fonts / photo_style / cut の既定 / subtitle / bgm / cast / transition= / read / cut を跨ぐ層)。
-- 名のある定義 (def・motion・run・svg・sound・image・cue) は、それを初めて使う cut の design の行 (`section#名` の次) に書く — 後の cut も
-  その名を使える (同じ名を 2 度は定義しない・使う cut より後の cut に定義を書かない)。
-- 根の層 (`.sticky`) には `out:` と `end` 基準の key を書かない (閉じる cut が来るまで描画が止まる)。
-- 要素の名は cut の名を頭に (`hook` の cut なら `hook_t`・`hook_img`)。根の物を除き、cut を跨いで同じ名を使わない。
-- 絵の生成は時代・形・数の段階を守らない・1 枚の説明に 2 場面を書くと上下 2 枚の合成になる。同じ物を 2 枚以上に描くなら根に
-  `image 名 = "…"` を置き各絵は `[ref:@名]` で派生させる。生成された絵は誰も見られないので、文字を置く所は `subject:` / `room:` で空けられる。
+The mechanics of draft src (facts of the machine):
+- The screen is {aspect} — the root canvas is `canvas {canvas}` (do not copy a sample's canvas; decide positions and sizes for this screen).
+- The root holds the video-wide settings (palette / font / fonts / photo_style / cut defaults / subtitle / bgm / cast / transition= / read / layers that span cuts).
+- A named definition (def, motion, run, svg, sound, image, cue) is written in the design of the cut that first uses it (right after
+  `section#name`) — later cuts can use the name (never define the same name twice, and never define it in a cut later than its first use).
+- Do not write `out:` or `end`-based keys on a root (`.sticky`) layer (rendering stalls until the closing cut arrives).
+- Prefix element names with the cut's name (in cut `hook`: `hook_t`, `hook_img`). Except the root's elements, never reuse a name across cuts.
+- Image generation does not keep eras, shapes or counts straight; a description with two scenes becomes a stacked two-picture composite. To draw the same thing in two or more pictures, put
+  `image name = "…"` in the root and derive each picture with `[ref:@name]`. Nobody gets to look at the generated pictures, so clear the spot where text goes with `subject:` / `room:`.
 {length_rule}
-{editable_note()}{editable_author_note(referenced=bool(reference))}出力の形 (この形以外は書かない。前置き・説明・code fence・見出しは書かない。各 `=== … ===` の行は行頭から):
+{editable_note()}{editable_author_note(referenced=bool(reference))}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
 === plan ===
-名: この cut で何を見せ、どう動かすか (目標秒・N 文)      ← 1 行 1 cut・名は英小文字・この順で cut が並ぶ
+name: what this cut shows and how it moves (target seconds · N sentences)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
 === root_design ===
-design.txt の `section#` より前の全部 (`#v2` から)
+everything in design.txt before `section#` (from `#v2`)
 === root_timeline ===
-timeline.txt の `***` より前の全部 (`#v2`・cast・transition=・read)
-=== cut 名 ===
-section#名(…)            ← この cut の design の行 (字下げ 0。字下げ 2 空白は子だけ)。この cut で初めて使う定義はこの直後に
+everything in timeline.txt before `***` (`#v2`, cast, transition=, read)
+=== cut name ===
+section#name(…)            ← this cut's design lines (indent 0; two-space indent is for children only). Definitions first used in this cut go right after this line
 …
 ---timeline---
-*** 名                    ← この cut の timeline の block (台詞・印・se・最後の行に transition)
+*** name                    ← this cut's timeline block (speech, marks, se, the transition on the last line)
 …
-# 台詞 N 文 ~M s          ← 最後の台詞の行の次
+# speech N sentences ~M s          ← right after the last speech line
 transition …
-=== cut 次の名 ===
+=== cut next-name ===
 …
 === end ===
 
-根も cut も 0 から書く (雛形は 1 行目と画面だけ):
+Write the root and the cuts from scratch (the scaffold is only the first line and the screen):
 --- design.txt ---
 #v2
 canvas {canvas}
 --- timeline.txt ---
 #v2
 {samples}{reference}{speech}{request}
-ユーザーの設定: 縦横比 {aspect} ({canvas})・長さの目安 {"指定なし" if seconds == AUTO_SECONDS else f"{seconds} 秒"}
+User settings: aspect {aspect} ({canvas}) · target length {"not specified" if seconds == AUTO_SECONDS else f"{seconds} seconds"}
 """
 
 
@@ -300,77 +305,78 @@ def staff_prompt(
     (依頼の遵守・根・定義を変えない・台詞は直してよいが逐語の台本は変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
     k, m = (order.index(name) + 1, len(order)) if order and name in order else (0, len(order or []))
     prev = (
-        f"前の cut `{prev_name}` (著者の版・参考。変えない。前の cut も別の担当が並列に仕上げるので、実際の画面はこの版と違う):\n"
+        f"The previous cut `{prev_name}` (the author's version, for reference. Do not change it. That cut is being finished in parallel by its own staff, so the real screen will differ):\n"
         f"=== cut {prev_name} ===\n{prev_block}=== end ===\n"
         if prev_name and prev_block
         else ""
     )
     if keep_assets:
-        speech_rule = "台詞 (`@` の行) は文字も行の割り方も変えない (声は著者の版からもう作っている。印は足してよい)。"
+        speech_rule = "Do not change the speech (`@` lines) — neither the characters nor how the lines split (the voice is already being made from the author's version; adding marks is fine). "
         picture_rule = (
-            "絵 (`img#` の説明文と `subject:` / `room:`) は著者の版のまま — 説明文を変えない・新しい説明文の絵を足さない (絵は著者の版から"
-            "もう作っている。同じ説明文の絵の置き直し・位置と大きさは変えてよい)。文字は絵の `room:` の空きに置く。"
+            "Pictures (`img#` descriptions and `subject:` / `room:`) stay as the author wrote them — do not change a description or add a picture with a new description (the pictures are"
+            " already being made from the author's version; re-placing the same description, and changing position and size, are fine). Put text in the opening the picture's `room:` leaves."
         )
     else:
         speech_rule = (
-            "台詞 (`@` の行の文字) は一字も変えない (依頼の台本をそのまま読む動画。許すのは読点の追加と `{表記|読み}` の読みの指定だけ)。"
+            "Do not change a single character of the speech (`@` lines' characters) — this video reads the request's script verbatim (only added commas and the reading notation `{表記|読み}` are allowed). "
             if verbatim
-            else "台詞 (`@` の行の文字) も直してよい (声と字幕はこの版から作る・この後の直し役は変えない)。構成のこの cut の中身と文の数は保つ。"
+            else "You may also fix the speech (`@` lines' characters) (the voice and subtitles are made from this version; the fixer after you cannot change them). Keep this cut's planned content and sentence count. "
         )
         picture_rule = (
-            "絵の説明文を書き換えられるのはこの段だけ (この後の直し役は変えない)。生成された絵は見られないので、文字を置く所は"
-            " `subject:` / `room:` で空ける。"
+            "This is the only stage that may rewrite a picture's description (the fixer after you cannot). The generated pictures cannot be looked at, so clear the spot where"
+            " text goes with `subject:` / `room:`."
         )
-    return f"""あなたはプロのモーションデザイナー兼動画編集者で、この動画の cut `{name}` の担当です。著者が書いた block を受け取りました。
-この cut を、プロが作った解説動画として出せる密度と階層に仕上げてください。動きと音まで作り込むこと。必要なら作り替えてよい。
+    return f"""You are a professional motion designer and video editor, the staff in charge of cut `{name}` of this video. You received the block the author wrote.
+Finish this cut to the density and hierarchy of an explainer video a professional studio could ship. Build it out to the motion and the sound. Rebuild it if needed.
 
-守る事 (機構の事実):
-- 下のユーザーの依頼の指示 (見せ方・色・文字・入れる物 / 入れない物など) は守る — 仕上げで作り替えても依頼から外れない。
-- {speech_rule}話者 (`@名:`) は保つ。
-- 根 (palette・font・cast) と前の cut の定義 (def・motion・run) は変えない (使ってよい)。この cut の block の定義も後の cut が同じ名で
-  使っている — 名・引数の形・見た目を変えない。別の形や見た目が要るなら新しい名で定義してこの block で使う。要素の名の接頭辞 (`{name}`) は保つ。
-- 文ごとの絵を「タイトル + 写真」で済ませず、結論の札か状態の変化を主役として立てる (章の入りに題と写真だけの溜めを作らない)。
+What to keep (facts of the machine):
+- The user's request below (how to show things, colors, text, what goes in and what stays out) binds you — however much you rebuild, do not drift from it.
+- {speech_rule}Keep the speakers (`@name:`).
+- Do not change the root (palette, font, cast) or earlier cuts' definitions (def, motion, run) (using them is fine). This block's definitions are used by later cuts under the same
+  names — do not change a name, an argument shape or a look. If you need another shape or look, define it under a new name and use it in this block. Keep the element-name prefix (`{name}`).
+- Do not settle a sentence's picture for "a title + a photo" — make a conclusion card or a state change the hero (no title-and-photo idle beat at a chapter's start).
 - {picture_rule}
-- key は authoring の「型」の表にある物だけ (無い key は DEFECT で cut が落ちる)。`hug` は字幕専用。印 (`[>#名]` `[!#名 …]`) はこの cut の層と根の要素 (跨いで出る札・字幕 — 著者が出す語を決めた `[>#名]` は残す) に付ける。前の cut の層には付けない・根の要素を写した別の要素を作らない。
-- DEFECT の常連: `"a;b"` の列は ×N の instance ごとの値 — その要素 (か def の呼び出し) の行末に `×N` が要る / 同じ key は 1 要素に 1 回 /
-  `名{{tok}}` の tok は空にしない / `to,{{…}}` に GSAP の位置の引数 (`,2`) は無い — 時刻は `+N` `-N` /
-  `filter` の look は全掛けの `sepia(1)` `grayscale(1)` `invert(1)` だけ。
+- Keys are only those in authoring's "Types" table (an unknown key is a DEFECT and the cut falls). `hug` is subtitles-only. Marks (`[>#name]` `[!#name …]`) go on this cut's layers and the root's elements (cards and subtitles that span cuts — keep a `[>#name]` whose word the author chose). Never mark an earlier cut's layer, and never create a copy of a root element.
+- DEFECT regulars: a `"a;b"` list is per-instance values of ×N — the element (or the def call) needs `×N` at the end of its line / the same key appears once per element /
+  a `name{{tok}}`'s tok is never empty / `to,{{…}}` has no GSAP position argument (`,2`) — timing is `+N` `-N` /
+  `filter` looks are only the full-strength `sepia(1)` `grayscale(1)` `invert(1)`.
 {editable_note()}{reference_note}
-ユーザーの依頼:
-{request.strip() or "(なし)"}
-ユーザーの設定: 長さの目安 {"指定なし" if target_s == AUTO_SECONDS else f"{target_s} 秒"} (構成の目標秒の和 {planned_s:.0f} 秒・尺は台詞で決まる)
+The user's request:
+{request.strip() or "(none)"}
+User settings: target length {"not specified" if target_s == AUTO_SECONDS else f"{target_s} seconds"} (the plan's targets sum to {planned_s:.0f} s; length is set by the speech)
 
-この cut は {k} 番目 / 全 {m} cut。
-構成:
+This cut is number {k} of {m}.
+The plan:
 {plan}
-根 (参考・変えない):
+Root (reference — do not change):
 === root_design ===
 {root_d}
 === root_timeline ===
 {root_t}
-{"前の cut の定義 (参考・変えない・使ってよい):" + chr(10) + defs_before if defs_before.strip() else ""}
+{"Definitions from earlier cuts (reference — do not change them; you may use them):" + chr(10) + defs_before if defs_before.strip() else ""}
 {prev}
-check の指摘 (著者の版・参考):
-{findings or "(なし)"}
-著者の版の時刻 (check の見積り — 秒は動画の頭から。印を動かせば変わる):
-{timing.strip() or "(なし)"}
+check's findings (on the author's version, for reference):
+{findings or "(none)"}
+The author's version's timing (check's estimate — seconds from the video's head; moving marks changes it):
+{timing.strip() or "(none)"}
 
-仕上げる block:
+The block to finish:
 === cut {name} ===
 {block}
 === end ===
 
-出力は仕上げた block だけを同じ形式で (前置き・説明・code fence は書かない。`=== cut {name} ===` から `=== end ===` まで)。
+Output only the finished block in the same format (no preamble, no explanations, no code fences; from `=== cut {name} ===` through `=== end ===`).
 """
 
 
 # 長さの指定なし (おまかせ) の params の秒 — 著者が長さを決め、尺の指摘は著者の目標秒だけを見る (締めの弾性なし)
 AUTO_SECONDS = "auto"
 # 依頼の台本をそのまま読む (逐語) と著者が判じた時に plan の最初の行に書く注記 — 尺の指摘を掛けない (文の足し引きが内容の改変になる)
-VERBATIM_MARK = "# 台本: 依頼の文のまま"
-# 依頼文が逐語の読み上げを求める強い言い回し (著者の注記と並ぶ 2 つ目の合図)
+VERBATIM_MARK = "# script: verbatim from the request"
+# 依頼文が逐語の読み上げを求める強い言い回し (著者の注記と並ぶ 2 つ目の合図)。依頼はユーザーの言語のまま来るので日本語も見る
 VERBATIM_REQUEST = re.compile(
     r"そのまま(?:読み上げ|読んで|読む|使って|ナレーション)|一字一句|原文のまま|台本(?:どおり|通り)|原稿(?:どおり|通り)"
+    r"|verbatim|word for word|read (?:it |this )?(?:aloud )?as[- ]is"
 )
 
 
@@ -382,8 +388,8 @@ def is_verbatim(plan: str, request: str) -> bool:
 # 台詞の尺の指摘 (orchestrator の stage が check の見積りと plan の目標秒から出す — `stream_run.Run.length_finding`)。直し役はこの
 # 指摘がある時だけ台詞の行を文ごと消す / 足してよい
 LENGTH_RULE = "cut_length"
-# 著者が cut の timeline の最後の台詞の次に書く、文の数と台詞を読む秒の目安の注記 (`# 台詞 4 文 ~20 s`)
-DECLARED_SECONDS = re.compile(r"^#\s*台詞[^\n]*?[~〜約]\s*(\d+(?:\.\d+)?)\s*(?:s|秒)", re.M)
+# 著者が cut の timeline の最後の台詞の次に書く、文の数と台詞を読む秒の目安の注記 (`# speech N sentences ~M s`)。旧形 (台詞) も受ける
+DECLARED_SECONDS = re.compile(r"^#\s*(?:speech|台詞)[^\n]*?[~〜約]\s*(\d+(?:\.\d+)?)\s*(?:s|秒)", re.M)
 
 
 def editable_note() -> str:
@@ -393,21 +399,21 @@ def editable_note() -> str:
     if os.environ.get("NOLANG_STUDIO_PROFILE") != "editable":
         return ""
     return """
-編集可能モード (この動画はユーザーが編集画面で自分で調整する — 編集できる語彙だけで書く。破ると投入で DEFECT `editable_*` になり、
-その cut は直しの往復で再生が遅れるか、動きを機械で fade に置き換えられる):
-- 1 cut の要素は 25 個まで (×N は N と数える)。情報は札 1 枚 (×N の項目・箇条) に束ねる (cut を増やすのは構成を書く時だけ — 直しでは cut を分けない)。
-- 語に結ぶ状態変化 (`[!…]` `[=…]`) は 1 cut 2 個まで — 主役の強調 1 回と still 割り 1 回に使う (立ち絵の表情・動作の切替は数えない)。
-- group / camera / svg / 数える数字 (`[count:]`) は使わない。部分の色・大きさの `{tok}` の run と、cut を跨いで残す `.sticky`
-  の層 (常設の帯・ロゴの札) は使ってよい (語の印 `[!…]` の的に run は取らない)。
-- 動きはこの形だけで書く (正の例 — これで十分な画面になる):
-  `in: fade`・`in: pop`・`in:{y:40, opacity:0, duration:.5}`・`in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`・
-  `out: fade`・`out:{opacity:0, duration:.3}`・絵の常時は `main: kb {scale: [1, 1.06]}`・札や文字の常時は `main: float`
-  (上下の揺れ)・図の常時は `main: pulse` (脈動)。
-  使えない形 (門で弾かれて cut が遅れる): `keys(at=…)` の keyframe 列・`path:`・float / pulse 以外の常時の動き (`main: sway`・文字単位の `wave` 等)・
-  filter の tween・`ease:'back.out(1.7)'` などの係数つき easing (語の ease だけ可)。
-- 書体は 3 種まで・影 (box-shadow) は 1 種を def で使い回す (flat な板を既定に)。文字の段は見出し / 本文 / 札の 3 段を def で揃える。
-- ユーザーが選んだ参照の動画がある時は、上の数の線は参照が使っている量まで緩む — 参照の根・常設の層 (枠・ロゴの札・
-  マスコット・字幕の箱) をそのまま写す (下の「ユーザーが選んだ形」の節)。
+Editable mode (the user will adjust this video themselves in the editor — write only inside the editable vocabulary. Breaking
+it turns the submission into a DEFECT `editable_*`: the cut loses time in fix round-trips, or its motion is mechanically replaced with a fade):
+- At most 25 elements per cut (×N counts as N). Fold information into one card (×N items, bullet rows) (add cuts only while planning — never split a cut during fixes).
+- At most 2 word-bound state changes (`[!…]` `[=…]`) per cut — spend them on one hero emphasis and one still split (standing-figure expression and pose switches do not count).
+- Do not use group / camera / svg / counting numbers (`[count:]`). Partial color / size `{tok}` runs, and `.sticky` layers
+  that persist across cuts (a standing band, a logo card), are fine (a run cannot be the target of a word mark `[!…]`).
+- Write motion only in these forms (positive examples — they are enough for a good screen):
+  `in: fade`, `in: pop`, `in:{y:40, opacity:0, duration:.5}`, `in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`,
+  `out: fade`, `out:{opacity:0, duration:.3}`; a picture's ambient is `main: kb {scale: [1, 1.06]}`; a card's or text's
+  ambient is `main: float` (a gentle bob); a diagram's ambient is `main: pulse`.
+  Forms that cannot be used (the gate rejects them and the cut is delayed): `keys(at=…)` keyframe rows, `path:`, ambient motions other than float / pulse (`main: sway`, per-glyph `wave`, …),
+  filter tweens, and coefficient easings like `ease:'back.out(1.7)'` (word easings only).
+- At most 3 fonts; one box-shadow, reused through a def (default to flat boards). Align text sizes to three tiers — heading / body / card — with defs.
+- When the user picked a reference video, the quantity lines above relax to what the reference uses — copy the reference's
+  root and persistent layers (frames, logo cards, mascots, the subtitle box) as they are (see "the shape the user chose" below).
 """
 
 
@@ -418,16 +424,16 @@ def editable_author_note(*, referenced: bool = False) -> str:
         return ""
     if referenced:
         return """
-編集可能モードの段取り (参照あり・plan を先に):
-- 全体の長考をしない — まず plan と根を出す。根 (palette・font・def・字幕・常設の層) は参照の根をそのまま写す。
-- cut の画面は参照の cut の型 (表紙・事例・ポイント・まとめ …) から選び、依頼の内容で埋める。参照の順と場面の型を保つ。
+Editable-mode flow (with a reference — plan first):
+- No long deliberation up front — put out the plan and the root first. Copy the reference's root (palette, font, defs, subtitle, persistent layers) as it is.
+- Pick each cut's screen from the reference's cut shapes (cover, case, point, wrap-up, …) and fill it with the request's content. Keep the reference's order and scene shapes.
 """
     return """
-編集可能モードの段取り (設計を軽く・plan を先に):
-- 全体の長考をしない — まず plan と根を出し、cut は書きながら決める。根は最小の design system を定型で即決してよい:
-  palette 2〜3 色・font 1〜2 種・文字の段の def (見出し / 本文 / 札) と card の def 1 つ。凝った根 (質感層・多段の def) は作らない。
-- cut の画面は定型から選ぶ: 「見出し + 札 (または図) + 強調 1 つ」・「全面の絵 + 帯の札」・「hero の数字 + 補足」級 —
-  この級で十分で、編集画面でユーザーが動かせる形になる。
+Editable-mode flow (light design — plan first):
+- No long deliberation up front — put out the plan and the root first, and decide cuts as you write. The root may be a minimal design system decided on the spot:
+  2–3 palette colors, 1–2 fonts, text-tier defs (heading / body / card) and one card def. Do not build an ornate root (texture layers, multi-tier defs).
+- Pick each cut's screen from the stock shapes: "heading + card (or diagram) + one emphasis", "full-bleed picture + a band card", "hero number + a footnote" —
+  this tier is enough, and it stays in a shape the user can move in the editor.
 """
 
 
@@ -457,8 +463,9 @@ def reference_role_note(project: Path) -> str:
     if ref is None:
         return ""
     return (
-        f"\nこの動画はユーザーが選んだ参照の動画「{ref['title']}」の形 (根の palette / font / def と cut の組み) を土台にしている —"
-        " 根の design system と cut の組みの型を保つ。参照から台詞・文言は持ち込まない。\n"
+        f'\nThis video is built on the shape of the reference video the user chose, "{ref["title"]}" (its root palette / font /'
+        " defs and its cut lineup) — keep the root design system and the shapes of the cut lineup. Do not bring speech or"
+        " wording over from the reference.\n"
     )
 
 
@@ -467,13 +474,15 @@ def _numbered(text: str) -> str:
 
 
 # 見直しの静止画 (`--look`) で絵の説明文を変えてよい時。作り直しは再生を待たせるので、文脈を取り違えさせる誤りだけ (些細な違いは放置)
-PICTURE_FIX_NOTE = """絵の重い誤り (画像を見て判断し、この時だけ絵を直す): 絵が台詞・説明の中身を取り違えさせる時 — 説明している物と別の物に
-見える (球が原子の模型に見える・地図が別の国)・話の要になる数や形が違う (穴の数・矢印の向き・グラフの増減)・台詞と食い違う (人物・時代・
-場所・出来事)・重ねた図形 (輪・矢印・印) が指す対象に乗っていない。直し方は 1 つ選ぶ: (a) その img の説明文を書き直す (形と数をはっきり
-書き、説明に無い物は描かないと書く) (b) 幾何・図式の対象 (球・輪・曲面・グラフ・図解) は生成画像をやめて shape / svg の図で描き直す
-(c) 根の `image` (使い回しの絵) が誤っている時は根を変えず、この cut の `content: @名` をこの cut だけの説明文の img に替える。
-些細な違い (画風・色味・細部・構図・想像と少し違う) は直さない — 絵の作り直しは再生を待たせる。絵を直したら `=== look ===` のその行の
-頭に `絵:` を付ける。「生成中 (仮の絵)」と添えた絵は中身を判定しない。
+PICTURE_FIX_NOTE = """Serious picture errors (judge from the images, and only then fix a picture): when a picture makes the speech or the explanation
+misleading — it reads as a different thing than what is being explained (a sphere reads as an atom model; the map shows another country), a number or
+shape the story hinges on is wrong (the number of holes, an arrow's direction, a graph's rise or fall), it contradicts the speech (person, era, place,
+event), or an overlaid figure (ring, arrow, marker) does not sit on its target. Pick one fix: (a) rewrite that img's description (state the shapes and
+counts plainly, and say that nothing outside the description is drawn) (b) for geometric / schematic subjects (spheres, rings, curved surfaces, graphs,
+diagrams) drop the generated image and redraw it as a shape / svg figure (c) when the root `image` (a reused picture) is wrong, leave the root alone and
+replace this cut's `content: @name` with an img described for this cut only.
+Leave small differences alone (style, color cast, details, framing, not quite as imagined) — remaking a picture makes playback wait. When you fix a
+picture, prefix that `=== look ===` line with `picture:`. Do not judge the content of pictures annotated "still generating (placeholder)".
 """
 
 
@@ -495,78 +504,86 @@ def fix_prompt(
     指摘が無くても呼ぶ)。
     shots = 見直しに見せる静止画の名 (無ければ block を読んで描いた姿を想像させる)。"""
     if own_root:
-        root_part = f"""根 (この cut の持ち物 — 直してよい。ただし image・cast・read・photo_style・prompt_tail・art・canvas の行と、名のある定義の名は変えない):
+        root_part = f"""Root (this cut's property — you may fix it, but never change the image / cast / read / photo_style / prompt_tail / art / canvas lines, or the names of named definitions):
 === root_design ===
 {_numbered(root_d)}
 === root_timeline ===
 {_numbered(root_t)}
 """
-        where = "`@ 行番号` は cut の block の行・根の行は `@ root_design 行番号` / `@ root_timeline 行番号`"
+        where = "`@ line-number` is a line of the cut's block; root lines are `@ root_design line-number` / `@ root_timeline line-number`"
     else:
-        root_part = f"""根 (参考・変えない — 根の行の指摘はこの cut の行で避ける):
+        root_part = f"""Root (reference — do not change it; avoid a finding on a root line by editing this cut's lines):
 === root_design ===
 {root_d}
 === root_timeline ===
 {root_t}
 """
-        where = "`@ 行番号` は cut の block の行だけ (根・前の cut は変えられない — 前の cut の定義が合わなければ自分の block に別の名で定義して使う)"
-    defs = f"前の cut の定義 (参考・変えない・使ってよい):\n{defs_before}\n" if defs_before.strip() else ""
+        where = "`@ line-number` is a line of the cut's block only (the root and earlier cuts cannot be changed — if an earlier cut's definition does not fit, define your own under a new name in this block and use that)"
+    defs = (
+        f"Definitions from earlier cuts (reference — do not change them; you may use them):\n{defs_before}\n"
+        if defs_before.strip()
+        else ""
+    )
     trim = ""
     if f" {LENGTH_RULE} " in findings:
         trim = (
-            f"ただし指摘に {LENGTH_RULE} (台詞の尺が cut の目標秒から外れた) がある時だけ、台詞の行 (`@` の行) を文ごと丸ごと消す・"
-            "新しい 1 文の行を足してよい (残す行の文字は変えない。早口・`[speed:]`・`[silence:]` の詰めで合わせない)。消すのは補足の文から"
-            " (数字・結論の文は残す)。消した行の印で出していた要素は、残す行の語へ印を移すか要素ごと消す。足す文は前後の台詞と話が"
-            "つながる 1 文で、その文の語で新しい要素か状態の変化 (札・図・絵の切替) を 1 つ以上出す (足した文の間に画面を止めない)。足した文の絵は「タイトル + 写真」で済ませず、結論の札か状態の変化を主役として立てる (章の入りの溜めを作らない)。\n"
+            f"Only because the findings include {LENGTH_RULE} (the speech length missed the cut's target) you may delete whole speech lines (`@` lines)"
+            " sentence by sentence, or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
+            " talking, `[speed:]`, or packed `[silence:]`). Delete supporting sentences first (keep numbers and conclusions). For elements a deleted"
+            " line's marks brought in, move the marks to a kept line's word or delete the element too. An added sentence must continue the surrounding"
+            " speech, and its words must bring in at least one new element or state change (a card, a diagram, a picture swap) — do not leave the screen"
+            ' still during an added sentence. Do not settle an added sentence\'s picture for "a title + a photo" — make a conclusion card or a state'
+            " change the hero (no idle chapter-opening beat).\n"
         )
     look = ""
     if review or shots:
         if shots:
             names = "・".join(shots)
             intro = (
-                f"画像はこの cut を本番の renderer で描いた静止画です ({names}・時刻は cut 頭から。動画素材と立ち絵は止まった姿・口は"
-                "閉じたまま・切替の窓は写らない)。check の指摘とは別に、厳しいモーションディレクターとして画像を 1 枚ずつ見て、"
+                f"The images are stills of this cut drawn by the production renderer ({names}; times run from the cut's head. Footage and standing"
+                " figures are frozen, mouths closed, and the transition window is not shown). Apart from check's findings, look at each image as a"
+                " strict motion director, and "
             )
         else:
-            intro = "check の指摘とは別に、厳しいモーションディレクターとして block を読み、描いた姿を想像して、"
+            intro = "Apart from check's findings, read the block as a strict motion director, imagine the rendered result, and "
         kept = (
-            "台詞の文字は変えない・絵の説明文は下の「絵の重い誤り」の時だけ"
+            'the speech characters stay unchanged; picture descriptions only for a "serious picture error" below'
             if shots
-            else "台詞の文字と絵の説明文だけは変えない"
+            else "only the speech characters and the picture descriptions stay unchanged"
         )
         look = f"""
-{intro}プロの解説動画として弱い所・崩れている所を探して直す。
-配置は大きく組み替えてよい (行の置き換え・追加・削除。{kept}{" — 尺の指摘の文の消し / 足しは上のとおり" if trim else ""})。
-{PICTURE_FIX_NOTE if shots else ""}まず `=== look ===` に見つけた所を 1 行ずつ (無ければ「なし」) 書き、続けて edits を書く。直す所が無ければ `=== edits ===` の直後に `=== end ===`。
+{intro}hunt for what is weak or broken for a professional explainer video, and fix it.
+You may rearrange the layout substantially (replace, add and delete lines; {kept}{" — the length finding's sentence deletions / additions work as above" if trim else ""}).
+{PICTURE_FIX_NOTE if shots else ""}First write what you found in `=== look ===`, one line each (or "none"), then write the edits. If there is nothing to fix, put `=== end ===` right after `=== edits ===`.
 """
     head = (
-        f"cut `{name}` の block に check の指摘が出ました。"
+        f"check flagged cut `{name}`'s block. "
         if findings.strip() or not look
-        else f"cut `{name}` の block を見直して、崩れがあれば直してください (check の指摘はありません)。"
+        else f"Review cut `{name}`'s block and fix anything broken (check has no findings). "
     )
     pictures = (
-        "絵の説明文は「絵の重い誤り」の時だけ (img の行の内容。宣言は直してよい・絵を足すのは可)"
+        'the picture descriptions only for a "serious picture error" (an img line\'s content; its declaration may be fixed, and adding pictures is fine)'
         if shots
-        else "絵の説明文 (img の行の内容。宣言は直してよい・絵を足すのは可)"
+        else "the picture descriptions (an img line's content; its declaration may be fixed, and adding pictures is fine)"
     )
-    return f"""{head}直す行だけを返してください (block 全体は書き直さない — 書く時間がそのまま再生の待ちになる)。他の cut は変えない。前置きは書かない{" (`=== look ===` は書く)" if look else ""}。
-変えない物 (声と絵はもう作り始めている — 変えると作り直しで再生が待つ): 台詞の文字 (`@` の行の、印 `[…]` を除いた文字。印は動かしてよい)・{pictures}。
-直しで悪くしない (直さない方が良かった直しに多い型): 題・見出し・最初の札は cut の頭に出したまま (印を足して出を遅らせない — cut の頭を背景だけにしない)・字幕を文の途中で割らない・札や図の文字・項目・数字を減らさない・人物の顔に札や題を重ねない・cut を分けない (`section#` と `***` の見出しは足さない・変えない)。
-{editable_note()}{reference_note}{trim}形式:
+    return f"""{head}Return only the lines you fix (do not rewrite the whole block — writing time is playback wait). Do not change other cuts. No preamble{" (`=== look ===` is still written)" if look else ""}.
+Things that stay unchanged (the voice and the pictures are already being made — changing them forces a redo and the playback waits): the speech characters (an `@` line's characters excluding the marks `[…]`; marks may move) and {pictures}.
+Do not make it worse (the common shapes of fixes that should not have happened): keep the title, the heading and the first card showing from the cut's head (do not delay them with a mark — do not leave the cut's head background-only); do not split a subtitle mid-sentence; do not reduce a card's or diagram's wording, items or numbers; do not cover a person's face with a card or title; do not split the cut (never add or change `section#` and `***` headings).
+{editable_note()}{reference_note}{trim}Format:
 === edits ===
-@ 行番号
-その行の新しい中身 (複数行にしてよい・行を消すなら空のまま次の `@` へ)
-@ 行番号
+@ line-number
+the line's new content (it may span several lines; to delete the line, leave it empty and move to the next `@`)
+@ line-number
 …
 === end ===
-{where}。block の末尾に行を足すなら `@ 最後の行番号+1`。行番号は下の `N|` の物 (指摘の file:行 は 根 + cut の順に並べた design.txt / timeline.txt の行で、別物)。`N|` は番号で、行の中身ではない。
-直しが新しい欠陥を作らないために: 印で使う変種 (`[!#名 .tag]`) は design にその `#名.tag(…)` の行がある物だけ・`size=` は文字と icon だけ (箱は w= h=)・
-1 行 1 要素のまま (要素の行を途中で割らない・字下げの子は親の直後)。
-{look}check の指摘 (file:行 と直し方つき):
-{findings or "なし"}
+{where}. To append after the block's last line, use `@ last-line-number+1`. Line numbers are the `N|` ones below (a finding's file:line counts design.txt / timeline.txt with the root first — a different numbering). `N|` is the number, not part of the line.
+So the fix does not create a new defect: a variant used by a mark (`[!#name .tag]`) must have its `#name.tag(…)` line in the design; `size=` is for text and icons only (boxes take w= / h=);
+keep one element per line (do not break an element's line in the middle; an indented child sits right under its parent).
+{look}check's findings (with file:line and the fix):
+{findings or "none"}
 
 {root_part}{defs}
-直す block:
+The block to fix:
 === cut {name} ===
 {_numbered(block)}
 === end ===

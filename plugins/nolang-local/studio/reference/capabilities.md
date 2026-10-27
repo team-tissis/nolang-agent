@@ -1,149 +1,149 @@
-# runtime の能力表 — VC の型と描画の field を v2 の property・印でどう書くか
+# Runtime capability table — how VC types and render fields are written as v2 properties and marks
 
-HTML + GSAP の表現を書くとき「書けない」と思ったら、まずここで runtime (`domain/entities/video_component*.py`) の field を引く。
-書き方の列: 要素の行の CSS 宣言 (`tag#id(…)`) / 印 · **✕** = 書けない (理由)。文法の形は authoring.md、型ごとの全 key は `docs/draft_src_v2/grammar-spec-types.md`。最後の「runtime に無い物」は runtime を足す判断待ち。
+When writing an HTML + GSAP expression and you think "this can't be written", first look up the runtime field here (`domain/entities/video_component*.py`).
+The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) / marks · **✕** = cannot be written (with the reason). Grammar shapes are in authoring.md; every key per type is in `docs/draft_src_v2/grammar-spec-types.md`. The final "Not in the runtime" section is pending decisions on adding runtime.
 
-## 層の共通 (VisualLayerBase)
+## Shared by all layers (VisualLayerBase)
 
-| field | 書き方 | 備考 |
+| field | How to write | Notes |
 |---|---|---|
-| frame_layout x y w h | 根 `left top width height` / `inset: 0` / `inset: 上 右 下 左` · 子 `left top right bottom width height` (親の内側から) · 表 = 容器の `display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px` + 字下げの子 (通常の子と ×N の複製が同じ grid item・cell いっぱい・gap 既定 0) | 語で動かす = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
-| frame_layout rot | `transform: rotate(-8deg)` · `[!#名 to,rotation=-15,pivot=100%,0%]` · `[!#名 to,rotation=720]` (上限なし = 2 周) | `transform-origin` (印では `pivot=`) は回転・倍率の原点 (中心は原点のまわりの弧を辿る・静止の rotate も原点のまわり — 原点は層が持ち描画時に解く・原点つきの一周 (360° の倍数) も 1 つの状態 key のまま原点のまわりに回る (他の変化と同じ印にも書ける)・箱を書いた群の `transform-origin` と静止の `scale()` は書いた箱に対して解く (CSS どおり — engine の原点は member の合併なので写す・原点が合併の外の群に倍率 / 回転の入退場は DEFECT)) |
-| frame_layout rx ry perspective (静止の 3D の傾き) | `rotationX: 30; depth: 0.8` (`transform: rotateX()` は DEFECT) · `[!#名 to,rotationX=0,duration=1200]` (補間) | 中心まわり — 下辺を軸にするなら `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`・透視の中心は pivot (CSS の `perspective()`・depth = 短辺 ÷ 視点距離 px で、VC の perspective = 短辺 / depth px — 透視の床 = 群に `main: constant {rotationX: 70, depth: 4, pivot: 'top'}`)・子を持つ要素は子ごと 1 枚 (群の pose) で傾く。眼の後ろに出る角は描けない (native の上限): 上辺を軸に 70° 倒す床は `depth·sin(rx) ≤ 0.8` で飽和するので、床は眼より手前の高さだけにする (CSS の perspective 780px → 高さ 660px・`depth: 0.85` = 440/520) |
-| frame_layout skx sky (静止の skew) | `transform: skewX(-12deg)` · `[!#名 to,skewX=12]` (補間) | CSS の skewX と同じ向き・±80°・素材も塗りも文字も枠ごと傾く (子を持つ要素は子ごと 1 枚の群ごと) |
-| media_layout (cover の切り抜き) | `object-fit: cover; object-position: 60% 0%; zoom: 130%` · `main: kb {scale: [1.1, 1], focus: '40% 60%'}` · `[!#名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!#名 to,w=640]` (切り抜きごと補間) | zoom_media は枠が動かず素材だけ寄る (cover の絵だけ — 箱の中の絵は `[!#箱.子 zoom_media]`) |
-| media_layout x_flip y_flip | `img#名(flip: x\|y)` (写真・生成画像・svg の鏡像) · `icon#名(flip: x\|y)` (svg を焼き直す) · `avatar#名(flip: x)` | |
-| visual_filter opacity contrast brightness saturation | `filter: saturate(.3) brightness(1.2) contrast(1.1)` · 語で `[!#名 to,{filter: 'saturate(0)', duration: .6}]` (filter 全体を置き換える) | 絵・写真・svg は素材に掛かる・文字と図形 (div の塗り・縁・影も — svg に焼いた板は本体に掛かり地 / 縁 / 影を焼く) は engine が描かないので書いた色に焼く (同じ式・色を書いていない文字は DEFECT)・子を持つ div には書けない (中の絵に)・子を持つ絵は絵の素材だけ |
-| visual_filter blur (静止のぼかし px) | `filter: blur(6px)` · `[!#名 to,blur=8,duration=600]` (補間) | 層の raster 全体 (文字・板・絵)。子を持つ要素と群は子ごと 1 枚に掛かる (member ごとの raster blur の近似) |
-| visual_filter color_matrix | `filter: sepia(1)` / `invert(1)` / `hue-rotate(90deg)` (`grayscale(a)` は彩度 = `saturate(1 − a)`) · CSS に無い look は `look: cool\|warm\|faded\|polaroid\|kodachrome\|technicolor\|browni\|vintage` · 単色化 `look: #暗/#明` (duotone) · `look: #色` (絵の形 (alpha) だけ残して 1 色で塗る = CSS の `mask-image` + 単色) | **✕** 生の行列 |
-| (画面全体の色調) | `veil#名(filter: saturate(0))` (= `filter: grayscale(1)`・か `look: #000000/#3366FF`) を `[>#名]` … `[<#名]` | 開いている間、下の層 (後から出る物も) を色調の変種へ — 文字と図形は look の行列と彩度を掛けた色の変種で写す |
-| alpha | `opacity: .5` · `[!#名 dim,0.3,duration=900]` · `[!#名 to,opacity=0.5]` | 子孫にも掛かる |
-| (画面全体の閃光・暗転・揺れ) | 全面の `veil#fl(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)` を `[>#fl][!#fl to,{opacity:0, duration:.4}]` (閃光) / `[>#名]` … `[<#名]` (暗転)・揺れは出ている要素ごとの `[!#名 shake,6,duration=2200]` を同じ語に | 幕は veil・揺れは層ごとの一回きりの shake (画面全体を指す印は無い — CameraLayer は viewport だけで揺れの channel が無い) |
-| (写真の暗幕) | `img#名(scrim: right,0.45)` (`vignette,0.6` / 一様 `0.4`) | 絵の子の veil が絵の直上で一緒に出入り |
-| pattern (svg に焼く板) | `pattern: dots,間隔,色,径` (CSS の `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` も同じ) · `pattern: grid,間隔,色,幅` (CSS の方眼 `background-image: linear-gradient(色 1px, transparent 1px), linear-gradient(90deg, 色 1px, transparent 1px); background-size: 60px 60px` も同じ — 縦横 1 枚ずつ・同じ色と幅) · `mask-image: radial-gradient(…)` で放射に薄める | 板の svg (FE は同じ画像) |
-| border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (箱・形・文字の札・楕円) · 辺の線 `border-top: 3px solid #色` (箱は `dashed` / `dotted` も・札の辺は実線) · `border-radius:` (角ごと `border-radius: 0 33px 33px 0` は svg に焼く・全隅が同じ `50%` 以上は楕円 (CSS どおり・幅と高さの変化に追随)・pill は `999px`) | 50% 未満の %・角ごとの %・`a / b` (CSS の楕円の角) は短辺 × N% の円の角で描く (warn)・破線 / 点線は Chromium と同じ模様 (dashed: 幅 3 以上は線 2W・間 W・細い線は 3W / 2W、dotted: 幅 3 より太いと直径 W の丸い点を中心間 2W)・周に整数回で収まるよう間を詰める・線種は変種で切り替えられる (CSS と同じく補間せず語で切り替わる — その語では同じ層の fill 等の補間も段差になる・外周の箱は動かない)・`double` / `groove` / `ridge` / `inset` / `outset` は DEFECT:CSS・辺の線 (`border-left:`) と吹き出しの形・字幕の帯は実線だけ |
-| border shape (形 70 種) path dash cap | `shape#名(path: arrow_r)` (形の名前 48 種) / 楕円は `border-radius: 50%` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (`border:` の線は既定 round・SVG の綴り `stroke: 色; stroke-width: 6` の線は既定 butt) · `fill: 色` · `path: "M … A …"` (SVG の全文法・A は C に直す) · `filter: drop-shadow(0 8px 16px 色)` (= box-shadow) · 文字の板・絵の mask 形は `p#名(shape: star)` / `img#名(shape: star)` | 形の変形 (morph): `points:` / `path:` の shape (単色の塗り) の変種 `#名.tag(path: …)` へ `[!#名 .tag]` で頂点を補間 (状態 key の `border_path`)。形の種類の違う変種は開き直し (切替) |
-| start_offset end_offset | `delay: 320` · 印の `+N` / `cut-N` (印の `+N` が `delay:` に勝つ) | |
-| motion_in / motion_out / motion_main | `in:` `out:` `main:` (下の「Motion」) | 1 位相 3 本まで (後の語の一回きりの効果と `window=` を書いた `[!#名 main,…]` は同じ層の anchor 窓の main で別枠)・1 本の keyframe (`keys(at=…)`) は 24 個まで (at=1 は数えない) |
-| keys = 状態 key (同じ層の状態の補間) | 印の変種 (`to` `move` `scale` `fill` `dim` `glow` `filter` `zoom_media` `.tag`) · 変種の `move: 600,sine.inOut` | `to,x= y= scale= scaleX= scaleY=` は frame の transform (tx ty sx sy・箱は変えない)・path = `to,…,arc=0.3` / `via=(x,y)`・`to,skewX= rotationX= rotationY= depth=` (姿勢)・`to,glow=1.5` (発光の強さ)・1 語の中で拍を書き分けて続ける (`[!#a to,rotation=-30 -50][!#a to,rotation=-22 +750]`・前の移りが途中なら途中の値から) |
-| bg_color | `background: #色` (div の地は書いた時だけ — 既定は透明) · `[!#名 fill,$色]` / `to,fill=` (400 ms で補間 — glass・角ごとの角丸・尻尾・点列の板も単色の地は層の塗り) | グラデの地は svg に焼く (印の fill は DEFECT:ARG) |
-| blend | `mix-blend-mode: screen\|multiply\|add\|overlay\|soft-light` | 印の変種なし |
-| mask_media_id | `mask: "[transparent]筆で払った線、文字なし"` / `mask: @名` (+ `background: $色` で筆の形の単色塗り) | 画像の alpha を素材と塗り地に掛ける (文字は対象外・縁を書くと枠の中が縁の色になる) |
-| shadows (影の列 ≤ 2) color dx dy blur spread | `box-shadow: 1..5` / `box-shadow: dx dy blur [spread] #色[, 2 つ目]` (`0 0 0 21px #E8743B` = 外側の太い縁・輪 + 落ち影は `0 0 0 10px $a, 0 24px 60px #0008`) · `glow: $色[,blur[,spread]]` (= `box-shadow: 0 0 blur spread 色`・後に書いた方が勝つ) · `[!#名 glow,blur=18,spread=10,$色]` · `[!#名 to,{boxShadow: '…'}]` | **✕** `inset`・3 つ目の影 (DEFECT:CSS) |
+| frame_layout x y w h | root `left top width height` / `inset: 0` / `inset: 上 右 下 左` · child `left top right bottom width height` (from the parent's inside) · table = the container's `display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px` + indented children (regular children and ×N copies become the same grid items, filling the cell, gap default 0) | moving on a word = `[!#名 to,x+=dx,y+=dy]` `[!#名 to,x= y= left= top= scale= w= h=]` |
+| frame_layout rot | `transform: rotate(-8deg)` · `[!#名 to,rotation=-15,pivot=100%,0%]` · `[!#名 to,rotation=720]` (no cap = 2 turns) | `transform-origin` (`pivot=` in marks) is the origin of rotation and scale (the center traces an arc around the origin; a static rotate also turns around the origin — the layer owns the origin and it is solved at render time; a full turn with an origin (multiples of 360°) also stays one state key and turns around the origin (it can be written in the same mark as other changes); a group with a written box solves `transform-origin` and a static `scale()` against that box (as CSS does — the engine's origin is the union of the members, so it is copied; scale / rotation entrances or exits on a group whose origin lies outside the union are DEFECT)) |
+| frame_layout rx ry perspective (static 3D tilt) | `rotationX: 30; depth: 0.8` (`transform: rotateX()` is DEFECT) · `[!#名 to,rotationX=0,duration=1200]` (interpolated) | around the center — to hinge on the bottom edge, `main: constant {rotationX: 30, depth: 0.8, pivot: 'bottom'}`; the perspective center is the pivot (CSS `perspective()`; depth = short side ÷ eye distance px, and the VC's perspective = short side / depth px — a perspective floor = `main: constant {rotationX: 70, depth: 4, pivot: 'top'}` on a group); an element with children tilts as one sheet per children (the group's pose). Corners that go behind the eye cannot be drawn (a native cap): a floor tilted 70° on its top edge saturates at `depth·sin(rx) ≤ 0.8`, so keep the floor only at heights in front of the eye (CSS perspective 780px → height 660px; `depth: 0.85` = 440/520) |
+| frame_layout skx sky (static skew) | `transform: skewX(-12deg)` · `[!#名 to,skewX=12]` (interpolated) | same direction as CSS skewX, ±80°; the asset, the fill and the text all tilt with the frame (an element with children tilts as its one-sheet-per-children group) |
+| media_layout (the cover crop) | `object-fit: cover; object-position: 60% 0%; zoom: 130%` · `main: kb {scale: [1.1, 1], focus: '40% 60%'}` · `[!#名 zoom_media,1.3,duration=900,focus=40%,60%]` · `[!#名 to,w=640]` (interpolated, crop and all) | zoom_media keeps the frame still and zooms only the asset (cover pictures only — a picture inside a box is `[!#箱.子 zoom_media]`) |
+| media_layout x_flip y_flip | `img#名(flip: x\|y)` (mirrors photos, generated images, svg) · `icon#名(flip: x\|y)` (re-bakes the svg) · `avatar#名(flip: x)` | |
+| visual_filter opacity contrast brightness saturation | `filter: saturate(.3) brightness(1.2) contrast(1.1)` · on a word `[!#名 to,{filter: 'saturate(0)', duration: .6}]` (replaces the whole filter) | applies to the asset for pictures, photos and svg; text and shapes (a div's fill, border and shadow too — a board baked to svg takes it on the body, baking ground / border / shadow) are not drawn by the engine, so the written colors are baked with the same formula (text with no written color is DEFECT); cannot be written on a div with children (put it on the picture inside); on a picture with children, only the picture's asset |
+| visual_filter blur (static blur px) | `filter: blur(6px)` · `[!#名 to,blur=8,duration=600]` (interpolated) | the layer's whole raster (text, board, picture). Elements with children and groups take it as one sheet per children (an approximation of per-member raster blur) |
+| visual_filter color_matrix | `filter: sepia(1)` / `invert(1)` / `hue-rotate(90deg)` (`grayscale(a)` is saturation = `saturate(1 − a)`) · looks not in CSS are `look: cool\|warm\|faded\|polaroid\|kodachrome\|technicolor\|browni\|vintage` · monochrome `look: #暗/#明` (duotone) · `look: #色` (keeps only the picture's shape (alpha) and paints one color = CSS `mask-image` + one color) | **✕** raw matrices |
+| (whole-screen color grading) | `veil#名(filter: saturate(0))` (= `filter: grayscale(1)`, or `look: #000000/#3366FF`) opened with `[>#名]` … `[<#名]` | while open, the layers beneath (including ones that appear later) shift to graded variants — text and shapes are copied as color variants with the look matrix and saturation applied to their colors |
+| alpha | `opacity: .5` · `[!#名 dim,0.3,duration=900]` · `[!#名 to,opacity=0.5]` | applies to descendants too |
+| (whole-screen flash, blackout, shake) | a full-screen `veil#fl(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)` with `[>#fl][!#fl to,{opacity:0, duration:.4}]` (flash) / `[>#名]` … `[<#名]` (blackout); shake is `[!#名 shake,6,duration=2200]` on each visible element, on the same word | curtains are veils; shake is a per-layer one-shot (there is no mark that targets the whole screen — CameraLayer is viewport only, with no shake channel) |
+| (a photo's dark scrim) | `img#名(scrim: right,0.45)` (`vignette,0.6` / uniform `0.4`) | a veil child of the picture, entering and exiting with it right above it |
+| pattern (a board baked to svg) | `pattern: dots,間隔,色,径` (CSS `background-image: radial-gradient(色 2px, transparent 2px); background-size: 48px` works the same) · `pattern: grid,間隔,色,幅` (the CSS graph grid `background-image: linear-gradient(色 1px, transparent 1px), linear-gradient(90deg, 色 1px, transparent 1px); background-size: 60px 60px` works the same — one sheet each for vertical and horizontal, same color and width) · thin out radially with `mask-image: radial-gradient(…)` | the board's svg (FE gets the same image) |
+| border w c radius | `border: 幅 solid #色` · `border: 幅 dashed #色` / `dotted` (boxes, shapes, text cards, ellipses) · edge lines `border-top: 3px solid #色` (boxes also take `dashed` / `dotted`; card edges are solid) · `border-radius:` (per-corner `border-radius: 0 33px 33px 0` bakes to svg; all corners equal at `50%` or more is an ellipse (as CSS, tracking width and height changes); pill is `999px`) | percentages under 50%, per-corner %, and `a / b` (CSS elliptical corners) are drawn as circular corners of short side × N% (warn); dashes / dots use the same pattern as Chromium (dashed: at width 3+, line 2W, gap W; thinner lines 3W / 2W; dotted: thicker than width 3 is round dots of diameter W at 2W center spacing); gaps are tightened so a whole count fits around the perimeter; the line style can switch via variants (as in CSS it switches on the word without interpolating — on that word, interpolation of the same layer's fill etc. also steps; the outer box does not move); `double` / `groove` / `ridge` / `inset` / `outset` are DEFECT:CSS; edge lines (`border-left:`), speech-bubble shapes and subtitle bands take solid lines only |
+| border shape (70 shapes) path dash cap | `shape#名(path: arrow_r)` (48 shape names) / an ellipse is `border-radius: 50%` / `points:` / `path: "M…"` · `dash: 6,6` · `stroke-linecap: butt` (lines of `border:` default to round; lines of the SVG spelling `stroke: 色; stroke-width: 6` default to butt) · `fill: 色` · `path: "M … A …"` (full SVG syntax; A is converted to C) · `filter: drop-shadow(0 8px 16px 色)` (= box-shadow) · a text's board and a picture's mask shape are `p#名(shape: star)` / `img#名(shape: star)` | shape morph: toward a variant `#名.tag(path: …)` of a `points:` / `path:` shape (single-color fill), `[!#名 .tag]` interpolates the vertices (the `border_path` state key). A variant of a different shape kind reopens (a switch) |
+| start_offset end_offset | `delay: 320` · a mark's `+N` / `cut-N` (the mark's `+N` beats `delay:`) | |
+| motion_in / motion_out / motion_main | `in:` `out:` `main:` ("Motion" below) | up to 3 per phase (a later word's one-shot effect, and `[!#名 main,…]` with `window=`, are the same layer's anchor-window main — a separate quota); one keyframe track (`keys(at=…)`) holds up to 24 (at=1 doesn't count) |
+| keys = state keys (interpolating the same layer's states) | mark variants (`to` `move` `scale` `fill` `dim` `glow` `filter` `zoom_media` `.tag`) · a variant's `move: 600,sine.inOut` | `to,x= y= scale= scaleX= scaleY=` are the frame's transform (tx ty sx sy; the box doesn't change) · paths = `to,…,arc=0.3` / `via=(x,y)` · `to,skewX= rotationX= rotationY= depth=` (pose) · `to,glow=1.5` (glow strength) · write separate beats within one word to continue (`[!#a to,rotation=-30 -50][!#a to,rotation=-22 +750]`; if the previous move is mid-flight, it continues from the mid-flight value) |
+| bg_color | `background: #色` (a div's ground only when written — the default is transparent) · `[!#名 fill,$色]` / `to,fill=` (interpolated over 400 ms — for glass, per-corner radii, tails and dotted boards too, a single-color ground is the layer's fill) | gradient grounds bake to svg (a mark's fill on them is DEFECT:ARG) |
+| blend | `mix-blend-mode: screen\|multiply\|add\|overlay\|soft-light` | no mark variants |
+| mask_media_id | `mask: "[transparent]筆で払った線、文字なし"` / `mask: @名` (+ `background: $色` for a single-color fill in the brush shape) | applies the image's alpha to the asset and the painted ground (text excluded; writing a border turns the inside of the frame the border color) |
+| shadows (list of shadows ≤ 2) color dx dy blur spread | `box-shadow: 1..5` / `box-shadow: dx dy blur [spread] #色[, a second]` (`0 0 0 21px #E8743B` = a thick outer rim; ring + drop shadow is `0 0 0 10px $a, 0 24px 60px #0008`) · `glow: $色[,blur[,spread]]` (= `box-shadow: 0 0 blur spread 色`; the one written later wins) · `[!#名 glow,blur=18,spread=10,$色]` · `[!#名 to,{boxShadow: '…'}]` | **✕** `inset` and a third shadow (DEFECT:CSS) |
 
-## 文字 (TextLayer・TextStyle・ParagraphStyle)
+## Text (TextLayer, TextStyle, ParagraphStyle)
 
-| field | 書き方 | 備考 |
+| field | How to write | Notes |
 |---|---|---|
-| font_id | `font-family: "family 太さ"` / 根の `font` `fonts` の短い名 `font-family: m` / `style: "書体の説明"` (意味検索) | `font-weight: 900` (1〜1000・normal / bold) は family の中の face を CSS の照合で選ぶ (名や説明文の太さより優先・箱から継ぐ・`h1〜h4` は UA の 700)。1 face の family は変わらない (合成 bold は無い・warn) |
-| font_size | `font-size: 72px` (`hero h1 h2 body label note` も・CSS と同じく書かない文字は親の値を継ぎ根は 16px・`em` は親の比・箱の font-size は子が継ぐ — `font-family` `color` `letter-spacing` `white-space` も同じ継承) | 語で `[!#名 to,scale=0.5]` (transform の sx / sy・箱は変えない)・`~` で size の違う変種へ移ると文字は frame の中心で拡縮 (折り返さない・枠線も太る) |
-| color | `color:` (svg は本文の currentColor に焼く) · `[!#名 fill,$色]` (補間) · `[!#名 recolor,$色]` / `to,{color}` (文字・図形・icon・1 色の svg は補間 — svg は色行列) | |
-| color_gradient | `color: linear(#FFE58A,#F5A623@60%,#C2410C,180)` / `radial(#…,#…,30%,60%[,72%,62%])` | 角度は CSS と同じ・`@N%` は止まり位置・radial の後ろは中心 (と楕円の半径) の箱の比 |
-| stroke_color stroke_width | `stroke: #色,幅` (文字の px) | |
-| 影 kind=drop | `text-shadow: dx dy blur #色` / `text-shadow: 1..5` | |
-| 影 kind=glow | `[!#名 glow,$色]` (字形の光彩・text-shadow 0 0) | **✕** neon / echo / glitch の影 (`style:` の意味検索だけ) |
-| highlight underline strikethrough | `[!#名{t} highlight,$色]` (run) · `underline: $色` (題の下の帯) · `[!#名 strike]` (取り消し線の図形) | 進行の style は `in: marker` / `in: underline_draw` / `in: strikethrough` (文字の preset) |
+| font_id | `font-family: "family 太さ"` / the root's `font` `fonts` short names `font-family: m` / `style: "書体の説明"` (semantic search) | `font-weight: 900` (1-1000, normal / bold) picks the face within the family by CSS matching (it beats the weight in names or descriptions; inherited from the box; `h1〜h4` are the UA's 700). A single-face family does not change (there is no synthetic bold; warn) |
+| font_size | `font-size: 72px` (also `hero h1 h2 body label note`; as in CSS, text without one inherits the parent's value and the root is 16px; `em` is a ratio of the parent; a box's font-size is inherited by its children — `font-family` `color` `letter-spacing` `white-space` inherit the same way) | on a word `[!#名 to,scale=0.5]` (the transform's sx / sy; the box doesn't change); moving with `~` to a variant of a different size scales the text around the frame's center (no rewrap; the border thickens too) |
+| color | `color:` (svg bakes the body's currentColor) · `[!#名 fill,$色]` (interpolated) · `[!#名 recolor,$色]` / `to,{color}` (text, shapes, icons and single-color svg interpolate — svg via a color matrix) | |
+| color_gradient | `color: linear(#FFE58A,#F5A623@60%,#C2410C,180)` / `radial(#…,#…,30%,60%[,72%,62%])` | angles as in CSS; `@N%` is a stop position; radial's trailing values are the center (and the ellipse radii) as ratios of the box |
+| stroke_color stroke_width | `stroke: #色,幅` (px of the text) | |
+| shadow kind=drop | `text-shadow: dx dy blur #色` / `text-shadow: 1..5` | |
+| shadow kind=glow | `[!#名 glow,$色]` (glyph glow; text-shadow 0 0) | **✕** neon / echo / glitch shadows (only via `style:` semantic search) |
+| highlight underline strikethrough | `[!#名{t} highlight,$色]` (runs) · `underline: $色` (the band under a title) · `[!#名 strike]` (a strikethrough shape) | progressive styles are `in: marker` / `in: underline_draw` / `in: strikethrough` (text presets) |
 | italic | `font-style: italic` | |
-| runs (文字の一部の style) | 根の `run hl { color: …; font-size: …; stroke: …; font-family: …; marker: …; background: …; border: …; border-radius: …; padding: … }` + content の `{hl}…{/}` (地の枠と下帯の形 = ParagraphStyle.highlight_box・文字で 1 つ) | 語で `[!#名{t} recolor / highlight / marker]` (`recolor,$o,250,400` = 250 ms で移り 400 ms で戻る)・一回きりの `[!#名{t} punch,1.12,duration=440]`・`[=#名{t} +600]` (span の切替を語から ms ずらす) |
-| counter | content の `[count:9.4 start=0 roll ms=1400]` · `[count:400 roll ms=1150,1000,850]` (桁の帯ごとの所要 = CounterSpec.digit_ms・0 = 回らない帯) · `[count:… laps=0,0,0,3]` (帯ごとの周回数 = CounterSpec.digit_laps・0 = まっすぐ・既定 1) · `[count:… ease=power1.inOut delay=320]` · `[!#名 count]` | |
-| spans (文言の切り替わり) | `[!#名 text,"文"]` (`[=#名]` で元の文) · 著者の変種の `content: "…"` を `[!#名 .tag]` で · 後の語の `[!#名 count]` | 同じ層の文言の切替 (箱は全部の文の最大)。地を持ち寸法を書かない文字と跨ぐ文字は写しの層に入れ替える |
+| runs (styling part of a text) | the root's `run hl { color: …; font-size: …; stroke: …; font-family: …; marker: …; background: …; border: …; border-radius: …; padding: … }` + `{hl}…{/}` in content (the ground frame and under-band shape = ParagraphStyle.highlight_box, one per text) | on a word `[!#名{t} recolor / highlight / marker]` (`recolor,$o,250,400` = shifts in 250 ms, returns in 400 ms) · one-shot `[!#名{t} punch,1.12,duration=440]` · `[=#名{t} +600]` (offsets the span switch from the word by ms) |
+| counter | content's `[count:9.4 start=0 roll ms=1400]` · `[count:400 roll ms=1150,1000,850]` (duration per digit band = CounterSpec.digit_ms; 0 = a band that doesn't roll) · `[count:… laps=0,0,0,3]` (laps per band = CounterSpec.digit_laps; 0 = straight; default 1) · `[count:… ease=power1.inOut delay=320]` · `[!#名 count]` | |
+| spans (wording switches) | `[!#名 text,"文"]` (`[=#名]` restores the original wording) · an author variant's `content: "…"` via `[!#名 .tag]` · a later word's `[!#名 count]` | wording switches within the same layer (the box is the max over all wordings). Text that has a ground but no written dimensions, and text that spans cuts, are swapped into a copy layer |
 | paragraph horizontal / vertical align | `text-align:` `vertical-align:` | |
 | paragraph line_height letter_spacing writing_mode | `line-height:` · `letter-spacing: .1em` · `writing-mode: vertical-rl` | |
-| padding | `padding:` (1 / 2 / 3 / 4 値) | |
-| 塗りつき札の地のグラデ | `p#名(background: linear-gradient(90deg, #a, #b 42%, #c))` (札の下に焼いた板) | |
-| chroma_key | **✕** | draft の語彙に無い (editor の keying) |
+| padding | `padding:` (1 / 2 / 3 / 4 values) | |
+| gradient ground of a filled card | `p#名(background: linear-gradient(90deg, #a, #b 42%, #c))` (a board baked under the card) | |
+| chroma_key | **✕** | not in the draft vocabulary (the editor's keying) |
 
 ## Motion (EdgeMotion・MainMotion・MotionChannels)
 
-| channel | 書き方 | 備考 |
+| channel | How to write | Notes |
 |---|---|---|
-| dx dy rot sx sy alpha blur | `in: {x: -45, opacity: 0, duration: .6}` / `in: keys(at=0 … \| at=0.6 …),duration=900` (時間は ms) / `main: sine {y: 18}` | 動きの `x y` は px (層の寸法で換算しない)・`scale scaleX scaleY` は倍率・`rotation` は deg |
-| skx sky | 同じ (`in: {skewX: -20, opacity: 0, duration: .5}`) | 静止の傾きは層の `transform: skewX(-12deg)` (上の frame_layout) |
-| rx ry perspective (+ `depth`) | 同じ (`main: constant {rotationX: 35, depth: 0.8, pivot: 'bottom'}`) | layer の単位だけ |
-| color (描画色) | `in: {color: '#FF0000', …}` | 文字の単位だけ (書けば unit=paragraph) |
-| glow gradient_shift stroke_width | `in: {glow: 3, …}` · `main: sawtooth {gradient_shift: 1, period: 1.8}` (`color: linear(…)` の文字) | 文字の単位だけ (unit=paragraph が付く)・箱 / 絵に書くと欠陥 |
-| tracking | `in: {letterSpacing: '0.6em', opacity: 0, duration: .9}` (字間が詰まって入る・px と素の数は同じ行の `font-size:` で em に割る・印の `to` は em だけ) | 文字だけ・unit=grapheme が付く・字 i を i × 値 em 右へ (左揃えの伸び) |
-| scramble | `in: {scramble: '01ABCDEF', duration: .6}` / `in: decode` | 文字だけ |
-| elevation | **✕** (v2 の channel に無い) | 影 (`box-shadow:` / `glow:`) を持つ層だけの影の倍率 |
-| reveal (+ reveal_shape) | `in: wipe {dir: 'right', angle: -20}` · `in: circle_wipe` / `iris_wipe` (円の中心 `pivot: 'top'` 等の 9 名・曲線 `ease`) / `clock_wipe {dir: 'left', splits: 3}` | `out:` も同じ・`in: wipe {dir: 'center'}` は横の倍率 |
+| dx dy rot sx sy alpha blur | `in: {x: -45, opacity: 0, duration: .6}` / `in: keys(at=0 … \| at=0.6 …),duration=900` (times are ms) / `main: sine {y: 18}` | motion `x y` are px (not scaled by the layer's dimensions); `scale scaleX scaleY` are factors; `rotation` is deg |
+| skx sky | same (`in: {skewX: -20, opacity: 0, duration: .5}`) | a static tilt is the layer's `transform: skewX(-12deg)` (frame_layout above) |
+| rx ry perspective (+ `depth`) | same (`main: constant {rotationX: 35, depth: 0.8, pivot: 'bottom'}`) | layer unit only |
+| color (the drawn color) | `in: {color: '#FF0000', …}` | text units only (writing it sets unit=paragraph) |
+| glow gradient_shift stroke_width | `in: {glow: 3, …}` · `main: sawtooth {gradient_shift: 1, period: 1.8}` (text with `color: linear(…)`) | text units only (unit=paragraph attaches); writing it on a box / picture is a defect |
+| tracking | `in: {letterSpacing: '0.6em', opacity: 0, duration: .9}` (enters with the letter spacing tightening; px and bare numbers divide into em by the same line's `font-size:`; a mark's `to` takes em only) | text only; unit=grapheme attaches; moves glyph i right by i × value em (a left-aligned stretch) |
+| scramble | `in: {scramble: '01ABCDEF', duration: .6}` / `in: decode` | text only |
+| elevation | **✕** (not a v2 channel) | a shadow factor, only for layers that have a shadow (`box-shadow:` / `glow:`) |
+| reveal (+ reveal_shape) | `in: wipe {dir: 'right', angle: -20}` · `in: circle_wipe` / `iris_wipe` (the circle center takes the 9 names like `pivot: 'top'`; curves via `ease`) / `clock_wipe {dir: 'left', splits: 3}` | `out:` works the same; `in: wipe {dir: 'center'}` is a horizontal scale |
 | pixelate | `in: pixelate` | |
 | number | `[count:…]` | |
-| draw dash_offset | `in: draw {duration: .6}` · `main: sawtooth {dash_offset: 1}` | 枠線のある path の図形 |
+| draw dash_offset | `in: draw {duration: .6}` · `main: sawtooth {dash_offset: 1}` | path shapes with a border |
 | clip | `in: {…, clip: true}` · `in: mask_rise` | |
-| style (進行済みの文字の上書き) | `in: karaoke {color: '#…', duration: 0}` (object の 1 字は 0.5 秒 — 即座に切り替えるなら `duration: 0`) / `in: marker` / `in: color_sweep` | 文字の preset |
+| style (overwriting progressed text) | `in: karaoke {color: '#…', duration: 0}` (one object glyph takes 0.5 s — for an instant switch, `duration: 0`) / `in: marker` / `in: color_sweep` | text presets |
 
-| 軸 | 書き方 | 備考 |
+| Axis | How to write | Notes |
 |---|---|---|
-| unit | `in: rise {y: 30, duration: .4, stagger: .04}` (1 字ずつの間隔 — stagger の無い `in: rise` は文字も層ごと) · range (`[!#名{t} punch]` が作る) | 文字だけ |
-| order seed | `in: fade_stagger {from: 'random', seed: 3}` · ×N の入場 `in: {stagger: {each: .06, from: 'center'}}` / 退場 `out: {opacity: 0, stagger: {each: .06, from: 'end'}}` (`[<#名[*]]` と cut 末の自動 close で同じ) · 項目 `[>#名[*] from=center]` `[<#名[*] from=random +110]` | reverse / center_out / random |
-| step duration delay | 入場の tween の `stagger: .04` (= step) · `in: pop {duration: .5}` · `delay: 320` / 印の `+N` | duration を書かない object は GSAP と同じ 0.5 秒・語だけの preset (`in: fade`) は語ごとの既定 |
-| easing (bezier spring steps) | `ease: 'back.out(1.7)'` / `back(2.2)` / `bezier(.2/.8/.2/1)` / `spring(10/240)` / `steps(4)` · 名は GSAP の綴り (lowering が EffectEasing に写す: power1 = ease_* · power2 = cubic_* · power3 / circ = quart_* · power4 / expo = strong_ease_*) · keys の区間ごと `at=… ease=bezier(.33/1/.68/1)` (main の keys も・at=1 は静止へ戻る最後の区間) | 係数つきは preset の入場と keys の key だけ |
-| pivot_point | `transform-origin: left` / `transform-origin: 40% 60%` / tween の `pivot: 'left'` · `[!#名 punch,1.05,duration=600,pivot=left]` · `[!#名 to,rotation=,pivot=]` | |
-| target=media | `main: kb {…}` · `main: ramp {target: 'media', scaleX: 1.3, scaleY: 1.3}` · `[!#名 zoom_media]` | x y scaleX scaleY rotation だけ |
-| path orient | `in: travel {start: '名', arc: 0.3}` / `via: '(x,y)(x,y)…'` (経由点をなめらかに通る・2 点で S 字) · 変種の `move: 600,sine.inOut,path="M…"` | path は quote |
-| main の waveform period (freq_ms) phase_step phase_offset window reverse | `main: sine\|triangle\|square\|noise\|sawtooth\|ramp\|constant {…, period: .9, phase_offset: 0.25, window: '0,2200', reverse: true}` | |
-| main start_ratio end_ratio | `main: kb {scale: [1, 1.06], start_ratio: 0.3}` / `main: ramp {…, start_ratio: 0.3}` · 進行バー `progress#名(until: cut\|end)` (ramp が層の実効の窓 = 尺を書かない) | |
-| settle · driver · blend_ms | **✕** | 正準の語彙外 (名前つき演出の畳み込み専用・avatar の話者状態) |
-| 一回きりの効果 | `[!#名 shake / punch / blink / pop / spring / swing]` (`punch,1.1,duration=450,rotation=8,pivot=left`) | `in: pop {then: 'shake'}` |
+| unit | `in: rise {y: 30, duration: .4, stagger: .04}` (the per-glyph interval — `in: rise` without stagger moves even text as one layer) · range (created by `[!#名{t} punch]`) | text only |
+| order seed | `in: fade_stagger {from: 'random', seed: 3}` · ×N entrances `in: {stagger: {each: .06, from: 'center'}}` / exits `out: {opacity: 0, stagger: {each: .06, from: 'end'}}` (the same for `[<#名[*]]` and the automatic close at cut end) · items `[>#名[*] from=center]` `[<#名[*] from=random +110]` | reverse / center_out / random |
+| step duration delay | the entrance tween's `stagger: .04` (= step) · `in: pop {duration: .5}` · `delay: 320` / a mark's `+N` | an object without duration takes 0.5 s as GSAP does; a bare-word preset (`in: fade`) takes each word's default |
+| easing (bezier spring steps) | `ease: 'back.out(1.7)'` / `back(2.2)` / `bezier(.2/.8/.2/1)` / `spring(10/240)` / `steps(4)` · names use GSAP spellings (lowering copies them to EffectEasing: power1 = ease_* · power2 = cubic_* · power3 / circ = quart_* · power4 / expo = strong_ease_*) · per keys segment `at=… ease=bezier(.33/1/.68/1)` (main keys too; at=1 is the final segment returning to rest) | coefficient forms only on preset entrances and keys keys |
+| pivot_point | `transform-origin: left` / `transform-origin: 40% 60%` / a tween's `pivot: 'left'` · `[!#名 punch,1.05,duration=600,pivot=left]` · `[!#名 to,rotation=,pivot=]` | |
+| target=media | `main: kb {…}` · `main: ramp {target: 'media', scaleX: 1.3, scaleY: 1.3}` · `[!#名 zoom_media]` | x y scaleX scaleY rotation only |
+| path orient | `in: travel {start: '名', arc: 0.3}` / `via: '(x,y)(x,y)…'` (passes smoothly through the via points; 2 points make an S) · a variant's `move: 600,sine.inOut,path="M…"` | the path is quoted |
+| main waveform period (freq_ms) phase_step phase_offset window reverse | `main: sine\|triangle\|square\|noise\|sawtooth\|ramp\|constant {…, period: .9, phase_offset: 0.25, window: '0,2200', reverse: true}` | |
+| main start_ratio end_ratio | `main: kb {scale: [1, 1.06], start_ratio: 0.3}` / `main: ramp {…, start_ratio: 0.3}` · a progress bar `progress#名(until: cut\|end)` (the ramp takes the layer's effective window = write no length) | |
+| settle · driver · blend_ms | **✕** | outside the canonical vocabulary (reserved for folding named effects; the avatar's speaker state) |
+| one-shot effects | `[!#名 shake / punch / blink / pop / spring / swing]` (`punch,1.1,duration=450,rotation=8,pivot=left`) | `in: pop {then: 'shake'}` |
 
-## 切替・場面 (SceneTransition・Scene)
+## Transitions and scenes (SceneTransition, Scene)
 
-| field | 書き方 | 備考 |
+| field | How to write | Notes |
 |---|---|---|
-| transition kind duration overlap zoom bars sweep drift dim easing backdrop | timeline `transition none,370` (混ぜない — 退場が次の cut の入りに重なる) / `transition wipe,700,dir=left,overlap=350,bars=#色,18,drift=140` / `bars=linear(色,…),幅` (グラデの帯・`linear(色,…,180)` = 帯の縦のグラデ) / `dissolve,850,dir=right,bars=…` (溶けの上を帯が払う) / `slide,850,dir=left,drift=240,dim=0.38` (旧頁がずれて暗む) / `dissolve,600,overlap=300` (境界中心) / `dissolve,320,overlap=320` (旧場面の上に 0 → 1) / `dissolve,320,color=#色` (黒の上から) / `dip,400,color=,level=` / `flash,300` | dissolve の既定の easing は linear |
+| transition kind duration overlap zoom bars sweep drift dim easing backdrop | timeline `transition none,370` (no mixing — the exit overlaps the next cut's entrance) / `transition wipe,700,dir=left,overlap=350,bars=#色,18,drift=140` / `bars=linear(色,…),幅` (gradient bars; `linear(色,…,180)` = a vertical gradient along the bar) / `dissolve,850,dir=right,bars=…` (bars sweep over the dissolve) / `slide,850,dir=left,drift=240,dim=0.38` (the old page slides off and dims) / `dissolve,600,overlap=300` (centered on the boundary) / `dissolve,320,overlap=320` (0 → 1 on top of the old scene) / `dissolve,320,color=#色` (up from black) / `dip,400,color=,level=` / `flash,300` | dissolve's default easing is linear |
 | enable_pre_fade post_fade | `fade in,1800` / `fade out,700` | |
-| head_pause tail_pause | 台詞の `[silence:600]` / 根の `silence head= tail=` | |
-| speedup_percent | `cast 名 = … speed=110%` · 台詞の `[speed:120%]` | |
-| override_speaker / indicator | `cast` / `manner=` / `[manner:…]` (台詞ごとは Fish Audio の声だけ) · キャラの声色 `@名.style:` | |
+| head_pause tail_pause | speech `[silence:600]` / the root's `silence head= tail=` | |
+| speedup_percent | `cast 名 = … speed=110%` · speech `[speed:120%]` | |
+| override_speaker / indicator | `cast` / `manner=` / `[manner:…]` (per-line only for Fish Audio voices) · a character's vocal color `@名.style:` | |
 | override_display_texts | `subtitle "…"` | |
-| yomi_edits | 根の `read 表記 = 読み` (全出現) / 台詞の `{表記\|読み}` (1 か所) | |
-| audio_filter volume_db (声) | `voice#名(volume: +3dB; filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate[,scale=,freq_ms=])` · 変種 `voice#名.tag(…)` を `@名 .tag:` で | |
+| yomi_edits | the root's `read 表記 = 読み` (every occurrence) / in speech `{表記\|読み}` (one spot) | |
+| audio_filter volume_db (voice) | `voice#名(volume: +3dB; filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate[,scale=,freq_ms=])` · variants `voice#名.tag(…)` via `@名 .tag:` | |
 
-## 字幕 (ScriptLayer・ScriptLayout・SpeechWindow)
+## Subtitles (ScriptLayer, ScriptLayout, SpeechWindow)
 
-| field | 書き方 |
+| field | How to write |
 |---|---|
 | frame / fill / border / radius / padding / shadow / alpha | `subtitle(left: …; top: …; bottom: …; width: …; height: …; background: …; border: …; border-radius: …; padding: …; font-size: …; font-family: …; style: …)` |
 | hug | `subtitle.hug(…)` |
-| card_motion_in / out | `subtitle(in: pop; out: fade)` (札ごと・custom / keys も) |
+| card_motion_in / out | `subtitle(in: pop; out: fade)` (per card; custom / keys too) |
 | speech_window | `lead: 100; tail: 300; hold: next,800` / `hold: same` / `hold: off` (ms) |
 | speaker_label | `cast 名 = … label="部下" label_fill=$a label_color=#…` + `subtitle(label: edge\|above\|top_left\|inside; label_in: pop)` |
-| 札の変種 | `subtitle.em(…)` + `subtitle .em "…"` / 札の頭の `[card:em]` / `cast 名 = … subtitle=.em` (札の声の窓 `lead: tail: hold:` も = ScriptCardStyle.speech_window) |
+| card variants | `subtitle.em(…)` + `subtitle .em "…"` / `[card:em]` at the card's head / `cast 名 = … subtitle=.em` (the card's speech window `lead: tail: hold:` too = ScriptCardStyle.speech_window) |
 
-## 群・camera (GroupLayer・CameraLayer)
+## Groups and camera (GroupLayer, CameraLayer)
 
-| field | 書き方 |
+| field | How to write |
 |---|---|
-| origin / pose (zoom rotate) | `group#g(…)` + `[!#g to,x=,scale=,rotation=]` / `[!#g to,scale=0.8]` / 変種 `#g.small(left: …; top: …; scale: .8; rotate: -6deg)` を `[!#g .small]` |
+| origin / pose (zoom rotate) | `group#g(…)` + `[!#g to,x=,scale=,rotation=]` / `[!#g to,scale=0.8]` / a variant `#g.small(left: …; top: …; scale: .8; rotate: -6deg)` via `[!#g .small]` |
 | alpha | `[!#g dim]` / `to,opacity=` |
-| 子を持つ要素 (div・絵・文字 … 型を問わず) | 子ごと 1 枚 (CSS の stacking context): `opacity:` `transform: rotate()`・`filter:` の色調 / blur・入退場・`[!#名 to,x= scale= rotation= filter=]` / `move` / `scale` / `dim`・一回きりの効果は群 (子ごと・原点は描いた箱の中心)・塗り / 縁 / 影 / 印の glow / tint / frame・絵の Ken Burns / 素材の寄り・文字の 1 字ずつの入場は要素自身 (子には掛からない) |
-| clip (角丸の窓) | `group#g(clip: 24,g.bg)` / `clip: true` (窓は箱の枠線の外周まで・def の中 / 箱の子の群にも) · 要素の `clip-path: inset(8% 0 78% 0)` (要素を群 + 本体にして箱の内側の矩形で切る — 動きは切り口ごと) · 子を持つ要素の `overflow: hidden` (子だけを切る群 `名._clip` — 窓は縁の内側の角丸・板の縁と影は切らない)・窓は角丸の矩形だけで楕円の窓は無い (群の `border-radius: 50%` は warn で落とす・楕円の箱の中の `clip: true` も矩形で切る) |
-| motion_in / out / main | 群に `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` — 群に掛かるのは移動・拡縮・回転・傾き・3D・不透明度・ぼかし (`out: {y: -14, blur: 8, opacity: 0, duration: .32}`) と経路・透視だけ (wipe 等は DEFECT:ARG — 板か子に) |
+| elements with children (div, picture, text … any type) | one sheet per children (a CSS stacking context): `opacity:` `transform: rotate()`, `filter:` grading / blur, entrances and exits, `[!#名 to,x= scale= rotation= filter=]` / `move` / `scale` / `dim`, and one-shot effects act on the group (per children; the origin is the center of the written box); fill / border / shadow / the glow / tint / frame marks, a picture's Ken Burns / asset zoom, and per-glyph text entrances act on the element itself (not on the children) |
+| clip (a rounded window) | `group#g(clip: 24,g.bg)` / `clip: true` (the window reaches the outer edge of the box's border; also inside a def / on a group of a box's children) · an element's `clip-path: inset(8% 0 78% 0)` (turns the element into group + body and cuts by the rectangle inside the box — motion rides each cutout) · `overflow: hidden` on an element with children (a group `名._clip` cutting only the children — the window is the rounded rect inside the border; the board's border and shadow are not cut) · windows are rounded rectangles only, with no elliptical windows (`border-radius: 50%` on a group drops with a warn; `clip: true` inside an elliptical box also cuts a rectangle) |
+| motion_in / out / main | `in:` `out: fade {duration: .4}` `main: spin {period: 9, pivot: 'g.sun'}` on the group — a group takes only translation, scale, rotation, tilt, 3D, opacity, blur (`out: {y: -14, blur: 8, opacity: 0, duration: .32}`), paths and perspective (wipe and the like are DEFECT:ARG — put them on a board or a child) |
 | camera viewport | `[!#名 zoom,1.4,duration=700]` / `[=#名]` · `camera#cam(left: 0px; top: 0px; zoom: 1)` + `#cam.tight(left: 300px; top: 150px; zoom: 1.4; move: 700)` + `[>#cam]` `[!#cam .tight]` |
 
-## 音 (BgmLayer・SoundEffectFire・MasterLoudness)
+## Sound (BgmLayer, SoundEffectFire, MasterLoudness)
 
-| field | 書き方 |
+| field | How to write |
 |---|---|
-| BGM volume_db / fade / crop_start | `bgm#名(volume: -3dB; fade: 1500,2500)` (volume の既定 +7dB = 声の 9 LU 下 — 書かない) · timeline `bgm 名 start=13.7s +1500` |
-| BGM keys (volume_db・語の anchor) | `[!#名 to,{volume:-13dB, duration:.6, ease:'power2.out'}]` (曲の既定の大きさからの dB)・design の変種 `#名.low(volume: -6dB)` を `[!#名 .low]`・`[=#名]` で戻る |
-| ducking | 既定で掛かる (−4 / 200 / 500 / 600 / 200)。`bgm#名(duck: -6; duck_attack: …; duck_release: …; duck_merge: …; duck_lead: …)`・`duck: off` |
-| keys の volume_db (音量の点列) align_end lowpass_hz | `keys: "0:+3\|15s:0\|end-3s:+2"; align: end; lowpass: 650` (`align: end` = 曲の末尾を層の末尾に・文字の寄せでないので `text-align` ではない) · 区間だけ `lowpass_keys: "20s:650\|28s:off"` |
-| keys の volume_db (変種の音量へ移る)・飛び (jump) | 変種 `#名.tag(volume: -6dB)` を `[!#名 .tag]` · `jump: 91.6s>166.8s; xfade: 1300` / `jump: at_cut:名>166.8s` |
+| BGM volume_db / fade / crop_start | `bgm#名(volume: -3dB; fade: 1500,2500)` (volume default +7dB = 9 LU under the voice — don't write it) · timeline `bgm 名 start=13.7s +1500` |
+| BGM keys (volume_db, word anchors) | `[!#名 to,{volume:-13dB, duration:.6, ease:'power2.out'}]` (dB from the track's default loudness) · a design variant `#名.low(volume: -6dB)` via `[!#名 .low]`; `[=#名]` restores |
+| ducking | on by default (−4 / 200 / 500 / 600 / 200). `bgm#名(duck: -6; duck_attack: …; duck_release: …; duck_merge: …; duck_lead: …)`; `duck: off` |
+| keys volume_db (loudness point list) align_end lowpass_hz | `keys: "0:+3\|15s:0\|end-3s:+2"; align: end; lowpass: 650` (`align: end` = the track's tail at the layer's tail; not text alignment, so not `text-align`) · a range only: `lowpass_keys: "20s:650\|28s:off"` |
+| keys volume_db (moving to a variant's loudness), jumps | a variant `#名.tag(volume: -6dB)` via `[!#名 .tag]` · `jump: 91.6s>166.8s; xfade: 1300` / `jump: at_cut:名>166.8s` |
 | BGM audio_filter | `bgm#名(filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate,scale=,freq_ms=)` |
-| SE volume offset crop fade | `se "…" -4.5dB -200 start=0.2s to=1.2s fade=100,800` (台詞の `[♪… -4.5dB peak=4.02s to=1.2s]` — start = 素材の頭出し・peak = 素材の山を語に) |
-| master lufs true_peak | 根の `master lufs=-15 tp=-1` |
-| 素材の再生 (mute loop fit_duration crop) | `img#名(play: loop\|stretch,start=500,to=1500,speed=150%,mute)` (img の footage・`stretch` = fit_duration・`start` = crop_start。bgm は常に loop — 書かない) |
+| SE volume offset crop fade | `se "…" -4.5dB -200 start=0.2s to=1.2s fade=100,800` (in speech `[♪… -4.5dB peak=4.02s to=1.2s]` — start = cueing into the asset; peak = the asset's peak onto the word) |
+| master lufs true_peak | the root's `master lufs=-15 tp=-1` |
+| asset playback (mute loop fit_duration crop) | `img#名(play: loop\|stretch,start=500,to=1500,speed=150%,mute)` (img footage; `stretch` = fit_duration; `start` = crop_start. bgm always loops — don't write it) |
 
-## runtime に無い物 (判断待ち — v2 でも足さなかった)
+## Not in the runtime (pending decisions — not added in v2 either)
 
-- **文字・図形への filter** (彩度・色行列・contrast・明るさ): VisualFilter は素材だけ。文字と図形の filter と色調の幕は書いた色 (文字色・縁取り・塗り・縁・影・発光・地・文字のグラデ・filter は run の色も) に絵と同じ式で焼く (svg に焼いた箱は素材なので filter が効く・既定の文字色は焼けない — `color:` を書く)。
-- **mix-blend-mode の saturation / color / hue / luminosity**: BlendMode は normal / multiply / screen / add / overlay / soft-light (画面全体の彩度落ちは色調の幕)。
-- **拡大したまま保つ文字の一部 (run の scale)**: run の印は一回きり (punch / settle / shake / pop) と色・下帯だけ — 保つ拡大は別の文字に分けて `[!#t2 scale]`。
-- **子を持つ要素の blend**: 子を持つ要素 (型を問わず) は子ごと 1 枚 (CSS の stacking context = 群) に `rotationX:` / `skewX:` / `depth:`・`filter:` の blur / 色調・`to,` の傾き / blur / filter / look が CSS の container と同じく掛かるが、`mix-blend-mode:`・filter の opacity・入退場の wipe は DEFECT (群に合成 mode と不透明度の filter が無い — 不透明度は `opacity:`)。
-- **layer 単位の glow / tint**: 字形の channel は文字だけ (箱・絵の発光は `glow:` の影)。
-- **語を囲む手描きの丸・括弧** (rough-notation の Circle / Bracket / Box): 語の印は `highlight underline strike marker` (文字) と `frame` (要素の縁) だけ — 囲むなら文字の上に `shape#o(left: …; top: …; width: …; height: …; path: circle_hand; border: 6px solid $a; background: none; in: draw {duration: .5})` (`bracket` `brace` `corners` も) を重ねて `[>#o]`。
-- **motion blur** (移動の残像): 入退場の `blur` channel で代用 (`in: {x: -360, blur: 18, opacity: 0, duration: .45, ease: 'power3.out'}`)。印の `to,blur=` は静止のぼかしへ移る (移動の残像ではない)。
-- **音のピッチ変更** (Remotion の toneFrequency): BGM / SE / 声とも無い — 別の素材を探す (`se` の説明文で高さを書く)。
-- **svg の中の動き** (SVG の animate・svg の中の id への GSAP): svg は 1 枚の静止画で、中の id は印の的にならない。動かす物は部品 (shape / path / group・切り抜いた svg) に分けて層にし、語の印 (`to,{rotation}`・`in: draw`・変種の morph・`recolor`・`in: wipe`) で動かす — hf 14 本の svg animate 85 回を全部この形で書けた (10-23 実測・scratchpad m1)。svg + GSAP を透過動画に焼いて 1 層にする経路は採らない (同期が声の実尺の後の焼き直し必須・VC の外の黒箱が黙って古くなる・費用 4〜5 倍)。再検討は、製品の著者が部品に分けて書けない svg animate を実際に出した時だけ。
-- **絵 (img / video) の mask-image** は DEFECT:CSS (絵の mask は画像の alpha `mask:` だけ — 透過の絵か svg で。地が単色なら絵の上に地の色のグラデの幕 `div#f(inset: 0; background: linear(#地色00,#地色,180))`)。板 (div / shape) の `mask-image: linear-gradient(…)` / `radial-gradient(…)` は svg に焼く — 子を持つ div は板だけが溶けて子の絵には効かない (warn `board_mask`)・**chroma key** (draft の語彙に無い)。
+- **filter on text and shapes** (saturation, color matrix, contrast, brightness): VisualFilter is assets only. Filters on text and shapes, and grading veils, are baked into the written colors (text color, stroke, fill, border, shadow, glow, ground, text gradients; filter covers run colors too) with the same formula as pictures (a box baked to svg is an asset, so filter works on it; a default text color cannot be baked — write `color:`).
+- **mix-blend-mode saturation / color / hue / luminosity**: BlendMode is normal / multiply / screen / add / overlay / soft-light (a whole-screen desaturation is a grading veil).
+- **part of a text held enlarged (run scale)**: run marks are one-shots (punch / settle / shake / pop) plus color and under-bands only — a held enlargement splits into a separate text with `[!#t2 scale]`.
+- **blend on elements with children**: an element with children (any type) takes `rotationX:` / `skewX:` / `depth:`, `filter:` blur / grading, and `to,` tilt / blur / filter / look on its one-sheet-per-children (the CSS stacking context = a group) just like a CSS container, but `mix-blend-mode:`, an opacity filter, and wipe entrances / exits are DEFECT (groups have no blend mode and no opacity filter — opacity is `opacity:`).
+- **layer-level glow / tint**: the glyph channels are text only (a box's or picture's glow is the `glow:` shadow).
+- **hand-drawn circles and brackets around a word** (rough-notation's Circle / Bracket / Box): word marks are `highlight underline strike marker` (text) and `frame` (an element's border) only — to encircle, layer `shape#o(left: …; top: …; width: …; height: …; path: circle_hand; border: 6px solid $a; background: none; in: draw {duration: .5})` (also `bracket` `brace` `corners`) over the text and `[>#o]`.
+- **motion blur** (movement trails): substitute the entrance / exit `blur` channel (`in: {x: -360, blur: 18, opacity: 0, duration: .45, ease: 'power3.out'}`). A mark's `to,blur=` moves to a static blur (not a movement trail).
+- **audio pitch shifting** (Remotion's toneFrequency): none for BGM / SE / voice — find another asset (write the pitch into the `se` description).
+- **motion inside an svg** (SVG animate, GSAP onto ids inside an svg): an svg is one still image and its inner ids are not mark targets. Split what moves into parts (shape / path / group, cut-out svgs) as layers, and move them with word marks (`to,{rotation}`, `in: draw`, variant morphs, `recolor`, `in: wipe`) — all 85 svg animate uses across 14 hf videos could be written this way (measured 10-23, scratchpad m1). The route of baking svg + GSAP into a transparent video as one layer is not taken (sync would require re-baking after the real voice length; a black box outside the VC silently goes stale; 4-5x the cost). Revisit only when a production author actually produces an svg animate that cannot be split into parts.
+- **mask-image on pictures (img / video)** is DEFECT:CSS (a picture's mask is only the image-alpha `mask:` — use a transparent picture or an svg. If the ground is one color, a ground-colored gradient veil over the picture: `div#f(inset: 0; background: linear(#地色00,#地色,180))`). `mask-image: linear-gradient(…)` / `radial-gradient(…)` on a board (div / shape) bakes to svg — on a div with children only the board melts, with no effect on the child picture (warn `board_mask`) · **chroma key** (not in the draft vocabulary).

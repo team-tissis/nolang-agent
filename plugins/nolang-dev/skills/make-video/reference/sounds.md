@@ -1,133 +1,133 @@
-# 効果音 — 大きさの階層と、名で引ける音の表
+# Sound effects — the loudness hierarchy and the by-name sound table
 
-catalog の効果音は全部 momentary 最大 -23 LUFS に揃えてある (声は -17)。そのままだと行が出る click と山場の fanfare が
-同じ大きさで鳴る。自然に聞こえる動画 (hf の実測) は 飾り -25〜-28 / 出来事 -22〜-24 / 山場 -16〜-20 と 9 dB の幅がある。
-そこで:
+Catalog sound effects are all normalized to a momentary max of -23 LUFS (voice is -17). Left as is, the click for a new row and a climax
+fanfare play at the same loudness. Videos that sound natural (measured on hf) span 9 dB: decoration -25 to -28 / events -22 to -24 / climaxes -16 to -20.
+So:
 
-| 層 | 何の音 | 書き方 | 大きさ |
+| Tier | What sounds | How to write | Loudness |
 |---|---|---|---|
-| 飾り | 箱・絵の pop、切替の風切り、数え上げ | 自動 (`sfx on`)。自分で書くなら `-8dB` | 出現と切替 -8 dB・強調 -5 dB (自動の既定) |
-| 出来事 | 打撃・倒れる・取得・警告・変身・決定 | `[♪"名"]` (0 dB) | 0 dB |
-| 山場 | fanfare・ジャン!・ドーン・歓声・結果発表 | `[♪"名" +3dB]` (1 本に 1〜2 回) | +3〜+5 dB |
+| Decoration | pops of boxes and pictures, transition swishes, count-ups | automatic (`sfx on`); if you write one yourself, `-8dB` | appearance and transitions -8 dB, emphasis -5 dB (automatic defaults) |
+| Events | impacts, falls, pickups, warnings, transformations, confirmations | `[♪"名"]` (0 dB) | 0 dB |
+| Climaxes | fanfares, stings (ジャン!), booms (ドーン), cheers, result reveals | `[♪"名" +3dB]` (once or twice per video) | +3 to +5 dB |
 
-決まり:
+Rules:
 
-- **1 cut に 3 回まで** (自動の音は数に入れない)。動きの指摘に音で答えない (動きは動きで直す)。lint `se_dense` (5 秒に 8 回以上) が出たら減らす。
-- 自動の音は compile が描く timeline に `[♪"…" -8dB]` (切替の境目は次の cut の頭の `se "風切り１-２" -8dB`) を足す (src の timeline.txt は変わらない・自分の印の先頭・`[>#名]` と `[!#名 count|check|pop|…]` だけ — 既定が足した印には付かない)。要素ごとに宣言 `se: "音"` で差し替え・`se: none` で消せる (消した音は間引きでは鳴ったと数える — 連なりの頭を消しても次の要素へ音は移らない)。切替に `se=` を書けばその 1 発だけ。
-- 文字・図・矢印の出現は鳴らない (文字が出るたびの click は「ポコポコ」と安っぽく聞こえた)。著者が語に `[♪]` を書いた語では、その語の自動の音は鳴らない (重ねない)。同じ瞬間の同じ自動の音は 1 発に畳む。
-- **自動の音 (`sfx on`) は compile が cut ごとに間引く**: 1 語に 1 発、語をまたいでは同じ音が 2 語続いた所から鳴らさない (別の音の語で数え直し)。全部の文の頭に同じ pop が付く作り (`cut { stagger: sentence }` + `in: card`) でも pop は連なりの頭だけになる。著者の `[♪]` / `se` は間引かず、その語に自動の音を重ねない (同じ音の連なりには数える)。
-- **一発の大きさは engine が床から置く**: 発火の瞬間の床 (声があれば声・無ければ曲・無ければ無音) の 2 LU 上に素材の最大が来る gain を engine が足す (台詞中は +8 dB・clamp −6〜+9)。著者の `-6dB` はその上の相対で、「床から少し引く」の意味。0 dB で書けば聞こえる。場の音 (`to=end`) は床相対にしない。
-- **3 秒より長い音は切る** (`se_long`)。mixer は scene を跨いで最後まで鳴らすので、23 秒のチャイムは次の 3 cut の下で鳴り続ける。長さの意図 (`to=` `peak=` `start=` `fade=`) を書かない一発が 3.5 秒超の素材に着いた時は engine が 3 秒で切って 600 ms で引く (説明文で引いた一発が環境ループに着いた時の保険)。`to=` で止める端は fade= の末尾を書かなければ 300 ms で引く (ブツッと切れない)。同じ瞬間 (語 + ずれ) の同じ音は engine が 1 発に畳む。
-  山のある音は `peak=山の秒` で山を語に合わせ、`to=` か `fade=0,600` で終える: `[♪"ドラムロール" peak=4.4s]` = 4.4 秒の山が語に来る (手前 4.4 秒から鳴る)。
-- 重ねるなら ずらして小さく: `[♪"打撃　パンチ03-1(ドライ)"][♪"打撃　パンチ03-4(ディレイ)" -4dB +160]` (hf の打撃 + 残響)。
-- 名で書くと検索が揺れない (下の表の名は LOCAL / STG / PROD に同じ名で入っている)。表に無い音は説明文で書く (`[♪"氷がピキピキと凍る音"]`)。
-  説明文で引いた音の尺は src.json の pin (`duration_ms`) か check の `se_long` で分かる。
+- **At most 3 per cut** (automatic sounds don't count). Don't answer a motion finding with a sound (fix motion with motion). If the lint `se_dense` fires (8+ in 5 seconds), cut some.
+- Automatic sounds are added by compile to the timeline it renders as `[♪"…" -8dB]` (at a transition boundary, `se "風切り１-２" -8dB` at the head of the next cut) (your timeline.txt does not change; only at the front of your own marks, `[>#名]` and `[!#名 count|check|pop|…]` — marks the defaults added get none). Per element, the declaration `se: "音"` swaps the sound and `se: none` removes it (a removed sound still counts as played for thinning — removing the head of a run does not move the sound to the next element). Write `se=` on a transition and only that one shot plays.
+- Text, diagrams and arrows make no sound on appearance (a click on every text entrance sounded cheap and plinky). On a word where the author wrote `[♪]`, that word's automatic sound does not play (no doubling). Identical automatic sounds at the same instant fold into one shot.
+- **Automatic sounds (`sfx on`) are thinned per cut by compile**: one shot per word, and across words the same sound stops playing from the second word in a row (the count restarts at a word with a different sound). Even in a build where every sentence head gets the same pop (`cut { stagger: sentence }` + `in: card`), the pop plays only at the head of the run. The author's `[♪]` / `se` are never thinned, and no automatic sound is layered on that word (it does count toward a same-sound run).
+- **The loudness of a shot is placed by the engine from the floor**: the engine adds the gain that puts the asset's max 2 LU above the floor at the instant of firing (voice if present, else music, else silence) (+8 dB during speech; clamp −6 to +9). The author's `-6dB` is relative on top of that, meaning "a little below the floor". Write 0 dB and it will be heard. Ambience (`to=end`) is not floor-relative.
+- **Cut sounds longer than 3 seconds** (`se_long`). The mixer plays across scenes to the end, so a 23-second chime keeps ringing under the next 3 cuts. When a shot with no written length intent (`to=` `peak=` `start=` `fade=`) lands on an asset over 3.5 seconds, the engine cuts it at 3 seconds and eases out over 600 ms (insurance for when a description-matched shot lands on an ambience loop). An end stopped with `to=` eases out over 300 ms unless you write the tail of fade= (no abrupt cutoff). Identical sounds at the same instant (word + offset) are folded into one shot by the engine.
+  A sound with a peak: align the peak to the word with `peak=山の秒` and end with `to=` or `fade=0,600`: `[♪"ドラムロール" peak=4.4s]` = the 4.4-second peak lands on the word (it starts playing 4.4 seconds earlier).
+- To layer, offset and lower: `[♪"打撃　パンチ03-1(ドライ)"][♪"打撃　パンチ03-4(ディレイ)" -4dB +160]` (hf's impact + reverb).
+- Writing by name keeps retrieval stable (the names in the tables below exist under the same names in LOCAL / STG / PROD). Sounds not in the tables are written as descriptions (`[♪"氷がピキピキと凍る音"]`).
+  The length of a description-matched sound shows in the src.json pin (`duration_ms`) or in check's `se_long`.
 
-## BGM は候補を聴いて選ぶ (engine)
+## BGM: listen to candidates and choose (engine)
 
-`bgm` 行の説明文は embedding 検索の窓 (cos 上位・幅 0.03〜0.05 で rank 1 は実質 tie-break) を引き、動画の依頼文があれば
-上位 5 曲の 20 秒の抜粋を Gemini 3.8 Flash に 3 通りの順で聴かせ 2 票以上の曲を採る (adapters の `_pick_bgm_by_listening`・
-libs/ai/bgm_listen_pick.py)。10-14 bench (人の耳が正解・10 query): rank 1 の一致 2 / 10 → 聴き選び 7 / 10。依頼文なしは 3 / 10 なので、
-studio では run dir の `request.txt` (stream_make.sh が置く) か src.json の settings.title が文脈になる。文脈が無い・聴けない・票が割れた時は、
-効果音と同じ発見窓 (cos 上位 40 + 名前一致 + 語彙一致) から選択役 (Jev) が説明文で選ぶ (`_resolve_sound_effect_by_pick`)。
-名指し (表示名の一致) は聴かない。
+The description on a `bgm` line pulls an embedding search window (top cos; at a spread of 0.03-0.05, rank 1 is effectively a tie-break), and when the video has a request text,
+20-second excerpts of the top 5 tracks are played to Gemini 3.8 Flash in 3 different orders and tracks with 2+ votes win (`_pick_bgm_by_listening` in adapters,
+libs/ai/bgm_listen_pick.py). 10-14 bench (human ears as ground truth, 10 queries): rank-1 match 2 / 10 → listen-and-pick 7 / 10. Without a request text it is 3 / 10, so
+in the studio the run dir's `request.txt` (placed by stream_make.sh) or src.json's settings.title serves as context. With no context, nothing to listen to, or a split vote,
+a picker (Jev) chooses by description from the same discovery window as sound effects (top-40 cos + name match + vocabulary match) (`_resolve_sound_effect_by_pick`).
+Named picks (display-name matches) skip the listening.
 
-## 聴取 check (`studio.py listen <project>`)
+## Listening check (`studio.py listen <project>`)
 
-描いた動画の cut ごとの音 (声 + BGM + 効果音の mix) と発火の表 (id・秒・名・dB・役割・説明文)・台詞を Gemini 3.8 Flash に渡し、発火ごとに
-`keep / drop / replace / repeat / too_quiet / too_loud` を enum で返させる。同じ cut を表の順を逆にして 2 回聴き、**`repeat` は 1 回で、
-`drop` は 2 回一致で** `listen.json` の drops に記録 → 次の `render` が VC からその発火を外す (`--apply` で続けて描き直す)。
-`replace` は 2 回一致でも提案に留める (同じ説明文は同じ音に着く — 説明文を擬音 + 音源 1 つに書き換える)。`too_quiet / too_loud` は採らない
-(10-14 計測: Flash は埋もれた音を keep と答える・音量は engine の床 / anchor が受ける)。1 call p50 4.5 s / 2〜3 円 / 本。
-2 回目以降の listen は前回の drops を表に出さず引き継ぐ。結果は `out/listen_report.md` (全発火の判定表)。
+Pass each cut's audio of the rendered video (voice + BGM + sound-effect mix), the firing table (id, seconds, name, dB, role, description) and the speech to Gemini 3.8 Flash, and have it return
+`keep / drop / replace / repeat / too_quiet / too_loud` as an enum per firing. Each cut is heard twice with the table order reversed; **`repeat` on 1 vote,
+`drop` on 2 matching votes** are recorded into the drops of `listen.json` → the next `render` removes that firing from the VC (`--apply` re-renders right away).
+`replace` stays a suggestion even on 2 matching votes (the same description lands on the same sound — rewrite the description as onomatopoeia + one source). `too_quiet / too_loud` are not adopted
+(10-14 measurement: Flash answers keep for buried sounds; loudness is handled by the engine's floor / anchor). One call p50 4.5 s / 2-3 yen per video.
+A second or later listen carries the previous drops over without showing them in the table. Results land in `out/listen_report.md` (a verdict table of all firings).
 
-## 絵に結ぶ音 (場の音と foley) — hf との差が残る所
+## Sounds tied to pictures (ambience and foley) — where hf still leads
 
-p8 20 本の判定文で音が褒められたのは hf だけ (6 回: 水音・環境音のバランス、注ぐ音のシズル、「ペタペタ」の文字と効果音)。NoLang 側は 0 回で、
-src の実測は `se` 行 0 本・`[♪]` 1〜7 回・場の音 (`to=` の長い音) 5 / 20 本。足りないのは音の数でなく、絵と結んだ音:
+In the p8 verdicts over 20 videos, only hf was praised for sound (6 times: the balance of water and ambience, the sizzle of pouring, the "ペタペタ" text with its sound effect). NoLang got 0, and
+the measured src had 0 `se` lines, 1-7 uses of `[♪]`, and ambience (long `to=` sounds) in 5 / 20 videos. What is missing is not the number of sounds but sounds tied to the picture:
 
-- **場の音**: 全面の絵の cut の頭に 1 つ (`se "早朝の商店街の環境音、遠くの鳥" -8dB to=6s fade=300,1500`・cut の尺で切る・場面が変わるごとに変える)。大きさは −8 dB: p9 の −12〜−16 dB は BGM (−33) より下に沈み、声の無い瞬間の床が hf より 8 LU 低かった (hf の story の床は声の 7〜10 LU 下)。
-- **foley**: 絵の中の動作の語に 1 つ (`[♪"グラスに酒を注ぐ澄んだ音" -6dB]`・湯気・水・火・足音・紙)。
-- **擬音の文字**: 同じ語に `[♪]` (`p#名(…) ペタペタ` + `[♪"ペタペタと貼る音"]`) — 文字だけ・音だけにしない。
-- 飾りの pop (`sfx on`) は褒められない。story / cinematic は `sfx off` にして場の音と foley だけにしてよい。
+- **Ambience**: one at the head of a full-picture cut (`se "早朝の商店街の環境音、遠くの鳥" -8dB to=6s fade=300,1500`; cut it at the cut's length; change it whenever the place changes). Loudness −8 dB: p9's −12 to −16 dB sank below the BGM (−33), and the floor in voiceless moments sat 8 LU lower than hf (hf's story floor is 7-10 LU under the voice).
+- **Foley**: one on the word of an action inside the picture (`[♪"グラスに酒を注ぐ澄んだ音" -6dB]`; steam, water, fire, footsteps, paper).
+- **Onomatopoeia text**: `[♪]` on the same word (`p#名(…) ペタペタ` + `[♪"ペタペタと貼る音"]`) — never the text alone or the sound alone.
+- Decorative pops (`sfx on`) win no praise. story / cinematic may go `sfx off` and keep only ambience and foley.
 
-## 名で引ける音 (用途 → catalog の名・尺・山の位置)
+## Sounds by name (use → catalog name, length, peak position)
 
-`山` は momentary が最大になる秒 (無い物は頭から鳴る短い音)。`±` は目安の音量。
+`peak` is the second where the momentary level is highest (absent = a short sound that plays from the head). `±` is a loudness guide.
 
-### 飾り (自動の音と同じ系統・-5 dB)
+### Decoration (same family as the automatic sounds, -5 dB)
 
-| 用途 | 名 | 尺 | 備考 |
+| Use | Name | Length | Notes |
 |---|---|---|---|
-| 箱・絵・写しの出現 (pop) | `オノマトペ 弾ける01-1（ドライ）` | 1.8 s | 自動の pop |
-| 数え上げの click | `アソート効果音05-14` | 1.7 s | 自動の click (count) |
-| cut の切替の風切り | `風切り１-２` | 0.4 s | 自動の swish |
-| 画面が横に動く whoosh | `カメラモーション06-1(中)` | 1.0 s | wipe / slide に |
-| 頭の入り (ノイズの sweep) | `ノイズスイープ03-04(ドライ)` | 0.6 s | 動画の 0 秒 |
-| 場面の頭の小さな合図 | `ひらめき02-1（高）` | 1.7 s | hf の step |
-| 小さな輝き | `キラリン 21` | 2.2 s | 札に ✓ が付く所 |
-| 判子 | `判子を押す` | 0.5 s | 自動の stamp |
-| 電子の決定 (ピッ) | `決定音` | 0.5 s | UI |
-| スマホの通知 | `スマートフォン UIサウンド01-09（スピーカー）` | 2.0 s | |
-| シャッター | `カメラのシャッター音` | 0.6 s | |
-| 紙をめくる | `ノートをめくる音` | 6.5 s | 山 1.7 s・`to=2s` |
+| Appearance of boxes, pictures, copies (pop) | `オノマトペ 弾ける01-1（ドライ）` | 1.8 s | the automatic pop |
+| Count-up click | `アソート効果音05-14` | 1.7 s | the automatic click (count) |
+| Cut-transition swish | `風切り１-２` | 0.4 s | the automatic swish |
+| Whoosh as the screen moves sideways | `カメラモーション06-1(中)` | 1.0 s | for wipe / slide |
+| Opening hit (noise sweep) | `ノイズスイープ03-04(ドライ)` | 0.6 s | second 0 of the video |
+| Small cue at a scene head | `ひらめき02-1（高）` | 1.7 s | hf's step |
+| Small sparkle | `キラリン 21` | 2.2 s | where a card gets its ✓ |
+| Stamp | `判子を押す` | 0.5 s | the automatic stamp |
+| Electronic confirm (beep) | `決定音` | 0.5 s | UI |
+| Phone notification | `スマートフォン UIサウンド01-09（スピーカー）` | 2.0 s | |
+| Shutter | `カメラのシャッター音` | 0.6 s | |
+| Page turn | `ノートをめくる音` | 6.5 s | peak 1.7 s, `to=2s` |
 
-### 出来事 (0 dB)
+### Events (0 dB)
 
-| 用途 | 名 | 尺 | 備考 |
+| Use | Name | Length | Notes |
 |---|---|---|---|
-| 重い打撃 | `打撃　パンチ03-1(ドライ)` | 0.5 s | +160 ms に `03-4(ディレイ)` -4dB を重ねると残響 |
-| 打撃の残響 | `打撃　パンチ03-4(ディレイ)` | 1.6 s | 重ね用 |
-| 軽い打撃 (コミカル) | `戦闘08` | 0.2 s | |
-| 倒れる (ドサッ) | `SNES 格闘06-12（倒れる）` | 1.8 s | |
-| 着地 (ストン) | `SNES 格闘06-11（着地）` | 1.8 s | |
-| 持ち上げる (上昇の笛) | `スライドホイッスル01-1（短 上昇）` | 1.8 s | |
-| 成功 chime | `正解01-2` | 2.0 s | 自動の ok (`$ok` の色) |
-| ピンポン (正解) | `クイズ　ボタン01-4(シングル)` | 1.3 s | |
-| 失敗 buzzer | `クイズ　ブザー02-2(短)` | 0.3 s | 自動の bad (`$bad` の色) |
-| 警告 (短いアラーム) | `アラーム01-3` | 2.2 s | |
-| 警告 (サイレン) | `警告音 サイレン05-01（速 中）` | 3.7 s | 山 0.5 s・`to=2s` |
-| 注目 (ピコン) | `注目 1` | 2.4 s | |
-| ひらめき (ピーン) | `ピーン！/閃き３` | 0.8 s | |
-| レベルアップ / 回復 | `レベルアップ、回復` | 0.8 s | |
-| パワーアップ | `パワーアップ01` | 0.6 s | |
-| アイテム取得 | `SNES アクション01-16（アイテム）` | 1.8 s | |
-| お金 / 宝 | `お金・財宝・アイテムゲット` | 2.1 s | |
-| 小銭 | `小銭をチャラチャラ` | 1.6 s | |
-| 変身 (シャキーン) | `オノマトペ シャキーン01-1（長）` | 2.7 s | 軽い物は `05-4（軽 ディレイ）` 5.7 s |
-| 電源が落ちる / 停止 | `DJのスピン・スクラッチ風SE` | 2.3 s | レコードが止まる |
-| ガラスが割れる | `コップが割れる` | 1.4 s | 無音を破る |
-| 爆発 | `爆発06` | 1.0 s | |
-| ドア | `ドア05` | 0.7 s | |
-| 水に飛び込む | `水に飛び込む` | 3.1 s | |
-| チャイム (鐘) | `チャイム12` | 2.0 s | |
-| 落胆 (トロンボーン) | `フレーズ04-1` | 7.1 s | `to=2.5s` |
-| 笑い声 | `爆笑3～6名` | 4.5 s | `to=2s` |
+| Heavy impact | `打撃　パンチ03-1(ドライ)` | 0.5 s | layer `03-4(ディレイ)` -4dB at +160 ms for reverb |
+| Impact reverb | `打撃　パンチ03-4(ディレイ)` | 1.6 s | for layering |
+| Light impact (comical) | `戦闘08` | 0.2 s | |
+| Falling over (thud) | `SNES 格闘06-12（倒れる）` | 1.8 s | |
+| Landing (plop) | `SNES 格闘06-11（着地）` | 1.8 s | |
+| Lifting (rising whistle) | `スライドホイッスル01-1（短 上昇）` | 1.8 s | |
+| Success chime | `正解01-2` | 2.0 s | the automatic ok (the `$ok` color) |
+| Ding-ding (correct) | `クイズ　ボタン01-4(シングル)` | 1.3 s | |
+| Failure buzzer | `クイズ　ブザー02-2(短)` | 0.3 s | the automatic bad (the `$bad` color) |
+| Warning (short alarm) | `アラーム01-3` | 2.2 s | |
+| Warning (siren) | `警告音 サイレン05-01（速 中）` | 3.7 s | peak 0.5 s, `to=2s` |
+| Attention (ping) | `注目 1` | 2.4 s | |
+| Insight (ding) | `ピーン！/閃き３` | 0.8 s | |
+| Level-up / heal | `レベルアップ、回復` | 0.8 s | |
+| Power-up | `パワーアップ01` | 0.6 s | |
+| Item pickup | `SNES アクション01-16（アイテム）` | 1.8 s | |
+| Money / treasure | `お金・財宝・アイテムゲット` | 2.1 s | |
+| Loose coins | `小銭をチャラチャラ` | 1.6 s | |
+| Transformation (shing!) | `オノマトペ シャキーン01-1（長）` | 2.7 s | for something light, `05-4（軽 ディレイ）` 5.7 s |
+| Power-down / stop | `DJのスピン・スクラッチ風SE` | 2.3 s | a record grinding to a halt |
+| Glass breaking | `コップが割れる` | 1.4 s | breaks a silence |
+| Explosion | `爆発06` | 1.0 s | |
+| Door | `ドア05` | 0.7 s | |
+| Diving into water | `水に飛び込む` | 3.1 s | |
+| Chime (bell) | `チャイム12` | 2.0 s | |
+| Letdown (trombone) | `フレーズ04-1` | 7.1 s | `to=2.5s` |
+| Laughter | `爆笑3～6名` | 4.5 s | `to=2s` |
 
-### 山場 (+3〜+5 dB・1 本に 1〜2 回)
+### Climaxes (+3 to +5 dB, once or twice per video)
 
-| 用途 | 名 | 尺 | 備考 |
+| Use | Name | Length | Notes |
 |---|---|---|---|
-| 驚き (ジャン!) | `ジャン！・驚き` | 1.0 s | 題の出現にも |
-| fanfare | `フレーズ01-1` | 3.1 s | 「呼べる!!」の類 |
-| 歓声 + 拍手 | `歓声 イェイ01-4（高 拍手）` | 2.6 s | fanfare の +120 ms に -4dB で重ねる |
-| 拍手 (短) | `拍手04-3（短）` | 3.9 s | `to=2s` |
-| ドラムロール → シンバル | `結果発表01-2` | 8.0 s | 溜め → 答え。`peak=` で山を答えの語に |
-| ドラムロール (素) | `ドラムロール` | 6.2 s | 山 4.4 s → `[♪"ドラムロール" peak=4.4s]` |
-| 重低音の衝撃 (ドーン) | `オノマトペ 衝撃13-2（長）` | 8.8 s | 山 0.5 s・残響が長い → `to=2.5s fade=0,800` |
-| 心音 (緊張の溜め) | `心臓の鼓動音` | 5.3 s | 山 3.3 s・`to=3.5s` |
-| ゲームクリア | `ベルのゲームクリア音` | 3.7 s | |
+| Surprise (sting) | `ジャン！・驚き` | 1.0 s | also for a title's appearance |
+| Fanfare | `フレーズ01-1` | 3.1 s | the "呼べる!!" kind of moment |
+| Cheers + applause | `歓声 イェイ01-4（高 拍手）` | 2.6 s | layer at -4dB, +120 ms after the fanfare |
+| Applause (short) | `拍手04-3（短）` | 3.9 s | `to=2s` |
+| Drumroll → cymbal | `結果発表01-2` | 8.0 s | build-up → reveal; `peak=` puts the peak on the reveal word |
+| Drumroll (plain) | `ドラムロール` | 6.2 s | peak 4.4 s → `[♪"ドラムロール" peak=4.4s]` |
+| Deep bass impact (boom) | `オノマトペ 衝撃13-2（長）` | 8.8 s | peak 0.5 s, long reverb → `to=2.5s fade=0,800` |
+| Heartbeat (tense build-up) | `心臓の鼓動音` | 5.3 s | peak 3.3 s, `to=3.5s` |
+| Game clear | `ベルのゲームクリア音` | 3.7 s | |
 
-### 長い音 (環境・ループ) — `to=` 必須
+### Long sounds (ambience, loops) — `to=` required
 
-| 用途 | 名 | 尺 | 備考 |
+| Use | Name | Length | Notes |
 |---|---|---|---|
-| 時計の秒針 | `時計 秒針01-1（ドライ ループ）` | 7.7 s | 溜めの間だけ `to=` |
-| 風 | `風03` | 4.4 s | |
-| 足音 | `足音` | 14.0 s | |
-| タイプ音 | `キーボード` | 23.9 s | |
-| キラキラ (長い) | `オノマトペ キラキラ01-2（短）` | 9.0 s | 「短」でも 9 秒 |
+| Clock ticking | `時計 秒針01-1（ドライ ループ）` | 7.7 s | `to=` only for the build-up |
+| Wind | `風03` | 4.4 s | |
+| Footsteps | `足音` | 14.0 s | |
+| Typing | `キーボード` | 23.9 s | |
+| Sparkles (long) | `オノマトペ キラキラ01-2（短）` | 9.0 s | 9 seconds even though named 「短」 |
 
-**曲の大きさと duck は engine の既定に任せる**: `bgm#music 説明` だけで、台詞中は声の 11 LU 下・長い間 (1 秒超) と末尾では自動で 2 dB 前に出る (duck −2・attack 200 / release 500・文の切れ目 0.6 s 未満では戻らない)・最後の語の後に前に出て消える。`volume:` は書かない (既定 +7dB = 声の 9 LU 下 = hf の大きさ・下げすぎると台詞の裏で曲が聞こえなくなる)。場の音を立てたい一瞬は曲を `[<#名]` で止める。`bgm#名(duck: off)` は曲を主役にする時だけ。
+**Leave music loudness and ducking to the engine defaults**: just `bgm#music 説明`; during speech the music sits 11 LU under the voice, in long pauses (over 1 second) and at the tail it automatically steps 2 dB forward (duck −2, attack 200 / release 500; it does not come back up in sentence breaks under 0.6 s), and after the last word it steps forward and fades away. Do not write `volume:` (the default +7dB = 9 LU under the voice = hf's loudness; lower it too far and the music becomes inaudible behind the speech). For an instant where ambience should stand out, stop the music with `[<#名]`. `bgm#名(duck: off)` is only for when the music is the lead.
 
-曲は層の尺より短ければ周期で繰り返す (既定・曲の末尾の fade がそのまま継ぎ目になるので、長い動画には長い曲を選ぶ)。BGM を語で下げる / 戻すのは印 `[!#music to,{volume:-13dB, duration:.1}]` … `[!#music to,{volume:0dB, duration:.6}]` (曲の既定の大きさからの dB・声の尺がずれても語に付いて動く)・末尾からの溜めは根の `bgm#名(keys: "end-6s:-9|end-4s:0") 説明`。曲を変えるのは前の cut の末尾に印だけの行 `[<#名]` → 次の cut の頭に `bgm 名2 -1500` (design の根に `bgm#名2 説明`・-1500 = 前の曲の fade out に 1.5 秒重ねる crossfade)・衝撃の cut は前の cut の末尾に `[<#名 -400]` だけ書いて場の音に任せる。fade は書かなければ 1.5 s / 2 s (切替は前の曲の末尾 2 秒と次の曲の頭 1.5 秒が重なる・末尾は最後の語の後の無音 (既定 3 s) の 1/3 を鳴ってから消える — 無音を短く書けば余韻も縮む)。
+A track shorter than its layer's length repeats on a cycle (the default; the track's tail fade becomes the seam as is, so pick a long track for a long video). Lowering / restoring the BGM on a word is the marks `[!#music to,{volume:-13dB, duration:.1}]` … `[!#music to,{volume:0dB, duration:.6}]` (dB from the track's default loudness; they stay attached to the word even when the speech length shifts); a build-up measured from the tail is the root's `bgm#名(keys: "end-6s:-9|end-4s:0") 説明`. To change tracks, write a mark-only line `[<#名]` at the end of the previous cut → `bgm 名2 -1500` at the head of the next cut (with `bgm#名2 説明` in the design root; -1500 = a crossfade overlapping the previous track's fade-out by 1.5 seconds); for an impact cut, write only `[<#名 -400]` at the end of the previous cut and let the ambience carry it. Unwritten fades are 1.5 s / 2 s (at a switch the previous track's last 2 seconds overlap the next track's first 1.5 seconds; at the tail the track plays through 1/3 of the silence after the last word (default 3 s) before fading — write a shorter silence and the afterglow shrinks too).
