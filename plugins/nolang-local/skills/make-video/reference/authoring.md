@@ -127,6 +127,7 @@ step#s3(left: 900px; top: 90px; n: 3; t: "…")
 
 - 形: `def 名(引数[=既定],…) = tag(宣言)` + 字下げの子。引数は `{名}` で値の中に (`content: {n}`・内容の `{n}`・`"@{who}、笑顔"`)。値は書いたまま渡る (CSS の custom property と同じ — 内容の `{t}` に `t: 16px` は `16px`・`width: {w}` や tween の中の `{w}` の px は長さ)。未指定で既定の無い引数は DEFECT:ARG。引数が無ければ `def 名 = tag(宣言)` (見た目だけの名 = class・`名#x 文字` で使う — 同じ形の 2 つ目はこれに上げて実体を並べる)。根に自分の型を書く def (`def div = div(…)`) は輪になるので DEFECT:NAME_SHADOW。`self` = def の中で根の名 (`link#l(start: self; to: {to}; dash: true)`)。
 - 実体: `def名#名(引数: 値; …; 根の宣言; 実体.子.CSS名: 値)`。字下げの子のうち def の同名の子 (`p#v(…)`・型は省くか def の子と同じ) はその子の差し替え (書いた宣言が勝ち・他は def のまま。位置は軸ごと — `left` / `right` / `cx` のどれかを書けば def の横の位置は全部替わる・縦の `top` / `bottom` / `cy` も同じ)・他の名は新しい子。×N・変種も要素と同じ。群が根の def は子が member。実体の `scale: 0.8` は通常の要素と同じ CSS transform。transform-origin まわりに子ごと描画を縮め、layout の width / height・子の位置・font-size・padding・gap は書いた値を保つ。箱そのものを変えるなら width / height を指定する。
+- 文字の一部 `{X}…{/}` の宣言 `run.X.CSS名: 値` (要素ごと) は def の根と `tag { }` にも書ける (`def cap = p(run.s.color: $o)`・`p { run.s.font-size: 40px }`) — 要素に書いた同じ key が勝ち、他の key は def / rule のまま (`run.X.*` を持つ要素の X は根の `run X { }` を継がない)。
 - 根の雛形 (見本 — 色と寸法は題材で変える。札の行・横棒・流れ図は組み込みの部品でなく、この形の def を根に書いて ×N で並べる):
 
 ```

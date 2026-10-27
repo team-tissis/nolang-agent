@@ -131,7 +131,7 @@ HLS の segment (`static/video_generate/<process>/`) が増え、全 cut で `st
 
 ## 辞書と待ち方
 
-`reference/authoring.md` は節を行番号で読む (Read の `offset` / `limit`): L7 HTML 形 · L16 字句 · L33 design.txt · L62 型 · L77 位置 · L95 動き · L106 ×N・群・def と根の雛形 · L164 字幕・cut · L168 timeline.txt · L198 印 · L217 時刻の規則 · L226 cue と切替 · L232 欠陥。key の名は v2 の綴り (`size` `fill` `radius` `shadow` …) で載っているが、CSS の名 (`font-size` `background` `border-radius` `box-shadow` …) でそのまま書ける。
+`reference/authoring.md` は節を行番号で読む (Read の `offset` / `limit`): L7 HTML 形 · L16 字句 · L33 design.txt · L62 型 · L77 位置 · L95 動き · L106 ×N・群・def と根の雛形 · L165 字幕・cut · L169 timeline.txt · L199 印 · L218 時刻の規則 · L227 cue と切替 · L233 欠陥。key の名は v2 の綴り (`size` `fill` `radius` `shadow` …) で載っているが、CSS の名 (`font-size` `background` `border-radius` `box-shadow` …) でそのまま書ける。
 render は前景で `timeout 900 $P $S …`。GPU を分け合うなら `STUDIO_RENDER_LOCK=<file>` を前置。resource-service が落ちていれば起こす (前提 (環境))。
 2 本を比べるときは `reference/compare.md`。
 この skill の形 (圧縮の規則 4 つ + 違い 5 つ + 工程 + 見本) の根拠は `docs/draft_src_v2/studio-skill-evidence.md`。
