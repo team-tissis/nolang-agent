@@ -18,7 +18,8 @@ usage (repo root から): python stream_run.py <project> [--staff medium|balance
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
-    値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
+    値は担当の effort。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
+    (間に合わない見込みなら low に落とす。開始 中央 約 90 s・全 cut medium は約 130 s で止まらないは 6/10・質は小さく落ちる)。
   --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の最初の直し役を、厳しい監督として
     指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ。check の severe / warn は常に全部見せる)。
@@ -441,8 +442,20 @@ class Run:
         self.t0 = time.time()
         self.order: list[str] = []
         self.cut_estimate: dict[str, float] = {}  # cut → check が測った見込み秒 (字数 × 話速 + 間・実尺 cache 込み)
+        # 止まらない開始の予測 (`staff_effort_for` の balanced) が読む進行の実測 — 値は全部 since 秒 (t0 からの経過)
+        self.cut_seen_s: dict[str, float] = {}
+        self.staff_begin_s: dict[str, float] = {}
+        self.staff_end_s: dict[str, float] = {}
+        self.staff_chosen: dict[str, str] = {}  # cut → 担当に渡した effort
+        self.staged_s: dict[str, float] = {}
+        self.fed_s: dict[str, float] = {}
+        self._manifest_s: float | None = None  # 再生開始 (manifest 公開) の実測の cache
 
     # ---- 記録 ----
+    def since(self) -> float:
+        """t0 からの経過秒 (run.jsonl の `since` と同じ時間軸)。"""
+        return time.time() - self.t0
+
     def log(self, **kw: object) -> None:
         kw["t"] = time.time()
         kw["since"] = round(float(kw["t"]) - self.t0, 1)
@@ -1243,6 +1256,7 @@ class Run:
         try:
             self._stage(i, c)
         finally:
+            self.staged_s[c] = self.since()
             self.staged[c] = True
             self.log(cut=c, event="staged", broken=self.broken.get(c), **self.cut_length(c))
 
@@ -1269,6 +1283,7 @@ class Run:
                 self.broken[c] = "not written"
                 return
             time.sleep(0.3)
+        self.cut_seen_s[c] = self.since()
         self.log(cut=c, event="cut_seen")
         self.move_forward_defs(c)
         if self.staff_effort:
@@ -1784,13 +1799,91 @@ class Run:
         (self.solo / f"cut_{c}.txt").write_text(new_text)
         return hit
 
-    def staff_effort_for(self, i: int) -> str:
-        """cut i の担当の effort。`balanced` = cut 1・2 だけ low・他は medium — 止まらない開始を決めるのは余裕の薄い cut 1・2
-        (cut 0 は再生の頭まで余裕がある)。2 題材群 16 本で止まらない開始 中央 117〜144 → 84〜95 s・質は 16 判定あたり約 -12 区間
-        (差は小・10-27)。cut 3 以降まで low にすると質ははっきり落ちる。"""
-        if self.staff_effort == "balanced":
-            return "low" if i in (1, 2) else "medium"
-        return self.staff_effort or "medium"
+    # 止まらない開始の予測の定数 (10-27 の local 実測 10 本: 担当 low 7〜25 s / medium 24〜72 s (中央 40)・check+直し 中央
+    # 0.8 s・最初の fed → manifest 公開 約 2.5 s・fed からその cut の segment が再生に届くまで ~10 s)。見積りは非対称に取る:
+    # 自分の完了 (作業側) は遅め (SLOW)・見る人の到達 (締切側) は早め (FAST × OFFSET_DISCOUNT) — どちらの外れも
+    # 「medium を選んで止まる」でなく「low に落として質が少し下がる」側に倒れる
+    STAFF_SLOW_S: dict[str, float] = {"low": 25.0, "medium": 55.0}
+    STAFF_FAST_S: dict[str, float] = {"low": 8.0, "medium": 25.0}
+    STAGE_TAIL_S = 3.0  # 担当の後の check + 直しの見込み
+    AUTHOR_CHECK_S = 5.0  # cut_seen から担当開始まで (著者版の check)
+    RENDER_HEAD_S = 10.0  # fed からその cut の segment が再生に届くまで
+    MANIFEST_LAG_S = 3.0  # 最初の fed から manifest 公開 (再生開始) まで
+    NONSTOP_MARGIN_S = 5.0  # 見込みの揺れの余白
+    OFFSET_DISCOUNT = 0.85  # 見込み秒の和の締切側の割引 (見込みより短い動画に早く着く)
+
+    def _staff_s(self, effort: str, *, fast: bool) -> float:
+        table = self.STAFF_FAST_S if fast else self.STAFF_SLOW_S
+        return table.get(effort, table["medium"])
+
+    def _ready_est(self, c: str, now: float, *, fast: bool) -> float:
+        """cut c が staged になる見込み (since 秒) — 実測があれば実測・走行中は担当の effort の見込みで先へ。"""
+        if c in self.staged_s:
+            return self.staged_s[c]
+        if c in self.staff_end_s:
+            return self.staff_end_s[c] + self.STAGE_TAIL_S
+        effort_s = self._staff_s(self.staff_chosen.get(c, "medium"), fast=fast)
+        if c in self.staff_begin_s:
+            return max(self.staff_begin_s[c] + effort_s, now) + self.STAGE_TAIL_S
+        return max(self.cut_seen_s.get(c, now) + self.AUTHOR_CHECK_S + effort_s, now) + self.STAGE_TAIL_S
+
+    def _fed_est(self, i: int, candidate: str, now: float) -> float:
+        """cut i (担当を candidate で回す場合) が投入 (fed) される見込み (遅め) — 投入は構成の順なので前の cut の遅い方を引き継ぐ。"""
+        fed = 0.0
+        for j, c in enumerate(self.order[: i + 1]):
+            if self.broken.get(c):
+                continue
+            if c in self.fed_s:
+                fed = max(fed, self.fed_s[c])
+            elif j == i:
+                fed = max(fed, now + self._staff_s(candidate, fast=False) + self.STAGE_TAIL_S)
+            else:
+                fed = max(fed, self._ready_est(c, now, fast=False))
+        return fed
+
+    def manifest_since(self) -> float | None:
+        """再生開始 (manifest 公開) の実測 (since 秒)。local は studio_stream が run.jsonl に `manifest_published` を書く —
+        remote の run では実測が無く、予測 (最初の fed + MANIFEST_LAG_S) に落ちる。"""
+        if self._manifest_s is None:
+            with contextlib.suppress(OSError, ValueError):
+                for line in (self.st / "run.jsonl").read_text().splitlines():
+                    e = json.loads(line)
+                    if e.get("event") == "manifest_published":
+                        self._manifest_s = float(e["since"])
+                        break
+        return self._manifest_s
+
+    def _viewer_at(self, i: int, now: float) -> float:
+        """見る人が cut i の頭に着く見込み (since 秒・早め) = 再生開始 (実測 → 最初の fed + lag → 早めの予測) +
+        前の cut の見込み秒の和 × 割引。"""
+        manifest = self.manifest_since()
+        if manifest is None:
+            first = next((c for c in self.order if not self.broken.get(c)), None)
+            fed0 = self.fed_s.get(first) if first is not None else None
+            if fed0 is None:
+                fed0 = self._ready_est(first, now, fast=True) if first is not None else now
+            manifest = fed0 + self.MANIFEST_LAG_S
+        est = self.estimated_seconds()
+        offset = sum(est.get(c, 10.0) for c in self.order[:i] if not self.broken.get(c))
+        return manifest + offset * self.OFFSET_DISCOUNT
+
+    def staff_effort_for(self, i: int, c: str) -> str:
+        """cut i の担当の effort。`balanced` = cut 1・2 は low (再生開始の臨界路・2 題材群 16 本で止まらない開始 中央 117〜144 →
+        84〜95 s・質は小さく落ちる・10-27)・cut 0 は medium (再生の頭まで余裕がある)・cut 3 以降は **medium の見込み完了が
+        「見る人がその cut に着く時刻」に間に合う時だけ medium** — 間に合わない見込みなら low に落とす (止まらない 9 割の裁定・
+        10-27。全 cut medium は止まらない 6/10 で、止まりは全部後半 cut の担当 medium の尻尾だった)。"""
+        if self.staff_effort != "balanced":
+            return self.staff_effort or "medium"
+        if i in (1, 2):
+            return "low"
+        if i == 0:
+            return "medium"
+        now = self.since()
+        fed = self._fed_est(i, "medium", now)
+        viewer = self._viewer_at(i, now)
+        effort = "medium" if fed + self.RENDER_HEAD_S + self.NONSTOP_MARGIN_S <= viewer else "low"
+        self.log(cut=c, event="staff_pace", effort=effort, fed_est=round(fed, 1), viewer_est=round(viewer, 1))
+        return effort
 
     def staff(self, i: int, c: str) -> None:
         """担当 (Opus) が著者の cut を仕上げる。前の cut は著者の版を渡すので cut ごとに並列に走る。
@@ -1816,6 +1909,9 @@ class Run:
         self.write_defs_before(c)
         before = src.read_text()  # 担当の前の block (著者の版 + 前方から移した定義) — 担当が消した定義を戻す基準
         t = time.time()
+        effort = self.staff_effort_for(i, c)
+        self.staff_chosen[c] = effort
+        self.staff_begin_s[c] = self.since()
         r = self.call_role(
             [
                 PY,
@@ -1825,11 +1921,12 @@ class Run:
                 c,
                 str(ff),
                 "--effort",
-                self.staff_effort_for(i),
+                effort,
                 *(["--keep-assets"] if self.keep_assets else []),
             ],
             timeout=900,
         )
+        self.staff_end_s[c] = self.since()
         if r.returncode == 0 and "---timeline---" in r.stdout:
             # 戻す基準は書き戻す直前の file — 担当の裏で前方から移された定義 (move_forward_defs) も含める (担当開始時の text だと
             # その定義が担当の出力に無いまま上書きされて消える)
@@ -2542,6 +2639,7 @@ class Run:
             self.root_submitted = True
             prefix += text
             self.submitted.add(c)
+            self.fed_s[c] = self.since()
             self.log(cut=c, event="fed", s=round(time.time() - t, 1))
             if last:
                 return

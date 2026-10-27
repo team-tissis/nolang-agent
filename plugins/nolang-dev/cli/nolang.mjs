@@ -765,7 +765,7 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.author) args.push("--effort", flags.author);
-  // 既定は担当 balanced (cut 1・2 だけ low・他は medium。担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 質を優先するなら --staff medium / high / xhigh・速さ最優先なら --staff none
+  // 既定は担当 balanced (cut 1・2 は low・cut 3 以降は medium が再生に間に合う見込みの時だけ medium。担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 質を優先するなら --staff medium / high / xhigh・速さ最優先なら --staff none
   if (staff === "none") args.push("--no-staff");
   else args.push("--staff", staff);
   if (flags["staff-warn"]) args.push("--staff-warn");
@@ -1115,7 +1115,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
         [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 内容に合わせる)] [--engine claude|codex]
-        [--author low (著者の effort・既定 low)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 だけ low 他 medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
+        [--author low (著者の effort・既定 low)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--review low|medium --fix low] [--staff-assets]
