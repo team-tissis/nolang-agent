@@ -305,6 +305,14 @@ function loginInstructions(status) {
       next: `${TELL_FIRST}。許可されたら nolang auth wait`,
     };
   }
+  if (status.opened) {
+    return {
+      authorize_url: status.authorize_url,
+      ...(status.notice ? { notice: status.notice } : {}),
+      tell_user: `NoLang へのログインが必要です。ブラウザで NoLang のログイン画面を開きました。ログインして「許可」を押してください (${minutes} 分以内・コードの入力はありません)。ブラウザが開かなければ、次の URL を開いてください:\n${status.authorize_url}`,
+      next: `${TELL_FIRST}。許可されたら nolang auth wait。ブラウザで進めない (別の機械のブラウザしか無い・許可後に接続エラー) と言われたら nolang auth login --background --device (コードを入力する方式) でやり直す`,
+    };
+  }
   return {
     authorize_url: status.authorize_url,
     ...(status.notice ? { notice: status.notice } : {}),
@@ -365,8 +373,20 @@ async function runLogin(api, flags, id, method) {
     method = "browser";
   }
   if (method === "device") return loginOnDevice(api, as, resource, id);
-  return loginInBrowser(api, flags, as, resource, id, notice);
+  const auto = !flags.browser && !flags["no-browser"];
+  try {
+    return await loginInBrowser(api, flags, as, resource, id, notice);
+  } catch (error) {
+    // 自動選択のブラウザ認可が始められない (戻り先を開けない・client の登録を断られた) — デバイス認可へ落とす
+    if (!(error instanceof BrowserSetupError)) throw error;
+    if (!auto || !as.device_authorization_endpoint) throw error.cause ?? error;
+    log(`ブラウザ認可を始められないため、コードを入力するデバイス認可に切り替えます (${error.cause?.message ?? error.message})`);
+    return loginOnDevice(api, as, resource, id);
+  }
 }
+
+// ブラウザ認可の準備 (戻り先の待ち受け・client の登録) の失敗 — 自動選択ならデバイス認可へ落とす印
+class BrowserSetupError extends Error {}
 
 async function loginOnDevice(api, as, resource, id) {
   const body = validateDeviceAuthorization(await postForm(as.device_authorization_endpoint, {
@@ -422,19 +442,28 @@ async function loginInBrowser(api, flags, as, resource, id, notice) {
         res.writeHead(400, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" }).end("<p>ログインできませんでした。ターミナルの表示を確認してください。</p>");
       }
     });
-    await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
+    try {
+      await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
+    } catch (error) {
+      throw new BrowserSetupError("戻り先を開けない", { cause: error });
+    }
     port = server.address().port;
   }
   try {
     const redirectUri = `http://127.0.0.1:${port}/callback`;
-    const clientId = await registerClient(as, redirectUri);
+    let clientId;
+    try {
+      clientId = await registerClient(as, redirectUri);
+    } catch (error) {
+      throw new BrowserSetupError("client を登録できない", { cause: error });
+    }
     const url = authorizeUrl(as, { clientId, redirectUri, challenge, state, resource });
     const status = await loginState.current(id);
     const pending = {
       login_id: id, method: "browser", api, client_id: clientId, redirect_uri: redirectUri,
       token_endpoint: as.token_endpoint, resource, verifier, state, expires_at: status.expires_at,
     };
-    await loginState.publish(pending, { method: "browser", authorize_url: url, ...(notice ? { notice } : {}) });
+    await loginState.publish(pending, { method: "browser", authorize_url: url, ...(flags["no-browser"] ? {} : { opened: true }), ...(notice ? { notice } : {}) });
     const instructions = loginInstructions(await loginState.current(id));
     if (flags["no-browser"]) return out({ ...instructions, ok: true, api, waiting: true, method: "browser" });
     log(instructions.tell_user);
@@ -1060,8 +1089,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 
 使い方:
   nolang auth login [--device | --browser | --no-browser]
-                                        エージェント・リモートはデバイス認可、ローカルの対話端末はブラウザ認可
-  nolang auth login --background        認可待ちを裏に回し、URL (デバイス認可ではコードも) を出してすぐ戻る
+                                        手元はブラウザ認可 (ブラウザが開く・コード入力なし)、SSH・コンテナ・画面の無い環境はデバイス認可 (コード入力)
+  nolang auth login --background        認可待ちを裏に回し、案内 (デバイス認可ではコードも) を出してすぐ戻る
   nolang auth wait [--timeout 120]      --background のログインが許可されるのを待つ (終了コード 0 でログイン済み)
   nolang auth complete '<URL>'          ブラウザ認可の続き (--background / 対話ログイン / --no-browser 共通)
   nolang auth status | logout

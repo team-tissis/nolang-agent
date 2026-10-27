@@ -3,13 +3,20 @@ import { test } from "node:test";
 import { DEVICE_GRANT, loginMethod, pollDeviceAuthorization, validateDeviceAuthorization } from "../lib/device-auth.mjs";
 import { CliError, EXIT } from "../lib/errors.mjs";
 
-const local = { env: {}, isTTY: true, platform: "darwin", inContainer: false };
-test("ローカルはブラウザ、エージェント・SSH・コンテナはデバイス認可", () => {
+const local = { env: {}, platform: "darwin", inContainer: false };
+test("手元はエージェントの --background でもブラウザ、SSH・コンテナ・WSL・画面の無い Linux はデバイス認可", () => {
   assert.equal(loginMethod({}, local), "browser");
-  for (const context of [{ isTTY: false }, { env: { SSH_CONNECTION: "remote" } }, { inContainer: true }, { platform: "linux" }]) {
-    assert.equal(loginMethod({}, { ...local, ...context }), "device");
+  assert.equal(loginMethod({ background: true }, local), "browser");
+  assert.equal(loginMethod({}, { ...local, platform: "linux", env: { DISPLAY: ":0" } }), "browser");
+  for (const context of [
+    { env: { SSH_CONNECTION: "remote" } },
+    { env: { REMOTE_CONTAINERS: "true" } },
+    { env: { WSL_DISTRO_NAME: "Ubuntu" } },
+    { inContainer: true },
+    { platform: "linux" },
+  ]) {
+    assert.equal(loginMethod({ background: true }, { ...local, ...context }), "device");
   }
-  assert.equal(loginMethod({ background: true }, local), "device");
   assert.equal(loginMethod({ browser: true }, { ...local, inContainer: true }), "browser");
   assert.equal(loginMethod({ device: true }, local), "device");
   assert.throws(() => loginMethod({ device: true, browser: true }, local), /同時/);

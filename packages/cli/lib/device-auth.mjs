@@ -6,16 +6,18 @@ import { CliError, EXIT } from "./errors.mjs";
 export const DEVICE_CLIENT_ID = "3ef941bb-cd19-552f-8a42-0229d64b3627";
 export const DEVICE_GRANT = "urn:ietf:params:oauth:grant-type:device_code";
 
-export function loginMethod(flags, { env = process.env, isTTY = process.stdin.isTTY, platform = process.platform, inContainer = existsSync("/.dockerenv") } = {}) {
+export function loginMethod(flags, { env = process.env, platform = process.platform, inContainer = existsSync("/.dockerenv") } = {}) {
   if ([flags.device, flags.browser, flags["no-browser"]].filter(Boolean).length > 1) {
     throw new CliError("--device / --browser / --no-browser は同時に指定できません", { exit: EXIT.USAGE });
   }
   if (flags["no-browser"] && flags.background) throw new CliError("--no-browser は単独で完了するため --background は不要です", { exit: EXIT.USAGE });
   if (flags.device) return "device";
   if (flags.browser || flags["no-browser"]) return "browser";
-  const remote = env.SSH_CONNECTION || env.SSH_TTY || env.REMOTE_CONTAINERS || env.CODESPACES || inContainer;
+  // コードを打つデバイス認可は、手元のブラウザから端末の戻り先 (127.0.0.1) に届かない所だけ。手元ならエージェントの --background・
+  // 対話できない端末でもブラウザ認可 (ブラウザが開き、許可すれば戻り先が受ける — コード入力なし)
+  const remote = env.SSH_CONNECTION || env.SSH_TTY || env.REMOTE_CONTAINERS || env.CODESPACES || env.WSL_DISTRO_NAME || inContainer;
   const headless = platform === "linux" && !env.DISPLAY && !env.WAYLAND_DISPLAY;
-  return flags.background || !isTTY || remote || headless ? "device" : "browser";
+  return remote || headless ? "device" : "browser";
 }
 
 export function validateDeviceAuthorization(body) {
