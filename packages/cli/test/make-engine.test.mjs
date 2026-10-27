@@ -49,11 +49,11 @@ test("Codex は Claude なしで起動し、engine を studio に明示する", 
   assert.equal(args[args.indexOf("--engine") + 1], "codex");
 });
 
-test("既定は担当 medium・長さ auto で、effort の既定を維持する", async (t) => {
+test("既定は担当 balanced・長さ auto で、effort の既定を維持する", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明"], { env });
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "balanced", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("--staff は担当を opt-in し、--editable を studio へ渡す", async (t) => {
@@ -82,12 +82,15 @@ test("--seconds は秒数か auto だけを受ける", async (t) => {
   });
 });
 
-test("--staff は medium / balanced / low / none 以外を拒否する", async (t) => {
+test("--staff は balanced / low / medium / high / xhigh / none 以外を拒否する", async (t) => {
   const { project, env } = await fixture(t, { claude: true });
-  await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--staff", "high"], { env }), (error) => {
+  await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--staff", "fast"], { env }), (error) => {
     assert.equal(error.code, 2);
     return true;
   });
+  await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--staff", "xhigh"], { env });
+  const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
+  assert.equal(args[args.indexOf("--staff") + 1], "xhigh");
 });
 
 test("Codex があっても engine 未指定なら Claude の不足を報告する", async (t) => {

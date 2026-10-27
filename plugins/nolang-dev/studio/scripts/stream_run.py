@@ -21,9 +21,9 @@ usage (repo root から): python stream_run.py <project> [--staff medium|balance
     値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
   --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の最初の直し役を、厳しい監督として
-    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しは cut の静止画も見て REVIEW_ROUNDS (2) 回
-    (静止画なしの見直しは置かない — 10-27 裁定): 担当の後、prewarm の絵で cut を GPU で描き (local は `studio.py shots`・
-    remote は server の GPU の worker `drafts/{id}/stills/`)、round ごとに撮り直す。見直しの call は直し役の 2 回の上限に数えない。
+    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しは cut の静止画も見る (REVIEW_ROUNDS = 1 回・
+    静止画なしの見直しは置かない — 10-27 裁定): 担当の後、prewarm の絵で cut を GPU で描く (local は `studio.py shots`・
+    remote は server の GPU の worker `drafts/{id}/stills/`)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
     直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`none` = 直し役も
     呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
@@ -341,10 +341,10 @@ class Rejected(Exception):
         self.defects = defects
 
 
-# 見直しの回数 — 静止画を見せて 2 回 (2 回目は 1 回目の直しを描き直した絵を見る)。静止画なしの見直しは置かない (10-27 裁定)。
+# 見直しの回数 — 静止画を見せて 1 回 (10-27 裁定: 静止画なしの見直しも 2 回目も置かない)。
 # 盲検の実測 (10-22・effort medium・low は直し役と差が出ない): 53 cut で見直しは今の直し役 (low・指摘のある cut だけ) に 9 対 3・
 # 5 cut の点で 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5・投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)
-REVIEW_ROUNDS = 2
+REVIEW_ROUNDS = 1
 # remote の静止画 (`drafts/{id}/stills/`) を待つ上限 — server は warm の絵を 90 s まで待ってから実現・描画する
 REMOTE_SHOTS_TIMEOUT_S = 240
 

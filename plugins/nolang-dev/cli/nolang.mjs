@@ -723,14 +723,14 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low (著者)] [--staff medium|balanced|low|none (既定 medium)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low (著者)] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
   parseSeconds(flags.seconds); // 形だけ検査 (studio へは文字列のまま渡す)
   const seconds = String(flags.seconds || "auto"); // 既定 auto = 台本の分量と内容に合わせる
-  const staff = flags.staff || "medium";
-  if (!["medium", "balanced", "low", "none"].includes(staff)) throw new CliError("--staff は medium / balanced / low / none", { exit: EXIT.USAGE });
+  const staff = flags.staff || "balanced";
+  if (!["balanced", "low", "medium", "high", "xhigh", "none"].includes(staff)) throw new CliError("--staff は balanced / low / medium / high / xhigh / none", { exit: EXIT.USAGE });
   for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では作れない (skill の write-yourself.md の手順で、自分で書いて流す)`, { exit: EXIT.FAIL });
   }
@@ -765,13 +765,13 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (flags.author) args.push("--effort", flags.author);
-  // 既定は担当 medium (担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 再生開始を早めるなら --staff balanced (cut 1・2 だけ担当 low)・速さ最優先なら --staff none
+  // 既定は担当 balanced (cut 1・2 だけ low・他は medium。担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 質を優先するなら --staff medium / high / xhigh・速さ最優先なら --staff none
   if (staff === "none") args.push("--no-staff");
   else args.push("--staff", staff);
   if (flags["staff-warn"]) args.push("--staff-warn");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
-  // 質を取りに行く時: 見直し (--review medium と --fix low — 見直しは cut の静止画を見て 2 回・server の GPU が描く)・担当が絵と台詞も変える
+  // 質を取りに行く時: 見直し (--review medium と --fix low — 見直しは cut の静止画を見る・server の GPU が描く)・担当が絵と台詞も変える
   if (flags.review) args.push("--review", flags.review);
   if (flags.fix) args.push("--fix", flags.fix);
   if (flags["staff-assets"]) args.push("--staff-edits-assets");
@@ -1115,12 +1115,12 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
         [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 内容に合わせる)] [--engine claude|codex]
-        [--author low (著者の effort・既定 low)] [--staff medium|balanced|low|none (担当・既定 medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
+        [--author low (著者の effort・既定 low)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 だけ low 他 medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--review low|medium --fix low] [--staff-assets]
                                         質を取りに行く時 (遅くなる): --fix low で見直し役を入れる (--review は その effort。見直しは cut の
-                                        静止画 — server の GPU が描く — を見て 2 回)・--staff-assets で担当が絵と台詞も変える
+                                        静止画 — server の GPU が描く — を見る)・--staff-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
