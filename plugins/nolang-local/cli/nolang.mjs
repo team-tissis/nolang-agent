@@ -6,7 +6,7 @@
 import { execFileSync, spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
-import { chmod, mkdir, open, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, open, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
@@ -15,6 +15,8 @@ import { parseArgs } from "node:util";
 
 import { ASSET_KINDS, mimeOf, uploadKind } from "./lib/assets.mjs";
 import { codeFromCallback } from "./lib/callback.mjs";
+import { DEVICE_CLIENT_ID, loginMethod, pollDeviceAuthorization, validateDeviceAuthorization } from "./lib/device-auth.mjs";
+import { LoginState, writePrivate as writePrivateAtomic } from "./lib/login-state.mjs";
 import { FALLBACK_API, TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
 import { aspectOf, pendingCuts, splitCuts } from "./lib/src.mjs";
@@ -30,9 +32,7 @@ const PACKAGED_API = (() => {
 })();
 const CONFIG_DIR = process.env.NOLANG_CONFIG_DIR || join(homedir(), ".config", "nolang");
 const CRED_FILE = join(CONFIG_DIR, "credentials.json");
-const PENDING_FILE = join(CONFIG_DIR, "pending-login.json");
 // --background のログイン: 待ち受けは切り離した子が持ち、状態 (waiting / done / failed) をここに書く
-const LOGIN_STATUS_FILE = join(CONFIG_DIR, "login-status.json");
 const LOGIN_LOG_FILE = join(CONFIG_DIR, "login.log");
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
 // --background は裏で待つだけなので長めに (エージェントが原稿を書く間も切れないように)
@@ -60,8 +60,7 @@ async function loadStore() {
 
 async function writePrivate(path, obj) {
   await mkdir(CONFIG_DIR, { recursive: true, mode: 0o700 });
-  await writeFile(path, JSON.stringify(obj, null, 2) + "\n", { mode: 0o600 });
-  await chmod(path, 0o600);
+  await writePrivateAtomic(path, obj);
 }
 
 const saveStore = (store) => writePrivate(CRED_FILE, store);
@@ -97,20 +96,23 @@ async function readBody(res) {
 }
 
 async function getJson(url) {
-  const res = await request(url, { headers: { accept: "application/json" } });
+  const res = await request(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30000) });
   const body = await readBody(res);
   if (!res.ok) throw new CliError(`GET ${url} → ${res.status}`, { exit: EXIT.NETWORK, data: body });
   return body;
 }
 
-async function postForm(url, form) {
+async function postForm(url, form, { signal } = {}) {
   const res = await request(url, {
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" },
     body: new URLSearchParams(Object.entries(form).filter(([, v]) => v != null && v !== "")).toString(),
+    signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(30000)]) : AbortSignal.timeout(30000),
   });
   const body = await readBody(res);
-  if (!res.ok) throw new CliError(`POST ${url} → ${res.status}: ${body.error_description || body.error || ""}`, { exit: EXIT.AUTH, data: body });
+  if (!res.ok) throw new CliError(`POST ${url} → ${res.status}: ${body.error_description || body.error || ""}`, {
+    exit: res.status >= 500 || res.status === 429 ? EXIT.NETWORK : EXIT.AUTH, data: body,
+  });
   return body;
 }
 
@@ -121,7 +123,7 @@ const b64url = (buf) => buf.toString("base64url");
 async function discover(api) {
   let prmUrl = `${api}/.well-known/oauth-protected-resource`;
   // 401 の WWW-Authenticate が resource metadata の場所を教える (無ければ root の well-known)
-  const probe = await request(`${api}/v1/unstable/drafts/templates/`);
+  const probe = await request(`${api}/v1/unstable/drafts/templates/`, { signal: AbortSignal.timeout(30000) });
   const hinted = (probe.headers.get("www-authenticate") || "").match(/resource_metadata="([^"]+)"/);
   if (hinted) prmUrl = hinted[1];
   const prm = await getJson(prmUrl);
@@ -135,6 +137,7 @@ async function registerClient(as, redirectUri) {
   const res = await request(as.registration_endpoint, {
     method: "POST",
     headers: { "content-type": "application/json", accept: "application/json" },
+    signal: AbortSignal.timeout(30000),
     body: JSON.stringify({
       client_name: "NoLang CLI",
       redirect_uris: [redirectUri],
@@ -164,38 +167,6 @@ function authorizeUrl(as, { clientId, redirectUri, challenge, state, resource })
   return url.toString();
 }
 
-function startCallbackServer(expectedState) {
-  return new Promise((resolveStart, rejectStart) => {
-    let settle;
-    const code = new Promise((resolveCode, rejectCode) => (settle = { resolveCode, rejectCode }));
-    const server = createServer((req, res) => {
-      const url = new URL(req.url, "http://127.0.0.1");
-      if (url.pathname !== "/callback") {
-        res.writeHead(404).end();
-        return;
-      }
-      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
-      try {
-        const got = codeFromCallback(url.toString(), expectedState);
-        res.end("<p>NoLang にログインしました。このタブを閉じてターミナルに戻ってください。</p>");
-        settle.resolveCode(got);
-      } catch (error) {
-        res.end("<p>ログインできませんでした。ターミナルの表示を確かめてください。</p>");
-        settle.rejectCode(error);
-      }
-    });
-    server.on("error", rejectStart);
-    server.listen(0, "127.0.0.1", () => resolveStart({ server, port: server.address().port, code }));
-  });
-}
-
-// ターミナルから使う人向け: ブラウザの戻り先がこの機械に届かない時 (リモート・コンテナ)、アドレスバーの URL を貼れば続く
-function pastedCallback() {
-  if (!process.stdin.isTTY) return new Promise(() => {});
-  const rl = createInterface({ input: process.stdin });
-  return new Promise((resolveLine) => rl.on("line", (line) => line.includes("code=") && (rl.close(), resolveLine(line))));
-}
-
 function openBrowser(url) {
   const [cmd, args] =
     process.platform === "darwin" ? ["open", [url]] : process.platform === "win32" ? ["cmd", ["/c", "start", "", url]] : ["xdg-open", [url]];
@@ -207,6 +178,9 @@ function openBrowser(url) {
 }
 
 async function saveTokens(api, base, tokens) {
+  if (typeof tokens.access_token !== "string" || !tokens.access_token) {
+    throw new CliError("token 応答に access_token がありません", { exit: EXIT.AUTH });
+  }
   const store = await loadStore();
   store.profiles[api] = {
     ...base,
@@ -317,157 +291,197 @@ async function waitStatus(api, videoId, until, timeoutS) {
 
 // ---- commands ----
 
-async function readLoginStatus() {
-  try {
-    return JSON.parse(await readFile(LOGIN_STATUS_FILE, "utf8"));
-  } catch {
-    return null;
+const loginState = new LoginState(CONFIG_DIR);
+const readLoginStatus = () => loginState.status();
+
+function loginInstructions(status) {
+  const minutes = Math.max(1, Math.ceil((status.expires_at - Date.now()) / 60000));
+  if (status.method === "device") {
+    return {
+      authorize_url: status.verification_uri,
+      verification_uri: status.verification_uri,
+      user_code: status.user_code,
+      tell_user: `NoLang へのログインが必要です。次の URL を開き、コード ${status.user_code} を入力して許可してください (${minutes} 分以内)。いま自分で開始したログインのコードか確認してください:\n${status.verification_uri}`,
+      next: `${TELL_FIRST}。許可されたら nolang auth wait`,
+    };
   }
+  return {
+    authorize_url: status.authorize_url,
+    ...(status.notice ? { notice: status.notice } : {}),
+    tell_user: `NoLang へのログインが必要です。次の URL をブラウザで開き、ログインして「許可」を押してください (${minutes} 分以内):\n${status.authorize_url}\n許可後に接続エラーになったら、そのページのアドレスバーの URL を貼ってください。ログインをやり直す必要はありません。`,
+    next: `${TELL_FIRST}。許可されたら nolang auth wait。戻り先に届かなければ nolang auth complete '<許可後の URL>'`,
+  };
 }
 
-// エージェント向け: 待ち受けを切り離した子に任せ、許可の URL が出たらすぐ戻る (長く待つコマンドを打ち切るエージェントでも使える)。
-// 完了は `nolang auth wait` で確かめる
-async function startBackgroundLogin(api) {
-  await mkdir(CONFIG_DIR, { recursive: true, mode: 0o700 });
-  await rm(LOGIN_STATUS_FILE, { force: true });
+const loginDone = (status) => ({ ok: true, api: status.api, logged_in: true, access_expires_at: status.access_expires_at });
+
+async function startBackgroundLogin(api, flags, id, method) {
   const logFile = await open(LOGIN_LOG_FILE, "w", 0o600);
-  const child = spawn(process.execPath, [process.argv[1], "auth", "login", "--detached-child", "--api", api], {
-    detached: true,
-    stdio: ["ignore", logFile.fd, logFile.fd],
-  });
-  child.unref();
-  await logFile.close();
-  for (let i = 0; i < 150; i++) {
-    const status = await readLoginStatus();
-    if (status?.state === "failed") throw new CliError(`ログインを始められなかった: ${status.error}`, { exit: EXIT.AUTH, data: status });
-    if (status?.authorize_url) {
-      log("ブラウザで NoLang にログインして許可してください (同じ機械ならブラウザが開いています)。許可したら `nolang auth wait`。");
-      out({
-        ok: true,
-        api,
-        waiting: true,
-        authorize_url: status.authorize_url,
-        // エージェントがそのままユーザーに伝える文 (コマンドの出力はユーザーに見えないことがあるので、URL ごと本文に書く)
-        tell_user: `NoLang へのログインが必要です。次の URL をブラウザで開き、ログインして「許可」を押してください (15 分有効):\n${status.authorize_url}`,
-        next: `${TELL_FIRST}。許可されたら nolang auth wait`,
-      });
-      return;
-    }
-    await new Promise((r) => setTimeout(r, 200));
+  const args = [process.argv[1], "auth", "login", "--detached-child", "--login-id", id, "--api", api];
+  // 自動選択か明示指定かを子にも伝える (非対応サーバーへの扱いが異なる)。
+  if (flags.device) args.push("--device");
+  else if (flags.browser) args.push("--browser");
+  else args.push("--login-method", method);
+  try {
+    const child = spawn(process.execPath, args, { detached: true, stdio: ["ignore", logFile.fd, logFile.fd] });
+    await new Promise((resolve, reject) => { child.once("spawn", resolve); child.once("error", reject); });
+    child.unref();
+  } finally { await logFile.close(); }
+  for (let i = 0; i < 300; i++) {
+    const status = await loginState.current(id);
+    if (status.state === "failed") throw new CliError(status.error, { exit: EXIT.AUTH });
+    if (status.state === "done") return out(loginDone(status));
+    if (status.state === "waiting") return out({ ...loginInstructions(status), ok: true, api, waiting: true, method: status.method, expires_at: status.expires_at });
+    await new Promise((resolve) => setTimeout(resolve, 200));
   }
-  throw new CliError(`ログインを始められなかった (30 秒で URL が出ない)。様子は ${LOGIN_LOG_FILE}`, { exit: EXIT.NETWORK });
+  throw new CliError(`ログインを始められませんでした。様子は ${LOGIN_LOG_FILE}`, { exit: EXIT.NETWORK });
 }
 
 async function cmdAuthLogin(flags) {
   const api = await resolveApi(flags);
-  if (flags.background) return startBackgroundLogin(api);
-  if (!flags["detached-child"]) return loginInBrowser(api, flags);
-  // 切り離した子: 結果を状態 file に残す (前の CLI はもう居ないので、stdout ではなく file で伝える)
+  const method = loginMethod(flags);
+  const id = flags["detached-child"] ? flags["login-id"] : b64url(randomBytes(16));
+  if (!id) throw new CliError("ログインの識別子がありません", { exit: EXIT.USAGE });
+  if (!flags["detached-child"]) {
+    await loginState.start(id, api, method, Date.now() + (flags.background || flags["no-browser"] ? BACKGROUND_LOGIN_TIMEOUT_MS : LOGIN_TIMEOUT_MS));
+  }
   try {
-    await loginInBrowser(api, flags, {
-      timeoutMs: BACKGROUND_LOGIN_TIMEOUT_MS,
-      onUrl: (url) => writePrivate(LOGIN_STATUS_FILE, { state: "waiting", api, authorize_url: url, pid: process.pid, started_at: new Date().toISOString() }),
-      onDone: (profile) => writePrivate(LOGIN_STATUS_FILE, { state: "done", api, access_expires_at: new Date(profile.expires_at).toISOString() }),
-    });
+    if (flags.background) return await startBackgroundLogin(api, flags, id, method);
+    await loginState.current(id);
+    await runLogin(api, flags, id, flags["login-method"] || method);
   } catch (error) {
-    await writePrivate(LOGIN_STATUS_FILE, { state: "failed", api, error: error.message });
+    await loginState.fail(id, error);
     throw error;
   }
 }
 
-async function loginInBrowser(api, flags, hooks = {}) {
+async function runLogin(api, flags, id, method) {
   const { resource, as } = await discover(api);
+  let notice;
+  if (method === "device" && !as.device_authorization_endpoint) {
+    if (flags.device) throw new CliError("接続先はデバイス認可に未対応です。サーバーを更新するか、auth login --browser --background で開始し、許可後の URL を auth complete に渡してください", { exit: EXIT.AUTH });
+    notice = "接続先はデバイス認可に未対応のため、ブラウザ認可と URL の貼り戻しを使います";
+    log(notice);
+    method = "browser";
+  }
+  if (method === "device") return loginOnDevice(api, as, resource, id);
+  return loginInBrowser(api, flags, as, resource, id, notice);
+}
+
+async function loginOnDevice(api, as, resource, id) {
+  const body = validateDeviceAuthorization(await postForm(as.device_authorization_endpoint, {
+    client_id: DEVICE_CLIENT_ID, scope: "nolang", resource,
+  }));
+  const pending = {
+    login_id: id, method: "device", api, client_id: DEVICE_CLIENT_ID,
+    device_code: body.device_code, token_endpoint: as.token_endpoint, resource,
+    interval: body.interval, expires_at: Date.now() + body.expires_in * 1000,
+  };
+  await loginState.publish(pending, { method: "device", verification_uri: body.verification_uri, user_code: body.user_code, expires_at: pending.expires_at });
+  const status = await loginState.current(id);
+  log(loginInstructions(status).tell_user);
+  // コードの確認を省かせない。verification_uri_complete は使わない。
+  const tokens = await pollDeviceAuthorization(pending, postForm, { check: () => loginState.current(id) });
+  const done = await loginState.complete(id, () => saveTokens(api, {
+    client_id: pending.client_id, token_endpoint: pending.token_endpoint, resource,
+  }, tokens));
+  out(loginDone(done));
+}
+
+async function completeBrowserLogin(id, callback) {
+  try {
+    return await loginState.complete(id, (pending) => {
+      if (pending.method !== "browser") throw new CliError("このログインはデバイス認可です。表示されたコードを認可ページに入力し、auth wait を実行してください", { exit: EXIT.USAGE });
+      const code = codeFromCallback(callback, pending.state, pending.redirect_uri);
+      return exchangeCode(pending.api, pending, code);
+    });
+  } catch (error) {
+    // state と戻り先を検証済みの拒否は、貼り戻しでも待ち受けでも同じ終了状態にする。
+    if (error.data?.error === "access_denied") await loginState.fail(id, error);
+    throw error;
+  }
+}
+
+async function loginInBrowser(api, flags, as, resource, id, notice) {
   const verifier = b64url(randomBytes(32));
   const challenge = b64url(createHash("sha256").update(verifier).digest());
   const state = b64url(randomBytes(16));
-
-  if (flags["no-browser"]) {
-    // 2 段: URL を出して終わる → 許可後のアドレスバーの URL を `nolang auth complete` に渡す (待ち受けない)
-    const port = 20000 + Math.floor(Math.random() * 40000);
+  const controller = new AbortController();
+  let server;
+  let readline;
+  let port = 20000 + Math.floor(Math.random() * 40000);
+  if (!flags["no-browser"]) {
+    server = createServer(async (req, res) => {
+      const callback = new URL(req.url, `http://127.0.0.1:${server.address().port}`);
+      if (callback.pathname !== "/callback") { res.writeHead(404).end(); return; }
+      if (callback.searchParams.get("state") !== state) { res.writeHead(400).end("Invalid state"); return; }
+      try {
+        await completeBrowserLogin(id, callback.toString());
+        res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" }).end("<p>NoLang にログインしました。このタブを閉じてください。</p>");
+      } catch (error) {
+        res.writeHead(400, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" }).end("<p>ログインできませんでした。ターミナルの表示を確認してください。</p>");
+      }
+    });
+    await new Promise((resolve, reject) => { server.once("error", reject); server.listen(0, "127.0.0.1", resolve); });
+    port = server.address().port;
+  }
+  try {
     const redirectUri = `http://127.0.0.1:${port}/callback`;
     const clientId = await registerClient(as, redirectUri);
     const url = authorizeUrl(as, { clientId, redirectUri, challenge, state, resource });
-    await writePrivate(PENDING_FILE, {
-      api,
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      token_endpoint: as.token_endpoint,
-      resource,
-      verifier,
-      state,
-      expires_at: Date.now() + 10 * 60 * 1000,
-    });
-    log("この URL をブラウザで開き、NoLang にログインして許可してください。");
-    log("許可後のページは接続エラーになります。そのアドレスバーの URL を `nolang auth complete '<URL>'` に渡してください。");
-    out({ ok: true, api, authorize_url: url, next: "nolang auth complete '<許可後のアドレスバーの URL>'" });
-    return;
-  }
-
-  const { server, port, code } = await startCallbackServer(state);
-  const redirectUri = `http://127.0.0.1:${port}/callback`;
-  try {
-    const clientId = await registerClient(as, redirectUri);
-    const url = authorizeUrl(as, { clientId, redirectUri, challenge, state, resource });
-    log("ブラウザで NoLang にログインして許可してください。開かなければこの URL を開いてください:");
-    log(url);
-    await hooks.onUrl?.(url);
-    if (process.stdin.isTTY) log("(ブラウザが別の機械なら、許可後のアドレスバーの URL をここに貼って Enter)");
+    const status = await loginState.current(id);
+    const pending = {
+      login_id: id, method: "browser", api, client_id: clientId, redirect_uri: redirectUri,
+      token_endpoint: as.token_endpoint, resource, verifier, state, expires_at: status.expires_at,
+    };
+    await loginState.publish(pending, { method: "browser", authorize_url: url, ...(notice ? { notice } : {}) });
+    const instructions = loginInstructions(await loginState.current(id));
+    if (flags["no-browser"]) return out({ ...instructions, ok: true, api, waiting: true, method: "browser" });
+    log(instructions.tell_user);
+    if (process.stdin.isTTY) {
+      log("許可後の URL をこのターミナルに貼って Enter でも完了できます。");
+      readline = createInterface({ input: process.stdin });
+      readline.on("line", (line) => {
+        if (!line.includes("code=") && !line.includes("error=")) return;
+        completeBrowserLogin(id, line).catch((error) => log(error.message));
+      });
+    }
     openBrowser(url);
-    const waitMs = hooks.timeoutMs ?? LOGIN_TIMEOUT_MS;
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new CliError(`ログインの待ち時間 (${waitMs / 60000} 分) を過ぎた`, { exit: EXIT.AUTH })), waitMs).unref(),
-    );
-    const got = await Promise.race([code, pastedCallback().then((line) => codeFromCallback(line, state)), timeout]);
-    const profile = await exchangeCode(api, { client_id: clientId, redirect_uri: redirectUri, token_endpoint: as.token_endpoint, resource, verifier }, got);
-    await hooks.onDone?.(profile);
-    out({ ok: true, api, logged_in: true, expires_at: new Date(profile.expires_at).toISOString() });
+    out(loginDone(await loginState.wait(id, controller.signal)));
   } finally {
-    server.close();
+    controller.abort();
+    readline?.close();
+    process.stdin.pause();
+    server?.close();
   }
-  process.exit(EXIT.OK); // 貼り付け待ちの stdin を閉じる
 }
 
-// --background で始めたログインの結果を待つ (既定 120 秒・エージェントの 1 回のコマンドに収まる長さ)
 async function cmdAuthWait(flags) {
-  const deadline = Date.now() + Number(flags.timeout || 120) * 1000;
+  const timeout = Number(flags.timeout ?? 120);
+  if (!Number.isFinite(timeout) || timeout < 0) throw new CliError("--timeout は 0 以上の秒数です", { exit: EXIT.USAGE });
+  const deadline = Date.now() + timeout * 1000;
   for (;;) {
     const status = await readLoginStatus();
-    if (status?.state === "done") return out({ ok: true, api: status.api, logged_in: true, access_expires_at: status.access_expires_at });
-    if (status?.state === "failed") throw new CliError(`ログインできなかった: ${status.error}`, { exit: EXIT.AUTH, data: status });
-    if (!status) {
-      const api = await resolveApi(flags);
-      if ((await loadStore()).profiles[api]) return out({ ok: true, api, logged_in: true });
-      throw new CliError("始めたログインが無い。先に `nolang auth login --background`", { exit: EXIT.AUTH });
-    }
-    if (Date.now() > deadline) {
-      out({
-        ok: false,
-        waiting: true,
-        api: status.api,
-        authorize_url: status.authorize_url,
-        tell_user: `まだログインの許可が確認できていません。次の URL をブラウザで開き、ログインして「許可」を押してから教えてください:\n${status.authorize_url}`,
-        next: `${TELL_FIRST}。そこで止まる → 許可されたら、もう一度 nolang auth wait (待ち受けは開始から 15 分)`,
-      });
+    if (status?.state === "done") return out(loginDone(status));
+    if (status?.state === "failed") throw new CliError(`ログインできませんでした: ${status.error}`, { exit: EXIT.AUTH });
+    if (!status) throw new CliError("始めたログインがありません。先に auth login --background を実行してください", { exit: EXIT.AUTH });
+    if (Date.now() >= status.expires_at) throw new CliError("ログインの期限が切れました。auth login からやり直してください", { exit: EXIT.AUTH });
+    if (Date.now() >= deadline) {
+      out({ ...(status.state === "waiting" ? loginInstructions(status) : {}), ok: false, waiting: true, api: status.api, method: status.method });
       process.exitCode = EXIT.AUTH;
       return;
     }
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 200));
   }
 }
 
 async function cmdAuthComplete(positionals) {
   const callback = positionals[0];
   if (!callback) throw new CliError("使い方: nolang auth complete '<許可後のアドレスバーの URL>'", { exit: EXIT.USAGE });
-  let pending;
-  try {
-    pending = JSON.parse(await readFile(PENDING_FILE, "utf8"));
-  } catch {
-    throw new CliError("始めたログインが無い。先に `nolang auth login --no-browser`", { exit: EXIT.USAGE });
-  }
-  if (Date.now() > pending.expires_at) throw new CliError("ログインの期限 (10 分) が切れた。`nolang auth login --no-browser` からやり直し", { exit: EXIT.AUTH });
-  const profile = await exchangeCode(pending.api, pending, codeFromCallback(callback, pending.state));
-  await rm(PENDING_FILE, { force: true });
-  out({ ok: true, api: pending.api, logged_in: true, expires_at: new Date(profile.expires_at).toISOString() });
+  const pending = await loginState.pending();
+  if (!pending) throw new CliError("待機中のログインがありません。先に auth login を実行してください", { exit: EXIT.USAGE });
+  // callback の任意の URL へアクセスしない。保存済み endpoint に PKCE 付きで交換する。
+  out(loginDone(await completeBrowserLogin(pending.login_id, callback)));
 }
 
 async function cmdAuthStatus(flags) {
@@ -1040,10 +1054,11 @@ async function cmdAssetsUpload(positionals, flags) {
 const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントから作る
 
 使い方:
-  nolang auth login [--no-browser]      ブラウザで NoLang にログイン (--no-browser は URL を出して終わる 2 段)
-  nolang auth login --background        エージェント向け: 待ち受けを裏に回し (15 分)、許可の URL を出してすぐ戻る
+  nolang auth login [--device | --browser | --no-browser]
+                                        エージェント・リモートはデバイス認可、ローカルの対話端末はブラウザ認可
+  nolang auth login --background        認可待ちを裏に回し、URL (デバイス認可ではコードも) を出してすぐ戻る
   nolang auth wait [--timeout 120]      --background のログインが許可されるのを待つ (終了コード 0 でログイン済み)
-  nolang auth complete '<URL>'          --no-browser の続き: 許可後のアドレスバーの URL を渡す
+  nolang auth complete '<URL>'          ブラウザ認可の続き (--background / 対話ログイン / --no-browser 共通)
   nolang auth status | logout
   nolang auth env                       他のスクリプトへ接続先とトークンを渡す (eval "$(nolang auth env)" で使う・画面に出さない)
   nolang use [local|dev|stg|prod|<URL>|default]
@@ -1078,6 +1093,10 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 const OPTIONS = {
   api: { type: "string" },
   "no-browser": { type: "boolean" },
+  device: { type: "boolean" },
+  browser: { type: "boolean" },
+  "login-id": { type: "string" },
+  "login-method": { type: "string" },
   background: { type: "boolean" },
   "detached-child": { type: "boolean" },
   aspect: { type: "string" },
