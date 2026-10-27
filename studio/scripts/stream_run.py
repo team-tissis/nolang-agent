@@ -21,7 +21,8 @@ usage (repo root から): python stream_run.py <project> [--staff medium|balance
     値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
   --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
   --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の最初の直し役を、厳しい監督として
-    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しは cut の静止画も見る (REVIEW_ROUNDS = 1 回・
+    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ。check の severe / warn は常に全部見せる)。
+    見直しは cut の静止画も見る (REVIEW_ROUNDS = 1 回・
     静止画なしの見直しは置かない — 10-27 裁定): 担当の後、prewarm の絵で cut を GPU で描く (local は `studio.py shots`・
     remote は server の GPU の worker `drafts/{id}/stills/`)。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
@@ -1381,9 +1382,10 @@ class Run:
             findings = "\n".join(d.text for d in defects[:40])
             rest = (
                 [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
-                if self.fix_scope == "warn"
+                if self.fix_scope == "warn" or reviews > 0
                 else []
-            )  # warn も直す直し役にはその cut の severe / warn を全部見せる (defect / severe の run は直す指摘だけ — warn を見せると直しに行く)
+            )  # 見直しと warn も直す直し役にはその cut の severe / warn を全部見せる (見直しに warn は常に渡す — 10-27 裁定。
+            # defect / severe の run の 2 回目以降の直し役は直す指摘だけ — warn を見せると直しに行く)
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
