@@ -16,7 +16,7 @@ Node.js 20 以上が要ります。依存パッケージはありません。
 ## 使い方
 
 ```
-nolang auth login                     ブラウザで NoLang にログイン (1 回だけ)
+nolang auth login                     NoLang にログイン (ローカルはブラウザ、リモートはコード入力)
 nolang doctor                         接続先とログインを確かめる
 nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
 nolang make <dir> --type concept --request-text "…" [--engine claude|codex]   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
@@ -37,6 +37,10 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 CI など対話できない環境では `NOLANG_TOKEN` に API key を入れます。
 
 ログイン情報は `~/.config/nolang/credentials.json` (権限 0600) に保存され、期限が切れても自動で更新されます。
-ブラウザが別の機械にある時 (リモート・コンテナ) は `nolang auth login --no-browser` → `nolang auth complete '<許可後の URL>'`。
+SSH・コンテナ・対話できない環境と `--background` はデバイス認可を選びます。表示された URL を手元のブラウザで開き、`user_code` を入力して許可するとログインが完了します。ブラウザから端末へのポート接続は不要です。エージェントは `nolang auth login --background` の案内とコードをユーザーに渡し、`nolang auth wait` で完了を確かめます。
+`--device` / `--browser` で方式を指定できます。サーバーが未対応なら自動選択はブラウザ認可へ戻り、明示 `--device` はエラーになります。
+
+ブラウザ認可の戻り先に接続できない場合は、許可後のアドレスバーの URL を `nolang auth complete '<URL>'` に渡してください。通常の待ち受け・`--background`・`--no-browser` のどれでも同じ開始済みログインを完了できます。`--no-browser` はブラウザを開かず、URL を表示して終了する従来の手動方式です。
+一度に待機できるログインは設定ディレクトリごとに 1 件です。新しいログインを始めると古い待機は終了します。
 
 `make` の既定は Claude のままです。`--engine codex` では著者・担当・修正役をすべて Codex が自動実行します (codex-cli 0.162.0 で検証)。Codex の `auth.json` によるログインと NoLang のログインは別々に必要です。Codex のユーザー設定は読み込まず、CLI の既定モデルを使用します。MCP サーバーは利用者のローカル Codex を起動しません。

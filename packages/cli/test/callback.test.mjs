@@ -23,3 +23,11 @@ test("code が無ければ未認可", () => {
 test("URL として読めなければ使い方の誤り", () => {
   assert.throws(() => codeFromCallback("not a url", "s1"), (e) => e.exit === EXIT.USAGE);
 });
+
+
+test("state が一致しても戻り先の host・port・path が違えば受け取らない", () => {
+  const expected = "http://127.0.0.1:5555/callback";
+  for (const base of ["http://evil.example/callback", "http://127.0.0.1:5556/callback", "http://127.0.0.1:5555/elsewhere"]) {
+    assert.throws(() => codeFromCallback(`${base}?code=abc&state=s1`, "s1", expected), /戻り先/);
+  }
+});
