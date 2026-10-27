@@ -907,18 +907,20 @@ class Run:
         return dd
 
     # ---- check と直し ----
-    def check(self, dd: Path, *, ended: bool) -> tuple[str, list[Defect], list[dict]]:
+    def check(self, dd: Path, *, ended: bool, focus: str | None = None) -> tuple[str, list[Defect], list[dict]]:
         """ended = 動画の終わりまで書いた doc (False = この prefix の後に cut が続く — 最後の cut だけの規則を掛けない)。製品の check
         (`drafts/check/` — compile・composer と layout の乾いた実行・lint の全規則・cut の時刻。書体は本番と同じ・run の warm で解けた絵は
         実画像で判定) を doc の 2 file で 1 回。結果は doc の out/ に書く (defects.json = DEFECT の行・lint_check.json = 指摘・
         check_cuts.json = cut の時刻) — 欠陥の行を落とす `drop_defect_lines` と期限の見込み (`note_cut_estimates`) が読む。返り値の
-        出力 = check の表 (担当に渡す時刻の行を含む)。"""
+        出力 = check の表 (担当に渡す時刻の行を含む)。focus = 指摘を要る cut (server が lint をその cut に絞る — 他の cut の指摘は
+        どこも使わない)。"""
         body = self.call(
             "check",
             {
                 "design": (dd / "design.txt").read_text(),
                 "timeline": (dd / "timeline.txt").read_text(),
                 "open_ended": not ended,
+                **({"lint_cut": focus} if focus else {}),
                 "aspect_ratio": self.aspect,
                 # 開始済みの run — warm で解けた絵 (測った主体と実画像) で読めない文字・主体に乗った文字も見る
                 **({"video_id": self.video_id} if self.video_id else {}),
@@ -1010,7 +1012,7 @@ class Run:
         doc の lint は c の物も含めて出ていない。name = doc の dir の名 (既定は c)。root_extra = 根の design の後ろに足す行 (除いた
         cut の定義 — check_without)。その行の DEFECT は根の物と数える。"""
         dd = self.doc_dir(name or c, cuts, root_extra=root_extra)
-        out, all_defects, lint = self.check(dd, ended=cuts[-1] == self.order[-1])
+        out, all_defects, lint = self.check(dd, ended=cuts[-1] == self.order[-1], focus=c)
         ranges = self.cut_line_ranges(cuts, root_extra=root_extra)
         rd, rt = self.root()
         root_n = ((rd + root_extra).count("\n"), rt.count("\n"))
@@ -1067,23 +1069,73 @@ class Run:
         )
         return self.check_cut(c, [x for x in cuts if x not in skip], rnd, root_extra=extra)
 
+    _CROSSING_KINDS = frozenset(
+        {"bg", "avatar", "camera"}
+    )  # 既定で cut を跨ぐ族 (spans.py DEFAULT_SPANS — 著述は `.sticky` を書く)
+    _DECL_RE = re.compile(r"(?m)^\s*([a-z_]+)#([A-Za-z_][\w-]*)([\w.\-]*)")
+    _MARK_RE = re.compile(r"\[([<>!=])((?:#[A-Za-z_][\w.-]*(?:\[[^\]]*\])?(?:\.[\w-]+)*(?:\{[^}]*\})?,?)+)")
+    _BGM_RE = re.compile(r"(?m)^bgm\s+([A-Za-z_][\w-]*)")
+
+    def outside_window(self, c: str, cuts: list[str]) -> frozenset[str]:
+        """c の check に要らない cut (窓の外)。窓 = 最初の cut・直前の cut・c と、c の時点でまだ開いている cut を跨ぐ状態を持つ cut
+        (字幕の lane を最後に開けた cut・閉じていない `.sticky` / 既定で跨ぐ族 / bgm を宣言した cut とそれに最後に印を打った cut)。
+        開けた cut と閉じた cut は対で入れる (開けた方だけだと層が窓の中で開きっぱなし・閉じた方だけだと閉じる印の的が design に
+        無い)。check の時間を cut 数に依らず一定にする (10-27・737 cut で DEFECT / severe の差 0・1 回 中央 0.37 → 0.21 s)。"""
+        i = cuts.index(c)
+        opened: dict[str, int] = {}  # 跨ぐ層の名 → 宣言 (か開けた) cut
+        touched: dict[str, int] = {}  # 名 → 最後に印を打った cut
+        closed: list[tuple[int, int]] = []  # (開けた cut, 閉じた cut)
+        for j in range(i):
+            blk = self.cut_block(cuts[j])
+            if blk is None:
+                continue
+            for m in self._DECL_RE.finditer(blk[0]):
+                tag, name, flags = m.groups()
+                if ".sticky" in flags or tag in self._CROSSING_KINDS:
+                    opened[name] = j
+            for m in self._BGM_RE.finditer(blk[1]):
+                opened[m.group(1)] = j
+            for m in self._MARK_RE.finditer(blk[1]):
+                op = m.group(1)
+                for name in re.findall(r"#([A-Za-z_][\w-]*)", m.group(2)):
+                    if name == "subtitle":
+                        if op != "<":
+                            opened["subtitle"] = j
+                        elif "subtitle" in opened:
+                            closed.append((opened.pop("subtitle"), j))
+                    elif name in opened:
+                        if op == "<":
+                            closed.append((opened.pop(name), j))
+                            touched.pop(name, None)
+                        else:
+                            touched[name] = j
+        keep = {0, max(0, i - 1), i} | set(opened.values()) | set(touched.values())
+        while True:
+            more = {b for a, b in closed if a in keep} | {a for a, b in closed if b in keep}
+            if more <= keep:
+                break
+            keep |= more
+        return frozenset(cuts[j] for j in range(i) if j not in keep)
+
     def check_settled(self, c: str, i: int, rnd: int | str) -> tuple[Path, str, list[Defect], list[dict], set[str]]:
-        """doc (根 + live な cut 0..i) で c を check する。前の cut (か根) の DEFECT で check が止まると c の DEFECT も lint も見えない
-        (dt_18: phone の `none` の色で後の 4 cut が lint なしのまま staged になった)。持ち主の分かる cut はその cut を除いた doc で取り
-        (前の cut の直しと c の直しが並列に進む)、持ち主の分からない DEFECT (根・まだ check していない cut) か、除くと c に DEFECT が出る
-        (除いた cut の sticky を指す) 時は、持ち主が ready になるまで待って掛け直す。掛け直しの check を止めた新しい持ち主もまた待つ —
-        掛け直しの blockers を捨てると隠れた c の DEFECT を 0 と数えて staged にした (nt03 rain: 待った後は rules の DEFECT で止まって
-        いた)。待った持ち主が ready なのにまだ止める時だけ打ち切る (見える範囲で進む・残りは投入検査が拾う)。"""
+        """窓の doc (根 + 窓の外の cut の定義 + 窓の cut・`outside_window`) で c を check する。前の cut (か根) の DEFECT で check が
+        止まると c の DEFECT も lint も見えない (dt_18: phone の `none` の色で後の 4 cut が lint なしのまま staged になった)。持ち主の
+        分かる cut はその cut も除いた doc で取り (前の cut の直しと c の直しが並列に進む)、持ち主の分からない DEFECT (根・まだ check
+        していない cut) か、除くと c に DEFECT が出る (除いた cut の sticky を指す) 時は、持ち主が ready になるまで待って掛け直す。
+        掛け直しの check を止めた新しい持ち主もまた待つ — 掛け直しの blockers を捨てると隠れた c の DEFECT を 0 と数えて staged にした
+        (nt03 rain: 待った後は rules の DEFECT で止まっていた)。待った持ち主が ready なのにまだ止める時だけ打ち切る (見える範囲で
+        進む・残りは投入検査が拾う)。"""
         waited: set[str] = set()
         while True:
             cuts = self.live_cuts(self.order[: i + 1])
-            res = self.check_cut(c, cuts, rnd)
+            outside = self.outside_window(c, cuts)
+            res = self.check_without(c, cuts, outside, rnd) if outside else self.check_cut(c, cuts, rnd)
             defects, blockers = res[2], res[4]
             if defects or not blockers:
                 return res
             skip = frozenset(blockers - {"?", ROOT})
             if skip and not (blockers & {"?", ROOT}):
-                skipped = self.check_without(c, cuts, skip, rnd)
+                skipped = self.check_without(c, cuts, skip | outside, rnd)
                 if not skipped[2] and not skipped[4]:
                     self.log(cut=c, event="lint_skip", round=rnd, skip=sorted(skip))
                     return skipped
@@ -1995,13 +2047,16 @@ class Run:
         """著者の版 (担当が触る前) を check し、DEFECT 0 なら author_clean に (revert_author の元)。指摘の file を返す (担当へ)。"""
         t = time.time()
         cuts = self.live_cuts(self.order[: i + 1])
-        dd, out, defects, lint, blockers = self.check_cut(c, cuts, "author")
+        outside = self.outside_window(c, cuts)
+        dd, out, defects, lint, blockers = (
+            self.check_without(c, cuts, outside, "author") if outside else self.check_cut(c, cuts, "author")
+        )
         clean = not defects and not blockers  # 止まった check では c の実行の DEFECT が見えない
         if blockers - {"?", ROOT}:
-            # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut を除いた doc で c の lint を取る (除いた cut の
+            # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut も除いた doc で c の lint を取る (除いた cut の
             # 定義は根の後ろに写す — c が使う名を失った誤った DEFECT で unclean にしない)。判定は c の行に落ちる DEFECT で数える
             skip = frozenset(blockers - {"?", ROOT})
-            dd, out, skipped, lint, rest = self.check_without(c, cuts, skip, "author")
+            dd, out, skipped, lint, rest = self.check_without(c, cuts, skip | outside, "author")
             clean = not defects and not skipped and not rest
         if clean:
             self.author_clean.add(c)
