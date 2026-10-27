@@ -15,7 +15,7 @@ usage (repo root から):
   python stream_author.py staff <project> <cut> <findings>  [--effort medium]   # 担当: cut を仕上げて block を stdout へ
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
       → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
-        --shots = 見直しに cut の静止画も見せる (stream_run の --look))
+        --shots = 見直しに cut の静止画も見せる (stream_run の見直し))
 project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [editable]"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
@@ -473,7 +473,7 @@ def _numbered(text: str) -> str:
     return "\n".join(f"{k}| {line}" for k, line in enumerate(text.rstrip("\n").split("\n"), start=1))
 
 
-# 見直しの静止画 (`--look`) で絵の説明文を変えてよい時。作り直しは再生を待たせるので、文脈を取り違えさせる誤りだけ (些細な違いは放置)
+# 見直しの静止画で絵の説明文を変えてよい時。作り直しは再生を待たせるので、文脈を取り違えさせる誤りだけ (些細な違いは放置)
 PICTURE_FIX_NOTE = """Serious picture errors (judge from the images, and only then fix a picture): when a picture makes the speech or the explanation
 misleading — it reads as a different thing than what is being explained (a sphere reads as an atom model; the map shows another country), a number or
 shape the story hinges on is wrong (the number of holes, an arrow's direction, a graph's rise or fall), it contradicts the speech (person, era, place,

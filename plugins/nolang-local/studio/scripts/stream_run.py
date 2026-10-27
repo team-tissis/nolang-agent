@@ -14,14 +14,16 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-warn] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low] [--look]
+usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-warn] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low]
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
     値は担当の effort。`balanced` = cut 1・2 だけ low・他は medium (止まらない開始 中央 約 90 s・medium は約 130 s・質は小さく落ちる)。
   --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
-  --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の 1 回目の直し役を、厳しい監督として
-    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しの call は直し役の 2 回の上限に数えない。
+  --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の最初の直し役を、厳しい監督として
+    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ)。見直しは cut の静止画も見て REVIEW_ROUNDS (2) 回
+    (静止画なしの見直しは置かない — 10-27 裁定): 担当の後、prewarm の絵で cut を GPU で描き (local は `studio.py shots`・
+    remote は server の GPU の worker `drafts/{id}/stills/`)、round ごとに撮り直す。見直しの call は直し役の 2 回の上限に数えない。
   --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
     直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`none` = 直し役も
     呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
@@ -30,9 +32,6 @@ usage (repo root から): python stream_run.py <project> [--staff medium|balance
   既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + 見直し +
     直しに Opus 両順 3 勝 1 分・担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。DEFECT だけの
     直し役は、落ちる cut を減らす網 (DEFECT が無ければ呼ばれない)。
-  --look = 見直しに cut の静止画も見せ、REVIEW_ROUNDS_LOOK (2) 回にする (質を取りに行く mode — 速さの枠の外): 担当の後、
-    prewarm の絵で cut を GPU で描き (local は `studio.py shots`・remote は server の GPU の worker `drafts/{id}/stills/`)、round ごとに
-    撮り直す。
   直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
 記録: project/stream/run.jsonl (event ごとの時刻・製品の segment の時刻も)・最終 project/studio/out/video.mp4 と、流した doc を
 studio/ (design.txt・timeline.txt・src.json) に書き戻した物。solo/ の cut は著者の版 author_cut_<名>・担当の版 staff_cut_<名>・最終
@@ -342,11 +341,10 @@ class Rejected(Exception):
         self.defects = defects
 
 
-# 見直しの回数。既定は画像なしで 1 回 — 53 cut の盲検 (両順で一致した差) で今の直し役 (low・指摘のある cut だけ) に 9 対 3・
-# 投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)。--look は静止画を見せて 2 回 (2 回目は 1 回目の直しを描き直した絵を見る) — 5 cut の点で
-# 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5 (10-22・effort medium・low は直し役と差が出ない)
-REVIEW_ROUNDS = 1
-REVIEW_ROUNDS_LOOK = 2
+# 見直しの回数 — 静止画を見せて 2 回 (2 回目は 1 回目の直しを描き直した絵を見る)。静止画なしの見直しは置かない (10-27 裁定)。
+# 盲検の実測 (10-22・effort medium・low は直し役と差が出ない): 53 cut で見直しは今の直し役 (low・指摘のある cut だけ) に 9 対 3・
+# 5 cut の点で 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5・投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)
+REVIEW_ROUNDS = 2
 # remote の静止画 (`drafts/{id}/stills/`) を待つ上限 — server は warm の絵を 90 s まで待ってから実現・描画する
 REMOTE_SHOTS_TIMEOUT_S = 240
 
@@ -387,7 +385,6 @@ class Run:
         review: str | None = "low",
         fix_scope: str = "severe",
         keep_assets: bool = True,
-        look: bool = False,
         remote: str | None = None,
         token: str | None = None,
         editable: bool = False,
@@ -416,7 +413,6 @@ class Run:
         )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
         # 担当は絵と台詞を変えない — 絵と声は著者の版から担当と並列に作る (`_stage` が担当の前に warm を頼む)
         self.keep_assets = keep_assets
-        self.look = look  # 見直しに cut の静止画も見せる (REVIEW_ROUNDS_LOOK 回)
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
         self.weave = project / "weave"
         self.weave.mkdir(parents=True, exist_ok=True)
@@ -436,7 +432,7 @@ class Run:
         self.unlocated_owner: dict[str, str] = {}
         self.shot_unwarmed: dict[
             str, list[str]
-        ] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (remote の `--look`)
+        ] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (remote の見直し)
         self.author_clean: set[str] = set()  # 著者の版 (担当が触る前) が check で DEFECT 0 だった cut
         self.staged: dict[str, bool] = {}
         self.broken: dict[str, str] = {}
@@ -638,7 +634,7 @@ class Run:
 
     # ---- doc ----
     def doc_src(self, pins: dict[str, object] | None = None) -> dict:
-        """doc の src.json = studio/src.json (設定と著者の pin) + pins (run が解いた素材 — `--look` の静止画・書き戻し)。素材を解くのは
+        """doc の src.json = studio/src.json (設定と著者の pin) + pins (run が解いた素材 — 見直しの静止画・書き戻し)。素材を解くのは
         run (warm と投入) で、check は doc の pin を読まない。"""
         base = self.studio / "src.json"
         d = json.loads(base.read_text()) if base.exists() else {"asset_pins": {}}
@@ -887,7 +883,7 @@ class Run:
     def doc_dir(
         self, name: str, cuts: list[str], *, root_extra: str = "", pins: dict[str, object] | None = None
     ) -> Path:
-        """doc (根 + cuts) を weave/<name>/ に組む。pins = doc の src.json に足す素材の pin (`--look` の静止画が warm の絵で撮る)。"""
+        """doc (根 + cuts) を weave/<name>/ に組む。pins = doc の src.json に足す素材の pin (見直しの静止画が warm の絵で撮る)。"""
         dd = self.weave / name
         (dd / "out").mkdir(parents=True, exist_ok=True)
         self.rename_collisions(cuts)
@@ -905,7 +901,7 @@ class Run:
         tmp = dd / f".src.json.{threading.get_ident()}"
         tmp.write_text(json.dumps(self.doc_src(pins), ensure_ascii=False, indent=1))
         os.replace(tmp, dd / "src.json")
-        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する (`--look` の静止画)
+        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する (見直しの静止画)
         shared = self.studio / "out/fonts"
         shared.mkdir(parents=True, exist_ok=True)
         fonts = dd / "out/fonts"
@@ -1286,11 +1282,11 @@ class Run:
         prev_keys: set[tuple[str, str]] | None = (
             None  # 直し役を掛ける直前の check の指摘 (規則と層) — 直しが新しく作った指摘の判定
         )
-        # 見直し: 最初の reviews 回の直し役は指摘に出ない弱い所・崩れも探す (--look なら静止画も・round ごとに撮り直す)。
+        # 見直し: 最初の reviews 回の直し役は指摘に出ない弱い所・崩れも探す (静止画も見せる・round ごとに撮り直す)。
         # 見直しの call は直し役の 2 回の上限に数えない
         reviews = 0
         if self.review_effort is not None and not self.broken.get(c):
-            reviews = REVIEW_ROUNDS_LOOK if self.look else REVIEW_ROUNDS
+            reviews = REVIEW_ROUNDS
         prev_findings: str | None = None
         # 塊だけ戻した (`revert_new_findings`) 直前の版 — 塊の戻しで design と timeline の名がずれて DEFECT になったら、
         # 直す前の版 (DEFECT 0) へまるごと戻す (改名した要素の印だけ旧名に戻り 3 回空回りした: dv nt07 shift60)
@@ -1431,7 +1427,7 @@ class Run:
                 reviews -= 1
             if interleave:
                 self.log(cut=c, event="look_interleave", round=rnd, defect=len(defects), fix=len(fixes))
-            shots = self.shots(c) if review and self.look else None  # 撮れなければ (空) 画像なしで見直す
+            shots = self.shots(c) if review else None  # 撮れなければ (空) 画像なしで見直す
             if shots and self.shot_unwarmed.get(c):
                 # warm が間に合わず意味検索で引いた仮の絵 — 見直し役に中身を判定させない (作り直しの連鎖を作らない)
                 ff.write_text(
@@ -2638,7 +2634,6 @@ def main(argv: list[str]) -> int:
     fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "severe"
     fix = {"none": None, "defect": "low", "severe": "low"}.get(fix_arg, fix_arg)
     review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
-    look = "--look" in argv
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
     if token is None and remote is not None:
@@ -2651,7 +2646,6 @@ def main(argv: list[str]) -> int:
         review=None if review == "none" else review,
         fix_scope=fix_arg if fix_arg in ("defect", "severe") else "warn",
         keep_assets="--staff-edits-assets" not in argv,
-        look=look,
         remote=remote,
         token=token,
         editable="--editable" in argv,

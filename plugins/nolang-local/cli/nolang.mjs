@@ -723,7 +723,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low (著者)] [--staff medium|balanced|low|none (既定 medium)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low [--review-look]] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low (著者)] [--staff medium|balanced|low|none (既定 medium)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -771,10 +771,9 @@ async function cmdMake(positionals, flags) {
   if (flags["staff-warn"]) args.push("--staff-warn");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
-  // 質を取りに行く時: 見直し (--review medium と --fix low)・見直しに cut の静止画 (--review-look — server の GPU が描く)・担当が絵と台詞も変える
+  // 質を取りに行く時: 見直し (--review medium と --fix low — 見直しは cut の静止画を見て 2 回・server の GPU が描く)・担当が絵と台詞も変える
   if (flags.review) args.push("--review", flags.review);
   if (flags.fix) args.push("--fix", flags.fix);
-  if (flags["review-look"]) args.push("--look");
   if (flags["staff-assets"]) args.push("--staff-edits-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
@@ -1119,9 +1118,9 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--author low (著者の effort・既定 low)] [--staff medium|balanced|low|none (担当・既定 medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
-        [--review low|medium --fix low [--review-look]] [--staff-assets]
-                                        質を取りに行く時 (遅くなる): --fix low で見直し役を入れ (--review は その effort)、--review-look で
-                                        見直しに cut の静止画も見せて 2 回 (server の GPU が描く)・--staff-assets で担当が絵と台詞も変える
+        [--review low|medium --fix low] [--staff-assets]
+                                        質を取りに行く時 (遅くなる): --fix low で見直し役を入れる (--review は その effort。見直しは cut の
+                                        静止画 — server の GPU が描く — を見て 2 回)・--staff-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
@@ -1170,7 +1169,6 @@ const OPTIONS = {
   samples: { type: "string" },
   review: { type: "string" },
   fix: { type: "string" },
-  "review-look": { type: "boolean" },
   mine: { type: "boolean" },
   limit: { type: "string" },
   name: { type: "string" },

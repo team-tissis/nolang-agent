@@ -63,15 +63,15 @@ test("--staff は担当を opt-in し、--editable を studio へ渡す", async 
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
-test("役割の新名 (--author / --staff none / --review-look / --staff-assets) を studio の旧名へ写す", async (t) => {
+test("役割の新名 (--author / --staff none / --staff-assets) を studio の旧名へ写す", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(
     process.execPath,
-    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--fix", "low", "--review-look", "--staff-assets"],
+    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--fix", "low", "--staff-assets"],
     { env },
   );
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--effort", "medium", "--no-staff", "--review", "medium", "--fix", "low", "--look", "--staff-edits-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--effort", "medium", "--no-staff", "--review", "medium", "--fix", "low", "--staff-edits-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("--seconds は秒数か auto だけを受ける", async (t) => {

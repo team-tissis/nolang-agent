@@ -3,8 +3,8 @@
 # usage (repo root から):
 #   bash .agents/skills/nolang-draft-studio/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|balanced|low] [--no-staff] [--staff-warn (担当に warn の指摘も渡す・既定は DEFECT と severe だけ)]
-#        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets] [--look]   (見直し = 1 回目の直し役が弱い所・崩れも探す・の effort / 2 回目以降の直し役の effort /
-#                                                        見直しに cut の静止画も見せて 2 回 (質を取りに行く mode・--fix low と — remote は server の GPU が描く))
+#        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets]   (見直し = 最初の直し役が弱い所・崩れも探し、cut の静止画も見て 2 回
+#                                                        (質を取りに行く mode・--fix low と — remote は server の GPU が描く)・の effort / 見直しの後の直し役の effort)
 #        (既定 --fix severe = DEFECT と severe の指摘 (隠れる文字・画面の外 …) の時だけ直し役 (low)・見直しなし・warn は直さない・--fix defect = DEFECT と隠れる文字だけ・
 #         --fix none で直し役も無し・--fix low で見直しと指摘の直し。既定では担当は絵と台詞を変えず、絵と声は著者の版から担当と
 #         並列に作る・--staff-edits-assets で担当が絵と台詞も変える)
@@ -26,7 +26,7 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; LOOK=""; EDITABLE=""; REF=""; SPEECH=""
+TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
@@ -42,7 +42,6 @@ while [ $# -gt 0 ]; do
     --staff-warn) STAFF_WARN=1; shift;;
     --fix) FIX=$2; shift 2;;
     --review) REVIEW=$2; shift 2;;
-    --look) LOOK=1; shift;;
     --staff-edits-assets) ASSETS=1; shift;;
     --request) REQ_FILE=$2; shift 2;;
     --request-text) REQ_TEXT=$2; shift 2;;
@@ -77,7 +76,7 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$S/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --review $REVIEW --fix $FIX${ASSETS:+ --staff-edits-assets}${LOOK:+ --look}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --review $REVIEW --fix $FIX${ASSETS:+ --staff-edits-assets}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
 # 参照の動画: --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
 [ -n "$REF" ] || REF=$(grep -oE '\[video:[0-9a-fA-F-]{36}\]' "$P/request.txt" | head -1 | sed -E 's/^\[video:(.*)\]$/\1/' || true)
 if [ -n "$REF" ]; then
@@ -89,7 +88,7 @@ if [ -n "$SPEECH" ]; then
   # shellcheck disable=SC2086
   env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
 fi
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && echo "$REVIEW" || echo none)${LOOK:+ (静止画)}・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
+echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && [ "$REVIEW" != none ] && echo "$REVIEW (静止画)" || echo none)・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
