@@ -17,7 +17,7 @@
 - `same_picture` 同じ絵が 15 秒以上 → cut の中で語に合わせて別の絵・図・札へ替える (cut は分けない)
 - `blank_band` cut の頭で画面の 1/3 が地のまま → 絵を全面に敷くか帯に札を
 - `dip_black_frame` dip は黒 frame → dissolve か wipe
-- `double_exit` 切替で終わる cut に cut 全体の out も掛かり、場面が fade してから切替が走る (二度消える) → 切替が場面を運ぶので section の out を外す (fade で消えたいなら切替を `transition cut` に)
+- `double_exit` 切替で終わる cut に cut 全体の out も掛かり、場面が fade してから切替が走る (二度消える) → fade で消えたいなら切替を `transition cut` に・切替が場面を運ぶなら section の out を外す (根から継いだ切替なら機械が切替を cut にする)
 - `persistent_chrome` 常設の層 (progress / 章番号 / 累計) は 3 分以上の動画だけ — 短い動画では画面の端を 1 本占有する損の方が大きいので外す
 - `sparse_cut` 4 秒以上で要素が少ない → 絵か札を足す
 - `palette_drift` palette 外の色が多い

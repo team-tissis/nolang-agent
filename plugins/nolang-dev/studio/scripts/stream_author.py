@@ -752,12 +752,13 @@ def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
     return spans
 
 
-# 積極的に当てる機械の直し — 直し方が正解として一つに決まり、問題を隠さない (月の読み・切替が運ぶ場面の余計な out・言い切って
-# から切り替える / 切替が済んでから話し始める 0.5 秒以下の間)。他 (0.5 秒を超える間・切替を短く溶かす・文字を板の上に出す) は
-# 消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種) を選べる — 後に担当や warn を直す直し役が残る間は当てずに
-# 指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は
-# 40-74 で負け)
-AUTOFIX_SURE = frozenset({"drop_out", "br"})
+# 積極的に当てる機械の直し — 直し方が正解として一つに決まり、問題を隠さず、著者が書いた物を消さない (design の `\n`・根から継いだ
+# 切替と書いた out の二重 (out を残して切替を cut に)・言い切ってから切り替える / 切替が済んでから話し始める 0.5 秒以下の間)。他
+# (0.5 秒を超える間・切替を短く溶かす・文字を板の上に出す) は消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種)
+# を選べる — 後に担当や warn を直す直し役が残る間は当てずに指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の
+# 間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は 40-74 で負け)。積極 / 消極は規則で決める (同じ `transition` の操作でも
+# double_exit の `cut` は積極・ghost_dissolve の短い dissolve は消極)
+AUTOFIX_SURE_RULES = frozenset({"literal_newline", "double_exit"})
 AUTOFIX_SURE_SILENCE_S = 0.5
 
 
@@ -767,11 +768,11 @@ def apply_autofix(
     """check の指摘のうち直し方が一つに決まる物 (`autofix` — lint が計算した `操作:引数`) を cut の block (design
     `---timeline---` timeline) に当てる → (直した block, 当てた指摘)。当たらない指摘 (行が見つからない・形が違う) は飛ばす。
     - `silence_tail:秒` 最後の台詞の末尾の無音 (切替が台詞に掛かる) / `silence_head:秒` 最初の台詞の頭の無音 (入場が切替の窓に入る)
-    - `drop_out:名` `section#名(…)` の `out:` を外す (切替との二重掛け)
-    - `transition:種,尺,overlap=…` cut の切替の行の種・尺・overlap を替える (他の引数 — 効果音・向き — は残す)
+    - `transition:種,尺,overlap=…` cut の切替の行の種・尺・overlap を替える (他の引数 — 効果音・向き — は残す)・`transition:cut` は
+      切替の行の無い cut に `transition cut` を足す (根から継いだ切替と書いた out の二重掛け — 書いた out を残す)
     - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
     - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
-    sure_only = 積極的な直し (`AUTOFIX_SURE`) だけ当てる (後に LLM が残る時)。"""
+    sure_only = 積極的な直し (`AUTOFIX_SURE_RULES` と短い無音) だけ当てる (後に LLM が残る時)。"""
     design, sep, timeline = block.partition("---timeline---")
     if not sep:
         return block, []
@@ -780,24 +781,15 @@ def apply_autofix(
     applied: list[dict[str, str]] = []
     for finding in findings:
         op, _, arg = str(finding.get("autofix") or "").partition(":")
-        sure = op in AUTOFIX_SURE or (op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S)
+        sure = finding.get("rule") in AUTOFIX_SURE_RULES or (
+            op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S
+        )
         if sure_only and not sure:
             continue
         before = (list(dlines), list(tlines))
         if op in ("silence_tail", "silence_head") and speech:
             at = speech[-1] if op == "silence_tail" else speech[0]
             tlines[at] = _add_silence(tlines[at], float(arg), head=op == "silence_head")
-        elif op == "drop_out":
-            for at, line in enumerate(dlines):
-                head = re.match(rf"^(\s*section#{re.escape(arg)}\()(.*)(\)\s*)$", line)
-                if head is not None:
-                    kept = [part for part in _split_top(head.group(2), ";") if not part.strip().startswith("out:")]
-                    props = ";".join(kept).strip()
-                    dlines[at] = (
-                        head.group(1) + props + head.group(3)
-                        if props
-                        else head.group(1)[:-1] + head.group(3).lstrip(")")
-                    )
         elif op == "transition":
             spec = _split_top(arg, ",")
             lines = [at for at, line in enumerate(tlines) if line.lstrip().startswith("transition ")]
