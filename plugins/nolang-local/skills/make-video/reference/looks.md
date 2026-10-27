@@ -50,7 +50,7 @@
 5. **組み込みの部品は無い**: 人物の舞台 (箱 + 地の形 + 透過の人物 = 3〜4 行)・結論の帯 (地つき icon + 文 + tag = 3 行)・手順の札 (番号 + 文 = 3 行)・lockup (3 行) は繰り返すなら `def` に畳む (authoring.md「根の雛形」)。
 6. **icon の地は 1 行** — `icon#i(font-size: 60px; name: leaf; background: $a)` で丸い地 (`border-radius: 18px` で角丸の四角・`padding:` は既定 size の 0.3・icon の色は地と反対の ink)。地の箱は size + 2 × padding で、書いた left / top と位置の式の辺もこの箱。線の icon (Lucide の名・`in: draw`) と著述の icon の地も同じ書き方 (描き出しは線だけ・地は fade で出る)。
 7. **`run` に letter-spacing が無い** — 小見出しの字間は文字ごとに `letter-spacing:`。
-8. **`div` は素の箱** — CSS の div と同じく地・縁・影・角丸・余白を持たない (容器はそのまま書く)。板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)`・繰り返すなら `def card = div(…)` か根の `div { … }`。暗い theme の塗りの板は glass (淡い縁つき — 縁を消すなら `border: none`)。
+8. **`div` は素の箱** — CSS の div と同じく地・縁・影・角丸・余白を持たない (容器はそのまま書く)。板は宣言で書く: `div#c(…; background: $panel; border: 2px solid $line; border-radius: 24px; box-shadow: 0 6px 18px #0003; padding: 36px)`・繰り返すなら `def card = div(…)` か根の `div { … }`。暗い theme の塗りの板は glass (淡い縁つき — 縁を消すなら `border: none`)。板は役目 (複数の子を束ねる・写真や模様の上で読ませる・場を区切る) がある時だけ — 文字 1 つを乗せるだけの板は書かず、文字は地に直接置く。
 9. **縦書きの主文は 1 列 600 px まで** (8 字 × 76 は入らない・`height` を超えると offcanvas) — 字数か size を落とす。
 11. **棒の長さは著者が計算する** — 横棒は `width: {v}%` (段の内側の幅の比) で、値 ÷ 最大 × 棒に使える比 (段の幅 − 札 − 値の札) を書く。値 0 は `1%` の切れ端で見せる。行の色は ×N の `;` の列 (`c: "$mute;$a"`)・語で替えるなら `[!#名[k].b fill,$c]`。
 13. **記述の書体は字ごと幅の詰め組み書体に当たりにくい** (「詰めて組める」と書いても等幅かなのゴシックに解決) — 行頭の「 が空くので見出しは括弧を使わず `run` の色で強調する。欧文の記述は代替字形の癖の強い family に当たることがあり、「細い / 細身」は写真の上で読めない Light になる — render の frame で字形を見て記述を替える。
