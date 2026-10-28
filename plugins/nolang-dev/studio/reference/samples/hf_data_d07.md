@@ -228,7 +228,7 @@ card#k_legend(left: 1380px; top: 250px; width: 450px; height: 220px; transform: 
   p#n(left: 30px; top: 78px; font-size: 22px; line-height: 1.4; color: $ink2) 1週あたりの記録日数[br]（ログと本人の話を突き合わせた値）
 note#k_take(left: 1395px; top: 544px; width: 440px; height: 360px; c: $pnk; transform: rotate(-2deg); in: {y:-46, scale:1.14, rotation:-8, opacity:0, duration:.55, ease:'back.out(1.6)'})
   p#t(left: 40px; top: 40px; font-size: 62px; font-family: m; line-height: 1.15) 2週目から[br]坂を[br]下り始める
-loop#k_loop(left: 556px; top: 512px; width: 87px; height: 80px; d: 450; border: 6px solid $red; overlap: k_val)
+loop#k_loop(left: 556px; top: 512px; width: 87px; height: 80px; d: .45; border: 6px solid $red; overlap: k_val)
 shape#k_arrow(path: "M420 409 Q586 470 740 556"; background: none; border: 6px solid $red; overlap: k_val; in: draw {duration: 0.55})
 shape#k_arrow_h(path: "M725 558 L740 556 L734 542"; background: none; border: 6px solid $red; in: draw {duration: 0.2})
 p#k_slope(left: 640px; top: 700px; font-size: 40px; font-family: h; color: $red; white-space: nowrap; transform: rotate(21deg); transform-origin: 0% 0%; in: {opacity:0, duration:.4, ease:'power1.out'}) 2週目から下り坂
@@ -291,10 +291,10 @@ btitle#bt6(n: "05"; t: "離脱が起きる2つの瞬間"; s: "ジャーニーの
 shape#j_path(path: "M80 220 C173 200 253 197 347 212 C433 225 480 280 547 288 C613 296 653 220 733 212 C827 204 907 293 973 299 C1040 304 1080 227 1200 208"; background: none; border: 8px solid #24304AE6; delay: 500; in: draw {duration: 1.4})
 shape#j_head(path: "M1183 193 L1204 208 L1181 223"; background: none; border: 8px solid $ink; delay: 1850; in: draw {duration: 0.2})
 p#j_lab(left: "33;220;393;640;1073"; top: 236px; width: 220px; font-size: 26px; color: $ink2; text-align: center; white-space: nowrap; delay: 600; in: {y:8, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.18}}) ×5 記録をはじめる;毎日つける;記録がたまる;月末・予算;目標を達成
-loop#j_loop1(left: 750px; top: 374px; width: 141px; height: 117px; d: 450; border: 9px solid $red)
+loop#j_loop1(left: 750px; top: 374px; width: 141px; height: 117px; d: .45; border: 9px solid $red)
 # hf の boltD (32x70 @1920 = 21x47) を canvas px の素の path で (名の bolt は縦横比を保って枠の幅に縮み半分の大きさになる)
 shape#j_bolt1(path: "M573.3,225.3 L562.6,250.7 L572.0,250.7 L566.6,272.0 L584.0,244.0 L574.6,244.0 L580.0,225.3 Z"; background: #FFD633F2; border: 4px solid $red; in: draw {duration: 0.35})
-loop#j_loop2(left: 1389px; top: 390px; width: 141px; height: 117px; d: 450; border: 9px solid $red)
+loop#j_loop2(left: 1389px; top: 390px; width: 141px; height: 117px; d: .45; border: 9px solid $red)
 shape#j_bolt2(path: "M1000.0,236.0 L989.3,261.4 L998.7,261.4 L993.3,282.7 L1010.7,254.7 L1001.3,254.7 L1006.7,236.0 Z"; background: #FFD633F2; border: 4px solid $red; in: draw {duration: 0.35})
 mcard#mc1(left: 520px; width: 610px; transform: rotate(-.8deg); b: "1"; t: "記録を3日以上ためた後の再開"; n: "7{nu}人{/}"; brk: "入力疲れ5・分類迷子2"; why: "たまった分を思い出せず、[br]「抜けがある家計簿」に戻る気がしなくなる")
   div#chips(left: "167;197;227;257;287;317;347"; top: 132px; width: 38px; height: 38px; border-radius: 2px 2px 8px 2px; background: "$yel;$yel;$yel;$yel;$yel;$blu;$blu"; in: {scale:.2, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:{each:.06}}) ×7
