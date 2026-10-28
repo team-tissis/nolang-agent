@@ -1799,18 +1799,20 @@ class Run:
         (self.solo / f"cut_{c}.txt").write_text(new_text)
         return hit
 
-    # 止まらない開始の予測の定数 (10-27 の local 実測 10 本: 担当 low 7〜25 s / medium 24〜72 s (中央 40)・check+直し 中央
-    # 0.8 s・最初の fed → manifest 公開 約 2.5 s・fed からその cut の segment が再生に届くまで ~10 s)。見積りは非対称に取る:
-    # 自分の完了 (作業側) は遅め (SLOW)・見る人の到達 (締切側) は早め (FAST × OFFSET_DISCOUNT) — どちらの外れも
-    # 「medium を選んで止まる」でなく「low に落として質が少し下がる」側に倒れる
-    STAFF_SLOW_S: dict[str, float] = {"low": 25.0, "medium": 55.0}
-    STAFF_FAST_S: dict[str, float] = {"low": 8.0, "medium": 25.0}
+    # 止まらない開始の予測の定数 (10-27〜28 の local 実測 30 run: 担当 low 7〜27 s (中央 15) / medium 21〜73 s (中央 37・
+    # p80 44.5)・check+直し 中央 0.9 s・最初の fed → manifest 公開 約 2.5 s)。見積りは非対称に取る: 自分の完了 (作業側) は
+    # 遅め (SLOW)・見る人の到達 (締切側) は早め (FAST × OFFSET_DISCOUNT) — どちらの外れも「medium を選んで止まる」でなく
+    # 「low に落として質が少し下がる」側に倒れる。張りは 30 run の骨格のモンテカルロ + 実走で選んだ「止まらない ~97% で
+    # medium ~3 割」の点 (作業側 = medium の p90・締切側 = p30)。作業側 p80 (44.5) は medium が 45% 残るが、単発の長尻
+    # (82 s を実測) を 2 割踏んで実走 8/10 だった (10-28)
+    STAFF_SLOW_S: dict[str, float] = {"low": 20.0, "medium": 50.0}
+    STAFF_FAST_S: dict[str, float] = {"low": 10.0, "medium": 31.0}
     STAGE_TAIL_S = 3.0  # 担当の後の check + 直しの見込み
     AUTHOR_CHECK_S = 5.0  # cut_seen から担当開始まで (著者版の check)
     RENDER_HEAD_S = 10.0  # fed からその cut の segment が再生に届くまで
     MANIFEST_LAG_S = 3.0  # 最初の fed から manifest 公開 (再生開始) まで
-    NONSTOP_MARGIN_S = 5.0  # 見込みの揺れの余白
-    OFFSET_DISCOUNT = 0.85  # 見込み秒の和の締切側の割引 (見込みより短い動画に早く着く)
+    NONSTOP_MARGIN_S = 2.0  # 見込みの揺れの余白
+    OFFSET_DISCOUNT = 0.95  # 見込み秒の和の締切側の割引 (見込みより短い動画に早く着く)
 
     def _staff_s(self, effort: str, *, fast: bool) -> float:
         table = self.STAFF_FAST_S if fast else self.STAFF_SLOW_S

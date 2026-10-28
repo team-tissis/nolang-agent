@@ -9,6 +9,7 @@
 //   mkdir -p /tmp/nds && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio' | tar x -C /tmp/nds
 //   node scripts/sync-reference.mjs /tmp/nds/.agents/skills/nolang-draft-studio --commit "$(ssh <host> git -C <backend> rev-parse HEAD)"
 import { execFileSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { cp, readFile, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -72,10 +73,17 @@ for (const name of DIRS) {
   await cp(join(from, "reference", name), join(DEST, name), { recursive: true });
 }
 await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, "SKILL.md"), "utf8")));
+// author_core.py は新しい backend にだけある — 無い snapshot では飛ばす (下で import との整合を確かめる)
+const STUDIO_OPTIONAL = new Set(["scripts/author_core.py"]);
 await rm(STUDIO_DEST, { recursive: true, force: true });
 for (const rel of STUDIO_FILES) {
+  if (STUDIO_OPTIONAL.has(rel) && !existsSync(join(from, rel))) continue;
   await cp(join(from, rel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
 }
+// import できない写しを出荷しない (10-23 の craft.md の欠けと同じ型の事故を塞ぐ)
+const streamAuthor = await readFile(join(STUDIO_DEST, "scripts/stream_author.py"), "utf8");
+if (streamAuthor.includes("author_core") && !existsSync(join(STUDIO_DEST, "scripts/author_core.py")))
+  throw new Error("stream_author.py が author_core を import するのに、写した元に scripts/author_core.py が無い");
 
 const git = gitCommit(from);
 const source = {
