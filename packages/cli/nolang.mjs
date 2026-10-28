@@ -16,7 +16,7 @@ import { parseArgs } from "node:util";
 import { ASSET_KINDS, mimeOf, uploadKind } from "./lib/assets.mjs";
 import { codeFromCallback } from "./lib/callback.mjs";
 import { DEVICE_CLIENT_ID, loginMethod, pollDeviceAuthorization, validateDeviceAuthorization } from "./lib/device-auth.mjs";
-import { LoginState, writePrivate as writePrivateAtomic } from "./lib/login-state.mjs";
+import { LoginState, withLock, writePrivate as writePrivateAtomic } from "./lib/login-state.mjs";
 import { FALLBACK_API, TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
 import { changedDocs, docHashes, installBundle, readContract, referenceHash } from "./lib/reference.mjs";
@@ -33,6 +33,8 @@ const PACKAGED_API = (() => {
 })();
 const CONFIG_DIR = process.env.NOLANG_CONFIG_DIR || join(homedir(), ".config", "nolang");
 const CRED_FILE = join(CONFIG_DIR, "credentials.json");
+// credentials.json の読み直し → 書き込みを直列にする (並行する nolang の更新を失わない・同じ refresh token を 2 回使わない)
+const CRED_LOCK_FILE = join(CONFIG_DIR, "credentials.lock");
 // --background のログイン: 待ち受けは切り離した子が持ち、状態 (waiting / done / failed) をここに書く
 const LOGIN_LOG_FILE = join(CONFIG_DIR, "login.log");
 const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
@@ -65,6 +67,15 @@ async function writePrivate(path, obj) {
 }
 
 const saveStore = (store) => writePrivate(CRED_FILE, store);
+
+// lock の中で読み直した store を update に渡し、書き戻す。update の戻り値を返す (例外なら書かない)
+const updateStore = (update) =>
+  withLock(CRED_LOCK_FILE, async () => {
+    const store = await loadStore();
+    const result = await update(store);
+    await saveStore(store);
+    return result;
+  }, "別の nolang が資格情報を更新中です。少し待ってやり直してください");
 
 async function chosenApi(flags) {
   return chooseApi({ flag: flags.api, env: process.env.NOLANG_API_URL, selected: (await loadStore()).selected_api, packaged: PACKAGED_API });
@@ -130,7 +141,12 @@ async function discover(api) {
   const prm = await getJson(prmUrl);
   const issuer = (prm.authorization_servers || [])[0];
   if (!issuer) throw new CliError(`${prmUrl} に authorization_servers が無い`, { exit: EXIT.NETWORK });
-  const as = await getJson(`${issuer.replace(/\/+$/, "")}/.well-known/oauth-authorization-server`);
+  const expected = issuer.replace(/\/+$/, "");
+  const as = await getJson(`${expected}/.well-known/oauth-authorization-server`);
+  // 名乗る issuer が取りに行った場所と違う metadata は使わない (別の認可サーバーの窓口へ誘導する mix-up の入口)
+  if (as.issuer?.replace(/\/+$/, "") !== expected) {
+    throw new CliError(`${expected} の認可サーバーの metadata が別の issuer (${as.issuer}) を名乗っています`, { exit: EXIT.AUTH });
+  }
   return { resource: prm.resource, as };
 }
 
@@ -178,12 +194,11 @@ function openBrowser(url) {
   }
 }
 
-async function saveTokens(api, base, tokens) {
+function tokenProfile(base, tokens) {
   if (typeof tokens.access_token !== "string" || !tokens.access_token) {
     throw new CliError("token 応答に access_token がありません", { exit: EXIT.AUTH });
   }
-  const store = await loadStore();
-  store.profiles[api] = {
+  return {
     ...base,
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token || base.refresh_token,
@@ -191,9 +206,9 @@ async function saveTokens(api, base, tokens) {
     scope: tokens.scope || base.scope,
     updated_at: new Date().toISOString(),
   };
-  await saveStore(store);
-  return store.profiles[api];
 }
+
+const saveTokens = (api, base, tokens) => updateStore((store) => (store.profiles[api] = tokenProfile(base, tokens)));
 
 async function exchangeCode(api, pending, code) {
   const tokens = await postForm(pending.token_endpoint, {
@@ -207,23 +222,29 @@ async function exchangeCode(api, pending, code) {
   return saveTokens(api, { client_id: pending.client_id, token_endpoint: pending.token_endpoint, resource: pending.resource }, tokens);
 }
 
-async function refreshTokens(api, profile) {
-  if (!profile.refresh_token) throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
-  try {
-    const tokens = await postForm(profile.token_endpoint, {
-      grant_type: "refresh_token",
-      refresh_token: profile.refresh_token,
-      client_id: profile.client_id,
-    });
-    return await saveTokens(api, profile, tokens);
-  } catch (error) {
-    if (error.exit === EXIT.NETWORK) throw error;
-    throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
-  }
+// refresh token は 1 回しか使えない。lock の中で読み直し、待つ間に別の nolang が更新していればその token を使う
+async function refreshTokens(api, stale) {
+  return updateStore(async (store) => {
+    const profile = store.profiles[api];
+    if (!profile?.refresh_token) throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
+    if (profile.refresh_token !== stale.refresh_token) return profile;
+    let tokens;
+    try {
+      tokens = await postForm(profile.token_endpoint, {
+        grant_type: "refresh_token",
+        refresh_token: profile.refresh_token,
+        client_id: profile.client_id,
+      });
+    } catch (error) {
+      if (error.exit === EXIT.NETWORK) throw error;
+      throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
+    }
+    return (store.profiles[api] = tokenProfile(profile, tokens));
+  });
 }
 
-// minValidMs = 返すトークンに残す有効時間 (他のスクリプトに渡して長く使う時)。更新すると前のトークンは無効になるので、
-// 足りている間は更新しない (同じ人が並行して作る動画のトークンを切らない)
+// minValidMs = 返すトークンに残す有効時間 (他のスクリプトに渡して長く使う時)。足りている間は更新しない
+// (更新しても前のトークンは期限まで使えるが、渡した先は自分で更新できないので期限より長くは使えない)
 async function accessToken(api, { forceRefresh = false, minValidMs = 60_000 } = {}) {
   if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // API key (nlg-c-…) か access token — CI 向け
   const profile = (await loadStore()).profiles[api];
@@ -413,7 +434,7 @@ async function completeBrowserLogin(id, callback) {
   try {
     return await loginState.complete(id, (pending) => {
       if (pending.method !== "browser") throw new CliError("このログインはデバイス認可です。表示されたコードを認可ページに入力し、auth wait を実行してください", { exit: EXIT.USAGE });
-      const code = codeFromCallback(callback, pending.state, pending.redirect_uri);
+      const code = codeFromCallback(callback, pending.state, pending.redirect_uri, { issuer: pending.issuer, issRequired: pending.iss_required });
       return exchangeCode(pending.api, pending, code);
     });
   } catch (error) {
@@ -463,6 +484,7 @@ async function loginInBrowser(api, flags, as, resource, id, notice) {
     const pending = {
       login_id: id, method: "browser", api, client_id: clientId, redirect_uri: redirectUri,
       token_endpoint: as.token_endpoint, resource, verifier, state, expires_at: status.expires_at,
+      issuer: as.issuer, iss_required: as.authorization_response_iss_parameter_supported === true,
     };
     await loginState.publish(pending, { method: "browser", authorize_url: url, ...(flags["no-browser"] ? {} : { opened: true }), ...(notice ? { notice } : {}) });
     const instructions = loginInstructions(await loginState.current(id));
@@ -537,23 +559,35 @@ async function cmdAuthEnv(flags) {
   process.stdout.write(`export NOLANG_API_URL=${q(api)}\nexport NOLANG_TOKEN=${q(token)}\n`);
 }
 
+// サーバーでも失効させる (RFC 7009・同じ認可から出た token をまとめて)。届かなくても手元からは消す
+async function revokeOnServer(api, profile) {
+  try {
+    const { as } = await discover(api);
+    if (!as.revocation_endpoint) return "接続先がトークンの取り消しに未対応です";
+    await postForm(as.revocation_endpoint, { token: profile.refresh_token || profile.access_token, client_id: profile.client_id });
+    return null;
+  } catch (error) {
+    return error.message;
+  }
+}
+
 async function cmdAuthLogout(flags) {
   const api = await resolveApi(flags);
-  const store = await loadStore();
-  const had = Boolean(store.profiles[api]);
-  delete store.profiles[api];
-  await saveStore(store);
-  out({ ok: true, api, removed: had });
+  const profile = (await loadStore()).profiles[api];
+  const failure = profile ? await revokeOnServer(api, profile) : null;
+  await updateStore((store) => { delete store.profiles[api]; });
+  out({
+    ok: true, api, removed: Boolean(profile), revoked: Boolean(profile) && !failure,
+    ...(failure ? { note: `手元のトークンは消しましたが、サーバー側の取り消しに失敗しました: ${failure}` } : {}),
+  });
 }
 
 // 接続先を選ぶ (名前か URL・`default` で選びを外してプラグインの接続先に戻す)。引数なしは今の接続先を見せる。ログインは接続先ごと
 async function cmdUse(positionals, flags) {
   const [target] = positionals;
-  const store = await loadStore();
-  if (target) {
-    store.selected_api = target === "default" ? null : apiUrl(target);
-    await saveStore(store);
-  }
+  const store = target
+    ? await updateStore((saved) => { saved.selected_api = target === "default" ? null : apiUrl(target); return saved; })
+    : await loadStore();
   const { api, source } = await chosenApi(flags);
   const loggedIn = Boolean(process.env.NOLANG_TOKEN || store.profiles[api]);
   out({
@@ -1215,7 +1249,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang auth login --background        認可待ちを裏に回し、案内 (デバイス認可ではコードも) を出してすぐ戻る
   nolang auth wait [--timeout 120]      --background のログインが許可されるのを待つ (終了コード 0 でログイン済み)
   nolang auth complete '<URL>'          ブラウザ認可の続き (--background / 対話ログイン / --no-browser 共通)
-  nolang auth status | logout
+  nolang auth status | logout           logout はサーバー側でもトークンを取り消す
   nolang auth env                       他のスクリプトへ接続先とトークンを渡す (eval "$(nolang auth env)" で使う・画面に出さない)
   nolang use [local|dev|stg|prod|<URL>|default]
                                         接続先を選ぶ (default = プラグインの接続先に戻す・引数なしは今の接続先)。ログインは接続先ごと
