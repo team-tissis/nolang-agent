@@ -2108,7 +2108,7 @@ class Run:
     def asset_key(cls, text: str) -> tuple[object, ...]:
         """cut の text のうち素材を決める物 (絵の説明文・台詞の文字 (印を除く)・効果音の説明・svg に焼く箱の見た目) — これが同じなら
         warm を掛け直さない (位置だけの直しは絵も声も変えない)。"""
-        from stream_author import _without_marks  # noqa: PLC0415 — scripts dir を sys.path に足している
+        from stream_author import without_marks  # noqa: PLC0415 — scripts dir を sys.path に足している
 
         # 集合で見る (並びと重複は素材を変えない — 直し役が img の行を section の行と一緒に書き直して 2 行になり、同じ絵なのに warm を
         # 掛け直した・o7_03 situation 17 s)
@@ -2116,7 +2116,7 @@ class Run:
         pictures = frozenset(
             m.group(1).strip() for l in lines if (m := re.match(r"^\s*img#\S+\((?:[^()]|\([^()]*\))*\)\s*(.*)$", l))
         )
-        speech = frozenset(_without_marks(l) for l in lines if l.lstrip().startswith("@"))
+        speech = frozenset(without_marks(l) for l in lines if l.lstrip().startswith("@"))
         boxes = frozenset(k for l in lines if (k := cls.box_key(l)) is not None)
         return (pictures, speech, frozenset(_SE.findall(text)), boxes)
 

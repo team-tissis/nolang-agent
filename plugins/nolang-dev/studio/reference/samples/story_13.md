@@ -137,7 +137,7 @@ se "ガタガタと激しく揺れる木の車輪の音" -8dB to=7s fade=200,150
 *** slow
 se "のどかな山道の環境音、遠くの鳥" -8dB to=8s fade=300,1500
 @narrator: [silence:+0.3s]しかも、[>#sl_t]とにかく遅い。
-@: [>#sl_b]坂をのんびり登る馬の横を、[!#sl_b.h to,x=110,duration=3200,ease=none][!#sl_b.w to,x=420,duration=3200,ease=power1.inOut]歩く人が、すいすい追い越していきます。
+@: [>#sl_b]坂をのんびり登る馬の横を、[!#sl_b.h to,{x:110, duration:3.2, ease:'none'}][!#sl_b.w to,{x:420, duration:3.2, ease:'power1.inOut'}]歩く人が、すいすい追い越していきます。
 @: [!#sl_b.w punch][!#sl_t{a} recolor,$a]歩きの勝ちです。
 
 *** walk

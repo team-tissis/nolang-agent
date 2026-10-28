@@ -397,5 +397,5 @@ se rise -3.5dB +350
 *** s10
 se swish -3dB +20
 se multi -3dB +450
-@n: [silence:0.35s][chap #chap.ch[6] #chap.ch[7] 517 87 -300]まずは[>#s10_r2 -300][♪multi -3dB]工事のいらない対策から始めれば、年[!#s10_r2 glow,#0E9F6E42,blur=29][>#s10_r2.first +100]194万円。[>#s10_r3 -300][♪multi -3dB]LED化の工事費も、[>#s10_src +500]6.5年で回収できます。[silence:0.25s][!#s10_r1 dim,0.45,duration=600][!#s10_r3 dim,0.45,duration=600][!#s10_r2 to,scale=1.025,duration=600,ease=power2.out][!#s10_r2.first punch,1.12,duration=700 +100][♪title +100][silence:2.05s]
+@n: [silence:0.35s][chap #chap.ch[6] #chap.ch[7] 517 87 -300]まずは[>#s10_r2 -300][♪multi -3dB]工事のいらない対策から始めれば、年[!#s10_r2 glow,#0E9F6E42,blur=29][>#s10_r2.first +100]194万円。[>#s10_r3 -300][♪multi -3dB]LED化の工事費も、[>#s10_src +500]6.5年で回収できます。[silence:0.25s][!#s10_r1 dim,0.45,duration=600][!#s10_r3 dim,0.45,duration=600][!#s10_r2 to,{scale:1.025, duration:0.6, ease:'power2.out'}][!#s10_r2.first punch,1.12,duration=700 +100][♪title +100][silence:2.05s]
 ```

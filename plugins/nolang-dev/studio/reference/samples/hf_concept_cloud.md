@@ -6,7 +6,7 @@
 #v2
 # 学ぶ作り: 明るい紙の地 (点の格子が流れ、色の光が呼吸する) の上で、1 枚の図 (手元の端末 / ネットワーク / サービス側) を def に畳み、章ごとに組み直して見せる
 # 章は 8 cut (題 → 6 章 → まとめ)・左上の章の見出し (番号の札 + 題 + 伸びる下線) は cut ごとに出し直し、右上のシリーズ表記と 7 本の進行は sticky で章ごとに 1 本埋める
-# 図の主役は語で動く小物: 線を描いて流れる破線 (dash_offset)・経由点を辿って飛ぶファイルとパケット (to,via=)・語で光る枠 (glow)・用語の札・比較の 2 枚・権限の流れ
+# 図の主役は語で動く小物: 線を描いて流れる破線 (dash_offset)・経由点を辿って飛ぶファイルとパケット (to,{via: …})・語で光る枠 (glow)・用語の札・比較の 2 枚・権限の流れ
 # hf cloud cloud-storage (全力版) の全量の写し。座標は hf の 1920x1080 × 2/3
 canvas 1920x1080 bg=#F2F5FA
 theme light
@@ -177,7 +177,7 @@ div#brand.sticky(left: 1444px; top: 58px; width: 396px; height: 54px; z-index: f
   p#t(left: 48px; top: -2px; width: 348px; font-family: m; font-size: 26px; letter-spacing: .02em; color: $ink2; text-align: right; white-space: nowrap) クラウドストレージの仕組み
   div#pg(left: "45;77;109;141;173;205;237"; top: 45px; width: 40px; height: 9px; border-radius: 4px; background: $track) ×7
     div#b(left: 0px; top: 0px; width: 100%; height: 9px; border-radius: 4px; background: $blue; in: {scaleX:0, pivot:'left', duration:.6, ease:'power2.inOut'})
-# 図 (sticky で ch2 まで続く)・サービス側へ寄せた変種 .tight で出し、語で to,x=285 を 1.4 秒かけて引きの姿へ (hf の #world の scale / x)
+# 図 (sticky で ch2 まで続く)・サービス側へ寄せた変種 .tight で出し、語で to,{x:285} を 1.4 秒かけて引きの姿へ (hf の #world の scale / x)
 world#w1.sticky(out: {opacity:0, scale:.97, duration:.45, ease:'power2.in'})
   svg#sil_pc(left: 200px; top: 304px; width: 300px; height: 210px; part: sil_pc; in: {y:18, opacity:0, duration:.5, ease:'power3.out'})
   svg#sil_sp(left: 294px; top: 610px; width: 112px; height: 190px; part: sil_sp; in: {y:18, opacity:0, duration:.5, ease:'power3.out'})
@@ -383,7 +383,7 @@ bgm music
 *** ch2
 @n: [♪whoosh -1dB][>#brand.pg[2].b +100][<#w1.q_bubble][silence:0.6s][>#w1.zone_dev scale=0.9,opacity=0,duration=600,ease=power3.out][>#w1.chip_dev scale=0.6,opacity=0,duration=500,ease=back.out(1.7) +150][♪pop +0.6dB]手元には、[<#w1.sil_pc][>#w1.pc scale=0.5,opacity=0,duration=500,ease=back.out(1.7)][>#w1.lb_pc y=17,opacity=0,duration=500,ease=power3.out +200][♪pop2 +1.3dB]{o}パソコン{/}や[<#w1.sil_sp][>#w1.sp scale=0.5,opacity=0,duration=500,ease=back.out(1.7)][>#w1.lb_sp y=17,opacity=0,duration=500,ease=power3.out +200][♪pop2 +1.3dB]{o}スマートフォン{/}など、[br][>#w1.brace -150][>#w1.nt_dev3][♪pen -1dB -150]ファイルを使う{o}端末{/}があります。
 @: [<#w1.brace -150][<#w1.nt_dev3 -150]{o}端末{/}は、[>#w1.hub scale=0.4,opacity=0,duration=500,ease=back.out(1.7)][>#w1.hub_ring scale=0.6,opacity=0,duration=600,ease=power3.out +100][>#w1.lb_net y=17,opacity=0,duration=500,ease=power3.out +200][>#w1.wb_pc draw,700,ease=power2.inOut][>#w1.wb_sp draw,700,ease=power2.inOut +100][>#w1.wf_pc fade,400 +500][>#w1.wf_sp fade,400 +500][♪pop +1.3dB]{t}ネットワーク{/}を通して、[br]サービス側の[>#w1.wb_sv draw,700,ease=power2.inOut -100][>#w1.wf_sv fade,400 +400][>#w1.ring_a +200][<#w1.ring_a +1600]{b}保存先{/}へ[>#w1.pl_acc[1]][>#w1.pl_acc[2] +120][>#w1.pl_acc[3] +240][hop #w1.pk[1] 985 245 640 355][hop #w1.pk[2] 985 245 640 355 +200][hop #w1.pk[3] 985 245 640 355 +700][hop #w1.pk[4] 985 245 640 355 +900][!#w1.hub punch,1.1,duration=400 +550][!#w1.srv punch,1.06,duration=400 +1200][♪data -4.9dB]アクセスします。
-@: [<#w1.pl_acc -50][>#w1.ring_b][<#w1.lb_db -100][>#w1.lb_same +200][♪click -1dB]同じ{b}保存先{/}を使うことで、[>#w1.pc_doc]{o}パソコン{/}から[>#w1.pl_save -100][hop #w1.mv_save 1047 245 640 355 1350 1330][hop #w1.mv_drop2 1047 460 1047 350 500 480 +1300][>#w1.f2 scale=0.3,opacity=0,duration=500,ease=back.out(1.7) +1750][♪swipe +0.6dB]保存したファイルを、[br][<#w1.ring_b -200][>#w1.pl_open][♪whoosh -3dB][>#w1.mv_open -50][!#w1.mv_open to,cy=245,duration=400,ease=power2.out -50][!#w1.mv_open to,cx=233,cy=467,via=(640,355),duration=800,ease=power1.inOut +350]{o}スマートフォン{/}から[<#w1.mv_open][>#w1.sp_doc][>#w1.sp_ok +250][>#w1.nt_5 +350][♪ok -2.5dB +250]開くこともできます。
+@: [<#w1.pl_acc -50][>#w1.ring_b][<#w1.lb_db -100][>#w1.lb_same +200][♪click -1dB]同じ{b}保存先{/}を使うことで、[>#w1.pc_doc]{o}パソコン{/}から[>#w1.pl_save -100][hop #w1.mv_save 1047 245 640 355 1350 1330][hop #w1.mv_drop2 1047 460 1047 350 500 480 +1300][>#w1.f2 scale=0.3,opacity=0,duration=500,ease=back.out(1.7) +1750][♪swipe +0.6dB]保存したファイルを、[br][<#w1.ring_b -200][>#w1.pl_open][♪whoosh -3dB][>#w1.mv_open -50][!#w1.mv_open to,{cy:245, duration:0.4, ease:'power2.out'} -50][!#w1.mv_open to,{cx:233, cy:467, via:'(640,355)', duration:0.8, ease:'power1.inOut'} +350]{o}スマートフォン{/}から[<#w1.mv_open][>#w1.sp_doc][>#w1.sp_ok +250][>#w1.nt_5 +350][♪ok -2.5dB +250]開くこともできます。
 [<#w1]
 
 *** ch3
@@ -404,6 +404,6 @@ bgm music
 
 *** sum
 @n: [♪whoosh -1dB][>#brand.pg[7].b +100][net #w8 0.22 10][wires #w8 0.22 10][silence:0.6s]仕組みを捉えるときは、[!#w8.zone_svc glow,#2159E042,blur=0,spread=7][=#w8.zone_svc +3400][<#w8.chip_svc -100][>#w8.sm_svc +200][♪click -1dB +100]ファイルの{b}保存先{/}と、[br]そこへ[!#w8.zone_dev glow,#D9680B47,blur=0,spread=7][=#w8.zone_dev +2400][<#w8.chip_dev -100][>#w8.sm_dev +200][♪click -1dB +100]アクセスする{o}端末{/}を[>#w8.divider -100][>#w8.sep +100][!#w8.zone_dev to,{x:-14, duration:.6, ease:'power2.out'} +100][!#w8.zone_svc to,{x:14, duration:.6, ease:'power2.out'} +100][♪pen -1dB -100]分けて考えましょう。
-@: [<#w8.sep -100][!#w8.divider to,opacity=0.25,duration=400 -100][!#w8.zone_dev to,{x:0, duration:.6, ease:'power2.inOut'} -100][!#w8.zone_svc to,{x:0, duration:.6, ease:'power2.inOut'} -100][net #w8 1 500 -100][wires #w8 1 500 -100][!#w8.f1 punch,1.3,duration=600][!#w8.f2 punch,1.3,duration=600]同じ資料を[hop #w8.mv_a 233 267 640 355 1000 780 -200][>#w8.pc_doc +750][>#w8.pc_ok +950][♪swipe -1dB -200][♪pop2 -1dB +950]{o}パソコン{/}でも[hop #w8.mv_b 233 467 640 355 1000 780 -200][>#w8.sp_doc +750][>#w8.sp_ok +950][♪whoosh -3.4dB -200][♪ok -3dB +950]{o}スマートフォン{/}でも開けるのは、[br][!#w8.pc punch,1.06,duration=440][!#w8.sp punch,1.08,duration=440 +300]{o}端末{/}が変わっても、[>#w8.ring][>#takeaway +150][♪kira +1.9dB +150 to=1.7s]同じ{b}保存先{/}を使えるからです。[silence:0.8s][!#w8 to,{opacity:0.35, duration:.9, ease:'power2.inOut'}][!#takeaway to,{scale:1.1, duration:.9, ease:'power2.inOut'}][<#h7 +300][<#brand +300][silence:4.2s]
+@: [<#w8.sep -100][!#w8.divider to,{opacity:0.25, duration:0.4} -100][!#w8.zone_dev to,{x:0, duration:.6, ease:'power2.inOut'} -100][!#w8.zone_svc to,{x:0, duration:.6, ease:'power2.inOut'} -100][net #w8 1 500 -100][wires #w8 1 500 -100][!#w8.f1 punch,1.3,duration=600][!#w8.f2 punch,1.3,duration=600]同じ資料を[hop #w8.mv_a 233 267 640 355 1000 780 -200][>#w8.pc_doc +750][>#w8.pc_ok +950][♪swipe -1dB -200][♪pop2 -1dB +950]{o}パソコン{/}でも[hop #w8.mv_b 233 467 640 355 1000 780 -200][>#w8.sp_doc +750][>#w8.sp_ok +950][♪whoosh -3.4dB -200][♪ok -3dB +950]{o}スマートフォン{/}でも開けるのは、[br][!#w8.pc punch,1.06,duration=440][!#w8.sp punch,1.08,duration=440 +300]{o}端末{/}が変わっても、[>#w8.ring][>#takeaway +150][♪kira +1.9dB +150 to=1.7s]同じ{b}保存先{/}を使えるからです。[silence:0.8s][!#w8 to,{opacity:0.35, duration:.9, ease:'power2.inOut'}][!#takeaway to,{scale:1.1, duration:.9, ease:'power2.inOut'}][<#h7 +300][<#brand +300][silence:4.2s]
 [<#w8 cut-200][<#takeaway cut-200]
 ```
