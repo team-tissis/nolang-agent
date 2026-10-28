@@ -1,6 +1,6 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 72ca9275cf45707a76f2c2b450a044728744316e7cea78185428702dad6568e9 · synced_at: 2026-10-28T15:16:38.869Z
+Version of these documents: contract: 1 · reference_hash: 72ca9275cf45707a76f2c2b450a044728744316e7cea78185428702dad6568e9 · synced_at: 2026-10-28T15:40:38.643Z
 
 Docs: contract.json ef39cb227d4f · spec.md df02b7bfe3eb · authoring.md 593b8ed47ca0 · capabilities.md a3f9838bc5a1 · looks.md a6c0e431acbb · sounds.md bfdeb42d7466 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bbd323cc370c · scaffolds/ 4946fc4afb33
 
@@ -17,6 +17,7 @@ The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_dr
 - `cut_head_gap` the cut's head is empty for 1.2+ seconds → place the head elements without marks
 - `entrance_in_fadeout` it enters too late before the transition or fade out to be read → move the word earlier (a short stamp landing on the last word reads in time and rides the transition — that is fine)
 - `entrance_in_transition` a word mark's entrance finishes inside the previous transition's window → add `[silence:+0.4s]` at the head of the first speech to push the word past the window (check says the seconds needed)
+- `count_in_fadeout` the count reaches its final value only at the outgoing transition — a wrong mid-count number rides the switch → fire the count on an earlier word, shorten its `ms=`, or add `[silence:+…]` at the last speech's tail (check says the seconds needed)
 - `no_closer` the last cut has no big closing line
 - `same_picture` the same picture for 15+ seconds → swap to another picture, diagram or card on a word inside the cut (do not split the cut)
 - `blank_band` a third of the screen is bare ground at the cut's head → lay a full-bleed picture, or put a card on the band
