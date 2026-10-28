@@ -1910,6 +1910,12 @@ class Run:
     # ほぼ確実に 9 割を守るなら作業側 50.0 (p90・medium ~3 割・実走 9/10)、確実に止めないなら 55.0 (実走 10/10・medium ~4%)
     STAFF_SLOW_S: dict[str, float] = {"low": 20.0, "medium": 44.5}
     STAFF_FAST_S: dict[str, float] = {"low": 10.0, "medium": 31.0}
+    # 著者 brief の run の担当は絵をゼロから書くので出力が ~2 倍・所要も長い。10-28 の同時起動 bench (4 題材 × full / brief・
+    # 担当 low 27 本・medium 68 本) の brief / full の比 (low p30 2.3・p80 2.1 / medium p30 1.6・p80 1.4) を上の表に掛けた値
+    # (生の秒は bench の負荷で full も表より遅かった — 比で写すと止まらない予測 94% の張りがそのまま残る)。brief に full の表を
+    # 使うと締切を緩く読み、medium を選んで止まった (t2: 担当 medium 86 s・約 7 s の停止)
+    STAFF_SLOW_S_BRIEF: dict[str, float] = {"low": 42.0, "medium": 64.0}
+    STAFF_FAST_S_BRIEF: dict[str, float] = {"low": 23.0, "medium": 48.0}
     STAGE_TAIL_S = 3.0  # 担当の後の check + 直しの見込み
     AUTHOR_CHECK_S = 5.0  # cut_seen から担当開始まで (著者版の check)
     RENDER_HEAD_S = 10.0  # fed からその cut の segment が再生に届くまで
@@ -1918,7 +1924,10 @@ class Run:
     OFFSET_DISCOUNT = 0.95  # 見込み秒の和の締切側の割引 (見込みより短い動画に早く着く)
 
     def _staff_s(self, effort: str, *, fast: bool) -> float:
-        table = self.STAFF_FAST_S if fast else self.STAFF_SLOW_S
+        if self.brief:
+            table = self.STAFF_FAST_S_BRIEF if fast else self.STAFF_SLOW_S_BRIEF
+        else:
+            table = self.STAFF_FAST_S if fast else self.STAFF_SLOW_S
         return table.get(effort, table["medium"])
 
     def _ready_est(self, c: str, now: float, *, fast: bool) -> float:
