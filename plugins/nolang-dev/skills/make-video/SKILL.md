@@ -43,6 +43,14 @@ description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。
 4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
 5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 
+## R. 完成した動画を直す (「この動画のここを直して」と頼まれた時)
+
+元の動画はどちらの手でもそのまま残り、直った動画が新しい URL でできる。対象は `video_id` (視聴 URL の UUID)。
+
+1. まず `nolang patch <video_id> --request-text "<直す点>"` — server の決定論の直し。台詞の言い換え・見た目 (色・大きさ・BGM 音量)・素材の差し替えなどが数十秒で当たり、声と触らない cut は再利用される。`stage: "applied"` なら出力の `tell_user` を伝えて終わり。`clarify` は質問に答えて (分からなければユーザーに聞いて) `--answered` で出し直す。
+2. `applied` にならなかった時 (`stage: rebuild / clarify_suppressed / unsupported / …`) は `nolang edit <dir> <video_id> --request-text "<直す点>"` — 保存された原稿を種に編集役が依頼のぶんだけ書き換え、触らない cut はそのまま通る (1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。
+3. どちらも新しい動画を作らずに終わった時だけ、依頼文に `[video:<video_id>]` を書いて `nolang make` (参照つきの作り直し)。
+
 ## L. ログイン (「NoLang にログインして」と頼まれた時も、作る前も)
 
 `nolang auth status`。終了コード 0 ならログイン済み。3 (未ログイン) なら、自分で始める:

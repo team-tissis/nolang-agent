@@ -913,6 +913,49 @@ async function cmdEdit(positionals, flags) {
   await runStudioAndWait(root, args, api, { engine, timeout: flags.timeout });
 }
 
+// ---- 完成した動画への最小の直し (patch — server の patch gate を直接叩く) ----
+// 決定論の op (台詞の言い換え・見た目の宣言・素材の差し替え…) が当たる依頼だけ成立し、音声・不変 cut は再利用される。
+// 成立しない依頼は stage (rebuild / clarify / unsupported / …) が返るだけで何も作らない — その時は nolang edit へ
+async function cmdPatch(positionals, flags) {
+  const videoId = (positionals[0] || "").match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0];
+  if (!videoId || !flags["request-text"]) {
+    throw new CliError(`使い方: nolang patch <video_id か動画の URL> --request-text "<直す点>" [--language ja] [--answered (質問に答えた再送)] [--confirmed (対応不能な節を無視して進める再送)]`, { exit: EXIT.USAGE });
+  }
+  const api = await resolveApi(flags);
+  const body = { text: flags["request-text"] };
+  if (flags.language) body.language = flags.language;
+  if (flags.confirmed) body.confirmed = true;
+  if (flags.answered) body.answered = true;
+  log(`patch を頼んだ (対象 ${videoId}) — 決定論の編集が当たる依頼だけ成立する (判定に数秒〜30 秒)`);
+  const res = await callApi(api, "POST", `/v1/unstable/videos/${videoId}/patch/`, body);
+  if (res.stage === "applied") {
+    const st = await waitStatus(api, res.video_id, "playable", Number(flags.timeout || 300));
+    const ok = st.status !== "failed" && st.status !== "expired" && !st.timed_out;
+    out({
+      ok,
+      stage: "applied",
+      video_id: res.video_id,
+      watch_url: res.watch_url,
+      status: st.status,
+      playable: Boolean(st.playable),
+      ...(ok
+        ? { tell_user: `直しを当てた動画ができました (元の動画はそのまま):\n${res.watch_url}`, next: TELL_FIRST }
+        : { error: st.timed_out ? "再生できるまでの待ち時間を超えた" : `描画が ${st.status} になった` }),
+    });
+    if (!ok) process.exitCode = EXIT.FAIL;
+    return;
+  }
+  if (res.stage === "clarify") {
+    out({ ok: false, stage: "clarify", questions: res.questions, next: "質問の答えを指示文に足し、--answered で出し直す (質問はもう返らない)。答えが分からなければユーザーに聞く" });
+    return;
+  }
+  if (res.stage === "unsupported") {
+    out({ ok: false, stage: "unsupported", blockers: res.blockers, next: "対応不能な節を外して出し直すか、そのまま進めるなら --confirmed で再送 (節は無視される)" });
+    return;
+  }
+  out({ ok: false, stage: res.stage, reason: res.reason ?? null, next: "patch にならない依頼 — nolang edit (保存された原稿への編集) で直す" });
+}
+
 // ---- cut ごとに流す (書いた端から投入する): start → submit → submit … → submit --end ----
 // 投入の状態は原稿の dir の stream.json (video_id・投入済みの cut の名と text・最後に投入した時刻)
 const STREAM_FILE = "stream.json";
@@ -1235,6 +1278,10 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
+  nolang patch <video_id か URL> --request-text "<直す点>" [--language ja] [--answered] [--confirmed]
+                                        完成した動画への最小の直し (server の決定論 patch)。台詞の言い換え・見た目・素材の
+                                        差し替えなどが数十秒で当たり、音声と触らない cut は再利用される。成立しない依頼は
+                                        stage が返るだけで何も作らない — その時は nolang edit へ
   nolang edit <dir> <video_id か URL> --request-text "<直す点>"
         [--fix severe|low|none] [--editable] [--engine claude|codex]
                                         studio で作った完成済みの動画を直す: 保存された原稿を種に、編集役が依頼のぶんだけ書き換えて
@@ -1287,6 +1334,8 @@ const OPTIONS = {
   samples: { type: "string" },
   review: { type: "string" },
   fix: { type: "string" },
+  answered: { type: "boolean" },
+  confirmed: { type: "boolean" },
   mine: { type: "boolean" },
   limit: { type: "string" },
   name: { type: "string" },
@@ -1332,6 +1381,8 @@ async function main() {
       return cmdMake(rest, flags);
     case "edit":
       return cmdEdit(rest, flags);
+    case "patch":
+      return cmdPatch(rest, flags);
     case "reference":
       return cmdReference(flags);
     case "start":
