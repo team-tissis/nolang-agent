@@ -15,6 +15,7 @@ import し (package init を通らない)、nolang-agent への sync が配布 b
 from __future__ import annotations
 
 import functools
+import hashlib
 import json
 import re
 import unicodedata
@@ -37,6 +38,54 @@ def resolve_reference_dir(scripts_dir: Path) -> Path:
         if (candidate / "contract.json").is_file():
             return candidate
     raise FileNotFoundError(f"reference/ (contract.json) が {local} にも repo の libs にも無い")
+
+
+# ===== 文書一式の版 (server の配信・client の照合・nolang-agent の sync が同じ範囲と指紋を使う) =====
+
+
+def _is_json_object(value: object) -> TypeGuard[dict[str, object]]:
+    return isinstance(value, dict)
+
+
+def read_contract_json(reference_dir: Path) -> dict[str, object]:
+    raw: object = json.loads((reference_dir / "contract.json").read_text(encoding="utf-8"))
+    if not _is_json_object(raw):
+        raise ValueError("contract.json: object でない")
+    return raw
+
+
+def reference_files(reference_dir: Path) -> tuple[str, ...]:
+    """束に入る file の相対 path (昇順) — contract.json の `reference` の列 (`/` で終わる行は dir の中の全 file・`.` で始まる物と
+    `__pycache__` は除く)。"""
+    manifest = read_contract_json(reference_dir).get("reference")
+    if not _is_json_array(manifest) or not all(isinstance(row, str) for row in manifest):
+        raise ValueError("contract.json: reference が文字列の列でない")
+    paths: set[str] = set()
+    for row in (str(row) for row in manifest):
+        target = reference_dir / row.rstrip("/")
+        if row.endswith("/"):
+            if not target.is_dir():
+                raise FileNotFoundError(f"contract.json の reference の dir が無い: {row}")
+            for path in target.rglob("*"):
+                rel = path.relative_to(reference_dir)
+                if path.is_file() and not any(part.startswith(".") or part == "__pycache__" for part in rel.parts):
+                    paths.add(rel.as_posix())
+        else:
+            if not target.is_file():
+                raise FileNotFoundError(f"contract.json の reference の file が無い: {row}")
+            paths.add(row)
+    return tuple(sorted(paths))
+
+
+def reference_hash_of(reference_dir: Path) -> str:
+    """文書一式の内容の指紋: sha256( Σ_{path の昇順} "{path}\\0{sha256(内容)}\\n" ) の hex。path は reference/ からの相対の POSIX
+    表記で ASCII だけ。nolang-agent の sync (Node) も同じ算法 — 変える時は test vector
+    (`libs/tests/ai/llm_core/test_draft_reference_bundle.py`) ごと揃える。"""
+    digest = hashlib.sha256()
+    for rel in reference_files(reference_dir):
+        content = hashlib.sha256((reference_dir / rel).read_bytes()).hexdigest()
+        digest.update(f"{rel}\0{content}\n".encode())
+    return digest.hexdigest()
 
 
 # ===== 見本の選び方 =====

@@ -45,6 +45,7 @@ from __future__ import annotations
 import contextlib
 import functools
 import http.client
+import io
 import itertools
 import json
 import os
@@ -52,6 +53,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tarfile
 import threading
 import time
 import urllib.error
@@ -71,6 +73,60 @@ if REPO is not None:
     sys.path.insert(1, str(REPO))
 
 PY = sys.executable  # この script を動かしている python (repo は /opt/venv・plugin の client は使う側の python3)
+
+from stream_author import (  # noqa: E402 — 隣の file (scripts dir を sys.path に足した後)
+    REFERENCE_SYNC_FILE,
+    author_core,
+)
+
+# 取り直した文書一式の置き場 (内容の指紋の名の dir — 中身は不変なので再検証も TTL も要らない)。新しい物から 2 版だけ残す
+REFERENCE_CACHE_KEEP = 2
+
+
+def reference_cache_root() -> Path:
+    return Path(os.environ.get("NOLANG_CONFIG_DIR") or Path.home() / ".config" / "nolang") / "reference"
+
+
+def fetch_reference_bundle(remote: str, headers: dict[str, str], expected_hash: str, dest: Path) -> None:
+    """`GET drafts/reference/` の束を dest (指紋の名の dir) に置く。tmp に展開して指紋を確かめてから rename するので、並行する run・
+    途中の失敗で半端な dir は残らない。path は束の範囲の相対 path だけを受ける (絶対 path・`..`・file 以外は弾く)。"""
+    req = urllib.request.Request(f"{remote}/v1/unstable/drafts/reference/", headers=headers)
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        data = resp.read()
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.parent / f".{dest.name}.{os.getpid()}.tmp"
+    shutil.rmtree(tmp, ignore_errors=True)
+    try:
+        with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
+            for member in tar.getmembers():
+                name = Path(member.name)
+                if not member.isfile() or name.is_absolute() or ".." in name.parts:
+                    raise ValueError(f"束に受けない path: {member.name}")
+                source = tar.extractfile(member)
+                if source is None:
+                    raise ValueError(f"束の file を読めない: {member.name}")
+                (tmp / name).parent.mkdir(parents=True, exist_ok=True)
+                (tmp / name).write_bytes(source.read())
+        got = author_core.reference_hash_of(tmp)
+        if got != expected_hash:
+            raise ValueError(f"束の指紋が違う: {got[:16]} ≠ {expected_hash[:16]}")
+        try:
+            tmp.rename(dest)
+        except OSError:
+            if not (
+                dest / "contract.json"
+            ).is_file():  # 並行する run が先に置いた (同じ指紋 = 同じ中身) のでなければ失敗
+                raise
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    kept = sorted(
+        (p for p in dest.parent.iterdir() if p.is_dir() and not p.name.startswith(".")), key=lambda p: p.stat().st_mtime
+    )
+    for old in kept[:-REFERENCE_CACHE_KEEP]:
+        if old != dest:
+            shutil.rmtree(old, ignore_errors=True)
+
+
 # local の描き手 (dev script — repo にだけある。bundle は --remote だけなので通らない)
 STUDIO = (REPO / ".agents/skills/nolang-draft-studio/scripts/studio.py") if REPO else HERE / "studio.py"
 
@@ -408,6 +464,15 @@ class Run:
         # 以後凍る
         self.remote = remote.rstrip("/") if remote else None
         self.token = token
+        # 焼き込みの文書一式 (bundle では scripts の隣・repo では libs の正本) の版 — server の版との照合 (`sync_reference`)・
+        # start の client_contract・全 request の X-NoLang-Client (server がずれた client の分布を測る)
+        baked = author_core.resolve_reference_dir(HERE)
+        contract = author_core.read_contract_json(baked).get("contract")
+        self.client_contract = contract if isinstance(contract, int) else 0
+        self.baked_hash = author_core.reference_hash_of(baked) if self.remote is not None else ""
+        self.rules_payload: dict[str, object] | None = (
+            None  # 照合の時に受けた `drafts/rules/` (run の頭の fixed もこれを使う)
+        )
         self.video_id: str | None = None  # run の video (start で決まる)
         self.watch_url = ""  # 視聴 URL (remote だけ・`WATCH` / `PLAYABLE` の行に出す)
         self.root_submitted = False
@@ -501,6 +566,16 @@ class Run:
     # 1 回で諦めると stage が死んで cut が動画から落ちた)。投入 (`cut`) は送り直さない — 照合は `submit`
     _RESENDABLE = frozenset({"check", "rename", "rules", "stills_status", "status"})
 
+    def headers(self, *, content_type: str | None = "application/json") -> dict[str, str]:
+        """remote の request の header — 認証と client の版 (`X-NoLang-Client`)。"""
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+            "X-NoLang-Client": f"contract={self.client_contract}; ref={self.baked_hash[:16]}",
+        }
+        if content_type is not None:
+            headers["Content-Type"] = content_type
+        return headers
+
     def call(self, op: str, body: dict[str, object] | None = None, **path_args: str) -> dict[str, object]:
         """受け口を 1 回呼ぶ。remote は HTTP (`_ROUTES`・path_args は path の `{名}`)・local は同じ flow 関数を手元の user で
         (`studio.py api <op>`・body は stdin)。止めた頼み (HTTP の 400) は `Rejected`・届かない時は `Unreachable` (`_RESENDABLE` は
@@ -519,7 +594,7 @@ class Run:
             req = urllib.request.Request(
                 f"{self.remote}{path.format(id=self.video_id, **path_args)}",
                 data=json.dumps(body).encode("utf-8") if method == "POST" else None,
-                headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+                headers=self.headers(),
                 method=method,
             )
             for attempt in range(3):
@@ -2342,7 +2417,7 @@ class Run:
 
     # ---- run の開始と終わり ----
     def remote_get(self, path: str) -> dict[str, object]:
-        req = urllib.request.Request(f"{self.remote}{path}", headers={"Authorization": f"Bearer {self.token}"})
+        req = urllib.request.Request(f"{self.remote}{path}", headers=self.headers(content_type=None))
         with urllib.request.urlopen(req, timeout=60) as resp:
             return json.loads(resp.read().decode("utf-8"))
 
@@ -2351,7 +2426,7 @@ class Run:
         req = urllib.request.Request(
             f"{self.remote}{path}",
             data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+            headers=self.headers(),
             method="POST",
         )
         try:
@@ -2431,6 +2506,83 @@ class Run:
         self.log(event="reference", video_id=video_id, source=got.get("source"), title=got.get("title"))
         return 0
 
+    # ---- 文書の版の照合 (app_main/docs/feature/video_generate/reference_sync.md) ----
+    def write_sync(self, **state: object) -> None:
+        """照合の状態 (stream/reference_sync.json) を atomic に書く — 著者・担当・直し役が claude を起こす前に読む。"""
+        tmp = self.st / f"{REFERENCE_SYNC_FILE}.tmp"
+        tmp.write_text(json.dumps(state, ensure_ascii=False))
+        tmp.replace(self.st / REFERENCE_SYNC_FILE)
+        self.log(event="reference_sync", **state)
+
+    def sync_gate(self) -> str | None:
+        """照合が版の契約の外 (gate) と決めた時の案内。"""
+        path = self.st / REFERENCE_SYNC_FILE
+        if not path.is_file():
+            return None
+        state = json.loads(path.read_text())
+        return str(state.get("message")) if state.get("status") == "gate" else None
+
+    def sync_reference(self) -> None:
+        """起動直後に著者と並走して、焼き込みの文書を server の版と照合する (著者は待たずに準備を進め、claude を起こす直前に結果を
+        読む)。状態: local (手元の run — 文書は repo の正本そのもの) / match / fetching → ready (取り直した束の dir) / gate (版の契約
+        の外 — 著者も orchestrator も始めない) / unknown (旧 server・失敗 — 焼き込みで続ける)。"""
+        if self.remote is None:
+            self.write_sync(status="local")
+            return
+        try:
+            self.rules_payload = self.call("rules")
+        except (Unreachable, RuntimeError, OSError, ValueError) as e:
+            self.write_sync(status="unknown", reason=f"rules: {e}"[:300])
+            return
+        sync = self.rules_payload.get("sync")
+        if not isinstance(sync, dict):
+            self.write_sync(status="unknown", reason="server が版を返さない (古い server)")
+            print("注意: 接続先の server が文書の版を返さない — 焼き込みの文書で書く", flush=True)
+            return
+        server_contract, min_supported, server_hash = (
+            sync.get("contract"),
+            sync.get("min_supported"),
+            str(sync.get("reference_hash") or ""),
+        )
+        if isinstance(min_supported, int) and self.client_contract < min_supported:
+            self.write_sync(
+                status="gate",
+                message=f"この NoLang plugin (contract {self.client_contract}) は server ({min_supported} 以上) より古い"
+                " — `claude plugin update` で plugin を更新して",
+            )
+            return
+        if isinstance(server_contract, int) and self.client_contract > server_contract:
+            self.write_sync(
+                status="gate",
+                message=f"接続先の server (contract {server_contract}) がこの plugin (contract {self.client_contract})"
+                " より古い — 接続先を確かめて",
+            )
+            return
+        if server_hash == self.baked_hash:
+            self.write_sync(status="match")
+            return
+        cached = reference_cache_root() / server_hash
+        if (cached / "contract.json").is_file():
+            self.write_sync(status="ready", reference_dir=str(cached), reference_hash=server_hash, cached=True)
+            return
+        self.write_sync(status="fetching", reference_hash=server_hash)
+        t = time.time()
+        try:
+            fetch_reference_bundle(self.remote, self.headers(content_type=None), server_hash, cached)
+        except (OSError, ValueError, tarfile.TarError) as e:
+            self.write_sync(status="unknown", reason=f"取り直せない: {e}"[:300])
+            print(
+                "注意: server の文書を取り直せない — 焼き込みの文書で書く (`claude plugin update` で直る)", flush=True
+            )
+            return
+        self.write_sync(
+            status="ready", reference_dir=str(cached), reference_hash=server_hash, s=round(time.time() - t, 2)
+        )
+        print(
+            "注意: plugin の文書が server より古い — 今回は server の文書を取り直して書く (`claude plugin update` で直る)",
+            flush=True,
+        )
+
     def start(self) -> None:
         """run を開く (plan が閉じた時点)。remote は `drafts/` (視聴 URL はこの時点で出る — server の video page が追いかけ再生する)・
         local は `studio.py stream` (API の start と同じ行を作り、video の id を stream/video.json に書く)。"""
@@ -2456,14 +2608,25 @@ class Run:
             body["reference_video_id"] = json.loads(reference.read_text())["template_video_id"]
         if speech_ids := self.speech_file_ids():  # 持ち込み音声 — 投入検査と worker が同じ clip 台帳で `@clip` を解く
             body["speech_file_ids"] = speech_ids
+        body["client_contract"] = (
+            self.client_contract
+        )  # server の受ける範囲の外なら課金の前に弾かれる (gate の正本は server)
         req = urllib.request.Request(
             f"{self.remote}/v1/unstable/drafts/",
             data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
+            headers=self.headers(),
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=120) as resp:
-            r = json.loads(resp.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                r = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code != 400:
+                raise
+            error = e.read().decode("utf-8", "replace")[:600]
+            self.log(event="start_rejected", error=error)
+            print(f"開始できない: {error}", flush=True)
+            return
         self.video_id = str(r["video_id"])
         self.watch_url = str(r["watch_url"])
         self.log(event="started", s=round(time.time() - t, 1), video_id=self.video_id, watch_url=self.watch_url)
@@ -2732,7 +2895,12 @@ class Run:
 
     def run(self) -> int:
         self.log(event="orchestrator_start")
+        sync = threading.Thread(target=self.sync_reference, daemon=True)
+        sync.start()
         while not (self.solo / "order.txt").exists():
+            if (gate := self.sync_gate()) is not None:  # 版の契約の外 — 著者も claude を起こす前に止まる
+                print(f"開始できない: {gate}", flush=True)
+                return 1
             if self.engine_failed():
                 return self.abort_engine()
             # 根 call が死んだ (claude が無い等) → 待ち続けない。300 s の打ち切りは著者が生きている印 (思考か本文の最初の token) を
@@ -2749,10 +2917,13 @@ class Run:
         self.log(event="plan_seen", cuts=self.order)
         if self.engine_failed():
             return self.abort_engine()
+        sync.join()
+        if (gate := self.sync_gate()) is not None:
+            print(f"開始できない: {gate}", flush=True)
+            return 1
+        rules = self.rules_payload if self.rules_payload is not None else self.call("rules")
         self.fixed = frozenset(
-            str(row["name"])
-            for row in self.call("rules").get("rules", [])
-            if isinstance(row, dict) and row.get("fixed")
+            str(row["name"]) for row in rules.get("rules", []) if isinstance(row, dict) and row.get("fixed")
         )
         self.start()
         if self.video_id is None:

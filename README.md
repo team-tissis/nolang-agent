@@ -208,12 +208,22 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 
 ### 辞書の同期 (nolang-backend → reference/)
 
-文法・規則・雛形・辞書の正本は nolang-backend の `.agents/skills/nolang-draft-studio/` (文法とサーバーは一緒に変わる)。ここには写しだけを置き、元の commit を `skills/make-video/reference/SOURCE.json` に残す。
-commit 済みの物だけを写す (作業中の変更を持ち込まない):
+正本は nolang-backend: 文書一式 (文法・見本・骨組み・`contract.json`) と `author_core.py` は `libs/ai/llm_prompts/draft_author/`、
+配布 script は `agent_client/scripts/`、studio で作る手順は `.agents/skills/nolang-draft-studio/SKILL.md`。ここには写しだけを置き、
+元の commit と文書の版 (`contract`・内容の指紋 `reference_hash`) を `skills/make-video/reference/SOURCE.json` に、版の行を
+`reference/rules.md` の先頭に残す (MCP の手順が `nolang_draft_sync` と比べる)。sync は指紋を JS と backend の python の両方で
+計算して食い違えば止まる (算法の正本と test vector は backend の `reference_bundle.py` / `test_draft_reference_bundle.py`)。
+版の整合の設計は backend の `app_main/docs/feature/video_generate/reference_sync.md`。
+
+自動: backend の `agent-sync-dispatch` が push を知らせ、この repo の `sync-from-backend` が写して plugin の版を上げて push する
+(secret: backend 側 `NOLANG_AGENT_DISPATCH_TOKEN`・この repo 側 `BACKEND_READ_TOKEN`)。`contract` が上がる sync は止まる —
+server を先に deploy してから workflow_dispatch に `server_deployed=true` を付けて流す。
+
+手で写す時は commit 済みの物だけを写す (作業中の変更を持ち込まない):
 
 ```
-mkdir -p /tmp/nds && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio' | tar x -C /tmp/nds
-npm run sync-reference -- /tmp/nds/.agents/skills/nolang-draft-studio \
+mkdir -p /tmp/nbe && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio agent_client libs/ai/llm_prompts/draft_author' | tar x -C /tmp/nbe
+npm run sync-reference -- /tmp/nbe \
   --commit "$(ssh <host> git -C <backend> rev-parse HEAD)" --ref "$(ssh <host> git -C <backend> rev-parse --abbrev-ref HEAD)"
 npm run build
 ```

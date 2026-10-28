@@ -14,7 +14,7 @@ if [ "${NOLANG_STUDIO_ENGINE:-claude}" = codex ]; then
 fi
 $PY "$S/stream_author.py" run "$P" "$@" > "$P/stream/author.out" 2>&1 &
 A=$!
-sleep 1
+# orchestrator は著者と同時に起こす — 起動直後の版の照合が著者の準備の影に入る (著者は claude を起こす直前に結果を読む)
 env $RUN_ENV $PY "$S/stream_run.py" "$P" ${STREAM_RUN_ARGS:-} > "$P/stream/run.out" 2>&1
 R=$?
 wait $A

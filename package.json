@@ -4,7 +4,7 @@
   "description": "NoLang を AI エージェントから使うための配布物 (CLI・スキル・Claude Code / Codex のプラグイン)",
   "type": "module",
   "scripts": {
-    "test": "npm --prefix packages/cli test && python3 -m unittest discover -s studio/tests",
+    "test": "npm --prefix packages/cli test && node --test 'scripts/*.test.mjs' && python3 -m unittest discover -s studio/tests",
     "build": "node scripts/build-plugins.mjs",
     "check": "node scripts/build-plugins.mjs --check && npm test",
     "validate": "claude plugin validate --strict . && claude plugin validate --strict plugins/nolang-local && claude plugin validate --strict plugins/nolang-dev",

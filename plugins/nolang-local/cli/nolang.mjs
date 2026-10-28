@@ -624,6 +624,7 @@ async function cmdCreate(positionals, flags) {
     aspect_ratio: flags.aspect || aspectOf(design),
     language: flags.language || "ja",
     ...(durationS ? { duration_s: durationS } : {}),
+    ...clientContract(),
   };
   if (flags["dry-run"]) {
     // サーバーに触れず、開始の引数と cut ごとの投入 text だけを見せる
@@ -695,6 +696,17 @@ const MAKE_LOG = "make.log";
 const MAKE_TIMEOUT_S = 420;
 const MAKE_SPEECH_TIMEOUT_S = 1500;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// 焼き込みの文書一式の段取りの版 (studio/reference/contract.json の contract)。drafts/ の開始に添え、server の受ける範囲の外なら
+// server が課金の前に DRAFT_CLIENT_CONTRACT_UNSUPPORTED で止める (版の整合 — backend の reference_sync.md)。studio が無ければ送らない
+function clientContract() {
+  try {
+    const contract = JSON.parse(readFileSync(join(studioDir(), "reference", "contract.json"), "utf8")).contract;
+    return Number.isInteger(contract) ? { client_contract: contract } : {};
+  } catch {
+    return {};
+  }
+}
 
 function studioDir() {
   const here = dirname(new URL(import.meta.url).pathname);
@@ -895,6 +907,7 @@ async function cmdStart(positionals, flags) {
     aspect_ratio: flags.aspect || aspectOf(design),
     language: flags.language || "ja",
     ...(durationS ? { duration_s: durationS } : {}),
+    ...clientContract(),
   };
   const api = await resolveApi(flags);
   const started = await callApi(api, "POST", "/v1/unstable/drafts/", params);

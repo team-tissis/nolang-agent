@@ -40,7 +40,11 @@
 
 ### 手順 (§1 の原稿を、書いた cut から)
 
-1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="ja", duration_s)` → `video_id` と `watch_url`。`template_video_id` は省略する (空のテンプレ)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400。規則と閾値は `GET drafts/rules/` の `profile` 列と `profiles.editable`・投入前の検査は `nolang_draft_check(profile="editable")`)。
+0. **文書の版を確かめる** (§1 で書き始める前に 1 回): `nolang_draft_sync()` → `contract` `min_supported` `reference_hash`。`reference/rules.md` の先頭の `Version of these documents:` の行の値と比べる (reference_hash は先頭 12 文字で)。
+   - 同じ → そのまま進む。
+   - reference_hash だけ違う → この plugin の文書は server より古い。書くのは続けてよいが、文書と `nolang_draft_check` の指摘が食い違う所は check に従う。終わった後 (`watch_url` を渡した後) に「NoLang の plugin を更新すると文書が最新になります」とユーザーに 1 回伝える。
+   - rules.md の `contract` が server の `min_supported` より小さい → 書かずに止まり、plugin の更新をユーザーに頼む (この plugin の手順では server に受け付けられない)。
+1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="ja", duration_s, client_contract=<rules.md の contract>)` → `video_id` と `watch_url`。`client_contract` は必ず渡す (版が合わない plugin を server が開始前に止める — `DRAFT_CLIENT_CONTRACT_UNSUPPORTED` が返ったら、その `error` の案内をユーザーに伝えて止まる)。`template_video_id` は省略する (空のテンプレ)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400。規則と閾値は `GET drafts/rules/` の `profile` 列と `profiles.editable`・投入前の検査は `nolang_draft_check(profile="editable")`)。
 2. **1 つ目を投入**: `nolang_draft_submit_cut(video_id, text)` — text = 根の design + 根の timeline (先頭の `#v2` 行は除く) + 1 つ目の cut の `section#` block + `*** ` block。`defects` が返ったらその cut を直して投入し直す。
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目が受理されたら、案内の文の次の行に `watch_url` だけを書いてユーザーに渡す (数十秒で再生が始まり、続きは投入した端から伸びる)。
 4. **続きを流す**: 次の cut を書いたら `nolang_draft_submit_cut(video_id, text)` — text = その cut の `section#` block + `*** ` block だけ。最後の cut は `end=true`。投入の間は 180 秒以内。

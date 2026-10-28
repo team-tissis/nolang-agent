@@ -75,10 +75,53 @@ from author_core import (
 )
 
 HERE = Path(__file__).resolve().parent
-# 文書一式 (bundle では scripts の隣・repo では libs の正本 — author_core.resolve_reference_dir)
-REFERENCE = author_core.resolve_reference_dir(HERE)
+# 焼き込みの文書一式 (bundle では scripts の隣・repo では libs の正本 — author_core.resolve_reference_dir)
+BAKED_REFERENCE = author_core.resolve_reference_dir(HERE)
+# 今の run が読む文書一式 — 版の照合が server の束を取り直した run では、その dir に替わる (`use_synced_reference`)
+REFERENCE = BAKED_REFERENCE
 # 見本の置き場 (選び方・近い type・1 本の大きさの上限は author_core.pick_samples)
 SAMPLES_DIR = REFERENCE / "samples"
+# orchestrator (stream_run) が書く版の照合の状態 (project/stream/ の下)。著者は claude を起こす直前に読む: 結果が SYNC_WAIT_S の内に
+# 来なければ焼き込みで進み (照合は rules の 1 往復 — 著者の準備の影に入る)、取り直しの最中 (fetching) なら FETCH_WAIT_S まで待つ
+REFERENCE_SYNC_FILE = "reference_sync.json"
+SYNC_WAIT_S = 1.5
+FETCH_WAIT_S = 30.0
+
+
+def use_synced_reference(st: Path, *, wait_s: float) -> tuple[str | None, bool]:
+    """版の照合の結果を読み、取り直した束があれば以後の文書をそこから読む → (gate の案内, 束が替わったか)。"""
+    global REFERENCE, SAMPLES_DIR
+    path = st / REFERENCE_SYNC_FILE
+    t0 = time.time()
+    state: dict[str, object] = {}
+    while True:
+        if path.is_file():
+            state = json.loads(path.read_text())
+        status = state.get("status")
+        if status in ("local", "match", "ready", "gate", "unknown"):
+            break
+        if time.time() - t0 > (FETCH_WAIT_S if status == "fetching" else wait_s):
+            break
+        time.sleep(0.02)
+    waited = round(time.time() - t0, 3)
+    if status == "gate":
+        return str(state.get("message")), False
+    synced = state.get("reference_dir")
+    if status != "ready" or not isinstance(synced, str):
+        if wait_s > 0:
+            log(st, event="reference_synced", status=status or "late", waited_s=waited)
+        return None, False
+    try:
+        author_core.system_docs_text(Path(synced))  # 束を組めるか (知らない compose の mode は古い script の印)
+    except (OSError, ValueError) as e:
+        log(st, event="reference_synced", status="unusable", error=str(e)[:300], waited_s=waited)
+        return None, False
+    REFERENCE, SAMPLES_DIR = Path(synced), Path(synced) / "samples"
+    if wait_s > 0:
+        log(st, event="reference_synced", status="switched", reference_dir=synced, waited_s=waited)
+    return None, True
+
+
 # 担当・直しの system に見本を同梱する type。10-25 の著者固定 A/B (4 題材・Opus 盲検両順 + ユーザーの盲検視聴) で、
 # 見本の効きが残るのは craft 的な type だけだった — cinematic は見本あり側が両順一致で勝ち・data は微・compare / concept は
 # 見本なしが小勝ち (craft.md が見本の教えを肩代わり)。著者の user turn の見本は全 type で据え置き (外す検証はしていない)
@@ -88,6 +131,10 @@ CWD = Path("/tmp/nolang-stream-cwd")  # claude -p の cwd (repo の外 — proje
 MODEL = "claude-opus-5-5"
 # 見直し役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
 SHOT_WIDTH = 960
+
+
+class InputCancelled(Exception):
+    """合流 (before_input) が prompt を渡さないと決めた call — 起こした claude は止めた (token は使っていない)。"""
 
 
 # claude の実体を起動時に解決する (PATH 上の shim が更新中だと一時的に見つからない)
@@ -638,9 +685,11 @@ def stream_claude(
     tag: str,
     cache_ttl: str | None = None,
     images: list[Path] | None = None,
+    before_input: Callable[[], bool] | None = None,
 ) -> dict[str, object]:
     """claude -p を stream-json で回し、text delta を on_text に流す。最初の thinking / text の時刻と費用を記録する。
-    images = prompt の前に見せる画像 (見直し役の cut の静止画)。
+    images = prompt の前に見せる画像 (見直し役の cut の静止画)。before_input = claude を起こした後・prompt を渡す前の合流
+    (claude の起動の間に済ませたい待ち)。False なら prompt を渡さずに claude を止めて `InputCancelled` (token は使っていない)。
     text delta が 1 つも来ずに終わった応答 (長い思考の後、本文が最後の assistant message にだけ乗る — now7_10 の担当 hook・246 s で
     delta 0) は、最後の assistant message の text の block を本文として流す (`text_from_message`)。"""
     CWD.mkdir(parents=True, exist_ok=True)
@@ -674,6 +723,10 @@ def stream_claude(
             time.sleep(2)
             args[0] = claude_bin()
     assert p.stdout is not None and p.stdin is not None
+    if before_input is not None and not before_input():
+        p.kill()
+        p.wait()
+        raise InputCancelled(tag)
     p.stdin.write(image_message(prompt, images) if images else prompt)
     p.stdin.close()
     result: dict[str, object] = {}
@@ -741,13 +794,25 @@ def stream_model(
     tag: str,
     cache_ttl: str | None = None,
     images: list[Path] | None = None,
+    before_input: Callable[[], bool] | None = None,
 ) -> dict[str, object]:
-    """制御と原稿形式は共通にし、明示された実行エンジンだけを切り替える。"""
+    """制御と原稿形式は共通にし、明示された実行エンジンだけを切り替える。before_input は claude なら起動の後・prompt の前、
+    他の engine は呼ぶ前に済ませる (False なら呼ばずに `InputCancelled`)。"""
     engine = os.environ.get("NOLANG_STUDIO_ENGINE", "claude")
     if engine == "claude":
         return stream_claude(
-            st, prompt, on_text, system_prompt=system_prompt, effort=effort, tag=tag, cache_ttl=cache_ttl, images=images
+            st,
+            prompt,
+            on_text,
+            system_prompt=system_prompt,
+            effort=effort,
+            tag=tag,
+            cache_ttl=cache_ttl,
+            images=images,
+            before_input=before_input,
         )
+    if before_input is not None and not before_input():
+        raise InputCancelled(tag)
     if engine != "codex":
         raise ValueError(f"unknown studio engine: {engine}")
     from stream_codex import stream_codex
@@ -797,63 +862,92 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: b
     # params は "型 縦横 秒" + 任意の flag token (`editable` — stream_make.sh --editable が足す)
     typ, aspect, seconds = (project / "params.txt").read_text().split()[:3]
     request = (project / "request.txt").read_text()
-    if samples is None:
-        samples, skipped = pick_samples(typ, aspect, request)
-        staff_samples = samples if typ in STAFF_SAMPLE_TYPES else ()
-    else:  # 明示の見本はそのまま使う (同じ題材なら記録だけ)・明示なら担当・直しにも type を問わず入れる
-        skipped = []
-        staff_samples = samples
-        if same := [n for n in samples if same_topic(n, request)]:
-            log(st, event="samples_same_topic", samples=same)
-    # 担当・直し役の system prompt (STAFF_SAMPLE_TYPES は見本込み — 同じ見本の run どうしで cache を共有する)。
-    # 著者の call と並んで 1 回だけ温める
-    shared_prompt = build_system_prompt(st / "system_prompt.md", staff_samples or None)
-    warm = None
-    if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
-        warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
-        warm.start()
-    # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
-    # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
-    sp = build_system_prompt(st / "system_prompt_author.md", None)
-    # 比べ用: 著者の user turn の見本を減らす — `none` = 置かない・`1` = 先頭の 1 本だけ (担当・直し役の見本は STAFF_SAMPLE_TYPES のまま)
-    author_samples = {"none": (), "1": samples[:1]}.get(os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLES", ""), samples)
-    # 比べ用: 著者の見本だけ別の type から選ぶ (製品は type を決めず concept の見本 = `concept`)
-    if sample_type := os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLE_TYPE"):
-        author_samples = pick_samples(sample_type, aspect, request)[0]
-    (st / "samples.txt").write_text(",".join(samples) + "\n")  # 記録 (--samples で再投入 = 明示扱いで全役に入る)
-    skeleton_d = (studio / "design.txt").read_text()
-    canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
-    if not request.lstrip().startswith("---- ユーザーの依頼 ----"):
-        request = "---- ユーザーの依頼 ----\n" + request.rstrip("\n") + "\n---- ここまで ----\n"
-    log(
-        st,
-        event="launch",
-        type=typ,
-        aspect=aspect,
-        seconds=seconds,
-        effort=effort,
-        samples=list(author_samples),
-        samples_skipped=skipped,
-    )
-    ref = reference_of(project)
-    if ref is not None:  # 依頼の `[video:<id>]` は参照の題に (製品の入口が題へ置換するのと同じ)
-        request = re.sub(rf"\[video:{re.escape(str(ref['template_video_id']))}\]", f"「{ref['title']}」", request)
-        log(st, event="reference", video_id=ref["template_video_id"], source=ref.get("source"), title=ref.get("title"))
-    if extra := os.environ.get("NOLANG_STUDIO_AUTHOR_EXTRA"):  # 比べ用: 依頼の後ろに足す著者だけの注意 (file の path)
-        request += "\n" + Path(extra).read_text()
-    speech = speech_of(project)
-    prompt = author_prompt(
-        aspect,
-        seconds,
-        canvas,
-        request,
-        samples_text(author_samples),
-        str(ref["brief"]) if ref is not None else "",
-        f"\n{speech['brief']}\n" if speech is not None else "",
-        editable=_editable(),
-        referenced=ref is not None,
-        brief=brief,
-    )
+    raw_request = request
+    requested = samples
+
+    def prepare() -> tuple[Path, str]:
+        """文書一式に依る準備 (見本選び・3 役の system prompt・著者の user turn) — 照合で束が替わった時だけ作り直す。"""
+        nonlocal samples
+        samples = requested
+        request = raw_request
+        if samples is None:
+            samples, skipped = pick_samples(typ, aspect, request)
+            staff_samples = samples if typ in STAFF_SAMPLE_TYPES else ()
+        else:  # 明示の見本はそのまま使う (同じ題材なら記録だけ)・明示なら担当・直しにも type を問わず入れる
+            skipped = []
+            staff_samples = samples
+            if same := [n for n in samples if same_topic(n, request)]:
+                log(st, event="samples_same_topic", samples=same)
+        # 担当・直し役の system prompt (STAFF_SAMPLE_TYPES は見本込み — 同じ見本の run どうしで cache を共有する)。
+        # 著者の call と並んで 1 回だけ温める
+        shared_prompt = build_system_prompt(st / "system_prompt.md", staff_samples or None)
+        # 著者の system prompt は見本を含めない静的な物 — 見本は題材ごとに変わるので system に置くと動画ごとに 85〜95k token が
+        # cache miss になる (o20 / o21 の著者は cache read 0)。見本は user turn の末尾 (依頼の前) に同じ内容で置く (10-18)
+        build_system_prompt(st / "system_prompt_author.md", None)
+        # 比べ用: 著者の user turn の見本を減らす — `none` = 置かない・`1` = 先頭の 1 本だけ (担当・直し役の見本は STAFF_SAMPLE_TYPES のまま)
+        author_samples = {"none": (), "1": samples[:1]}.get(os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLES", ""), samples)
+        # 比べ用: 著者の見本だけ別の type から選ぶ (製品は type を決めず concept の見本 = `concept`)
+        if sample_type := os.environ.get("NOLANG_STUDIO_AUTHOR_SAMPLE_TYPE"):
+            author_samples = pick_samples(sample_type, aspect, request)[0]
+        (st / "samples.txt").write_text(",".join(samples) + "\n")  # 記録 (--samples で再投入 = 明示扱いで全役に入る)
+        skeleton_d = (studio / "design.txt").read_text()
+        canvas = next((line.split()[1] for line in skeleton_d.splitlines() if line.startswith("canvas ")), "")
+        if not request.lstrip().startswith("---- ユーザーの依頼 ----"):
+            request = "---- ユーザーの依頼 ----\n" + request.rstrip("\n") + "\n---- ここまで ----\n"
+        log(
+            st,
+            event="launch",
+            type=typ,
+            aspect=aspect,
+            seconds=seconds,
+            effort=effort,
+            samples=list(author_samples),
+            samples_skipped=skipped,
+        )
+        ref = reference_of(project)
+        if ref is not None:  # 依頼の `[video:<id>]` は参照の題に (製品の入口が題へ置換するのと同じ)
+            request = re.sub(rf"\[video:{re.escape(str(ref['template_video_id']))}\]", f"「{ref['title']}」", request)
+            log(
+                st,
+                event="reference",
+                video_id=ref["template_video_id"],
+                source=ref.get("source"),
+                title=ref.get("title"),
+            )
+        if extra := os.environ.get(
+            "NOLANG_STUDIO_AUTHOR_EXTRA"
+        ):  # 比べ用: 依頼の後ろに足す著者だけの注意 (file の path)
+            request += "\n" + Path(extra).read_text()
+        speech = speech_of(project)
+        prompt = author_prompt(
+            aspect,
+            seconds,
+            canvas,
+            request,
+            samples_text(author_samples),
+            str(ref["brief"]) if ref is not None else "",
+            f"\n{speech['brief']}\n" if speech is not None else "",
+            editable=_editable(),
+            referenced=ref is not None,
+            brief=brief,
+        )
+        return shared_prompt, prompt
+
+    shared_prompt, prompt = prepare()
+    sp = st / "system_prompt_author.md"
+    warm: threading.Thread | None = None
+    gate: str | None = None
+
+    def merge() -> bool:
+        """合流点: orchestrator の版の照合 (起動直後から並走) を、著者の claude を起こした後・prompt を渡す前に 1 回だけ読む —
+        照合の往復は claude の起動の影に入る。一致なら担当・直し役の system prompt を温め始めて True。束が替わった・gate なら False。"""
+        nonlocal warm, gate
+        gate, switched = use_synced_reference(st, wait_s=SYNC_WAIT_S)
+        if gate is None and not switched and os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
+            warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
+            warm.start()
+        return gate is None and not switched
+
     sp0 = Splitter(proj, st, "author")
     if author_model := os.environ.get(
         "NOLANG_STUDIO_AUTHOR_MODEL"
@@ -868,9 +962,26 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: b
             sys.path.insert(0, str(dev_scripts))
         from stream_gemini import stream_gemini
 
-        stream_gemini(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", model=author_model, log=log)
+        merged = merge()
+        if gate is None:
+            if not merged:  # 照合が server の束に替えた
+                shared_prompt, prompt = prepare()
+            stream_gemini(
+                st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", model=author_model, log=log
+            )
     else:
-        stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
+        try:
+            stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", before_input=merge)
+        except InputCancelled:
+            if gate is None:  # 照合が server の束に替えた — 組み直して起こし直す (前の claude は prompt を受けていない)
+                shared_prompt, prompt = prepare()
+                if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
+                    warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
+                    warm.start()
+                stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
+    if gate is not None:
+        log(st, event="reference_gate", message=gate)
+        return 1
     sp0.finish()
     if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
         (st / "src.done").touch()
@@ -1041,6 +1152,8 @@ def main(argv: list[str]) -> int:
         print(__doc__)
         return 2
     cmd, project = argv[0], Path(argv[1]).resolve()
+    if cmd in ("fix", "staff"):  # 著者の後に呼ばれる役 — 照合は済んでいるので待たずに同じ束を読む
+        use_synced_reference(project / "stream", wait_s=0)
     if cmd == "run":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "low"  # 質は担当 medium が運ぶ (s9 / s10)
         samples = None

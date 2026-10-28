@@ -103,6 +103,15 @@ $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
 p = pathlib.Path(sys.argv[1]); ev = [json.loads(l) for l in (p / "stream/run.jsonl").read_text().splitlines()]
 by = lambda e: [x for x in ev if x.get("event") == e]
+# 文書の版の照合 (stream_run の sync_reference) — gate は何も作らずに止まった run (exit 3)
+sync = by("reference_sync")[-1] if by("reference_sync") else {}
+if sync.get("status") == "gate":
+    print(f"開始できない: {sync.get('message')}")
+    sys.exit(3)
+if sync.get("status") == "ready":
+    print("注意: plugin の文書が server より古い — 今回は server の文書を取り直して書いた (`claude plugin update` で直る)")
+elif sync.get("status") == "unknown":
+    print(f"注意: 文書の版を照合できない ({sync.get('reason')}) — 焼き込みの文書で書いた")
 cuts = by("plan_seen")[0]["cuts"] if by("plan_seen") else []
 asm = sorted(by("assemble"), key=lambda x: x["index"])
 F = by("final_ready")[0]["since"] if by("final_ready") else None

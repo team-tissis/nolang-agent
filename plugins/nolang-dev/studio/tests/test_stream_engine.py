@@ -141,7 +141,7 @@ class EngineRoutingTest(unittest.TestCase):
             # Act
             result = author.stream_model(Path("stream"), "本文", callback, **arguments)
         # Assert
-        call.assert_called_once_with(Path("stream"), "本文", callback, **arguments)
+        call.assert_called_once_with(Path("stream"), "本文", callback, **arguments, before_input=None)
         self.assertEqual(result, {"ok": True})
 
     def test_codex_failure_is_visible_to_the_orchestrator(self):

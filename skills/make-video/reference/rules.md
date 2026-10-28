@@ -1,5 +1,7 @@
 # Rule names and fixes for check findings
 
+Version of these documents: contract: 1 · reference_hash: ce05f000252262472c49ebf03e8896f2188cd333972d981c56639bbc3cc560b1 · synced_at: 2026-10-28T04:16:01.003Z
+
 The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
 - `empty_cut` place a picture or a card

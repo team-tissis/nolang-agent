@@ -14,6 +14,7 @@ import { existsSync } from "node:fs";
 import { cp, readFile, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readContract, referenceHash } from "./reference-hash.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const DEST = join(ROOT, "skills/make-video/reference");
@@ -64,13 +65,16 @@ function gitCommit(dir) {
 }
 
 // 規則の台帳 (SKILL.md の「Rule names and fixes」の 1 段落) を 1 規則 1 行に
-function rulesMarkdown(skillMd) {
+// 先頭の版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる
+function rulesMarkdown(skillMd, version) {
   const line = skillMd.split("\n").find((l) => l.startsWith("Rule names and fixes"));
   if (!line) throw new Error('SKILL.md に「Rule names and fixes」の段落が無い');
   const body = line.slice(line.indexOf("): ") + 3);
   const items = body.split("・`").map((item, i) => (i === 0 ? item : "`" + item));
   return [
     "# Rule names and fixes for check findings",
+    "",
+    `Version of these documents: contract: ${version.contract} · reference_hash: ${version.reference_hash} · synced_at: ${version.synced_at}`,
     "",
     "The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.",
     "",
@@ -84,7 +88,6 @@ for (const name of DIRS) {
   await rm(join(DEST, name), { recursive: true, force: true });
   await cp(join(from, REFERENCE, name), join(DEST, name), { recursive: true });
 }
-await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8")));
 await rm(STUDIO_DEST, { recursive: true, force: true });
 for (const [rel, srcRel] of STUDIO_FILES) {
   await cp(join(from, srcRel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
@@ -94,13 +97,34 @@ const streamAuthor = await readFile(join(STUDIO_DEST, "scripts/stream_author.py"
 if (streamAuthor.includes("author_core") && !existsSync(join(STUDIO_DEST, "scripts/author_core.py")))
   throw new Error("stream_author.py が author_core を import するのに、写した元に scripts/author_core.py が無い");
 
+// 文書一式の版: 写した studio/reference/ の指紋 (JS) を、backend の正本の実装 (author_core.reference_hash_of — server と client が
+// 使う python) の値と突き合わせる。食い違えば言語間の算法がずれている — 出荷すると全 run が「古い plugin」と判定されて毎回取り直す
+const referenceDir = join(STUDIO_DEST, "reference");
+const contract = (await readContract(referenceDir)).contract;
+const reference_hash = await referenceHash(referenceDir);
+const pyHash = execFileSync(
+  process.env.PYTHON || "python3",
+  [
+    "-c",
+    "import importlib.util, sys, pathlib; s = importlib.util.spec_from_file_location('author_core', sys.argv[1]); m = importlib.util.module_from_spec(s); sys.modules['author_core'] = m; s.loader.exec_module(m); print(m.reference_hash_of(pathlib.Path(sys.argv[2])))",
+    join(from, AUTHOR_CORE),
+    join(from, REFERENCE),
+  ],
+  { encoding: "utf8" },
+).trim();
+if (pyHash !== reference_hash) throw new Error(`文書一式の指紋が JS (${reference_hash.slice(0, 16)}) と python (${pyHash.slice(0, 16)}) で違う`);
+const synced_at = new Date().toISOString();
+await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8"), { contract, reference_hash, synced_at }));
+
 const git = gitCommit(from);
 const source = {
   from: "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   ref: flag("--ref") || null,
   commit: flag("--commit") || git?.sha || null,
   dirty: git?.dirty ?? null,
-  synced_at: new Date().toISOString(),
+  synced_at,
+  contract,
+  reference_hash,
   files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (SKILL.md から生成)", "../../../studio/ (skill 一式)"],
 };
 await writeFile(join(DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");
