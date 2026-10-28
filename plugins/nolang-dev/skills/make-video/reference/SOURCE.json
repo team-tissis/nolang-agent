@@ -1,10 +1,11 @@
 {
-  "from": "nolang-backend/.agents/skills/nolang-draft-studio",
+  "from": "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   "ref": "claude-draft-src",
-  "commit": "9d804d7e5787828306eac3bc5555123d37728b08",
-  "dirty": null,
-  "synced_at": "2026-10-28T01:26:10.968Z",
+  "commit": "a97370fb7a",
+  "dirty": true,
+  "synced_at": "2026-10-28T03:51:20.548Z",
   "files": [
+    "spec.md",
     "authoring.md",
     "capabilities.md",
     "looks.md",

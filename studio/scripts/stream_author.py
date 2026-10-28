@@ -34,9 +34,29 @@ import time
 from collections.abc import Callable
 from pathlib import Path
 
-import author_core  # 隣の file = libs/ai/llm_prompts/draft_author/author_core.py の byte 同一の写し (prompt と出力の読みの正本)
+# prompt と出力の読みの正本 author_core: 配布 bundle では隣の file (sync が libs の正本を同梱する)・repo 内では libs の正本を
+# file で読む (写しは置かない。package init を通らず標準 library だけで動く)
+try:
+    import author_core
+except ModuleNotFoundError:
+    import importlib.util
+
+    _core_path = next(
+        p / "libs/ai/llm_prompts/draft_author/author_core.py"
+        for p in Path(__file__).resolve().parents
+        if (p / "libs/ai/llm_prompts/draft_author/author_core.py").is_file()
+    )
+    _spec = importlib.util.spec_from_file_location("author_core", _core_path)
+    assert _spec is not None and _spec.loader is not None
+    author_core = importlib.util.module_from_spec(_spec)
+    sys.modules["author_core"] = author_core
+    _spec.loader.exec_module(author_core)
 from author_core import (
     AUTO_SECONDS,
+    DECLARED_SECONDS,  # noqa: F401 — 再 export (stream_run が stream_author 経由で import する。ruff --fix に消させない)
+    LENGTH_RULE,  # noqa: F401 — 再 export (同上)
+    VERBATIM_MARK,  # noqa: F401 — 再 export (同上)
+    VERBATIM_REQUEST,  # noqa: F401 — 再 export (同上)
     AuthorOutputSplitter,
     AuthorSection,
     apply_line_edits,
@@ -55,9 +75,10 @@ from author_core import (
 )
 
 HERE = Path(__file__).resolve().parent
-SKILL = HERE.parent
+# 文書一式 (bundle では scripts の隣・repo では libs の正本 — author_core.resolve_reference_dir)
+REFERENCE = author_core.resolve_reference_dir(HERE)
 # 見本の置き場 (選び方・近い type・1 本の大きさの上限は author_core.pick_samples)
-SAMPLES_DIR = SKILL / "reference/samples"
+SAMPLES_DIR = REFERENCE / "samples"
 # 担当・直しの system に見本を同梱する type。10-25 の著者固定 A/B (4 題材・Opus 盲検両順 + ユーザーの盲検視聴) で、
 # 見本の効きが残るのは craft 的な type だけだった — cinematic は見本あり側が両順一致で勝ち・data は微・compare / concept は
 # 見本なしが小勝ち (craft.md が見本の教えを肩代わり)。著者の user turn の見本は全 type で据え置き (外す検証はしていない)
@@ -108,13 +129,26 @@ def build_system_prompt(out: Path, samples: tuple[str, ...] | None) -> Path:
     """3 役の system prompt (`author_core.system_docs_text` — 役の冒頭 + skill の文書 + 見本) を file に書く。samples=None は見本なし
     (著者の静的な system prompt — 見本は user turn に置く)。担当と直し役の見本は STAFF_SAMPLE_TYPES だけ — hf2 (craft.md) 採用前は
     外すと大敗した (10-22) が、採用後の再検証 (10-25) では密度ほぼ同等・品質 2-2 で、効きが残るのは craft 的な type だけだった。"""
-    out.write_text(author_core.system_docs_text(SKILL, tuple(samples or ())))
+    out.write_text(author_core.system_docs_text(REFERENCE, tuple(samples or ())))
     return out
 
 
 def samples_text(samples: tuple[str, ...]) -> str:
     """見本の本文 (著者の user turn に置く)。"""
     return author_core.samples_text(SAMPLES_DIR, samples)
+
+
+# 著者 brief (`--author-brief`) の run の担当への注記 (user turn の末尾)。文言は 10-28 の bench (B′) で検証した版 —
+# 「brief は欠陥でない・ゼロから設計・著者の transition は残す・前の cut (著者の brief) の空を写さない」
+STAFF_BRIEF_NOTE = (
+    "Note for this run: the author deliberately wrote only a brief for this cut — the speech lines and `#` comment lines saying"
+    " what the cut shows and how it moves. That is not a defect. You design the whole cut from scratch to that brief: the layers,"
+    " the named definitions, the motion, the pictures, the marks and the sound effects, at the same bar (the density and hierarchy"
+    " of an explainer video a professional studio could ship). The author's transition line is deliberate (the author sees the"
+    " whole cut lineup; you cannot see the next cut) — keep it unless your build makes it impossible. The previous cut shown above"
+    " is also only a brief, so do not copy its emptiness — build this cut so it stands on its own, and keep the video's look"
+    " coherent through the root (palette / font / defaults) rather than through the previous cut's layers.\n"
+)
 
 
 def staff_prompt(
@@ -136,6 +170,7 @@ def staff_prompt(
     reference_note: str = "",
     verbatim: bool = False,
     keep_assets: bool = False,
+    brief: bool = False,
 ) -> str:
     """担当の user turn — 著者の cut をプロの解説動画の密度と階層に仕上げる。見る観点・欠陥の型・字の大きさの規則は渡さず、機構の事実
     (依頼の遵守・根・定義を変えない・台詞は直してよいが逐語の台本は変えない・DEFECT の常連) だけ。担当は著者の構図を残して要素・印・効果音を足す (10-23 の実測で要素 4.9 → 9.7 個)。"""
@@ -153,11 +188,13 @@ def staff_prompt(
             " already being made from the author's version; re-placing the same description, and changing position and size, are fine). Put text in the opening the picture's `room:` leaves."
         )
     else:
-        speech_rule = (
-            "Do not change a single character of the speech (`@` lines' characters) — this video reads the request's script verbatim (only added commas and the reading notation `{表記|読み}` are allowed). "
-            if verbatim
-            else "You may also fix the speech (`@` lines' characters) (the voice and subtitles are made from this version; the fixer after you cannot change them). Keep this cut's planned content and sentence count. "
-        )
+        if verbatim:
+            speech_rule = "Do not change a single character of the speech (`@` lines' characters) — this video reads the request's script verbatim (only added commas and the reading notation `{表記|読み}` are allowed). "
+        elif brief:
+            # 著者 brief: 台詞は著者の版のまま固定 (声は著者の時点から担当と並列に作っている)。絵の設計は担当
+            speech_rule = "Do not change the speech (`@` lines) — neither the characters nor how the lines split (the voice is already being made from the author's version; adding marks is fine). "
+        else:
+            speech_rule = "You may also fix the speech (`@` lines' characters) (the voice and subtitles are made from this version; the fixer after you cannot change them). Keep this cut's planned content and sentence count. "
         picture_rule = (
             "This is the only stage that may rewrite a picture's description (the fixer after you cannot). The generated pictures cannot be looked at, so clear the spot where"
             " text goes with `subject:` / `room:`."
@@ -202,7 +239,7 @@ The block to finish:
 === end ===
 
 Output only the finished block in the same format (no preamble, no explanations, no code fences; from `=== cut {name} ===` through `=== end ===`).
-"""
+{chr(10) + STAFF_BRIEF_NOTE if brief else ""}"""
 
 
 def reference_of(project: Path) -> dict[str, object] | None:
@@ -753,7 +790,7 @@ def warmup(st: Path, system_prompt: Path) -> None:
     )
 
 
-def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
+def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: bool = False) -> int:
     proj, st, studio = project / "solo", project / "stream", project / "studio"
     proj.mkdir(exist_ok=True)
     st.mkdir(exist_ok=True)
@@ -815,11 +852,20 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None) -> int:
         f"\n{speech['brief']}\n" if speech is not None else "",
         editable=_editable(),
         referenced=ref is not None,
+        brief=brief,
     )
     sp0 = Splitter(proj, st, "author")
     if author_model := os.environ.get(
         "NOLANG_STUDIO_AUTHOR_MODEL"
     ):  # 著者だけ別の model (担当・直し役は engine のまま)
+        # dev 専用 (repo 内だけ): stream_gemini は skill の dev script — その dir を探して import する
+        dev_scripts = next(
+            p / ".agents/skills/nolang-draft-studio/scripts"
+            for p in Path(__file__).resolve().parents
+            if (p / ".agents/skills/nolang-draft-studio/scripts/stream_gemini.py").is_file()
+        )
+        if str(dev_scripts) not in sys.path:
+            sys.path.insert(0, str(dev_scripts))
         from stream_gemini import stream_gemini
 
         stream_gemini(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", model=author_model, log=log)
@@ -925,7 +971,9 @@ def fix(
     return _emit_block(st, name, text, event="fix_unparsed")  # block 全体を返した出力もそのまま受ける
 
 
-def staff(project: Path, name: str, findings_file: Path, *, effort: str, keep_assets: bool = False) -> int:
+def staff(
+    project: Path, name: str, findings_file: Path, *, effort: str, keep_assets: bool = False, brief: bool = False
+) -> int:
     """担当: 著者の cut を仕上げる (前の cut は著者の版を参考に渡す = cut ごとに並列に走らせるため)。依頼文・cut の
     位置・著者の版の時刻 (orchestrator が指摘の隣に置く `timing_author.txt`) も渡す。"""
     proj, st = project / "solo", project / "stream"
@@ -947,28 +995,32 @@ def staff(project: Path, name: str, findings_file: Path, *, effort: str, keep_as
     planned_s = sum(sec for _, sec in plan_names(plan))
     _typ, _aspect, target_s = (project / "params.txt").read_text().split()[:3]
     request = (project / "request.txt").read_text()
+    prompt = staff_prompt(
+        name,
+        block,
+        findings,
+        root_d,
+        root_t,
+        plan,
+        prev_name,
+        prev_block,
+        planned_s,
+        defs_before_text(proj, name),
+        request=request,
+        order=order,
+        target_s=target_s,
+        timing=timing_file.read_text() if timing_file.exists() else "",
+        reference_note=reference_role_note(project),
+        verbatim=is_verbatim(plan, request),
+        keep_assets=keep_assets,
+        brief=brief,
+    )
+    if extra := os.environ.get("NOLANG_STUDIO_STAFF_EXTRA"):  # 比べ用: 担当の user turn の末尾に足す注意 (file の path)
+        prompt += "\n" + Path(extra).read_text()
     out: list[str] = []
     stream_model(
         st,
-        staff_prompt(
-            name,
-            block,
-            findings,
-            root_d,
-            root_t,
-            plan,
-            prev_name,
-            prev_block,
-            planned_s,
-            defs_before_text(proj, name),
-            request=request,
-            order=order,
-            target_s=target_s,
-            timing=timing_file.read_text() if timing_file.exists() else "",
-            reference_note=reference_role_note(project),
-            verbatim=is_verbatim(plan, request),
-            keep_assets=keep_assets,
-        ),
+        prompt,
         out.append,
         system_prompt=sp,
         effort=effort,
@@ -994,7 +1046,7 @@ def main(argv: list[str]) -> int:
         samples = None
         if "--samples" in argv:
             samples = tuple(x.strip() for x in argv[argv.index("--samples") + 1].split(",") if x.strip())
-        return run(project, effort=eff, samples=samples)
+        return run(project, effort=eff, samples=samples, brief="--author-brief" in argv)
     if cmd == "fix":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "low"
         shots = [Path(x) for x in argv[argv.index("--shots") + 1].split(",") if x] if "--shots" in argv else []
@@ -1009,7 +1061,14 @@ def main(argv: list[str]) -> int:
         )
     if cmd == "staff":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "medium"
-        return staff(project, argv[2], Path(argv[3]), effort=eff, keep_assets="--keep-assets" in argv)
+        return staff(
+            project,
+            argv[2],
+            Path(argv[3]),
+            effort=eff,
+            keep_assets="--keep-assets" in argv,
+            brief="--author-brief" in argv,
+        )
     print(__doc__)
     return 2
 

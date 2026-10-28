@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import contextlib
 import functools
+import http.client
 import itertools
 import json
 import os
@@ -63,14 +64,15 @@ from pathlib import Path
 from uuid import NAMESPACE_URL, uuid5
 
 HERE = Path(__file__).resolve().parent
-# repo の中の skill なら自 repo の製品で描ける (local)。plugin で入れた skill (repo 無し) は --remote だけが動く
-REPO = HERE.parents[3] if (HERE.parents[3] / "pyproject.toml").exists() else None
+# repo の中 (agent_client/) なら自 repo の製品で描ける (local)。plugin で入れた skill (repo 無し) は --remote だけが動く
+REPO = next((p for p in HERE.parents if (p / "pyproject.toml").exists()), None)
 sys.path.insert(0, str(HERE))
 if REPO is not None:
     sys.path.insert(1, str(REPO))
 
 PY = sys.executable  # この script を動かしている python (repo は /opt/venv・plugin の client は使う側の python3)
-STUDIO = HERE / "studio.py"
+# local の描き手 (dev script — repo にだけある。bundle は --remote だけなので通らない)
+STUDIO = (REPO / ".agents/skills/nolang-draft-studio/scripts/studio.py") if REPO else HERE / "studio.py"
 
 
 def _prefer_cpu() -> None:
@@ -343,6 +345,10 @@ class Rejected(Exception):
         self.defects = defects
 
 
+class Unreachable(RuntimeError):
+    """受け口に届かない・返事を失った (gateway の 502〜504・切断・時間切れ)。server が頼みを処理したかは分からない。"""
+
+
 # 見直しの回数 — 静止画を見せて 1 回 (10-27 裁定: 静止画なしの見直しも 2 回目も置かない)。
 # 盲検の実測 (10-22・effort medium・low は直し役と差が出ない): 53 cut で見直しは今の直し役 (low・指摘のある cut だけ) に 9 対 3・
 # 5 cut の点で 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5・投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)
@@ -387,6 +393,7 @@ class Run:
         review: str | None = "low",
         fix_scope: str = "severe",
         keep_assets: bool = True,
+        brief: bool = False,
         remote: str | None = None,
         token: str | None = None,
         editable: bool = False,
@@ -413,8 +420,11 @@ class Run:
         self.review_effort = (
             review if fix is not None and fix_scope == "warn" else None
         )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
+        # 著者 brief (`--author-brief`): 著者は台詞と絵コンテだけ書き、絵は担当が設計する — 担当は常に素材も変える
+        # (keep_assets と両立しない)。台詞だけは著者の版のまま固定し、声は著者の時点から担当と並列に作る
+        self.brief = brief
         # 担当は絵と台詞を変えない — 絵と声は著者の版から担当と並列に作る (`_stage` が担当の前に warm を頼む)
-        self.keep_assets = keep_assets
+        self.keep_assets = keep_assets and not brief
         self.solo, self.st, self.studio = project / "solo", project / "stream", project / "studio"
         self.weave = project / "weave"
         self.weave.mkdir(parents=True, exist_ok=True)
@@ -485,11 +495,16 @@ class Run:
         "rename": ("POST", "/v1/unstable/drafts/rename/"),
         "rules": ("GET", "/v1/unstable/drafts/rules/"),
         "abort": ("DELETE", "/v1/unstable/drafts/{id}/"),
+        "status": ("GET", "/v1/unstable/drafts/{id}/"),
     }
+    # 何度送っても同じ答えの頼み — 届かなければ間を置いて送り直す (dev の check は混むと ALB の 60 s を超えて 504・切断も出る。
+    # 1 回で諦めると stage が死んで cut が動画から落ちた)。投入 (`cut`) は送り直さない — 照合は `submit`
+    _RESENDABLE = frozenset({"check", "rename", "rules", "stills_status", "status"})
 
     def call(self, op: str, body: dict[str, object] | None = None, **path_args: str) -> dict[str, object]:
         """受け口を 1 回呼ぶ。remote は HTTP (`_ROUTES`・path_args は path の `{名}`)・local は同じ flow 関数を手元の user で
-        (`studio.py api <op>`・body は stdin)。止めた頼み (HTTP の 400) は `Rejected`・届かない時は RuntimeError。"""
+        (`studio.py api <op>`・body は stdin)。止めた頼み (HTTP の 400) は `Rejected`・届かない時は `Unreachable` (`_RESENDABLE` は
+        3 回まで送ってから)・その他の失敗は RuntimeError。"""
         body = dict(body or {})
         if self.remote is None:
             if self.video_id is not None:
@@ -507,17 +522,29 @@ class Run:
                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
                 method=method,
             )
-            try:
-                with urllib.request.urlopen(req, timeout=120) as resp:
-                    loaded = json.loads(resp.read().decode("utf-8") or "{}")
-            except urllib.error.HTTPError as e:
-                detail = e.read().decode("utf-8", "replace")
-                if e.code != 400:
-                    raise RuntimeError(f"{op} -> {e.code}: {detail[:600]}") from e
+            for attempt in range(3):
                 try:
-                    loaded = {"status": 400, **json.loads(detail)}
-                except ValueError:
-                    loaded = {"status": 400, "error": detail[:600]}
+                    with urllib.request.urlopen(req, timeout=120) as resp:
+                        loaded = json.loads(resp.read().decode("utf-8") or "{}")
+                    break
+                except urllib.error.HTTPError as e:
+                    detail = e.read().decode("utf-8", "replace")
+                    if e.code in (502, 503, 504):
+                        error: RuntimeError = Unreachable(f"{op} -> {e.code}: {detail[:600]}")
+                    elif e.code != 400:
+                        raise RuntimeError(f"{op} -> {e.code}: {detail[:600]}") from e
+                    else:
+                        try:
+                            loaded = {"status": 400, **json.loads(detail)}
+                        except ValueError:
+                            loaded = {"status": 400, "error": detail[:600]}
+                        break
+                except (urllib.error.URLError, http.client.HTTPException, ConnectionError, TimeoutError) as e:
+                    error = Unreachable(f"{op}: {e!r}")
+                if op not in self._RESENDABLE or attempt == 2:
+                    raise error
+                self.log(event="call_retry", op=op, attempt=attempt + 1, error=str(error)[:200])
+                time.sleep(10 * (attempt + 1))
         if loaded.get("status") == 500:
             raise RuntimeError(f"{op} -> 500: {loaded.get('error')}")
         if loaded.get("status") == 400:
@@ -1252,7 +1279,7 @@ class Run:
 
     def stage(self, i: int, c: str) -> None:
         """cut c が出たら doc (根 + live な cut 0..i) を組んで check → 直し (2 回まで) → staged (ready)。段の thread が死んでも旗は
-        立てる (立たないと後の cut が全部待ち続ける — 死んだ cut は guarded が壊れ扱いにする)。"""
+        立てる (立たないと後の cut が全部待ち続ける — 死んだ cut は guarded が壊れ扱いにする・受け口に届かず死んだ cut は除く)。"""
         try:
             self._stage(i, c)
         finally:
@@ -1906,8 +1933,9 @@ class Run:
         ff = self.author_check(i, c)
         if not keep.exists():
             keep.write_text(src.read_text())
-        if self.keep_assets:
-            # 担当は絵と台詞を変えない — 著者の版のまま素材を頼み、担当と並列に作る
+        if self.keep_assets or self.brief:
+            # 担当は絵と台詞を変えない — 著者の版のまま素材を頼み、担当と並列に作る (brief は台詞だけ固定:
+            # 著者の版に絵が無いので実質 TTS の warm が先に走り、絵は担当後の warm が担当の版から作る)
             self.start_prewarm(c)
         self.write_defs_before(c)
         before = src.read_text()  # 担当の前の block (著者の版 + 前方から移した定義) — 担当が消した定義を戻す基準
@@ -1926,6 +1954,7 @@ class Run:
                 "--effort",
                 effort,
                 *(["--keep-assets"] if self.keep_assets else []),
+                *(["--author-brief"] if self.brief else []),
             ],
             timeout=900,
         )
@@ -1935,8 +1964,8 @@ class Run:
             # その定義が担当の出力に無いまま上書きされて消える)
             author = keep.read_text()
             text, restored = (
-                restore_speech(author, r.stdout, exact=self.keep_assets)
-                if self.verbatim or self.keep_assets
+                restore_speech(author, r.stdout, exact=self.keep_assets or self.brief)
+                if self.verbatim or self.keep_assets or self.brief
                 else (r.stdout, [])
             )
             pictures: list[dict[str, str]] = []
@@ -2301,9 +2330,12 @@ class Run:
         return applied
 
     def guarded(self, fn, i: int, c: str) -> None:
-        """段の thread が例外で死んだ cut は壊れ扱い (旗は段 (stage / warm) が finally で立てる)。"""
+        """段の thread が例外で死んだ cut は壊れ扱い (旗は段 (stage / warm) が finally で立てる)。受け口に届かず死んだ段は
+        cut を落とさない — その時の text を投入の門 (同じ検査・弾けば直し役と最後の手段) に任せる。"""
         try:
             fn(i, c)
+        except Unreachable as exc:
+            self.log(cut=c, event="stage_unreachable", stage=fn.__name__, error=str(exc)[:300])
         except Exception as exc:  # noqa: BLE001 — 1 cut の失敗で動画全体を止めない
             self.broken[c] = f"{fn.__name__} crashed: {exc!r}"[:200]
             self.log(cut=c, event="stage_crashed", stage=fn.__name__, error=repr(exc)[:300])
@@ -2535,13 +2567,32 @@ class Run:
                 return None
         if not self.stream_alive():
             return None
+        error: Exception | None = None
+        for attempt in range(2):
+            try:
+                r = self.call("cut", {"text": text, "end": end})
+                return {"sealed": True, "lines": r.get("lines")}
+            except (Rejected, RuntimeError) as e:
+                error = e
+            # 返事を失った投入は、server が受理したかを受理済みの cut 名で確かめる — 受理済みなら流れた物として続け、届いて
+            # いなければ 1 回だけ送り直す (server は検査した prefix の上にだけ原子に足すので二重には入らない。先の投入が後から
+            # 入れば、送り直しは 409 か DUP_CUT で止まり、ここで受理済みと分かる)
+            if c is None or not (attempt or isinstance(error, Unreachable)):
+                break
+            if c in self.server_submitted():
+                self.log(cut=c, event="submit_recovered", error=str(error)[:200])
+                return {"sealed": True, "lines": None}
+            if attempt:
+                break
+            self.log(cut=c, event="submit_retry", error=str(error)[:200])
+        return {"rejected": str(error)[:400], "defects": error.defects if isinstance(error, Rejected) else []}
+
+    def server_submitted(self) -> list[str]:
+        """server が受理済みの cut 名 (`GET drafts/{id}/` の submitted_cuts — 投入の真実)。読めなければ空。"""
         try:
-            r = self.call("cut", {"text": text, "end": end})
-        except Rejected as e:
-            return {"rejected": str(e)[:400], "defects": e.defects}
-        except RuntimeError as e:
-            return {"rejected": str(e)[:400], "defects": []}
-        return {"sealed": True, "lines": r.get("lines")}
+            return [str(x) for x in self.call("status").get("submitted_cuts", [])]
+        except RuntimeError:
+            return []
 
     def feed_text(self, c: str) -> str | None:
         """cut c の投入の text (design の block + timeline の block)。根がまだ流れていなければ根を前に付ける (根の先行投入が弾かれた時)。"""
@@ -2749,6 +2800,7 @@ def main(argv: list[str]) -> int:
         review=None if review == "none" else review,
         fix_scope=fix_arg if fix_arg in ("defect", "severe") else "warn",
         keep_assets="--staff-edits-assets" not in argv,
+        brief="--author-brief" in argv,
         remote=remote,
         token=token,
         editable="--editable" in argv,

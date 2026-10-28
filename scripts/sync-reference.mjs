@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-// nolang-backend のスキル `nolang-draft-studio` から、このスキルの辞書 (skills/make-video/reference/) と、studio の一式 (studio/ —
+// nolang-backend から、このスキルの辞書 (skills/make-video/reference/) と、studio の一式 (studio/ —
 // `nolang make` が --remote で動かす著者・担当・投入の段取り) を写す。
 // 正本は backend (文法とサーバーは一緒に変わる)。ここには写しと、写した元の commit (reference/SOURCE.json) だけを置く。
+// backend 31e748d48f で置き場が分かれた: script は agent_client/・文書と author_core.py は libs/ai/llm_prompts/draft_author/ が正本。
 //
-//   node scripts/sync-reference.mjs <nolang-draft-studio の directory> [--commit <sha>] [--ref <branch>]
+//   node scripts/sync-reference.mjs <nolang-backend の repo root> [--commit <sha>] [--ref <branch>]
 //
 // backend の checkout が手元に無い時 (例: 開発機にだけある) は、commit 済みの物を git archive で取り出して渡す:
-//   mkdir -p /tmp/nds && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio' | tar x -C /tmp/nds
-//   node scripts/sync-reference.mjs /tmp/nds/.agents/skills/nolang-draft-studio --commit "$(ssh <host> git -C <backend> rev-parse HEAD)"
+//   mkdir -p /tmp/nbe && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio agent_client libs/ai/llm_prompts/draft_author' | tar x -C /tmp/nbe
+//   node scripts/sync-reference.mjs /tmp/nbe --commit "$(ssh <host> git -C <backend> rev-parse HEAD)"
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { cp, readFile, rm, writeFile } from "node:fs/promises";
@@ -16,20 +17,31 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const DEST = join(ROOT, "skills/make-video/reference");
-const DOCS = ["authoring.md", "capabilities.md", "looks.md", "sounds.md"];
+const DOCS = ["spec.md", "authoring.md", "capabilities.md", "looks.md", "sounds.md"];
 const DIRS = ["scaffolds", "samples"];
 const STUDIO_DEST = join(ROOT, "studio");
 const STUDIO_SKIP = new Set(["__pycache__", ".DS_Store"]);
-// `nolang make` (stream_make.sh --remote) が読む物だけ — 著者の system prompt の文書 (SKILL.md と reference の 4 つ)・見本・骨組みと、
-// remote の段取りの script。check / 素材 / 描画はサーバーがするので、backend の repo の中でだけ動く script (studio.py・studio_lint.py …) は要らない
+// backend の中の置き場 (31e748d48f 以降)
+const SKILL_MD = ".agents/skills/nolang-draft-studio/SKILL.md";
+const REFERENCE = "libs/ai/llm_prompts/draft_author/reference";
+const AUTHOR_CORE = "libs/ai/llm_prompts/draft_author/author_core.py";
+const SCRIPTS = "agent_client/scripts";
+const TESTS = "agent_client/tests";
+// `nolang make` (stream_make.sh --remote) が読む物だけ — 著者の文書一式 (reference/ は contract.json の manifest どおり丸ごと) と
+// remote の段取りの script。check / 素材 / 描画はサーバーがするので、backend の repo の中でだけ動く script (studio.py・studio_lint.py …) は要らない。
+// [studio/ の中の写し先, backend repo root からの写し元]
 const STUDIO_FILES = [
-  "SKILL.md",
-  "scripts/README.md",
-  "tests/test_stream_engine.py",
-  "tests/__init__.py",
-  ...["authoring.md", "capabilities.md", "looks.md", "sounds.md", "craft.md", "craft.NOTICE.md", "samples", "scaffolds"].map((name) => `reference/${name}`),
+  ["SKILL.md", SKILL_MD],
+  ["reference", REFERENCE],
+  // author_core.py の正本は libs — bundle では scripts の隣に同梱する (stream_author は repo 内なら libs を読む)
+  ["scripts/author_core.py", AUTHOR_CORE],
+  ["scripts/README.md", `${SCRIPTS}/README.md`],
+  ["tests/__init__.py", `${TESTS}/__init__.py`],
+  ["tests/test_stream_engine.py", `${TESTS}/test_stream_engine.py`],
   // studio_rules.py は backend 1874c9ecd5 で server 側 (`GET drafts/rules/`) へ移った — stream_run は台帳を API から受ける
-  ...["author_core.py", "stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_new.py"].map((name) => `scripts/${name}`),
+  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_new.py"].map(
+    (name) => [`scripts/${name}`, `${SCRIPTS}/${name}`],
+  ),
 ];
 
 const args = process.argv.slice(2);
@@ -67,18 +79,15 @@ function rulesMarkdown(skillMd) {
   ].join("\n");
 }
 
-for (const name of DOCS) await cp(join(from, "reference", name), join(DEST, name));
+for (const name of DOCS) await cp(join(from, REFERENCE, name), join(DEST, name));
 for (const name of DIRS) {
   await rm(join(DEST, name), { recursive: true, force: true });
-  await cp(join(from, "reference", name), join(DEST, name), { recursive: true });
+  await cp(join(from, REFERENCE, name), join(DEST, name), { recursive: true });
 }
-await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, "SKILL.md"), "utf8")));
-// author_core.py は新しい backend にだけある — 無い snapshot では飛ばす (下で import との整合を確かめる)
-const STUDIO_OPTIONAL = new Set(["scripts/author_core.py"]);
+await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8")));
 await rm(STUDIO_DEST, { recursive: true, force: true });
-for (const rel of STUDIO_FILES) {
-  if (STUDIO_OPTIONAL.has(rel) && !existsSync(join(from, rel))) continue;
-  await cp(join(from, rel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
+for (const [rel, srcRel] of STUDIO_FILES) {
+  await cp(join(from, srcRel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
 }
 // import できない写しを出荷しない (10-23 の craft.md の欠けと同じ型の事故を塞ぐ)
 const streamAuthor = await readFile(join(STUDIO_DEST, "scripts/stream_author.py"), "utf8");
@@ -87,7 +96,7 @@ if (streamAuthor.includes("author_core") && !existsSync(join(STUDIO_DEST, "scrip
 
 const git = gitCommit(from);
 const source = {
-  from: "nolang-backend/.agents/skills/nolang-draft-studio",
+  from: "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   ref: flag("--ref") || null,
   commit: flag("--commit") || git?.sha || null,
   dirty: git?.dirty ?? null,

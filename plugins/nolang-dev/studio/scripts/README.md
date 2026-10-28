@@ -18,8 +18,15 @@ end は著者の src.done を確認してから送る。確定済み cut の再�
 外部 LLM を呼ばない契約テスト:
 
 ```bash
-python3 -m unittest discover -s .agents/skills/nolang-draft-studio/tests
+python3 -m unittest discover -s agent_client/tests
 ```
 
-nolang-agent への配布では scripts/sync-reference.mjs のコピー対象も更新する。
+## 置き場と配布
+
+この dir (`agent_client/scripts/`) は nolang-agent plugin へ写す配布 client。server のどの層からも import しない (importlinter
+の `agent-client-is-shipped-code`)。prompt と出力の読みの正本 `author_core.py` と文書一式 (`reference/` — 文法・見本・骨組み・
+`contract.json`) は `libs/ai/llm_prompts/draft_author/` に 1 つだけ置き、repo 内ではそこを読む。配布 bundle は
+`studio/{scripts,reference,tests}` の形で、sync が `author_core.py` を scripts の隣に、`reference/` を contract.json の
+`reference` の列どおりに同梱する。dev 専用の script (studio.py・studio_server.py・stream_gemini.py …) は
+`.agents/skills/nolang-draft-studio/scripts/` に残り、配布しない。
 Claude のプロンプトを保つ変更では、文法・見本などの無関係な同期を混ぜない。

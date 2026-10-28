@@ -1,0 +1,24 @@
+{
+  "contract": 1,
+  "min_supported": 1,
+  "reference": [
+    "contract.json",
+    "spec.md",
+    "authoring.md",
+    "capabilities.md",
+    "looks.md",
+    "sounds.md",
+    "craft.md",
+    "craft.NOTICE.md",
+    "samples/",
+    "scaffolds/"
+  ],
+  "compose": [
+    "spec:spec.md",
+    "traps:looks.md",
+    "sounds:sounds.md",
+    "raw:authoring.md",
+    "raw:capabilities.md",
+    "craft:craft.md"
+  ]
+}

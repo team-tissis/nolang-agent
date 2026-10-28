@@ -1,0 +1,87 @@
+name: sync-from-backend
+
+# nolang-backend の push (文書一式・3 役の prompt・配布 script) を写して plugin を出し直す。backend の
+# `agent-sync-dispatch` が repository_dispatch (backend-sync) を打つ。手で流す時は workflow_dispatch。
+# 版の整合の設計は backend の app_main/docs/feature/video_generate/reference_sync.md。
+#
+# contract (配布 script × API が壊れる変更の版) が上がる sync は自動では出さない — server を先に deploy してから
+# workflow_dispatch で server_deployed=true を付けて流す (逆順だと新しい plugin × 古い server を server の gate が止める)。
+#
+# secret: BACKEND_READ_TOKEN = nolang-backend を読める token。push は GITHUB_TOKEN (contents: write)。
+on:
+  repository_dispatch:
+    types: [backend-sync]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: backend の branch
+        required: true
+        default: claude-draft-src
+      sha:
+        description: backend の commit (空なら ref の先頭)
+        required: false
+      server_deployed:
+        description: contract を上げる sync — 新しい contract の server が deploy 済みなら true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-from-backend
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      REF: ${{ github.event.client_payload.ref || inputs.ref }}
+      SHA: ${{ github.event.client_payload.sha || inputs.sha }}
+      SERVER_DEPLOYED: ${{ inputs.server_deployed || false }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: team-tissis/nolang-backend
+          ref: ${{ github.event.client_payload.sha || inputs.sha || inputs.ref }}
+          token: ${{ secrets.BACKEND_READ_TOKEN }}
+          path: backend
+          fetch-depth: 1
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Guard contract bumps (server first)
+        run: |
+          new=$(node -e 'console.log(JSON.parse(require("fs").readFileSync("backend/libs/ai/llm_prompts/draft_author/reference/contract.json")).contract)')
+          old=$(node -e 'try { console.log(JSON.parse(require("fs").readFileSync("skills/make-video/reference/SOURCE.json")).contract ?? 0) } catch { console.log(0) }')
+          echo "contract: plugin $old → backend $new"
+          if [ "$old" != 0 ] && [ "$new" -gt "$old" ] && [ "$SERVER_DEPLOYED" != true ]; then
+            echo "::error::contract が $old → $new に上がる。server を先に deploy してから workflow_dispatch (server_deployed=true) で流す"
+            exit 1
+          fi
+
+      - name: Sync from backend
+        run: node scripts/sync-reference.mjs backend --commit "$(git -C backend rev-parse HEAD)" --ref "$REF"
+
+      - run: npm run build
+      - run: npm run check
+
+      - name: Bump the plugin version and push
+        run: |
+          rm -rf backend
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "変化なし"
+            exit 0
+          fi
+          npm version patch --no-git-tag-version --prefix packages/cli
+          npm run build
+          git config user.name "nolang-agent-sync[bot]"
+          git config user.email "nolang-agent-sync@users.noreply.github.com"
+          git add -A
+          git commit -m "chore(studio): resync from nolang-backend $(echo "${SHA:-$REF}" | cut -c1-10) ($REF)"
+          git push

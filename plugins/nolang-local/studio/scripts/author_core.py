@@ -1,26 +1,43 @@
 """著者 3 役 (著者・担当・直し役) の prompt と出力の読みの共有実装 — 製品と skill の bench の 1 本の正本。
 
-この file は 2 か所に byte 同一で置く (`libs/tests/ai/llm_core/test_draft_author_prompts.py` が一致を縛る):
+正本はこの 1 枚 (repo 内に写しは置かない)。`agent_client/scripts/` の script は repo 内ではこの file を importlib の file 読みで
+import し (package init を通らない)、nolang-agent への sync が配布 bundle の scripts の隣に同梱する。bundle は repo の外で
+単体で動くので、この file は標準 library だけに依存する。
 
-- 正本: ``libs/ai/llm_prompts/draft_author/author_core.py`` — 直すのはこちら
-- 写し: ``.agents/skills/nolang-draft-studio/scripts/author_core.py`` — ``stream_author.py`` の隣。skill の一式は
-  nolang-agent repo へ写され repo の外で単体で動くので、libs を import できない — この file は標準 library だけに依存する。
-  直したら ``cp libs/ai/llm_prompts/draft_author/author_core.py .agents/skills/nolang-draft-studio/scripts/author_core.py``
-
-skill の文書 (SKILL.md・reference/) と見本 (reference/samples/) は dir を引数に取って読む — 製品は
-`skill_docs.SKILL_DIR`、skill の bench は自分の dir を渡す。製品だけの物 (製品の追記 `PRODUCT_RULES`・LLM message の
-組み立て) は libs の他の module、skill だけの物 (claude CLI の呼び出し・担当の prompt・台詞や絵の復元) は
-`stream_author.py` に置く。
+文書 (spec.md・looks.md …) と見本 (samples/) は正本 1 式の dir (`libs/ai/llm_prompts/draft_author/reference/` — 配布 bundle
+では scripts の隣の `reference/`) を引数に取って読み、連結する文書の集合と順は同 dir の `contract.json` の `compose` が決める
+(文書の集合が変わっても古い client が新しい bundle を正しく組めるよう、組み立ては data 側に置く)。製品は
+`skill_docs.REFERENCE_DIR`、skill の bench は `stream_author.py` が自分の場所から解決した dir を渡す。製品だけの物 (製品の
+追記 `PRODUCT_RULES`・LLM message の組み立て) は libs の他の module、skill だけの物 (claude CLI の呼び出し・担当の prompt・
+台詞や絵の復元) は `stream_author.py` に置く。
 """
 
 from __future__ import annotations
 
 import functools
+import json
 import re
 import unicodedata
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TypeGuard
+
+# ===== 文書の置き場 =====
+
+
+def resolve_reference_dir(scripts_dir: Path) -> Path:
+    """文書一式 (contract.json・spec.md・samples/ …) の dir — 配布 bundle では scripts の隣の `reference/`、repo 内では
+    libs の正本 (`libs/ai/llm_prompts/draft_author/reference/`) を上へ辿って見つける。"""
+    local = scripts_dir.parent / "reference"
+    if (local / "contract.json").is_file():
+        return local
+    for parent in scripts_dir.parents:
+        candidate = parent / "libs" / "ai" / "llm_prompts" / "draft_author" / "reference"
+        if (candidate / "contract.json").is_file():
+            return candidate
+    raise FileNotFoundError(f"reference/ (contract.json) が {local} にも repo の libs にも無い")
+
 
 # ===== 見本の選び方 =====
 
@@ -135,45 +152,57 @@ CRAFT_HEAD = (
     " tools and no files, so skip anything about commands, files (SPEC.md and the like) or confirming with a person, and"
     " read it for the craft. For spelling, follow the draft src documents above.\n\n"
 )
-# SKILL.md のうち 3 役に渡す節 (文法)。工程・ループ・規則の一覧・stream の段取りは対話で skill を使う時の物なので渡さない
-SKILL_GRAMMAR = ("## Differences", "## Spelling map", "## What cannot be written")
+# 3 役に渡す文書の集合と連結順は reference/contract.json の `compose` (`mode:file` の列)。mode は組み方: spec = 文法の正本を
+# そのまま・traps = 罠の節から後ろ・sounds = 道具の節を落とす・raw = そのまま・craft = 制作の作法の前置き付き
 
 
-def skill_grammar(skill_dir: Path) -> str:
-    """SKILL.md の冒頭 (圧縮の規則・素材の書き方) と文法の節だけ。frontmatter は落とす。"""
-    parts = re.split(r"(?m)^(## .*)$", (skill_dir / "SKILL.md").read_text(encoding="utf-8"))
-    got = [parts[0].split("\n---\n", 1)[-1]]
-    got += [parts[i] + parts[i + 1] for i in range(1, len(parts), 2) if parts[i].startswith(SKILL_GRAMMAR)]
-    return "".join(got)
+def _is_json_array(value: object) -> TypeGuard[list[object]]:
+    return isinstance(value, list)
 
 
 @functools.cache
-def system_docs_text(skill_dir: Path, samples: tuple[str, ...] = ()) -> str:
-    """skill の文書の system prompt: 役の冒頭 + SKILL の文法 + looks の罠 + sounds + authoring + capabilities + 制作の作法
-    (+ 見本 — 道具の無い call は file を読めないので全部同梱)。samples=() は見本なし (著者の静的な system prompt — 見本は題材ごとに
-    変わるので system に置くと cache miss になり、user turn に置く)。製品はこの後ろに追記 (`product.PRODUCT_RULES`) を足す。"""
-    looks = (skill_dir / "reference/looks.md").read_text(encoding="utf-8")
-    parts = [
-        SYSTEM_HEAD,
-        "\n<!-- ===== how to write draft src ===== -->\n\n" + skill_grammar(skill_dir),
-        "\n<!-- ===== reference/looks.md (traps) ===== -->\n\n## Beyond the grammar (traps)"
-        + looks.split("## Beyond the grammar (traps)", 1)[1],
-    ]
-    # sounds.md のうち道具の節 (listen / engine の聴き比べ) は落とす — 3 役は command を打てない (SYSTEM_HEAD と矛盾する)
-    sounds = re.sub(
-        r"(?ms)^## (?:BGM: listen to candidates|Listening check).*?(?=^## |\Z)",
-        "",
-        (skill_dir / "reference/sounds.md").read_text(encoding="utf-8"),
-    )
-    parts.append("\n<!-- ===== reference/sounds.md ===== -->\n\n" + sounds)
-    for rel in ("reference/authoring.md", "reference/capabilities.md"):
-        parts.append(f"\n<!-- ===== {rel} ===== -->\n\n" + (skill_dir / rel).read_text(encoding="utf-8"))
-    parts.append(
-        "\n<!-- ===== production craft ===== -->\n\n"
-        + CRAFT_HEAD
-        + (skill_dir / "reference/craft.md").read_text(encoding="utf-8")
-    )
-    parts.append(samples_text(skill_dir / "reference" / "samples", samples))
+def compose_entries(reference_dir: Path) -> tuple[tuple[str, str], ...]:
+    """contract.json の compose — (mode, file) の列。"""
+    raw: dict[str, object] = json.loads((reference_dir / "contract.json").read_text(encoding="utf-8"))
+    items = raw.get("compose")
+    if not _is_json_array(items):
+        raise ValueError("contract.json: compose が無い")
+    entries: list[tuple[str, str]] = []
+    for row in items:
+        if not isinstance(row, str) or ":" not in row:
+            raise ValueError(f"contract.json: compose の行が mode:file でない: {row!r}")
+        mode, _, name = row.partition(":")
+        entries.append((mode, name))
+    return tuple(entries)
+
+
+@functools.cache
+def system_docs_text(reference_dir: Path, samples: tuple[str, ...] = ()) -> str:
+    """文書の system prompt: 役の冒頭 + contract.json の compose 順の文書 (spec の文法 + looks の罠 + sounds + authoring +
+    capabilities + 制作の作法) (+ 見本 — 道具の無い call は file を読めないので全部同梱)。samples=() は見本なし (著者の静的な
+    system prompt — 見本は題材ごとに変わるので system に置くと cache miss になり、user turn に置く)。製品はこの後ろに追記
+    (`product.PRODUCT_RULES`) を足す。"""
+    parts = [SYSTEM_HEAD]
+    for mode, name in compose_entries(reference_dir):
+        text = (reference_dir / name).read_text(encoding="utf-8")
+        if mode == "spec":
+            parts.append("\n<!-- ===== how to write draft src ===== -->\n\n" + text)
+        elif mode == "traps":
+            parts.append(
+                f"\n<!-- ===== reference/{name} (traps) ===== -->\n\n## Beyond the grammar (traps)"
+                + text.split("## Beyond the grammar (traps)", 1)[1]
+            )
+        elif mode == "sounds":
+            # 道具の節 (listen / engine の聴き比べ) は落とす — 3 役は command を打てない (SYSTEM_HEAD と矛盾する)
+            text = re.sub(r"(?ms)^## (?:BGM: listen to candidates|Listening check).*?(?=^## |\Z)", "", text)
+            parts.append(f"\n<!-- ===== reference/{name} ===== -->\n\n" + text)
+        elif mode == "raw":
+            parts.append(f"\n<!-- ===== reference/{name} ===== -->\n\n" + text)
+        elif mode == "craft":
+            parts.append("\n<!-- ===== production craft ===== -->\n\n" + CRAFT_HEAD + text)
+        else:
+            raise ValueError(f"contract.json: 知らない compose mode {mode!r} — この script が文書より古い")
+    parts.append(samples_text(reference_dir / "samples", samples))
     return "".join(parts)
 
 
@@ -252,6 +281,27 @@ Editable-mode flow (light design — plan first):
 """
 
 
+# 著者 brief (`--author-brief`): 著者は台本 (台詞)・cut ごとの絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
+# 絵は cut ごとの担当がゼロから設計する (担当は常に素材も変える)。台詞は著者の版のまま固定 — 声は著者の時点から担当と並列に作る。
+# 文言は 10-28 の bench (B′) で検証した版: 1 文 25〜30 字・意味つき palette token・cut を跨ぐ約束は root に書く
+AUTHOR_BRIEF_NOTE = (
+    "Production note for this run (it narrows the cut shape above): every cut is finished by its own staff, who designs all the"
+    " visuals from scratch. For each cut, write only the brief:\n"
+    "- the design block is just the `section#name(…)` line — no layers, no named definitions (def / motion / run / svg / sound / image / cue), no `img#`;\n"
+    "- the timeline block opens with 1–3 `#` comment lines stating what the cut shows and how it moves (the hero, the support, the"
+    " state changes, what picture if any), then the speech lines (`@speaker: …`), then the `# speech N sentences ~M s` note, then"
+    " the transition line (how this cut hands off to the next is yours — only you see the whole lineup);\n"
+    "- write no marks and no `se` in the cuts.\n"
+    "The speech you write is final — the voice is made from your lines as they stand, so keep each sentence 25–30 characters (a"
+    " long sentence bloats the length past the target).\n"
+    "The plan and the root are still fully yours — write the root as usual (palette / font / fonts / photo_style / cut defaults /"
+    " subtitle and bgm / cast / transition= / read / layers that span cuts).\n"
+    "The staffs work in parallel and never see each other's cuts, so the root must carry every promise that spans cuts: give"
+    " meaning-bearing colors named palette tokens (e.g. `old=` for the legacy side, one token per recurring subject), and when a"
+    " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
+)
+
+
 def author_prompt(
     aspect: str,
     seconds: str,
@@ -263,6 +313,7 @@ def author_prompt(
     *,
     editable: bool,
     referenced: bool = False,
+    brief: bool = False,
 ) -> str:
     """著者の user turn。構成の型・雛形・数字の規則は渡さない (台本と絵コンテは著者が依頼から決める)。雛形は 1 行目と canvas だけ —
     役の入った雛形 (cut の役・定義済みの段・theme dark) を渡すと部品を写し、暗い地に揃った (10-23)。
@@ -326,7 +377,7 @@ Write the root and the cuts from scratch (the scaffold is only the first line an
 canvas {canvas}
 --- timeline.txt ---
 #v2
-{samples}{reference}{speech}{request}
+{samples}{reference}{speech}{request}{chr(10) + AUTHOR_BRIEF_NOTE if brief else ""}
 User settings: aspect {aspect} ({canvas}) · target length {"not specified" if seconds == AUTO_SECONDS else f"{seconds} seconds"}
 """
 
