@@ -1,6 +1,6 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 2fd874bba9824dfb8b1cc209ce42593b1daa93e6663d7dee31f562566e1e3453 · synced_at: 2026-10-28T04:59:05.452Z
+Version of these documents: contract: 1 · reference_hash: 2fd874bba9824dfb8b1cc209ce42593b1daa93e6663d7dee31f562566e1e3453 · synced_at: 2026-10-28T05:32:12.757Z
 
 Docs: contract.json ef39cb227d4f · spec.md df02b7bfe3eb · authoring.md 92db7b0bf7b9 · capabilities.md a3f9838bc5a1 · looks.md a6c0e431acbb · sounds.md bfdeb42d7466 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ 7779af558c10 · scaffolds/ 4946fc4afb33
 

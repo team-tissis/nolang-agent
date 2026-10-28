@@ -1,8 +1,8 @@
 #!/bin/bash
-# 依頼文 1 つから stream (製品と同じ段取り: 著者 low 1 call → cut ごとの担当 medium → check / 直し → 素材 → 確定 → 投入 → 製品の DraftStreamRun が描く) で動画を作る。
+# 依頼文 1 つから stream (製品と同じ段取り: 著者 low 1 call → cut ごとの担当 balanced → check / 直し → 素材 → 確定 → 投入 → 製品の DraftStreamRun が描く) で動画を作る。
 # usage (repo root から):
 #   bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
-#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 60|auto (指定なし)] [--effort low] [--staff medium|balanced|low] [--no-staff] [--staff-warn (担当に warn の指摘も渡す・既定は DEFECT と severe だけ)]
+#        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 台本の分量に合わせる)] [--effort low] [--staff balanced (既定)|medium|low] [--no-staff] [--staff-warn (担当に warn の指摘も渡す・既定は DEFECT と severe だけ)]
 #        [--author-brief]   (著者は台本 = 台詞・絵コンテ (`#` 1〜3 行)・transition と root だけを書き、絵は cut ごとの担当がゼロから設計する。
 #                            台詞は著者の版のまま固定 (声は著者の時点から作り始める)。--staff-edits-assets を含意・--no-staff とは併用不可)
 #        [--review low|medium|none] [--fix severe|defect|none|low] [--staff-edits-assets]   (見直し = 最初の直し役が弱い所・崩れも探し、cut の静止画も見て 2 回
@@ -28,7 +28,7 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=60; EFFORT=low; STAFF=medium; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""
+TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
@@ -97,7 +97,7 @@ if [ -n "$SPEECH" ]; then
   # shellcheck disable=SC2086
   env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
 fi
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}s・著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && [ "$REVIEW" != none ] && echo "$REVIEW (静止画)" || echo none)・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
+echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && [ "$REVIEW" != none ] && echo "$REVIEW (静止画)" || echo none)・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
 PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
