@@ -354,8 +354,9 @@ Editable-mode flow (light design — plan first):
 # 著者 brief (`--author-brief`): 著者は台本 (台詞)・cut ごとの絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
 # 絵は cut ごとの担当がゼロから設計する (担当は常に素材も変える)。台詞は著者の版のまま固定 — 声は著者の時点から担当と並列に作る。
 # 文言は 10-28 の bench (B′) で検証した版: 1 文 25〜30 字・意味つき palette token・cut を跨ぐ約束は root に書く。
-# 決め技の段 (root の transition= を気分に合わせて凝る・1 本 1 種・窓 300〜700 ms) は 10-28 の sig2 bench で検証した版 —
-# cut の transition 行は root からの逸脱だけ書く
+# 決め技の段 (root の transition= を実例で凝る・1 本 1 種・ms はテンポとして変調) は 10-28 の sig3 bench で検証した版
+# (Opus 両順 4-1・区間計 42-29。実例なしの sig2 は 2-2-1 で、hf の語彙 (angle・linear()・se の先行) が出なかった) —
+# cut の transition 行は root からの逸脱だけ書く。例文は全部 check 緑を確認済み (bars は hex 直書き・se は引用の説明)
 AUTHOR_BRIEF_NOTE = (
     "Production note for this run (it narrows the cut shape above): every cut is finished by its own staff, who designs all the"
     " visuals from scratch. For each cut, write only the brief:\n"
@@ -371,12 +372,18 @@ AUTHOR_BRIEF_NOTE = (
     "The staffs work in parallel and never see each other's cuts, so the root must carry every promise that spans cuts: give"
     " meaning-bearing colors named palette tokens (e.g. `old=` for the legacy side, one token per recurring subject), and when a"
     " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
-    "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve —"
-    " a data film's sharp `wipe` or `push`, a story's page-turn `slide` with `drift=` and `dim=`, a cinematic's slow"
-    " `dissolve,…,color=` or `zoom`; tune its keys (up to 4 `bars=` in the film's own hex colors (`linear(…)` allowed),"
-    ' `se="シュッ"` at the seam) and keep the window 300–700 ms. One kind per film: cuts inherit the root move, so write a'
-    " cut's transition line only where the story turns — `transition cut` or `none,N` for a hard beat, one different kind at"
-    " a chapter break (`panel` may sit there; curtains never as the root default or on the last cut).\n"
+    "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve, at"
+    " the richness of these real moves —\n"
+    '- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440,se="シュッ" -4dB -310` (an angled sweep in the'
+    " film's own hex colors; a glow is `bars=linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180`);\n"
+    '- `slide,600,dir=right,offset=8%,opacity=0,se="ページをめくる音" -4dB` or with `drift=240,dim=0.38` (a page turn);\n'
+    "- `dissolve,320,overlap=320,color=#0A0F1A,zoom=1.08` (rising out of the dark) · `push,500,dir=up` · `none,300` (hard"
+    " documentary cuts).\n"
+    "Keep the window 300–850 ms and pick `dir=` and the `se` sound to fit this film (not every film sweeps left with the same"
+    " swish). One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
+    " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
+    ' `transition panel,800,color=$色,label="01 原因",skew=-12,se="シュッ"` (a curtain — never the root default or on'
+    " the last cut).\n"
 )
 
 
