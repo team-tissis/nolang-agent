@@ -210,9 +210,11 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 
 正本は nolang-backend: 文書一式 (文法・見本・骨組み・`contract.json`) と `author_core.py` は `libs/ai/llm_prompts/draft_author/`、
 配布 script は `agent_client/scripts/`、studio で作る手順は `.agents/skills/nolang-draft-studio/SKILL.md`。ここには写しだけを置き、
-元の commit と文書の版 (`contract`・内容の指紋 `reference_hash`) を `skills/make-video/reference/SOURCE.json` に、版の行を
-`reference/rules.md` の先頭に残す (MCP の手順が `nolang_draft_sync` と比べる)。sync は指紋を JS と backend の python の両方で
-計算して食い違えば止まる (算法の正本と test vector は backend の `reference_bundle.py` / `test_draft_reference_bundle.py`)。
+元の commit と文書の版 (`contract`・内容の指紋 `reference_hash`・文書ごとの指紋 `docs`) を `skills/make-video/reference/SOURCE.json` に、
+版の行と `Docs:` の行を `reference/rules.md` の先頭に残す (MCP の手順が `nolang_draft_sync` と比べ、ずれた文書だけを
+`nolang_draft_reference` で server から読む)。シェルのある経路は `nolang reference` が同じ照合をして server の現行の文書を
+cache に置く。指紋の算法は `packages/cli/lib/reference.mjs` 1 か所 (sync と CLI が共有)。sync は指紋を JS と backend の python の
+両方で計算して食い違えば止まる (算法の正本と test vector は backend の `author_core.py` / `test_draft_reference_bundle.py`)。
 版の整合の設計は backend の `app_main/docs/feature/video_generate/reference_sync.md`。
 
 自動: backend の `agent-sync-dispatch` が push を知らせ、この repo の `sync-from-backend` が写して plugin の版を上げて push する
@@ -229,7 +231,8 @@ npm run build
 ```
 
 デモのスタックに合わせる時はスタックが動いている branch から、本番向けは backend の `main` から写す。
-`SKILL.md` (studio で作る標準の手順・ログイン・素材) と `write-yourself.md` の「1・A・B」(自分で書く経路) はこの repo で書いた物、`write-yourself.md` の「2」(書き方の要点) は backend の SKILL.md からの抜き出し。
+`SKILL.md` (studio で作る標準の手順・ログイン・素材) と `write-yourself.md` (自分で書く経路) はこの repo で書いた物。文法は写した
+`reference/spec.md` を読ませる (手順の文書に文法の要約を手で写さない — 版の照合の外で古びる)。
 
 ## 公開 (まだしていない)
 

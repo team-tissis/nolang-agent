@@ -14,7 +14,7 @@ import { existsSync } from "node:fs";
 import { cp, readFile, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { readContract, referenceHash } from "./reference-hash.mjs";
+import { docHashes, readContract, referenceHash } from "../packages/cli/lib/reference.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const DEST = join(ROOT, "skills/make-video/reference");
@@ -65,7 +65,8 @@ function gitCommit(dir) {
 }
 
 // 規則の台帳 (SKILL.md の「Rule names and fixes」の 1 段落) を 1 規則 1 行に
-// 先頭の版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる
+// 先頭の版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる。
+// `Docs:` の行は文書ごとの指紋 — ずれた文書だけを `nolang_draft_reference` で server の現行から読む
 function rulesMarkdown(skillMd, version) {
   const line = skillMd.split("\n").find((l) => l.startsWith("Rule names and fixes"));
   if (!line) throw new Error('SKILL.md に「Rule names and fixes」の段落が無い');
@@ -75,6 +76,8 @@ function rulesMarkdown(skillMd, version) {
     "# Rule names and fixes for check findings",
     "",
     `Version of these documents: contract: ${version.contract} · reference_hash: ${version.reference_hash} · synced_at: ${version.synced_at}`,
+    "",
+    `Docs: ${Object.entries(version.docs).map(([row, hash]) => `${row} ${hash}`).join(" · ")}`,
     "",
     "The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.",
     "",
@@ -102,19 +105,23 @@ if (streamAuthor.includes("author_core") && !existsSync(join(STUDIO_DEST, "scrip
 const referenceDir = join(STUDIO_DEST, "reference");
 const contract = (await readContract(referenceDir)).contract;
 const reference_hash = await referenceHash(referenceDir);
-const pyHash = execFileSync(
-  process.env.PYTHON || "python3",
-  [
-    "-c",
-    "import importlib.util, sys, pathlib; s = importlib.util.spec_from_file_location('author_core', sys.argv[1]); m = importlib.util.module_from_spec(s); sys.modules['author_core'] = m; s.loader.exec_module(m); print(m.reference_hash_of(pathlib.Path(sys.argv[2])))",
-    join(from, AUTHOR_CORE),
-    join(from, REFERENCE),
-  ],
-  { encoding: "utf8" },
-).trim();
-if (pyHash !== reference_hash) throw new Error(`文書一式の指紋が JS (${reference_hash.slice(0, 16)}) と python (${pyHash.slice(0, 16)}) で違う`);
+const docs = await docHashes(referenceDir);
+const py = JSON.parse(
+  execFileSync(
+    process.env.PYTHON || "python3",
+    [
+      "-c",
+      "import importlib.util, json, sys, pathlib; s = importlib.util.spec_from_file_location('author_core', sys.argv[1]); m = importlib.util.module_from_spec(s); sys.modules['author_core'] = m; s.loader.exec_module(m); d = pathlib.Path(sys.argv[2]); print(json.dumps({'hash': m.reference_hash_of(d), 'docs': m.doc_hashes_of(d)}))",
+      join(from, AUTHOR_CORE),
+      join(from, REFERENCE),
+    ],
+    { encoding: "utf8" },
+  ),
+);
+if (py.hash !== reference_hash) throw new Error(`文書一式の指紋が JS (${reference_hash.slice(0, 16)}) と python (${py.hash.slice(0, 16)}) で違う`);
+if (JSON.stringify(py.docs) !== JSON.stringify(docs)) throw new Error(`文書ごとの指紋が JS と python で違う: ${JSON.stringify(docs)} ≠ ${JSON.stringify(py.docs)}`);
 const synced_at = new Date().toISOString();
-await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8"), { contract, reference_hash, synced_at }));
+await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8"), { contract, reference_hash, synced_at, docs }));
 
 const git = gitCommit(from);
 const source = {
@@ -125,6 +132,7 @@ const source = {
   synced_at,
   contract,
   reference_hash,
+  docs,
   files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (SKILL.md から生成)", "../../../studio/ (skill 一式)"],
 };
 await writeFile(join(DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");

@@ -4,13 +4,15 @@
 // 依頼と同じ題材の物を外し・依頼と同じ向きの物を先に・その中は file 名順。片側に 1 本も無ければもう片側の 2 本目を取る。
 // 自分の型の NoLang の見本に依頼と同じ向きの物が無ければ、NoLang 側を使わず hf の写し 2 本 (同じ向きを先に) にする。
 //
-//   node scripts/pick_samples.mjs --type concept --aspect 16:9 --request "<依頼文>"
+//   node scripts/pick_samples.mjs --type concept --aspect 16:9 --request "<依頼文>" [--reference <dir>]
+// --reference = 文書一式の dir (`nolang reference` が返した server の現行の dir — 無ければこの skill の reference/)
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-const SAMPLES_DIR = fileURLToPath(new URL("../reference/samples/", import.meta.url));
+const SKILL_REFERENCE = fileURLToPath(new URL("../reference/", import.meta.url));
+let SAMPLES_DIR = join(SKILL_REFERENCE, "samples");
 const NEAR_TYPE = { cinematic: "story", compare: "concept", data: "compare", story: "cinematic", concept: "compare" };
 const SAMPLE_MAX_BYTES = 70_000;
 // 題の語: 漢字・片仮名の続き 2 字以上・英字で始まる英数 3 字以上 (平仮名だけの語・1 字の漢字は数えない)
@@ -79,13 +81,17 @@ export function pickSamples(type, aspect, request) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const { values } = parseArgs({ options: { type: { type: "string" }, aspect: { type: "string" }, request: { type: "string" } } });
+  const { values } = parseArgs({
+    options: { type: { type: "string" }, aspect: { type: "string" }, request: { type: "string" }, reference: { type: "string" } },
+  });
   if (!values.type) {
-    console.error('使い方: node scripts/pick_samples.mjs --type <concept|data|compare|story|cinematic> --aspect <16:9|9:16> --request "<依頼文>"');
+    console.error('使い方: node scripts/pick_samples.mjs --type <concept|data|compare|story|cinematic> --aspect <16:9|9:16> --request "<依頼文>" [--reference <dir>]');
     process.exit(2);
   }
+  if (values.reference) SAMPLES_DIR = join(values.reference, "samples");
   const { samples, skipped } = pickSamples(values.type, values.aspect || "16:9", values.request || "");
-  const rows = samples.map((name) => ({ path: `reference/samples/${name}`, sticky_parents: stickyParents(name) }));
+  const shown = values.reference ? join(values.reference, "samples") : "reference/samples";
+  const rows = samples.map((name) => ({ path: `${shown}/${name}`, sticky_parents: stickyParents(name) }));
   for (const row of rows) {
     console.error(`見本: ${row.path}${row.sticky_parents.length ? ` (子を持つ .sticky: ${row.sticky_parents.join(" ")} — 写す時に cut ごとに置き直す)` : ""}`);
   }

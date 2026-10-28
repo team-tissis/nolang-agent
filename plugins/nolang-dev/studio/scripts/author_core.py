@@ -88,6 +88,27 @@ def reference_hash_of(reference_dir: Path) -> str:
     return digest.hexdigest()
 
 
+def doc_hashes_of(reference_dir: Path) -> dict[str, str]:
+    """manifest の項目ごとの内容の指紋 (hex の先頭 12 文字) — 全体の指紋がずれた client が「どの文書が変わったか」を知り、
+    変わった文書だけを server の現行で読み直すための物。file の行はその内容の sha256、dir の行 (`samples/`) は中の file で
+    `reference_hash_of` と同じ算法。nolang-agent の sync (Node) も同じ算法 — 変える時は test vector ごと揃える。"""
+    manifest = read_contract_json(reference_dir).get("reference")
+    if not _is_json_array(manifest) or not all(isinstance(row, str) for row in manifest):
+        raise ValueError("contract.json: reference が文字列の列でない")
+    files = reference_files(reference_dir)
+    out: dict[str, str] = {}
+    for row in (str(row) for row in manifest):
+        if row.endswith("/"):
+            digest = hashlib.sha256()
+            for rel in (rel for rel in files if rel.startswith(row)):
+                content = hashlib.sha256((reference_dir / rel).read_bytes()).hexdigest()
+                digest.update(f"{rel}\0{content}\n".encode())
+            out[row] = digest.hexdigest()[:12]
+        else:
+            out[row] = hashlib.sha256((reference_dir / row).read_bytes()).hexdigest()[:12]
+    return out
+
+
 # ===== 見本の選び方 =====
 
 # 自分の type の見本が足りない時に借りる近い type と、prompt に同梱する見本 1 本の大きさの上限 (超える物は選ばない)

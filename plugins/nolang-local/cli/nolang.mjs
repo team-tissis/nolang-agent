@@ -19,6 +19,7 @@ import { DEVICE_CLIENT_ID, loginMethod, pollDeviceAuthorization, validateDeviceA
 import { LoginState, writePrivate as writePrivateAtomic } from "./lib/login-state.mjs";
 import { FALLBACK_API, TARGETS, apiUrl, chooseApi, targetName } from "./lib/config.mjs";
 import { CliError, EXIT } from "./lib/errors.mjs";
+import { changedDocs, docHashes, installBundle, readContract, referenceHash } from "./lib/reference.mjs";
 import { aspectOf, pendingCuts, splitCuts } from "./lib/src.mjs";
 
 const VERSION = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
@@ -998,6 +999,46 @@ async function cmdStatus(positionals, flags) {
   if (st.status === "failed" || st.status === "expired") process.exitCode = EXIT.FAIL;
 }
 
+// 焼き込みの文書一式 (studio/reference/) を server の版と照合する — 自分で書く経路 (write-yourself.md §1 の 0) が書く前に 1 回。
+// 一致なら焼き込みの dir、ずれていれば server の束を cache (NOLANG_CONFIG_DIR/reference/<指紋>/ — `nolang make` の取り直しと共有)
+// に置いてその dir を返す。changed = 文書ごとの指紋が違う文書 (server が文書ごとの指紋を返さなければ null)
+async function cmdReference(flags) {
+  const api = await resolveApi(flags);
+  const baked = join(studioDir(), "reference");
+  const { contract } = await readContract(baked);
+  const { sync } = await callApi(api, "GET", "/v1/unstable/drafts/rules/");
+  if (!sync) {
+    log("接続先の server は文書の版を返さない (古い server) — 焼き込みの文書で書く");
+    return out({ status: "unknown", dir: baked, changed: null });
+  }
+  if (contract < sync.min_supported || contract > sync.contract) {
+    throw new CliError(
+      contract < sync.min_supported
+        ? `このプラグインの段取り (contract ${contract}) は server が受ける範囲 (${sync.min_supported} 以上) より古い — プラグインを更新する`
+        : `このプラグインの段取り (contract ${contract}) は server (${sync.contract}) より新しい — server の更新を待つか、接続先を確かめる`,
+      { exit: EXIT.FAIL, data: { contract, sync } },
+    );
+  }
+  if ((await referenceHash(baked)) === sync.reference_hash) return out({ status: "match", dir: baked, changed: [] });
+  const changed = sync.docs ? changedDocs(await docHashes(baked), sync.docs) : null;
+  const dest = join(CONFIG_DIR, "reference", sync.reference_hash);
+  let status = "cached";
+  if (!(await stat(join(dest, "contract.json")).catch(() => null))) {
+    const path = "/v1/unstable/drafts/reference/";
+    const res = await request(`${api}${path}`, { headers: { authorization: `Bearer ${await accessToken(api)}` } });
+    // 取れない (束を配らない server・一時の失敗) → 焼き込みで続ける。終了コード 1 は contract の止まれだけに使う (手順が書かずに止まる)
+    if (!res.ok) {
+      log(`server の文書を取れなかった (GET ${path} → ${res.status}) — 焼き込みの文書で書く (文書と check が食い違う所は check に従う)`);
+      return out({ status: "unknown", dir: baked, changed });
+    }
+    await mkdir(dirname(dest), { recursive: true });
+    await installBundle(Buffer.from(await res.arrayBuffer()), sync.reference_hash, dest);
+    status = "fetched";
+  }
+  log(`プラグインの文書は server より古い — server の現行の文書を ${dest} に置いた${changed ? ` (変わった文書: ${changed.join(" ") || "なし"})` : ""}`);
+  out({ status, dir: dest, changed });
+}
+
 async function cmdAbort(positionals, flags) {
   const videoId = positionals[0];
   if (!videoId) throw new CliError("使い方: nolang abort <video_id>", { exit: EXIT.USAGE });
@@ -1142,6 +1183,8 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
+  nolang reference                      手元の文書 (プラグインに焼き込み) を server の版と照合する。古ければ server の現行の文書を
+                                        cache に置き、その dir (と変わった文書) を返す — 自分で書く時は以後そこを読む
   nolang start [dir] --title "…" [--seconds 秒|auto (既定)]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
@@ -1230,6 +1273,8 @@ async function main() {
       return cmdStatus(rest, flags);
     case "make":
       return cmdMake(rest, flags);
+    case "reference":
+      return cmdReference(flags);
     case "start":
       return cmdStart(rest, flags);
     case "submit":

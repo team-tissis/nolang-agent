@@ -76,7 +76,7 @@ def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z
 def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
   shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
   shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
-def wordmark(y) = p(cx: 960px; top: {y}; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
+def wordmark = p(cx: 960px; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
 
 # タブレット: 枠・上の帯・右の側板。中の page と側板の中身は場面ごとに子で差す (def の実体の scale で縮める)
 def tablet() = div(width: 1180px; height: 800px; border-radius: 46px; background: #FFFFFF; border: 2px solid #DCE4EE; box-shadow: 0px 50px 110px #0E2A4738)
