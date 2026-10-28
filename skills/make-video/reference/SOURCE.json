@@ -1,9 +1,9 @@
 {
   "from": "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   "ref": null,
-  "commit": "551542ba637e1a44adaa08b1884f3ffce830d2e8",
-  "dirty": false,
-  "synced_at": "2026-10-28T05:32:12.757Z",
+  "commit": "9208fe44f06460f09261c87e96523462262cd63e",
+  "dirty": true,
+  "synced_at": "2026-10-28T07:07:58.194Z",
   "contract": 1,
   "reference_hash": "2fd874bba9824dfb8b1cc209ce42593b1daa93e6663d7dee31f562566e1e3453",
   "docs": {

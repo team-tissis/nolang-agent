@@ -795,6 +795,12 @@ async function cmdMake(positionals, flags) {
   if (flags["staff-assets"]) args.push("--staff-edits-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}・担当 ${staff === "none" ? "なし" : staff}・著者 ${flags.author || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
+  await runStudioAndWait(root, args, api, { engine, timeout: flags.timeout, speech: Boolean(speechId) });
+}
+
+// stream_make.sh を裏で起こし、再生できるまで待って out() する (make / edit 共通の待ち方)
+async function runStudioAndWait(root, args, api, { engine = "claude", timeout, speech = false } = {}) {
   // macOS の bash は UTF-8 の locale で `$VAR・` の全角文字を変数名に含めて読む — bash は C・python は UTF-8 で動かす
   const logFile = await open(join(root, MAKE_LOG), "a");
   const child = spawn("bash", args, { detached: true, stdio: ["ignore", logFile.fd, logFile.fd], env: { ...process.env, LC_ALL: "C", PYTHONUTF8: "1" } });
@@ -802,9 +808,8 @@ async function cmdMake(positionals, flags) {
   await logFile.close();
   let exited = null;
   child.on("exit", (code) => (exited = code));
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}・担当 ${staff === "none" ? "なし" : staff}・著者 ${flags.author || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
   const startedAt = Date.now();
-  const deadline = startedAt + Number(flags.timeout || (speechId ? MAKE_SPEECH_TIMEOUT_S : MAKE_TIMEOUT_S)) * 1000;
+  const deadline = startedAt + Number(timeout || (speech ? MAKE_SPEECH_TIMEOUT_S : MAKE_TIMEOUT_S)) * 1000;
   let watch = null;
   let serverPlayable = false;
   let serverFailed = null;
@@ -837,7 +842,24 @@ async function cmdMake(positionals, flags) {
       return;
     }
     if (engineFailure || exited !== null || serverFailed || Date.now() > deadline) {
-      const tail = (await readFile(join(root, MAKE_LOG), "utf8").catch(() => "")).split("\n").slice(-12).join("\n");
+      const makeLog = await readFile(join(root, MAKE_LOG), "utf8").catch(() => "");
+      // edit の「変更なし」(exit 0): patch の対象が無かっただけで失敗ではない — 項目ごとの判定を返す
+      if (exited === 0 && !watch && /^edit: 変更なし/m.test(makeLog)) {
+        let verdict = null;
+        try {
+          verdict = JSON.parse(await readFile(join(root, "edit", "verdict.json"), "utf8"));
+        } catch { /* 判定 file が無い・壊れている時は verdict なしで返す */ }
+        out({
+          ok: true,
+          no_change: true,
+          verdict,
+          tell_user: "依頼のうち、この動画の変更になる項目はありませんでした (動画はそのまま)。",
+          next: `${TELL_FIRST}。verdict の各項目 (rebuild / asset / impossible と why) を平易に伝える`,
+          log: join(root, MAKE_LOG),
+        });
+        return;
+      }
+      const tail = makeLog.split("\n").slice(-12).join("\n");
       const author = (await readFile(join(root, "stream", "author.out"), "utf8").catch(() => "")).split("\n").slice(-4).join("\n");
       const timedOut = exited === null && !serverFailed && !engineFailure;
       out({
@@ -859,6 +881,36 @@ async function cmdMake(positionals, flags) {
     }
     await new Promise((r) => setTimeout(r, MAKE_POLL_MS));
   }
+}
+
+// ---- 完成した動画を直す (stored src を種に、著者を飛ばして編集役が依頼のぶんだけ patch) ----
+// patch にならない依頼 (作り直し級・編集役の失敗) は stream_make.sh がそのまま参照つきの著者経路に倒す
+async function cmdEdit(positionals, flags) {
+  const dir = positionals[0];
+  const videoId = (positionals[1] || "").match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0];
+  if (!dir || !videoId || !(flags["request-text"] || flags.request)) {
+    throw new CliError(`使い方: nolang edit <dir> <video_id か動画の URL> --request-text "<直す点>" [--fix severe|low|none] [--editable] [--engine claude|codex]`, { exit: EXIT.USAGE });
+  }
+  const engine = flags.engine || "claude";
+  if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
+  for (const name of ["python3", engine]) {
+    if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では直せない`, { exit: EXIT.FAIL });
+  }
+  const root = resolve(dir);
+  if (await stat(join(root, "stream")).then(() => true, () => false)) throw new CliError(`${root}/stream が既にある (別の dir で)`, { exit: EXIT.USAGE });
+  const studio = studioDir();
+  const api = await resolveApi(flags);
+  const token = await accessToken(api, { minValidMs: 20 * 60_000 });
+  await mkdir(root, { recursive: true });
+  const args = [join(studio, "scripts", "stream_make.sh"), root, "--edit", videoId];
+  if (flags.engine) args.push("--engine", engine);
+  if (flags.request) args.push("--request", resolve(flags.request));
+  else args.push("--request-text", flags["request-text"]);
+  if (flags.fix) args.push("--fix", flags.fix);
+  if (flags.editable) args.push("--editable");
+  args.push("--remote", api, "--token", token);
+  log(`編集を始めた ${engine === "codex" ? "[Codex] " : ""}(対象 ${videoId}) — patch にならない依頼は参照つきの作り直しに倒れる。再生できるまで待つ (1〜3 分)`);
+  await runStudioAndWait(root, args, api, { engine, timeout: flags.timeout });
 }
 
 // ---- cut ごとに流す (書いた端から投入する): start → submit → submit … → submit --end ----
@@ -1183,6 +1235,11 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
+  nolang edit <dir> <video_id か URL> --request-text "<直す点>"
+        [--fix severe|low|none] [--editable] [--engine claude|codex]
+                                        studio で作った完成済みの動画を直す: 保存された原稿を種に、編集役が依頼のぶんだけ書き換えて
+                                        新しい動画にする (元の動画はそのまま)。patch にならない依頼 (尺・縦横・全体の作り直し級) は
+                                        元の動画を参照にした作り直しに自動で倒れる。再生できたら URL を返す
   nolang reference                      手元の文書 (プラグインに焼き込み) を server の版と照合する。古ければ server の現行の文書を
                                         cache に置き、その dir (と変わった文書) を返す — 自分で書く時は以後そこを読む
   nolang start [dir] --title "…" [--seconds 秒|auto (既定)]
@@ -1273,6 +1330,8 @@ async function main() {
       return cmdStatus(rest, flags);
     case "make":
       return cmdMake(rest, flags);
+    case "edit":
+      return cmdEdit(rest, flags);
     case "reference":
       return cmdReference(flags);
     case "start":

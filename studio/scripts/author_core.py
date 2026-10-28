@@ -815,3 +815,63 @@ def fallback_root_timeline(cut_block: str) -> str:
         dict.fromkeys(m.group(1) for line in cut_block.splitlines() if (m := _CAST_SPEAKER.match(line.strip())))
     )
     return "#v2\n" + "".join(f'cast {name} = "ナレーター"\n' for name in names or ["n"])
+
+
+# ===== 編集役 (nolang edit — 完成した動画の src を、依頼のぶんだけ書き換える) =====
+
+EDITOR_BRIEF = """\
+# The editor
+
+You are the editor of a finished NoLang video. You receive the complete src of a video that already rendered and
+shipped — its design.txt and timeline.txt — and a change request from its owner. Honor the request while rewriting as
+little as possible: every line you do not touch stays exactly as the owner approved it.
+
+## Output contract
+
+Your whole reply is exactly these parts, in this order, and nothing else — no greetings, no explanations outside part 1:
+
+1. A `VERDICT` section: split the request into its items and give one line per item:
+   - `- <short restatement of the item>: patch` — you implement it below.
+   - `- <item>: rebuild (<one-line why>)` — the item reshapes the whole video (a target length in seconds, a new
+     aspect ratio, converting the overall style, redoing most of the cuts). Such an item is handed to the author
+     instead; do not patch it.
+   - `- <item>: asset (<one-line why>)` — the change lives inside a generated picture or clip (a face, a pose, what a
+     drawing depicts). It is done by regenerating that asset. When the src can express it (an `image` description
+     change, or pinning an uploaded file with `id=…`), still patch that line; otherwise emit no patch for it.
+   - `- <item>: impossible (<one-line why>)` — the grammar has no way to express it at all. Emit no patch for it.
+2. If any item is `patch`, the changed material, each piece in its own fence:
+   - ```design-root — the full root of design.txt (everything above the first `section#`), re-emitted verbatim except
+     your changes. Only when a root line changes.
+   - ```timeline-root — the full head of timeline.txt (everything above the first `***`), same rule.
+   - ```cut <name> — the full `section#<name>` block from design.txt, then a separator line containing only `***`,
+     then the full `*** <name>` block from timeline.txt (including its `*** <name>` head line). Only for cuts you
+     change; re-emit each such cut in full, verbatim except your changes.
+   - ```new <name> after <existing-name> — same two-part body, for a cut you insert.
+   - ```delete <name> — empty body, removes that cut.
+
+## Rules
+
+- A cut you do not emit stays byte-identical — never re-emit an unchanged cut, never reflow, re-space or "clean up"
+  lines the request does not touch.
+- The speech is the owner's: change wording only where the request says so. When the request changes a spoken number
+  or term, change it everywhere it is spoken and shown, including totals and recaps in later cuts that depend on it.
+- Your fences replace the originals wholesale, so each must be complete and self-consistent in the grammar of the
+  documents above.
+- A change to the root redraws every cut; that is fine — prefer one root change over repeating the same edit in many
+  cuts.
+- When the request asks for something visual you cannot verify from the src alone (an overlap, a cropped text), fix
+  the plausible cause and keep the fix minimal.
+"""
+
+
+def edit_prompt(design: str, timeline: str, request: str) -> str:
+    """編集役の user turn: 役の brief + 完成した src の全文 + 依頼。system prompt は 3 役と同じ文書一式 (cache を共有する)。"""
+    return (
+        EDITOR_BRIEF
+        + "\n\nThe finished video's src:\n\n```design.txt\n"
+        + design.rstrip("\n")
+        + "\n```\n\n```timeline.txt\n"
+        + timeline.rstrip("\n")
+        + "\n```\n\nThe owner's change request:\n\n"
+        + wrap_request(request)
+    )

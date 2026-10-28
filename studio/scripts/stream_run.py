@@ -453,8 +453,19 @@ class Run:
         remote: str | None = None,
         token: str | None = None,
         editable: bool = False,
+        edit: bool = False,
     ) -> None:
         self.project = project
+        # 編集の run (`stream_make.sh --edit`): 著者は走らず、編集役 (stream_author.py edit) が置いた src を運ぶ。
+        # 不変の cut は担当も check も掛けずに素通しで投入し (前の run で検証済み)、変わった cut だけ check → 直し、
+        # 新しい cut だけ担当を通す
+        self.edit = edit
+        self.edit_unchanged: frozenset[str] = frozenset()
+        self.edit_new: frozenset[str] = frozenset()
+        if edit:
+            meta = json.loads((project / "edit/cuts.json").read_text())
+            self.edit_unchanged = frozenset(str(c) for c in meta.get("unchanged", []))
+            self.edit_new = frozenset(str(c) for c in meta.get("new", []))
         # 編集可能モード: start に editable を立て、check に profile=editable を渡す (投入の門は server が video の
         # create_setting から読む)。著者・担当・直しの prompt の節は env NOLANG_STUDIO_PROFILE (stream_make.sh が立てる)
         self.editable = editable
@@ -1387,8 +1398,13 @@ class Run:
             time.sleep(0.3)
         self.cut_seen_s[c] = self.since()
         self.log(cut=c, event="cut_seen")
+        if self.edit and c in self.edit_unchanged:
+            # 編集で触っていない cut — 前の run で検証・配信済みの text なので担当も check も掛けない。素材だけ先に温める
+            self.request_warm(c)
+            self.log(cut=c, event="cut_passthrough")
+            return
         self.move_forward_defs(c)
-        if self.staff_effort:
+        if self.staff_effort and (not self.edit or c in self.edit_new):
             self.staff(i, c)
         # 絵と声は担当が書き終えた瞬間に作り始める (check と直しに並ぶ・DEFECT の行は落として残りを作り、直しの後に差分だけ作る)
         self.start_prewarm(c)
@@ -2984,6 +3000,7 @@ def main(argv: list[str]) -> int:
         remote=remote,
         token=token,
         editable="--editable" in argv,
+        edit="--edit" in argv,
     )
     if (
         "--fetch-ref" in argv

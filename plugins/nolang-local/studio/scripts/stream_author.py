@@ -1141,6 +1141,159 @@ def staff(
     return _emit_block(st, name, text, event="staff_unparsed")
 
 
+# ===== 編集役 (nolang edit — 完成した動画の src を依頼のぶんだけ書き換える) =====
+
+_EDIT_FENCE = re.compile(r"```(design-root|timeline-root|cut \S+|new \S+ after \S+|delete \S+)[ \t]*\n(.*?)```", re.S)
+_EDIT_VERDICT = re.compile(r"^[-*] (.+?): (patch|rebuild|asset|impossible)\b(.*)$", re.M)
+_EDIT_SEP = re.compile(r"^\*\*\*\s*$", re.M)
+
+
+def _split_doc(text: str, head: str) -> tuple[str, dict[str, str], list[str]]:
+    """先頭部 (根) と、名 → block (head 行から次の head の前まで)・構成の順を返す。"""
+    pat = re.compile(rf"^{head}(\S+)", re.M)
+    names = [m.group(1) for m in pat.finditer(text)]
+    starts = [m.start() for m in pat.finditer(text)] + [len(text)]
+    blocks = {names[i]: text[starts[i] : starts[i + 1]].strip("\n") + "\n" for i in range(len(names))}
+    return (text[: starts[0]] if names else text), blocks, names
+
+
+def _apply_edit(
+    design: str, timeline: str, reply: str
+) -> tuple[str, dict[str, str], str, dict[str, str], list[str], dict[str, list[str]]]:
+    """編集役の fence を src に当てる → (design の根, design の block, timeline の根, timeline の block, 構成の順,
+    {changed, new, deleted})。形が壊れていれば ValueError。"""
+    d_root, d_blocks, order = _split_doc(design, r"section#")
+    t_root, t_blocks, t_names = _split_doc(timeline, r"\*\*\* ")
+    if set(order) != set(t_names):
+        raise ValueError(f"src の design と timeline の cut が揃わない: {sorted(set(order) ^ set(t_names))}")
+    touched: dict[str, list[str]] = {"changed": [], "new": [], "deleted": []}
+    root_changed = False
+    for kind, body in _EDIT_FENCE.findall(reply):
+        if kind == "design-root":
+            new_root = body.strip("\n") + "\n"
+            root_changed = root_changed or new_root != d_root.strip("\n") + "\n"
+            d_root = new_root
+            continue
+        if kind == "timeline-root":
+            new_root = body.strip("\n") + "\n"
+            root_changed = root_changed or new_root != t_root.strip("\n") + "\n"
+            t_root = new_root
+            continue
+        name = kind.split()[1]
+        if kind.startswith("delete "):
+            if name not in order:
+                raise ValueError(f"delete {name}: 知らない cut")
+            order.remove(name)
+            touched["deleted"].append(name)
+            continue
+        m = _EDIT_SEP.search(body)
+        if m is None:
+            raise ValueError(f"{kind}: design と timeline を分ける *** の行が無い")
+        d_part = body[: m.start()].strip("\n") + "\n"
+        t_part = body[m.end() :].strip("\n") + "\n"
+        if not re.search(rf"^section#{re.escape(name)}\b", d_part, re.M):
+            raise ValueError(f"{kind}: design の頭が section#{name} でない")
+        if not t_part.startswith(f"*** {name}"):
+            raise ValueError(f"{kind}: timeline の頭が *** {name} でない")
+        if kind.startswith("cut "):
+            if name not in order:
+                raise ValueError(f"cut {name}: 知らない cut (新しい cut は `new <名> after <名>`)")
+            if d_part != d_blocks[name] or t_part != t_blocks[name]:
+                touched["changed"].append(name)
+            d_blocks[name], t_blocks[name] = d_part, t_part
+        else:  # new <name> after <existing>
+            after = kind.split()[3]
+            if after not in order:
+                raise ValueError(f"{kind}: {after} が構成に無い")
+            if name in order:
+                raise ValueError(f"{kind}: {name} は既にある")
+            order.insert(order.index(after) + 1, name)
+            d_blocks[name], t_blocks[name] = d_part, t_part
+            touched["new"].append(name)
+    if root_changed:  # 根は全 cut に効く — 不変の cut も check を通し直す (担当は掛けない)
+        touched["changed"] = [c for c in order if c not in touched["new"]]
+        touched["root"] = ["root"]
+    return d_root, d_blocks, t_root, t_blocks, order, touched
+
+
+def edit(project: Path, *, effort: str) -> int:
+    """編集役: 完成した動画の src (reference.json の design / timeline) を依頼のぶんだけ書き換え、著者の成果物の形
+    (solo/order.txt・root_*.txt・cut_<名>.txt・src.done) に置く。orchestrator は `--edit` で、不変の cut を素通しで投入する。
+    戻り: 0 = patch を適用・3 = 作り直し級 (著者経路へ)・4 = 変更なし (何も作らない)・2 = 編集役の失敗 (著者経路へ)。"""
+    proj, st, ed = project / "solo", project / "stream", project / "edit"
+    for d in (proj, st, ed):
+        d.mkdir(exist_ok=True)
+    ref = json.loads((project / "reference.json").read_text())
+    design, timeline = str(ref["design"]), str(ref["timeline"])
+    request = (project / "request.txt").read_text()
+    gate, _switched = use_synced_reference(st, wait_s=0)
+    if gate is not None:
+        log(st, event="editor_gate", message=gate)
+        return 2
+    sp = build_system_prompt(st / "system_prompt.md", None)
+    out: list[str] = []
+    stream_model(
+        st,
+        author_core.edit_prompt(design, timeline, request),
+        out.append,
+        system_prompt=sp,
+        effort=effort,
+        tag="editor",
+    )
+    reply = "".join(out)
+    (ed / "reply.md").write_text(reply)
+    verdicts = [
+        {"item": item.strip(), "verdict": verdict, "why": why.strip(" ()")}
+        for item, verdict, why in _EDIT_VERDICT.findall(reply)
+    ]
+    (ed / "verdict.json").write_text(json.dumps(verdicts, ensure_ascii=False, indent=1))
+    fences = _EDIT_FENCE.findall(reply)
+    if not fences:
+        if any(v["verdict"] == "rebuild" for v in verdicts):
+            log(st, event="editor_rebuild", items=[v["item"][:80] for v in verdicts])
+            return 3
+        if verdicts:
+            log(st, event="editor_no_patch", verdicts=[v["verdict"] for v in verdicts])
+            return 4
+        log(st, event="editor_failed", reason="出力に VERDICT も fence も無い", tail=reply[-400:])
+        return 2
+    try:
+        d_root, d_blocks, t_root, t_blocks, order, touched = _apply_edit(design, timeline, reply)
+    except ValueError as e:
+        log(st, event="editor_failed", reason=str(e)[:300])
+        return 2
+    if not any(touched.values()):
+        log(st, event="editor_no_patch", reason="fence はあるが中身が元と同じ")
+        return 4
+    (proj / "root_design.txt").write_text(d_root)
+    (proj / "root_timeline.txt").write_text(t_root)
+    (proj / "plan.txt").write_text("")  # 著者の plan は無い — 尺の予算は check の実測だけで見る
+    for c in order:
+        block = d_blocks[c].rstrip("\n") + "\n" + author_core.TIMELINE_SEP + "\n" + t_blocks[c].rstrip("\n") + "\n"
+        (proj / f"cut_{c}.txt").write_text(block)
+        (proj / f"author_cut_{c}.txt").write_text(block)  # 差し戻しの底 = 編集済みの版 (持ち主が認めた元 + 依頼の変更)
+    (proj / "order.txt").write_text("\n".join(order) + "\n")
+    cuts_meta = {
+        "unchanged": [c for c in order if c not in touched["changed"] and c not in touched["new"]],
+        "changed": touched["changed"],
+        "new": touched["new"],
+        "deleted": touched["deleted"],
+        "root_changed": bool(touched.get("root")),
+    }
+    (ed / "cuts.json").write_text(json.dumps(cuts_meta, ensure_ascii=False, indent=1))
+    (st / "src.done").touch()
+    log(
+        st,
+        event="editor_applied",
+        changed=touched["changed"],
+        new=touched["new"],
+        deleted=touched["deleted"],
+        unchanged=len(cuts_meta["unchanged"]),
+        verdicts=[v["verdict"] for v in verdicts],
+    )
+    return 0
+
+
 def main(argv: list[str]) -> int:
     if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
 
@@ -1172,6 +1325,9 @@ def main(argv: list[str]) -> int:
             review="--review" in argv,
             shots=shots,
         )
+    if cmd == "edit":
+        eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "medium"
+        return edit(project, effort=eff)
     if cmd == "staff":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "medium"
         return staff(

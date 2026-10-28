@@ -46,7 +46,10 @@ Rule names and fixes (generated from the two ledgers, check's `draft_check/rules
 
 ```bash
 bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept --aspect 9:16 --request <依頼文の file>
+bash agent_client/scripts/stream_make.sh tmp/studio/<name> --edit <video_id> --request-text "<直す点>"   # 完成した動画を直す (下)
 ```
+
+`--edit <video_id>` edits a finished video instead of writing a new one: the author is skipped, and an editor (Opus · medium · 1 call) reads the video's stored src plus the request and re-emits only the cuts the request touches (per request item it answers patch / rebuild / asset / impossible — `edit/verdict.json`). Untouched cuts submit byte-identical with no staff and no check (they shipped once already); changed cuts get check → fix; only inserted cuts get the staff; a root change re-checks every cut. A rebuild-class item (target seconds, aspect ratio, whole-style conversion) or an editor failure falls back to the author lane with the video as reference (same as `--ref`), and a request with nothing to patch exits 0 after `edit: 変更なし`. `--type` is not needed (aspect follows the parent); `--speech` / `--author-brief` do not combine. Mechanics in `reference/stream.md`.
 
 The author (Opus · low · 1 call) streams the src in cut order; per cut the staff (Opus · medium) finishes it to a professional explainer's density and hierarchy, then check → fix (up to 2) → assets (pictures · voice) → seal → submission, and so it
 advances cut by cut. Drawing is the product's DraftStreamRun (`studio.py stream` · one process on this machine) extending the HLS per seal. From the moment the first cut is sealed (90–110 s on a quiet machine)

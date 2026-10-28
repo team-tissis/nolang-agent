@@ -13,6 +13,9 @@
 #        [--editable]   (編集可能モード = 編集画面で調整できる文法サブセットに収める — 著者の作法 + check の profile + 投入の門の DEFECT)
 #        [--ref <video_id>]   (参照の動画 = ユーザーが選んだテンプレか自分の動画。その src を著者に「ユーザーが選んだ形」として渡す・
 #                              依頼文の `[video:<id>]` でも同じ。長さは --seconds が優先)
+#        [--edit <video_id>]  (編集 = 完成した動画の stored src を種に、著者を飛ばして編集役 (Opus medium・1 call) が依頼のぶんだけ
+#                              cut block を書き換える。不変の cut は担当も check も掛けず素通しで投入。依頼が作り直し級 (尺・縦横・
+#                              全スタイル) なら著者経路 (--ref と同じ) へ自動で倒れる。--type は不要・縦横は親に合わせる)
 #        [--speech <speech_file_id>[,<id>]]   (持ち込み音声 = upload 済みの音声。server が文字起こしし、その clip を切って使う動画を作る・
 #                                              --remote だけ)
 #        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
@@ -28,12 +31,13 @@ PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo 
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""
+TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=low; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""; EDIT=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --engine) ENGINE=$2; shift 2;;
     --editable) EDITABLE=1; shift;;
     --ref) REF=$2; shift 2;;
+    --edit) EDIT=$2; shift 2;;
     --speech) SPEECH=$2; shift 2;;
     --type) TYPE=$2; shift 2;;
     --aspect) ASPECT=$2; shift 2;;
@@ -61,7 +65,11 @@ if [ "$ENGINE" = codex ]; then
   [ -f "${CODEX_HOME:-$HOME/.codex}/auth.json" ] || { echo "Codex の auth.json がありません。codex login で file 保存の認証を用意してください" >&2; exit 3; }
   codex login status >/dev/null 2>&1 || { echo "codex login を先に実行してください" >&2; exit 3; }
 fi
-[ -n "$TYPE" ] || { echo "--type が要る (concept|data|compare|story|cinematic)" >&2; exit 2; }
+[ -n "$TYPE" ] || { [ -n "$EDIT" ] && TYPE=concept; } || { echo "--type が要る (concept|data|compare|story|cinematic)" >&2; exit 2; }
+if [ -n "$EDIT" ]; then
+  [ -z "$SPEECH" ] || { echo "--edit と --speech は併用できない" >&2; exit 2; }
+  [ -z "$BRIEF" ] || { echo "--edit と --author-brief は併用できない" >&2; exit 2; }
+fi
 # 著者 brief: 絵は担当が設計する前提 — 担当は必須・素材も担当が変える (固定)
 if [ -n "$BRIEF" ]; then
   [ -n "$STAFF" ] || { echo "--author-brief は担当が各 cut を仕上げる前提 (--no-staff と併用不可)" >&2; exit 2; }
@@ -86,19 +94,47 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 if [ -n "$IN_REPO" ]; then $PY "$ROOT/.agents/skills/nolang-draft-studio/scripts/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
 export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --review $REVIEW --fix $FIX${ASSETS:+ --staff-edits-assets}${BRIEF:+ --author-brief}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
-# 参照の動画: --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
+# 参照の動画: --edit / --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
+[ -n "$REF" ] || REF=$EDIT
 [ -n "$REF" ] || REF=$(grep -oE '\[video:[0-9a-fA-F-]{36}\]' "$P/request.txt" | head -1 | sed -E 's/^\[video:(.*)\]$/\1/' || true)
 if [ -n "$REF" ]; then
   # shellcheck disable=SC2086
-  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-ref "$REF" $STREAM_RUN_ARGS || echo "参照 $REF の src を取れない — 参照なしで書く (stream/run.jsonl の reference_failed)" >&2
+  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-ref "$REF" $STREAM_RUN_ARGS || {
+    [ -z "$EDIT" ] || { echo "編集の対象 $EDIT の src を取れない (stream/run.jsonl の reference_failed)" >&2; exit 1; }
+    echo "参照 $REF の src を取れない — 参照なしで書く (stream/run.jsonl の reference_failed)" >&2
+  }
 fi
 # 持ち込み音声: server の文字起こしの clip 台帳と `@clip` の書き方を project/speech.json に (著者が読む・転写を待つ)。取れなければ止める
 if [ -n "$SPEECH" ]; then
   # shellcheck disable=SC2086
   env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
 fi
-echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && [ "$REVIEW" != none ] && echo "$REVIEW (静止画)" || echo none)・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
-PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
+# 編集 (--edit): 著者を飛ばし、編集役が stored src に依頼の patch を当てる。patch にならない依頼 (作り直し級・編集役の失敗) は
+# 著者経路 (上で取った reference.json を参照に) へそのまま倒れる
+RAN_EDIT=""
+if [ -n "$EDIT" ]; then
+  # 縦横は親の canvas から — start の aspect_ratio は親と一致していなければならない
+  ASPECT=$($PY -c 'import json,re,sys,pathlib; ref=json.loads((pathlib.Path(sys.argv[1])/"reference.json").read_text()); m=re.search(r"^canvas (\d+)x(\d+)", str(ref["design"]), re.M); w,h=(int(m.group(1)),int(m.group(2))) if m else (1920,1080); print("9:16" if h>w else "16:9")' "$P")
+  echo "$TYPE $ASPECT $SECONDS_${EDITABLE:+ editable}" > "$P/params.txt"
+  echo "edit: $P (対象 $EDIT・$ASPECT・編集役 medium・直し $FIX)"
+  EC=0
+  # shellcheck disable=SC2086
+  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_author.py" edit "$P" --effort medium > "$P/stream/editor.out" 2>&1 || EC=$?
+  if [ $EC = 0 ]; then
+    RAN_EDIT=1
+    # shellcheck disable=SC2086
+    env ${IN_REPO:+PYTHONPATH=$ROOT STUDIO_SERVER_SOCK=$ROOT/tmp/studio/.server/sock} $PY "$S/stream_run.py" "$P" $STREAM_RUN_ARGS --edit > "$P/stream/run.out" 2>&1 || true
+  elif [ $EC = 4 ]; then
+    echo "edit: 変更なし — 項目の判定は $P/edit/verdict.json (patch の対象が無い)"
+    exit 0
+  else
+    echo "edit: patch にならない (exit $EC — 判定は $P/edit/verdict.json) — 著者経路で作り直す (参照 $EDIT)"
+  fi
+fi
+if [ -z "$RAN_EDIT" ]; then
+  echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・見直し $([ "$FIX" = low ] && [ "$REVIEW" != none ] && echo "$REVIEW (静止画)" || echo none)・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
+  PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
+fi
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
 p = pathlib.Path(sys.argv[1]); ev = [json.loads(l) for l in (p / "stream/run.jsonl").read_text().splitlines()]
