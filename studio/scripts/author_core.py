@@ -890,3 +890,131 @@ def edit_prompt(design: str, timeline: str, request: str) -> str:
         + "\n```\n\nThe owner's change request:\n\n"
         + wrap_request(request)
     )
+
+
+# ===== 編集役の出力の読み (fence の適用) — client の stream_author.py と製品の DraftAuthorRun の共有実装 =====
+
+EDIT_FENCE = re.compile(r"```(design-root|timeline-root|cut \S+|new \S+ after \S+|delete \S+)[ \t]*\n(.*?)```", re.S)
+_EDIT_VERDICT = re.compile(r"^[-*] (.+?): (patch|rebuild|asset|impossible)\b(.*)$", re.M)
+_EDIT_SEP = re.compile(r"^\*\*\*\s*$", re.M)
+
+
+@dataclass(frozen=True)
+class EditVerdict:
+    """VERDICT の 1 行 — item = 依頼の項目の言い直し・verdict = patch / rebuild / asset / impossible・why = 括弧の中。"""
+
+    item: str
+    verdict: str
+    why: str
+
+
+def edit_verdicts(reply: str) -> list[EditVerdict]:
+    return [
+        EditVerdict(item=item.strip(), verdict=verdict, why=why.strip(" ()"))
+        for item, verdict, why in _EDIT_VERDICT.findall(reply)
+    ]
+
+
+@dataclass(frozen=True)
+class AppliedEdit:
+    """編集役の fence を src に当てた結果。根と block は末尾 1 つの改行の正規形・order = 構成の順 (delete 済み)。
+    changed は根が変わった時、新規以外の全 cut (根は全 cut に効く — 不変の cut も check を通し直す)。"""
+
+    design_root: str
+    design_blocks: dict[str, str]
+    timeline_root: str
+    timeline_blocks: dict[str, str]
+    order: tuple[str, ...]
+    changed: tuple[str, ...]
+    new: tuple[str, ...]
+    deleted: tuple[str, ...]
+    root_changed: bool
+
+    @property
+    def unchanged(self) -> tuple[str, ...]:
+        return tuple(c for c in self.order if c not in self.changed and c not in self.new)
+
+    @property
+    def touched(self) -> bool:
+        return bool(self.changed or self.new or self.deleted or self.root_changed)
+
+    def cut_block(self, name: str) -> str:
+        """cut 1 つの block (design + 区切り + timeline) — 著者の成果物と同じ形。"""
+        design = self.design_blocks[name].rstrip("\n")
+        return f"{design}\n{TIMELINE_SEP}\n" + self.timeline_blocks[name].rstrip("\n") + "\n"
+
+
+def _split_src_doc(text: str, head: str) -> tuple[str, dict[str, str], list[str]]:
+    """先頭部 (根) と、名 → block (head 行から次の head の前まで)・構成の順を返す。"""
+    pat = re.compile(rf"^{head}(\S+)", re.M)
+    names = [m.group(1) for m in pat.finditer(text)]
+    starts = [m.start() for m in pat.finditer(text)] + [len(text)]
+    blocks = {names[i]: text[starts[i] : starts[i + 1]].strip("\n") + "\n" for i in range(len(names))}
+    return (text[: starts[0]] if names else text), blocks, names
+
+
+def apply_edit_reply(design: str, timeline: str, reply: str) -> AppliedEdit:
+    """編集役の fence を src に当てる。形が壊れていれば ValueError (fence が無い出力は touched が偽の AppliedEdit)。"""
+    d_root, d_blocks, order = _split_src_doc(design, r"section#")
+    t_root, t_blocks, t_names = _split_src_doc(timeline, r"\*\*\* ")
+    if set(order) != set(t_names):
+        raise ValueError(f"src の design と timeline の cut が揃わない: {sorted(set(order) ^ set(t_names))}")
+    changed: list[str] = []
+    new: list[str] = []
+    deleted: list[str] = []
+    root_changed = False
+    for kind, body in EDIT_FENCE.findall(reply):
+        if kind == "design-root":
+            new_root = body.strip("\n") + "\n"
+            root_changed = root_changed or new_root != d_root.strip("\n") + "\n"
+            d_root = new_root
+            continue
+        if kind == "timeline-root":
+            new_root = body.strip("\n") + "\n"
+            root_changed = root_changed or new_root != t_root.strip("\n") + "\n"
+            t_root = new_root
+            continue
+        name = kind.split()[1]
+        if kind.startswith("delete "):
+            if name not in order:
+                raise ValueError(f"delete {name}: 知らない cut")
+            order.remove(name)
+            deleted.append(name)
+            continue
+        m = _EDIT_SEP.search(body)
+        if m is None:
+            raise ValueError(f"{kind}: design と timeline を分ける *** の行が無い")
+        d_part = body[: m.start()].strip("\n") + "\n"
+        t_part = body[m.end() :].strip("\n") + "\n"
+        if not re.search(rf"^section#{re.escape(name)}\b", d_part, re.M):
+            raise ValueError(f"{kind}: design の頭が section#{name} でない")
+        if not t_part.startswith(f"*** {name}"):
+            raise ValueError(f"{kind}: timeline の頭が *** {name} でない")
+        if kind.startswith("cut "):
+            if name not in order:
+                raise ValueError(f"cut {name}: 知らない cut (新しい cut は `new <名> after <名>`)")
+            if d_part != d_blocks[name] or t_part != t_blocks[name]:
+                changed.append(name)
+            d_blocks[name], t_blocks[name] = d_part, t_part
+        else:  # new <name> after <existing>
+            after = kind.split()[3]
+            if after not in order:
+                raise ValueError(f"{kind}: {after} が構成に無い")
+            if name in order:
+                raise ValueError(f"{kind}: {name} は既にある")
+            order.insert(order.index(after) + 1, name)
+            d_blocks[name], t_blocks[name] = d_part, t_part
+            new.append(name)
+    if root_changed:  # 根は全 cut に効く — 不変の cut も check を通し直す (担当は掛けない)
+        changed = [c for c in order if c not in new]
+    return AppliedEdit(
+        design_root=d_root,
+        design_blocks=d_blocks,
+        timeline_root=t_root,
+        timeline_blocks=t_blocks,
+        order=tuple(order),
+        changed=tuple(changed),
+        new=tuple(new),
+        deleted=tuple(deleted),
+        root_changed=root_changed,
+    )
