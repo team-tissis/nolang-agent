@@ -186,13 +186,17 @@ def samples_text(samples: tuple[str, ...]) -> str:
 
 
 # 著者 brief (`--author-brief`) の run の担当への注記 (user turn の末尾)。文言は 10-28 の bench (B′) で検証した版 —
-# 「brief は欠陥でない・ゼロから設計・著者の transition は残す・前の cut (著者の brief) の空を写さない」
+# 「brief は欠陥でない・ゼロから設計・著者の transition は残す・前の cut (著者の brief) の空を写さない」。
+# 「掃き系の root transition は cut の頭に見出し/最初の板を立てて空の地を見せない」は 10-28 の sig2 bench で検証した版
+# (1 周目は wipe 明けに空の画面が 0.7〜1 s 挟まって負けた)
 STAFF_BRIEF_NOTE = (
     "Note for this run: the author deliberately wrote only a brief for this cut — the speech lines and `#` comment lines saying"
     " what the cut shows and how it moves. That is not a defect. You design the whole cut from scratch to that brief: the layers,"
     " the named definitions, the motion, the pictures, the marks and the sound effects, at the same bar (the density and hierarchy"
     " of an explainer video a professional studio could ship). The author's transition line is deliberate (the author sees the"
-    " whole cut lineup; you cannot see the next cut) — keep it unless your build makes it impossible. The previous cut shown above"
+    " whole cut lineup; you cannot see the next cut) — keep it unless your build makes it impossible. When the root transition"
+    " sweeps (wipe / slide / push), it reveals your cut's opening frame — have the heading or the first board already standing"
+    " at the cut head (markless), so the sweep never uncovers an empty ground. The previous cut shown above"
     " is also only a brief, so do not copy its emptiness — build this cut so it stands on its own, and keep the video's look"
     " coherent through the root (palette / font / defaults) rather than through the previous cut's layers.\n"
 )

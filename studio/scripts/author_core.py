@@ -353,14 +353,16 @@ Editable-mode flow (light design — plan first):
 
 # 著者 brief (`--author-brief`): 著者は台本 (台詞)・cut ごとの絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
 # 絵は cut ごとの担当がゼロから設計する (担当は常に素材も変える)。台詞は著者の版のまま固定 — 声は著者の時点から担当と並列に作る。
-# 文言は 10-28 の bench (B′) で検証した版: 1 文 25〜30 字・意味つき palette token・cut を跨ぐ約束は root に書く
+# 文言は 10-28 の bench (B′) で検証した版: 1 文 25〜30 字・意味つき palette token・cut を跨ぐ約束は root に書く。
+# 決め技の段 (root の transition= を気分に合わせて凝る・1 本 1 種・窓 300〜700 ms) は 10-28 の sig2 bench で検証した版 —
+# cut の transition 行は root からの逸脱だけ書く
 AUTHOR_BRIEF_NOTE = (
     "Production note for this run (it narrows the cut shape above): every cut is finished by its own staff, who designs all the"
     " visuals from scratch. For each cut, write only the brief:\n"
     "- the design block is just the `section#name(…)` line — no layers, no named definitions (def / motion / run / svg / sound / image / cue), no `img#`;\n"
     "- the timeline block opens with 1–3 `#` comment lines stating what the cut shows and how it moves (the hero, the support, the"
     " state changes, what picture if any), then the speech lines (`@speaker: …`), then the `# speech N sentences ~M s` note, then"
-    " the transition line (how this cut hands off to the next is yours — only you see the whole lineup);\n"
+    " the transition line only where this cut's handoff departs from the root default (only you see the whole lineup);\n"
     "- write no marks and no `se` in the cuts.\n"
     "The speech you write is final — the voice is made from your lines as they stand, so keep each sentence 25–30 characters (a"
     " long sentence bloats the length past the target).\n"
@@ -369,6 +371,12 @@ AUTHOR_BRIEF_NOTE = (
     "The staffs work in parallel and never see each other's cuts, so the root must carry every promise that spans cuts: give"
     " meaning-bearing colors named palette tokens (e.g. `old=` for the legacy side, one token per recurring subject), and when a"
     " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
+    "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve —"
+    " a data film's sharp `wipe` or `push`, a story's page-turn `slide` with `drift=` and `dim=`, a cinematic's slow"
+    " `dissolve,…,color=` or `zoom`; tune its keys (up to 4 `bars=` in the film's own hex colors (`linear(…)` allowed),"
+    ' `se="シュッ"` at the seam) and keep the window 300–700 ms. One kind per film: cuts inherit the root move, so write a'
+    " cut's transition line only where the story turns — `transition cut` or `none,N` for a hard beat, one different kind at"
+    " a chapter break (`panel` may sit there; curtains never as the root default or on the last cut).\n"
 )
 
 
