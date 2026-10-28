@@ -1,6 +1,6 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 72ca9275cf45707a76f2c2b450a044728744316e7cea78185428702dad6568e9 · synced_at: 2026-10-28T11:11:17.399Z
+Version of these documents: contract: 1 · reference_hash: 72ca9275cf45707a76f2c2b450a044728744316e7cea78185428702dad6568e9 · synced_at: 2026-10-28T15:16:38.869Z
 
 Docs: contract.json ef39cb227d4f · spec.md df02b7bfe3eb · authoring.md 593b8ed47ca0 · capabilities.md a3f9838bc5a1 · looks.md a6c0e431acbb · sounds.md bfdeb42d7466 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bbd323cc370c · scaffolds/ 4946fc4afb33
 
@@ -15,7 +15,7 @@ The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_dr
 - `still_stretch` nothing moves for 6+ seconds (a picture's kb does not count as motion) → add marks on words
 - `long_still` (info) the screen does not change while speech runs 3+ seconds → mark a word in that span
 - `cut_head_gap` the cut's head is empty for 1.2+ seconds → place the head elements without marks
-- `entrance_in_fadeout` it enters after 0.8 s before the transition or fade out → move the word earlier
+- `entrance_in_fadeout` it enters too late before the transition or fade out to be read → move the word earlier (a short stamp landing on the last word reads in time and rides the transition — that is fine)
 - `entrance_in_transition` a word mark's entrance finishes inside the previous transition's window → add `[silence:+0.4s]` at the head of the first speech to push the word past the window (check says the seconds needed)
 - `no_closer` the last cut has no big closing line
 - `same_picture` the same picture for 15+ seconds → swap to another picture, diagram or card on a word inside the cut (do not split the cut)
@@ -24,7 +24,7 @@ The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_dr
 - `double_exit` a cut that ends on a transition also has a whole-cut out, so the scene fades and then the transition runs (it dies twice) → to end on a fade, make the transition `transition cut`; if the transition carries the scene, drop the section's out (for a transition inherited from the root, the machine turns it into a cut)
 - `persistent_chrome` persistent layers (progress / chapter numbers / running totals) belong only in videos of 3+ minutes — in a short video the cost of occupying a screen edge outweighs them, so drop it
 - `sparse_cut` 4+ seconds with few elements → add a picture or a card
-- `palette_drift` many colors outside the palette
+- `palette_drift` inline colors in hues off every root palette hue (tints and shades of a palette hue do not count) → add the hue to the root's `palette`
 - `low_contrast` little contrast between text and its ground (also after a dimmed `dim` / focus sibling or `recolor`) → dim deeper
 - `overlap` text of the same family overlaps (warn even with `overlap:` declared; hiding another family's text is the severe occluded) → move the stamp / card off the other text
 - `title_on_close` the first cut's title is never closed and remains in the last frame → `[<#name]` (to restate the name at the close, make a new layer in the closing cut)
