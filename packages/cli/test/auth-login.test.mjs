@@ -32,7 +32,7 @@ async function fixture(t, { device = false, tokenErrors = [], registerFails = fa
     const send = (body, status = 200) => res.writeHead(status, { "content-type": "application/json" }).end(JSON.stringify(body));
     if (req.url === "/.well-known/oauth-protected-resource") return send({ resource: api, authorization_servers: [api] });
     if (req.url === "/.well-known/oauth-authorization-server") return send({
-      authorization_endpoint: `${api}/authorize`, token_endpoint: `${api}/token`, registration_endpoint: `${api}/register`,
+      issuer: api, authorization_endpoint: `${api}/authorize`, token_endpoint: `${api}/token`, registration_endpoint: `${api}/register`,
       ...(device ? { device_authorization_endpoint: `${api}/device` } : {}), scopes_supported: ["nolang"],
     });
     if (req.url === "/register") {

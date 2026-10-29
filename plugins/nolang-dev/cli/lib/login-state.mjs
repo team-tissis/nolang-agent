@@ -1,7 +1,7 @@
 // ログインの待ち受けと別プロセスの auth complete が、同じ認可を一度だけ交換する。
 import { randomBytes } from "node:crypto";
 import { mkdir, open, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { CliError, EXIT } from "./errors.mjs";
 
@@ -13,6 +13,44 @@ export async function writePrivate(path, value) {
   } finally {
     await rm(temp, { force: true });
   }
+}
+
+// lockFile を排他作成できた 1 プロセスだけが action を実行する (持ち主の消えた lock は回収する)。
+export async function withLock(lockFile, action, busyMessage) {
+  await mkdir(dirname(lockFile), { recursive: true, mode: 0o700 });
+  for (let attempt = 0; attempt < 700; attempt++) {
+    let handle;
+    try { handle = await open(lockFile, "wx", 0o600); }
+    catch (error) {
+      if (error.code !== "EEXIST") throw error;
+      // 回収同士も直列化して、別プロセスが取得し直した lock を消さない。
+      let recovery;
+      try { recovery = await open(`${lockFile}.recovery`, "wx", 0o600); }
+      catch (cause) { if (cause.code !== "EEXIST") throw cause; }
+      if (recovery) {
+        try {
+          const pid = Number(await readFile(lockFile, "utf8"));
+          if (pid > 0) {
+            try { process.kill(pid, 0); }
+            catch (cause) { if (cause.code === "ESRCH") await rm(lockFile, { force: true }); }
+          } else if (Date.now() - (await stat(lockFile)).mtimeMs > 30000) {
+            await rm(lockFile, { force: true });
+          }
+        } catch (cause) { if (cause.code !== "ENOENT") throw cause; }
+        finally { await recovery.close(); await rm(`${lockFile}.recovery`, { force: true }); }
+      }
+      await sleep(50);
+      continue;
+    }
+    try {
+      await handle.writeFile(String(process.pid));
+      return await action();
+    } finally {
+      await handle.close();
+      await rm(lockFile, { force: true });
+    }
+  }
+  throw new CliError(busyMessage, { exit: EXIT.AUTH });
 }
 
 export class LoginState {
@@ -31,41 +69,8 @@ export class LoginState {
   status() { return this.read(this.statusFile); }
   pending() { return this.read(this.pendingFile); }
 
-  async locked(action) {
-    await mkdir(this.dir, { recursive: true, mode: 0o700 });
-    for (let attempt = 0; attempt < 700; attempt++) {
-      let handle;
-      try { handle = await open(this.lockFile, "wx", 0o600); }
-      catch (error) {
-        if (error.code !== "EEXIST") throw error;
-        // 回収同士も直列化して、別プロセスが取得し直した lock を消さない。
-        let recovery;
-        try { recovery = await open(`${this.lockFile}.recovery`, "wx", 0o600); }
-        catch (cause) { if (cause.code !== "EEXIST") throw cause; }
-        if (recovery) {
-          try {
-            const pid = Number(await readFile(this.lockFile, "utf8"));
-            if (pid > 0) {
-              try { process.kill(pid, 0); }
-              catch (cause) { if (cause.code === "ESRCH") await rm(this.lockFile, { force: true }); }
-            } else if (Date.now() - (await stat(this.lockFile)).mtimeMs > 30000) {
-              await rm(this.lockFile, { force: true });
-            }
-          } catch (cause) { if (cause.code !== "ENOENT") throw cause; }
-          finally { await recovery.close(); await rm(`${this.lockFile}.recovery`, { force: true }); }
-        }
-        await sleep(50);
-        continue;
-      }
-      try {
-        await handle.writeFile(String(process.pid));
-        return await action();
-      } finally {
-        await handle.close();
-        await rm(this.lockFile, { force: true });
-      }
-    }
-    throw new CliError("別のログイン処理が実行中です。少し待ってやり直してください", { exit: EXIT.AUTH });
+  locked(action) {
+    return withLock(this.lockFile, action, "別のログイン処理が実行中です。少し待ってやり直してください");
   }
 
   async current(id) {
