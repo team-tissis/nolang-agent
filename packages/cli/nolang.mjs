@@ -781,7 +781,7 @@ function hasCommand(name) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|brief (著者)] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--review low|medium --fix low] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -790,9 +790,18 @@ async function cmdMake(positionals, flags) {
   const staff = flags.staff || "balanced";
   if (!["balanced", "low", "medium", "high", "xhigh", "none"].includes(staff)) throw new CliError("--staff は balanced / low / medium / high / xhigh / none", { exit: EXIT.USAGE });
   // 著者 brief: 著者は台本 (台詞) と cut ごとの絵コンテだけを書き、絵は cut ごとの担当がゼロから設計する。
+  // effort (--author) とは直交 — brief の著者の深さも --author で選ぶ。
   // 担当が素材も変える形に固定 (engine が --staff-edits-assets を含意) なので、担当なしとは両立しない
-  const brief = flags.author === "brief";
-  if (brief && staff === "none") throw new CliError("--author brief は担当が各 cut を仕上げる前提 — --staff none とは併用できない", { exit: EXIT.USAGE });
+  const brief = Boolean(flags["author-brief"]);
+  if (flags.author && !["low", "medium", "high", "xhigh"].includes(flags.author)) {
+    throw new CliError(
+      flags.author === "brief"
+        ? "--author brief は --author-brief になった (--author は著者の effort: low / medium / high / xhigh)"
+        : "--author は low / medium / high / xhigh",
+      { exit: EXIT.USAGE },
+    );
+  }
+  if (brief && staff === "none") throw new CliError("--author-brief は担当が各 cut を仕上げる前提 — --staff none とは併用できない", { exit: EXIT.USAGE });
   for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では作れない (skill の write-yourself.md の手順で、自分で書いて流す)`, { exit: EXIT.FAIL });
   }
@@ -827,7 +836,7 @@ async function cmdMake(positionals, flags) {
   if (flags.request) args.push("--request", resolve(flags.request));
   else args.push("--request-text", flags["request-text"]);
   if (brief) args.push("--author-brief");
-  else if (flags.author) args.push("--effort", flags.author);
+  if (flags.author) args.push("--effort", flags.author);
   // 既定は担当 balanced (cut 1・2 は low・cut 3 以降は medium が再生に間に合う見込みの時だけ medium。担当は絵と台詞を変えず、素材は著者の版から担当と並列に作る・直し役は DEFECT の時だけ) — 質を優先するなら --staff medium / high / xhigh・速さ最優先なら --staff none
   if (staff === "none") args.push("--no-staff");
   else args.push("--staff", staff);
@@ -840,7 +849,7 @@ async function cmdMake(positionals, flags) {
   if (flags["staff-assets"]) args.push("--staff-edits-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}・担当 ${staff === "none" ? "なし" : staff}・著者 ${flags.author || "low"}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}・担当 ${staff === "none" ? "なし" : staff}・著者 ${flags.author || "low"}${brief ? " (brief = 台詞と絵コンテだけ)" : ""}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
   await runStudioAndWait(root, args, api, { engine, timeout: flags.timeout, speech: Boolean(speechId) });
 }
 
@@ -1314,7 +1323,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
         [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 内容に合わせる)] [--engine claude|codex]
-        [--author low|brief (著者の effort・既定 low。brief = 著者は台詞と絵コンテだけ書き、担当が絵をゼロから設計 — 台詞は著者の版で固定・--staff-assets を含意・--staff none とは併用不可)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
+        [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief (著者は台詞と絵コンテだけ書き、担当が絵をゼロから設計 — 台詞は著者の版で固定・--staff-assets を含意・--staff none とは併用不可。--author は brief の著者にも効く)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--review low|medium --fix low] [--staff-assets]
@@ -1372,6 +1381,7 @@ const OPTIONS = {
   request: { type: "string" },
   engine: { type: "string" },
   author: { type: "string" },
+  "author-brief": { type: "boolean" },
   staff: { type: "string" },
   "staff-warn": { type: "boolean" },
   "staff-assets": { type: "boolean" },
