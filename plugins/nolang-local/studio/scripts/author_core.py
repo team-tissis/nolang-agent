@@ -418,6 +418,10 @@ def author_prompt(
   Write that many sentences in the cut — long videos tend to run short on sentences (eyeballed seconds read longer than they are). Tie at least one screen change (an element entering, a
   state change, a picture swap) to every sentence. {closing}Right after the last speech line of each cut's timeline (before the transition), note the sentence count and the
   estimated seconds: `# speech N sentences ~M s`.
+- Pauses the piece needs are not length fitting — plan and write them like speech: a voiceless cut (a chapter card or a title held with no
+  narration, 1.5–3 s) is `(2 s · 0 sentences)` on the plan line and `@名: [silence:2s]` in the timeline; a held beat after a question, before a
+  reveal or after a number that should sink in is `[silence:0.8s]` inside the cut (its seconds count toward the target). What is banned is bending
+  speed or silences after writing to hit the length.
 - If the request hands over a script to read aloud (verbatim), use its sentences as the speech without changing a character, and derive the target seconds from the script's
   amount (do not add or cut sentences to meet the target length). In that case write `{VERBATIM_MARK}` as the first line of the plan."""
     return f"""You are the author of this video. You build the video in the user request below from scratch. Write the script (the narration)
@@ -439,7 +443,7 @@ The mechanics of draft src (facts of the machine):
 {length_rule}
 {editable_note(editable)}{editable_author_note(editable, referenced=referenced)}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
 === plan ===
-name: what this cut shows and how it moves (target seconds · N sentences)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
+name: what this cut shows and how it moves (target seconds · N sentences — 0 for a voiceless cut)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
 === root_design ===
 everything in design.txt before `section#` (from `#v2`)
 === root_timeline ===
@@ -552,7 +556,8 @@ def fix_prompt(
     if f" {LENGTH_RULE} " in findings:
         trim = (
             f"Only because the findings include {LENGTH_RULE} (the speech length missed the cut's target) you may delete whole speech lines (`@` lines)"
-            " sentence by sentence, or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
+            " sentence by sentence (never a voiceless line `@名: [silence:N]` or a held `[silence:N]` beat — those pauses are the piece's rhythm, not"
+            " length), or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
             " talking, `[speed:]`, or packed `[silence:]`). Delete supporting sentences first (keep numbers and conclusions). For elements a deleted"
             " line's marks brought in, move the marks to a kept line's word or delete the element too. An added sentence must continue the surrounding"
             " speech, and its words must bring in at least one new element or state change (a card, a diagram, a picture swap) — do not leave the screen"
@@ -628,7 +633,7 @@ def without_marks(line: str) -> str:
     return "".join(out).strip()
 
 
-_SPEAKER = re.compile(r"^\s*@[^:\s\[]*:")  # 台詞の行の頭 `@n:` / `@:`
+_SPEAKER = re.compile(r"^\s*@(?:\||[^:\s\[]*:)")  # 台詞の行の頭 `@n:` / `@:` / 折り目の `@|`
 _READING = re.compile(r"\{([^{}|]*)\|[^{}]*\}")  # 読みの指定 `{表記|読み}`
 PICTURE_LINE = re.compile(r"^\s*img#\S+\((?:[^()]|\([^()]*\))*\)\s*(.*)$")  # img の行 → 絵の説明文
 

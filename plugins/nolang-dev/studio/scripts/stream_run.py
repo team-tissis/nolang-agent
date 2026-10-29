@@ -151,12 +151,15 @@ _RESERVED_NAMES = frozenset({"bg", "se", "subtitle", "cut", "screen", "self", "p
 
 def rows_naming_layers(text: str, layers: list[str]) -> tuple[set[int], int]:
     """text (cut の block) の中で層の名を指す行 (section の `#名(`・印の `#名`) の 0 始まりの行番号と、見つかった層の数。板の子の層
-    (`板._board`・`板._text`) は板の名でも引く (板の出現の印は `[>#板]`)。子の名 (`板.k`) は自分の名だけ。"""
+    (`板._board`・`板._text`) は板の名でも引く (板の出現の印は `[>#板]`)。×N の実体 (`row[2]`) と子 (`板.k`) は書いた名
+    (`#row(…) ×2`・字下げの `#k`) でも引く。"""
     lines = text.split("\n")
     rows: set[int] = set()
     hit = 0
     for layer in layers:
-        names = {name for name in (layer, layer.split("._")[0]) if name and name != "-"}
+        owner = layer.split("._")[0]
+        leaf = re.sub(r"\[\d+\]", "", owner.rsplit(".", 1)[-1])
+        names = {name for name in (layer, owner, leaf) if name and name != "-"}
         if not names:
             continue
         pattern = re.compile(r"#(?:" + "|".join(re.escape(name) for name in names) + r")(?![\w.])")
@@ -947,7 +950,7 @@ class Run:
         直し役への指摘の 1 行 (文を丸ごと消す / 足す本数つき)。外れていなければ空。直し役を新しく呼ぶ理由にはしない — 見直し (全 cut
         1 回目の直し役) の call に添えるだけ (待ちと call を増やさない)。最初の cut は見ない: 再生開始の臨界路で、足した文が次の直しの
         指摘と声の作り直しを呼び最初の segment を 15〜30 s 遅らせた (10-24 の a2 d5)・ずれは締めの cut の弾性が吸う。"""
-        from stream_author import LENGTH_RULE  # noqa: PLC0415 — scripts dir を sys.path に足している
+        from stream_author import LENGTH_RULE, spoken  # noqa: PLC0415 — scripts dir を sys.path に足している
 
         budget, estimate, blk = self.cut_budget(c), self.cut_estimate.get(c), self.cut_block(c)
         if self.verbatim or c == self.order[0] or budget is None or estimate is None or blk is None:
@@ -955,7 +958,10 @@ class Run:
         gap = estimate - budget
         if abs(gap) <= max(budget * LENGTH_TOLERANCE, LENGTH_SLACK_S):
             return ""
-        lines = max(sum(1 for line in blk[1].splitlines() if line.lstrip().startswith("@")), 1)
+        # 声の無い行 (`@名: [silence:2s]`) は演出の間 — 数えず、声の無い cut (章の札・題の間) は文の足し引きで寄せない (足すと間が台詞に化ける)
+        lines = sum(1 for line in blk[1].splitlines() if line.lstrip().startswith("@") and spoken(line))
+        if not lines:
+            return ""
         per = estimate / lines
         n = min(max(round(abs(gap) / per), 1), 2)
         verb = "delete" if gap > 0 else "add"
