@@ -141,11 +141,11 @@ async function discover(api) {
   const prm = await getJson(prmUrl);
   const issuer = (prm.authorization_servers || [])[0];
   if (!issuer) throw new CliError(`${prmUrl} に authorization_servers が無い`, { exit: EXIT.NETWORK });
-  const expected = issuer.replace(/\/+$/, "");
-  const as = await getJson(`${expected}/.well-known/oauth-authorization-server`);
-  // 名乗る issuer が取りに行った場所と違う metadata は使わない (別の認可サーバーの窓口へ誘導する mix-up の入口)
-  if (as.issuer?.replace(/\/+$/, "") !== expected) {
-    throw new CliError(`${expected} の認可サーバーの metadata が別の issuer (${as.issuer}) を名乗っています`, { exit: EXIT.AUTH });
+  const as = await getJson(`${issuer.replace(/\/+$/, "")}/.well-known/oauth-authorization-server`);
+  // 名乗る issuer が取りに行った場所と違う metadata は使わない (別の認可サーバーの窓口へ誘導する mix-up の入口)。
+  // issuer は末尾の / も含めて完全一致で比べる (RFC 8414 — 末尾だけ違う issuer は別の認可サーバー)
+  if (as.issuer !== issuer) {
+    throw new CliError(`${issuer} の認可サーバーの metadata が別の issuer (${as.issuer}) を名乗っています`, { exit: EXIT.AUTH });
   }
   return { resource: prm.resource, as };
 }
@@ -222,12 +222,13 @@ async function exchangeCode(api, pending, code) {
   return saveTokens(api, { client_id: pending.client_id, token_endpoint: pending.token_endpoint, resource: pending.resource }, tokens);
 }
 
-// refresh token は 1 回しか使えない。lock の中で読み直し、待つ間に別の nolang が更新していればその token を使う
-async function refreshTokens(api, stale) {
+// refresh token は 1 回しか使えない。lock の中で読み直し、手元の access token が staleAccess (期限が近い・401 を受けた
+// token) から変わっていれば、別の nolang が更新済みなのでその token を使う
+async function refreshTokens(api, staleAccess) {
   return updateStore(async (store) => {
     const profile = store.profiles[api];
     if (!profile?.refresh_token) throw new CliError(LOGIN_HINT(api, "ログインが切れた"), { exit: EXIT.AUTH });
-    if (profile.refresh_token !== stale.refresh_token) return profile;
+    if (profile.access_token !== staleAccess) return profile;
     let tokens;
     try {
       tokens = await postForm(profile.token_endpoint, {
@@ -244,12 +245,13 @@ async function refreshTokens(api, stale) {
 }
 
 // minValidMs = 返すトークンに残す有効時間 (他のスクリプトに渡して長く使う時)。足りている間は更新しない
-// (更新しても前のトークンは期限まで使えるが、渡した先は自分で更新できないので期限より長くは使えない)
-async function accessToken(api, { forceRefresh = false, minValidMs = 60_000 } = {}) {
+// (更新しても前のトークンは期限まで使えるが、渡した先は自分で更新できないので期限より長くは使えない)。
+// rejected = 401 を受けた token。それを基準に更新する (同じ token の 401 が重なっても更新は 1 回)
+async function accessToken(api, { rejected, minValidMs = 60_000 } = {}) {
   if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // API key (nlg-c-…) か access token — CI 向け
   const profile = (await loadStore()).profiles[api];
   if (!profile) throw new CliError(LOGIN_HINT(api, "未ログイン"), { exit: EXIT.AUTH });
-  if (forceRefresh || Date.now() > profile.expires_at - minValidMs) return (await refreshTokens(api, profile)).access_token;
+  if (rejected || Date.now() > profile.expires_at - minValidMs) return (await refreshTokens(api, rejected ?? profile.access_token)).access_token;
   return profile.access_token;
 }
 
@@ -266,8 +268,9 @@ async function callApi(api, method, path, body) {
       },
       body: body ? (form ? body : JSON.stringify(body)) : undefined,
     });
-  let res = await send(await accessToken(api));
-  if (res.status === 401 && !process.env.NOLANG_TOKEN) res = await send(await accessToken(api, { forceRefresh: true }));
+  const token = await accessToken(api);
+  let res = await send(token);
+  if (res.status === 401 && !process.env.NOLANG_TOKEN) res = await send(await accessToken(api, { rejected: token }));
   const data = await readBody(res);
   if (!res.ok) {
     const exit = res.status === 401 || res.status === 403 ? EXIT.AUTH : res.status >= 500 ? EXIT.NETWORK : EXIT.FAIL;
@@ -559,11 +562,10 @@ async function cmdAuthEnv(flags) {
   process.stdout.write(`export NOLANG_API_URL=${q(api)}\nexport NOLANG_TOKEN=${q(token)}\n`);
 }
 
-// サーバーでも失効させる (RFC 7009・同じ認可から出た token をまとめて)。届かなくても手元からは消す
-async function revokeOnServer(api, profile) {
+// サーバーでも失効させる (RFC 7009・同じ認可から出た token をまとめて)。失敗の理由を返す (成功は null)
+async function revokeOnServer(as, profile) {
+  if (!as.revocation_endpoint) return "接続先がトークンの取り消しに未対応です";
   try {
-    const { as } = await discover(api);
-    if (!as.revocation_endpoint) return "接続先がトークンの取り消しに未対応です";
     await postForm(as.revocation_endpoint, { token: profile.refresh_token || profile.access_token, client_id: profile.client_id });
     return null;
   } catch (error) {
@@ -573,12 +575,21 @@ async function revokeOnServer(api, profile) {
 
 async function cmdAuthLogout(flags) {
   const api = await resolveApi(flags);
-  const profile = (await loadStore()).profiles[api];
-  const failure = profile ? await revokeOnServer(api, profile) : null;
-  await updateStore((store) => { delete store.profiles[api]; });
+  if (!(await loadStore()).profiles[api]) return out({ ok: true, api, removed: false, revoked: false });
+  // 窓口を探す通信は lock の外 (lock を握るのは取り消しの 1 回だけにして、並行する nolang を長く待たせない)
+  let as;
+  let failure = null;
+  try { ({ as } = await discover(api)); } catch (error) { failure = error.message; }
+  // 取り消しと削除は lock の中: 待つ間に別の nolang が更新していても、その最新の token で取り消す。届かなくても手元からは消す
+  const removed = await updateStore(async (store) => {
+    const profile = store.profiles[api];
+    if (profile && !failure) failure = await revokeOnServer(as, profile);
+    delete store.profiles[api];
+    return Boolean(profile);
+  });
   out({
-    ok: true, api, removed: Boolean(profile), revoked: Boolean(profile) && !failure,
-    ...(failure ? { note: `手元のトークンは消しましたが、サーバー側の取り消しに失敗しました: ${failure}` } : {}),
+    ok: true, api, removed, revoked: removed && !failure,
+    ...(removed && failure ? { note: `手元のトークンは消しましたが、サーバー側の取り消しに失敗しました: ${failure}` } : {}),
   });
 }
 
