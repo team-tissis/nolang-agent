@@ -879,7 +879,8 @@ async function cmdMake(positionals, flags) {
   log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}${mode ? `・mode ${mode}` : ""}${staff ? `・担当 ${staff === "none" ? "なし" : staff}` : ""}${flags.author ? `・著者 ${flags.author}` : ""}${brief ? " (brief = 台詞と絵コンテだけ)" : ""}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : MAKE_PLAYBACK_ESTIMATE[mode || "standard"]})`);
   await runStudioAndWait(root, args, api, {
     engine,
-    timeout: flags.timeout || (mode === "super" ? MAKE_SUPER_TIMEOUT_S : null),
+    // 待ち時間の優先: --timeout の指定 → 持ち込み音声 (文字起こしを待つ・runStudioAndWait の既定) → super → 既定
+    timeout: flags.timeout || (!speechId && mode === "super" ? MAKE_SUPER_TIMEOUT_S : null),
     speech: Boolean(speechId),
   });
 }
