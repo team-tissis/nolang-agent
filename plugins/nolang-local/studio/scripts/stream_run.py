@@ -203,6 +203,47 @@ def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None
     return "\n".join(out) if hit else None
 
 
+_ELEMENT_HEAD = re.compile(r"^[a-z][\w-]*#([\w-]+)\(")  # design の最上位の要素の行 (`p#名(` — 字下げなし)
+_PICTURE_ROW = re.compile(r"^\s*img#[^\s(]+\((?:[^()]|\([^()]*\))*\)\s*(.+)$")  # design の絵の行 → 説明文
+
+
+def prune_orphan_elements(before: str, after: str, text: str) -> str:
+    """直し役が足した最上位の要素 (before に無く after にある) のうち、after の timeline では印で出していたのに、塊の戻し (text) で
+    その印が消えた物の定義 (と残った印) を text から落とす。印を失った要素は cut の頭から末尾まで出っぱなしの層になり、他の文字に
+    重なる (10-30 c15 super の learn: レビューが足した台詞の行ごと `[>#learn_q +300]` が戻り、`p#learn_q` だけ残って cut 全体に居座った)。"""
+
+    def parts(s: str) -> tuple[list[str], str]:
+        d, _sep, t = s.partition("---timeline---")
+        return d.split("\n"), t
+
+    def names(lines: list[str]) -> set[str]:
+        return {m.group(1) for line in lines if (m := _ELEMENT_HEAD.match(line))}
+
+    def marked(timeline: str, name: str) -> bool:
+        return re.search(r"#" + re.escape(name) + r"(?![\w-])", timeline) is not None
+
+    b_design, _ = parts(before)
+    a_design, a_timeline = parts(after)
+    n_design, n_timeline = parts(text)
+    orphans = {n for n in names(a_design) - names(b_design) if marked(a_timeline, n) and not marked(n_timeline, n)}
+    if not orphans:
+        return text
+    out: list[str] = []
+    skip = False
+    for line in n_design:
+        m = _ELEMENT_HEAD.match(line)
+        if m is not None:
+            skip = m.group(1) in orphans
+        elif skip and line.strip() and not line.startswith((" ", "\t")):
+            skip = False  # 字下げの子を抜けた
+        if not skip:
+            out.append(line)
+    for n in orphans:  # 残った印 (`[<#名]` 等) — 名を抜き、空になった印を消す
+        n_timeline = re.sub(r",?#" + re.escape(n) + r"(?![\w-])[^\],]*", "", n_timeline)
+    n_timeline = re.sub(r"\[[>!<=~]\s*\]", "", n_timeline)
+    return "\n".join(out) + "---timeline---" + n_timeline
+
+
 # 直し役・レビューの 1 回の待ちの上限 — server は投入の行が 180 秒届かないと run を落とすので、その内側で諦めて直す前の版で続ける
 FIX_TIMEOUT_S = 120
 # 持ち込み音声の転写を待つ上限 (`drafts/speeches/` が ready になるまで — 1 時間の音声で数分) と問い合わせの間隔
@@ -1678,7 +1719,10 @@ class Run:
         if w.thread is not None:
             w.thread.join()
         t = time.time()
-        pins = self.warm_pins() if self.remote is None else None  # remote の warm の絵は server が待って使う
+        pins = None
+        if self.remote is None:  # remote の warm の絵は server が待って使う (`warmed_pin`)
+            pins, missing = self.warm_pins(self.picture_descriptions(c))
+            self.shot_unwarmed[c] = missing
         i = self.order.index(c)
         extra = "".join(
             text
@@ -1758,20 +1802,36 @@ class Run:
         self.shot_unwarmed[c] = [str(name) for name in raw_unwarmed] if isinstance(raw_unwarmed, list) else []
         return paths
 
-    def warm_pins(self) -> dict[str, object]:
-        """run の warm で解けた絵の pin — 頼んだ絵が解けるのを待つ (増えなくなって 3 s か 90 s まで・local だけ)。"""
+    def picture_descriptions(self, c: str) -> list[str]:
+        """cut c の絵 (`img#名(…) 説明`) の説明文 (`[ref:@名]` 等の頭の tag を除いた本文) — warm の pin の名の尻尾と照らす。"""
+        blk = self.cut_block(c)
+        if blk is None:
+            return []
+        out: list[str] = []
+        for line in blk[0].split("\n"):
+            m = _PICTURE_ROW.match(line)
+            if m is None:
+                continue
+            desc = m.group(1).rsplit("]", 1)[-1].strip()
+            if desc:
+                out.append(desc)
+        return out
+
+    def warm_pins(self, need: list[str]) -> tuple[dict[str, object], list[str]]:
+        """run の warm で解けた絵の pin — need (この cut の絵の説明文) が全部解けるまで待つ (90 s まで・local だけ) →
+        (pin, 間に合わなかった説明文)。「増えなくなって 3 s」で抜けると、生成中の絵 (15〜30 s) を待たずに静止画の側が別の絵を
+        作り、レビューが見た絵と最後に描かれる絵が違っていた (10-30 c14 super の memory: 手で押さえた本 → 手の無い本・輪は机に落ちた)。"""
         seen: dict[str, object] = {}
-        stable_since = time.time()
+        missing = list(need)
         deadline = time.time() + 90
-        while time.time() < deadline:
+        while True:
             raw = self.call("warm_pins").get("pins")
-            now = raw if isinstance(raw, dict) else {}
-            if len(now) != len(seen):
-                seen, stable_since = now, time.time()
-            elif seen and time.time() - stable_since > 3:
-                break
+            seen = raw if isinstance(raw, dict) else {}
+            names = [str(pin.get("name", "")) for pin in seen.values() if isinstance(pin, dict)]
+            missing = [desc for desc in need if not any(name.endswith(desc) for name in names)]
+            if not missing or time.time() >= deadline:
+                return seen, missing
             time.sleep(1)
-        return seen
 
     def revert_fixer_damage(self, c: str, cuts: list[str], before: str, defects: list[Defect]) -> int:
         """直し役の後の check で出た DEFECT が、直し役が変えた行にあれば、その変更の塊だけ直し前 (before) に戻す — 直し役を 2 回目に
@@ -1800,7 +1860,7 @@ class Run:
         new_text = before_text if whole else revert_changed_regions(before_text, after_text, bad)
         if new_text is None or new_text == after_text:
             return 0
-        (self.solo / f"cut_{c}.txt").write_text(new_text)
+        (self.solo / f"cut_{c}.txt").write_text(prune_orphan_elements(before_text, after_text, new_text))
         return len(defects) if whole else len(bad)
 
     def revert_to_author(self, c: str) -> bool:
@@ -1922,7 +1982,7 @@ class Run:
         new_text = revert_changed_regions(before_text, after_text, bad) if bad else None
         if new_text is None or new_text == after_text:
             return 0
-        (self.solo / f"cut_{c}.txt").write_text(new_text)
+        (self.solo / f"cut_{c}.txt").write_text(prune_orphan_elements(before_text, after_text, new_text))
         return hit
 
     # 止まらない開始の予測の定数 (10-27〜28 の local 実測 30 run: 担当 low 7〜27 s (中央 15) / medium 21〜73 s (中央 37・

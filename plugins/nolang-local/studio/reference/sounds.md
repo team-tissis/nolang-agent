@@ -63,7 +63,7 @@ Every transition except `cut` / `none` gets its matching `切替音` automatical
 | `dip` | `切替音 暗転` (a low, deep whoosh) | `短` ≤ 600 ms · `長` longer |
 | `flash` | `切替音 閃光` (a bright shining ping) | `短` ≤ 900 ms · `長` longer |
 
-To give a film its own transition voice, write a family name alone — `se="切替音 ポロロン"` — and the engine picks the version fitting each transition's direction and length (also for the automatic families above: `se="切替音 掃き"` on a dissolve). These families are the catalog's own scene-change sounds (one series each, so every version shares the timbre); each lands its loudest moment on the transition's peak. One family per film, two at most (a different one for chapter bands).
+To give a film its own transition voice, write a family name alone — `se="切替音 ポロロン"` — and the engine picks the version fitting each transition's direction and length (also for the automatic families above: `se="切替音 掃き"` on a dissolve). A one-shot family sound is also cut to the transition: it stops 600 ms after the window ends (300 ms fade), so a long-tailed asset never outlasts the switch; the band's two parts are sized from the band. **`se=none` makes a transition silent** — put it on the root `transition=` of a quiet film (cinematic, story, anything the ambience carries): a whoosh on every cut of a hushed scene is noise, and the picture and ambience carry the join; sound only the one turn that deserves it. These families are the catalog's own scene-change sounds (one series each, so every version shares the timbre); each lands its loudest moment on the transition's peak. One family per film, two at most (a different one for chapter bands).
 
 | Family | Sound | Fits | Versions |
 |---|---|---|---|

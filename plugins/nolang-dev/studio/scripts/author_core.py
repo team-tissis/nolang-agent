@@ -382,11 +382,21 @@ AUTHOR_BRIEF_NOTE = (
     "Keep the window 300–850 ms and pick `dir=` to fit this film (not every film sweeps left). Every transition sounds its"
     " own `切替音` matched to its motion; to give the film its own transition voice write a family name alone"
     ' (`se="切替音 ポロロン"` for a cheerful film, `キラキラ` elegant, `シュワーン` TV energy, `拍子木` Japanese — sounds.md) and'
-    " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn). One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
+    " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn)."
+    " A quiet film (cinematic, story, anything the ambience carries) wants silent joins: write `se=none` on the root"
+    " `transition=` and let the ambience and the picture carry the cut; sound at most the one turn that deserves it. A whoosh on"
+    " every cut of a snowbound cabin is noise, not craft. One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
     " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
     ' `transition panel,800,color=$色,label="01 原因",skew=-12` (a curtain — never the root default or on'
     " the last cut).\n"
 )
+
+
+# 尺の換算の 1 文 (1 つの `@` 行・25〜30 字) の秒と、その下の字数の予算 (間込みの台詞の字 / 秒) — どちらも話速 100% での値
+# (参照なしの len2 bench で 1 行 4.3 s・指定比 8/10 が ±20% 内)。cast の speed= を掛ける (10-29: speed=150% の参照で 100% のまま
+# 数えて 7 本とも参照の実尺の 0.58〜0.71。文の数を直しても参照の短い文 (~14 字) を写すと 1 行 2.3 s で 0.72 — 字数で数える)
+SENTENCE_SECONDS_AT_100 = 5.0
+CHARS_PER_SECOND_AT_100 = 6
 
 
 def author_prompt(
@@ -416,7 +426,9 @@ def author_prompt(
         )
         closing = "The closing cut is elastic, 10–30 seconds (it absorbs the other cuts' stretch). "
     length_rule = f"""- Length is set by the amount of speech; there is no write-measure-revise loop. {allot},
-  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ 5 seconds (25–30 characters), so a cut's sentences = target seconds ÷ 5 (write `(target seconds · N sentences)` on the plan line).
+  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ {SENTENCE_SECONDS_AT_100:.0f} seconds (25–30 characters) at the cast's speed=100%, so a cut's sentences = target seconds ÷ {SENTENCE_SECONDS_AT_100:.0f} (write `(target seconds · N sentences)` on the plan line).
+  The budget underneath is characters: ≈ {CHARS_PER_SECOND_AT_100} characters of speech per second at speed=100%, times the cast's `speed=` (speed=150% → {CHARS_PER_SECOND_AT_100 * 1.5:.0f} a second,
+  so a 25–30 character sentence takes ≈ {SENTENCE_SECONDS_AT_100 / 1.5:.1f} s). Count sentences with the speed of the cast you write, and write more of them when they run shorter than 25 characters.
   Write that many sentences in the cut — long videos tend to run short on sentences (eyeballed seconds read longer than they are). Tie at least one screen change (an element entering, a
   state change, a picture swap) to every sentence. {closing}Right after the last speech line of each cut's timeline (before the transition), note the sentence count and the
   estimated seconds: `# speech N sentences ~M s`.
