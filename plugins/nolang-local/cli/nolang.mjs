@@ -805,7 +805,7 @@ function reviewFixArgs(flags) {
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|standard|plus|super] [--review low|medium|none] [--no-stills] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|solo|standard|plus|super] [--review low|medium|none] [--no-stills] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -813,7 +813,7 @@ async function cmdMake(positionals, flags) {
   const seconds = String(flags.seconds || "auto"); // 既定 auto = 台本の分量と内容に合わせる
   // --mode = 役の flag の組 (engine の stream_make.sh が展開する・明示の役の flag が上書き)
   const mode = flags.mode || null;
-  if (mode && !["light", "standard", "plus", "super"].includes(mode)) throw new CliError("--mode は light / standard / plus / super", { exit: EXIT.USAGE });
+  if (mode && !["light", "solo", "standard", "plus", "super"].includes(mode)) throw new CliError("--mode は light / solo / standard / plus / super", { exit: EXIT.USAGE });
   const staff = flags.staff || null; // 書かなければ engine の既定 (balanced・--mode があればその組)
   if (staff && !["balanced", "low", "medium", "high", "xhigh", "none"].includes(staff)) throw new CliError("--staff は balanced / low / medium / high / xhigh / none", { exit: EXIT.USAGE });
   // 著者 brief: 著者は台本 (台詞) と cut ごとの絵コンテだけを書き、絵は cut ごとの担当がゼロから設計する。
@@ -1354,10 +1354,11 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief (著者は台詞と絵コンテだけ書き、担当が絵をゼロから設計 — 台詞は著者の版で固定・--staff-assets を含意・--staff none とは併用不可。--author は brief の著者にも効く)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
-        [--mode light|standard|plus|super]
-                                        役の flag の組。light = 著者 low・担当なし・直し severe (速さ最優先) / standard = 既定 (著者 low・担当 balanced・
-                                        直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn / super = 著者 brief (medium)・担当 high・
-                                        直し warn・レビュー medium (静止画)。後ろに書いた役の flag が組の値を上書きする
+        [--mode light|solo|standard|plus|super]
+                                        役の flag の組。light = 著者 low・担当なし・直し severe (速さ最優先) / solo = 著者 medium・担当なし・直し warn
+                                        (短い動画向け) / standard = 既定 (著者 low・担当 balanced・直し severe) / plus = 著者 brief (low)・担当 balanced
+                                        (素材も)・直し warn / super = 著者 brief (medium)・担当 high・直し warn・レビュー medium (静止画)。
+                                        後ろに書いた役の flag が組の値を上書きする
         [--review low|medium|none (既定 none)] [--no-stills] [--fix defect|severe|warn|none (既定 severe)] [--staff-assets]
                                         役は 4 つ (著者・担当・レビュー・直し役)。--fix = 直し役が直す指摘の段 (severe = DEFECT と severe だけ・warn = warn も・
                                         defect = DEFECT と隠れる文字だけ・none = 直し役なし)。--review = レビュー (担当の後に 1 回、指摘に出ない弱い所・崩れも

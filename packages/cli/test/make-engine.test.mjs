@@ -81,7 +81,7 @@ test("--mode は役の flag の組として studio へ渡り、書かない役�
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--mode", "super", "--fix", "severe", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
   await assert.rejects(execute(process.execPath, [cli, "make", project + "2", "--type", "concept", "--request-text", "説明", "--mode", "turbo"], { env }), (error) => {
     assert.equal(error.code, 2);
-    assert.match(error.stderr, /--mode は light \/ standard \/ plus \/ super/);
+    assert.match(error.stderr, /--mode は light \/ solo \/ standard \/ plus \/ super/);
     return true;
   });
 });

@@ -3,8 +3,9 @@
 # usage (repo root から):
 #   bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 台本の分量に合わせる)]
-#        [--mode light|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / standard = 既定 (著者 low・担当 balanced・直し severe) /
-#                            plus = 著者 brief (low)・担当 balanced (素材も)・直し warn / super = 著者 brief (medium)・担当 high・直し warn・レビュー medium。
+#        [--mode light|solo|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / solo = 著者 medium・担当なし・直し warn /
+#                            standard = 既定 (著者 low・担当 balanced・直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn /
+#                            super = 著者 brief (medium)・担当 high・直し warn・レビュー medium。
 #                            後ろに書いた役の flag が組の値を上書きする)
 #        役は 4 つ (著者・担当・レビュー・直し役)。flag は「役の名 → 強さ・none で外す」で、CLI `nolang make` と同じ名:
 #        [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief]   (著者は台本 = 台詞・絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
@@ -33,7 +34,7 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,31p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,32p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
@@ -43,10 +44,11 @@ MODE=""; _args=("$@"); for ((i=0; i<${#_args[@]}; i++)); do [ "${_args[$i]}" = -
 case "$MODE" in
   "") ;;
   light)    EFFORT=low;    BRIEF="";  STAFF="";       FIX=severe; REVIEW=none;;    # 速さ最優先: 著者だけ・DEFECT と severe だけ直す
+  solo)     EFFORT=medium; BRIEF="";  STAFF="";       FIX=warn;   REVIEW=none;;    # 著者 medium だけ・warn まで直す (短い動画向けの見立て)
   standard) EFFORT=low;    BRIEF="";  STAFF=balanced; FIX=severe; REVIEW=none;;    # 既定 (--mode を書かない時と同じ)
   plus)     EFFORT=low;    BRIEF=1;   STAFF=balanced; FIX=warn;   REVIEW=none;;    # 著者は台本だけ・担当が絵も設計・warn まで直す
   super)    EFFORT=medium; BRIEF=1;   STAFF=high;     FIX=warn;   REVIEW=medium;;  # 質を取りに行く: 著者 medium の brief・担当 high・レビュー medium (静止画)
-  *) echo "--mode は light / standard / plus / super" >&2; exit 2;;
+  *) echo "--mode は light / solo / standard / plus / super" >&2; exit 2;;
 esac
 while [ $# -gt 0 ]; do
   case "$1" in
