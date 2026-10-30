@@ -14,8 +14,8 @@ usage (repo root から):
                   `hf_<type>_*.md` 2 本 (依頼と同じ題材を外し、依頼と同じ向きの物を先に・pick_samples)。stream/samples.txt に記録し fix も同じ見本を使う
   python stream_author.py staff <project> <cut> <findings>  [--effort medium]   # 担当: cut を仕上げて block を stdout へ
   python stream_author.py fix  <project> <cut 名> <findings file> [--root] [--effort low] [--review] [--shots a.png,b.png]
-      → stdout に直した block (--root = 根の 2 file も直す・--review = 見直し (指摘に出ない弱い所・崩れも探す)・
-        --shots = 見直しに cut の静止画も見せる (stream_run の見直し))
+      → stdout に直した block (--root = 根の 2 file も直す・--review = レビュー (指摘に出ない弱い所・崩れも探す)・
+        --shots = レビューに cut の静止画も見せる (stream_run のレビュー))
 project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [editable]"・studio/ = `new` の雛形)。
 出力: project/stream/ (system_prompt.md・claude_*.jsonl・author.jsonl = 時刻の記録) と project/solo/ (plan.txt・order.txt・root_design.txt・root_timeline.txt・cut_<名>.txt)。
 """
@@ -129,7 +129,7 @@ STAFF_SAMPLE_TYPES = ("cinematic", "story")
 # claude を起動する cwd: CLAUDE.md の無い場所 (repo の CLAUDE.md を読ませない)
 CWD = Path("/tmp/nolang-stream-cwd")  # claude -p の cwd (repo の外 — project の CLAUDE.md / settings を読ませない)
 MODEL = "claude-opus-5-5"
-# 見直し役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
+# レビュー役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
 SHOT_WIDTH = 960
 
 
@@ -692,7 +692,7 @@ def stream_claude(
     before_input: Callable[[], bool] | None = None,
 ) -> dict[str, object]:
     """claude -p を stream-json で回し、text delta を on_text に流す。最初の thinking / text の時刻と費用を記録する。
-    images = prompt の前に見せる画像 (見直し役の cut の静止画)。before_input = claude を起こした後・prompt を渡す前の合流
+    images = prompt の前に見せる画像 (レビュー役の cut の静止画)。before_input = claude を起こした後・prompt を渡す前の合流
     (claude の起動の間に済ませたい待ち)。False なら prompt を渡さずに claude を止めて `InputCancelled` (token は使っていない)。
     text delta が 1 つも来ずに終わった応答 (長い思考の後、本文が最後の assistant message にだけ乗る — now7_10 の担当 hook・246 s で
     delta 0) は、最後の assistant message の text の block を本文として流す (`text_from_message`)。"""
@@ -1029,7 +1029,7 @@ def fix(
     shots: list[Path],
 ) -> int:
     """直し役。own_root = この cut が根の持ち主 (最初の live な cut・根が流れる前) — 根の 2 file も直せる (`@ root_design 行`) 。
-    review = 見直し (指摘に出ない弱い所・崩れも探す)・shots = 見直しに見せる cut の静止画。"""
+    review = レビュー (指摘に出ない弱い所・崩れも探す)・shots = レビューに見せる cut の静止画。"""
     proj, st = project / "solo", project / "stream"
     sp = st / "system_prompt.md"
     root_d, root_t = (proj / "root_design.txt").read_text(), (proj / "root_timeline.txt").read_text()
@@ -1065,7 +1065,7 @@ def fix(
     if dropped:
         log(st, event="fix_edits_dropped", cut=name, edits=dropped)
     if edits is None and not dropped and has_empty_edits(text):
-        # 直す所が無い (見直しで崩れが無かった) — block をそのまま返す
+        # 直す所が無い (レビューで崩れが無かった) — block をそのまま返す
         log(st, event="fix_no_edits", cut=name)
         sys.stdout.write(block)
         return 0

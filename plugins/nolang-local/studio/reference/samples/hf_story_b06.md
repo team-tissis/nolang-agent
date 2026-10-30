@@ -28,7 +28,6 @@ image cart = "[transparent]真横から見た、馬が小さな木造の客車�
 image horse = "[transparent]得意げなドヤ顔でこちらを見る馬の顔のアップ。鼻息が荒く、片目をつぶってウインクしている。コミカルで力強い。"
 image ogai = "[transparent]口ひげをたくわえた明治時代の洋装の若い紳士（文豪）の上半身。鼻をつまみ、顔を真っ赤にして目をむいて激怒している。頭から怒りの湯気。コミカルな戯画。"
 sound hyoshigi = "拍子木をカンカンと打つ乾いた音"
-sound whoosh = "スイングのシュッという速い動きの音"
 sound swish = "カメラが流れるようなシュッという風切り音"
 sound taiko = "和太鼓をドンと一発鳴らす音"
 sound pon = "ポンと軽く鳴る明るいアクセントの音"
@@ -303,7 +302,7 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=swish -6dB
 @n: [silence:20][♪hooves -11dB to=3.2s fade=0,500]線路の上の客車を、[|]馬がパカパカ引っ張ります。[silence:100]
 @: [manner:ちょっと得意げに、早口でオチをつけるように][>#spec -50]動力は、文字どおりの[>#spec.v][♪pon_hi -5dB][!#spec.v punch,1.15,duration=290 +480][♪"パフパフとラッパを鳴らす音" -2dB +480][♪hyoshigi -4dB +440 to=0.7s]「馬力」。[silence:150]
 [<#ch1 cut-0]
-transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
+transition panel,500,color=#D23F2A,skew=-14,dir=right
 
 *** ogai1
 @n: [silence:250][>#ch2 -130][>#ogai_pop +80][♪pon -5dB +100]乗客には、あの文豪、[>#nameplate +280][♪pon_hi -5dB +280]森鴎外も。[silence:50]
@@ -316,7 +315,7 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
 @ogai: [silence:100][♪impact -5dB -60 to=2.5s fade=0,800][♪"ハエがブーンと飛び回る音" -13dB +100 to=4.6s fade=300,800][>#brush1 +50]臭いと揺れが、[>#brush2 +180][♪"ガーンとショックを受けた時の短い音" -7dB +180][!#rage_bg shake,15,duration=550 +220][!#brush2 shake,7,duration=400 +300]最悪！[silence:340]
 @n: [manner:あきれ半分に、面白がって早口で][<#brush1 -50][<#brush2 -50]文豪、[>#gekido +140][♪taiko -2dB +140][!#rage_bg shake,12,duration=450 +160][♪hyoshigi -4dB +740 to=0.7s]大激怒。[silence:150]
 [<#ch2 cut-0]
-transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
+transition panel,500,color=#D23F2A,skew=-14,dir=right
 
 *** slow
 [>#subtitle]
@@ -328,7 +327,7 @@ transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
 [>#subtitle]
 @n: [manner:哀愁をこめて、テンポよく][silence:100][>#ono1 +200][!#ono1 to,{x:200, duration:1.6, ease:'none'} +200][♪swish -9dB -150][>#ono2 +900]乗客に追い抜かれる[>#gloom][♪"チーンと低く鳴るりんの音" +4dB +50 to=1.8s][♪hyoshigi -4dB -50 to=0.7s]馬車。[silence:200]
 [<#ch3 cut-0]
-transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -4dB
+transition panel,500,color=#D23F2A,skew=-14,dir=right
 
 *** omen
 subtitle "でも 本当の地獄は下り坂"
@@ -345,7 +344,7 @@ subtitle "まさにジェットコースター状態"
 @n: [<#scream +300][>#jc1 +380][♪jan -8dB +420][>#jc2 +450]まさに、ジェットコースター状態。[|]明治の人、[>#inochi +20][♪taiko -6dB +20]命がけです。[silence:180]
 [<#rush]
 [<#ch4 cut-0]
-transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -6dB
+transition panel,500,color=#D23F2A,skew=-14,dir=right
 
 *** bridge
 bgm music_b
@@ -353,7 +352,7 @@ bgm music_b
 [<#subtitle]
 @n: [manner:心をこめて、ねぎらうように、テンポよく][>#warm -300][<#tline -250][<#intai -250][>#otsukare +100]馬たち、本当におつかれさまでした。[silence:220]
 [<#ch5 cut-0]
-transition panel,500,color=#D23F2A,skew=-14,dir=right,se=whoosh -6dB
+transition panel,500,color=#D23F2A,skew=-14,dir=right
 
 *** end
 @n: [♪"チャンチャンと締めるワンポイントの音" -4dB +100][>#end_date +120][>#end_name +360][>#end_sub +500][>#end_horse +700][silence:1.9s]

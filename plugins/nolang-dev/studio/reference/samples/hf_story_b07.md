@@ -30,7 +30,6 @@ run l2 { font-size: 96px }
 run l2r { font-size: 96px; color: $red }
 sound gaan = "ガーンという漫画的なショックの衝撃音"
 sound jan = "ジャン！という短く鋭い驚きのアクセント音"
-sound whoosh = "ヒュッと短く鋭い風切り音"
 sound tick = "時計の秒針がチクタク刻む乾いた音"
 sound chiin_s = "お鈴をチーンと短く打つ音"
 sound tsukkomi = "ツッコミのハリセンのような乾いた軽い打撃音"
@@ -174,7 +173,7 @@ div#cnt.bleed(left: 356px; top: 368px; width: 690px; height: 260px; border-radiu
 #v2
 cast n = "テンション高めのバラエティ番組風の若い男性ナレーター、張りのある声で早口に勢いよく語る" speed=130% manner="テンション高めのバラエティ番組ナレーション風に、早口で勢いよく"
 silence head=0 tail=120
-transition = push,240,dir=left,overlap=240,ease=power3.out,se=whoosh -8dB
+transition = push,240,dir=left,overlap=240,ease=power3.out
 
 *** hook
 [>#subtitle]
@@ -184,22 +183,22 @@ bgm music
 *** one
 [!#pc[1] .on][!#pc[1] punch,1.3,duration=320]
 @n: [♪jan -6dB][>#st1 +20][>#clock +220][<#st1 +500][>#hl1 +500]1つ目！日曜18時半のアニメが[|]終わった瞬間、[|]休日の終わりを告げる[|][>#cd][♪tick -10dB to=1.7s fade=50,150]カウントダウンが始まって[|][>#bub +50][!#bub to,{scale:.82, duration:.3, ease:'power2.in'} +320][♪chiin_s -4dB +280 to=1.2s fade=0,500]口数が減る。
-transition push,260,dir=up,overlap=260,ease=power3.out,se=whoosh -8dB
+transition push,260,dir=up,overlap=260,ease=power3.out
 
 *** two
 [!#pc[2] .on][!#pc[2] punch,1.3,duration=320][!#pc[1] .done]
 @n: [♪jan -6dB][>#st2 +20][<#st2 +520][>#hl2 +520][!#clock.hm text,"23:00" +300]2つ目！早く寝なきゃいけないのに、[|][♪tick -12dB to=2.4s fade=50,120][!#clock.hm text,"23:30" +300]「寝たら[!#clock.day text,"月"][!#clock.day fill,$blue][!#clock.hm text,"0:00"]明日に[!#clock.hm text,"0:30"]なっちゃう」[|][!#clock.hm text,"1:00"]と思[!#clock.hm text,"1:30"]って[|][!#clock.hm text,"2:00" +50][>#clock.al +50][!#clock punch,1.12,duration=300 +50][♪tsukkomi -8dB +20]深夜2時まで[|][>#sw1 +50][<#sw1 +270][>#sw2 +420][<#sw2 +640][♪swipe -1dB +50 to=0.45s][♪swipe -2dB +420 to=0.45s]無駄にスマホを見る。
-transition dissolve,260,overlap=260,zoom=1.45,ease=power3.out,se=whoosh -8dB
+transition dissolve,260,overlap=260,zoom=1.45,ease=power3.out
 
 *** three
 [!#pc[3] .on][!#pc[3] punch,1.3,duration=320][!#pc[2] .done]
 @n: [>#fl3][!#fl3 to,{opacity:0, duration:.2, ease:'power1.out'} +50][♪jan -6dB][>#st3 +20][<#st3 +520][>#hl3 +520][<#clock.al][!#clock.hm text,"6:59" +300]3つ目！月曜の朝起きた瞬間、[|][card:small][>#th][!#th.fill .hi +200]「ワンチャン熱出てないかな…」[|]と自分のおでこを[|][!#th.fill .mid -100][>#pt1][<#pt1 +320][>#pt2 +240][<#pt2 +560][♪pat -3dB to=0.35s][♪pat -3dB +240 to=0.35s][>#read +840][♪tsukkomi -7dB +840]ペタペタ触って確認する。
-transition push,240,dir=right,overlap=240,ease=power3.out,se=whoosh -8dB
+transition push,240,dir=right,overlap=240,ease=power3.out
 
 *** four
 [!#pc[4] .on][!#pc[4] punch,1.3,duration=320][!#pc[3] .done]
 @n: [♪jan -6dB][>#st4 +20][<#st4 +520][>#hl4 +520][!#clock.hm text,"7:45" +300]4つ目！家を出て駅に向かう道中、[|][>#gv -120][♪impact -1dB +20 to=1.4s fade=0,600][!#p4 shake,15,duration=550 +60][!#gv shake,15,duration=550 +60]まるで重力10倍の[|][<#gv +300][>#ins +450]部屋にいるかのように[|][>#zu1 -30][!#p4 to,{y:30, duration:.06, ease:'power2.out'} +20][!#p4 to,{y:10, duration:.2, ease:'power2.out'} +80][!#ins shake,7,duration=225 +20][♪step +20 to=0.5s][♪thud -11dB +20 to=0.6s][<#zu1 +320][>#zu2 +350][!#p4 to,{y:30, duration:.06, ease:'power2.out'} +400][!#p4 to,{y:10, duration:.2, ease:'power2.out'} +460][!#ins shake,7,duration=225 +400][♪step +400 to=0.5s][♪thud -11dB +400 to=0.6s][<#zu2 +700]一歩一歩が重い。
-transition dissolve,260,overlap=260,zoom=1.45,ease=power3.out,se=whoosh -8dB
+transition dissolve,260,overlap=260,zoom=1.45,ease=power3.out
 
 *** five
 [!#pc[5] .on][!#pc[5] punch,1.3,duration=320][!#pc[4] .done]

@@ -159,7 +159,7 @@ p#end_tags(cx: "153;307;513"; cy: 660px; font-size: 40px; color: $y; background:
 #v2
 cast n = "爽やかな若い男性のナレーター、明るくはっきりした声でテンポよく語る" speed=110%
 silence head=0 tail=0
-transition = dissolve,320,overlap=320,color=#000000,zoom=1.08,ease=power2.out,se=whoosh -0.2dB -100
+transition = dissolve,320,overlap=320,color=#000000,zoom=1.08,ease=power2.out
 
 *** hook
 [>#subtitle]

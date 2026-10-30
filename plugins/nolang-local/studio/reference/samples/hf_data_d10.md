@@ -52,7 +52,6 @@ sound pop = "柔らかく短いポップ音"
 sound blip = "柔らかい短い電子のブリップ音"
 sound chime = "短く澄んだチャイム"
 sound swish = "乾いた短いシュッという音"
-sound whoosh = "低く柔らかい風切りのウーッシュ"
 sound click = "乾いた短いクリック音"
 sound chime_low = "低めに響く落ち着いたチャイム"
 sound chime_warm = "温かみのある柔らかなチャイム"
@@ -386,7 +385,7 @@ silence head=0 tail=0
 # 切替: 細い光の縦線 (芯 2 px・両脇は淡い光) が左から右へ払い、新しい場面を見せる (窓 600 ms は境目の後ろ・声は窓の頭の 300 ms 後)。風切りは窓の頭の 80 ms 前・乾いたシュッは各場面の最初の語の 250 ms 後
 # 線は上から下へ青緑 → 琥珀の縦のグラデ (帯の linear(…,180))
 # engine: hf の線の青緑の光の滲み (box-shadow 22 px) は帯に添えられない — グラデの帯は 1 本だけ (縦グラデの芯の両側に半透明の帯を並べると DEFECT:RUNTIME)・滲みを幅方向のグラデで書くと縦の青緑 → 琥珀が消える
-transition = wipe,600,dir=right,overlap=600,ease=power2.inOut,bars=linear(#7ADFD300,#7ADFD3F2@30%,#F6C35BF2@70%,#F6C35B00,180),3,se=whoosh -3.5dB -380
+transition = wipe,600,dir=right,overlap=600,ease=power2.inOut,bars=linear(#7ADFD300,#7ADFD3F2@30%,#F6C35BF2@70%,#F6C35B00,180),3
 
 *** a
 bgm music

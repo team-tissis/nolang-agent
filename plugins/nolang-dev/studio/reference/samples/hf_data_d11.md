@@ -43,7 +43,6 @@ img { out: none }
 veil { out: none }
 sound sw_start = "ストップウォッチのボタンを押すカチッという短い電子音"
 sound whoosh = "速く鋭いシュッという風切り音、画面を横切る"
-sound whoosh2 = "低く太いヒュッという風切り音、場面の切り替わり"
 sound impact = "重く短いドンという衝撃音、数字を叩きつける"
 sound pop = "軽く弾むポンという短い音"
 sound bell = "明るく澄んだチーンというベルの音"
@@ -319,41 +318,41 @@ silence head=0 tail=180
 *** s1
 bgm music
 @n: [silence:950][♪sw_start -4dB -830][♪whoosh -6dB -180][♪impact -6dB -140][>#s1_kick -170][>#s1_title.l1 -120][flash 0.5 -120][>#s1_title.l2]前半を飛ばしたランナーは、[>#s1_title.nanpun -40][flash 0.35 -20][♪impact -30][!#s1_title shake,9,duration=300 +20][>#s1_title.son +300][!#s1_title.nanpun to,{scale:1.04, duration:0.5, ease:'sine.inOut', repeat:1, yoyo:true} +500]何分損したのか？
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s2
 [>#subtitle]
 @n: [silence:220][>#b2.lbl -50]完走者[>#b2.big -120][>#b2.unit -120][♪pop -5dB -50][>#b2.rate +450][>#b2.bar +450]{hl}8,214人{/}の、[|][>#b2.ca -80][>#b2.ca.dot[*] +50][>#b2.ca.dl[*] +85][♪pop -8dB]5kmごとの記録と[>#b2.x -150][>#b2.cb -50][♪pop -8dB]目標タイムを[>#b2.match -100][♪bell -3dB]突き合わせました。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s3
 @n: [silence:220]後半の方が速かったのは、わずか[>#b3.lga -100][>#b3.wnc[*] {stagger:{each:0.05}} -50][>#b3.lgb +750][>#b3.wec[*] {stagger:{each:0.012}} +750][♪pop -4dB]{hl}7.3%{/}。
 @: [>#b3.lgc -100][>#b3.wpc[*] {stagger:{each:0.007}} -80][!#b3 shake,5,duration=300 +50][♪impact -2dB]{hl}78.1%{/}は、[>#b3.medh -150][>#b3.mka -50][>#b3.mba -50][>#b3.mkb +150][>#b3.mbb +150][>#b3.badge +600]後半に[!#b3.lgc.h{tf} recolor,$fast,duration=200 -50][!#b3.lgc.h punch,1.08,duration=400 -50]{hl}2分以上{/}遅れました。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s4
 @n: [silence:220][>#b4.la][>#b4.pa[*] +20][>#b4.va[*] +20]崩れるのは[>#b4.zone -50][>#b4.m30 -50][>#b4.chip -20][♪negative -3dB to=1.75s]{hl}30km{/}から。[|]
 @: [>#b4.lb -100][>#b4.pb[*] -100][>#b4.vb[*] -100][>#b4.d40 +450]35〜40kmでは、[>#b4.info -100]最初の5kmより、[|]キロ[>#b4.call -60][!#b4 shake,8,duration=300][flash 0.25 -40][♪impact -20]{hl}64秒{/}も遅くなります。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s5
 @n: [silence:220][>#b5.g[*] +50]目標より2%以上速く入った[|][!#b5.g[2] to,{opacity:0.45, duration:0.25} -50][!#b5.g[3] to,{opacity:0.45, duration:0.25} -50][!#b5.g[1] to,{scale:1.04, duration:0.25} -50][!#b5.g[1] glow,#FF4D2E73,blur=33 -50][♪pop -5dB]「飛ばし」は、[!#b5.g[1].pc to,{scale:1.18, duration:0.3, ease:'back.out', pivot:'100% 20%'} -50][!#b5.sa to,{scaleY:1.12, duration:0.2} -50][!#b5.sa to,{scaleY:1, duration:0.2} +150][♪impact -4dB]{hl}36%{/}。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s6
 @n: [silence:220]前半[>#b6.ba -50][>#b6.va +100][>#b6.vas +100][♪bell -3dB]{hl}3分20秒{/}の貯金が、[|]後半は[>#b6.bb -80][>#b6.bb.t +250][!#b6 shake,5,duration=300 +50][♪negative -2dB to=1.75s]{hl}11分{/}の[>#b6.bc +350][>#b6.vc +600][>#b6.vcs +600]借金に。
 @: [>#b6.h6b -200][>#b6.cr[*] -100]設定どおりの人より、[>#b6.guide -350][>#b6.loss -150][>#b6.tri -60][>#b6.call -60][flash 0.25 -40][♪impact -20]{hl}3分50秒{/}の損です。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s7
 @n: [silence:220][>#b7.ra[*] +150]飛ばした人は、30km以降の大失速が[!#b7.ra[2] to,{opacity:0.4, duration:0.25} -50][!#b7.ra[3] to,{opacity:0.4, duration:0.25} -50][!#b7.ra[1].v to,{scale:1.25, duration:0.25, ease:'back.out'} -50][♪pop -4dB]{hl}70%{/}。
 @: [>#b7.h7b -250][>#b7.rd[*] -100][>#b7.avg +400][>#b7.avgl +600]目標達成率は、[!#b7.rd[2] to,{opacity:0.4, duration:0.25} -50][!#b7.rd[3] to,{opacity:0.4, duration:0.25} -50][!#b7.rd[1].v to,{scale:1.3, duration:0.25, ease:'back.out'} -50][!#b7 shake,5,duration=300 +20][♪negative -3dB to=1.75s]{hl}21%{/}どまり。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s8
 @n: [silence:220][flash 0.4 -95][♪rise -3dB -170][>#s8_chip -100][>#s8_q -20][>#b8 +900]いちばん達成したのは、[|]前半を[>#b8.big -60][>#b8.sub +500][♪whoosh -5dB -40]キロ{hl}4〜7秒{/}ゆっくり入った人。
 @: 達成率は[>#b8.donut -450][>#b8.r[*] +100][>#b8.note +700][♪sparkle]{hl}47%{/}です。
-transition panel,600,color=#0B1224,skew=-14,dir=right,se=whoosh2 -6dB -140
+transition panel,600,color=#0B1224,skew=-14,dir=right
 
 *** s9
 @n: [silence:220][♪pop -8dB -70][♪pop -8dB +230][♪pop -8dB +530]最初の5kmは我慢して、30kmに余力を。

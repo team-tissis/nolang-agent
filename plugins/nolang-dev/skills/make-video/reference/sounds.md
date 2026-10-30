@@ -6,14 +6,14 @@ So:
 
 | Tier | What sounds | How to write | Loudness |
 |---|---|---|---|
-| Decoration | pops of boxes and pictures, transition swishes, count-ups | automatic (`sfx on`); if you write one yourself, `-8dB` | appearance and transitions -8 dB, emphasis -5 dB (automatic defaults) |
+| Decoration | pops of boxes and pictures, transition swishes, count-ups | automatic (`sfx on`); if you write one yourself, `-8dB` (a transition sound `-12dB`) | appearance -8 dB, transitions -12 dB, emphasis -5 dB (automatic defaults) |
 | Events | impacts, falls, pickups, warnings, transformations, confirmations | `[♪"名"]` (0 dB) | 0 dB |
 | Climaxes | fanfares, stings (ジャン!), booms (ドーン), cheers, result reveals | `[♪"名" +3dB]` (once or twice per video) | +3 to +5 dB |
 
 Rules:
 
 - **At most 3 per cut** (automatic sounds don't count). Don't answer a motion finding with a sound (fix motion with motion). If the lint `se_dense` fires (8+ in 5 seconds), cut some.
-- Automatic sounds are added by compile to the timeline it renders as `[♪"…" -8dB]` (at a transition boundary, `se "風切り１-２" -8dB` at the head of the next cut) (your timeline.txt does not change; only at the front of your own marks, `[>#名]` and `[!#名 count|check|pop|…]` — marks the defaults added get none). Per element, the declaration `se: "音"` swaps the sound and `se: none` removes it (a removed sound still counts as played for thinning — removing the head of a run does not move the sound to the next element). Write `se=` on a transition and only that one shot plays.
+- Automatic sounds are added by compile to the timeline it renders as `[♪"…" -8dB]` (at a transition boundary, the sound of that transition's `切替音` family — e.g. `se "カメラモーション03-09(中高　リバーブ)" -12dB -200 to=800` for a 400 ms dissolve at the head of the next cut; transitions under 400 ms get no automatic sound) (your timeline.txt does not change; only at the front of your own marks, `[>#名]` and `[!#名 count|check|pop|…]` — marks the defaults added get none). Per element, the declaration `se: "音"` swaps the sound and `se: none` removes it (a removed sound still counts as played for thinning — removing the head of a run does not move the sound to the next element). Write `se=` on a transition and only that one shot plays.
 - Text, diagrams and arrows make no sound on appearance (a click on every text entrance sounded cheap and plinky). On a word where the author wrote `[♪]`, that word's automatic sound does not play (no doubling). Identical automatic sounds at the same instant fold into one shot.
 - **Automatic sounds (`sfx on`) are thinned per cut by compile**: one shot per word, and across words the same sound stops playing from the second word in a row (the count restarts at a word with a different sound). Even in a build where every sentence head gets the same pop (`cut { stagger: sentence }` + `in: card`), the pop plays only at the head of the run. The author's `[♪]` / `se` are never thinned, and no automatic sound is layered on that word (it does count toward a same-sound run).
 - **The loudness of a shot is placed by the engine from the floor**: the engine adds the gain that puts the asset's max 2 LU above the floor at the instant of firing (voice if present, else music, else silence) (+8 dB during speech; clamp −6 to +9). The author's `-6dB` is relative on top of that, meaning "a little below the floor". Write 0 dB and it will be heard. Ambience (`to=end`) is not floor-relative.
@@ -51,6 +51,58 @@ the measured src had 0 `se` lines, 1-7 uses of `[♪]`, and ambience (long `to=`
 - **Onomatopoeia text**: `[♪]` on the same word (`p#名(…) ペタペタ` + `[♪"ペタペタと貼る音"]`) — never the text alone or the sound alone.
 - Decorative pops (`sfx on`) win no praise. story / cinematic may go `sfx off` and keep only ambience and foley.
 
+## Transition sounds (`切替音 …`)
+
+Every transition of 400 ms or more except `cut` / `none` gets its matching `切替音` automatically, at −12 dB (quieter than the pops, well under the voice; quick melts under 400 ms stay silent unless you write `se=`; a family written without a dB plays at the same −12 dB): a family of real catalog sounds chosen for that kind of motion (one smooth swell whose loudest moment the engine lands on the transition's peak, so it never sounds early or late). A `panel` band moves twice (sweeps in, holds, sweeps out), so its sound is built on the spot for that band: one swelling sound is split at its peak, its swell lands on the moment the band covers the screen and its fall plays again as the band leaves, each part as long as that band's own cover and leave (the band families below). Write `se=` on a transition only to change that default; then another `切替音` family, or any other catalog sound, plays on the same peak. To keep the automatic one but change its loudness, write its family (`se="切替音 ふわっ" -4dB`; `se="切替音 帯" -4dB` on a panel keeps both parts) — a written family plays exactly as the automatic one would (same peak alignment, same length), only its loudness changes.
+
+| Transition | Automatic | Variants |
+|---|---|---|
+| `panel` | `切替音 帯` (a light whoosh) split in two: in on the cover, out on the leave | fitted to the band's own ms |
+| `wipe` `push` `slide` `zoom` · `dissolve` with `dir=` | `切替音 掃き` (a quick whoosh) | `短` ≤ 600 ms · `長` longer |
+| `dissolve` | `切替音 ふわっ` (a soft, airy whoosh with a gentle tail) | `短` ≤ 600 ms · `長` longer |
+| `dip` | `切替音 暗転` (a low, deep whoosh) | `短` ≤ 600 ms · `長` longer |
+| `flash` | `切替音 閃光` (a bright shining ping) | `短` ≤ 900 ms · `長` longer |
+
+To give a film its own transition voice, write a family name alone — `se="切替音 ポロロン"` — and the engine picks the version fitting each transition's direction and length (also for the automatic families above: `se="切替音 掃き"` on a dissolve). A one-shot family sound is also cut to the transition: it stops 600 ms after the window ends (300 ms fade), so a long-tailed asset never outlasts the switch; the band's two parts are sized from the band. **`se=none` makes a transition silent** — put it on the root `transition=` of a quiet film (cinematic, story, anything the ambience carries): a whoosh on every cut of a hushed scene is noise, and the picture and ambience carry the join; sound only the one turn that deserves it. These families are the catalog's own scene-change sounds (one series each, so every version shares the timbre); each lands its loudest moment on the transition's peak. One family per film, two at most (a different one for chapter bands).
+
+| Family | Sound | Fits | Versions |
+|---|---|---|---|
+| `切替音 ポロロン` | a xylophone run | variety, kids, cheerful explainers | `上へ` / `下へ` (`dir=down`) × `短` / `長` |
+| `切替音 テレレーン` | a bright synth-bell run with a ringing tail | TV variety, a new topic | `上へ` / `下へ` × `短` / `長` |
+| `切替音 ピロロ` | an electronic trill | games, apps, pop and playful | `上へ` / `下へ` |
+| `切替音 シュワーン` | a tonal whoosh traveling across | TV energy, news, sports, tech | `左へ` / `右へ` / `中央` |
+| `切替音 シュッ` | a short swish | quick, plain pace | one |
+| `切替音 ブワッ` | a soft rushing swell | a flashback, a mood shift (`dissolve`) | one |
+| `切替音 キラキラ` | a shimmering chime | elegant, magical, a discovery | `短` / `長` |
+| `切替音 キラーン` | a whoosh into a sparkle | a reveal, a bright answer | one |
+| `切替音 シャララン` | a harp-like glissando | gentle, warm, a happy turn | one |
+| `切替音 ドーン` | a deep impact | dramatic, a shock, a chapter opening (`panel`, `dip`) | `短` / `長` |
+| `切替音 リバース` | a reverse swell that stops on the peak | just before a reveal (`zoom`, `flash`) | `短` / `長` |
+| `切替音 グリッチ` | crackling digital noise | tech, cyber, unease | `短` / `長` |
+| `切替音 パラパラ` | a book's pages flipping | study, history, a story (`slide`, `push`) | one |
+| `切替音 カシャ` | a camera shutter | photos, a snapshot | one |
+| `切替音 ポン` | a round pop | cute, light | one |
+| `切替音 パチン` | a finger snap | a quick switch, "and then —" | one |
+| `切替音 拍子木` | wooden clappers (two strikes) | Japanese, period, a curtain (`panel`) | one |
+
+`短` / `長` for these families = the time from the transition's start to its peak (half a wipe / dissolve / dip, a third of a flash, a band's sweep in): `短` up to 0.3 s.
+
+Band families split in two on a `panel` (in on the cover, out on the leave — fitted to that band's ms); on any other transition they play once on the peak. `ブワッ` above is one too. Pick one for the film's chapter bands:
+
+| Family | Sound | Fits |
+|---|---|---|
+| `切替音 帯` | a light whoosh (the default) | any chapter band |
+| `切替音 フォン` | a low, soft whoosh | calm, serious, business |
+| `切替音 シャーッ` | a curtain drawn | a stage, a story's next act |
+| `切替音 ビュン` | anime speed lines, falling pitch | energetic, anime, sports |
+| `切替音 ピュイーン` | a bright electronic rise | TV variety, a new topic |
+| `切替音 ギュイン` | a flashy synth whoosh | games, hype, tech |
+| `切替音 ピシュン` | a thin, high digital sweep | tech, cyber, data |
+| `切替音 ザザッ` | 8-bit noise | retro games |
+| `切替音 鈴` | a shake of kagura bells | Japanese, shrines, seasons |
+| `切替音 シャカッ` | a slow shaker | soft, cozy, lifestyle |
+| `切替音 ヒューイ` | a slide whistle | comedy, a silly turn |
+
 ## Sounds by name (use → catalog name, length, peak position)
 
 `peak` is the second where the momentary level is highest (absent = a short sound that plays from the head). `±` is a loudness guide.
@@ -61,7 +113,7 @@ the measured src had 0 `se` lines, 1-7 uses of `[♪]`, and ambience (long `to=`
 |---|---|---|---|
 | Appearance of boxes, pictures, copies (pop) | `オノマトペ 弾ける01-1（ドライ）` | 1.8 s | the automatic pop |
 | Count-up click | `アソート効果音05-14` | 1.7 s | the automatic click (count) |
-| Cut-transition swish | `風切り１-２` | 0.4 s | the automatic swish |
+| Swish (fast swing) | `風切り１-２` | 0.4 s | the automatic sound of `in=travel` |
 | Whoosh as the screen moves sideways | `カメラモーション06-1(中)` | 1.0 s | for wipe / slide |
 | Opening hit (noise sweep) | `ノイズスイープ03-04(ドライ)` | 0.6 s | second 0 of the video |
 | Small cue at a scene head | `ひらめき02-1（高）` | 1.7 s | hf's step |

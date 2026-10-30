@@ -44,8 +44,6 @@ shape { out: none }
 svg { out: none }
 img { out: none }
 sound telop = "ニュース番組のテロップが出る明るい電子音のジングル"
-sound whoosh = "短いノイズのスイープのシュッという場面転換の音"
-sound whoosh_big = "カメラが大きく動くような重めのシュッという風切り音"
 sound pop = "短く軽いサイバーなポップの電子音"
 sound count = "数字が回るサイバーな電子のカウント音"
 sound hit = "短く締まった単発のアクセントの打音"
@@ -284,7 +282,7 @@ read 23.4% = にじゅうさんてんよんパーセント
 read 38.5% = さんじゅうはってんごパーセント
 # 切替: 旧い板が左へ抜け新しい板が右から入る (板ごとの in / out・0.5 秒)。縁が 2 枚の板の隙間を同じ速さで走る wipe で継ぐので、地と常設の枠は動かない
 # 窓は境界の前の 0.5 秒 (overlap なし = 旧い板の out と新しい板の in が同じ 0.5 秒に重なる)・前の声の末尾の 0.2 秒 + 次の頭の 0.06 秒 (字幕は声の 60 ms 前に出る) が声と声の間
-transition = wipe,500,dir=left,ease=power3.inOut,se=whoosh -1dB
+transition = wipe,500,dir=left,ease=power3.inOut
 
 # hook — 頭に題が組み上がり、「4人に1人」で結論の札と人の形 (1 つ目が弾む)・字幕は下に寄せた札
 *** hook
@@ -323,7 +321,7 @@ subtitle "始めたいけど、していない人も{a}38.5%{/}"
 # reasons — 頭で 5 行 →「時間がない」で 1 行目が琥珀・「1位」→「規則が」で 3 行目が空色 →「61%」でドーナツ →「就業規則」で 61% が弾む
 *** reasons
 @n: [silence:60]始めない理由の1位も「[!#b8.r7[1] fill,#FFB21A1A,duration=300 -100][>#b8.hot -100][>#b8.badge7][♪hit -3dB -50]時間がない」。[!#b8.r7[3] fill,#4FC3F71F,duration=300 -100][>#b8.rul -100][♪pop -6dB -20]規則が理由の人の[>#b8.dn -550][>#b8.dn.arc -500][♪hit -3dB -150]{a}61%{/}は、[|][!#b8.dn.b{h} punch,1.12,duration=320]就業規則を読んだことがありません。[silence:0.2s]
-transition wipe,500,dir=left,ease=power3.inOut,se=whoosh_big -3dB
+transition wipe,500,dir=left,ease=power3.inOut
 
 # summary — 頭で題と 3 枚の札 (ティック 3 回) →「就業規則」で絵の枠と文 → 2 秒止めて終わる
 *** summary

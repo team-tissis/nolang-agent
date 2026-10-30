@@ -340,7 +340,7 @@ panel#c3(left: 1269px; top: 284px; width: 572px; height: 600px; in: {y:50, opaci
 cast n = "明るく澄んだ若い女性のナレーター、落ち着いて明瞭に、社内向けの報告をテンポよく読む" speed=110%
 silence head=0 tail=0
 # 切替: 旧場面が溶けて新場面が出る上を、琥珀の光の帯が左から右へ払う (hf の cross fade + sweep・帯は溶けと独立・境目で風切り)
-transition = dissolve,850,dir=right,overlap=850,ease=power2.inOut,bars=linear(#F5B54400,#F5B5441A@60%,#FFD27F8C@97%,#FFD27F00),173,se=whoosh -4dB
+transition = dissolve,850,dir=right,overlap=850,ease=power2.inOut,bars=linear(#F5B54400,#F5B5441A@60%,#FFD27F8C@97%,#FFD27F00),173
 
 # title — 題は頭に組み上がり、「アンケート」で概要・「結果」で目次の札 5 つ
 *** title

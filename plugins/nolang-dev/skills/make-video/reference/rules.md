@@ -1,8 +1,8 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 6f4c0dfd8fce6a2257627f59aefe8173b9bb0b2bff55ecc5cc29d4f673772480 · synced_at: 2026-10-29T03:38:34.554Z
+Version of these documents: contract: 1 · reference_hash: adc6ef2aec025bc443a5491eb478aa8891c3becfd2472425e5d9a1c46f9f545b · synced_at: 2026-10-30T06:28:00.873Z
 
-Docs: contract.json ef39cb227d4f · spec.md df02b7bfe3eb · authoring.md 5dfd0cb9e4e5 · capabilities.md a3f9838bc5a1 · looks.md a6c0e431acbb · sounds.md bfdeb42d7466 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bbd323cc370c · scaffolds/ 4946fc4afb33
+Docs: contract.json ef39cb227d4f · spec.md 8c2efaecb3b4 · authoring.md d7731121c703 · capabilities.md a3f9838bc5a1 · looks.md 7ec769916902 · sounds.md 0f2f21652e0b · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bd176c700da7 · scaffolds/ 4946fc4afb33
 
 The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
@@ -22,6 +22,7 @@ The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_dr
 - `same_picture` the same picture for 15+ seconds → swap to another picture, diagram or card on a word inside the cut (do not split the cut)
 - `blank_band` a third of the screen is bare ground at the cut's head → lay a full-bleed picture, or put a card on the band
 - `dip_black_frame` dip means black frames → dissolve or wipe
+- `transition_label_flash` the panel curtain's label rides the band, so it is readable only while the band holds (the sweeps take 0.7 s; the rest of the ms is the hold — 100 ms at 800) → lengthen the panel to the ms check names, or cut the label to a glance (a number + one short word)
 - `double_exit` a cut that ends on a transition also has a whole-cut out, so the scene fades and then the transition runs (it dies twice) → to end on a fade, make the transition `transition cut`; if the transition carries the scene, drop the section's out (for a transition inherited from the root, the machine turns it into a cut)
 - `persistent_chrome` persistent layers (progress / chapter numbers / running totals) belong only in videos of 3+ minutes — in a short video the cost of occupying a screen edge outweighs them, so drop it
 - `sparse_cut` 4+ seconds with few elements → add a picture or a card

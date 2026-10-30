@@ -374,17 +374,29 @@ AUTHOR_BRIEF_NOTE = (
     " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
     "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve, at"
     " the richness of these real moves —\n"
-    '- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440,se="シュッ" -4dB -310` (an angled sweep in the'
+    "- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440` (an angled sweep in the"
     " film's own hex colors; a glow is `bars=linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180`);\n"
     '- `slide,600,dir=right,offset=8%,opacity=0,se="ページをめくる音" -4dB` or with `drift=240,dim=0.38` (a page turn);\n'
     "- `dissolve,320,overlap=320,color=#0A0F1A,zoom=1.08` (rising out of the dark) · `push,500,dir=up` · `none,300` (hard"
     " documentary cuts).\n"
-    "Keep the window 300–850 ms and pick `dir=` and the `se` sound to fit this film (not every film sweeps left with the same"
-    " swish). One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
+    "Keep the window 300–850 ms and pick `dir=` to fit this film (not every film sweeps left). Every transition sounds its"
+    " own `切替音` matched to its motion; to give the film its own transition voice write a family name alone"
+    ' (`se="切替音 ポロロン"` for a cheerful film, `キラキラ` elegant, `シュワーン` TV energy, `拍子木` Japanese — sounds.md) and'
+    " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn)."
+    " A quiet film (cinematic, story, anything the ambience carries) wants silent joins: write `se=none` on the root"
+    " `transition=` and let the ambience and the picture carry the cut; sound at most the one turn that deserves it. A whoosh on"
+    " every cut of a snowbound cabin is noise, not craft. One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
     " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
-    ' `transition panel,800,color=$色,label="01 原因",skew=-12,se="シュッ"` (a curtain — never the root default or on'
+    ' `transition panel,800,color=$色,label="01 原因",skew=-12` (a curtain — never the root default or on'
     " the last cut).\n"
 )
+
+
+# 尺の換算の 1 文 (1 つの `@` 行・25〜30 字) の秒と、その下の字数の予算 (間込みの台詞の字 / 秒) — どちらも話速 100% での値
+# (参照なしの len2 bench で 1 行 4.3 s・指定比 8/10 が ±20% 内)。cast の speed= を掛ける (10-29: speed=150% の参照で 100% のまま
+# 数えて 7 本とも参照の実尺の 0.58〜0.71。文の数を直しても参照の短い文 (~14 字) を写すと 1 行 2.3 s で 0.72 — 字数で数える)
+SENTENCE_SECONDS_AT_100 = 5.0
+CHARS_PER_SECOND_AT_100 = 6
 
 
 def author_prompt(
@@ -414,10 +426,16 @@ def author_prompt(
         )
         closing = "The closing cut is elastic, 10–30 seconds (it absorbs the other cuts' stretch). "
     length_rule = f"""- Length is set by the amount of speech; there is no write-measure-revise loop. {allot},
-  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ 5 seconds (25–30 characters), so a cut's sentences = target seconds ÷ 5 (write `(target seconds · N sentences)` on the plan line).
+  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ {SENTENCE_SECONDS_AT_100:.0f} seconds (25–30 characters) at the cast's speed=100%, so a cut's sentences = target seconds ÷ {SENTENCE_SECONDS_AT_100:.0f} (write `(target seconds · N sentences)` on the plan line).
+  The budget underneath is characters: ≈ {CHARS_PER_SECOND_AT_100} characters of speech per second at speed=100%, times the cast's `speed=` (speed=150% → {CHARS_PER_SECOND_AT_100 * 1.5:.0f} a second,
+  so a 25–30 character sentence takes ≈ {SENTENCE_SECONDS_AT_100 / 1.5:.1f} s). Count sentences with the speed of the cast you write, and write more of them when they run shorter than 25 characters.
   Write that many sentences in the cut — long videos tend to run short on sentences (eyeballed seconds read longer than they are). Tie at least one screen change (an element entering, a
   state change, a picture swap) to every sentence. {closing}Right after the last speech line of each cut's timeline (before the transition), note the sentence count and the
   estimated seconds: `# speech N sentences ~M s`.
+- Pauses the piece needs are not length fitting — plan and write them like speech: a voiceless cut (a chapter card or a title held with no
+  narration, 1.5–3 s) is `(2 s · 0 sentences)` on the plan line and `@名: [silence:2s]` in the timeline; a held beat after a question, before a
+  reveal or after a number that should sink in is `[silence:0.8s]` inside the cut (its seconds count toward the target). What is banned is bending
+  speed or silences after writing to hit the length.
 - If the request hands over a script to read aloud (verbatim), use its sentences as the speech without changing a character, and derive the target seconds from the script's
   amount (do not add or cut sentences to meet the target length). In that case write `{VERBATIM_MARK}` as the first line of the plan."""
     return f"""You are the author of this video. You build the video in the user request below from scratch. Write the script (the narration)
@@ -439,7 +457,7 @@ The mechanics of draft src (facts of the machine):
 {length_rule}
 {editable_note(editable)}{editable_author_note(editable, referenced=referenced)}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
 === plan ===
-name: what this cut shows and how it moves (target seconds · N sentences)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
+name: what this cut shows and how it moves (target seconds · N sentences — 0 for a voiceless cut)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
 === root_design ===
 everything in design.txt before `section#` (from `#v2`)
 === root_timeline ===
@@ -552,7 +570,8 @@ def fix_prompt(
     if f" {LENGTH_RULE} " in findings:
         trim = (
             f"Only because the findings include {LENGTH_RULE} (the speech length missed the cut's target) you may delete whole speech lines (`@` lines)"
-            " sentence by sentence, or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
+            " sentence by sentence (never a voiceless line `@名: [silence:N]` or a held `[silence:N]` beat — those pauses are the piece's rhythm, not"
+            " length), or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
             " talking, `[speed:]`, or packed `[silence:]`). Delete supporting sentences first (keep numbers and conclusions). For elements a deleted"
             " line's marks brought in, move the marks to a kept line's word or delete the element too. An added sentence must continue the surrounding"
             " speech, and its words must bring in at least one new element or state change (a card, a diagram, a picture swap) — do not leave the screen"
@@ -628,7 +647,7 @@ def without_marks(line: str) -> str:
     return "".join(out).strip()
 
 
-_SPEAKER = re.compile(r"^\s*@[^:\s\[]*:")  # 台詞の行の頭 `@n:` / `@:`
+_SPEAKER = re.compile(r"^\s*@(?:\||[^:\s\[]*:)")  # 台詞の行の頭 `@n:` / `@:` / 折り目の `@|`
 _READING = re.compile(r"\{([^{}|]*)\|[^{}]*\}")  # 読みの指定 `{表記|読み}`
 PICTURE_LINE = re.compile(r"^\s*img#\S+\((?:[^()]|\([^()]*\))*\)\s*(.*)$")  # img の行 → 絵の説明文
 

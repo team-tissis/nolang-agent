@@ -20,7 +20,6 @@ image boss_pleased = "[ref:@sheet]上司のバストアップ。褒められた�
 sound pop = "紙筒で鳴らす乾いた軽いポンという弾ける音"
 sound stamp = "判子を紙に強く押す乾いた音"
 sound chiin = "お鈴を打つ温かく太いチーンという音"
-sound whoosh = "風を切る明るく強いシュッという振りの音"
 sound hyoshigi = "拍子木を打つ鋭く乾いた音"
 sound slide = "小さなスライドホイッスルの高く可愛い下降音"
 sound taiko = "和太鼓の大太鼓を一打、低く重く響く"
@@ -123,7 +122,7 @@ telop#inhouse_pro(setup: "業界のプロ？"; punchline: "社内のプロ。")
 cast sub = "爽やかで少し高めの若い男性の声、20代、明瞭で誠実な話し方" speed=106% manner="上司を褒めるように、にこやかで丁寧な口調。心から感心しているように明るく" label="部下" label_fill=$sub
 cast boss = "低めで穏やかなシニア男性の声、60代、温かく語りかける話し方" speed=106% manner="偉そうで得意げな中年の上司。余裕たっぷりに胸を張って" label="上司" label_fill=$boss
 silence head=0 tail=0
-transition = slide,260,dir=left,offset=38%,opacity=0,overlap=260,ease=power3.out,se=whoosh -10dB
+transition = slide,260,dir=left,offset=38%,opacity=0,overlap=260,ease=power3.out
 
 # 帯の決め語が弾む → 組織図が組み上がり、「管理職」「上層部」の語で × を叩きつけ、「資格」の語で社員の資格証が脈打つ → 落ちのあと絵を驚きの部下へ
 *** org_chart

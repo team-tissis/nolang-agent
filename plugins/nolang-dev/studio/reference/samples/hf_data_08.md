@@ -29,7 +29,6 @@ svg hall_gray = """<svg viewBox="0 0 24 24" fill="#5F6B7B"><path d="M12 1.8 L22.
 sound chime_in = "柔らかい低めの4点チャイム、アナウンスの前の合図 (ピンポンパンポーン)"
 sound chime_out = "柔らかい4点チャイムの締め、公共施設のアナウンス (ピンポンパンポーン)"
 sound fuwan = "テロップがふわりと出る柔らかい短い電子音 (ふわん)"
-sound swish_soft = "空気感のある短い高音のノイズの掃き、残響つき (スッ)"
 sound swish = "鋭く空気感のある短いデジタルの風切り音、残響つき (シュッ)"
 sound pop = "短く明るい電子音のポン (ピコン)"
 sound sparkle = "柔らかく高いシンセのベルの和音 (キラーン)"
@@ -195,7 +194,7 @@ div#endcard(left: 110px; top: 196px; width: 1000px; height: 610px; border-radius
 #v2
 cast n = "澄んだ明るい高めの声の30〜40代の女性ナレーター、公共施設の案内アナウンスのように明瞭で落ち着いた丁寧な口調"
 silence head=0 tail=0
-transition = wipe,700,dir=left,overlap=700,ease=power3.inOut,bars=#1F3A5F,5;#E8743B,12,se=swish_soft -3dB
+transition = wipe,700,dir=left,overlap=700,ease=power3.inOut,bars=#1F3A5F,5;#E8743B,12
 
 # title — チャイムで開き、題は頭に組み上げて「変わります」で弾ませる
 *** title
