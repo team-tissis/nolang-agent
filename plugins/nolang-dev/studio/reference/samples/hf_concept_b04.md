@@ -393,55 +393,55 @@ bgm music
 se whoosh -1dB +50
 se sparkle 0dB +420
 @n: [silence:2.83s]
-transition panel,800,color=#2B3A63,label="はじめに",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=#2B3A63,label="はじめに",skew=-12,label_skew=0,dir=left
 
 *** intro
 [>#subtitle]
 @n: [silence:300][>#hdr -250][>#in_b[*] +900]ITのプロダクト開発では、[|]多くの専門職が一緒に仕事をします。
 @: [<#in_team +530][<#in_b +530][>#in_t1 +880][♪pop_soft -1dB +880][>#in_t2 +2120][♪pop_soft -1dB +2120][>#in_t3 +3040][♪pop_soft -1dB +3040]その中でも「{kpdm}PdM{/}」「{kpm}PM{/}」「{kpo}PO{/}」など、[|][!#in_t1 to,{rotation:4, x:30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'}][!#in_t2 to,{rotation:-4, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +50][!#in_t3 to,{rotation:4, x:-30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +100]似た略称が多く、[!#in_t1 to,{x:380, duration:.5, ease:'power2.inOut'}][!#in_t1 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t2 to,{x:-380, duration:.5, ease:'power2.inOut'}][!#in_t2 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t3 to,{y:-30, duration:.3, repeat:1, yoyo:true, ease:'sine.inOut'} +300][!#in_t1 to,{x:0, duration:.5, ease:'power2.inOut'} +750][!#in_t1 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750][!#in_t2 to,{x:0, duration:.5, ease:'power2.inOut'} +750][!#in_t2 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750][>#in_qm[*] +100][>#in_conf -100][♪ping -1dB]最初は混乱しやすい用語があります。
 @: 今回は、[<#in_t1 -400][<#in_t2 -400][<#in_t3 -400][<#in_qm -400][<#in_conf -400][>#in_rc[*] -50][♪pop -3dB]それぞれが何を考える役割なのかを[|][>#in_goal -50]大まかにつかみましょう。[silence:+310]
-transition panel,800,color=$pdm,label="{lsm}01{/}  PdM",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$pdm,label="{lsm}01{/}  PdM",skew=-12,label_skew=0,dir=left
 
 *** pdm
 @n: [silence:300][!#hdr.c[1] .on -300]{kpdm}PdM{/}は[>#pdm_head.en][>#pdm_head.ja +180]Product Managerの略です。
 @: [>#pdm_q[1] -50][♪pop_soft -1dB]「どんなプロダクトをつくるのか」[|][>#pdm_q[2] -50][♪pop_soft -1dB]「誰のどんな課題を解決するのか」[|][>#pdm_q[3] -50][♪pop_soft -1dB]「どうすれば事業として成長するのか」など、[|][>#pdm_frame -50][>#pdm_ftag +100][!#pdm_ftag.i to,{rotation:360, duration:1.2, ease:'power2.inOut'} +300][♪click -2dB]プロダクト全体の方向性を考える役割です。
 @: [silence:100]まとめると、{kpdm}PdM{/}は[>#pdm_sum -100][♪chime -1dB]「プロダクトの価値と方向性を考える人」です。[silence:+310]
-transition panel,800,color=$pm,label="{lsm}02{/}  PM",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$pm,label="{lsm}02{/}  PM",skew=-12,label_skew=0,dir=left
 
 *** pm
 @n: [silence:300][!#hdr.c[1] .done -300][!#hdr.c[2] .on -300]{kpm}PM{/}は[>#pm_a.head.en][>#pm_a.head.often][>#pm_a.head.ja +180]Project Managerを指すことが多くあります。
 @: プロジェクトの[>#pm_a.m[1] -50][♪pop_soft -2dB]スケジュール、[>#pm_a.m[2] -50][♪pop_soft -2dB]予算、[>#pm_a.m[3] -50][♪pop_soft -2dB]人員、[>#pm_a.m[4] -50][♪pop_soft -2dB]進捗などを管理し、[|][>#pm_a.gantt -250][>#pm_a.gantt.bar[*] +100][>#pm_a.gantt.ok +1600][>#pm_a.sum +300][♪chime -2dB]計画通りにプロジェクトを進める役割です。
 @: [silence:150][<#pm_a -450][>#pm_vs_title -200][>#pm_vl][♪pop -2dB]{kpdm}PdM{/}が「何を、なぜつくるか」を考えるのに対し、[|][>#pm_vr -100][♪pop -2dB]{kpm}PM{/}は「どうやって計画通りにつくるか」を管理する、[|][>#pm_vs -100][!#pm_vl.kv{mk} marker][!#pm_vr.kv{mk} marker +250][♪click -1dB]という違いがあります。
 @: [>#pm_note -50][!#pm_vr.a to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +900][♪ping 0dB]なお、{kpm}PM{/}という略称が[|]Product Managerを指す企業もあります。[silence:+310]
-transition panel,800,color=$po,label="{lsm}03{/}  PO",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$po,label="{lsm}03{/}  PO",skew=-12,label_skew=0,dir=left
 
 *** po
 @n: [silence:300][!#hdr.c[2] .done -300][!#hdr.c[3] .on -300]{kpo}PO{/}は[>#po_head.en][>#po_head.ja +180]Product Ownerの略です。
 @: [>#po_p1 -50][!#po_p1.i to,{rotation:360, duration:1.4, ease:'power2.inOut'} +300][♪pop_soft -2dB]スクラム開発などで使われる役割で、[|][>#po_p2 -50][♪pop_soft -2dB]プロダクトの価値が最大になるように、[|][>#po_blog -150][>#po_it[*] +100][♪pop -2dB]やることの一覧である「プロダクトバックログ」の[|][!#po_it[1] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[2] to,{y:-64, duration:.55, ease:'power3.inOut'}][!#po_it[3] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[4] to,{y:-129, duration:.55, ease:'power3.inOut'}][!#po_it[5] to,{y:-64, duration:.55, ease:'power3.inOut'}][>#po_arrow +200][>#po_it[*].no +500][>#po_top +800][!#po_it[2] .first +500][♪click -1dB][♪click -2dB +350]優先順位を決めます。
 @: つまり{kpo}PO{/}は、[>#po_sum -100][♪chime -1dB]「何から先につくるかを決める人」です。[silence:+310]
-transition panel,800,color=$bo,label="{lsm}04{/}  BO",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$bo,label="{lsm}04{/}  BO",skew=-12,label_skew=0,dir=left
 
 *** bo
 @n: [silence:300][!#hdr.c[3] .done -300][!#hdr.c[4] .on -300]{kbo}BO{/}は[>#bo_head.en][>#bo_head.ja +180]Business Ownerの略です。
 @: [>#bo_c1 -50][♪pop_soft -2dB]事業の責任者として、[|][>#bo_c2 -50][>#bo_c2.bar[*] +250][♪pop_soft -2dB]売上や利益などの目標を持ち、[|][>#bo_c3 -50][>#bo_c3.stamp][>#bo_c3.coin +100][♪click 0dB +250]予算や投資を判断します。
 @: [>#bo_rel.n2 -100][>#bo_rel.ln[*] +100][>#bo_rel.n1 +300][>#bo_rel.n3 +400][>#bo_rel.lab +450][♪pop_soft -2dB]{kpdm}PdM{/}や{kpo}PO{/}と連携しながら、[|][>#bo_sum -100][♪chime -1dB]「事業の成果に責任を持つ人」です。[silence:+310]
-transition panel,800,color=$eng,label="{lsm}05{/}  エンジニア",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$eng,label="{lsm}05{/}  エンジニア",skew=-12,label_skew=0,dir=left
 
 *** eng
 @n: [silence:300][!#hdr.c[4] .done -300][!#hdr.c[5] .on -300][>#eng_head.en][>#eng_head.ja +180]{keng}エンジニア{/}は、[>#eng_steps -200][>#eng_ed -100][♪typing -7dB to=2.2s][!#eng_steps.st[1] .on]設計や[!#eng_steps.st[2] .on]プログラミング、[!#eng_steps.st[3] .on]テストを通して、[|][>#eng_ph -100][>#eng_ph.pb[*] +150][♪pop -3dB]プロダクトを実際につくる役割です。
 @: [>#eng_lf -50][!#eng_ph to,{scale:1.06, duration:.25, repeat:1, yoyo:true, ease:'sine.inOut'}][♪pop_soft -2dB]画面側のフロントエンドや、[>#eng_sv -100][>#eng_lb +100][>#eng_flow +150][>#eng_d1 +400][!#eng_d1 to,{x:80, duration:.8, ease:'none', repeat:4} +400][>#eng_d2 +800][!#eng_d2 to,{x:-80, duration:.8, ease:'none', repeat:4} +800][♪pop_soft -2dB]サーバー側のバックエンドなど、[|]専門もさまざま。[>#eng_sum -100][♪chime -1dB]「技術でプロダクトを形にする人」です。[silence:+310]
-transition panel,800,color=$des,label="{lsm}06{/}  デザイナー",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$des,label="{lsm}06{/}  デザイナー",skew=-12,label_skew=0,dir=left
 
 *** des
 @n: [silence:300][!#hdr.c[5] .done -300][!#hdr.c[6] .on -300][>#des_head.en][>#des_head.ja +180]{kdes}デザイナー{/}は、[>#des_ph -150][>#des_l1][♪pop_soft -2dB]画面の見た目だけでなく、[|][>#des_ph.ub[*] -100][<#des_l1 -100][>#des_l2 +50][>#des_cur +50][!#des_cur to,{scale:.85, duration:.12, repeat:1, yoyo:true} +550][>#des_ring +580][>#des_ok +750][♪click -1dB +550]ユーザーが迷わず使えるかまで考える役割です。
 @: [>#des_c1 -50][>#des_c2 +600][♪pop_soft -2dB]「UI」や「UX」という言葉もよく使われます。[|][>#des_sum -100][♪chime -1dB]「使いやすさと体験を設計する人」です。[silence:+310]
-transition panel,800,color=$ink,label="注意したいこと",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$ink,label="注意したいこと",skew=-12,label_skew=0,dir=left
 
 *** diff
 @n: [silence:300][!#hdr.c[6] .done -300][>#da.h -100][!#da.h.i to,{scale:1.25, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +300][>#da.a +700][>#da.b +850][>#da.c +1000][>#da.a.p1 +1100][>#da.a.plus +1180][>#da.a.p2 +1260][>#da.b.p1 +1300][>#da.b.p2 +1380][>#da.b.p3 +1460][>#da.c.p1 +1500][♪ping -1dB]ただし、ここで紹介した役割の定義は、[|]企業によって異なることがあります。
 @: [!#da.a .hl -100][>#da.a.av +150][>#da.a.cl +400][♪pop -2dB]たとえば、{kpdm}PdM{/}が{kpo}PO{/}を兼ねる会社や、[|][=#da.a -300][!#da.b .hl -100][>#da.b.av +100][>#da.b.cl +400][=#da.b +1400][!#da.c .hl +1400][>#da.c.c2 +1600][>#da.c.cl +1900][♪pop -2dB]一人で複数の役割を担うチームもあります。
 @: [=#da.c -500][<#da -450][>#diff_ask -100][>#diff_chk][>#diff_chk.ci[*] +250][>#diff_chk.ci[1].ck +600][♪click -2dB +600][>#diff_chk.ci[2].ck +1150][♪click -2dB +1150][>#diff_chk.ci[3].ck +1700][♪click -2dB +1700]配属されたら、自分のチームでは[|]誰がどの役割を担っているのか、確認してみましょう。[silence:+310]
-transition panel,800,color=$ink,label="おさらい",skew=-12,label_skew=0,dir=left,se=whoosh -760
+transition panel,800,color=$ink,label="おさらい",skew=-12,label_skew=0,dir=left
 
 *** recap
 @n: [silence:300][>#rc[*] +100]最後におさらいです。

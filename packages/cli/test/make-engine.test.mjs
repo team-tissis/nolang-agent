@@ -63,15 +63,25 @@ test("--staff は担当を opt-in し、--editable を studio へ渡す", async 
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
-test("役割の新名 (--author / --staff none / --staff-assets) を studio の旧名へ写す", async (t) => {
+test("役割の flag (--author / --staff none / --review / --fix / --staff-assets) は同じ名で studio へ渡る", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(
     process.execPath,
-    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--fix", "low", "--staff-assets"],
+    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--no-stills", "--fix", "warn", "--staff-assets"],
     { env },
   );
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--effort", "medium", "--no-staff", "--review", "medium", "--fix", "low", "--staff-edits-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--author", "medium", "--staff", "none", "--review", "medium", "--no-stills", "--fix", "warn", "--staff-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+});
+
+test("--fix low は直し役の段でない (warn の直しとレビューに分かれた) — 案内して止める", async (t) => {
+  const { project, env } = await fixture(t, { claude: true });
+  await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--fix", "low"], { env }), (error) => {
+    assert.equal(error.code, 2);
+    assert.match(error.stderr, /--fix warn/);
+    assert.match(error.stderr, /--review low/);
+    return true;
+  });
 });
 
 test("--seconds は秒数か auto だけを受ける", async (t) => {

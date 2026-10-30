@@ -374,15 +374,17 @@ AUTHOR_BRIEF_NOTE = (
     " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
     "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve, at"
     " the richness of these real moves —\n"
-    '- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440,se="シュッ" -4dB -310` (an angled sweep in the'
+    "- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440` (an angled sweep in the"
     " film's own hex colors; a glow is `bars=linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180`);\n"
     '- `slide,600,dir=right,offset=8%,opacity=0,se="ページをめくる音" -4dB` or with `drift=240,dim=0.38` (a page turn);\n'
     "- `dissolve,320,overlap=320,color=#0A0F1A,zoom=1.08` (rising out of the dark) · `push,500,dir=up` · `none,300` (hard"
     " documentary cuts).\n"
-    "Keep the window 300–850 ms and pick `dir=` and the `se` sound to fit this film (not every film sweeps left with the same"
-    " swish). One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
+    "Keep the window 300–850 ms and pick `dir=` to fit this film (not every film sweeps left). Every transition sounds its"
+    " own `切替音` matched to its motion; to give the film its own transition voice write a family name alone"
+    ' (`se="切替音 ポロロン"` for a cheerful film, `キラキラ` elegant, `シュワーン` TV energy, `拍子木` Japanese — sounds.md) and'
+    " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn). One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
     " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
-    ' `transition panel,800,color=$色,label="01 原因",skew=-12,se="シュッ"` (a curtain — never the root default or on'
+    ' `transition panel,800,color=$色,label="01 原因",skew=-12` (a curtain — never the root default or on'
     " the last cut).\n"
 )
 

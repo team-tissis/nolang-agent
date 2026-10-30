@@ -43,7 +43,6 @@ sound pop2 = "口で鳴らしたような短く乾いたパッという軽いポ
 sound sparkle = "シンセのハープの分散和音と風鈴がきらめく、明るく高いアクセント音"
 sound tick = "掛け時計のスイッチを切り替えるカチッという乾いたプラスチックの音"
 sound pencil = "鉛筆で紙にさっとチェックを書くカリッという柔らかい音"
-sound swipe = "ノートパソコンのトラックパッドを指で滑らせるかすかなスワイプの音"
 sound bell = "高く澄んだ短いシンセのベルのアクセント音"
 image mori = "日本人の女性の図書館司書の胸から上の肖像。30代後半、肩までの黒髪、白いブラウスにベージュのカーディガン、職員証のストラップ、温かい笑顔で少し右を向く。顔は画面の中央やや上に大きく。背景は無地の生成り色に淡い水彩のにじみ"
 image takagi = "日本人の男性の大学研究者の胸から上の肖像。40代後半、白髪まじりの短髪に丸めがね、襟付きシャツに紺のニットのセーター、落ち着いた温かい笑顔で少し左を向く。顔は画面の中央やや上に大きく。背景は無地の生成り色に淡い水彩のにじみ"
@@ -396,7 +395,7 @@ transition dissolve,500,overlap=250
 *** used
 @mori: [silence:0.21s][>#ch2 +140][>#hdr_r.seg[2].fill +240][spk #subbar.av_mori #subbar.av_takagi -50][>#c_wu -210][>#c_wn -210][!#c_wu .on stagger=26 +240][♪riffle -10dB +240]この1年に図書館を使った方は、[>#c_use -500][♪pop2 -7dB -100]38%。[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50][!#c_wn .on stagger=18 +50][♪riffle -10dB +50]残る[>#c_non -400][>#c_non.stamp +500][♪pop -6dB +450][!#c_non.stamp to,{rotation:1, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true} +1000][>#c_note +900]62%は、一度も来ていません。[silence:0.21s][<#ch2 cut-0]
-transition push,700,dir=left,overlap=500,ease=power3.inOut,se=swipe -6dB
+transition push,700,dir=left,overlap=500,ease=power3.inOut
 
 # age — 頭で縦棒が立ち上がり (棒ごとの小さな音 3 つ)・「26%」で 20 代を縁取り脈打たせる・2 行目で括弧と 4 割の破線・「40代」で親子の札・「4割」で 3 本が跳ねる
 *** age
@@ -409,12 +408,12 @@ transition wipe,750,dir=left,overlap=600,ease=power2.inOut,bars=linear(#3C281400
 @mori: [silence:0.21s][>#ch4 +140][>#hdr_r.seg[4].fill +240][>#e_board.r[*] {stagger:{each:0.16}} +200][>#e_board.btag[1] +200][>#e_board.btag[2] +360][>#e_board.q +200][♪pop2 -7dB +250][♪pop2 -7dB +650]来ない理由のトップは？[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50][<#e_board.q -50][>#e_board.top.lab +50][>#e_board.top.b +250][♪tick -4dB +100]「開いている時間に行けない」。[||][>#e_board.top.v -100][>#e_board.hl][♪pop -6dB]41%です。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50][!#e_board.r[1] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.r[2] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.btag[1] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.btag[2] to,{opacity:.45, duration:.4, ease:'none'}][>#e_board.sum -50][♪pencil -5dB +50]本ではなく、[!#e_board.top.lab.i to,{rotation:360, duration:.8, ease:'back.out'} -200]時間なんですね。[silence:0.21s][<#ch4 cut-0]
-transition dissolve,500,overlap=250,se=swipe -6dB
+transition dissolve,500,overlap=250
 
 # wants — 頭で写真の札と板と 4 行・「夜9時」「電子書籍」で行を灯し、「46%」「38%」で値を弾ませる
 *** wants
 @takagi: [silence:0.21s][>#ch5 +140][>#hdr_r.seg[5].fill +240][spk #subbar.av_takagi #subbar.av_mori -50]欲しいのは、[!#f_board.s[1] .hl -50][♪pop -6dB -50]夜9時までの開館が[!#f_board.s[1].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]46%、[|][!#f_board.s[2] .hl -50][♪pop -6dB -50]電子書籍が[!#f_board.s[2].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]38%。[silence:0.21s][<#ch5 cut-0]
-transition push,700,dir=left,overlap=500,ease=power3.inOut,se=swipe -6dB
+transition push,700,dir=left,overlap=500,ease=power3.inOut
 
 # gap — 「新刊」で 1 行目を灯して利用者の点・「52%」で値と人数・「18%」で線と来ない人の点 → 残り 4 行を 160 ms ずつ・森の行で注記・「時間」「行き方」で札と地・台詞の後の間で夜の色へ暗転
 *** gap

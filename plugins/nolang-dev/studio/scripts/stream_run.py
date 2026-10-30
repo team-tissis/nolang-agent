@@ -14,24 +14,25 @@ BGM の開き・常設の層) の持ち主は最初の live な cut — その�
 cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFECT で check が止まった時だけ・相手は持ち主 1 つ) だけ。素材 (絵・声) は
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
-usage (repo root から): python stream_run.py <project> [--staff medium|balanced|low] [--staff-warn] [--staff-edits-assets] [--review low|medium|none] [--fix severe|defect|none|low]
+usage (repo root から): python stream_run.py <project> [--staff balanced|low|medium|high|xhigh|none] [--staff-warn] [--staff-assets]
+  [--review low|medium|none] [--no-stills] [--fix defect|severe|warn|none]   (役は 4 つ: 著者・担当・レビュー・直し役。flag の名は CLI `nolang make` と同じ)
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
-    値は担当の effort。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
+    値は担当の effort (`none` = 担当なし)。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
     (間に合わない見込みなら low に落とす。開始 中央 約 90 s・全 cut medium は約 130 s で止まらないは 6/10・質は小さく落ちる)。
-  --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix low` と同じ向きの opt-in。担当の思考が伸びる)。
-  --review = 見直しの effort (既定 low・`medium` も可・`none` で見直しなし): 全 cut の最初の直し役を、厳しい監督として
-    指摘に出ない弱い所・崩れも探す見直しにする (指摘の無い cut も呼ぶ。check の severe / warn は常に全部見せる)。
-    見直しは cut の静止画も見る (REVIEW_ROUNDS = 1 回・
-    静止画なしの見直しは置かない — 10-27 裁定): 担当の後、prewarm の絵で cut を GPU で描く (local は `studio.py shots`・
-    remote は server の GPU の worker `drafts/{id}/stills/`)。見直しの call は直し役の 2 回の上限に数えない。
-  --fix = 直し役の範囲。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役 (low) を呼ぶ (見直しなし・warn は
-    直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`none` = 直し役も
-    呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。`low` = 見直し (--review) と、指摘も直す直し役。
+  --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix warn` と同じ向きの opt-in。担当の思考が伸びる)。
+  --review = レビューの effort (既定 none・`low` / `medium`): 担当の後に 1 回、厳しい監督として指摘に出ない弱い所・崩れも探して自分で直す call
+    (指摘の無い cut も呼ぶ。check の severe / warn は常に全部見せる)。`--fix` の段とは独立 (直し役の 2 回の上限に数えない) — ただし直し役の
+    機構で直すので `--fix none` とは併用不可。既定は cut の静止画も見る (REVIEW_ROUNDS = 1 回): 担当の後、warm が解いた本物の絵を待って cut を
+    GPU で描く (local は `studio.py shots`・remote は server の GPU の worker `drafts/{id}/stills/`) — 絵を待つのは 10-30 裁定。
+    `--no-stills` = 静止画を撮らず doc と全指摘だけを見る (warm を待たず担当の check の直後に走る)。
+  --fix = 直し役が直す指摘の段 (effort は low 固定)。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役を呼ぶ (warn は
+    直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`warn` = 台帳の
+    直しの列の severe / warn も直す。`none` = 直し役も呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。
   担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
-    作る。--staff-edits-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
-  既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + 見直し +
+    作る。--staff-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
+  既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + レビュー +
     直しに Opus 両順 3 勝 1 分・担当なしに 4 勝・最初の segment 中央 118 → 87 s (担当なし 70 s)・担当後の DEFECT 0/21 cut。DEFECT だけの
     直し役は、落ちる cut を減らす網 (DEFECT が無ければ呼ばれない)。
   直し役に回す規則は製品の台帳 (`drafts/rules/` の fixed)。最後の cut 以外の doc は open_ended (後に cut が続く prefix) で check する。
@@ -202,7 +203,7 @@ def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None
     return "\n".join(out) if hit else None
 
 
-# 直し役・見直しの 1 回の待ちの上限 — server は投入の行が 180 秒届かないと run を落とすので、その内側で諦めて直す前の版で続ける
+# 直し役・レビューの 1 回の待ちの上限 — server は投入の行が 180 秒届かないと run を落とすので、その内側で諦めて直す前の版で続ける
 FIX_TIMEOUT_S = 120
 # 持ち込み音声の転写を待つ上限 (`drafts/speeches/` が ready になるまで — 1 時間の音声で数分) と問い合わせの間隔
 SPEECH_WAIT_S = 15 * 60
@@ -408,9 +409,9 @@ class Unreachable(RuntimeError):
     """受け口に届かない・返事を失った (gateway の 502〜504・切断・時間切れ)。server が頼みを処理したかは分からない。"""
 
 
-# 見直しの回数 — 静止画を見せて 1 回 (10-27 裁定: 静止画なしの見直しも 2 回目も置かない)。
-# 盲検の実測 (10-22・effort medium・low は直し役と差が出ない): 53 cut で見直しは今の直し役 (low・指摘のある cut だけ) に 9 対 3・
-# 5 cut の点で 直し役だけ 5.2・見直し 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5・投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)
+# レビューの回数 — 静止画を見せて 1 回 (10-27 裁定: 静止画なしのレビューも 2 回目も置かない)。
+# 盲検の実測 (10-22・effort medium・low は直し役と差が出ない): 53 cut でレビューは今の直し役 (low・指摘のある cut だけ) に 9 対 3・
+# 5 cut の点で 直し役だけ 5.2・レビュー 1 回 5.8・画像なし 2 回 6.4・画像あり 2 回 6.5・投入の遅れは全 cut 平均 1.5 s (p90 5.5 s)
 REVIEW_ROUNDS = 1
 # remote の静止画 (`drafts/{id}/stills/`) を待つ上限 — server は warm の絵を 90 s まで待ってから実現・描画する
 REMOTE_SHOTS_TIMEOUT_S = 240
@@ -449,8 +450,9 @@ class Run:
         staff: str | None = None,
         staff_warn: bool = False,
         fix: str | None = "low",
-        review: str | None = "low",
+        review: str | None = None,
         fix_scope: str = "severe",
+        stills: bool = True,
         keep_assets: bool = True,
         brief: bool = False,
         remote: str | None = None,
@@ -493,12 +495,12 @@ class Run:
         self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.staff_warn = staff_warn  # 担当に warn の指摘も渡す (`--staff-warn`・既定は DEFECT と severe だけ)
-        self.fix_effort = fix  # 直し役の effort。None = 直し役なし (見直しもなし)
-        # 直し役の範囲: "defect" = DEFECT と隠れる文字だけ・"severe" = + severe 全部・"warn" = 見直しと台帳の指摘の直し
+        self.fix_effort = fix  # 直し役の effort (low 固定)。None = 直し役なし (レビューもその機構を使うので無し)
+        # 直し役の範囲 (直す指摘の段): "defect" = DEFECT と隠れる文字だけ・"severe" = + severe 全部・"warn" = + 台帳の severe / warn
         self.fix_scope = fix_scope
-        self.review_effort = (
-            review if fix is not None and fix_scope == "warn" else None
-        )  # 見直し (指摘に出ない弱い所・崩れも探す 1 回目の直し役) の effort。None = 見直しなし
+        # レビュー (担当の後に 1 回・指摘に出ない弱い所・崩れも探して自分で直す call) の effort。None = なし。`--fix` の段とは独立
+        self.review_effort = review if fix is not None else None
+        self.stills = stills  # レビューが cut の静止画 (絵の warm を待って描く) を見るか。False = doc と全指摘だけ (`--no-stills`)
         # 著者 brief (`--author-brief`): 著者は台詞と絵コンテだけ書き、絵は担当が設計する — 担当は常に素材も変える
         # (keep_assets と両立しない)。台詞だけは著者の版のまま固定し、声は著者の時点から担当と並列に作る
         self.brief = brief
@@ -523,7 +525,7 @@ class Run:
         self.unlocated_owner: dict[str, str] = {}
         self.shot_unwarmed: dict[
             str, list[str]
-        ] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (remote の見直し)
+        ] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (remote のレビュー)
         self.author_clean: set[str] = set()  # 著者の版 (担当が触る前) が check で DEFECT 0 だった cut
         self.staged: dict[str, bool] = {}
         self.broken: dict[str, str] = {}
@@ -764,7 +766,7 @@ class Run:
 
     # ---- doc ----
     def doc_src(self, pins: dict[str, object] | None = None) -> dict:
-        """doc の src.json = studio/src.json (設定と著者の pin) + pins (run が解いた素材 — 見直しの静止画・書き戻し)。素材を解くのは
+        """doc の src.json = studio/src.json (設定と著者の pin) + pins (run が解いた素材 — レビューの静止画・書き戻し)。素材を解くのは
         run (warm と投入) で、check は doc の pin を読まない。"""
         base = self.studio / "src.json"
         d = json.loads(base.read_text()) if base.exists() else {"asset_pins": {}}
@@ -947,7 +949,7 @@ class Run:
 
     def length_finding(self, c: str) -> str:
         """check の見積り (字数 × 話速 + 間) が cut の予算から LENGTH_TOLERANCE (か LENGTH_SLACK_S の大きい方) を超えて外れたら、
-        直し役への指摘の 1 行 (文を丸ごと消す / 足す本数つき)。外れていなければ空。直し役を新しく呼ぶ理由にはしない — 見直し (全 cut
+        直し役への指摘の 1 行 (文を丸ごと消す / 足す本数つき)。外れていなければ空。直し役を新しく呼ぶ理由にはしない — レビュー (全 cut
         1 回目の直し役) の call に添えるだけ (待ちと call を増やさない)。最初の cut は見ない: 再生開始の臨界路で、足した文が次の直しの
         指摘と声の作り直しを呼び最初の segment を 15〜30 s 遅らせた (10-24 の a2 d5)・ずれは締めの cut の弾性が吸う。"""
         from stream_author import LENGTH_RULE, spoken  # noqa: PLC0415 — scripts dir を sys.path に足している
@@ -1016,7 +1018,7 @@ class Run:
     def doc_dir(
         self, name: str, cuts: list[str], *, root_extra: str = "", pins: dict[str, object] | None = None
     ) -> Path:
-        """doc (根 + cuts) を weave/<name>/ に組む。pins = doc の src.json に足す素材の pin (見直しの静止画が warm の絵で撮る)。"""
+        """doc (根 + cuts) を weave/<name>/ に組む。pins = doc の src.json に足す素材の pin (レビューの静止画が warm の絵で撮る)。"""
         dd = self.weave / name
         (dd / "out").mkdir(parents=True, exist_ok=True)
         self.rename_collisions(cuts)
@@ -1034,7 +1036,7 @@ class Run:
         tmp = dd / f".src.json.{threading.get_ident()}"
         tmp.write_text(json.dumps(self.doc_src(pins), ensure_ascii=False, indent=1))
         os.replace(tmp, dd / "src.json")
-        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する (見直しの静止画)
+        # 書体の実体 (TTF) は project で 1 つの cache (studio/out/fonts) を全部の doc が symlink で共有する (レビューの静止画)
         shared = self.studio / "out/fonts"
         shared.mkdir(parents=True, exist_ok=True)
         fonts = dd / "out/fonts"
@@ -1293,7 +1295,7 @@ class Run:
         return c == self.first_live() and not self.root_submitted
 
     def call_role(self, args: list[str], *, timeout: int, fatal: bool = True) -> subprocess.CompletedProcess[str]:
-        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。fatal=False (直し役・見直し) は伝えない — 直しは cut を良くする
+        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。fatal=False (直し役・レビュー) は伝えない — 直しは cut を良くする
         だけの段で、失敗しても直す前の版で続けられる (止めると動画ごと落ちる)。"""
         try:
             result = subprocess.run(
@@ -1316,7 +1318,7 @@ class Run:
     def run_fixer(self, c: str, ff: Path, *, review: bool = False, shots: list[Path] | None = None) -> tuple[bool, str]:
         """直し役 (claude -p) を 1 回。通れば cut の file を書き戻す → (通ったか, 出力の末尾)。通らない = 出力が使えない (読めない・
         cut を分けた) — 呼び直せば通り得る。返らない・process が落ちた時は FixerUnavailable。根の持ち主の cut なら根の 2 file も
-        直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。review = 見直し (effort は --review)・shots = 見直しに見せる静止画。"""
+        直せる (`--root`)。担当・直し役の参考に前の cut の定義を渡す。review = レビュー (effort は --review)・shots = レビューに見せる静止画。"""
         self.write_defs_before(c)
         src = self.solo / f"cut_{c}.txt"
         before = src.read_text()
@@ -1422,8 +1424,8 @@ class Run:
         prev_keys: set[tuple[str, str]] | None = (
             None  # 直し役を掛ける直前の check の指摘 (規則と層) — 直しが新しく作った指摘の判定
         )
-        # 見直し: 最初の reviews 回の直し役は指摘に出ない弱い所・崩れも探す (静止画も見せる・round ごとに撮り直す)。
-        # 見直しの call は直し役の 2 回の上限に数えない
+        # レビュー: 最初の reviews 回の直し役は指摘に出ない弱い所・崩れも探す (静止画も見せる・round ごとに撮り直す)。
+        # レビューの call は直し役の 2 回の上限に数えない
         reviews = 0
         if self.review_effort is not None and not self.broken.get(c):
             reviews = REVIEW_ROUNDS
@@ -1434,8 +1436,8 @@ class Run:
         reverted_fixes: list[str] = []  # 戻した直し役の出力 (cut の text) — 同じ edit が返ったら当てずに戻す
         failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
         last: tuple[str, list[dict[str, object]]] | None = None  # 最後の check の (cut の text, その cut の指摘)
-        # look の直しが絵の説明文を変えた (作り直しが warm で裏に走る) — 次の見直しの前に、直す指摘があれば画像を見ない直しを挟み、
-        # 作り直しの生成と重ねる (次の見直しの静止画は server が新しい絵を待って描く)
+        # look の直しが絵の説明文を変えた (作り直しが warm で裏に走る) — 次のレビューの前に、直す指摘があれば画像を見ない直しを挟み、
+        # 作り直しの生成と重ねる (次のレビューの静止画は server が新しい絵を待って描く)
         pictures_pending = False
         for rnd in itertools.count():
             t = time.time()
@@ -1523,11 +1525,11 @@ class Run:
                 [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
                 if self.fix_scope == "warn" or reviews > 0
                 else []
-            )  # 見直しと warn も直す直し役にはその cut の severe / warn を全部見せる (見直しに warn は常に渡す — 10-27 裁定。
+            )  # レビューと warn も直す直し役にはその cut の severe / warn を全部見せる (レビューに warn は常に渡す — 10-27 裁定。
             # defect / severe の run の 2 回目以降の直し役は直す指摘だけ — warn を見せると直しに行く)
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
-            # 見直し (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
+            # レビュー (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
             # 画面の変化の無い文が増えて静止が伸びた (10-24 の両順の比べ)
             if reviews > 0 and (length := self.length_finding(c)):
                 findings += "\n" + length
@@ -1568,9 +1570,9 @@ class Run:
                 reviews -= 1
             if interleave:
                 self.log(cut=c, event="look_interleave", round=rnd, defect=len(defects), fix=len(fixes))
-            shots = self.shots(c) if review else None  # 撮れなければ (空) 画像なしで見直す
+            shots = self.shots(c) if review and self.stills else None  # 撮れなければ (空) 画像なしでレビュー
             if shots and self.shot_unwarmed.get(c):
-                # warm が間に合わず意味検索で引いた仮の絵 — 見直し役に中身を判定させない (作り直しの連鎖を作らない)
+                # warm が間に合わず意味検索で引いた仮の絵 — レビュー役に中身を判定させない (作り直しの連鎖を作らない)
                 ff.write_text(
                     ff.read_text()
                     + "\n\nstill generating (placeholder pictures — do not judge their content): "
@@ -1669,7 +1671,7 @@ class Run:
         self.log(cut=c, event="dropped_unshown", n=len(removed), tokens=removed)
 
     def shots(self, c: str) -> list[Path]:
-        """見直し役に見せる cut c の静止画 (`studio.py shots`)。run の warm (担当の直後に頼む) が解いた絵を待ち、その pin を載せた根 + c
+        """レビュー役に見せる cut c の静止画 (`studio.py shots`)。run の warm (担当の直後に頼む) が解いた絵を待ち、その pin を載せた根 + c
         の doc (前の cut の名のある定義は根の後ろ) を描く。前の cut を入れないのは、その cut の直し中の DEFECT で build できず、前の
         cut の声 (尺) がまだ無ければ TTS を待つから (前の cut の sticky な層は写らない)。c の DEFECT の行は落として描く。"""
         w = self.warms[c]
@@ -2409,7 +2411,7 @@ class Run:
 
     @property
     def warn_fixer(self) -> bool:
-        """warn も直す直し役がいる (`--fix low`)。いなければ担当の後の check からは LLM が warn を見ない。"""
+        """warn も直す直し役がいる (`--fix warn`)。いなければ担当の後の check からは LLM が warn を見ない。"""
         return self.fix_effort is not None and self.fix_scope == "warn"
 
     def autofix(self, c: str, findings: list[dict], rnd: int | str, *, sure_only: bool) -> list[dict]:
@@ -2987,9 +2989,19 @@ def main(argv: list[str]) -> int:
         return 2
     project = Path(argv[0]).resolve()
     staff = argv[argv.index("--staff") + 1] if "--staff" in argv else None
+    staff = None if staff == "none" else staff
     fix_arg = argv[argv.index("--fix") + 1] if "--fix" in argv else "severe"
-    fix = {"none": None, "defect": "low", "severe": "low"}.get(fix_arg, fix_arg)
-    review = argv[argv.index("--review") + 1] if "--review" in argv else "low"
+    if fix_arg not in ("defect", "severe", "warn", "none"):
+        print(
+            f"--fix は直す指摘の段 (defect|severe|warn|none): {fix_arg!r} — warn まで直すなら --fix warn・レビューは --review",
+            file=sys.stderr,
+        )
+        return 2
+    fix = None if fix_arg == "none" else "low"  # 直し役の effort は low 固定 (値は段)
+    review = argv[argv.index("--review") + 1] if "--review" in argv else "none"
+    if review != "none" and fix is None:
+        print("--review は直し役の機構で直す — --fix none とは併用できない", file=sys.stderr)
+        return 2
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
     token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
     if token is None and remote is not None:
@@ -3000,8 +3012,9 @@ def main(argv: list[str]) -> int:
         staff_warn="--staff-warn" in argv,
         fix=fix,
         review=None if review == "none" else review,
-        fix_scope=fix_arg if fix_arg in ("defect", "severe") else "warn",
-        keep_assets="--staff-edits-assets" not in argv,
+        fix_scope=fix_arg,
+        stills="--no-stills" not in argv,
+        keep_assets="--staff-assets" not in argv,
         brief="--author-brief" in argv,
         remote=remote,
         token=token,

@@ -440,7 +440,7 @@ cast n = "落ち着いた低めの声の 30〜40 代の男性ナレーター、�
 silence head=0 tail=0
 # 場面の切替は hf と同じ 0.6 秒の溶け (新場面の頭で風切り・hf の旧場面 / 新場面の左右 27 px の流れは写さない)。場面ごとの台詞は 1 行 = 1 回の合成で、句の切れ目は [|]
 # 字幕と声は同じ台詞 (数字・記号の読みは TTS 側に任せる)
-transition = dissolve,600,overlap=600,se=whoosh -6dB
+transition = dissolve,600,overlap=600
 
 *** s01
 [>#subtitle]
