@@ -63,15 +63,15 @@ test("--staff は担当を opt-in し、--editable を studio へ渡す", async 
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "medium", "--editable", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
-test("役割の flag (--author / --staff none / --review / --fix / --staff-assets) は同じ名で studio へ渡る", async (t) => {
+test("役割の flag (--author / --staff none / --fix / --staff-assets) は同じ名で studio へ渡る", async (t) => {
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(
     process.execPath,
-    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--review", "medium", "--no-stills", "--fix", "warn", "--staff-assets"],
+    [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--seconds", "90", "--author", "medium", "--staff", "none", "--fix", "warn", "--staff-assets"],
     { env },
   );
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--author", "medium", "--staff", "none", "--review", "medium", "--no-stills", "--fix", "warn", "--staff-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--author", "medium", "--staff", "none", "--fix", "warn", "--staff-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("--mode は役の flag の組として studio へ渡り、書かない役の flag は押し付けない", async (t) => {
@@ -81,17 +81,16 @@ test("--mode は役の flag の組として studio へ渡り、書かない役�
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--mode", "super", "--fix", "severe", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
   await assert.rejects(execute(process.execPath, [cli, "make", project + "2", "--type", "concept", "--request-text", "説明", "--mode", "turbo"], { env }), (error) => {
     assert.equal(error.code, 2);
-    assert.match(error.stderr, /--mode は light \/ solo \/ standard \/ plus \/ super/);
+    assert.match(error.stderr, /--mode は light \/ standard \/ plus \/ super/);
     return true;
   });
 });
 
-test("--fix low は直し役の段でない (warn の直しとレビューに分かれた) — 案内して止める", async (t) => {
+test("--fix low は直し役の段でない — --fix warn を案内して止める", async (t) => {
   const { project, env } = await fixture(t, { claude: true });
   await assert.rejects(execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "説明", "--fix", "low"], { env }), (error) => {
     assert.equal(error.code, 2);
     assert.match(error.stderr, /--fix warn/);
-    assert.match(error.stderr, /--review low/);
     return true;
   });
 });

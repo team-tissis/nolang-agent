@@ -3,18 +3,14 @@
 # usage (repo root から):
 #   bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 台本の分量に合わせる)]
-#        [--mode light|solo|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / solo = 著者 medium・担当なし・直し warn /
-#                            standard = 既定 (著者 low・担当 balanced・直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn /
-#                            super = 著者 brief (medium)・担当 high・直し warn・レビュー medium。
+#        [--mode light|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / standard = 既定 (著者 low・担当 balanced・直し severe) /
+#                            plus = 著者 brief (low)・担当 balanced (素材も)・直し warn / super = 著者 brief (medium)・担当 high・直し warn。
 #                            後ろに書いた役の flag が組の値を上書きする)
-#        役は 4 つ (著者・担当・レビュー・直し役)。flag は「役の名 → 強さ・none で外す」で、CLI `nolang make` と同じ名:
+#        役は 3 つ (著者・担当・直し役)。flag は「役の名 → 強さ・none で外す」で、CLI `nolang make` と同じ名:
 #        [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief]   (著者は台本 = 台詞・絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
 #                            絵は cut ごとの担当がゼロから設計する。台詞は著者の版のまま固定 (声は著者の時点から作り始める)。--staff-assets を含意・--staff none とは併用不可)
 #        [--staff balanced (既定)|low|medium|high|xhigh|none] [--staff-warn (担当に warn の指摘も渡す・既定は DEFECT と severe だけ)]
 #        [--staff-assets]   (担当が絵と台詞も変える・素材は担当の版から担当の後に作る。既定では担当は絵と台詞を変えず、絵と声は著者の版から担当と並列に作る)
-#        [--review low|medium|none (既定 none)] [--no-stills]   (レビュー = 担当の後に 1 回、厳しい監督として指摘に出ない弱い所・崩れも探して自分で直す call。
-#                            既定は cut の静止画 (本物の絵 — 絵の warm を待って GPU で描く・remote は server) と全指摘を見る。--no-stills = 静止画を撮らず
-#                            doc と全指摘だけを見る (warm を待たない)。直し役の回数に数えない・--fix none とは併用不可)
 #        [--fix defect|severe|warn|none (既定 severe)]   (直し役 = check の指摘を直す call (effort low・2 回まで)。値は直す指摘の段: severe = DEFECT と severe
 #                            (隠れる文字・画面の外 …) だけ・defect = DEFECT と隠れる文字だけ・warn = 台帳の severe / warn も・none = 直し役なし (DEFECT は機械の直しと最後の手段だけ))
 #        [--editable]   (編集可能モード = 編集画面で調整できる文法サブセットに収める — 著者の作法 + check の profile + 投入の門の DEFECT)
@@ -34,21 +30,22 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,32p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,28p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
-TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=none; NO_STILLS=""; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""; EDIT=""
-# --mode = 役の flag の組 (先に読んで既定を置き換える・明示の役の flag が上書き)。表は CLI `nolang make` と同じ
+TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""; EDIT=""
+# --mode = 役の flag の組 (先に読んで既定を置き換える・明示の役の flag が上書き)。表は CLI `nolang make` と同じ。
+# 10-30 の bench (5 題材 × 6 腕) で solo (著者 medium だけ) とレビュー (静止画つきの監督) は外した — solo は著者 medium の思考で開始が
+# 3〜4 倍遅く質は standard 以下、レビューは cut ごとに 25〜45 s 直列に乗り費用 +25% で質の上積みは題材次第だった
 MODE=""; _args=("$@"); for ((i=0; i<${#_args[@]}; i++)); do [ "${_args[$i]}" = --mode ] && MODE=${_args[$((i+1))]:-}; done
 case "$MODE" in
   "") ;;
-  light)    EFFORT=low;    BRIEF="";  STAFF="";       FIX=severe; REVIEW=none;;    # 速さ最優先: 著者だけ・DEFECT と severe だけ直す
-  solo)     EFFORT=medium; BRIEF="";  STAFF="";       FIX=warn;   REVIEW=none;;    # 著者 medium だけ・warn まで直す (短い動画向けの見立て)
-  standard) EFFORT=low;    BRIEF="";  STAFF=balanced; FIX=severe; REVIEW=none;;    # 既定 (--mode を書かない時と同じ)
-  plus)     EFFORT=low;    BRIEF=1;   STAFF=balanced; FIX=warn;   REVIEW=none;;    # 著者は台本だけ・担当が絵も設計・warn まで直す
-  super)    EFFORT=medium; BRIEF=1;   STAFF=high;     FIX=warn;   REVIEW=medium;;  # 質を取りに行く: 著者 medium の brief・担当 high・レビュー medium (静止画)
-  *) echo "--mode は light / solo / standard / plus / super" >&2; exit 2;;
+  light)    EFFORT=low;    BRIEF="";  STAFF="";       FIX=severe;;  # 速さ最優先: 著者だけ・DEFECT と severe だけ直す
+  standard) EFFORT=low;    BRIEF="";  STAFF=balanced; FIX=severe;;  # 既定 (--mode を書かない時と同じ)
+  plus)     EFFORT=low;    BRIEF=1;   STAFF=balanced; FIX=warn;;    # 著者は台本だけ・担当が絵も設計・warn まで直す (長い説明系で standard に勝つ)
+  super)    EFFORT=medium; BRIEF=1;   STAFF=high;     FIX=warn;;    # 質を取りに行く: 著者 medium の brief・担当 high (開始は遅く費用は倍)
+  *) echo "--mode は light / standard / plus / super" >&2; exit 2;;
 esac
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -65,8 +62,6 @@ while [ $# -gt 0 ]; do
     --staff) STAFF=$2; [ "$STAFF" != none ] || STAFF=""; shift 2;;
     --staff-warn) STAFF_WARN=1; shift;;
     --fix) FIX=$2; shift 2;;
-    --review) REVIEW=$2; shift 2;;
-    --no-stills) NO_STILLS=1; shift;;
     --staff-assets) ASSETS=1; shift;;
     --author-brief) BRIEF=1; shift;;
     --request) REQ_FILE=$2; shift 2;;
@@ -78,16 +73,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 case "$ENGINE" in claude|codex) ;; *) echo "--engine は claude / codex" >&2; exit 2;; esac
-# 直し役の値は直す指摘の段 (effort は low 固定)。レビューは別の役 (--review) — 旧 `--fix low` (warn の直し + レビュー) は 2 つの flag に分かれた
+# 直し役の値は直す指摘の段 (effort は low 固定)。旧 `--fix low` (warn の直し + レビュー) のレビューは外した — warn まで直すなら `--fix warn`
 case "$FIX" in
   defect|severe|warn|none) ;;
-  low|medium|high|xhigh) echo "--fix は直す指摘の段 (defect|severe|warn|none)。warn まで直すなら --fix warn・レビューは --review $FIX" >&2; exit 2;;
+  low|medium|high|xhigh) echo "--fix は直す指摘の段 (defect|severe|warn|none)。warn まで直すなら --fix warn" >&2; exit 2;;
   *) echo "--fix は defect / severe / warn / none" >&2; exit 2;;
 esac
-case "$REVIEW" in low|medium|none) ;; *) echo "--review は low / medium / none" >&2; exit 2;; esac
-[ "$REVIEW" = none ] || [ "$FIX" != none ] || { echo "--review は直し役の機構で直す — --fix none とは併用できない" >&2; exit 2; }
-[ -z "$NO_STILLS" ] || [ "$REVIEW" != none ] || { echo "--no-stills は --review と一緒に" >&2; exit 2; }
-REVIEW_LABEL=$REVIEW; [ "$REVIEW" = none ] || REVIEW_LABEL="$REVIEW ($([ -n "$NO_STILLS" ] && echo 文面だけ || echo 静止画))"
 export NOLANG_STUDIO_ENGINE="$ENGINE"
 if [ "$ENGINE" = codex ]; then
   command -v codex >/dev/null || { echo "codex がありません" >&2; exit 2; }
@@ -122,7 +113,7 @@ if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' 
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
 if [ -n "$IN_REPO" ]; then $PY "$ROOT/.agents/skills/nolang-draft-studio/scripts/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
 [ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
-export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --review $REVIEW${NO_STILLS:+ --no-stills} --fix $FIX${ASSETS:+ --staff-assets}${BRIEF:+ --author-brief}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
+export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --fix $FIX${ASSETS:+ --staff-assets}${BRIEF:+ --author-brief}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
 # 参照の動画: --edit / --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
 [ -n "$REF" ] || REF=$EDIT
 [ -n "$REF" ] || REF=$(grep -oE '\[video:[0-9a-fA-F-]{36}\]' "$P/request.txt" | head -1 | sed -E 's/^\[video:(.*)\]$/\1/' || true)
@@ -161,7 +152,7 @@ if [ -n "$EDIT" ]; then
   fi
 fi
 if [ -z "$RAN_EDIT" ]; then
-  echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・${MODE:+mode $MODE・}著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・レビュー $REVIEW_LABEL・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
+  echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・${MODE:+mode $MODE・}著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
   PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
 fi
 $PY - "$P" <<'PYEOF'

@@ -778,34 +778,25 @@ function hasCommand(name) {
   });
 }
 
-// レビュー (--review) と直し役 (--fix) の flag — 検証して studio へそのまま渡す (make / edit 共通)。
-// 役は別物: 直し役は check の指摘を直す (値は直す指摘の段・effort は low 固定)、レビューは担当の後に 1 回、指摘に出ない弱い所・崩れも探して
-// 自分で直す (値は effort・既定 none・--no-stills で静止画なし)。旧 `--fix low` (warn の直し + レビュー) は `--fix warn --review low`
-function reviewFixArgs(flags) {
-  const review = flags.review || "none";
-  if (!["low", "medium", "none"].includes(review)) throw new CliError("--review は low / medium / none (レビュー = 担当の後に 1 回、弱い所・崩れを探して直す役)", { exit: EXIT.USAGE });
+// 直し役 (--fix) の flag — 検証して studio へそのまま渡す (make / edit 共通)。値は直す指摘の段 (effort は low 固定)。
+// 旧 `--fix low` (warn の直し + レビュー) のレビューは 10-30 に外した — warn まで直すなら `--fix warn`
+function fixArgs(flags) {
   const fix = flags.fix || "severe";
   if (!["defect", "severe", "warn", "none"].includes(fix)) {
     throw new CliError(
       ["low", "medium", "high", "xhigh"].includes(fix)
-        ? `--fix は直す指摘の段 (defect / severe / warn / none)。warn まで直すなら --fix warn・レビューは --review ${fix}`
+        ? "--fix は直す指摘の段 (defect / severe / warn / none)。warn まで直すなら --fix warn"
         : "--fix は defect / severe / warn / none",
       { exit: EXIT.USAGE },
     );
   }
-  if (review !== "none" && fix === "none") throw new CliError("--review は直し役の機構で直す — --fix none とは併用できない", { exit: EXIT.USAGE });
-  if (flags["no-stills"] && review === "none") throw new CliError("--no-stills は --review と一緒に", { exit: EXIT.USAGE });
-  const args = [];
-  if (flags.review) args.push("--review", flags.review);
-  if (flags["no-stills"]) args.push("--no-stills");
-  if (flags.fix) args.push("--fix", flags.fix);
-  return args;
+  return flags.fix ? ["--fix", flags.fix] : [];
 }
 
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|solo|standard|plus|super] [--review low|medium|none] [--no-stills] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|standard|plus|super] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -813,7 +804,7 @@ async function cmdMake(positionals, flags) {
   const seconds = String(flags.seconds || "auto"); // 既定 auto = 台本の分量と内容に合わせる
   // --mode = 役の flag の組 (engine の stream_make.sh が展開する・明示の役の flag が上書き)
   const mode = flags.mode || null;
-  if (mode && !["light", "solo", "standard", "plus", "super"].includes(mode)) throw new CliError("--mode は light / solo / standard / plus / super", { exit: EXIT.USAGE });
+  if (mode && !["light", "standard", "plus", "super"].includes(mode)) throw new CliError("--mode は light / standard / plus / super", { exit: EXIT.USAGE });
   const staff = flags.staff || null; // 書かなければ engine の既定 (balanced・--mode があればその組)
   if (staff && !["balanced", "low", "medium", "high", "xhigh", "none"].includes(staff)) throw new CliError("--staff は balanced / low / medium / high / xhigh / none", { exit: EXIT.USAGE });
   // 著者 brief: 著者は台本 (台詞) と cut ごとの絵コンテだけを書き、絵は cut ごとの担当がゼロから設計する。
@@ -829,7 +820,7 @@ async function cmdMake(positionals, flags) {
     );
   }
   if (brief && staff === "none") throw new CliError("--author-brief は担当が各 cut を仕上げる前提 — --staff none とは併用できない", { exit: EXIT.USAGE });
-  const roleArgs = reviewFixArgs(flags);
+  const roleArgs = fixArgs(flags);
   for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では作れない (skill の write-yourself.md の手順で、自分で書いて流す)`, { exit: EXIT.FAIL });
   }
@@ -871,7 +862,7 @@ async function cmdMake(positionals, flags) {
   if (flags["staff-warn"]) args.push("--staff-warn");
   if (flags.editable) args.push("--editable");
   if (flags.samples) args.push("--samples", flags.samples);
-  // レビュー / 直し役 (reviewFixArgs で検証済み)・担当が絵と台詞も変える
+  // 直し役 (fixArgs で検証済み)・担当が絵と台詞も変える
   args.push(...roleArgs);
   if (flags["staff-assets"]) args.push("--staff-assets");
   if (speechId) args.push("--speech", speechId);
@@ -970,11 +961,11 @@ async function cmdEdit(positionals, flags) {
   const dir = positionals[0];
   const videoId = (positionals[1] || "").match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i)?.[0];
   if (!dir || !videoId || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang edit <dir> <video_id か動画の URL> --request-text "<直す点>" [--fix defect|severe|warn|none] [--review low|medium|none] [--no-stills] [--editable] [--engine claude|codex]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang edit <dir> <video_id か動画の URL> --request-text "<直す点>" [--fix defect|severe|warn|none] [--editable] [--engine claude|codex]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
-  const roleArgs = reviewFixArgs(flags);
+  const roleArgs = fixArgs(flags);
   for (const name of ["python3", engine]) {
     if (!hasCommand(name)) throw new CliError(`${name} が無い — studio では直せない`, { exit: EXIT.FAIL });
   }
@@ -1354,16 +1345,13 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief (著者は台詞と絵コンテだけ書き、担当が絵をゼロから設計 — 台詞は著者の版で固定・--staff-assets を含意・--staff none とは併用不可。--author は brief の著者にも効く)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
                                         NoLang の studio と同じ段取りで作る (既定 Claude / codex は全役割 Codex)。再生できたら URL を返す
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
-        [--mode light|solo|standard|plus|super]
-                                        役の flag の組。light = 著者 low・担当なし・直し severe (速さ最優先) / solo = 著者 medium・担当なし・直し warn
-                                        (短い動画向け) / standard = 既定 (著者 low・担当 balanced・直し severe) / plus = 著者 brief (low)・担当 balanced
-                                        (素材も)・直し warn / super = 著者 brief (medium)・担当 high・直し warn・レビュー medium (静止画)。
-                                        後ろに書いた役の flag が組の値を上書きする
-        [--review low|medium|none (既定 none)] [--no-stills] [--fix defect|severe|warn|none (既定 severe)] [--staff-assets]
-                                        役は 4 つ (著者・担当・レビュー・直し役)。--fix = 直し役が直す指摘の段 (severe = DEFECT と severe だけ・warn = warn も・
-                                        defect = DEFECT と隠れる文字だけ・none = 直し役なし)。--review = レビュー (担当の後に 1 回、指摘に出ない弱い所・崩れも
-                                        探して直す役・遅くなる)。既定は cut の静止画 (server の GPU が本物の絵で描く・絵の warm を待つ) を見る・--no-stills で
-                                        文面だけ。--staff-assets で担当が絵と台詞も変える
+        [--mode light|standard|plus|super]
+                                        役の flag の組。light = 著者 low・担当なし・直し severe (速さ最優先) / standard = 既定 (著者 low・担当 balanced・
+                                        直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn (長い説明系向け) / super = 著者 brief
+                                        (medium)・担当 high・直し warn (遅く費用も倍)。後ろに書いた役の flag が組の値を上書きする
+        [--fix defect|severe|warn|none (既定 severe)] [--staff-assets]
+                                        役は 3 つ (著者・担当・直し役)。--fix = 直し役が直す指摘の段 (severe = DEFECT と severe だけ・warn = warn も・
+                                        defect = DEFECT と隠れる文字だけ・none = 直し役なし)。--staff-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
@@ -1372,7 +1360,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
                                         差し替えなどが数十秒で当たり、音声と触らない cut は再利用される。成立しない依頼は
                                         stage が返るだけで何も作らない — その時は nolang edit へ
   nolang edit <dir> <video_id か URL> --request-text "<直す点>"
-        [--fix defect|severe|warn|none] [--review low|medium|none] [--no-stills] [--editable] [--engine claude|codex]
+        [--fix defect|severe|warn|none] [--editable] [--engine claude|codex]
                                         studio で作った完成済みの動画を直す: 保存された原稿を種に、編集役が依頼のぶんだけ書き換えて
                                         新しい動画にする (元の動画はそのまま)。patch にならない依頼 (尺・縦横・全体の作り直し級) は
                                         元の動画を参照にした作り直しに自動で倒れる。再生できたら URL を返す
@@ -1417,7 +1405,6 @@ const OPTIONS = {
   engine: { type: "string" },
   author: { type: "string" },
   "author-brief": { type: "boolean" },
-  "no-stills": { type: "boolean" },
   mode: { type: "string" },
   staff: { type: "string" },
   "staff-warn": { type: "boolean" },
