@@ -3,6 +3,9 @@
 # usage (repo root から):
 #   bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 台本の分量に合わせる)]
+#        [--mode light|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / standard = 既定 (著者 low・担当 balanced・直し severe) /
+#                            plus = 著者 brief (low)・担当 balanced (素材も)・直し warn / super = 著者 brief (medium)・担当 high・直し warn・レビュー medium。
+#                            後ろに書いた役の flag が組の値を上書きする)
 #        役は 4 つ (著者・担当・レビュー・直し役)。flag は「役の名 → 強さ・none で外す」で、CLI `nolang make` と同じ名:
 #        [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief]   (著者は台本 = 台詞・絵コンテ (`#` 1〜3 行)・transition と root だけを書き、
 #                            絵は cut ごとの担当がゼロから設計する。台詞は著者の版のまま固定 (声は著者の時点から作り始める)。--staff-assets を含意・--staff none とは併用不可)
@@ -30,13 +33,24 @@ set -eu
 S=$(cd "$(dirname "$0")" && pwd)
 ROOT=$(cd "$S/../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,28p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,31p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
 if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
 TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=none; NO_STILLS=""; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""; EDIT=""
+# --mode = 役の flag の組 (先に読んで既定を置き換える・明示の役の flag が上書き)。表は CLI `nolang make` と同じ
+MODE=""; _args=("$@"); for ((i=0; i<${#_args[@]}; i++)); do [ "${_args[$i]}" = --mode ] && MODE=${_args[$((i+1))]:-}; done
+case "$MODE" in
+  "") ;;
+  light)    EFFORT=low;    BRIEF="";  STAFF="";       FIX=severe; REVIEW=none;;    # 速さ最優先: 著者だけ・DEFECT と severe だけ直す
+  standard) EFFORT=low;    BRIEF="";  STAFF=balanced; FIX=severe; REVIEW=none;;    # 既定 (--mode を書かない時と同じ)
+  plus)     EFFORT=low;    BRIEF=1;   STAFF=balanced; FIX=warn;   REVIEW=none;;    # 著者は台本だけ・担当が絵も設計・warn まで直す
+  super)    EFFORT=medium; BRIEF=1;   STAFF=high;     FIX=warn;   REVIEW=medium;;  # 質を取りに行く: 著者 medium の brief・担当 high・レビュー medium (静止画)
+  *) echo "--mode は light / standard / plus / super" >&2; exit 2;;
+esac
 while [ $# -gt 0 ]; do
   case "$1" in
+    --mode) shift 2;;
     --engine) ENGINE=$2; shift 2;;
     --editable) EDITABLE=1; shift;;
     --ref) REF=$2; shift 2;;
@@ -145,7 +159,7 @@ if [ -n "$EDIT" ]; then
   fi
 fi
 if [ -z "$RAN_EDIT" ]; then
-  echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・レビュー $REVIEW_LABEL・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
+  echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・${MODE:+mode $MODE・}著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・レビュー $REVIEW_LABEL・直し $FIX${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
   PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
 fi
 $PY - "$P" <<'PYEOF'

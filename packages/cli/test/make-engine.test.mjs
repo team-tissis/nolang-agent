@@ -53,7 +53,7 @@ test("既定は担当 balanced・長さ auto で、effort の既定を維持す�
   const { project, env } = await fixture(t, { claude: true, codex: true });
   await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明"], { env });
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
-  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--staff", "balanced", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
 });
 
 test("--staff は担当を opt-in し、--editable を studio へ渡す", async (t) => {
@@ -72,6 +72,18 @@ test("役割の flag (--author / --staff none / --review / --fix / --staff-asset
   );
   const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
   assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "90", "--request-text", "短い説明", "--author", "medium", "--staff", "none", "--review", "medium", "--no-stills", "--fix", "warn", "--staff-assets", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+});
+
+test("--mode は役の flag の組として studio へ渡り、書かない役の flag は押し付けない", async (t) => {
+  const { project, env } = await fixture(t, { claude: true, codex: true });
+  await execute(process.execPath, [cli, "make", project, "--type", "concept", "--request-text", "短い説明", "--mode", "super", "--fix", "severe"], { env });
+  const args = JSON.parse(await readFile(join(project, "args.json"), "utf8"));
+  assert.deepEqual(args.slice(2), ["--type", "concept", "--aspect", "16:9", "--seconds", "auto", "--request-text", "短い説明", "--mode", "super", "--fix", "severe", "--remote", "https://api-dev.no-lang.com", "--token", "test"]);
+  await assert.rejects(execute(process.execPath, [cli, "make", project + "2", "--type", "concept", "--request-text", "説明", "--mode", "turbo"], { env }), (error) => {
+    assert.equal(error.code, 2);
+    assert.match(error.stderr, /--mode は light \/ standard \/ plus \/ super/);
+    return true;
+  });
 });
 
 test("--fix low は直し役の段でない (warn の直しとレビューに分かれた) — 案内して止める", async (t) => {
