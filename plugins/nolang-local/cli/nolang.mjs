@@ -790,13 +790,16 @@ function fixArgs(flags) {
       { exit: EXIT.USAGE },
     );
   }
-  return flags.fix ? ["--fix", flags.fix] : [];
+  const review = flags.review || "none";
+  if (!["low", "medium", "none"].includes(review)) throw new CliError("--review は low / medium / none", { exit: EXIT.USAGE });
+  if (review !== "none" && fix === "none") throw new CliError("--review は直し役の機構で直す — --fix none とは併用できない", { exit: EXIT.USAGE });
+  return [...(flags.fix ? ["--fix", flags.fix] : []), ...(flags.review ? ["--review", flags.review] : [])];
 }
 
 async function cmdMake(positionals, flags) {
   const dir = positionals[0];
   if (!dir || !STUDIO_TYPES.includes(flags.type) || !(flags["request-text"] || flags.request)) {
-    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|standard|plus|super] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
+    throw new CliError(`使い方: nolang make <dir> --type <${STUDIO_TYPES.join("|")}> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh (著者の effort)] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--staff-warn] [--editable] [--engine claude|codex] [--mode light|standard|plus|super] [--review low|medium|none] [--fix defect|severe|warn|none] [--staff-assets] [--speech <音声の file か id> [--speakers N]]`, { exit: EXIT.USAGE });
   }
   const engine = flags.engine || "claude";
   if (!["claude", "codex"].includes(engine)) throw new CliError("--engine は claude / codex", { exit: EXIT.USAGE });
@@ -1347,11 +1350,13 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
                                         --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
         [--mode light|standard|plus|super]
                                         役の flag の組。light = 著者 low・担当なし・直し severe (速さ最優先) / standard = 既定 (著者 low・担当 balanced・
-                                        直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn (長い説明系向け) / super = 著者 brief
-                                        (medium)・担当 high・直し warn (遅く費用も倍)。後ろに書いた役の flag が組の値を上書きする
-        [--fix defect|severe|warn|none (既定 severe)] [--staff-assets]
-                                        役は 3 つ (著者・担当・直し役)。--fix = 直し役が直す指摘の段 (severe = DEFECT と severe だけ・warn = warn も・
-                                        defect = DEFECT と隠れる文字だけ・none = 直し役なし)。--staff-assets で担当が絵と台詞も変える
+                                        直し severe) / plus = 著者 brief (low)・担当 balanced (素材も)・直し warn (長い説明系向け) / super = 著者 high
+                                        (brief なし)・担当 high (素材も)・レビュー medium・直し warn (再生開始 6〜10 分・費用は plus の 2 倍)。
+                                        後ろに書いた役の flag が組の値を上書きする
+        [--review low|medium|none (既定 none)] [--fix defect|severe|warn|none (既定 severe)] [--staff-assets]
+                                        役は 4 つ (著者・担当・レビュー・直し役)。--review = 担当の後に 1 回、cut の静止画と check の指摘全部を見て
+                                        弱い所・崩れも探して直す監督 (--fix none とは併用不可)。--fix = 直し役が直す指摘の段 (severe = DEFECT と severe
+                                        だけ・warn = warn も・defect = DEFECT と隠れる文字だけ・none = 直し役なし)。--staff-assets で担当が絵と台詞も変える
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)

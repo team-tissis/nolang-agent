@@ -15,20 +15,21 @@ cut を跨ぐ待ちは 投入の順・持ち主待ち (他の cut の行の DEFE
 run が warm の頼みで先に作る (頼んだ cut の check と直しは待たない)。
 
 usage (repo root から): python stream_run.py <project> [--staff balanced|low|medium|high|xhigh|none] [--staff-warn] [--staff-assets]
-  [--fix defect|severe|warn|none]   (役は 3 つ: 著者・担当・直し役。flag の名は CLI `nolang make` と同じ)
-  [--review low|medium] [--no-stills]   (bench 専用の knob — 10-30 にスタメンから外したレビュー (担当の後の静止画つき監督)。製品の CLI にも stream_make.sh にも無い)
+  [--fix defect|severe|warn|none] [--review low|medium]   (役は 4 つ: 著者・担当・レビュー・直し役。flag の名は CLI `nolang make` と同じ)
+  [--no-stills]   (bench 専用の knob — レビューに静止画を見せない)
   --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
     値は担当の effort (`none` = 担当なし)。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
     (間に合わない見込みなら low に落とす。開始 中央 約 90 s・全 cut medium は約 130 s で止まらないは 6/10・質は小さく落ちる)。
   --staff-warn = 担当に warn の指摘も渡す (既定は DEFECT と severe だけ — 直し役の `--fix warn` と同じ向きの opt-in。担当の思考が伸びる)。
-  --review = (bench 専用) レビューの effort: 担当の後に 1 回、厳しい監督として指摘に出ない弱い所・崩れも探して自分で直す call
+  --review = レビューの effort (`--mode super` が medium で持つ・既定 none): 担当の後に 1 回、厳しい監督として指摘に出ない弱い所・崩れも探して自分で直す call
     (指摘の無い cut も呼ぶ。check の severe / warn は常に全部見せる)。`--fix` の段とは独立 (直し役の 2 回の上限に数えない) — ただし直し役の
     機構で直すので `--fix none` とは併用不可。既定は cut の静止画も見る (REVIEW_ROUNDS = 1 回): 担当の後、warm が解いた本物の絵を待って cut を
     GPU で描く (local は `studio.py shots`・remote は server の GPU の worker `drafts/{id}/stills/`)。
     `--no-stills` = 静止画を撮らず doc と全指摘だけを見る (warm を待たず担当の check の直後に走る)。
-    10-30 の mode bench: cut ごとに 25〜45 s 直列・費用 +25%・質の上積みは data / compare / story でだけ → 製品の option から外した。
+    10-30 の mode bench: plus に足すと cut ごとに 25〜45 s 直列・費用 +25% で上積みは data / compare / story だけ → plus には無い。super (著者 high・
+    担当 high + 素材・レビュー medium・直し warn) では旧 super (brief medium) に Gemini 2 系で勝ち plus に全判定で勝った → super の既定 (ユーザー裁定)。
   --fix = 直し役が直す指摘の段 (effort は low 固定)。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役を呼ぶ (warn は
     直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`warn` = 台帳の
     直しの列の severe / warn も直す。`none` = 直し役も呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。
