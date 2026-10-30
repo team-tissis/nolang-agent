@@ -107,78 +107,99 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 
 `peak` is the second where the momentary level is highest (absent = a short sound that plays from the head). `±` is a loudness guide.
 
+**Match the film's tone** (`Tone` column). `playful` sounds (game chimes, quiz bells, cartoon hits, comic fanfares, drumrolls) belong to variety, kids, quizzes and comedy. In a serious or factual film (history, science, space, medicine, disasters, business, news, a solemn achievement) use only `neutral` / `serious` sounds — the climax too: a comic fanfare on a historic moment reads as a joke. The serious climaxes are in their own table below.
+
 ### Decoration (same family as the automatic sounds, -5 dB)
 
-| Use | Name | Length | Notes |
-|---|---|---|---|
-| Appearance of boxes, pictures, copies (pop) | `オノマトペ 弾ける01-1（ドライ）` | 1.8 s | the automatic pop |
-| Count-up click | `アソート効果音05-14` | 1.7 s | the automatic click (count) |
-| Swish (fast swing) | `風切り１-２` | 0.4 s | the automatic sound of `in=travel` |
-| Whoosh as the screen moves sideways | `カメラモーション06-1(中)` | 1.0 s | for wipe / slide |
-| Opening hit (noise sweep) | `ノイズスイープ03-04(ドライ)` | 0.6 s | second 0 of the video |
-| Small cue at a scene head | `ひらめき02-1（高）` | 1.7 s | hf's step |
-| Small sparkle | `キラリン 21` | 2.2 s | where a card gets its ✓ |
-| Stamp | `判子を押す` | 0.5 s | the automatic stamp |
-| Electronic confirm (beep) | `決定音` | 0.5 s | UI |
-| Phone notification | `スマートフォン UIサウンド01-09（スピーカー）` | 2.0 s | |
-| Shutter | `カメラのシャッター音` | 0.6 s | |
-| Page turn | `ノートをめくる音` | 6.5 s | peak 1.7 s, `to=2s` |
+| Use | Name | Tone | Length | Notes |
+|---|---|---|---|---|
+| Appearance of boxes, pictures, copies (pop) | `オノマトペ 弾ける01-1（ドライ）` | playful | 1.8 s | the automatic pop |
+| Count-up click | `アソート効果音05-14` | neutral | 1.7 s | the automatic click (count) |
+| Swish (fast swing) | `風切り１-２` | neutral | 0.4 s | the automatic sound of `in=travel` |
+| Whoosh as the screen moves sideways | `カメラモーション06-1(中)` | neutral | 1.0 s | for wipe / slide |
+| Opening hit (noise sweep) | `ノイズスイープ03-04(ドライ)` | neutral | 0.6 s | second 0 of the video |
+| Small cue at a scene head | `ひらめき02-1（高）` | playful | 1.7 s | hf's step |
+| Small sparkle | `キラリン 21` | playful | 2.2 s | where a card gets its ✓ |
+| Stamp | `判子を押す` | neutral | 0.5 s | the automatic stamp |
+| Electronic confirm (beep) | `決定音` | neutral | 0.5 s | UI |
+| Phone notification | `スマートフォン UIサウンド01-09（スピーカー）` | neutral | 2.0 s | |
+| Shutter | `カメラのシャッター音` | neutral | 0.6 s | |
+| Page turn | `ノートをめくる音` | neutral | 6.5 s | peak 1.7 s, `to=2s` |
 
 ### Events (0 dB)
 
-| Use | Name | Length | Notes |
-|---|---|---|---|
-| Heavy impact | `打撃　パンチ03-1(ドライ)` | 0.5 s | layer `03-4(ディレイ)` -4dB at +160 ms for reverb |
-| Impact reverb | `打撃　パンチ03-4(ディレイ)` | 1.6 s | for layering |
-| Light impact (comical) | `戦闘08` | 0.2 s | |
-| Falling over (thud) | `SNES 格闘06-12（倒れる）` | 1.8 s | |
-| Landing (plop) | `SNES 格闘06-11（着地）` | 1.8 s | |
-| Lifting (rising whistle) | `スライドホイッスル01-1（短 上昇）` | 1.8 s | |
-| Success chime | `正解01-2` | 2.0 s | the automatic ok (the `$ok` color) |
-| Ding-ding (correct) | `クイズ　ボタン01-4(シングル)` | 1.3 s | |
-| Failure buzzer | `クイズ　ブザー02-2(短)` | 0.3 s | the automatic bad (the `$bad` color) |
-| Warning (short alarm) | `アラーム01-3` | 2.2 s | |
-| Warning (siren) | `警告音 サイレン05-01（速 中）` | 3.7 s | peak 0.5 s, `to=2s` |
-| Attention (ping) | `注目 1` | 2.4 s | |
-| Insight (ding) | `ピーン！/閃き３` | 0.8 s | |
-| Level-up / heal | `レベルアップ、回復` | 0.8 s | |
-| Power-up | `パワーアップ01` | 0.6 s | |
-| Item pickup | `SNES アクション01-16（アイテム）` | 1.8 s | |
-| Money / treasure | `お金・財宝・アイテムゲット` | 2.1 s | |
-| Loose coins | `小銭をチャラチャラ` | 1.6 s | |
-| Transformation (shing!) | `オノマトペ シャキーン01-1（長）` | 2.7 s | for something light, `05-4（軽 ディレイ）` 5.7 s |
-| Power-down / stop | `DJのスピン・スクラッチ風SE` | 2.3 s | a record grinding to a halt |
-| Glass breaking | `コップが割れる` | 1.4 s | breaks a silence |
-| Explosion | `爆発06` | 1.0 s | |
-| Door | `ドア05` | 0.7 s | |
-| Diving into water | `水に飛び込む` | 3.1 s | |
-| Chime (bell) | `チャイム12` | 2.0 s | |
-| Letdown (trombone) | `フレーズ04-1` | 7.1 s | `to=2.5s` |
-| Laughter | `爆笑3～6名` | 4.5 s | `to=2s` |
+| Use | Name | Tone | Length | Notes |
+|---|---|---|---|---|
+| Heavy impact | `打撃　パンチ03-1(ドライ)` | playful | 0.5 s | layer `03-4(ディレイ)` -4dB at +160 ms for reverb |
+| Impact reverb | `打撃　パンチ03-4(ディレイ)` | playful | 1.6 s | for layering |
+| Light impact (comical) | `戦闘08` | playful | 0.2 s | |
+| Falling over (thud) | `SNES 格闘06-12（倒れる）` | playful | 1.8 s | |
+| Landing (plop) | `SNES 格闘06-11（着地）` | playful | 1.8 s | |
+| Lifting (rising whistle) | `スライドホイッスル01-1（短 上昇）` | playful | 1.8 s | |
+| Success chime | `正解01-2` | playful | 2.0 s | the automatic ok (the `$ok` color) |
+| Ding-ding (correct) | `クイズ　ボタン01-4(シングル)` | playful | 1.3 s | |
+| Failure buzzer | `クイズ　ブザー02-2(短)` | playful | 0.3 s | the automatic bad (the `$bad` color) |
+| Warning (short alarm) | `アラーム01-3` | neutral | 2.2 s | |
+| Warning (siren) | `警告音 サイレン05-01（速 中）` | serious | 3.7 s | peak 0.5 s, `to=2s` |
+| Attention (ping) | `注目 1` | playful | 2.4 s | |
+| Insight (ding) | `ピーン！/閃き３` | playful | 0.8 s | |
+| Level-up / heal | `レベルアップ、回復` | playful | 0.8 s | |
+| Power-up | `パワーアップ01` | playful | 0.6 s | |
+| Item pickup | `SNES アクション01-16（アイテム）` | playful | 1.8 s | |
+| Money / treasure | `お金・財宝・アイテムゲット` | playful | 2.1 s | |
+| Loose coins | `小銭をチャラチャラ` | neutral | 1.6 s | |
+| Transformation (shing!) | `オノマトペ シャキーン01-1（長）` | playful | 2.7 s | for something light, `05-4（軽 ディレイ）` 5.7 s |
+| Power-down / stop | `DJのスピン・スクラッチ風SE` | playful | 2.3 s | a record grinding to a halt |
+| Glass breaking | `コップが割れる` | neutral | 1.4 s | breaks a silence |
+| Explosion | `爆発06` | playful | 1.0 s | |
+| Door | `ドア05` | serious | 0.7 s | |
+| Diving into water | `水に飛び込む` | neutral | 3.1 s | |
+| Chime (bell) | `チャイム12` | serious | 2.0 s | |
+| Letdown (trombone) | `フレーズ04-1` | playful | 7.1 s | `to=2.5s` |
+| Laughter | `爆笑3～6名` | playful | 4.5 s | `to=2s` |
 
 ### Climaxes (+3 to +5 dB, once or twice per video)
 
-| Use | Name | Length | Notes |
-|---|---|---|---|
-| Surprise (sting) | `ジャン！・驚き` | 1.0 s | also for a title's appearance |
-| Fanfare | `フレーズ01-1` | 3.1 s | the "呼べる!!" kind of moment |
-| Cheers + applause | `歓声 イェイ01-4（高 拍手）` | 2.6 s | layer at -4dB, +120 ms after the fanfare |
-| Applause (short) | `拍手04-3（短）` | 3.9 s | `to=2s` |
-| Drumroll → cymbal | `結果発表01-2` | 8.0 s | build-up → reveal; `peak=` puts the peak on the reveal word |
-| Drumroll (plain) | `ドラムロール` | 6.2 s | peak 4.4 s → `[♪"ドラムロール" peak=4.4s]` |
-| Deep bass impact (boom) | `オノマトペ 衝撃13-2（長）` | 8.8 s | peak 0.5 s, long reverb → `to=2.5s fade=0,800` |
-| Heartbeat (tense build-up) | `心臓の鼓動音` | 5.3 s | peak 3.3 s, `to=3.5s` |
-| Game clear | `ベルのゲームクリア音` | 3.7 s | |
+| Use | Name | Tone | Length | Notes |
+|---|---|---|---|---|
+| Surprise (sting) | `ジャン！・驚き` | playful | 1.0 s | also for a title's appearance |
+| Fanfare | `フレーズ01-1` | playful | 3.1 s | the "呼べる!!" kind of moment |
+| Cheers + applause | `歓声 イェイ01-4（高 拍手）` | playful | 2.6 s | layer at -4dB, +120 ms after the fanfare |
+| Applause (short) | `拍手04-3（短）` | neutral | 3.9 s | `to=2s` |
+| Drumroll → cymbal | `結果発表01-2` | playful | 8.0 s | build-up → reveal; `peak=` puts the peak on the reveal word |
+| Drumroll (plain) | `ドラムロール` | playful | 6.2 s | peak 4.4 s → `[♪"ドラムロール" peak=4.4s]` |
+| Deep bass impact (boom) | `オノマトペ 衝撃13-2（長）` | serious | 8.8 s | peak 0.5 s, long reverb → `to=2.5s fade=0,800` |
+| Heartbeat (tense build-up) | `心臓の鼓動音` | serious | 5.3 s | peak 3.3 s, `to=3.5s` |
+| Game clear | `ベルのゲームクリア音` | playful | 3.7 s | |
+| Bright orchestral close (a happy ending) | `エンディング 01` | neutral | 4.6 s | |
+| Announcement hit (a quiz answer, a ranking reveal) | `オーケストラヒット` | neutral | 4.0 s | `to=2s` |
+
+### Serious climaxes and accents (serious / factual / cinematic films; +3 dB at a climax, 0 dB as an accent)
+
+| Use | Name | Tone | Length | Notes |
+|---|---|---|---|---|
+| Deep cinematic hit (a title, a turning point, a solemn achievement) | `Big Hits` | serious | 4.3 s | peak 1.3 s, `to=3s fade=0,800` |
+| Trailer-ending metallic impact | `ムービー予告動画のラスト風SE` | serious | 4.8 s | peak 0.7 s, `to=3s fade=0,800` |
+| Slow-motion sub-bass impact | `スローモーション攻撃` | serious | 6.6 s | `to=3s fade=0,800` |
+| Rumbling impact (an earthquake, a collapse) | `地響き` | serious | 3.0 s | |
+| Ominous rising swell (a threat appears) | `ラスボス・強敵が現れる時の音` | serious | 2.1 s | |
+| Cinematic logo (bass drop + sparkle; an opening, a final title) | `サウンドロゴ01` | serious | 6.0 s | peak 0.7 s, `to=4s` |
+| Choir and strings swell (the vastness of space or nature) | `天使06-3(短)` | serious | 3.4 s | peak 0.8 s |
+| Ethereal pad swell (a new chapter, wonder) | `チャプター開始` | serious | 6.9 s | peak 2.8 s, `to=4s` |
+| Documentary piano chord (tension, a sober fact) | `ピアノ02-2（長）` | serious | 8.0 s | `to=3s fade=0,800` |
+| Warm piano chord (reflection, a quiet close) | `ピアノの和音` | serious | 4.4 s | `to=3s` |
+| Heavy low bell (an ominous fact, a warning) | `チャイム08` | serious | 3.3 s | |
+| Temple bell (Japanese, history, remembrance) | `お寺の鐘１` | serious | 7.6 s | `to=4s fade=0,1500` |
 
 ### Long sounds (ambience, loops) — `to=` required
 
-| Use | Name | Length | Notes |
-|---|---|---|---|
-| Clock ticking | `時計 秒針01-1（ドライ ループ）` | 7.7 s | `to=` only for the build-up |
-| Wind | `風03` | 4.4 s | |
-| Footsteps | `足音` | 14.0 s | |
-| Typing | `キーボード` | 23.9 s | |
-| Sparkles (long) | `オノマトペ キラキラ01-2（短）` | 9.0 s | 9 seconds even though named 「短」 |
+| Use | Name | Tone | Length | Notes |
+|---|---|---|---|---|
+| Clock ticking | `時計 秒針01-1（ドライ ループ）` | serious | 7.7 s | `to=` only for the build-up |
+| Wind | `風03` | serious | 4.4 s | |
+| Footsteps | `足音` | serious | 14.0 s | |
+| Typing | `キーボード` | neutral | 23.9 s | |
+| Sparkles (long) | `オノマトペ キラキラ01-2（短）` | playful | 9.0 s | 9 seconds even though named 「短」 |
 
 **Leave music loudness and ducking to the engine defaults**: just `bgm#music 説明`; during speech the music sits 11 LU under the voice, in long pauses (over 1 second) and at the tail it automatically steps 2 dB forward (duck −2, attack 200 / release 500; it does not come back up in sentence breaks under 0.6 s), and after the last word it steps forward and fades away. Do not write `volume:` (the default +7dB = 9 LU under the voice = hf's loudness; lower it too far and the music becomes inaudible behind the speech). For an instant where ambience should stand out, stop the music with `[<#名]`. `bgm#名(duck: off)` is only for when the music is the lead.
 
