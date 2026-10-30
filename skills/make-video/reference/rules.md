@@ -1,8 +1,8 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 5f9f25d0c5ddf855712519dfce7fbd9b421ed994b0b79df73d76730c55e6559e · synced_at: 2026-10-30T06:20:22.930Z
+Version of these documents: contract: 1 · reference_hash: adc6ef2aec025bc443a5491eb478aa8891c3becfd2472425e5d9a1c46f9f545b · synced_at: 2026-10-30T06:22:48.067Z
 
-Docs: contract.json ef39cb227d4f · spec.md 8c2efaecb3b4 · authoring.md d7731121c703 · capabilities.md a3f9838bc5a1 · looks.md 7ec769916902 · sounds.md 89414a2122f0 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bd176c700da7 · scaffolds/ 4946fc4afb33
+Docs: contract.json ef39cb227d4f · spec.md 8c2efaecb3b4 · authoring.md d7731121c703 · capabilities.md a3f9838bc5a1 · looks.md 7ec769916902 · sounds.md 0f2f21652e0b · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bd176c700da7 · scaffolds/ 4946fc4afb33
 
 The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
