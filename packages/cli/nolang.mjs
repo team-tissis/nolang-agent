@@ -304,7 +304,7 @@ async function waitStatus(api, videoId, until, timeoutS) {
   const deadline = Date.now() + timeoutS * 1000;
   let last = null;
   for (;;) {
-    const st = await callApi(api, "GET", `/v1/videos/${videoId}/`);
+    const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
     if (st.status !== last?.status || st.playable !== last?.playable) log(`status: ${st.status}${st.playable ? " (再生できる)" : ""}`);
     last = st;
     if (st.status === "failed" || st.status === "expired") return st;
@@ -898,7 +898,7 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
     // 再生できるかはサーバーに直接聞く — studio は全 cut を投入し終えてから見に行くので、PLAYABLE の行を待つと最後の cut まで遅れる
     if (videoId && !playableLine && Date.now() - polledAt >= MAKE_POLL_MS) {
       polledAt = Date.now();
-      const st = await callApi(api, "GET", `/v1/videos/${videoId}/`).catch(() => null);
+      const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`).catch(() => null);
       serverPlayable = Boolean(st?.playable);
       if (st?.status === "failed" || st?.status === "expired") serverFailed = st.status;
     }
@@ -1165,7 +1165,7 @@ async function cmdStatus(positionals, flags) {
   const api = await resolveApi(flags);
   const st = flags.wait
     ? await waitStatus(api, videoId, flags.until || "completed", Number(flags.timeout || 900))
-    : await callApi(api, "GET", `/v1/videos/${videoId}/`);
+    : await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
   out(st);
   if (st.status === "failed" || st.status === "expired") process.exitCode = EXIT.FAIL;
 }
