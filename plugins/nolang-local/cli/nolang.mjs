@@ -248,7 +248,7 @@ async function refreshTokens(api, staleAccess) {
 // (更新しても前のトークンは期限まで使えるが、渡した先は自分で更新できないので期限より長くは使えない)。
 // rejected = 401 を受けた token。それを基準に更新する (同じ token の 401 が重なっても更新は 1 回)
 async function accessToken(api, { rejected, minValidMs = 60_000 } = {}) {
-  if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // API key (nlg-c-…) か access token — CI 向け
+  if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // OAuth の access token (nolang auth env が出す) — CI 向け。API key は受けない (403)
   const profile = (await loadStore()).profiles[api];
   if (!profile) throw new CliError(LOGIN_HINT(api, "未ログイン"), { exit: EXIT.AUTH });
   if (rejected || Date.now() > profile.expires_at - minValidMs) return (await refreshTokens(api, rejected ?? profile.access_token)).access_token;
@@ -1383,7 +1383,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 
 共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → ${FALLBACK_API})
 接続先の名前: ${Object.entries(TARGETS).map(([name, url]) => `${name} = ${url}`).join("・")}
-環境変数: NOLANG_TOKEN (API key か access token。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
+環境変数: NOLANG_TOKEN (OAuth の access token・nolang auth env が出す。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
 出力: 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 欠陥・失敗 / 2 使い方 / 3 未ログイン / 4 接続`;
 
 const OPTIONS = {

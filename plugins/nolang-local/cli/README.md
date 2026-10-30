@@ -34,7 +34,7 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 `--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → `dev` (`https://api-dev.no-lang.com`) の順で決まります。手元のスタックで試す時は `nolang use local` に切り替えます。
 どれも名前か URL で書けます: `local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`。
 `nolang use stg` で切り替え、`nolang use` で今の接続先、`nolang use default` で選びを外します。ログインは接続先ごとに保存され、切り替えても前のログインは残ります。
-CI など対話できない環境では `NOLANG_TOKEN` に API key を入れます。
+CI など対話できない環境では、ログイン済みの機械の `eval "$(nolang auth env)"` が出す access token を `NOLANG_TOKEN` に入れます。この token は CLI が更新しないので、期限 (1 時間) が切れたら入れ直します。API key (`nlg-c-…`) は CLI と MCP では使えません (403)。API key は NoLang API 用です。
 
 ログイン情報は `~/.config/nolang/credentials.json` (権限 0600) に保存され、期限が切れても自動で更新されます。
 手元の機械では、エージェントの `--background` や対話できない端末でもブラウザ認可を選びます。ブラウザでログイン画面が開き、「許可」を押すと端末の戻り先 (`127.0.0.1`) が受けてログインが完了します (コード入力なし)。ブラウザ認可を始められない時 (戻り先を開けない・client の登録を断られた) は、自動でデバイス認可に切り替えます。
