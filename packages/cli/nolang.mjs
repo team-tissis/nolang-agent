@@ -248,7 +248,7 @@ async function refreshTokens(api, staleAccess) {
 // (更新しても前のトークンは期限まで使えるが、渡した先は自分で更新できないので期限より長くは使えない)。
 // rejected = 401 を受けた token。それを基準に更新する (同じ token の 401 が重なっても更新は 1 回)
 async function accessToken(api, { rejected, minValidMs = 60_000 } = {}) {
-  if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // API key (nlg-c-…) か access token — CI 向け
+  if (process.env.NOLANG_TOKEN) return process.env.NOLANG_TOKEN; // OAuth の access token (nolang auth env が出す) — CI 向け。API key は受けない (403)
   const profile = (await loadStore()).profiles[api];
   if (!profile) throw new CliError(LOGIN_HINT(api, "未ログイン"), { exit: EXIT.AUTH });
   if (rejected || Date.now() > profile.expires_at - minValidMs) return (await refreshTokens(api, rejected ?? profile.access_token)).access_token;
@@ -304,7 +304,7 @@ async function waitStatus(api, videoId, until, timeoutS) {
   const deadline = Date.now() + timeoutS * 1000;
   let last = null;
   for (;;) {
-    const st = await callApi(api, "GET", `/v1/videos/${videoId}/`);
+    const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
     if (st.status !== last?.status || st.playable !== last?.playable) log(`status: ${st.status}${st.playable ? " (再生できる)" : ""}`);
     last = st;
     if (st.status === "failed" || st.status === "expired") return st;
@@ -733,14 +733,20 @@ async function cmdCreate(positionals, flags) {
 }
 
 // ---- studio で作る (NoLang の studio と同じ段取り: 著者が cut を書いた端から、担当の書き直し → check / 直し → 投入) ----
-// 再生できるかを聞く間隔 — 気づくのが遅れた分だけユーザーにリンクが届くのが遅れる (1 回の GET は軽い)
+// studio の出力 (stream/run.out) を見直す間隔 — 手元の file を読むだけなので短くてよい
 const MAKE_POLL_MS = 1000;
+// サーバーに再生できるかを聞く間隔。気づくのが遅れた分だけリンクが遅れるが、本番の回数制限と無駄な負荷を考えて 3 秒にする
+const MAKE_SERVER_POLL_MS = 3000;
 // studio の一式 (backend の .agents/skills/nolang-draft-studio の写し) を --remote で動かす。著者と担当は `claude -p`。
 const STUDIO_TYPES = ["concept", "data", "compare", "story", "cinematic"];
 const MAKE_LOG = "make.log";
-// 再生できるまで待つ上限 (秒)。持ち込み音声は文字起こしを待つ分だけ長い
+// 再生できるまで待つ上限 (秒)。持ち込み音声は文字起こしを待つ分だけ長い。super は著者 high とレビューの分だけ再生開始が遅い
+// (6〜10 分) が、エージェントの Bash の上限 (10 分) より短くする — 超えても生成中なら still_generating でリンクを返す
 const MAKE_TIMEOUT_S = 420;
+const MAKE_SUPER_TIMEOUT_S = 570;
 const MAKE_SPEECH_TIMEOUT_S = 1500;
+// 開始時に出す「再生できるまで」の目安 (mode ごと)
+const MAKE_PLAYBACK_ESTIMATE = { light: "1〜3 分", standard: "1〜3 分", plus: "2〜4 分", super: "6〜10 分" };
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // 焼き込みの文書一式の段取りの版 (studio/reference/contract.json の contract)。drafts/ の開始に添え、server の受ける範囲の外なら
@@ -870,8 +876,13 @@ async function cmdMake(positionals, flags) {
   if (flags["staff-assets"]) args.push("--staff-assets");
   if (speechId) args.push("--speech", speechId);
   args.push("--remote", api, "--token", token);
-  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}${mode ? `・mode ${mode}` : ""}${staff ? `・担当 ${staff === "none" ? "なし" : staff}` : ""}${flags.author ? `・著者 ${flags.author}` : ""}${brief ? " (brief = 台詞と絵コンテだけ)" : ""}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : "1〜3 分"})`);
-  await runStudioAndWait(root, args, api, { engine, timeout: flags.timeout, speech: Boolean(speechId) });
+  log(`studio で作り始めた ${engine === "codex" ? "[Codex] " : ""}(${flags.type}・${seconds === "auto" ? "長さ auto" : `${seconds} 秒`}${mode ? `・mode ${mode}` : ""}${staff ? `・担当 ${staff === "none" ? "なし" : staff}` : ""}${flags.author ? `・著者 ${flags.author}` : ""}${brief ? " (brief = 台詞と絵コンテだけ)" : ""}${flags.editable ? "・編集可能モード" : ""}${speechId ? `・持ち込み音声 ${speechId}` : ""}) — 再生できるまで待つ (${speechId ? "文字起こしを含めて数分" : MAKE_PLAYBACK_ESTIMATE[mode || "standard"]})`);
+  await runStudioAndWait(root, args, api, {
+    engine,
+    // 待ち時間の優先: --timeout の指定 → 持ち込み音声 (文字起こしを待つ・runStudioAndWait の既定) → super → 既定
+    timeout: flags.timeout || (!speechId && mode === "super" ? MAKE_SUPER_TIMEOUT_S : null),
+    speech: Boolean(speechId),
+  });
 }
 
 // stream_make.sh を裏で起こし、再生できるまで待って out() する (make / edit 共通の待ち方)
@@ -896,9 +907,9 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
     const playableLine = runOut.match(/^PLAYABLE (\S+)/m)?.[1];
     const videoId = (playableLine || watch || "").match(/[0-9a-f-]{36}/)?.[0] || null;
     // 再生できるかはサーバーに直接聞く — studio は全 cut を投入し終えてから見に行くので、PLAYABLE の行を待つと最後の cut まで遅れる
-    if (videoId && !playableLine && Date.now() - polledAt >= MAKE_POLL_MS) {
+    if (videoId && !playableLine && Date.now() - polledAt >= MAKE_SERVER_POLL_MS) {
       polledAt = Date.now();
-      const st = await callApi(api, "GET", `/v1/videos/${videoId}/`).catch(() => null);
+      const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`).catch(() => null);
       serverPlayable = Boolean(st?.playable);
       if (st?.status === "failed" || st?.status === "expired") serverFailed = st.status;
     }
@@ -937,6 +948,24 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
       const tail = makeLog.split("\n").slice(-12).join("\n");
       const author = (await readFile(join(root, "stream", "author.out"), "utf8").catch(() => "")).split("\n").slice(-4).join("\n");
       const timedOut = exited === null && !serverFailed && !engineFailure;
+      // 待ち時間を超えても、動画が始まっていてサーバーが失敗にしていなければ生成は裏で続いている — 失敗として返さない
+      if (timedOut && watch) {
+        log(`待ち時間を超えたが生成中 (${Math.round((Date.now() - startedAt) / 1000)} 秒)`);
+        out({
+          ok: true,
+          video_id: videoId,
+          watch_url: watch,
+          playable: false,
+          still_generating: true,
+          tell_user: `動画を生成中です。再生できるまでもう少しかかります。このページで続きを確かめてください:\n${watch}`,
+          next: `${TELL_FIRST}。他に頼まれていなければ、そのあとターンを終える (生成は裏で最後まで続く)`,
+          log: join(root, MAKE_LOG),
+        });
+        return;
+      }
+      // engine の失敗 (サーバーが開始を断った理由・traceback) は make.log ではなく run.out に出る
+      const runTail = runOut.split("\n").slice(-12).join("\n");
+      const startRefused = runOut.match(/^開始できない: (.+)$/m)?.[1];
       out({
         ok: false,
         video_id: videoId,
@@ -947,8 +976,11 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
           ? `サーバーで動画の生成が失敗した (status ${serverFailed})`
           : timedOut
             ? "再生できるまでの待ち時間を超えた (生成は裏で続いている事がある)"
-            : `studio が終わった (exit ${exited}) — 再生まで届かなかった`,
+            : startRefused
+              ? `サーバーが生成の開始を断った: ${startRefused}`
+              : `studio が終わった (exit ${exited}) — 再生まで届かなかった`,
         log_tail: tail,
+        run_tail: runTail,
         author_tail: author,
       });
       process.exitCode = EXIT.FAIL;
@@ -1165,7 +1197,7 @@ async function cmdStatus(positionals, flags) {
   const api = await resolveApi(flags);
   const st = flags.wait
     ? await waitStatus(api, videoId, flags.until || "completed", Number(flags.timeout || 900))
-    : await callApi(api, "GET", `/v1/videos/${videoId}/`);
+    : await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
   out(st);
   if (st.status === "failed" || st.status === "expired") process.exitCode = EXIT.FAIL;
 }
@@ -1383,7 +1415,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
 
 共通: --api <名前か URL> (無ければ NOLANG_API_URL → nolang use の接続先 → このプラグインの接続先${PACKAGED_API ? ` (${PACKAGED_API})` : ""} → ${FALLBACK_API})
 接続先の名前: ${Object.entries(TARGETS).map(([name, url]) => `${name} = ${url}`).join("・")}
-環境変数: NOLANG_TOKEN (API key か access token。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
+環境変数: NOLANG_TOKEN (OAuth の access token・nolang auth env が出す。CI 向け)・NOLANG_API_URL・NOLANG_CONFIG_DIR
 出力: 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 欠陥・失敗 / 2 使い方 / 3 未ログイン / 4 接続`;
 
 const OPTIONS = {
