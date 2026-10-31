@@ -174,7 +174,7 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 | Bright orchestral close (a happy ending) | `エンディング 01` | neutral | 4.6 s | |
 | Announcement hit (a quiz answer, a ranking reveal) | `オーケストラヒット` | neutral | 4.0 s | `to=2s` |
 
-### Serious climaxes and accents (serious / factual / cinematic films; +3 dB at a climax, 0 dB as an accent)
+### Serious climaxes and accents (serious / factual / cinematic films; once or twice per video — +3 dB at a climax, 0 dB as an accent; a cut's close needs no sound, the BGM carries it)
 
 | Use | Name | Tone | Length | Notes |
 |---|---|---|---|---|
@@ -186,8 +186,7 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 | Cinematic logo (bass drop + sparkle; an opening, a final title) | `サウンドロゴ01` | serious | 6.0 s | peak 0.7 s, `to=4s` |
 | Choir and strings swell (the vastness of space or nature) | `天使06-3(短)` | serious | 3.4 s | peak 0.8 s |
 | Ethereal pad swell (a new chapter, wonder) | `チャプター開始` | serious | 6.9 s | peak 2.8 s, `to=4s` |
-| Documentary piano chord (tension, a sober fact) | `ピアノ02-2（長）` | serious | 8.0 s | `to=3s fade=0,800` |
-| Warm piano chord (reflection, a quiet close) | `ピアノの和音` | serious | 4.4 s | `to=3s` |
+| Quiet accent on a sober fact (one clear metal tap, long thin tail) | `フィンガーシンバル03-1（長）` | serious | 4.3 s | `to=3s fade=0,800` |
 | Heavy low bell (an ominous fact, a warning) | `チャイム08` | serious | 3.3 s | |
 | Temple bell (Japanese, history, remembrance) | `お寺の鐘１` | serious | 7.6 s | `to=4s fade=0,1500` |
 

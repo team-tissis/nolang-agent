@@ -32,7 +32,7 @@ usage (repo root から): python stream_run.py <project> [--staff balanced|low|m
     担当 high + 素材・レビュー medium・直し warn) では旧 super (brief medium) に Gemini 2 系で勝ち plus に全判定で勝った → super の既定 (ユーザー裁定)。
   --fix = 直し役が直す指摘の段 (effort は low 固定)。既定 `severe` = DEFECT と severe の指摘 (隠れる文字・画面の外 …) だけ直し役を呼ぶ (warn は
     直さない — 担当後の severe は cut の 9% で、大半は担当が作る)。`defect` = DEFECT と隠れる文字 (severe の occluded) だけ。`warn` = 台帳の
-    直しの列の severe / warn も直す。`none` = 直し役も呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。
+    直しの列の warn も直す。`none` = 直し役も呼ばない (DEFECT は機械の直しと最後の手段 — 著者の版・DEFECT の印を落とす — だけ)。
   担当は既定で絵 (説明文) と台詞を変えない (変えていれば著者の版に戻す)。絵と声は著者の cut が届いた時点で warm に頼み、担当と並列に
     作る。--staff-assets = 担当が絵と台詞も変えてよい (素材は担当の版から・担当の後に作る)。
   既定 (担当 medium・素材は著者の版・DEFECT だけ直す) の根拠: 10-26 の 4 題材 bench で、担当 + 素材は著者の版 + 直しなしが、担当 + レビュー +
@@ -1156,13 +1156,14 @@ class Run:
                 f["cut"] = c
 
     def to_fix(self, f: dict[str, object]) -> bool:
-        """fix を回す指摘か: 台帳の直しの列の規則の severe / warn (level では決めない — docs/draft_src_v2/quality.md)。"""
-        return f.get("severity") in ("severe", "warn") and f.get("rule") in self.fixed
+        """fix を回す指摘か: severe は全部 (`--fix severe` と同じ — warn も直す run が standard より直さない事が無いように)・
+        warn は台帳の直しの列の規則だけ (docs/draft_src_v2/quality.md)。"""
+        return f.get("severity") == "severe" or (f.get("severity") == "warn" and f.get("rule") in self.fixed)
 
     def fix_finding(self, f: dict[str, object]) -> bool:
         """直し役に回す指摘か (`fix_scope`): defect = 隠れる文字だけ (一番避けたい崩れで、機械の直し move_after は字の札どうしに
-        届かない)・severe = severe 全部 (担当後の severe は cut の 9%・大半は担当が作る — 隠れる文字 / 画面の外)・warn = 台帳の
-        直しの列の severe / warn (`to_fix`)。"""
+        届かない)・severe = severe 全部 (担当後の severe は cut の 9%・大半は担当が作る — 隠れる文字 / 画面の外)・warn = severe
+        全部と台帳の直しの列の warn (`to_fix`)。"""
         if self.fix_scope == "warn":
             return self.to_fix(f)
         if self.fix_scope == "severe":
