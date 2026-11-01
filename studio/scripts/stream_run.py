@@ -17,8 +17,9 @@ run が warm の頼みで先に作る (頼んだ cut の check と直しは待�
 usage (repo root から): python stream_run.py <project> [--staff balanced|low|medium|high|xhigh|none] [--staff-warn] [--staff-assets]
   [--fix defect|severe|warn|none] [--review low|medium]   (役は 4 つ: 著者・担当・レビュー・直し役。flag の名は CLI `nolang make` と同じ)
   [--no-stills]   (bench 専用の knob — レビューに静止画を見せない)
-  --remote http://host:18000 [--token nlg-c-…] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
-    の 1 行で出す (token は --token か env NOLANG_API_KEY・無ければ Claude Code が `/mcp` の OAuth で得た token)。
+  --remote http://host:18000 [--token <OAuth の access token>] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
+    の 1 行で出す (token は OAuth の access token — --token か env NOLANG_TOKEN (`eval "$(nolang auth env)"`)・無ければ Claude Code が
+    `/mcp` の OAuth で得た token。CLI / MCP の窓口は API key を受けない (403))。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
     値は担当の effort (`none` = 担当なし)。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
     (間に合わない見込みなら low に落とす。開始 中央 約 90 s・全 cut medium は約 130 s で止まらないは 6/10・質は小さく落ちる)。
@@ -472,7 +473,8 @@ CLOSING_BUDGET_S = (10.0, 30.0)
 
 def claude_mcp_token(remote: str) -> str | None:
     """Claude Code が remote MCP (`<remote>/mcp`) の OAuth で得た access token (`~/.claude/.credentials.json` の mcpOAuth)。
-    plugin で入れた skill は API key を持たない — `/mcp` で NoLang に接続した token をそのまま REST にも使う (同じ Bearer)。"""
+    CLI / MCP の窓口は OAuth の token だけを受ける (API key は 403) — `/mcp` で NoLang に接続した token をそのまま REST にも使う
+    (同じ Bearer)。"""
     path = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude"))) / ".credentials.json"
     try:
         entries = json.loads(path.read_text()).get("mcpOAuth", {})
@@ -2530,9 +2532,11 @@ class Run:
             with urllib.request.urlopen(req, timeout=120) as resp:
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", "replace")[:600]
             if e.code != 400:
-                raise
-            return {"status": 400, "error": e.read().decode("utf-8", "replace")[:600]}
+                # 断った理由 (本文の error_code・detail) を落とさない — 素の HTTPError では traceback に status しか残らない
+                raise RuntimeError(f"{path} -> {e.code}: {detail}") from e
+            return {"status": 400, "error": detail}
 
     def speech_file_ids(self) -> list[str]:
         """持ち込み音声 (`--speech` — project/speech.json の sources) の id。無ければ空。"""
@@ -2718,11 +2722,16 @@ class Run:
             with urllib.request.urlopen(req, timeout=120) as resp:
                 r = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
-            if e.code != 400:
-                raise
-            error = e.read().decode("utf-8", "replace")[:600]
-            self.log(event="start_rejected", error=error)
+            # 断った理由 (本文の error_code・detail) を出して止まる (CLI は run.out のこの行を error に載せる)。送り直さない —
+            # 開始は課金を伴う 1 回きりの頼みで、クレジット不足は待っても直らない。待つかは呼び出し側が理由を見て決める
+            error = f"HTTP {e.code} {e.read().decode('utf-8', 'replace')[:600]}"
+            self.log(event="start_rejected", status=e.code, error=error)
             print(f"開始できない: {error}", flush=True)
+            return
+        except (urllib.error.URLError, http.client.HTTPException, ConnectionError, TimeoutError) as e:
+            # 届かない・返事を失った: サーバーが受け付けたかは分からない (受け付けていれば視聴 URL の画面で続きが見える)
+            self.log(event="start_unreachable", error=repr(e)[:400])
+            print(f"開始できない (届かない・受け付けたかは不明): {e!r}"[:600], flush=True)
             return
         self.video_id = str(r["video_id"])
         self.watch_url = str(r["watch_url"])
@@ -2749,7 +2758,7 @@ class Run:
             if self.engine_failed():
                 return self.abort_engine()
             try:
-                r = self.remote_get(f"/v1/videos/{self.video_id}/")
+                r = self.remote_get(f"/v1/unstable/videos/{self.video_id}/")
             except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
                 failures += 1
                 self.log(event="remote_poll_failed", n=failures, error=str(e)[:200])
@@ -3067,7 +3076,7 @@ def main(argv: list[str]) -> int:
         print("--review は直し役の機構で直す — --fix none とは併用できない", file=sys.stderr)
         return 2
     remote = argv[argv.index("--remote") + 1] if "--remote" in argv else None
-    token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_API_KEY")
+    token = argv[argv.index("--token") + 1] if "--token" in argv else os.environ.get("NOLANG_TOKEN")
     if token is None and remote is not None:
         token = claude_mcp_token(remote)
     run = Run(

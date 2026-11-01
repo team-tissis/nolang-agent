@@ -1,15 +1,15 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 088e20ae0a3626ad7c207c0ada5e8bfe40d96ed68ddb00e60885e2633ca0bffb · synced_at: 2026-10-31T12:33:09.887Z
+Version of these documents: contract: 1 · reference_hash: fab53f2c29892e5719c2ca4a56d1fd688be7bedfb89312cff5921c6062acaad4 · synced_at: 2026-11-01T03:21:48.545Z
 
-Docs: contract.json ef39cb227d4f · spec.md 8c2efaecb3b4 · authoring.md d7731121c703 · capabilities.md a3f9838bc5a1 · looks.md 7ec769916902 · sounds.md a75b4c250730 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ bd176c700da7 · scaffolds/ 4946fc4afb33
+Docs: contract.json ef39cb227d4f · spec.md 3c33649dd3a1 · authoring.md 98aa228a62bd · capabilities.md 47d6966f6303 · looks.md 7ec769916902 · sounds.md a75b4c250730 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ 5e9d6dfcaf9e · scaffolds/ 4946fc4afb33
 
 The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
 - `empty_cut` place a picture or a card
 - `shrunk` change the width or the text size (widen the frame / drop `width:` to fit the text / shorten the wording)
 - `offcanvas` (severe) move the position inward
-- `duplicate_text` a card with the same text as the subtitle → put short key words on screen instead. A card that shows the speech itself (lyric-video lines, speech bubbles) takes `.hide_subtitle` (the subtitle is not drawn while it shows; with `lint off` the two stay side by side)
+- `duplicate_text` a card with the same text as the subtitle → put short key words on screen instead. A card that shows the speech itself (lyric-video lines, speech bubbles) takes `.hide_subtitle` (the subtitle band leaves while the card shows and comes back after it; with `lint off` the two stay side by side)
 - `text_overload` more text than the cut's length lets the viewer read → trim the wording to short key words; show it in turns on the words instead of all at once (close the earlier card with `[<#name]`; do not split the cut)
 - `spoiler` a heading shows a speech word early → bring it in on its word's mark
 - `still_stretch` nothing moves for 6+ seconds (a picture's kb does not count as motion) → add marks on words

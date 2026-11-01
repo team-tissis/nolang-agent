@@ -23,7 +23,7 @@
 #                              全スタイル) なら著者経路 (--ref と同じ) へ自動で倒れる。--type は不要・縦横は親に合わせる)
 #        [--speech <speech_file_id>[,<id>]]   (持ち込み音声 = upload 済みの音声。server が文字起こしし、その clip を切って使う動画を作る・
 #                                              --remote だけ)
-#        [--remote http://host:18000 --token nlg-c-…]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
+#        [--remote http://host:18000 --token <OAuth の access token>]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の hf_<type>_* 2 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
 # 出来上がり: <project>/studio/out/video.mp4 (再生開始の時点から製品の HLS (static/video_generate/<process>/) が伸びる)・stream/run.jsonl に時刻の記録。
@@ -195,7 +195,7 @@ else:
 if video.exists():
     print(f"video: {video} ({video.stat().st_size // 1024} KB)")
 elif by("remote_started"):  # --remote: 描画と配信は server (手元に mp4 は無い)
-    print(f"video: server — {by('remote_started')[0]['watch_url']} (status: GET /v1/videos/<id>/)")
+    print(f"video: server — {by('remote_started')[0]['watch_url']} (status: GET /v1/unstable/videos/<id>/)")
 else:
     print("video: なし (stream/run.out と weave/*/out/check_*.txt を見る)")
 PYEOF

@@ -50,6 +50,7 @@ The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) 
 | paragraph horizontal / vertical align | `text-align:` `vertical-align:` | |
 | paragraph line_height letter_spacing writing_mode | `line-height:` · `letter-spacing: .1em` · `writing-mode: vertical-rl` | |
 | padding | `padding:` (1 / 2 / 3 / 4 values) | |
+| speech_window (lead_ms / tail_ms / hold_ms) | `p#名(lead: 80; tail: 250; hold: next,1500)` (the subtitle words; unwritten keys take the subtitle defaults) | each wording span shows only over the voice of the lines it covers; one per element (not in variants) |
 | gradient ground of a filled card | `p#名(background: linear-gradient(90deg, #a, #b 42%, #c))` (a board baked under the card) | |
 | chroma_key | **✕** | not in the draft vocabulary (the editor's keying) |
 
@@ -95,20 +96,21 @@ The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) 
 | head_pause tail_pause | speech `[silence:600]` / the root's `silence head= tail=` | |
 | speedup_percent | `cast 名 = … speed=110%` · speech `[speed:120%]` | |
 | override_speaker / indicator | `cast` / `manner=` / `[manner:…]` (per-line only for Fish Audio voices) · a character's vocal color `@名.style:` | |
-| override_display_texts | `subtitle "…"` | |
+| subtitle text that differs from the speech (a ScriptLayer carrying its own text) | `subtitle "…"` | |
 | yomi_edits | the root's `read 表記 = 読み` (every occurrence) / in speech `{表記\|読み}` (one spot) | |
 | audio_filter volume_db (voice) | `voice#名(volume: +3dB; filter: echo\|radio\|karaoke\|chorus\|megaphone\|vibrate[,scale=,freq_ms=])` · variants `voice#名.tag(…)` via `@名 .tag:` | |
 
-## Subtitles (ScriptLayer, ScriptLayout, SpeechWindow)
+## Subtitles (ScriptLayer = a text layer whose text is derived from the script)
 
 | field | How to write |
 |---|---|
 | frame / fill / border / radius / padding / shadow / alpha | `subtitle(left: …; top: …; bottom: …; width: …; height: …; background: …; border: …; border-radius: …; padding: …; font-size: …; font-family: …; style: …)` |
-| hug | `subtitle.hug(…)` |
-| card_motion_in / out | `subtitle(in: pop; out: fade)` (per card; custom / keys too) |
-| speech_window | `lead: 100; tail: 300; hold: next,800` / `hold: same` / `hold: off` (ms) |
+| hug | `subtitle.hug(…)` (same `hug` field as text; the shrunk band stays on the frame edge nearer the screen edge — `bottom:` keeps its bottom edge, `top:` its top edge; `vertical-align:` is the text alignment and defaults to middle; writing `vertical-align: middle` still sticks the band to that edge — a hug band cannot be centred in its frame) |
+| span_motion_in / out (default per card) | `subtitle(in: pop; out: fade)` (per card; custom / keys too) |
+| speech_window (lead_ms / tail_ms / hold_ms / scope) | `lead: 100; tail: 300; hold: next,800` / `hold: off` (ms); `window: item` (the band hides outside the window too; the default is item for filled / hug bands and text = only the text hides for a telopbase band) / `window: off` (no window). A subtitle with `telopbase` has no window unless `lead` / `tail` / `hold` is written. A speaker variant (`cast 名 … subtitle=.tag`) that only changes the text style becomes that speaker's default text style (one lane); a variant that also moves or restyles the band switches the lane per speaker |
 | speaker_label | `cast 名 = … label="部下" label_fill=$a label_color=#…` + `subtitle(label: edge\|above\|top_left\|inside; label_in: pop)` |
-| card variants | `subtitle.em(…)` + `subtitle .em "…"` / `[card:em]` at the card's head / `cast 名 = … subtitle=.em` (the card's speech window `lead: tail: hold:` too = ScriptCardStyle.speech_window) |
+| card variants | `subtitle.em(…)` + `subtitle .em "…"` / `[card:em]` at the card's head / `cast 名 = … subtitle=.em` (text style only → the speaker's `default_text_style`, no lane switch) — lowered to ordinary state keys (band look), span overrides (in / out, `lead:` as the span's offset) and a windowed main; per-card `tail:` / `hold:` cannot be written |
+| a gap in the lane (no item over an interval) | `.hide_subtitle` on a text / box: the lane has no item from that element's start to its close — the band leaves with its `out:` and the next item comes back with its `in:` (an element that runs to the cut's end leaves no item after it) |
 
 ## Groups and camera (GroupLayer, CameraLayer)
 

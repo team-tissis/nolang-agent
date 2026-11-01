@@ -30,7 +30,7 @@ p { out: none }
 div { out: none }
 bgm#music(fade: 600,60; keys: "0:0") ファゴットとマリンバとアコースティックギターが跳ねる、とぼけて愉快な軽いコメディ曲
 # 字幕 (白の極太 + 紺の縁・中央・話者札は上・文ごとの札・16 字を超える文は読点で 2 行)
-subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; stroke: #0D1222,4; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0; tail: 250; hold: same,1500; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
+subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; stroke: #0D1222,4; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0; tail: 250; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
 
 # 2 段テロップ (Dela・前置き 白 52 / 落ち 黄 75 (9 字以上は 65)・-2° 傾き・拡大から back で着地・落ちは着地後に横に揺れる)
 def telop(setup, punchline, punch_size=75) = group(left: 0px; top: 1030px; width: 1080px; height: 255px)

@@ -73,7 +73,7 @@ bgm#music_a(volume: 2dB; lowpass: 650; fade: 400,60) 疾走感のあるアップ
 bgm#music_b(volume: 5dB; fade: 0,50) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 bgm#music_c(volume: 6dB; fade: 0,40) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 # 字幕: 画面中央に 1 句ずつ、極太の丸ゴシック・紺の太い縁・マゼンタの光・ポンと弾んで出て次の句まで残る
-subtitle.hug(bottom: 710px; padding: 0px; font-size: 150px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: #0B0730,9; text-shadow: 0px 0px 22px #FF28C8E6; background: none; text-align: center; unit: phrase; min_phrase: 0; strip: 、。; lead: 0; tail: 0; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
+subtitle.hug(bottom: 710px; padding: 0px; font-size: 150px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: #0B0730,9; text-shadow: 0px 0px 22px #FF28C8E6; background: none; text-align: center; unit: segment; strip: 、。; lead: 0; tail: 0; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
 # 句の型 (札の頭の [card:型]): 小さい前置き・決め語 (傾いて弾む)・驚き・判子・色ずれの分身・熱・突進・被弾・復活・沈む・勝利の金・冷たい音源・熱いフェス
 subtitle.small(font-size: 112px; in: {scale:.7, opacity:0, duration:.16, ease:'back.out(1.7)'})
 subtitle.big85(font-size: 128px)
@@ -81,7 +81,7 @@ subtitle.hit(font-size: 168px; rotation: -3; in: {scale:.45, rotation:-3, opacit
 subtitle.hit85(font-size: 128px; rotation: -3; in: {scale:.45, rotation:-3, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.huh(font-size: 225px; in: {scale:.3, opacity:0, duration:.18, ease:'back.out(1.7)'})
 subtitle.stamp(font-size: 168px; color: $red; stroke: #FFFFFF,9; text-shadow: 0px 0px 26px #FF2448E6; background: #FFFFFFEB; border: 14px solid $red; border-radius: 26px; padding: 0px 46px; rotation: -10; in: {scale:3.2, rotation:-14, opacity:0, duration:.16, ease:'power4.in'})
-subtitle.clone(ghost: #00F0FF,#FF2BD6,17; in: {scale:.6, opacity:0, duration:.18, ease:'back.out(1.7)'})
+subtitle.clone(in: {scale:.6, opacity:0, duration:.18, ease:'back.out(1.7)'})
 subtitle.heat(font-size: 160px; in: {scale:.45, rotation:-6, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.dash(in: {scale:1.4, opacity:0, duration:.18, ease:'power4.out'})
 subtitle.damage(font-size: 165px; in: {scale:1.5, opacity:0, duration:.12, ease:'power4.out'})

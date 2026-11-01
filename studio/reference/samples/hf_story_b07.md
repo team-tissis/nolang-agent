@@ -50,7 +50,7 @@ div { border: none; out: none }
 img { in: none; out: none }
 bgm#music(fade: 120,1100) テンポが速くコミカルで慌ただしい、焦りを煽るドタバタのBGM
 # 字幕: 白の太字 + 黒の太い縁・中央・句ごとの札 (hf の割り方を [|] で)・札は縮んだ所から弾んで出て、次の札まで残る
-subtitle(left: 0px; top: 1392px; width: 1080px; font-size: 72px; line-height: 1.2; color: #FFFFFF; stroke: #111111,10; background: none; text-align: center; unit: phrase; min_phrase: 0; lead: 0; tail: 0; hold: next,800; in: {scale:.86, opacity:0, duration:.09, ease:'back.out(2.5)'}; out: {opacity:0, duration:.05})
+subtitle(left: 0px; top: 1392px; width: 1080px; font-size: 72px; line-height: 1.2; color: #FFFFFF; stroke: #111111,10; background: none; text-align: center; unit: segment; lead: 0; tail: 0; hold: next,800; in: {scale:.86, opacity:0, duration:.09, ease:'back.out(2.5)'}; out: {opacity:0, duration:.05})
 subtitle.small(font-size: 66px)
 
 # 星形の判子「N つ目！」(-8° に傾けて置き、-30° の 0.2 倍から 1.12 倍へ弾んで 1 倍に・退場は縮みながら下の見出しへ落ちる)・出ている間は字幕を消す

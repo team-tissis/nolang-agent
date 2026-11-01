@@ -55,9 +55,8 @@ bgm#music(fade: 350,300) ピコピコした電子音と跳ねるリズムの明�
 # 溜めで止めた曲を結果の後に同じ曲の続きの位置から戻す (2 本目の層)
 bgm#music_b(fade: 500,2000) ピコピコした電子音と跳ねるリズムの明るく軽快なエレクトロニカ、可愛くコミカルなゲーム実況向け、124 BPM
 # 字幕: 縁取りの白字・文で 1 枚・語は {y} で黄・下端の暗い帯 (sub_band) の上
-subtitle(left: 0px; bottom: 46px; width: 1920px; font-size: 64px; line-height: 1.3; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: $navy,10; background: none; padding: 0px; unit: sentence; lead: 60; tail: 400; hold: off; in: {y:14, opacity:0, duration:0.14, ease:'power2.out'}; out: none)
-# 切替の前の文の札: 字幕は切替の帯より上に描かれるので、声の終わりで消して帯に被らせない ([card:early])
-subtitle.early(tail: 0)
+subtitle(left: 0px; bottom: 46px; width: 1920px; font-size: 64px; line-height: 1.3; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: $navy,10; background: none; padding: 0px; unit: sentence; lead: 60; tail: 0; hold: next,400; in: {y:14, opacity:0, duration:0.14, ease:'power2.out'}; out: none)
+# 札は次の札まで最大 400 ms 残り (hold)、cut の最後の札は声の終わりで消える (tail 0) — 字幕は切替の帯より上に描かれるので帯に被らせない
 # 全編の層: 字幕の下の暗い帯 (溜めと結果で to で消して締めで戻す)・全面の白い閃光 (攻撃・すぐに・結果の語で to)
 div#sub_band(left: 0px; top: 810px; width: 1920px; height: 270px; background: linear(#120E3000,#120E3080@55%,#120E30C7,180); border-radius: 24px; in: {opacity:0, duration:0.3})
 veil#flash(color: #FFFFFF; opacity: 0; z-index: curtain; in: none)
@@ -211,26 +210,26 @@ transition = wipe,620,dir=left,overlap=310,angle=16,ease=power2.inOut,bars=#1E1B
 *** title
 [>#subtitle]
 bgm music
-@n: [silence:920][♪sweep -2dB -870][♪jan +3dB -670][>#sub_band -320][>#title_stamp +80][!#title_stamp to,{scale:1.08, duration:0.18, ease:'power1.out', repeat:1, yoyo:true} +280][♪pop -3dB +280][!#title_star[*] to,{opacity:0, scale:0.3, rotation:90, duration:0.5, ease:'power2.in', stagger:0.37} +280][!#title_main to,{y:-8, duration:0.9, ease:'sine.inOut', repeat:3, yoyo:true} +680][card:early]今回は、{y}サクラスクールシミュレーター{/}で[br]{y}敵と遊ぶ方法{/}を紹介します。[silence:460]
+@n: [silence:920][♪sweep -2dB -870][♪jan +3dB -670][>#sub_band -320][>#title_stamp +80][!#title_stamp to,{scale:1.08, duration:0.18, ease:'power1.out', repeat:1, yoyo:true} +280][♪pop -3dB +280][!#title_star[*] to,{opacity:0, scale:0.3, rotation:90, duration:0.5, ease:'power2.in', stagger:0.37} +280][!#title_main to,{y:-8, duration:0.9, ease:'sine.inOut', repeat:3, yoyo:true} +680]今回は、{y}サクラスクールシミュレーター{/}で[br]{y}敵と遊ぶ方法{/}を紹介します。[silence:460]
 
 *** down
-@n: [silence:320][♪step -3dB -100][card:early]まず、[>#down_label -160]遊びたい{y}敵キャラ{/}を[>#down_ring -250][!#down_ring to,{rotation:40, duration:1.075, ease:'none'} +200][>#down_sfx -200][♪down +1dB][!#down_sfx to,{y:10, duration:0.08, ease:'none', repeat:3, yoyo:true} +240]{y}ダウン{/}させましょう。[silence:400]
+@n: [silence:320][♪step -3dB -100]まず、[>#down_label -160]遊びたい{y}敵キャラ{/}を[>#down_ring -250][!#down_ring to,{rotation:40, duration:1.075, ease:'none'} +200][>#down_sfx -200][♪down +1dB][!#down_sfx to,{y:10, duration:0.08, ease:'none', repeat:3, yoyo:true} +240]{y}ダウン{/}させましょう。[silence:400]
 
 *** revive
-@n: [silence:380][♪step -3dB -160][!#rv_a[*] to,{y:-80, opacity:0, duration:0.5, ease:'power1.in', stagger:0.28} +470][!#rv_b[*] to,{y:-80, opacity:0, duration:0.5, ease:'power1.in', stagger:0.28} +470][card:early]次に、そのキャラを[>#revive_sfx][♪revive -1dB][!#revive_sfx to,{scale:1.06, duration:0.35, ease:'sine.inOut', repeat:1, yoyo:true} +450]{y}復活{/}させます。[silence:290]
+@n: [silence:380][♪step -3dB -160][!#rv_a[*] to,{y:-80, opacity:0, duration:0.5, ease:'power1.in', stagger:0.28} +470][!#rv_b[*] to,{y:-80, opacity:0, duration:0.5, ease:'power1.in', stagger:0.28} +470]次に、そのキャラを[>#revive_sfx][♪revive -1dB][!#revive_sfx to,{scale:1.06, duration:0.35, ease:'sine.inOut', repeat:1, yoyo:true} +450]{y}復活{/}させます。[silence:290]
 
 *** where
-@n: [silence:420][>#panel_h -220][♪pop -2dB -80][>#plate_h +50][card:early]{y}病院{/}で復活させるか[>#or_badge -450][>#panel_s -220][♪pop -2dB -80][>#plate_s +50]{y}神社{/}で復活させるかは[br][<#or_badge -200][>#ok_stamp -180][♪item 0dB][!#panel_h to,{y:8, duration:0.06, ease:'none', repeat:3, yoyo:true} +250][!#panel_s to,{y:8, duration:0.06, ease:'none', repeat:3, yoyo:true} +250]{y}どちらでもいい{/}です。[silence:450]
+@n: [silence:420][>#panel_h -220][♪pop -2dB -80][>#plate_h +50]{y}病院{/}で復活させるか[>#or_badge -450][>#panel_s -220][♪pop -2dB -80][>#plate_s +50]{y}神社{/}で復活させるかは[br][<#or_badge -200][>#ok_stamp -180][♪item 0dB][!#panel_h to,{y:8, duration:0.06, ease:'none', repeat:3, yoyo:true} +250][!#panel_s to,{y:8, duration:0.06, ease:'none', repeat:3, yoyo:true} +250]{y}どちらでもいい{/}です。[silence:450]
 
 *** prep
 @n: [silence:380][♪step -3dB -80]{y}下準備{/}として、[>#prep_card.r1.hl -450][!#prep_card.r1.icon pop -150]{y}神父{/}に[♪change -2dB -50][>#prep_card.r1.ck +400]着替えます。[silence:590]
-@: [silence:0][<#prep_card.r1.hl -240][>#props_bg -240][<#dress_bg +110][>#prep_card.r2.hl -140][card:early]そして{y}小道具{/}から[!#prep_card.r2.icon pop -150][>#prep_star[*] -200][!#prep_star[*] to,{opacity:0, scale:0.36, rotation:60, duration:0.45, ease:'power2.in', stagger:0.09} +250][♪get -2dB -50][>#get_sfx]{y}車椅子{/}を[>#prep_card.r2.ck +330]出しましょう。[silence:460]
+@: [silence:0][<#prep_card.r1.hl -240][>#props_bg -240][<#dress_bg +110][>#prep_card.r2.hl -140]そして{y}小道具{/}から[!#prep_card.r2.icon pop -150][>#prep_star[*] -200][!#prep_star[*] to,{opacity:0, scale:0.36, rotation:60, duration:0.45, ease:'power2.in', stagger:0.09} +250][♪get -2dB -50][>#get_sfx]{y}車椅子{/}を[>#prep_card.r2.ck +330]出しましょう。[silence:460]
 
 *** attack
-@n: [silence:340][♪step -3dB -120][card:early]復活させたら、[>#speedlines -20][<#speedlines +450][!#attack_bg shake,17,duration=280][>#attack_sfx -200][!#flash to,{opacity:0.55, duration:0.04}][!#flash to,{opacity:0, duration:0.22, ease:'power1.out'} +40][♪punch +3dB][♪punch_echo -1dB +160]{y}攻撃{/}します。[silence:300]
+@n: [silence:340][♪step -3dB -120]復活させたら、[>#speedlines -20][<#speedlines +450][!#attack_bg shake,17,duration=280][>#attack_sfx -200][!#flash to,{opacity:0.55, duration:0.04}][!#flash to,{opacity:0, duration:0.22, ease:'power1.out'} +40][♪punch +3dB][♪punch_echo -1dB +160]{y}攻撃{/}します。[silence:300]
 
 *** lift
-@n: [silence:380][♪step -3dB -160][card:early]敵が倒れたら[>#lift_a[*] -100][<#lift_a[*] +450][>#lift_b[*] +20][<#lift_b[*] +570][>#lift_c[*] +800][>#lift_d[*] +920][>#lift_sfx][♪lift 0dB -50][!#lift_bg to,{y:-18, duration:0.5, ease:'power2.out'}]{y}持ち上げ{/}ます。[silence:330]
+@n: [silence:380][♪step -3dB -160]敵が倒れたら[>#lift_a[*] -100][<#lift_a[*] +450][>#lift_b[*] +20][<#lift_b[*] +570][>#lift_c[*] +800][>#lift_d[*] +920][>#lift_sfx][♪lift 0dB -50][!#lift_bg to,{y:-18, duration:0.5, ease:'power2.out'}]{y}持ち上げ{/}ます。[silence:330]
 
 *** counter
 @n: [silence:360][♪step -3dB -140][!#warn_frame to,{opacity:1, duration:0.12, ease:'none', repeat:7, yoyo:true} -180][♪alarm -4dB -160][>#warn_sign -130][!#warn_sign to,{x:-10, duration:0.05, ease:'none', repeat:7, yoyo:true} +220]{y}反撃{/}してくるので[br][<#warn_sign -120][!#flash to,{opacity:0.7, duration:0.03} -30][!#flash to,{opacity:0, duration:0.25}][>#seat_bg][<#counter_bg][♪sweep -2dB -50][>#quick_sfx -150]{y}すぐに{/}{y}車椅子に{/}[<#quick_sfx -150][>#seat_sfx][♪seat 0dB][!#seat_bg to,{y:14, duration:0.08, ease:'power1.out', repeat:1, yoyo:true} +20]{y}座らせ{/}ます。[silence:440]
