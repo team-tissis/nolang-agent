@@ -1573,8 +1573,20 @@ class Run:
                     and (self.to_fix(f) or f.get("severity") == "severe")
                     and (str(f.get("rule", "")), str(f.get("layer", ""))) not in prev_keys
                 ]
+                if regressed and not before_clean:
+                    # 直しが DEFECT を消した版は、新しい severe / warn を作っていても戻さない — DEFECT (描けない) は severe (描けるが
+                    # 崩れる) より重く、塊を戻すと DEFECT が復活して 2 回空回りした (11-02 LOCAL A/B t1 onestop: DEFECT 3 を消すと
+                    # offset_window 26 → 戻す → DEFECT 3 → 最後は DEFECT の行を落とす)。新しい指摘は次の round の直し役が見る
+                    self.log(
+                        cut=c,
+                        event="fix_regression_kept",
+                        round=rnd,
+                        n=len(regressed),
+                        rules=sorted({f["rule"] for f in regressed}),
+                    )
+                    regressed = []
                 undone = self.revert_new_findings(c, before_fix, regressed) if regressed else 0
-                partial_base = before_fix if undone and before_clean else None
+                partial_base = before_fix if undone else None
                 before_fix = None
                 if undone:
                     self.log(
