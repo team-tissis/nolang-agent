@@ -42,7 +42,7 @@ div { out: none }
 img { out: none }
 shape { out: none }
 icon { out: none }
-cut { stagger: 0 }
+cut { stagger: 0ms }
 sound pad = "柔らかいシンセパッドの持続音、静かな広がり"
 sound bell = "澄んだベルの単音、短い余韻"
 sound bell_lo = "低めのベルの単音"
@@ -60,11 +60,11 @@ sound paper = "紙をめくる音"
 sound done = "完了を告げる明るい二音"
 bgm#music(duck: -7; fade: 1200,1500; keys: "0:+2|8s:0|end-6s:+2"; jump: at_cut:anywhere>166.8s; xfade: 1300) 上品で落ち着いたコーポレート向けのピアノと弦、企業紹介向け
 # 進行の板の 1 段: 今の段 (輪・「サポート中」・名を濃く) / 済んだ段 (✓)
-cue step_on(x) = [>#x.cur][>#x.st][!#x.nm recolor,$ink,duration=300]
-cue step_done(x) = [<#x.cur][<#x.st][>#x.ck +50][>#x.ci +50]
+cue step_on(x) = [>#x.cur][>#x.st][!#x.nm recolor,$ink {duration: .3}]
+cue step_done(x) = [<#x.cur][<#x.st][>#x.ck +50ms][>#x.ci +50ms]
 
 # テロップ (左下の白い札・青の縁) と章の札 (左上の白い丸札)
-def telop(t, y=582) = p(left: 96px; top: {y}; font-size: 46px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 10px; padding: 24px 44px 26px 46px; edge: left,4,$a; box-shadow: 0px 16px 44px #0E2A472E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'}; out: {y:-6, opacity:0, duration:0.35})
+def telop(t, y=582) = p(left: 96px; top: {y}; font-size: 46px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 10px; padding: 24px 44px 26px 46px; border-left: 4px solid $a; box-shadow: 0px 16px 44px #0E2A472E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'}; out: {y:-6, opacity:0, duration:0.35})
 def chap(n, t) = p(left: 92px; top: 76px; font-size: 27px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 148px; padding: 16px 30px 16px 26px; box-shadow: 0px 10px 30px #0E2A471F; in: {x:-24, opacity:0, duration:0.55, ease:'power3.out'}; out: {x:-12, opacity:0, duration:0.3}) {k}STEP {n}{/}　{l}｜{/}　{t}
 # 写真の左下の札 (icon の丸 + 2 行)
 def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; border-radius: 12px; box-shadow: 0px 14px 40px #0E2A4724; in: rise {y: 16.5, duration: 0.55})
@@ -158,8 +158,8 @@ telop#in_tel オンラインで{bb}完結する{/}時代
 # 問い: 戸惑う顔の寄り → ぼかした写真の上にタブレット (指が迷い、プランの一覧が開いて閉じる)
 section#confused
 img#cf_p(inset: 0; content: @conf; main: kb {scale: [1, 1.09], focus: '67% 29%'})
-img#cf_b(inset: 0; content: @conf; filter: blur(9px); delay: 3500; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
-tablet#tc(left: 370px; top: 96px; scale: 0.9; delay: 3500; in: fade {duration: 0.6})
+img#cf_b(inset: 0; content: @conf; filter: blur(9px); delay: 3500ms; in: fade {duration: 0.6}; main: kb {scale: [1, 1.06]})
+tablet#tc(left: 370px; top: 96px; scale: 0.9; delay: 3500ms; in: fade {duration: 0.6})
   form_page#p1(left: 16px; top: 86px; scale: 0.9)
   help_panel#hp(left: 726px; top: 122px; scale: 0.9)
   dropdown#dd(left: 56px; top: 392px; scale: 0.9; overlap: tc.p1)
@@ -170,14 +170,14 @@ telop#cf_tel 「{bb}誰かに聞きたい{/}」と思う瞬間
 section#tap_connect
 img#tp_p(inset: 0; main: kb {scale: [1.02, 1.12], focus: ['', '76% 65%']}; out: fade {duration: 0.6}) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
 shape#rp(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; border-radius: 50%; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
-soft_bg#cn_bg(delay: 2300; in: fade {duration: 0.6})
-rings#cn_r(x1: 173; x2: 507; top: -60px; d: 600; delay: 2300; in: fade {duration: 0.6})
-shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600; in: fade {duration: 0.4})
-shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid $a; delay: 2750; in: draw {duration: 0.8})
-img#av1(left: 310px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @cust; object-fit: cover; object-position: 55% 28%; zoom: 190%; delay: 2450; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
-img#av2(left: 1160px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @staff; object-fit: cover; object-position: 50% 28%; zoom: 190%; delay: 2650; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
-p#wh1(cx: 460px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
-p#wh2(cx: 1310px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2950; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}STAFF{/}[br]スタッフ
+soft_bg#cn_bg(delay: 2300ms; in: fade {duration: 0.6})
+rings#cn_r(x1: 173; x2: 507; top: -60px; d: 600; delay: 2300ms; in: fade {duration: 0.6})
+shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600ms; in: fade {duration: 0.4})
+shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid $a; delay: 2750ms; in: draw {duration: 0.8})
+img#av1(left: 310px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @cust; object-fit: cover; object-position: 55% 28%; zoom: 190%; delay: 2450ms; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
+img#av2(left: 1160px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @staff; object-fit: cover; object-position: 50% 28%; zoom: 190%; delay: 2650ms; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
+p#wh1(cx: 460px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750ms; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
+p#wh2(cx: 1310px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2950ms; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}STAFF{/}[br]スタッフ
 shape#cd(left: 752px; top: 441px; width: 18px; height: 18px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 8px #1F6FE02E; in: fade {duration: 0.15}; out: fade {duration: 0.2})
 p#cbig(cx: 960px; top: 792px; font-size: 56px; letter-spacing: 0.08em; in: {y:16, opacity:0, duration:0.6, ease:'power2.out'}) お客様とスタッフを、{bb}つなぐ。{/}
 
@@ -185,9 +185,9 @@ p#cbig(cx: 960px; top: 792px; font-size: 56px; letter-spacing: 0.08em; in: {y:16
 section#title
 soft_bg#ti_bg
 rings#ti_r(x1: 220; x2: 60)
-wordmark#ti_w(top: 356px; delay: 250)
-shape#ti_rl(left: 890px; top: 566px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 900; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
-p#ti_t(cx: 960px; top: 606px; font-size: 42px; letter-spacing: 0.1em; color: $ink2; delay: 1350; in: {y:14, opacity:0, duration:0.8, ease:'power2.out'}) オンラインなのに、まるで隣にいるようなサポート。
+wordmark#ti_w(top: 356px; delay: 250ms)
+shape#ti_rl(left: 890px; top: 566px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 900ms; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
+p#ti_t(cx: 960px; top: 606px; font-size: 42px; letter-spacing: 0.1em; color: $ink2; delay: 1350ms; in: {y:14, opacity:0, duration:0.8, ease:'power2.out'}) オンラインなのに、まるで隣にいるようなサポート。
 
 # 今の不便: チャットの写真が左半分に寄り、右から電話の写真が入る (写真の左下に札)
 section#chat_phone
@@ -208,7 +208,7 @@ telop#fc_tel {bb}顔を見ながら{/}、状況に合わせてサポート
 section#share_screen
 div#sc_bg(inset: 0; background: $paper; border-radius: 24px)
 img#pn_s(left: 0px; top: 0px; width: 860px; height: 1080px; object-fit: cover; object-position: 47% 50%; main: kb {scale: [1, 1.06], focus: '31% 50%'}) [ref:@staff]Medium close-up of the same staff woman at her desk looking attentively at her monitor while guiding with a mouse, gentle focused expression, speaking into the headset microphone, soft monitor glow, bright office
-tablet#ts(left: 800px; top: 140px; scale: 0.8; delay: 200; in: {x:440, duration:0.9, ease:'power3.out'})
+tablet#ts(left: 800px; top: 140px; scale: 0.8; delay: 200ms; in: {x:440, duration:0.9, ease:'power3.out'})
   form_page#p1(left: 15px; top: 75px; scale: 0.8)
   call_panel#cp(left: 622px; top: 75px; scale: 0.8)
   share_badge#sh(top: 28px; scale: 0.8)
@@ -233,7 +233,7 @@ tablet#tn(left: 370px; top: 150px; scale: 0.9)
   form_page#p1(left: 16px; top: 86px; scale: 0.9; out: {x:-45, opacity:0, duration:0.45, ease:'power3.in'})
   plan_page#p2(left: 16px; top: 86px; scale: 0.9; in: {x:45, opacity:0, duration:0.6, ease:'power3.out'})
   call_panel#cp(left: 700px; top: 86px; scale: 0.9)
-  share_badge#sh(top: 33px; scale: 0.9; delay: 300)
+  share_badge#sh(top: 33px; scale: 0.9; delay: 300ms)
   staff_msg#msg(left: 726px; top: 410px; scale: 0.9)
   focus_box#h3(left: 48px; top: 195px; width: 688px; height: 104px; scale: 0.9; overlap: tn.p2)
   cursor#p(left: 592px; top: 520px; scale: 0.9; in: {x:-36, y:36, opacity:0, duration:0.4}; overlap: tn.p1,tn.p2,tn.cp,tn.msg)
@@ -260,7 +260,7 @@ telop#dc_tel 資料や書類も、{bb}その場で共有{/}
 section#procedure
 div#pr_bg(inset: 0; background: $paper; border-radius: 24px)
 img#pr_p(left: 0px; top: 0px; width: 980px; height: 1080px; main: kb {scale: [1, 1.07], focus: '21% 50%'}) [ref:@cust]Medium shot of the same woman at a white dining table at home, entering information on a white tablet with her finger, calm and focused, a cup of tea and a pen beside her, a printed document on the table; the screen shows a simple form with blue progress steps
-div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule; box-shadow: 0px 30px 80px #0E2A4724; delay: 300; in: {x:60, opacity:0, duration:0.8, ease:'power3.out'})
+div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule; box-shadow: 0px 30px 80px #0E2A4724; delay: 300ms; in: {x:60, opacity:0, duration:0.8, ease:'power3.out'})
   p#h(left: 48px; top: 44px; font-size: 32px; font-family: b; letter-spacing: 0.06em) お手続きの進行状況
   p#sub(left: 48px; top: 94px; font-size: 20px; color: $gray) ご契約内容の変更 ・ 4 ステップ
   div#sup(left: 48px; top: 150px; width: 684px; height: 128px; border-radius: 16px; background: $paper; border: 2px solid $rule)
@@ -291,7 +291,7 @@ telop#pr_tel2(top: 807px) 完了まで、[br]{bb}迷わせない{/}サポート
 section#anywhere
 soft_bg#aw_bg
 p#aw_h(cx: 960px; top: 74px; font-size: 52px; letter-spacing: 0.1em; in: {y:16, opacity:0, duration:0.7, ease:'power2.out'}) どこにいても、{bb}人による{/}サポートを。
-img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 360px; border-radius: 16px; box-shadow: 0px 18px 44px #0E2A4724; delay: "350;690;1030;1370;1710"; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
+img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 360px; border-radius: 16px; box-shadow: 0px 18px 44px #0E2A4724; delay: "350ms;690ms;1030ms;1370ms;1710ms"; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
   div#lb(left: 22px; top: 282px; width: 225px; height: 54px; border-radius: 148px; background: #FFFFFFF2; box-shadow: 0px 6px 18px #0E2A4724)
   shape#c(left: 36px; cy: 309px; width: 34px; height: 34px; border-radius: 50%; background: $sky)
   icon#i(left: 42px; cy: 309px; font-size: 22px; color: $a; name: "device-mobile;laptop;device-tablet;storefront;buildings")
@@ -311,7 +311,7 @@ div#vc(left: "80;467;853"; top: 681px; width: 520px; height: 294px; in: {y:18, o
 # 人: スタッフの寄り + 右へ白む幕に 2 段の言葉 (「人。」は語で)
 section#human
 img#hm_p(inset: 0; main: kb {scale: [1.12, 1.17], focus: ['80% 50%', '87% 50%']}) [ref:@staff]Tight close-up of the same staff woman, warm genuine smile, looking slightly off-camera toward her monitor, speaking softly into the headset microphone, soft key light from the window, creamy bokeh of the bright office, 85mm lens
-div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); border-radius: 24px; delay: 200; in: fade {duration: 0.8})
+div#hm_v(inset: 0; background: linear(#FFFFFF00@44%,#FFFFFFB3@62%,#FFFFFFE0,90); border-radius: 24px; delay: 200ms; in: fade {duration: 0.8})
 p#hm1(left: 1250px; top: 312px; font-size: 56px; font-family: r; letter-spacing: 0.12em; line-height: 1.55; in: {y:16, opacity:0, duration:0.7, ease:'power2.out'}) テクノロジーの[br]先にいるのは、
 p#hm2(left: 1244px; top: 500px; font-size: 168px; letter-spacing: 0.06em; in: {y:24, opacity:0, duration:0.9, ease:'power3.out'}) {a}人{/}。
 
@@ -327,69 +327,69 @@ p#tg_t(cx: 960px; top: 873px; font-size: 46px; letter-spacing: 0.06em; backgroun
 section#end
 soft_bg#en_bg
 rings#en_r(x1: 220; x2: 60)
-wordmark#en_w(top: 380px; delay: 450)
-shape#en_rl(left: 890px; top: 588px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 1100; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
+wordmark#en_w(top: 380px; delay: 450ms)
+shape#en_rl(left: 890px; top: 588px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 1100ms; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
 p#en_by(cx: 960px; top: 630px; font-size: 40px; font-family: e; letter-spacing: 0.08em; color: $ink2; in: {y:12, opacity:0, duration:0.8, ease:'power2.out'}) by {nv}Kumolis{/}
 ```
 
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた上品な男性ナレーター" manner="落ち着いた上品なトーンで、企業紹介ビデオのナレーションとして、ゆったりと丁寧に"
-silence head=0 tail=0
-transition = dissolve,300,overlap=300
+silence head=0ms tail=0ms
+transition = dissolve {duration: .3, overlap: .3}
 
 *** intro
-fade in,1600
+fade in,1600ms
 bgm music
-@narrator: [silence:3.4s][♪pad -1dB -3250][>#in_tel +300][<#in_tel cut-150][>#ch[*] +550][♪bell -7dB +550]さまざまなサービスが、オンラインで完結する時代。[silence:0.55s]
+@narrator: [silence:3.4s][♪pad -1dB -3250ms][>#in_tel +300ms][<#in_tel cut-150ms][>#ch[*] +550ms][♪bell -7dB +550ms]さまざまなサービスが、オンラインで完結する時代。[silence:0.55s]
 
 *** confused
-@: [silence:0.45s][>#cf_tel +2500][<#cf_tel cut-200][>#tc.tch +3650][>#tc.dd +4600][!#tc.tch to,{x:-108, y:123, duration:.8, ease:'power1.inOut'} +4950][!#tc.tch to,{x:-36, y:76, duration:.7, ease:'power1.inOut'} +5850][!#tc.tch to,{x:-154, y:171, duration:.7, ease:'power1.inOut'} +6650][<#tc.dd +7450][!#tc.tch to,{x:280, y:6, duration:.7, ease:'power2.inOut'} +7550]便利になった一方で、お客様が『誰かに聞きたい』と思う瞬間は、今もなくなっていません。[silence:1.95s]
+@: [silence:0.45s][>#cf_tel +2500ms][<#cf_tel cut-200ms][>#tc.tch +3650ms][>#tc.dd +4600ms][!#tc.tch to,{x:-108, y:123, duration:.8, ease:'power1.inOut'} +4950ms][!#tc.tch to,{x:-36, y:76, duration:.7, ease:'power1.inOut'} +5850ms][!#tc.tch to,{x:-154, y:171, duration:.7, ease:'power1.inOut'} +6650ms][<#tc.dd +7450ms][!#tc.tch to,{x:280, y:6, duration:.7, ease:'power2.inOut'} +7550ms]便利になった一方で、お客様が『誰かに聞きたい』と思う瞬間は、今もなくなっていません。[silence:1.95s]
 
 *** tap_connect
-@: [silence:0.25s][♪tap +550][>#rp[1] +550][>#rp[2] +730][<#rp[1] +1050][<#rp[2] +1300][<#tp_p +2050][♪whoosh -4dB +1950][>#cd +2500][!#cd to,{x:399, arc:0.3, duration:0.8, ease:'power2.inOut'} +2550][<#cd +3350][>#cbig +3200][!#av1 ping,$b2,scale=1>1.35 +3300][!#av2 ping,$b2,scale=1>1.35 +3300][♪connect -1dB +3300]そんな瞬間に、お客様とスタッフをつなぐ。[silence:1.55s]
+@: [silence:0.25s][♪tap +550ms][>#rp[1] +550ms][>#rp[2] +730ms][<#rp[1] +1050ms][<#rp[2] +1300ms][<#tp_p +2050ms][♪whoosh -4dB +1950ms][>#cd +2500ms][!#cd to,{x:399, arc:0.3, duration:0.8, ease:'power2.inOut'} +2550ms][<#cd +3350ms][>#cbig +3200ms][!#av1 ping,$b2 {scale: [1, 1.35]} +3300ms][!#av2 ping,$b2 {scale: [1, 1.35]} +3300ms][♪connect -1dB +3300ms]そんな瞬間に、お客様とスタッフをつなぐ。[silence:1.55s]
 
 *** title
-@: [silence:0.15s][♪shimmer -50]それが、Live Assistです。[silence:2.55s]
+@: [silence:0.15s][♪shimmer -50ms]それが、Live Assistです。[silence:2.55s]
 
 *** chat_phone
-@: [silence:0.55s][♪shwip -6dB -500][>#lb_c +200]チャットだけでは伝えにくいこと。[silence:0.8s]
-@: [>#pn_p -350][>#pn_d -350][!#pn_c to,{w:960, duration:0.75, ease:'power3.inOut'} -350][♪shwip -6dB -200][>#lb_p +250]電話だけでは確認しにくいこと。[silence:1.25s]
+@: [silence:0.55s][♪shwip -6dB -500ms][>#lb_c +200ms]チャットだけでは伝えにくいこと。[silence:0.8s]
+@: [>#pn_p -350ms][>#pn_d -350ms][!#pn_c to,{w:960, duration:0.75, ease:'power3.inOut'} -350ms][♪shwip -6dB -200ms][>#lb_p +250ms]電話だけでは確認しにくいこと。[silence:1.25s]
 
 *** face
-@: [silence:0.35s][♪smooth -4dB -330][>#c1][<#c1 cut-100][>#fc_tel +500][<#fc_tel cut-150][>#fc2 +3550][♪whoosh -8dB +3550]Live Assistなら、顔を見ながら、お客様の状況に合わせてサポートできます。[silence:1.85s]
+@: [silence:0.35s][♪smooth -4dB -330ms][>#c1][<#c1 cut-100ms][>#fc_tel +500ms][<#fc_tel cut-150ms][>#fc2 +3550ms][♪whoosh -8dB +3550ms]Live Assistなら、顔を見ながら、お客様の状況に合わせてサポートできます。[silence:1.85s]
 
 *** share_screen
-@: [silence:0.45s][>#c2 -100][<#c2 cut-100][>#sc_tel +450][♪notify -4dB +650][>#ts.sh +650][>#ts.p +1150][>#ts.pl +1150][!#ts.p to,{x:-240, y:-144, duration:1.2, ease:'power2.inOut'} +1950][!#ts.pl to,{x:-240, y:-144, duration:1.2, ease:'power2.inOut'} +1950][!#ts.p to,{x:-447, y:0, duration:1.1, ease:'power2.inOut'} +3550][!#ts.pl to,{x:-447, y:0, duration:1.1, ease:'power2.inOut'} +3550]さらに、お客様が見ている画面を確認しながら、リアルタイムで[<#sc_tel -300][!#pn_s to,{x:-880, duration:0.9, ease:'power3.inOut'} -100][!#ts to,{x:-430, y:46, duration:1, ease:'power3.inOut'} -100][!#ts.p to,{x:-176, y:-140, duration:.8, ease:'power2.inOut'} +300][!#ts.pl to,{x:-176, y:-140, duration:.8, ease:'power2.inOut'} +300][>#ts.h1 +800][♪click -4dB +800][>#ts.a1 +1000]ご案内。[silence:1.0s]
-@: どこを見ればいいのか、[!#ts.p to,{x:-488, y:20, duration:.8, ease:'power2.inOut'} -650][!#ts.pl to,{x:-488, y:20, duration:.8, ease:'power2.inOut'} -650][<#ts.h1 +100][<#ts.a1 +100][>#ts.h2 +100][♪click -4dB +100][>#ts.a2 +300]どこを操作すればいいのか。[silence:0.6s]
+@: [silence:0.45s][>#c2 -100ms][<#c2 cut-100ms][>#sc_tel +450ms][♪notify -4dB +650ms][>#ts.sh +650ms][>#ts.p +1150ms][>#ts.pl +1150ms][!#ts.p to,{x:-240, y:-144, duration:1.2, ease:'power2.inOut'} +1950ms][!#ts.pl to,{x:-240, y:-144, duration:1.2, ease:'power2.inOut'} +1950ms][!#ts.p to,{x:-447, y:0, duration:1.1, ease:'power2.inOut'} +3550ms][!#ts.pl to,{x:-447, y:0, duration:1.1, ease:'power2.inOut'} +3550ms]さらに、お客様が見ている画面を確認しながら、リアルタイムで[<#sc_tel -300ms][!#pn_s to,{x:-880, duration:0.9, ease:'power3.inOut'} -100ms][!#ts to,{x:-430, y:46, duration:1, ease:'power3.inOut'} -100ms][!#ts.p to,{x:-176, y:-140, duration:.8, ease:'power2.inOut'} +300ms][!#ts.pl to,{x:-176, y:-140, duration:.8, ease:'power2.inOut'} +300ms][>#ts.h1 +800ms][♪click -4dB +800ms][>#ts.a1 +1000ms]ご案内。[silence:1.0s]
+@: どこを見ればいいのか、[!#ts.p to,{x:-488, y:20, duration:.8, ease:'power2.inOut'} -650ms][!#ts.pl to,{x:-488, y:20, duration:.8, ease:'power2.inOut'} -650ms][<#ts.h1 +100ms][<#ts.a1 +100ms][>#ts.h2 +100ms][♪click -4dB +100ms][>#ts.a2 +300ms]どこを操作すればいいのか。[silence:0.6s]
 
 *** relief
-@: [silence:0.3s][♪swell -6dB -250][>#rl_tel +350][<#rl_tel cut-150]そんな迷いを、その場で解消します。[silence:1.85s]
+@: [silence:0.3s][♪swell -6dB -250ms][>#rl_tel +350ms][<#rl_tel cut-150ms]そんな迷いを、その場で解消します。[silence:1.85s]
 
 *** navigate
-@: [silence:0.45s][>#c3 -100][<#c3 cut-100][>#nv_tel +400][<#nv_tel cut-150][>#tn.msg +1200][♪bell_lo -4dB +1200][>#tn.p +1400][>#tn.pl +1400][!#tn.p to,{x:284, y:8, duration:1, ease:'power2.inOut'} +1700][!#tn.pl to,{x:284, y:8, duration:1, ease:'power2.inOut'} +1700][!#tn.msg.lk punch,0.96,duration=240 +2750][♪click -4dB +2750][<#tn.p1 +2950][>#tn.p2 +2950][♪shwip -5dB +2950][!#tn.p to,{x:-74, y:-261, duration:.9, ease:'power2.inOut'} +3450][!#tn.pl to,{x:-74, y:-261, duration:.9, ease:'power2.inOut'} +3450][>#tn.h3 +4150]必要な情報が別のページにある場合も、スタッフからスムーズにご案内。[silence:0.7s]
+@: [silence:0.45s][>#c3 -100ms][<#c3 cut-100ms][>#nv_tel +400ms][<#nv_tel cut-150ms][>#tn.msg +1200ms][♪bell_lo -4dB +1200ms][>#tn.p +1400ms][>#tn.pl +1400ms][!#tn.p to,{x:284, y:8, duration:1, ease:'power2.inOut'} +1700ms][!#tn.pl to,{x:284, y:8, duration:1, ease:'power2.inOut'} +1700ms][!#tn.msg.lk punch {scale: .96, duration: .24} +2750ms][♪click -4dB +2750ms][<#tn.p1 +2950ms][>#tn.p2 +2950ms][♪shwip -5dB +2950ms][!#tn.p to,{x:-74, y:-261, duration:.9, ease:'power2.inOut'} +3450ms][!#tn.pl to,{x:-74, y:-261, duration:.9, ease:'power2.inOut'} +3450ms][>#tn.h3 +4150ms]必要な情報が別のページにある場合も、スタッフからスムーズにご案内。[silence:0.7s]
 
 *** document
-@: [silence:0.4s][>#c4 -50][<#c4 cut-100][>#dc_tel +350][<#dc_tel cut-150][>#doc1 +650][♪shwip -4dB +650][♪paper -2dB +1250][>#toast +1450][♪bell -6dB +1450]必要な資料や書類も、その場でお客様へ共有できます。[silence:1.85s]
+@: [silence:0.4s][>#c4 -50ms][<#c4 cut-100ms][>#dc_tel +350ms][<#dc_tel cut-150ms][>#doc1 +650ms][♪shwip -4dB +650ms][♪paper -2dB +1250ms][>#toast +1450ms][♪bell -6dB +1450ms]必要な資料や書類も、その場でお客様へ共有できます。[silence:1.85s]
 
 *** procedure
-@: [silence:0.45s][>#c5 -100][>#pr_tel +400][step_on #fl.s[1] +50]手続きの途中で[step_done #fl.s[1] -50][step_on #fl.s[2]][!#fl.vf to,{h:100, duration:.5, ease:'power2.inOut'}][♪click -6dB]分からないことがあっても、スタッフが[step_done #fl.s[2] -50][step_on #fl.s[3]][!#fl.vf to,{h:200, duration:.5, ease:'power2.inOut'}][♪click -6dB]リアルタイムでサポート。[silence:1.0s]
-@: [<#pr_tel -250][>#pr_tel2 +300]お客様を迷わせることなく、[step_done #fl.s[3] -50][step_on #fl.s[4]][!#fl.vf to,{h:300, duration:.5, ease:'power2.inOut'}][♪click -6dB]手続きの[step_done #fl.s[4] +300]完了まで[>#fl.done][♪done]サポート[<#c5 +100][<#pr_tel2 +100][>#cp_p +500]します。[silence:2.55s]
+@: [silence:0.45s][>#c5 -100ms][>#pr_tel +400ms][step_on #fl.s[1] +50ms]手続きの途中で[step_done #fl.s[1] -50ms][step_on #fl.s[2]][!#fl.vf to,{h:100, duration:.5, ease:'power2.inOut'}][♪click -6dB]分からないことがあっても、スタッフが[step_done #fl.s[2] -50ms][step_on #fl.s[3]][!#fl.vf to,{h:200, duration:.5, ease:'power2.inOut'}][♪click -6dB]リアルタイムでサポート。[silence:1.0s]
+@: [<#pr_tel -250ms][>#pr_tel2 +300ms]お客様を迷わせることなく、[step_done #fl.s[3] -50ms][step_on #fl.s[4]][!#fl.vf to,{h:300, duration:.5, ease:'power2.inOut'}][♪click -6dB]手続きの[step_done #fl.s[4] +300ms]完了まで[>#fl.done][♪done]サポート[<#c5 +100ms][<#pr_tel2 +100ms][>#cp_p +500ms]します。[silence:2.55s]
 
 *** anywhere
-@: [silence:0.45s][♪pad -4dB -400]お客様がどこにいても、必要な瞬間に、[>#aw_h]人によるサポートを届ける。[silence:2.65s]
+@: [silence:0.45s][♪pad -4dB -400ms]お客様がどこにいても、必要な瞬間に、[>#aw_h]人によるサポートを届ける。[silence:2.65s]
 
 *** values
-@: [silence:0.55s][>#vp[1] -300][>#vp[2] .dim -180][>#vp[3] .dim -60][>#vc[1] -50][♪bell_lo -7dB +50]お客様には、より安心でスムーズな体験を。[silence:1.1s]
-@: [=#vp[2] -150][>#vc[2] -50][♪bell_lo -7dB +50]スタッフには、より柔軟な接客環境を。[silence:1.1s]
-@: [=#vp[3] -150][>#vc[3] -50][♪bell_lo -7dB +50]企業には、新たな顧客接点を。[silence:2.3s]
+@: [silence:0.55s][>#vp[1] -300ms][>#vp[2] .dim -180ms][>#vp[3] .dim -60ms][>#vc[1] -50ms][♪bell_lo -7dB +50ms]お客様には、より安心でスムーズな体験を。[silence:1.1s]
+@: [=#vp[2] -150ms][>#vc[2] -50ms][♪bell_lo -7dB +50ms]スタッフには、より柔軟な接客環境を。[silence:1.1s]
+@: [=#vp[3] -150ms][>#vc[3] -50ms][♪bell_lo -7dB +50ms]企業には、新たな顧客接点を。[silence:2.3s]
 
 *** human
-@: [silence:0.5s][♪swell -5dB -450][>#hm1 +100]テクノロジーの先にいるのは、[>#hm2]人。[silence:1.6s]
+@: [silence:0.5s][♪swell -5dB -450ms][>#hm1 +100ms]テクノロジーの先にいるのは、[>#hm2]人。[silence:1.6s]
 
 *** together
-@: [silence:0.45s][>#tg_p +350][!#tg_p to,{y:801, duration:2.4, ease:'power1.inOut'} +400][<#tg_p +2550][♪whoosh -8dB +450][>#tg_t +400]デジタルと、人による接客を、もっと自然につなげていく。[silence:1.8s]
+@: [silence:0.45s][>#tg_p +350ms][!#tg_p to,{y:801, duration:2.4, ease:'power1.inOut'} +400ms][<#tg_p +2550ms][♪whoosh -8dB +450ms][>#tg_t +400ms]デジタルと、人による接客を、もっと自然につなげていく。[silence:1.8s]
 
 *** end
-@: [silence:0.7s][♪end_sh -1dB -600]Live Assist [>#en_by]by Kumolis。[silence:5.5s]
+@: [silence:0.7s][♪end_sh -1dB -600ms]Live Assist [>#en_by]by Kumolis。[silence:5.5s]
 ```

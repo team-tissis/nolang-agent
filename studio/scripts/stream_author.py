@@ -22,6 +22,9 @@ project = tmp/studio/<name>/ (request.txt・params.txt = "type aspect seconds [e
 
 from __future__ import annotations
 
+import base64
+import importlib
+import importlib.util
 import json
 import os
 import re
@@ -34,29 +37,36 @@ import time
 from collections.abc import Callable
 from pathlib import Path
 
-# prompt と出力の読みの正本 author_core: 配布 bundle では隣の file (sync が libs の正本を同梱する)・repo 内では libs の正本を
-# file で読む (写しは置かない。package init を通らず標準 library だけで動く)
-try:
-    import author_core
-except ModuleNotFoundError:
-    import importlib.util
 
-    _core_path = next(
-        p / "libs/ai/llm_prompts/draft_author/author_core.py"
-        for p in Path(__file__).resolve().parents
-        if (p / "libs/ai/llm_prompts/draft_author/author_core.py").is_file()
-    )
-    _spec = importlib.util.spec_from_file_location("author_core", _core_path)
-    assert _spec is not None and _spec.loader is not None
-    author_core = importlib.util.module_from_spec(_spec)
-    sys.modules["author_core"] = author_core
-    _spec.loader.exec_module(author_core)
+# 製品と共有の正本 (libs/ai/llm_prompts/draft_author/ の author_core = prompt と出力の読み・cut_stages = cut の段の状態機械): 配布
+# bundle では隣の file (sync が libs の正本を同梱する)・repo 内では libs の正本を file で読む (写しは置かない。package init を通らず
+# 標準 library だけで動く)。cut_stages は author_core を top-level の名で import するので author_core を先に読む
+def _shipped(name: str):
+    try:
+        return importlib.import_module(name)
+    except ModuleNotFoundError:
+        path = next(
+            (
+                p / f"libs/ai/llm_prompts/draft_author/{name}.py"
+                for p in Path(__file__).resolve().parents
+                if (p / f"libs/ai/llm_prompts/draft_author/{name}.py").is_file()
+            ),
+            None,
+        )
+        if path is None:
+            raise RuntimeError(f"{name}.py が bundle に無い (sync の STUDIO_FILES に同梱する)") from None
+        spec = importlib.util.spec_from_file_location(name, path)
+        assert spec is not None and spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+        return module
+
+
+author_core = _shipped("author_core")
+cut_stages = _shipped("cut_stages")
 from author_core import (
     AUTO_SECONDS,
-    DECLARED_SECONDS,  # noqa: F401 — 再 export (stream_run が stream_author 経由で import する。ruff --fix に消させない)
-    LENGTH_RULE,  # noqa: F401 — 再 export (同上)
-    VERBATIM_MARK,  # noqa: F401 — 再 export (同上)
-    VERBATIM_REQUEST,  # noqa: F401 — 再 export (同上)
     AuthorOutputSplitter,
     AuthorSection,
     apply_line_edits,
@@ -129,8 +139,6 @@ STAFF_SAMPLE_TYPES = ("cinematic", "story")
 # claude を起動する cwd: CLAUDE.md の無い場所 (repo の CLAUDE.md を読ませない)
 CWD = Path("/tmp/nolang-stream-cwd")  # claude -p の cwd (repo の外 — project の CLAUDE.md / settings を読ませない)
 MODEL = "claude-opus-5-5"
-# レビュー役に見せる静止画の幅 (1920 のままだと 1 枚 2.7k token・960 で 0.7k — 字の重なりは 960 でも見える)
-SHOT_WIDTH = 960
 
 
 class InputCancelled(Exception):
@@ -153,6 +161,11 @@ def log(st: Path, **kw: object) -> None:
 def _editable() -> bool:
     """編集可能モード (env NOLANG_STUDIO_PROFILE=editable・stream_make.sh --editable)。"""
     return os.environ.get("NOLANG_STUDIO_PROFILE") == "editable"
+
+
+def _editable_limits() -> author_core.EditableLimits | None:
+    """prompt に差し込む編集可能モードの量の線 — 今の run が読む文書一式の contract.json の `editable` (正本は server の定数)。"""
+    return author_core.editable_limits(REFERENCE) if _editable() else None
 
 
 def same_topic(name: str, request: str) -> bool:
@@ -262,9 +275,9 @@ What to keep (facts of the machine):
 - {picture_rule}
 - Keys are only those in authoring's "Types" table (an unknown key is a DEFECT and the cut falls). `hug` is subtitles-only. Marks (`[>#name]` `[!#name …]`) go on this cut's layers and the root's elements (cards and subtitles that span cuts — keep a `[>#name]` whose word the author chose). Never mark an earlier cut's layer, and never create a copy of a root element.
 - DEFECT regulars: a `"a;b"` list is per-instance values of ×N — the element (or the def call) needs `×N` at the end of its line / the same key appears once per element /
-  a `name{{tok}}`'s tok is never empty / `to,{{…}}` has no GSAP position argument (`,2`) — timing is `+N` `-N` /
+  a `name{{tok}}`'s tok is never empty / `to,{{…}}` has no GSAP position argument (`,2`) — timing is `+300ms` `-.3s` (with a unit) /
   `filter` looks are only the full-strength `sepia(1)` `grayscale(1)` `invert(1)`.
-{editable_note(_editable())}{reference_note}
+{editable_note(_editable_limits())}{reference_note}
 The user's request:
 {request.strip() or "(none)"}
 User settings: target length {"not specified" if target_s == AUTO_SECONDS else f"{target_s} seconds"} (the plan's targets sum to {planned_s:.0f} s; length is set by the speech)
@@ -417,138 +430,6 @@ def _bare_speech(line: str) -> str:
 _PICTURE_LINE = re.compile(r"^(\s*)img#([^\s(]+)\((?:[^()]|\([^()]*\))*\)\s*(.*)$")
 
 
-_ELEMENT_LINE = re.compile(r"^(\s*)[a-z][\w-]*#([\w-]+)")  # design の要素の行 (`  p#名(` — 字下げで親子)
-_SILENCE_TAIL = re.compile(r"\[silence:\+([\d.]+)s\]\s*$")
-_SILENCE_AT = re.compile(r"\[silence:\+([\d.]+)s\]")
-
-
-def _split_top(text: str, sep: str) -> list[str]:
-    """括弧・引用符の外の sep で割る (`out: fade {duration: .4}; main: spin {period: 9, dir: 'ccw'}` を宣言ごとに)。"""
-    parts, depth, quote, start = [], 0, "", 0
-    for at, ch in enumerate(text):
-        if quote:
-            quote = "" if ch == quote else quote
-        elif ch in "'\"":
-            quote = ch
-        elif ch in "([{":
-            depth += 1
-        elif ch in ")]}":
-            depth -= 1
-        elif ch == sep and depth == 0:
-            parts.append(text[start:at])
-            start = at + 1
-    return [*parts, text[start:]]
-
-
-def _add_silence(line: str, seconds: float, *, head: bool) -> str:
-    """台詞の行の頭 (話者の後) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。"""
-    if head:
-        speaker = _SPEAKER.match(line)
-        cut = speaker.end() if speaker else 0
-        rest = line[cut:]
-        lead = rest[: len(rest) - len(rest.lstrip())]
-        if (old := _SILENCE_AT.match(rest[len(lead) :])) is not None:
-            total = float(old.group(1)) + seconds
-            return line[:cut] + lead + f"[silence:+{total:.2f}s]" + rest[len(lead) + old.end() :]
-        return line[:cut] + lead + f"[silence:+{seconds:.2f}s]" + rest[len(lead) :]
-    if (old := _SILENCE_TAIL.search(line)) is not None:
-        return line[: old.start()] + f"[silence:+{float(old.group(1)) + seconds:.2f}s]"
-    return line.rstrip() + f"[silence:+{seconds:.2f}s]"
-
-
-def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
-    """design の行 → 要素の path (字下げで親の名を `.` で繋ぐ) → (行の始め, 子を含む終わり, 親の path)。"""
-    spans: dict[str, tuple[int, int, str]] = {}
-    stack: list[tuple[int, str]] = []
-    for at, line in enumerate(lines):
-        hit = _ELEMENT_LINE.match(line)
-        if hit is None:
-            continue
-        indent = len(hit.group(1))
-        while stack and stack[-1][0] >= indent:
-            stack.pop()
-        parent = stack[-1][1] if stack else ""
-        path = f"{parent}.{hit.group(2)}" if parent else hit.group(2)
-        end = at + 1
-        while end < len(lines) and lines[end].strip() and len(lines[end]) - len(lines[end].lstrip()) > indent:
-            end += 1
-        spans[path] = (at, end, parent)
-        stack.append((indent, path))
-    return spans
-
-
-# 積極的に当てる機械の直し — 直し方が正解として一つに決まり、問題を隠さず、著者が書いた物を消さない (design の `\n`・根から継いだ
-# 切替と書いた out の二重 (out を残して切替を cut に)・言い切ってから切り替える / 切替が済んでから話し始める 0.5 秒以下の間)。他
-# (0.5 秒を超える間・切替を短く溶かす・文字を板の上に出す) は消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種)
-# を選べる — 後に担当や warn を直す直し役が残る間は当てずに指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の
-# 間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は 40-74 で負け)。積極 / 消極は規則で決める (同じ `transition` の操作でも
-# double_exit の `cut` は積極・ghost_dissolve の短い dissolve は消極)
-AUTOFIX_SURE_SILENCE_S = 0.5
-
-
-def apply_autofix(
-    block: str, findings: list[dict[str, str]], *, sure_only: bool = False, sure_rules: frozenset[str] = frozenset()
-) -> tuple[str, list[dict[str, str]]]:
-    """check の指摘のうち直し方が一つに決まる物 (`autofix` — lint が計算した `操作:引数`) を cut の block (design
-    `---timeline---` timeline) に当てる → (直した block, 当てた指摘)。当たらない指摘 (行が見つからない・形が違う) は飛ばす。
-    - `silence_tail:秒` 最後の台詞の末尾の無音 (切替が台詞に掛かる) / `silence_head:秒` 最初の台詞の頭の無音 (入場が切替の窓に入る)
-    - `transition:種,尺,overlap=…` cut の切替の行の種・尺・overlap を替える (他の引数 — 効果音・向き — は残す)・`transition:cut` は
-      切替の行の無い cut に `transition cut` を足す (根から継いだ切替と書いた out の二重掛け — 書いた out を残す)
-    - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
-    - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
-    sure_only = 積極的な直し (台帳の `sure` の規則 `sure_rules` — API `drafts/rules/` から — と短い無音) だけ当てる (後に LLM が残る時)。"""
-    design, sep, timeline = block.partition("---timeline---")
-    if not sep:
-        return block, []
-    dlines, tlines = design.split("\n"), timeline.split("\n")
-    speech = [at for at, line in enumerate(tlines) if line.lstrip().startswith("@")]
-    applied: list[dict[str, str]] = []
-    for finding in findings:
-        op, _, arg = str(finding.get("autofix") or "").partition(":")
-        sure = finding.get("rule") in sure_rules or (
-            op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S
-        )
-        if sure_only and not sure:
-            continue
-        before = (list(dlines), list(tlines))
-        if op in ("silence_tail", "silence_head") and speech:
-            at = speech[-1] if op == "silence_tail" else speech[0]
-            tlines[at] = _add_silence(tlines[at], float(arg), head=op == "silence_head")
-        elif op == "transition":
-            spec = _split_top(arg, ",")
-            lines = [at for at, line in enumerate(tlines) if line.lstrip().startswith("transition ")]
-            if lines:
-                old = _split_top(tlines[lines[-1]].strip().removeprefix("transition ").strip(), ",")
-                extra = [part for part in old[1:] if "=" in part and not part.strip().startswith(("overlap=",))]
-                tlines[lines[-1]] = "transition " + ",".join([*spec, *(part.strip() for part in extra)])
-            else:
-                last = max(at for at, line in enumerate(tlines) if line.strip())
-                tlines.insert(last + 1, "transition " + arg)
-        elif op == "br":
-            fence = False
-            for at, line in enumerate(dlines):
-                if '"""' in line:
-                    fence = fence if line.count('"""') % 2 == 0 else not fence
-                    continue
-                if not fence and "\\n" in line:
-                    dlines[at] = line.replace("\\n", "[br]")
-        elif op == "move_after":
-            mine, _, theirs = arg.partition(":")
-            spans = _element_spans(dlines)
-            if (
-                mine in spans
-                and theirs in spans
-                and spans[mine][2] == spans[theirs][2]
-                and spans[mine][0] < spans[theirs][0]
-            ):
-                (start, end, _), (_, over_end, _) = spans[mine], spans[theirs]
-                moved = dlines[start:end]
-                dlines = dlines[:start] + dlines[end:over_end] + moved + dlines[over_end:]
-        if (dlines, tlines) != before:
-            applied.append(finding)
-    return "\n".join(dlines) + sep + "\n".join(tlines), applied
-
-
 def restore_pictures(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
     """担当が素材を変えない run で、担当の block の絵 (`img#`) を著者の版の説明文に戻す → (戻した block, 記録)。著者の版にある名の
     絵は説明文を著者の物に書き戻し (`mode: text`)、著者の版に無い説明文の新しい絵は行 (と字下げの子) ごと消して timeline の
@@ -660,19 +541,11 @@ def claude_args(system_prompt: Path, *, effort: str, json_input: bool = False) -
 
 
 def image_message(prompt: str, images: list[Path]) -> str:
-    """画像 (幅 SHOT_WIDTH の JPEG に縮める) + prompt の user message 1 つ (`--input-format stream-json` の 1 行)。"""
-    import base64
-    import io
-
-    from PIL import Image
-
+    """画像 + prompt の user message 1 つ (`--input-format stream-json` の 1 行)。画像は server の stills が見せる幅の JPEG に
+    済ませた物 (client は bytes を base64 にするだけ — 標準 library の外に出ない)。"""
     content: list[dict[str, object]] = []
     for path in images:
-        image = Image.open(path).convert("RGB")
-        image.thumbnail((SHOT_WIDTH, SHOT_WIDTH))
-        buf = io.BytesIO()
-        image.save(buf, "JPEG", quality=85)
-        data = base64.b64encode(buf.getvalue()).decode()
+        data = base64.b64encode(path.read_bytes()).decode()
         content.append({"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": data}})
     content.append({"type": "text", "text": prompt})
     return json.dumps({"type": "user", "message": {"role": "user", "content": content}}, ensure_ascii=False) + "\n"
@@ -858,7 +731,18 @@ def warmup(st: Path, system_prompt: Path) -> None:
     )
 
 
-def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: bool = False) -> int:
+# 著者の本文を token の stream で書く call を差し替える物 (st, prompt, on_text, system_prompt, effort) — 比べ用の別 model の著者
+AuthorStream = Callable[[Path, str, Callable[[str], None], Path, str], None]
+
+
+def run(
+    project: Path,
+    *,
+    effort: str,
+    samples: tuple[str, ...] | None,
+    brief: bool = False,
+    author_stream: AuthorStream | None = None,
+) -> int:
     proj, st, studio = project / "solo", project / "stream", project / "studio"
     proj.mkdir(exist_ok=True)
     st.mkdir(exist_ok=True)
@@ -930,7 +814,7 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: b
             samples_text(author_samples),
             str(ref["brief"]) if ref is not None else "",
             f"\n{speech['brief']}\n" if speech is not None else "",
-            editable=_editable(),
+            editable=_editable_limits(),
             referenced=ref is not None,
             brief=brief,
         )
@@ -952,26 +836,12 @@ def run(project: Path, *, effort: str, samples: tuple[str, ...] | None, brief: b
         return gate is None and not switched
 
     sp0 = Splitter(proj, st, "author")
-    if author_model := os.environ.get(
-        "NOLANG_STUDIO_AUTHOR_MODEL"
-    ):  # 著者だけ別の model (担当・直し役は engine のまま)
-        # dev 専用 (repo 内だけ): stream_gemini は skill の dev script — その dir を探して import する
-        dev_scripts = next(
-            p / ".agents/skills/nolang-draft-studio/scripts"
-            for p in Path(__file__).resolve().parents
-            if (p / ".agents/skills/nolang-draft-studio/scripts/stream_gemini.py").is_file()
-        )
-        if str(dev_scripts) not in sys.path:
-            sys.path.insert(0, str(dev_scripts))
-        from stream_gemini import stream_gemini
-
+    if author_stream is not None:  # 注入された著者 (比べ用 — repo の dev script が渡す・担当と直し役は engine のまま)
         merged = merge()
         if gate is None:
             if not merged:  # 照合が server の束に替えた
                 shared_prompt, prompt = prepare()
-            stream_gemini(
-                st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", model=author_model, log=log
-            )
+            author_stream(st, prompt, sp0.feed, sp, effort)
     else:
         try:
             stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", before_input=merge)
@@ -1047,7 +917,7 @@ def fix(
             review=review,
             shots=[path.stem for path in shots],
             reference_note=reference_role_note(project),
-            editable=_editable(),
+            editable=_editable_limits(),
         ),
         out.append,
         system_prompt=sp,
@@ -1222,7 +1092,8 @@ def edit(project: Path, *, effort: str) -> int:
     return 0
 
 
-def main(argv: list[str]) -> int:
+def main(argv: list[str], *, author_stream: AuthorStream | None = None) -> int:
+    """author_stream = 著者の call の差し替え (`run` だけ・既定は engine の claude / codex)。"""
     if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
 
         def interrupted(_signum: int, _frame: object) -> None:
@@ -1240,7 +1111,7 @@ def main(argv: list[str]) -> int:
         samples = None
         if "--samples" in argv:
             samples = tuple(x.strip() for x in argv[argv.index("--samples") + 1].split(",") if x.strip())
-        return run(project, effort=eff, samples=samples, brief="--author-brief" in argv)
+        return run(project, effort=eff, samples=samples, brief="--author-brief" in argv, author_stream=author_stream)
     if cmd == "fix":
         eff = argv[argv.index("--effort") + 1] if "--effort" in argv else "low"
         shots = [Path(x) for x in argv[argv.index("--shots") + 1].split(",") if x] if "--shots" in argv else []

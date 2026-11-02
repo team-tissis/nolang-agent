@@ -5,17 +5,18 @@
 ```design.txt
 #v2
 # 計画: 明るい台所の地 (cream) に、賞味 = 緑 (a)・消費 = 赤 (b)。縦なので文字は上 1/3 に寄せ、下 1/4 は字幕の帯のために空ける
-# editable: 要素 25/cut・動きは preset と単純 object・書体 3 種
+# editable: 動きは preset と単純 object・書体 3 種
 # 書体 太い丸ゴシック (見出し) + 太い等幅 (数字) + 細い角ゴシック (注記)
 canvas 1080x1920 bg=#FBF7EF
+lint profile=editable
 palette a=#2E9E6A b=#D9483B bg=#FBF7EF ink=#2B2622 mute=#7A6F66 line=#E6DCCD card=#FFFFFF a_t=#2E9E6A1F b_t=#D9483B1F
 font "太い丸ゴシック体、やさしく親しみやすい"
 fonts e="太い等幅の数字が揃う書体" m="細い角ゴシック体、本文向き"
 photo_style "明るい家庭の台所の写真、柔らかい自然光、清潔感、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、ラベルの文字は読めない程度にぼかす"
-motion title { in: {y:-48, opacity:0, duration:0.55, ease:'power3.out'}; out: fade {duration:0.25} }
-motion card { in: {y:48, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.22} }
-motion note { in: {opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
+motion title { in: fade {duration:0.55}; out: fade {duration:0.25} }
+motion card { in: rise {duration:0.5}; out: fade {duration:0.22} }
+motion note { in: fade {duration:0.4}; out: fade {duration:0.2} }
 div { in: card; border-radius: 30px; background: $card; border: 3px solid $line }
 cut { stagger: sentence }
 def h1(t) = p(font-size: 84px; line-height: 1.2; color: $ink; text-align: center; in: title; content: {t})
@@ -23,7 +24,7 @@ def kick(t, c=$a) = p(font-size: 39px; font-family: e; color: {c}; letter-spacin
 def sub(t) = p(font-size: 45px; font-family: m; color: $mute; text-align: center; in: note; content: {t})
 # 期限の札: 色の帯 + 名前 + 意味 (×2 で並べる時は c と t を per-instance で)
 def tag(t, m, c=$a) = div(width: 900px; height: 330px)
-  div#band(left: 0px; top: 0px; width: 24px; height: 100%; border-radius: 30px 0px 0px 30px; background: {c}; border: none)
+  div#band(left: 0px; top: 0px; width: 24px; height: 100%; border-radius: 12px; background: {c}; border: none)
   p#t(left: 72px; top: 54px; font-size: 72px; color: {c}; content: {t})
   p#m(left: 72px; top: 177px; width: 780px; font-size: 45px; font-family: m; color: $ink; content: {m})
 subtitle.hug(font-size: 48px; bottom: 150px; background: #2B2622E6; color: #FBF7EF; border-radius: 15px; padding: 15px 36px)
@@ -68,13 +69,13 @@ h1#cl_h(left: 90px; top: 1290px; width: 900px; font-size: 66px) 期限の意味�
 ```timeline.txt
 #v2
 cast narrator = "やさしい30代女性のナレーター、明るく親しみやすい解説口調" speed=105%
-transition = dissolve,300,overlap=300,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, ease: 'power2.out'}
 
 *** open
 [>#subtitle]
 bgm music
 @narrator: [silence:+0.3s]食品のパッケージにある、[>#op_h]賞味期限と消費期限。
-@: [>#op_s]どちらも同じ「期限」ですが、[!#op_h pulse]意味がちがいます。
+@: [>#op_s]どちらも同じ「期限」ですが、意味がちがいます。
 # 台詞 2 文 ~8 s
 
 *** pair
@@ -85,12 +86,12 @@ bgm music
 
 *** best
 @narrator: [silence:+0.3s][>#bs_h]賞味期限が書かれるのは、お菓子や缶詰など、傷みにくい食品。
-@: [>#bs_c]過ぎても、すぐに食べられなくなるわけではありません。[!#bs_c punch +500]
+@: [>#bs_c]過ぎても、すぐに食べられなくなるわけではありません。
 # 台詞 2 文 ~10 s
 
 *** use
 @narrator: [silence:+0.3s][>#us_h]消費期限が書かれるのは、お弁当やサンドイッチなど、傷みやすい食品。
-@: [>#us_c]期限を過ぎたら、食べないのが安心です。[!#us_c punch +500]
+@: [>#us_c]期限を過ぎたら、食べないのが安心です。
 # 台詞 2 文 ~10 s
 
 *** open_pack

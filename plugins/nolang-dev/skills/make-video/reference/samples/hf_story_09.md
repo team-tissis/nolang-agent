@@ -51,7 +51,7 @@ image noma = "[photo]Documentary photograph of a Shinto horse ritual in Japan: m
 image procession = "[photo]Photograph of a grand festival procession in Japan: mounted samurai in full armor riding slowly in a long line along a wide street of a small Japanese town, each rider with a tall colorful banner on the back, a golden portable shrine carried in the procession, spectators lining both sides of the street, fresh green roadside trees, bright late-spring morning light, telephoto compression showing many riders. Photorealistic documentary photograph. No readable text, no signs, no letters." aspect=16:9
 image brush = "[transparent]A single bold horizontal brush stroke of black sumi ink, thick and powerful in the middle with dry-brush streaks and small ink splatters at both ends, isolated on a fully transparent background, nothing else in the image." aspect=8:3
 bgm#music(volume: 8dB; duck: -9.5; duck_attack: 120; duck_release: 450; duck_lead: 250; jump: at_cut:noma>180.9s; xfade: 1000; keys: "end-5.8s:0|end-4.3s:+5"; fade: 0,900) 温かく力強い和風の管弦楽、和太鼓と笛と弦、厳かで郷愁のある時代劇の曲
-subtitle(font-size: 46px; bottom: 66px; width: 1600px; background: none; color: #FFFFFF; letter-spacing: 0.04em; text-shadow: 0px 2px 10px #000000E6; unit: sentence; in: {y:8, opacity:0, duration:0.16, ease:'power1.out'}; lead: 80; tail: 250)
+subtitle(font-size: 46px; bottom: 66px; width: 1600px; background: none; color: #FFFFFF; letter-spacing: 0.04em; text-shadow: 0px 2px 10px #000000E6; unit: sentence; in: {y:8, opacity:0, duration:0.16, ease:'power1.out'}; lead: 80ms; tail: 250ms)
 # 左からの陰 (写真の上の札の地)
 def shade() = div(inset: 0; background: linear(#0000009E,#00000040@34%,#00000000@55%,right))
 # 場面の札 (区分 > 名称 > 補足): 朱の縦の罫が上から伸び、区分が左から・名称が左から拭われ・補足がせり上がり、切替の前に揃って消える
@@ -81,7 +81,7 @@ shade#charge_shade
 group#riders(left: 118px; top: 570px; in: {y:24, opacity:0, duration:0.4, ease:'power2.out'})
   p#cap(left: 6px; top: 0px; font-size: 32px; font-family: k; color: $gold; letter-spacing: 0.24em; out: fade {duration: 0.25}) 甲冑の騎馬武者
   p#pre(left: 0px; top: 186px; overlap: riders.num; font-size: 64px; font-family: s; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) 約
-  p#num(left: 72px; top: 46px; font-size: 236px; font-family: s; letter-spacing: -0.01em; palt: off; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) [count:400 roll ms=1150,1000,850]
+  p#num(left: 72px; top: 46px; font-size: 236px; font-family: s; letter-spacing: -0.01em; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) [count:400 roll ms=1150,1000,850]
   p#unit(left: 495px; top: 150px; overlap: riders.num; font-size: 120px; font-family: s; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) 騎
 
 # 題: 鎧の武者の寄りが暗く沈み、閃光と太鼓で題字が着地・英字は字間が締まり、地名がせり上がる
@@ -198,8 +198,8 @@ p#end_url(cx: 960px; cy: 843px; font-size: 32px; color: $pale; letter-spacing: 0
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた低音の男性ナレーター、響きが豊かで滑らか、ドキュメンタリーの語り"
-silence head=0 tail=0
-transition = dissolve,300,overlap=300
+silence head=0ms tail=0ms
+transition = dissolve {duration: .3, overlap: .3}
 read 法螺貝 = ほらがい
 read 甲冑 = かっちゅう
 read 約400騎 = やくよんひゃっき
@@ -221,51 +221,51 @@ read お行列 = おぎょうれつ
 
 *** open
 [>#subtitle]
-fade in,1800
-bgm music +600
-@narrator: [silence:2.9s][♪hora +3dB fade=0,600 -2650][>#sub_shade -380]法螺貝の音を合図に、武者たちが動き出す。[silence:0.45s]
+fade in,1800ms
+bgm music +600ms
+@narrator: [silence:2.9s][♪hora +3dB fade=0ms,600ms -2650ms][>#sub_shade -380ms]法螺貝の音を合図に、武者たちが動き出す。[silence:0.45s]
 transition cut
 
 *** charge
-@narrator: [silence:0.3s][>#charge_fl -300][!#charge_fl to,{opacity:0, duration:.32} -300][♪taiko +2dB peak=0.086s -300][♪gallop -7dB fade=50,1200 to=4.4s -300]甲冑に身を固めた、[>#riders +50][<#riders cut-50]約400騎の騎馬武者。[silence:0.3s]
+@narrator: [silence:0.3s][>#charge_fl -300ms][!#charge_fl to,{opacity:0, duration:.32} -300ms][♪taiko +2dB peak=0.086s -300ms][♪gallop -7dB fade=50ms,1200ms to=4.4s -300ms]甲冑に身を固めた、[>#riders +50ms][<#riders cut-50ms]約400騎の騎馬武者。[silence:0.3s]
 transition cut
 
 *** title
-@narrator: [silence:0.25s][♪wind -9dB peak=0.35s -250]福島県・相馬地方に伝わる祭り、[>#title_dim -350][>#logo -220][>#region +750][>#title_fl][!#title_fl to,{opacity:0, duration:.5}][♪taiko2 +2.5dB peak=0.185s][♪flag -14dB fade=400,1000 to=3.6s -200]相馬野馬追です。[silence:1.45s]
-transition dissolve,300,overlap=300
+@narrator: [silence:0.25s][♪wind -9dB peak=0.35s -250ms]福島県・相馬地方に伝わる祭り、[>#title_dim -350ms][>#logo -220ms][>#region +750ms][>#title_fl][!#title_fl to,{opacity:0, duration:.5}][♪taiko2 +2.5dB peak=0.185s][♪flag -14dB fade=400ms,1000ms to=3.6s -200ms]相馬野馬追です。[silence:1.45s]
+transition dissolve {duration: .3, overlap: .3}
 
 *** origin
-@narrator: [silence:0.75s][♪swing -8dB peak=0.15s -750]その起源は、[>#origin_lead -700][>#origin_years -50][>#origin_seal +1000]千年以上前にさかのぼります。[silence:0.2s]
+@narrator: [silence:0.75s][♪swing -8dB peak=0.15s -750ms]その起源は、[>#origin_lead -700ms][>#origin_years -50ms][>#origin_seal +1000ms]千年以上前にさかのぼります。[silence:0.2s]
 
 *** masakado
-@narrator: [silence:0.35s]相馬氏の遠祖とされる[>#masakado_name -100][>#masakado_ruby +300][>#masakado_note +750]平将門が、[|]野に放った馬を敵兵に見立て、[|][!#masakado_ink zoom_media,1.12,duration=2500,focus=80%,55%]軍事訓練を行ったのが始まりと伝えられています。[silence:0.15s]
-transition dissolve,300,overlap=300
+@narrator: [silence:0.35s]相馬氏の遠祖とされる[>#masakado_name -100ms][>#masakado_ruby +300ms][>#masakado_note +750ms]平将門が、[|]野に放った馬を敵兵に見立て、[|][!#masakado_ink zoom_media {scale: 1.12, duration: 2.5, focus: '80% 55%'}]軍事訓練を行ったのが始まりと伝えられています。[silence:0.15s]
+transition dissolve {duration: .3, overlap: .3}
 
 *** hill
-@narrator: [silence:0.45s]現在は、国の[>#seal -200][!#seal shake,3,duration=280 +20][♪wadaiko -1dB peak=0.018s]重要無形民俗文化財に指定されています。[silence:0.55s]
+@narrator: [silence:0.45s]現在は、国の[>#seal -200ms][!#seal shake {x: 3, duration: .28} +20ms][♪wadaiko -1dB peak=0.018s]重要無形民俗文化財に指定されています。[silence:0.55s]
 
 *** schedule
-@narrator: [silence:0.55s][♪wind -10dB peak=0.35s -550][>#schedule_head -300]祭りは毎年5月下旬の3日間。[|][!#schedule_head to,{x:-454, y:-309, scale:0.667, duration:0.75, ease:'power3.inOut'} -950][>#schedule_rule -200][>#day_card[1] -180][♪kodaiko -6dB peak=0.012s]出陣と宵乗り、[>#day_card[2] -180][♪kodaiko -6dB peak=0.012s]本祭り、そして[>#day_card[3] -180][♪kodaiko -6dB peak=0.012s]野馬懸へと続きます。[silence:0.5s]
-transition dissolve,300,overlap=300
+@narrator: [silence:0.55s][♪wind -10dB peak=0.35s -550ms][>#schedule_head -300ms]祭りは毎年5月下旬の3日間。[|][!#schedule_head to,{x:-454, y:-309, scale:0.667, duration:0.75, ease:'power3.inOut'} -950ms][>#schedule_rule -200ms][>#day_card[1] -180ms][♪kodaiko -6dB peak=0.012s]出陣と宵乗り、[>#day_card[2] -180ms][♪kodaiko -6dB peak=0.012s]本祭り、そして[>#day_card[3] -180ms][♪kodaiko -6dB peak=0.012s]野馬懸へと続きます。[silence:0.5s]
+transition dissolve {duration: .3, overlap: .3}
 
 *** procession
-@narrator: [silence:0.5s][>#procession_label -250][♪horse -9dB peak=0.41s fade=100,800 -500][♪crowd -18dB fade=1000,1500 to=7.5s -500]本祭りの朝。[||]旗指物をなびかせた[!#procession_photo zoom_media,1.1,duration=2500,focus=40%,55%]騎馬武者の行列が、[|]雲雀ヶ原祭場地へと進みます。[silence:0.45s]
+@narrator: [silence:0.5s][>#procession_label -250ms][♪horse -9dB peak=0.41s fade=100ms,800ms -500ms][♪crowd -18dB fade=1000ms,1500ms to=7.5s -500ms]本祭りの朝。[||]旗指物をなびかせた[!#procession_photo zoom_media {scale: 1.1, duration: 2.5, focus: '40% 55%'}]騎馬武者の行列が、[|]雲雀ヶ原祭場地へと進みます。[silence:0.45s]
 transition cut
 
 *** race
-@narrator: [silence:0.4s][>#race_label -250][♪wind -7dB peak=0.35s -400][♪gallop -5dB fade=50,1000 to=6.4s -400][♪cheer -15dB fade=500,1500 to=6s]正午からは甲冑競馬。[|]土ぼこりを上げ、人馬一体となって駆け抜けます。[silence:0.45s]
+@narrator: [silence:0.4s][>#race_label -250ms][♪wind -7dB peak=0.35s -400ms][♪gallop -5dB fade=50ms,1000ms to=6.4s -400ms][♪cheer -15dB fade=500ms,1500ms to=6s]正午からは甲冑競馬。[|]土ぼこりを上げ、人馬一体となって駆け抜けます。[silence:0.45s]
 transition cut
 
 *** sky
-@narrator: [silence:0.45s][>#sky_fl -450][!#sky_fl to,{opacity:0, duration:.4} -450][♪hanabiho -4dB peak=0.033s fade=0,800 -450][>#sky_label -250]そして神旗争奪戦。[|][>#sky_fl2 +250][!#sky_fl2 to,{opacity:0, duration:.55} +250][♪firework -3dB peak=4.02s fade=0,1500 +250]花火で打ち上げられ、空から舞い降りる御神旗を、[|][>#scramble -120][♪cheer -9dB fade=200,2000 to=7.2s -120]数百の騎馬武者が奪い合います。[silence:1.0s]
+@narrator: [silence:0.45s][>#sky_fl -450ms][!#sky_fl to,{opacity:0, duration:.4} -450ms][♪hanabiho -4dB peak=0.033s fade=0ms,800ms -450ms][>#sky_label -250ms]そして神旗争奪戦。[|][>#sky_fl2 +250ms][!#sky_fl2 to,{opacity:0, duration:.55} +250ms][♪firework -3dB peak=4.02s fade=0ms,1500ms +250ms]花火で打ち上げられ、空から舞い降りる御神旗を、[|][>#scramble -120ms][♪cheer -9dB fade=200ms,2000ms to=7.2s -120ms]数百の騎馬武者が奪い合います。[silence:1.0s]
 
 *** noma
-@narrator: [silence:0.9s][♪wadaiko peak=0.018s -900][♪neigh -8dB -750][>#noma_label -400]最終日は、相馬小高神社の野馬懸。[|]白装束の御小人たちが、[!#noma_photo zoom_media,1.12,duration=2000,focus=60%,58%]素手で馬を捕らえ、[|]神前に献納します。[silence:0.45s]
+@narrator: [silence:0.9s][♪wadaiko peak=0.018s -900ms][♪neigh -8dB -750ms][>#noma_label -400ms]最終日は、相馬小高神社の野馬懸。[|]白装束の御小人たちが、[!#noma_photo zoom_media {scale: 1.12, duration: 2, focus: '60% 58%'}]素手で馬を捕らえ、[|]神前に献納します。[silence:0.45s]
 
 *** manners
-@narrator: [silence:0.55s][♪swing -10dB peak=0.15s -550][>#manners_board]観覧の心得は、[>#manners_board.rule[1] -150][♪kodaiko -8dB peak=0.012s]お行列を横切らないこと、[|][>#manners_board.rule[2] -150][♪kodaiko -8dB peak=0.012s]高い所から見下ろさないこと。[silence:0.3s]
-transition dissolve,300,overlap=300
+@narrator: [silence:0.55s][♪swing -10dB peak=0.15s -550ms][>#manners_board]観覧の心得は、[>#manners_board.rule[1] -150ms][♪kodaiko -8dB peak=0.012s]お行列を横切らないこと、[|][>#manners_board.rule[2] -150ms][♪kodaiko -8dB peak=0.012s]高い所から見下ろさないこと。[silence:0.3s]
+transition dissolve {duration: .3, overlap: .3}
 
 *** finale
-@narrator: [silence:0.7s][♪flag -15dB fade=800,1500 to=6s -700]千年の歴史を受け継ぐ武者たちの勇姿を、[|]ぜひ、その目で。[silence:0.45s][>#end_dim -100][>#end_logo +50][>#end_info +1250][>#end_url +1700][<#sub_shade][♪odeza +1dB peak=0.015s fade=0,1200][♪hora -6dB fade=50,1000 +550][silence:5.6s]
+@narrator: [silence:0.7s][♪flag -15dB fade=800ms,1500ms to=6s -700ms]千年の歴史を受け継ぐ武者たちの勇姿を、[|]ぜひ、その目で。[silence:0.45s][>#end_dim -100ms][>#end_logo +50ms][>#end_info +1250ms][>#end_url +1700ms][<#sub_shade][♪odeza +1dB peak=0.015s fade=0ms,1200ms][♪hora -6dB fade=50ms,1000ms +550ms][silence:5.6s]
 ```

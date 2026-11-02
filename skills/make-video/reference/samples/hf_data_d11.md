@@ -51,15 +51,15 @@ sound sparkle = "キラキラと輝く高い音、達成の瞬間"
 sound rise = "上昇していくシューッというライザーの音"
 svg target = """<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#FFC83D" stroke-width="7"/><circle cx="60" cy="60" r="35" fill="none" stroke="#FFC83D" stroke-width="7"/><circle cx="60" cy="60" r="15" fill="#FFC83D"/></svg>"""
 # 白い閃光 (全編に 1 枚・語で 0.03 秒光って 0.22 秒で引く)
-cue flash(o) = [!#flash to,opacity={o},duration=30][!#flash to,opacity=0,duration=220 >]
+cue flash(o) = [!#flash to,{opacity: {o}, duration: .03}][!#flash to,{opacity: 0, duration: .22} >]
 bgm#music スポーティでテンポの速いエレクトロ・ロックのビート、力強いドラムと歪んだシンセ、競技の高揚感、ランニングのデータ解説の縦型動画向け
 # 字幕: 下の帯の中央に白の極太 + 紺の太い縁 (地なし)・数字は黄緑 (台詞の {hl})・句末の約物は外す
-subtitle.hug(font-family: sb; left: 40px; bottom: 352px; width: 1000px; padding: 0px; font-size: 50px; line-height: 1.28; letter-spacing: 0.01em; color: #FFFFFF; stroke: #070B14,8; background: none; unit: sentence; strip: 、。; lead: 60; tail: 350; hold: off; in: {y:18, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.08})
+subtitle.hug(font-family: sb; left: 40px; bottom: 352px; width: 1000px; padding: 0px; font-size: 50px; line-height: 1.28; letter-spacing: 0.01em; color: #FFFFFF; -webkit-text-stroke: 8px #070B14; background: none; unit: sentence; strip: 、。; lead: 60ms; tail: 350ms; hold: off; in: {y:18, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.08})
 # 札 (欧文の斜体・黄緑の地・斜めに傾く)。和文の札は chipj
 def chip(t) = p(font-size: 30px; line-height: 1.2; font-family: n; font-style: italic; letter-spacing: 0.04em; color: #0A0E17; background: $lime; border-radius: 4px; padding: 6px 18px 8px 18px; transform: skewX(-10deg); content: {t})
 def chipj(t) = p(font-size: 27px; line-height: 1.3; letter-spacing: 0.02em; color: #0A0E17; background: $lime; border-radius: 4px; padding: 6px 18px 8px 18px; transform: skewX(-10deg); content: {t})
 # 題つきの板 (紺の板 + 左の色の縦棒 + 札 + 題 + 副題 + 下の注記)・下から 47 px 上がって出る
-def board(k, t, s="", fn="", c=$lime) = div(left: 60px; top: 230px; width: 960px; height: 1140px; border-radius: 34px; background: #0C1220ED; border: 2px solid #FFFFFF14; box-shadow: 0px 30px 90px #00000080; delay: 20; in: {y:70, scale:0.97, opacity:0, duration:0.5, ease:'power3.out'})
+def board(k, t, s="", fn="", c=$lime) = div(left: 60px; top: 230px; width: 960px; height: 1140px; border-radius: 34px; background: #0C1220ED; border: 2px solid #FFFFFF14; box-shadow: 0px 30px 90px #00000080; delay: 20ms; in: {y:70, scale:0.97, opacity:0, duration:0.5, ease:'power3.out'})
   div#acc(left: 0px; top: 0px; width: 10px; height: 100%; border-radius: 34px 0px 0px 34px; background: {c})
   chip#k(left: 48px; top: 36px; background: {c}; content: {k})
   p#t(left: 48px; top: 99px; font-size: 58px; line-height: 1.15; letter-spacing: -0.01em; white-space: nowrap; content: {t})
@@ -93,20 +93,20 @@ img#s1_img(inset: 0; subject: bottom 60%; room: top 40%; main: kb {scale: [1.16,
 veil#s1_shade(background: linear(#070B14DB,#070B1473@30%,#070B140D@46%,#070B1459@62%,#070B14EB,180); in: none)
 chipj#s1_kick(left: 60px; top: 236px; in: {x:-80, opacity:0, duration:0.3, ease:'power3.out'}) 完走者8,214人のデータで検証
 group#s1_title(left: 60px; top: 314px; width: 990px; height: 495px; in: none)
-  p#l1(left: 0px; top: 0px; font-size: 86px; line-height: 1.1; stroke: #070B14E0,4; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {x:-120, skewX:-18, opacity:0, duration:0.3, ease:'power4.out'}) マラソン、
-  p#l2(left: 0px; top: 100px; font-size: 106px; line-height: 1.12; letter-spacing: -0.02em; stroke: #070B14E0,4; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {scale:1.5, opacity:0, duration:0.3, ease:'power4.out'}) 前半を{fs}飛ばした{/}人は
-  p#nanpun(left: 0px; top: 246px; width: 483px; font-size: 236px; line-height: 1; color: $lime; stroke: #070B14E0,4; text-shadow: 0px 10px 50px #C6FF3D59; transform-origin: 30% 70%; white-space: nowrap; in: {scale:2.6, opacity:0, duration:0.32, ease:'power4.out'}) 何分
-  p#son(left: 482px; top: 357px; font-size: 124px; line-height: 1; stroke: #070B14E0,4; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {x:60, opacity:0, duration:0.3, ease:'power3.out'}) 損した？
+  p#l1(left: 0px; top: 0px; font-size: 86px; line-height: 1.1; -webkit-text-stroke: 4px #070B14E0; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {x:-120, skewX:-18, opacity:0, duration:0.3, ease:'power4.out'}) マラソン、
+  p#l2(left: 0px; top: 100px; font-size: 106px; line-height: 1.12; letter-spacing: -0.02em; -webkit-text-stroke: 4px #070B14E0; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {scale:1.5, opacity:0, duration:0.3, ease:'power4.out'}) 前半を{fs}飛ばした{/}人は
+  p#nanpun(left: 0px; top: 246px; width: 483px; font-size: 236px; line-height: 1; color: $lime; -webkit-text-stroke: 4px #070B14E0; text-shadow: 0px 10px 50px #C6FF3D59; transform-origin: 30% 70%; white-space: nowrap; in: {scale:2.6, opacity:0, duration:0.32, ease:'power4.out'}) 何分
+  p#son(left: 482px; top: 357px; font-size: 124px; line-height: 1; -webkit-text-stroke: 4px #070B14E0; text-shadow: 0px 6px 30px #00000099; white-space: nowrap; in: {x:60, opacity:0, duration:0.3, ease:'power3.out'}) 損した？
 # 完走タイムの時計 (黄緑の縁の暗い札・0:00 → 4:24 を 2.2 秒で数える)
 # 時計は時:分:秒の桁送りで 0:00:00 → 4:24:15 (hf の秒の桁まで回る)
-div#s1_clock(left: 210px; top: 1110px; width: 660px; height: 200px; border-radius: 26px; background: #070B14C7; border: 3px solid #C6FF3D8C; box-shadow: 0px 0px 60px #C6FF3D2E; delay: 100; in: {scale:0.7, opacity:0, duration:0.3, ease:'back.out(2.4)'})
+div#s1_clock(left: 210px; top: 1110px; width: 660px; height: 200px; border-radius: 26px; background: #070B14C7; border: 3px solid #C6FF3D8C; box-shadow: 0px 0px 60px #C6FF3D2E; delay: 100ms; in: {scale:0.7, opacity:0, duration:0.3, ease:'back.out(2.4)'})
   p#lbl(cx: 50%; top: 20px; font-size: 30px; font-family: n; font-style: italic; letter-spacing: 0.12em; color: $lime; white-space: nowrap) FINISH TIME {lb}完走タイムの中央値{/}
   p#clock(cx: 50%; top: 64px; font-size: 124px; line-height: 1; font-family: n; font-style: italic; white-space: nowrap) [count:4:24:15 start=0:00:00 ms=2200]
 
 # s2 調べたデータ: 上端にコース型の進行が降り (以後常設)、板の上で大会名 → 完走者 8,214 人が数え上がり 95% の帯 → 5km ごとの点 9 個 × 目標の的と 4 つの札 → 「突き合わせ」の金の行
 section#s2(stagger: {each:0})
 # 常設の上端の帯 (sticky): 札 DATA RUN・大会名・コースの線に S〜G の 10 目盛り
-div#hdr.sticky(left: 0px; top: 0px; width: 1080px; height: 180px; z-index: front; delay: 50; in: {y:-30, opacity:0, duration:0.4, ease:'power3.out'})
+div#hdr.sticky(left: 0px; top: 0px; width: 1080px; height: 180px; z-index: front; delay: 50ms; in: {y:-30, opacity:0, duration:0.4, ease:'power3.out'})
   chip#chip(left: 60px; top: 64px) DATA RUN
   p#race(right: 60px; top: 70px; font-size: 26px; font-family: m; color: $sub; white-space: nowrap) みなと湾岸シティマラソン（架空）
   div#base(left: 60px; top: 140px; width: 960px; height: 4px; border-radius: 3px; background: #FFFFFF29)
@@ -116,15 +116,15 @@ div#hdr.sticky(left: 0px; top: 0px; width: 1080px; height: 180px; z-index: front
 progress#prog.sticky(left: 60px; top: 140px; width: 960px; height: 4px; background: $lime; border-radius: 3px; until: end; z-index: front; overlap: hdr)
 shape#runner.sticky(left: 50px; top: 130px; width: 22px; height: 22px; border-radius: 50%; background: $lime; box-shadow: 0px 0px 0px 6px #C6FF3D40; z-index: front; overlap: hdr; in: {opacity:0, duration:0.4}; main: ramp {x: 960})
 board#b2(k: "DATA"; t: "調べたデータ"; s: "申込時の目標タイム × 実際の走り"; fn: "※架空の市民マラソン1大会分のデータ（作例）")
-  p#name(left: 48px; top: 228px; font-size: 50px; line-height: 1.2; white-space: nowrap; delay: 180; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) みなと湾岸シティマラソン
-  p#tag(left: .name.right+14; top: 237px; font-size: 24px; font-family: m; color: #C9D2E0; background: #2A3345; border-radius: 10px; padding: 4px 14px 6px 14px; delay: 180; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) 架空の大会
-  p#meta(left: 48px; top: 303px; font-size: 28px; font-family: m; color: $sub; white-space: nowrap; delay: 280; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) フル{nb}42.195{/}km ｜ 制限{nb}6{/}時間 ｜ 出走{nb}8,650{/}人
+  p#name(left: 48px; top: 228px; font-size: 50px; line-height: 1.2; white-space: nowrap; delay: 180ms; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) みなと湾岸シティマラソン
+  p#tag(left: .name.right+14; top: 237px; font-size: 24px; font-family: m; color: #C9D2E0; background: #2A3345; border-radius: 10px; padding: 4px 14px 6px 14px; delay: 180ms; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) 架空の大会
+  p#meta(left: 48px; top: 303px; font-size: 28px; font-family: m; color: $sub; white-space: nowrap; delay: 280ms; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) フル{nb}42.195{/}km ｜ 制限{nb}6{/}時間 ｜ 出走{nb}8,650{/}人
   chipj#lbl(left: 48px; top: 368px; in: {scale:0.5, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 完走者
   p#big(left: 40px; top: 436px; font-size: 204px; line-height: 1; font-family: n; font-style: italic; color: $lime; white-space: nowrap; in: {opacity:0, duration:0.15}) [count:8,214 start=0 ms=900]
   p#unit(left: .big.right+8; top: 546px; font-size: 76px; line-height: 1; in: {opacity:0, duration:0.15}) 人
   p#rate(left: 48px; top: 666px; font-size: 28px; font-family: m; color: $sub; white-space: nowrap; in: {y:20, opacity:0, duration:0.35, ease:'power3.out'}) 完走率 {nb}95.0{/}%（8,214人 ÷ 8,650人）
   div#bar(left: 48px; top: 722px; width: 864px; height: 16px; border-radius: 8px; background: #232C3D; in: {opacity:0, duration:0.2})
-    div#fill(left: 0px; top: 0px; width: 95%; height: 16px; border-radius: 8px; background: $lime; delay: 50; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
+    div#fill(left: 0px; top: 0px; width: 95%; height: 16px; border-radius: 8px; background: $lime; delay: 50ms; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
   # 5km ごとの通過記録 (線の上に点 9 つ・G だけ金) × 目標タイム (的 + 4 つの札)
   div#ca(left: 48px; top: 762px; width: 392px; height: 228px; border-radius: 22px; background: #FFFFFF0B; border: 2px solid #FFFFFF14; in: {y:30, opacity:0, duration:0.35, ease:'power3.out'})
     p#ct(left: 24px; top: 20px; font-size: 30px; white-space: nowrap) 5kmごとの通過記録
@@ -143,9 +143,9 @@ section#s3(stagger: {each:0})
 board#b3(k: "前半 vs 後半"; t: "後半の方が速かった人は？"; s: "中間点21.1kmで比較｜1マス＝完走者の1%"; fn: "※ネガティブスプリット＝後半の方が速いペース配分")
   chip#k(font-size: 27px; line-height: 1.3; font-family: j; font-style: normal; letter-spacing: 0.02em)
   # 1 マス = 1%: 速くなった 7・ほぼ同じ 15・遅くなった 78 (10 列の行順)
-  div#wn(left: "32;71;109;148;187;225;264"; top: 244px; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 200; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×7
-  div#we(left: "303;341;380;32;71;109;148;187;225;264;303;341;380;32;71"; top: "163;163;163;202;202;202;202;202;202;202;202;202;202;240;240"; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 242; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×15
-  div#wp(left: "109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380"; top: "240;240;240;240;240;240;240;240;279;279;279;279;279;279;279;279;279;279;318;318;318;318;318;318;318;318;318;318;356;356;356;356;356;356;356;356;356;356;395;395;395;395;395;395;395;395;395;395;434;434;434;434;434;434;434;434;434;434;472;472;472;472;472;472;472;472;472;472;511;511;511;511;511;511;511;511;511;511"; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 332; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×78
+  div#wn(left: "32;71;109;148;187;225;264"; top: 244px; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 200ms; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×7
+  div#we(left: "303;341;380;32;71;109;148;187;225;264;303;341;380;32;71"; top: "163;163;163;202;202;202;202;202;202;202;202;202;202;240;240"; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 242ms; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×15
+  div#wp(left: "109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380;32;71;109;148;187;225;264;303;341;380"; top: "240;240;240;240;240;240;240;240;279;279;279;279;279;279;279;279;279;279;318;318;318;318;318;318;318;318;318;318;356;356;356;356;356;356;356;356;356;356;395;395;395;395;395;395;395;395;395;395;434;434;434;434;434;434;434;434;434;434;472;472;472;472;472;472;472;472;472;472;511;511;511;511;511;511;511;511;511;511"; width: 51px; height: 51px; border-radius: 10px; background: #1B2333; border: 2px solid #FFFFFF1A; delay: 332ms; in: {scale:0.4, opacity:0, duration:0.22, ease:'back.out(2)', stagger:{each:0.006}}) ×78
   # 塗る語で同じ位置に色のマスを重ねて溶かし出す (hf はマスの地と縁の色を tween)
   div#wnc(left: "32;71;109;148;187;225;264"; top: 244px; width: 51px; height: 51px; border-radius: 10px; background: $lime; border: 2px solid $lime; in: {opacity:0, duration:0.2}) ×7
   div#wec(left: "303;341;380;32;71;109;148;187;225;264;303;341;380;32;71"; top: "163;163;163;202;202;202;202;202;202;202;202;202;202;240;240"; width: 51px; height: 51px; border-radius: 10px; background: #6B778C; border: 2px solid #6B778C; in: {opacity:0, duration:0.2}) ×15
@@ -183,10 +183,10 @@ div#s4_top(left: 0px; top: 0px; width: 1080px; height: 320px; background: linear
 board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1kmあたり"; fn: "※各区間の1kmあたりペース（完走者の中央値）"; c: $fast; background: #0A0F1BDB)
   chip#k(color: #FFFFFF)
   # 目盛り (横の破線 4 本・縦軸のペース・横軸の区間・速い / 遅い)・cut 頭の 0.2 秒後に
-  p#hint(left: 45px; top: "150;508"; font-size: 22px; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) ×2 ↑速い;↓遅い
-  shape#grid(left: 120px; top: "213;293;373;453"; width: 790px; height: 3px; path: line_h; border: 2px solid #FFFFFF1A; dash: 4,5; delay: 200; in: {opacity:0, duration:0.3}) ×4
-  p#xl(cx: "93;155;216;278;340;401;463;525;586"; cy: 794px; font-size: 26px; font-family: n; color: "$pale;$pale;$pale;$pale;$pale;$pale;$coral;$coral;$coral"; delay: 200; in: {opacity:0, duration:0.3}) ×9 0-5;5-10;10-15;15-20;20-25;25-30;30-35;35-40;40-G
-  p#unit(right: 40px; top: 820px; font-size: 20px; font-family: m; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) 区間（km）
+  p#hint(left: 45px; top: "150;508"; font-size: 22px; color: $dim; delay: 200ms; in: {opacity:0, duration:0.3}) ×2 ↑速い;↓遅い
+  shape#grid(left: 120px; top: "213;293;373;453"; width: 790px; height: 3px; path: line_h; border: 2px solid #FFFFFF1A; dash: 4,5; delay: 200ms; in: {opacity:0, duration:0.3}) ×4
+  p#xl(cx: "93;155;216;278;340;401;463;525;586"; cy: 794px; font-size: 26px; font-family: n; color: "$pale;$pale;$pale;$pale;$pale;$pale;$coral;$coral;$coral"; delay: 200ms; in: {opacity:0, duration:0.3}) ×9 0-5;5-10;10-15;15-20;20-25;25-30;30-35;35-40;40-G
+  p#unit(right: 40px; top: 820px; font-size: 20px; font-family: m; color: $dim; delay: 200ms; in: {opacity:0, duration:0.3}) 区間（km）
   # 30km からの赤い帯と縦の破線 (語で出る)
   div#zone(left: 648px; top: 240px; width: 272px; height: 520px; border-radius: 18px; background: linear(#FF4D2E47,#FF4D2E0F,180); in: {opacity:0, duration:0.3})
   shape#m30(left: 646px; top: 240px; width: 4px; height: 525px; path: line_v; border: 4px solid $fast; dash: 7,5; in: {opacity:0, duration:0.2})
@@ -194,10 +194,10 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   shape#la(path: "M93 205.7 L154.7 193.7 L216.3 201.7 L278 213.7 L339.7 233.7 L401.3 269.7"; background: none; border: 9px solid $ink; in: draw {duration: 1, ease: 'power1.inOut'})
   shape#lb(path: "M401.3 269.7 L463 365.7 L524.7 461.7 L586.3 433.7"; background: none; border: 10px solid $fast; in: draw {duration: 0.8, ease: 'power2.in'})
   shape#pa(left: "84;146;208;269;331;393"; top: "197;185;193;205;225;261"; width: 26px; height: 26px; border-radius: 50%; background: $lime; border: 4px solid #0B1020; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.19}}) ×6
-  p#yl(left: 18px; cy: "214;294;374;454"; width: 90px; text-align: right; font-size: 26px; font-family: n; color: $dim; delay: 200; in: {opacity:0, duration:0.3}) ×4 6′00″;6′20″;6′40″;7′00″
-  p#va(cx: "93;155;216;278;340;401"; cy: "179;167;175;187;207;243"; font-size: 30px; font-family: n; font-style: italic; delay: 40; in: {y:8, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
-  shape#pb(left: "455;516;578"; top: "357;453;425"; width: 26px; height: 26px; border-radius: 50%; background: $fast; border: 4px solid #0B1020; delay: 260; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
-  p#vb(cx: "463;525;586"; cy: "400;496;407"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
+  p#yl(left: 18px; cy: "214;294;374;454"; width: 90px; text-align: right; font-size: 26px; font-family: n; color: $dim; delay: 200ms; in: {opacity:0, duration:0.3}) ×4 6′00″;6′20″;6′40″;7′00″
+  p#va(cx: "93;155;216;278;340;401"; cy: "179;167;175;187;207;243"; font-size: 30px; font-family: n; font-style: italic; delay: 40ms; in: {y:8, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
+  shape#pb(left: "455;516;578"; top: "357;453;425"; width: 26px; height: 26px; border-radius: 50%; background: $fast; border: 4px solid #0B1020; delay: 260ms; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
+  p#vb(cx: "463;525;586"; cy: "400;496;407"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300ms; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
   chipj#chip(left: 644px; top: 240px; font-size: 24px; color: #FFFFFF; background: $fast; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 崩れるのは30kmから
   p#d40(left: 726px; top: 512px; font-size: 34px; font-family: n; font-style: italic; color: $coral; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) +40秒
   # 52% の札 (薄い赤の板)
@@ -215,13 +215,13 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
 # s5 入り方で 3 群: 左右の向きの札 → 36 / 42 / 22% の帯が左から順に伸び → 3 群の札が左から入る → 「飛ばし」で他の 2 枚が沈み、飛ばしの札が赤く光って 36% が弾む
 section#s5(stagger: {each:0})
 board#b5(k: "GROUP"; t: "入り方で3グループに"; s: "前半のペースを、申込時の目標ペースと比べる"; fn: "※前半のペースを申告した目標タイムのペースと比較して分類"; c: $even)
-  p#axl(left: 48px; top: 236px; font-size: 24px; color: $coral; white-space: nowrap; delay: 200; in: {opacity:0, duration:0.3}) ◀ 目標より速く入った
-  p#axr(right: 48px; top: 236px; font-size: 24px; color: $slow; white-space: nowrap; delay: 200; in: {opacity:0, duration:0.3}) 目標より遅く入った ▶
-  div#sa(left: 48px; top: 276px; width: 310px; height: 124px; border-radius: 18px 0px 0px 18px; background: $fast; delay: 220; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
+  p#axl(left: 48px; top: 236px; font-size: 24px; color: $coral; white-space: nowrap; delay: 200ms; in: {opacity:0, duration:0.3}) ◀ 目標より速く入った
+  p#axr(right: 48px; top: 236px; font-size: 24px; color: $slow; white-space: nowrap; delay: 200ms; in: {opacity:0, duration:0.3}) 目標より遅く入った ▶
+  div#sa(left: 48px; top: 276px; width: 310px; height: 124px; border-radius: 18px 0px 0px 18px; background: $fast; delay: 220ms; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
     p#t(cx: 50%; cy: 50%; font-size: 62px; font-family: n; font-style: italic; color: #FFFFFF) 36%
-  div#sb(left: 358px; top: 276px; width: 363px; height: 124px; background: $even; delay: 400; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
+  div#sb(left: 358px; top: 276px; width: 363px; height: 124px; background: $even; delay: 400ms; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
     p#t(cx: 50%; cy: 50%; font-size: 62px; font-family: n; font-style: italic; color: #062A26) 42%
-  div#sc(left: 722px; top: 276px; width: 190px; height: 124px; border-radius: 0px 18px 18px 0px; background: $slow; delay: 580; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
+  div#sc(left: 722px; top: 276px; width: 190px; height: 124px; border-radius: 0px 18px 18px 0px; background: $slow; delay: 580ms; in: {scaleX:0, duration:0.35, ease:'power3.out', pivot:'left'})
     p#t(cx: 50%; cy: 50%; font-size: 62px; font-family: n; font-style: italic; color: #0A0E17) 22%
   gcard#g(top: "293;416;539"; nm: "飛ばし;設定どおり;抑えめ"; df: "前半が目標より2%以上速い;前半が目標の±2%以内;前半が目標より2%以上遅い"; pc: "36%;42%;22%"; ct: "2,957人;3,450人;1,807人"; c: "$fast;$even;$slow") ×3
 
@@ -229,11 +229,11 @@ board#b5(k: "GROUP"; t: "入り方で3グループに"; s: "前半のペース�
 section#s6(stagger: {each:0})
 board#b6(k: "飛ばし"; t: "貯金が、借金に変わる"; s: "目標タイムとのずれ（中央値）"; fn: "※設定どおり：前半−0:20・後半+4:10／抑えめ：前半+3:10・後半+1:50"; c: $fast)
   chip#k(font-size: 27px; line-height: 1.3; font-family: j; font-style: normal; letter-spacing: 0.02em; color: #FFFFFF)
-  p#lgl(left: 48px; top: 238px; font-size: 24px; color: $lime; white-space: nowrap; delay: 200; in: {opacity:0, duration:0.3}) ◀ 貯金（目標より速い）
-  p#lgr(right: 48px; top: 238px; font-size: 24px; color: $coral; white-space: nowrap; delay: 200; in: {opacity:0, duration:0.3}) 借金（目標より遅い）▶
-  shape#axis(left: 468px; top: 284px; width: 3px; height: 320px; path: line_v; border: 3px solid #FFFFFF73; dash: 5,4; delay: 200; in: {scaleY:0, duration:0.4, ease:'power2.out', pivot:'top'})
-  p#axl(cx: 470px; top: 610px; font-size: 22px; color: $pale; delay: 200; in: {opacity:0, duration:0.3}) 目標
-  p#rk(left: 48px; top: "207;274;340"; font-size: 32px; color: "$ink;$ink;$coral"; delay: 200; in: {opacity:0, duration:0.3}) ×3 前半;後半;差し引き
+  p#lgl(left: 48px; top: 238px; font-size: 24px; color: $lime; white-space: nowrap; delay: 200ms; in: {opacity:0, duration:0.3}) ◀ 貯金（目標より速い）
+  p#lgr(right: 48px; top: 238px; font-size: 24px; color: $coral; white-space: nowrap; delay: 200ms; in: {opacity:0, duration:0.3}) 借金（目標より遅い）▶
+  shape#axis(left: 468px; top: 284px; width: 3px; height: 320px; path: line_v; border: 3px solid #FFFFFF73; dash: 5,4; delay: 200ms; in: {scaleY:0, duration:0.4, ease:'power2.out', pivot:'top'})
+  p#axl(cx: 470px; top: 610px; font-size: 22px; color: $pale; delay: 200ms; in: {opacity:0, duration:0.3}) 目標
+  p#rk(left: 48px; top: "207;274;340"; font-size: 32px; color: "$ink;$ink;$coral"; delay: 200ms; in: {opacity:0, duration:0.3}) ×3 前半;後半;差し引き
   div#ba(left: 360px; top: 296px; width: 110px; height: 72px; border-radius: 12px; background: $lime; in: {scaleX:0, duration:0.4, ease:'power3.out', pivot:'right'})
   p#va(right: 612px; top: 298px; font-size: 60px; line-height: 1; font-family: n; font-style: italic; color: $lime; text-align: right; in: {x:40, opacity:0, duration:0.3, ease:'power3.out'}) −3:20
   p#vas(right: 612px; top: 364px; font-size: 26px; color: $lime; text-align: right; in: {x:40, opacity:0, duration:0.3, ease:'power3.out'}) 貯金
@@ -242,7 +242,7 @@ board#b6(k: "飛ばし"; t: "貯金が、借金に変わる"; s: "目標タイ�
   div#bc(left: 470px; top: 496px; width: 254px; height: 72px; border-radius: 12px; background: #FF4D2ED9; pattern: hatch,-45,#FF4D2E73,19,9; border: 3px solid $fast; in: {scaleX:0, duration:0.45, ease:'power3.out', pivot:'left'})
   p#vc(left: 738px; top: 500px; font-size: 60px; line-height: 1; font-family: n; font-style: italic; color: $fast; in: {x:-30, opacity:0, duration:0.3, ease:'power3.out'}) +7:40
   p#vcs(left: 738px; top: 566px; font-size: 26px; in: {x:-30, opacity:0, duration:0.3, ease:'power3.out'}) の遅れ
-  div#rule(left: 48px; top: 636px; width: 864px; height: 2px; background: #FFFFFF1A; delay: 200; in: {opacity:0, duration:0.3})
+  div#rule(left: 48px; top: 636px; width: 864px; height: 2px; background: #FFFFFF1A; delay: 200ms; in: {opacity:0, duration:0.3})
   p#h6b(left: 48px; top: 656px; font-size: 30px; white-space: nowrap; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 差し引きの遅れ（中央値）
   hrow#cr(top: "475;533;592"; k: "設定どおり;抑えめ;飛ばし"; bw: "131;170;261"; v: "+3:50;+5:00;+7:40"; c: "$even;$slow;$fast"; in: {opacity:0, duration:0.15, stagger:{each:0.16}}) ×3
   # 設定どおりの棒の端から下りる破線と、飛ばしの棒の差の分 (白の斜線)
@@ -256,9 +256,9 @@ board#b6(k: "飛ばし"; t: "貯金が、借金に変わる"; s: "目標タイ�
 # s7 結果: 30km 以降の大失速の横棒 3 本 (0 / 50 / 100% の目盛り) → 70% で他を沈め値が弾む → 目標達成率の横棒 3 本と全体 29.9% の金の破線 → 21% で他を沈め板が揺れる
 section#s7(stagger: {each:0})
 board#b7(k: "RESULT"; t: "飛ばすと、後半に崩れる"; s: "入り方の3グループで比較"; fn: "※大失速＝30km以降にキロ30秒以上ペースが落ちた人"; c: $fast)
-  p#h7a(left: 48px; top: 238px; font-size: 34px; white-space: nowrap; delay: 200; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 30km以降の大失速 {lb}キロ30秒以上のペースダウン{/}
-  div#sc(left: "147;347;547"; top: 296px; width: 3px; height: 220px; background: #FFFFFF14; delay: 200; in: {opacity:0, duration:0.3}) ×3
-  p#sl(cx: "148;348;548"; top: 520px; font-size: 20px; font-family: n; color: #6F7A8C; delay: 200; in: {opacity:0, duration:0.3}) ×3 0;50;100%
+  p#h7a(left: 48px; top: 238px; font-size: 34px; white-space: nowrap; delay: 200ms; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 30km以降の大失速 {lb}キロ30秒以上のペースダウン{/}
+  div#sc(left: "147;347;547"; top: 296px; width: 3px; height: 220px; background: #FFFFFF14; delay: 200ms; in: {opacity:0, duration:0.3}) ×3
+  p#sl(cx: "148;348;548"; top: 520px; font-size: 20px; font-family: n; color: #6F7A8C; delay: 200ms; in: {opacity:0, duration:0.3}) ×3 0;50;100%
   hrow#ra(top: "200;248;296"; k: "飛ばし;設定どおり;抑えめ"; bw: "280;172;160"; v: "[count:70 start=0 ms=600]%{s} 2,070人{/};43%{s} 1,484人{/};40%{s} 723人{/}"; c: "$fast;$even;$slow"; o: "1;0.85;0.85") ×3
     p#v(transform-origin: 0% 60%)
   p#h7b(left: 48px; top: 598px; font-size: 34px; white-space: nowrap; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 目標達成率 {lb}申告した目標タイムを達成{/}
@@ -272,8 +272,8 @@ section#s8(stagger: {each:0})
 img#s8_img(inset: 0; subject: 25%,20%,50%,80%; face: 40%,25%,20%,9%; room: top 20%; main: kb {scale: [1.2, 1.04], ease:'power1.out'}) [photo]縦長 9:16 の写真。マラソン序盤、海沿いの遊歩道を他のランナーに混じってリラックスして走る、落ち着いて集中した市民ランナーを正面からやや引いて撮る。左手首の GPS スポーツウォッチにちらりと目をやる。柔らかい朝の光、涼しい青と青緑の色調、浅い被写界深度、時計の画面は抽象的な光だけ。主役は画面の左右の中央。画面の上 2 割は霞んだ空と遠くの山並みだけで人の頭を入れない (主役の頭のてっぺんは上から 2 割の高さ)。主役の顔は画面の上から 25〜32% の高さ、肩と胴と腕時計は画面の中ほど (上から 35〜60%)、下 4 割は走る脚と濡れた路面。背後のランナーも頭は上から 2 割より下。
 veil#s8_shade(background: linear(#070B14D9,#070B1440@16%,#070B1426@26%,#070B14BF@36%,#070B14F2,180); in: none)
 chip#s8_chip(cx: 540px; top: 236px; background: $gold; in: {y:-30, opacity:0, duration:0.3}) BEST PACE
-p#s8_q(cx: 540px; top: 302px; font-size: 60px; line-height: 1.2; stroke: #070B14,5; white-space: nowrap; in: {scale:1.3, opacity:0, duration:0.35, ease:'power3.out'}) いちばん目標を達成したのは？
-board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: $gold; top: 668px; height: 702px; background: #0A0F1CE6; delay: 0)
+p#s8_q(cx: 540px; top: 302px; font-size: 60px; line-height: 1.2; -webkit-text-stroke: 5px #070B14; white-space: nowrap; in: {scale:1.3, opacity:0, duration:0.35, ease:'power3.out'}) いちばん目標を達成したのは？
+board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: $gold; top: 668px; height: 702px; background: #0A0F1CE6; delay: 0ms)
   chip#k(font-size: 27px; line-height: 1.3; font-family: j; font-style: normal; letter-spacing: 0.02em)
   p#sub(cx: 480px; top: 368px; font-size: 28px; font-family: m; color: $pale; white-space: nowrap; in: {y:16, opacity:0, duration:0.3, ease:'power3.out'}) 設定どおり群のうち、目標より1〜2%遅く入った812人
   # 達成率の輪 (紺の輪の上に金の弧が 0 → 47% を 0.8 秒で描く)
@@ -293,10 +293,10 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
 section#s9(stagger: {each:0})
 img#s9_img(inset: 0; subject: bottom 55%; room: top 45%; main: kb {scale: [1.14, 1.02], ease:'power1.out'}) [photo]縦長 9:16 の写真。両手を高く挙げてゴールに飛び込む市民マラソンランナーを後ろから見た姿。湾岸の街のスカイラインの上の金色の太陽に逆光で照らされたシルエット、ゴールのアーチの影。祝福と感動の雰囲気、暖かい橙と深い紺の色調。人物は画面の下半分の中央、上半分は広い空。
 veil#s9_shade(background: linear(#070B14E0,#070B14B3@40%,#070B148C@62%,#070B14E6,180); in: none)
-div#s9_head(left: 60px; top: 232px; width: 960px; height: 60px; delay: 80; in: {x:-60, opacity:0, duration:0.35, ease:'power3.out'})
+div#s9_head(left: 60px; top: 232px; width: 960px; height: 60px; delay: 80ms; in: {x:-60, opacity:0, duration:0.35, ease:'power3.out'})
   chipj#k(left: 0px; cy: 50%) まとめ
   p#t(left: .k.right+18; cy: 50%; font-size: 40px; white-space: nowrap) 数字が示す3つのこと
-div#tk(left: 60px; top: "211;332;453"; width: 960px; height: 164px; border-radius: 24px; background: #080C16D6; border: 2px solid #FFFFFF1A; delay: 150; in: {x:-120, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.3}}) ×3
+div#tk(left: 60px; top: "211;332;453"; width: 960px; height: 164px; border-radius: 24px; background: #080C16D6; border: 2px solid #FFFFFF1A; delay: 150ms; in: {x:-120, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.3}}) ×3
   div#bl(left: 0px; top: 0px; width: 12px; height: 100%; border-radius: 24px 0px 0px 24px; background: "$lime;$lime;$gold")
   p#no(left: 26px; top: 18px; font-size: 104px; line-height: 1; font-family: n; font-style: italic; color: "$lime;$lime;$gold") 1;2;3
   p#tx(left: 120px; cy: 50%; font-size: 38px; line-height: 1.32; white-space: nowrap) 完走者の{r}8割近く{/}が後半に失速。[br]崩れは{r}30km{/}から始まる;飛ばすと貯金{hl}3:20{/}が借金{r}11:00{/}に。[br]設定どおりより{r}3分50秒{/}の損;目標より{g}キロ数秒{/}遅く入る人が、[br]いちばん目標を達成している
@@ -311,50 +311,50 @@ div#tape_r(left: 540px; top: 1180px; width: 540px; height: 10px; background: $go
 #v2
 cast n = "明るくエネルギッシュな若い男性のナレーター、スポーツ番組のように歯切れのよい声" manner="スポーツ番組のナレーターのように、明るくエネルギッシュに、テンポよく歯切れよく、やや早口で読む"
 # 場面の境は声の終わりの 0.18 秒後・次の声はその 0.22 秒後 (hf の間)
-silence head=0 tail=180
+silence head=0ms tail=180ms
 # 切替: 斜めの紺の板 (skew -14・左から入って覆い切り右へ抜ける) = `transition panel` (板が覆い切った所で場面が替わる・600 ms = 覆う 255 / 覆ったまま 75 / 抜ける 270)
 # engine: hf の板の先頭の縁 (黄緑 90 px → 紺の隙間 → 赤 26 px) は panel に書けない (板は 1 色)・panel は常設の上端の帯 (hdr・prog・runner) も覆う (hf は帯 z6 が板 z5 の上に残る)
 
 *** s1
 bgm music
-@n: [silence:950][♪sw_start -4dB -830][♪whoosh -6dB -180][♪impact -6dB -140][>#s1_kick -170][>#s1_title.l1 -120][flash 0.5 -120][>#s1_title.l2]前半を飛ばしたランナーは、[>#s1_title.nanpun -40][flash 0.35 -20][♪impact -30][!#s1_title shake,9,duration=300 +20][>#s1_title.son +300][!#s1_title.nanpun to,{scale:1.04, duration:0.5, ease:'sine.inOut', repeat:1, yoyo:true} +500]何分損したのか？
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:950ms][♪sw_start -4dB -830ms][♪whoosh -6dB -180ms][♪impact -6dB -140ms][>#s1_kick -170ms][>#s1_title.l1 -120ms][flash 0.5 -120ms][>#s1_title.l2]前半を飛ばしたランナーは、[>#s1_title.nanpun -40ms][flash 0.35 -20ms][♪impact -30ms][!#s1_title shake {x: 9, duration: .3} +20ms][>#s1_title.son +300ms][!#s1_title.nanpun to,{scale:1.04, duration:0.5, ease:'sine.inOut', repeat:1, yoyo:true} +500ms]何分損したのか？
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s2
 [>#subtitle]
-@n: [silence:220][>#b2.lbl -50]完走者[>#b2.big -120][>#b2.unit -120][♪pop -5dB -50][>#b2.rate +450][>#b2.bar +450]{hl}8,214人{/}の、[|][>#b2.ca -80][>#b2.ca.dot[*] +50][>#b2.ca.dl[*] +85][♪pop -8dB]5kmごとの記録と[>#b2.x -150][>#b2.cb -50][♪pop -8dB]目標タイムを[>#b2.match -100][♪bell -3dB]突き合わせました。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms][>#b2.lbl -50ms]完走者[>#b2.big -120ms][>#b2.unit -120ms][♪pop -5dB -50ms][>#b2.rate +450ms][>#b2.bar +450ms]{hl}8,214人{/}の、[|][>#b2.ca -80ms][>#b2.ca.dot[*] +50ms][>#b2.ca.dl[*] +85ms][♪pop -8dB]5kmごとの記録と[>#b2.x -150ms][>#b2.cb -50ms][♪pop -8dB]目標タイムを[>#b2.match -100ms][♪bell -3dB]突き合わせました。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s3
-@n: [silence:220]後半の方が速かったのは、わずか[>#b3.lga -100][>#b3.wnc[*] {stagger:{each:0.05}} -50][>#b3.lgb +750][>#b3.wec[*] {stagger:{each:0.012}} +750][♪pop -4dB]{hl}7.3%{/}。
-@: [>#b3.lgc -100][>#b3.wpc[*] {stagger:{each:0.007}} -80][!#b3 shake,5,duration=300 +50][♪impact -2dB]{hl}78.1%{/}は、[>#b3.medh -150][>#b3.mka -50][>#b3.mba -50][>#b3.mkb +150][>#b3.mbb +150][>#b3.badge +600]後半に[!#b3.lgc.h{tf} recolor,$fast,duration=200 -50][!#b3.lgc.h punch,1.08,duration=400 -50]{hl}2分以上{/}遅れました。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms]後半の方が速かったのは、わずか[>#b3.lga -100ms][>#b3.wnc[*] {stagger:{each:0.05}} -50ms][>#b3.lgb +750ms][>#b3.wec[*] {stagger:{each:0.012}} +750ms][♪pop -4dB]{hl}7.3%{/}。
+@: [>#b3.lgc -100ms][>#b3.wpc[*] {stagger:{each:0.007}} -80ms][!#b3 shake {x: 5, duration: .3} +50ms][♪impact -2dB]{hl}78.1%{/}は、[>#b3.medh -150ms][>#b3.mka -50ms][>#b3.mba -50ms][>#b3.mkb +150ms][>#b3.mbb +150ms][>#b3.badge +600ms]後半に[!#b3.lgc.h{tf} recolor,$fast {duration: .2} -50ms][!#b3.lgc.h punch {scale: 1.08, duration: .4} -50ms]{hl}2分以上{/}遅れました。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s4
-@n: [silence:220][>#b4.la][>#b4.pa[*] +20][>#b4.va[*] +20]崩れるのは[>#b4.zone -50][>#b4.m30 -50][>#b4.chip -20][♪negative -3dB to=1.75s]{hl}30km{/}から。[|]
-@: [>#b4.lb -100][>#b4.pb[*] -100][>#b4.vb[*] -100][>#b4.d40 +450]35〜40kmでは、[>#b4.info -100]最初の5kmより、[|]キロ[>#b4.call -60][!#b4 shake,8,duration=300][flash 0.25 -40][♪impact -20]{hl}64秒{/}も遅くなります。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms][>#b4.la][>#b4.pa[*] +20ms][>#b4.va[*] +20ms]崩れるのは[>#b4.zone -50ms][>#b4.m30 -50ms][>#b4.chip -20ms][♪negative -3dB to=1.75s]{hl}30km{/}から。[|]
+@: [>#b4.lb -100ms][>#b4.pb[*] -100ms][>#b4.vb[*] -100ms][>#b4.d40 +450ms]35〜40kmでは、[>#b4.info -100ms]最初の5kmより、[|]キロ[>#b4.call -60ms][!#b4 shake {x: 8, duration: .3}][flash 0.25 -40ms][♪impact -20ms]{hl}64秒{/}も遅くなります。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s5
-@n: [silence:220][>#b5.g[*] +50]目標より2%以上速く入った[|][!#b5.g[2] to,{opacity:0.45, duration:0.25} -50][!#b5.g[3] to,{opacity:0.45, duration:0.25} -50][!#b5.g[1] to,{scale:1.04, duration:0.25} -50][!#b5.g[1] glow,#FF4D2E73,blur=33 -50][♪pop -5dB]「飛ばし」は、[!#b5.g[1].pc to,{scale:1.18, duration:0.3, ease:'back.out', pivot:'100% 20%'} -50][!#b5.sa to,{scaleY:1.12, duration:0.2} -50][!#b5.sa to,{scaleY:1, duration:0.2} +150][♪impact -4dB]{hl}36%{/}。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms][>#b5.g[*] +50ms]目標より2%以上速く入った[|][!#b5.g[2] to,{opacity:0.45, duration:0.25} -50ms][!#b5.g[3] to,{opacity:0.45, duration:0.25} -50ms][!#b5.g[1] to,{scale:1.04, duration:0.25} -50ms][!#b5.g[1] glow,#FF4D2E73 {blur: 33} -50ms][♪pop -5dB]「飛ばし」は、[!#b5.g[1].pc to,{scale:1.18, duration:0.3, ease:'back.out', pivot:'100% 20%'} -50ms][!#b5.sa to,{scaleY:1.12, duration:0.2} -50ms][!#b5.sa to,{scaleY:1, duration:0.2} +150ms][♪impact -4dB]{hl}36%{/}。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s6
-@n: [silence:220]前半[>#b6.ba -50][>#b6.va +100][>#b6.vas +100][♪bell -3dB]{hl}3分20秒{/}の貯金が、[|]後半は[>#b6.bb -80][>#b6.bb.t +250][!#b6 shake,5,duration=300 +50][♪negative -2dB to=1.75s]{hl}11分{/}の[>#b6.bc +350][>#b6.vc +600][>#b6.vcs +600]借金に。
-@: [>#b6.h6b -200][>#b6.cr[*] -100]設定どおりの人より、[>#b6.guide -350][>#b6.loss -150][>#b6.tri -60][>#b6.call -60][flash 0.25 -40][♪impact -20]{hl}3分50秒{/}の損です。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms]前半[>#b6.ba -50ms][>#b6.va +100ms][>#b6.vas +100ms][♪bell -3dB]{hl}3分20秒{/}の貯金が、[|]後半は[>#b6.bb -80ms][>#b6.bb.t +250ms][!#b6 shake {x: 5, duration: .3} +50ms][♪negative -2dB to=1.75s]{hl}11分{/}の[>#b6.bc +350ms][>#b6.vc +600ms][>#b6.vcs +600ms]借金に。
+@: [>#b6.h6b -200ms][>#b6.cr[*] -100ms]設定どおりの人より、[>#b6.guide -350ms][>#b6.loss -150ms][>#b6.tri -60ms][>#b6.call -60ms][flash 0.25 -40ms][♪impact -20ms]{hl}3分50秒{/}の損です。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s7
-@n: [silence:220][>#b7.ra[*] +150]飛ばした人は、30km以降の大失速が[!#b7.ra[2] to,{opacity:0.4, duration:0.25} -50][!#b7.ra[3] to,{opacity:0.4, duration:0.25} -50][!#b7.ra[1].v to,{scale:1.25, duration:0.25, ease:'back.out'} -50][♪pop -4dB]{hl}70%{/}。
-@: [>#b7.h7b -250][>#b7.rd[*] -100][>#b7.avg +400][>#b7.avgl +600]目標達成率は、[!#b7.rd[2] to,{opacity:0.4, duration:0.25} -50][!#b7.rd[3] to,{opacity:0.4, duration:0.25} -50][!#b7.rd[1].v to,{scale:1.3, duration:0.25, ease:'back.out'} -50][!#b7 shake,5,duration=300 +20][♪negative -3dB to=1.75s]{hl}21%{/}どまり。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms][>#b7.ra[*] +150ms]飛ばした人は、30km以降の大失速が[!#b7.ra[2] to,{opacity:0.4, duration:0.25} -50ms][!#b7.ra[3] to,{opacity:0.4, duration:0.25} -50ms][!#b7.ra[1].v to,{scale:1.25, duration:0.25, ease:'back.out'} -50ms][♪pop -4dB]{hl}70%{/}。
+@: [>#b7.h7b -250ms][>#b7.rd[*] -100ms][>#b7.avg +400ms][>#b7.avgl +600ms]目標達成率は、[!#b7.rd[2] to,{opacity:0.4, duration:0.25} -50ms][!#b7.rd[3] to,{opacity:0.4, duration:0.25} -50ms][!#b7.rd[1].v to,{scale:1.3, duration:0.25, ease:'back.out'} -50ms][!#b7 shake {x: 5, duration: .3} +20ms][♪negative -3dB to=1.75s]{hl}21%{/}どまり。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s8
-@n: [silence:220][flash 0.4 -95][♪rise -3dB -170][>#s8_chip -100][>#s8_q -20][>#b8 +900]いちばん達成したのは、[|]前半を[>#b8.big -60][>#b8.sub +500][♪whoosh -5dB -40]キロ{hl}4〜7秒{/}ゆっくり入った人。
-@: 達成率は[>#b8.donut -450][>#b8.r[*] +100][>#b8.note +700][♪sparkle]{hl}47%{/}です。
-transition panel,600,color=#0B1224,skew=-14,dir=right
+@n: [silence:220ms][flash 0.4 -95ms][♪rise -3dB -170ms][>#s8_chip -100ms][>#s8_q -20ms][>#b8 +900ms]いちばん達成したのは、[|]前半を[>#b8.big -60ms][>#b8.sub +500ms][♪whoosh -5dB -40ms]キロ{hl}4〜7秒{/}ゆっくり入った人。
+@: 達成率は[>#b8.donut -450ms][>#b8.r[*] +100ms][>#b8.note +700ms][♪sparkle]{hl}47%{/}です。
+transition panel {duration: .6, color: #0B1224, skew: -14, dir: 'right'}
 
 *** s9
-@n: [silence:220][♪pop -8dB -70][♪pop -8dB +230][♪pop -8dB +530]最初の5kmは我慢して、30kmに余力を。
-@: [>#s9_a -100][>#tape_l][>#tape_r]前半は、[>#s9_b -80][flash 0.4 -60][<#tape_l -40][<#tape_r -40][♪impact -4dB -50][♪sparkle -3dB +20][!#s9_b glow,$gold +300][=#s9_b +700]「少し遅い」が正解[♪sw_start -4dB +1290]です。[silence:1.4s]
+@n: [silence:220ms][♪pop -8dB -70ms][♪pop -8dB +230ms][♪pop -8dB +530ms]最初の5kmは我慢して、30kmに余力を。
+@: [>#s9_a -100ms][>#tape_l][>#tape_r]前半は、[>#s9_b -80ms][flash 0.4 -60ms][<#tape_l -40ms][<#tape_r -40ms][♪impact -4dB -50ms][♪sparkle -3dB +20ms][!#s9_b glow,$gold +300ms][=#s9_b +700ms]「少し遅い」が正解[♪sw_start -4dB +1290ms]です。[silence:1.4s]
 ```

@@ -30,7 +30,7 @@ run s { font-size: 32px; color: $sub }
 p { color: $ink }
 img { main: none }
 # 場面の要素は一斉に左へ抜ける (hf の leave: x -40 px・0.35 s)・頭は印で組む
-cut { stagger: 0; out: {x:-40, opacity:0, duration:.35, ease:'power2.in'} }
+cut { stagger: 0ms; out: {x:-40, opacity:0, duration:.35, ease:'power2.in'} }
 sound pop = "柔らかく澄んだ短い UI のポップ音、アイコンが画面に出る時の小さな泡が弾ける音、乾いた控えめな音"
 sound tick = "1 回だけのはっきりした柔らかいマウスのクリック音、乾いた UI の音"
 sound ding = "柔らかく明るい通知のディン、1 音だけの穏やかな UI の音"
@@ -49,7 +49,7 @@ image employee = "[transparent]日本人の20代前半の新入社員、紺の�
 image attacker = "[transparent]顔が影で完全に隠れた濃い炭色のフード付きパーカーの匿名の攻撃者、椅子に座ってノートパソコンを打っている、画面は青く柔らかく光る、象徴的で簡素、怖すぎない、斜めからの構図で全身とノートパソコンが見える"
 bgm#music(fade: 800,2400) 落ち着いて明るく安心感のある企業研修向けの曲、柔らかいフェルトピアノの和音と軽く弾くシンセのアルペジオ、暖かいパッド、控えめなミュートのエレキギター、ブラシの軽い打楽器、96 BPM 前後の長調、声の邪魔をしない一定の流れ
 # 字幕: 白い札 (95%・角丸 12・薄い縁と影)・墨色の太字・1 行の台詞を 1 枚 (2 文の行は [||] で繋ぎ [br] で 2 行)・語の強調は青
-subtitle.hug(bottom: 38px; font-size: 38px; line-height: 1.5; letter-spacing: .03em; text-align: center; color: $ink; background: #FFFFFFF2; border-radius: 18px; padding: 12px 40px 14px 40px; border: 2px solid #1E2B3C12; box-shadow: 0px 8px 26px #1E2B3C1F; unit: sentence; lead: 50; tail: 200; hold: off; in: {y:8, opacity:0, duration:0.18, ease:'power2.out'}; out: {opacity:0, duration:0.1})
+subtitle.hug(bottom: 38px; font-size: 38px; line-height: 1.5; letter-spacing: .03em; text-align: center; color: $ink; background: #FFFFFFF2; border-radius: 18px; padding: 12px 40px 14px 40px; border: 2px solid #1E2B3C12; box-shadow: 0px 8px 26px #1E2B3C1F; unit: sentence; lead: 50ms; tail: 200ms; hold: off; in: {y:8, opacity:0, duration:0.18, ease:'power2.out'}; out: {opacity:0, duration:0.1})
 
 # 帯の STEP 札の状態: 今の段 (青の地・白字・白い番号) → 済み (淡い青の地・青字・番号の上に ✓)
 cue step_on(x) = [!#x .on][!#x.t recolor,#FFFFFF][!#x.n fill,#FFFFFF][!#x.n.v recolor,$blue]
@@ -112,7 +112,7 @@ div#bg_dots(inset: 0; pattern: dots,24,#1E2B3C11; z-index: back; border-radius: 
 # hook — 問い: 机の新入社員 → いつものパスワードを打って伏せ字に → 3 つのサービスの札 → 線で結んで鍵 → 「危険」で線と鍵が赤く・札に「使い回し」
 section#hook(out: {scale:0.97, opacity:0, duration:0.4, ease:'power2.in'})
 # 絵の枠は hf より大きく取る (生成の絵は余白が広い — 見える人物の大きさを hf に合わせた)
-img#hk_emp(left: 38px; top: 76px; width: 662px; height: 897px; content: @employee; object-fit: contain; delay: 150; in: {x:-40, opacity:0, duration:0.9, ease:'power3.out'})
+img#hk_emp(left: 38px; top: 76px; width: 662px; height: 897px; content: @employee; object-fit: contain; delay: 150ms; in: {x:-40, opacity:0, duration:0.9, ease:'power3.out'})
 shape#hk_l1(path: "M840 249 C840 307 623 313 623 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
 shape#hk_l2(path: "M840 249 L840 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
 shape#hk_l3(path: "M840 249 C840 307 1057 313 1057 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
@@ -329,47 +329,47 @@ div#ot_banner(left: 740px; top: 690px; width: 1040px; height: 130px; border-radi
 ```timeline.txt
 #v2
 cast n = "明瞭で落ち着いた30〜40代の女性のナレーター、企業研修らしく信頼感のある一定のテンポで丁寧に話す"
-silence head=0 tail=300
+silence head=0ms tail=300ms
 read 12文字 = じゅうにもじ
 
 *** hook
 [>#subtitle]
 bgm music
-@n: [silence:600][♪pop -10dB -350]あなたが学生時代から使っている、[>#hk_pw -300][♪pop -9dB -250][>#hk_pw.field.plain +50][>#hk_pw.field.caret +50][!#hk_pw.field.caret to,{x:214, duration:0.9, ease:'none'} +50][♪type -5dB +50][br]お気に入りの[<#hk_pw.field.caret +633][<#hk_pw.field.plain +683][>#hk_pw.field.mask +683][♪tick -4dB +683]パスワード。
-@: [>#hk_s[1]][♪pop -7dB]通販サイトや[>#hk_s[2]][♪pop -7dB]SNS、[>#hk_s[3]][♪pop -7dB]会社のアカウントにも、[>#hk_l1][>#hk_l2 +120][>#hk_l3 +240][♪whoosh -10dB][>#hk_s[1].k +500][>#hk_s[2].k +630][>#hk_s[3].k +760][♪tick -8dB +500][♪tick -8dB +630][♪tick -8dB +760][br]同じものを使っていませんか？
-@: 便利ですが、実はとても[!#hk_l1 recolor,$red,duration=350][!#hk_l2 recolor,$red,duration=350][!#hk_l3 recolor,$red,duration=350][!#hk_s[1].k recolor,$red][!#hk_s[2].k recolor,$red][!#hk_s[3].k recolor,$red][!#hk_pw .bad][>#hk_pw.warn +50][♪alert -9dB]危険です。
+@n: [silence:600ms][♪pop -10dB -350ms]あなたが学生時代から使っている、[>#hk_pw -300ms][♪pop -9dB -250ms][>#hk_pw.field.plain +50ms][>#hk_pw.field.caret +50ms][!#hk_pw.field.caret to,{x:214, duration:0.9, ease:'none'} +50ms][♪type -5dB +50ms][br]お気に入りの[<#hk_pw.field.caret +633ms][<#hk_pw.field.plain +683ms][>#hk_pw.field.mask +683ms][♪tick -4dB +683ms]パスワード。
+@: [>#hk_s[1]][♪pop -7dB]通販サイトや[>#hk_s[2]][♪pop -7dB]SNS、[>#hk_s[3]][♪pop -7dB]会社のアカウントにも、[>#hk_l1][>#hk_l2 +120ms][>#hk_l3 +240ms][♪whoosh -10dB][>#hk_s[1].k +500ms][>#hk_s[2].k +630ms][>#hk_s[3].k +760ms][♪tick -8dB +500ms][♪tick -8dB +630ms][♪tick -8dB +760ms][br]同じものを使っていませんか？
+@: 便利ですが、実はとても[!#hk_l1 recolor,$red {duration: .35}][!#hk_l2 recolor,$red {duration: .35}][!#hk_l3 recolor,$red {duration: .35}][!#hk_s[1].k recolor,$red][!#hk_s[2].k recolor,$red][!#hk_s[3].k recolor,$red][!#hk_pw .bad][>#hk_pw.warn +50ms][♪alert -9dB]危険です。
 
 *** title
 se whoosh -8dB
-@n: [>#tt_r1 +100][>#tt_r2 +250][>#tt_chip +200][>#tt_l1 +300][>#tt_l2 +460][!#tt_l1{u} marker +850][>#tt_flow +1000][♪impact -2.5dB +250][silence:2.3s]
+@n: [>#tt_r1 +100ms][>#tt_r2 +250ms][>#tt_chip +200ms][>#tt_l1 +300ms][>#tt_l2 +460ms][!#tt_l1{u} marker +850ms][>#tt_flow +1000ms][♪impact -2.5dB +250ms][silence:2.3s]
 
 *** leak
-@n: [silence:600][>#hdr -300][step_on #hdr.st[1] -200][>#lk_head -250][>#lk_site +50][♪pop -8dB +50]たとえば、学生時代に登録したサービスから、[!#lk_site.r[1] .you][>#lk_site.you +100][♪tick -4dB][br]IDとパスワードが[>#lk_zap -250][!#lk_zap to,{x:36, y:40, duration:0.25, ease:'power2.in'} -50][>#lk_site.flash +150][!#lk_site shake,8,duration=380 +150][>#lk_badge +250][>#lk_arrow +300][>#lk_fly[1] +350][>#lk_fly[2] +470][>#lk_fly[3] +590][!#lk_fly[1] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +650][!#lk_fly[2] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +770][!#lk_fly[3] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +890][>#lk_list +300][>#lk_list.r[*] {stagger:{each:0.12}} +700][>#lk_list.more +1180][♪alert -9dB -200][♪leak -6dB]漏えいしたとします。
-@: [>#lk_note +100][♪ding -9dB +100]あなたに落ち度がなくても、[!#lk_note glow,#2B6CB040,blur=0,spread=3]漏えいは起きるのです。
+@n: [silence:600ms][>#hdr -300ms][step_on #hdr.st[1] -200ms][>#lk_head -250ms][>#lk_site +50ms][♪pop -8dB +50ms]たとえば、学生時代に登録したサービスから、[!#lk_site.r[1] .you][>#lk_site.you +100ms][♪tick -4dB][br]IDとパスワードが[>#lk_zap -250ms][!#lk_zap to,{x:36, y:40, duration:0.25, ease:'power2.in'} -50ms][>#lk_site.flash +150ms][!#lk_site shake {x: 8, duration: .38} +150ms][>#lk_badge +250ms][>#lk_arrow +300ms][>#lk_fly[1] +350ms][>#lk_fly[2] +470ms][>#lk_fly[3] +590ms][!#lk_fly[1] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +650ms][!#lk_fly[2] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +770ms][!#lk_fly[3] to,{x:270, y:-86, opacity:0, duration:0.55, ease:'power2.in'} +890ms][>#lk_list +300ms][>#lk_list.r[*] {stagger:{each:0.12}} +700ms][>#lk_list.more +1180ms][♪alert -9dB -200ms][♪leak -6dB]漏えいしたとします。
+@: [>#lk_note +100ms][♪ding -9dB +100ms]あなたに落ち度がなくても、[!#lk_note glow,#2B6CB040 {blur: 0, spread: 3}]漏えいは起きるのです。
 
 *** attack
-se whoosh -9dB +50
-@n: [silence:700][step_done #hdr.st[1] -400][step_on #hdr.st[2] -400][>#at_head -400][>#at_att][♪pop -8dB]攻撃者は、[>#at_list][♪tick -8dB][>#at_a0 +350]漏れたIDとパスワードを、[>#at_p[*] {stagger:{each:0.15}}][♪pop -9dB][♪pop -9dB +150][♪pop -9dB +300][br]別のサービスで[>#at_a1][>#at_p[1].fi.v +250][>#at_p[1].fp.v +600][>#at_a2 +420][>#at_p[2].fi.v +670][>#at_p[2].fp.v +1020][>#at_a3 +840][>#at_p[3].fi.v +1090][>#at_p[3].fp.v +1440][♪type -7dB][♪type -8dB +600]次々に試します。
-@: これが「[<#at_head.t -150][>#at_t2 +180][>#at_def +350][♪impact -12dB -50]{em}リスト型攻撃{/}」です。
-@: [>#at_p[1].fp.same +200][>#at_p[2].fp.same +320][>#at_p[3].fp.same +440][♪tick -8dB +200][♪tick -8dB +320][♪tick -8dB +440]同じパスワードなら、[>#at_p[1].ring][>#at_p[1].ok][>#at_p[2].ring +280][>#at_p[2].ok +280][>#at_p[3].ring +560][>#at_p[3].ok +560][♪unlock -13dB][♪unlock -13dB +280][♪unlock -13dB +560]ログインは成功。[||][br]アカウントは[<#at_p[1].fp.same -250][<#at_p[2].fp.same -250][<#at_p[3].fp.same -250][>#at_p[1].x][>#at_p[2].x +200][>#at_p[3].x +400][♪stamp -8dB][♪stamp -8dB +200][♪stamp -8dB +400]乗っ取られてしまいます。
+se whoosh -9dB +50ms
+@n: [silence:700ms][step_done #hdr.st[1] -400ms][step_on #hdr.st[2] -400ms][>#at_head -400ms][>#at_att][♪pop -8dB]攻撃者は、[>#at_list][♪tick -8dB][>#at_a0 +350ms]漏れたIDとパスワードを、[>#at_p[*] {stagger:{each:0.15}}][♪pop -9dB][♪pop -9dB +150ms][♪pop -9dB +300ms][br]別のサービスで[>#at_a1][>#at_p[1].fi.v +250ms][>#at_p[1].fp.v +600ms][>#at_a2 +420ms][>#at_p[2].fi.v +670ms][>#at_p[2].fp.v +1020ms][>#at_a3 +840ms][>#at_p[3].fi.v +1090ms][>#at_p[3].fp.v +1440ms][♪type -7dB][♪type -8dB +600ms]次々に試します。
+@: これが「[<#at_head.t -150ms][>#at_t2 +180ms][>#at_def +350ms][♪impact -12dB -50ms]{em}リスト型攻撃{/}」です。
+@: [>#at_p[1].fp.same +200ms][>#at_p[2].fp.same +320ms][>#at_p[3].fp.same +440ms][♪tick -8dB +200ms][♪tick -8dB +320ms][♪tick -8dB +440ms]同じパスワードなら、[>#at_p[1].ring][>#at_p[1].ok][>#at_p[2].ring +280ms][>#at_p[2].ok +280ms][>#at_p[3].ring +560ms][>#at_p[3].ok +560ms][♪unlock -13dB][♪unlock -13dB +280ms][♪unlock -13dB +560ms]ログインは成功。[||][br]アカウントは[<#at_p[1].fp.same -250ms][<#at_p[2].fp.same -250ms][<#at_p[3].fp.same -250ms][>#at_p[1].x][>#at_p[2].x +200ms][>#at_p[3].x +400ms][♪stamp -8dB][♪stamp -8dB +200ms][♪stamp -8dB +400ms]乗っ取られてしまいます。
 
 *** damage
-se whoosh -9dB +50
-@n: [silence:800][step_done #hdr.st[2] -500][step_on #hdr.st[3] -500][>#dm_head -500][>#dm_c1][♪pop -7dB]通販サイトでは、[!#dm_c1.b.r2 .hit][♪tick -8dB]登録済みのカードで、[>#dm_c1.b.stamp][>#dm_c1.tag +100][♪stamp -6dB]勝手に注文される。
-@: [>#dm_c2][♪pop -7dB]SNSでは、[>#dm_c2.b.post.fake][>#dm_c2.tag +100][♪alert -10dB]あなたのふりをした投稿やメッセージが[>#dm_c2.b.m[1]][>#dm_c2.b.m[2] +120][>#dm_c2.b.m[3] +240][♪tick -4dB][♪tick -4dB +120][♪tick -4dB +240]送られる。
-@: [>#dm_c3][>#dm_c3.tag +800][♪pop -7dB]会社のクラウドに侵入されれば、[!#dm_c3.b.f[1] .hit][♪tick -8dB][br]社内の資料や[!#dm_c3.b.f[2] .hit][>#dm_c3.b.f[1].e +1000][>#dm_c3.b.f[2].e +1150][♪tick -8dB][♪alert -9dB +1000]お客さまの情報まで見られてしまいます。
-@: [!#dm_c1 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100][!#dm_c2 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100][!#dm_c3 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100][>#dm_sum][>#dm_sum.a +50][♪whoosh -9dB -100]たった一つのパスワードが、[>#dm_arrow -450][>#dm_sum.b][♪impact -10dB]会社全体のリスクになるのです。
+se whoosh -9dB +50ms
+@n: [silence:800ms][step_done #hdr.st[2] -500ms][step_on #hdr.st[3] -500ms][>#dm_head -500ms][>#dm_c1][♪pop -7dB]通販サイトでは、[!#dm_c1.b.r2 .hit][♪tick -8dB]登録済みのカードで、[>#dm_c1.b.stamp][>#dm_c1.tag +100ms][♪stamp -6dB]勝手に注文される。
+@: [>#dm_c2][♪pop -7dB]SNSでは、[>#dm_c2.b.post.fake][>#dm_c2.tag +100ms][♪alert -10dB]あなたのふりをした投稿やメッセージが[>#dm_c2.b.m[1]][>#dm_c2.b.m[2] +120ms][>#dm_c2.b.m[3] +240ms][♪tick -4dB][♪tick -4dB +120ms][♪tick -4dB +240ms]送られる。
+@: [>#dm_c3][>#dm_c3.tag +800ms][♪pop -7dB]会社のクラウドに侵入されれば、[!#dm_c3.b.f[1] .hit][♪tick -8dB][br]社内の資料や[!#dm_c3.b.f[2] .hit][>#dm_c3.b.f[1].e +1000ms][>#dm_c3.b.f[2].e +1150ms][♪tick -8dB][♪alert -9dB +1000ms]お客さまの情報まで見られてしまいます。
+@: [!#dm_c1 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100ms][!#dm_c2 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100ms][!#dm_c3 to,{opacity:0.18, scale:0.97, duration:0.5, ease:'power2.inOut'} -100ms][>#dm_sum][>#dm_sum.a +50ms][♪whoosh -9dB -100ms]たった一つのパスワードが、[>#dm_arrow -450ms][>#dm_sum.b][♪impact -10dB]会社全体のリスクになるのです。
 
 *** measures
-se whoosh -9dB +50
-@n: [silence:700][step_done #hdr.st[3] -400][step_on #hdr.st[4] -400][>#ms_head -150][♪ding -8dB]対策は、[>#ms_g[*] {stagger:{each:0.12}} -100][♪tick -6dB -100][♪tick -6dB +20][♪tick -6dB +140]3つです。
-@: [<#ms_g[1]][>#ms_c1][♪pop -7dB]1つ目、{em}サービスごとに[>#ms_c1.v.t[1].k][>#ms_c1.v.t[2].k +130][>#ms_c1.v.t[3].k +260][♪tick -8dB][♪tick -8dB +130][♪tick -8dB +260]別のパスワード{/}にする。[||][!#ms_c1.v.t[1] .bad][>#ms_c1.v.leak +50][!#ms_c1.v.t[1] shake,8,duration=380 +50][♪alert -10dB][br]どこかで漏れても、[>#ms_c1.v.wall][>#ms_c1.v.wi +200][>#ms_c1.v.t[2].ok +350][>#ms_c1.v.t[3].ok +470][>#ms_c1.foot +400][♪shimmer -9dB]被害はそこで止まります。
-@: [<#ms_g[2]][>#ms_c2][♪pop -7dB]2つ目、[>#ms_c2.v.mk][>#ms_c2.v.ml +50][>#ms_c2.v.dots.d[9] pop +150][>#ms_c2.v.dots.d[10] pop +220][>#ms_c2.v.dots.d[11] pop +290][>#ms_c2.v.dots.d[12] pop +360][>#ms_c2.v.dots.d[13] pop +430][>#ms_c2.v.dots.d[14] pop +500][!#ms_c2.v.dots.d[1] fill,$green,duration=300 +650][!#ms_c2.v.dots.d[2] fill,$green,duration=300 +670][!#ms_c2.v.dots.d[3] fill,$green,duration=300 +690][!#ms_c2.v.dots.d[4] fill,$green,duration=300 +710][!#ms_c2.v.dots.d[5] fill,$green,duration=300 +730][!#ms_c2.v.dots.d[6] fill,$green,duration=300 +750][!#ms_c2.v.dots.d[7] fill,$green,duration=300 +770][!#ms_c2.v.dots.d[8] fill,$green,duration=300 +790][!#ms_c2.v.dots.d[9] fill,$green,duration=300 +810][!#ms_c2.v.dots.d[10] fill,$green,duration=300 +830][!#ms_c2.v.dots.d[11] fill,$green,duration=300 +850][!#ms_c2.v.dots.d[12] fill,$green,duration=300 +870][!#ms_c2.v.dots.d[13] fill,$green,duration=300 +890][!#ms_c2.v.dots.d[14] fill,$green,duration=300 +910][♪type -8dB +100]{em}12文字以上{/}の長さにする。[||][<#ms_c2.v.len -300][>#ms_c2.v.cmp][br]複雑さより、[!#ms_c2.v.cmp{b} punch,1.15,duration=450 -100][>#ms_c2.foot][♪ding -8dB]長さが大切です。
-@: [<#ms_g[3]][>#ms_c3][♪pop -7dB]3つ目、[!#ms_c3.v.f2 .on][♪tick -8dB]{em}二段階認証{/}を有効にする。[||][>#ms_c3.v.att][!#ms_c3.v.att to,{x:126, y:-84, duration:0.7, ease:'power2.inOut'} +250][♪whoosh -12dB][br]パスワードだけでは、[>#ms_c3.v.x][!#ms_c3.v.f2 .ng][!#ms_c3.v.att shake,8,duration=380 +50][>#ms_c3.v.blk +150][>#ms_c3.foot +300][♪denied -7dB]ログインできなくなります。
-@: パスワードは[>#ms_strip -350][♪whoosh -9dB -50]覚えずに、[>#ms_strip.vault][>#ms_strip.b][>#ms_strip.kf[*] {stagger:{each:0.1}} +300][>#ms_strip.kl +750][!#ms_strip.vault punch,1.08,duration=430 +950][♪shimmer -8dB +200][br]{em}パスワード管理ツール{/}に任せましょう。
+se whoosh -9dB +50ms
+@n: [silence:700ms][step_done #hdr.st[3] -400ms][step_on #hdr.st[4] -400ms][>#ms_head -150ms][♪ding -8dB]対策は、[>#ms_g[*] {stagger:{each:0.12}} -100ms][♪tick -6dB -100ms][♪tick -6dB +20ms][♪tick -6dB +140ms]3つです。
+@: [<#ms_g[1]][>#ms_c1][♪pop -7dB]1つ目、{em}サービスごとに[>#ms_c1.v.t[1].k][>#ms_c1.v.t[2].k +130ms][>#ms_c1.v.t[3].k +260ms][♪tick -8dB][♪tick -8dB +130ms][♪tick -8dB +260ms]別のパスワード{/}にする。[||][!#ms_c1.v.t[1] .bad][>#ms_c1.v.leak +50ms][!#ms_c1.v.t[1] shake {x: 8, duration: .38} +50ms][♪alert -10dB][br]どこかで漏れても、[>#ms_c1.v.wall][>#ms_c1.v.wi +200ms][>#ms_c1.v.t[2].ok +350ms][>#ms_c1.v.t[3].ok +470ms][>#ms_c1.foot +400ms][♪shimmer -9dB]被害はそこで止まります。
+@: [<#ms_g[2]][>#ms_c2][♪pop -7dB]2つ目、[>#ms_c2.v.mk][>#ms_c2.v.ml +50ms][>#ms_c2.v.dots.d[9] pop +150ms][>#ms_c2.v.dots.d[10] pop +220ms][>#ms_c2.v.dots.d[11] pop +290ms][>#ms_c2.v.dots.d[12] pop +360ms][>#ms_c2.v.dots.d[13] pop +430ms][>#ms_c2.v.dots.d[14] pop +500ms][!#ms_c2.v.dots.d[1] fill,$green {duration: .3} +650ms][!#ms_c2.v.dots.d[2] fill,$green {duration: .3} +670ms][!#ms_c2.v.dots.d[3] fill,$green {duration: .3} +690ms][!#ms_c2.v.dots.d[4] fill,$green {duration: .3} +710ms][!#ms_c2.v.dots.d[5] fill,$green {duration: .3} +730ms][!#ms_c2.v.dots.d[6] fill,$green {duration: .3} +750ms][!#ms_c2.v.dots.d[7] fill,$green {duration: .3} +770ms][!#ms_c2.v.dots.d[8] fill,$green {duration: .3} +790ms][!#ms_c2.v.dots.d[9] fill,$green {duration: .3} +810ms][!#ms_c2.v.dots.d[10] fill,$green {duration: .3} +830ms][!#ms_c2.v.dots.d[11] fill,$green {duration: .3} +850ms][!#ms_c2.v.dots.d[12] fill,$green {duration: .3} +870ms][!#ms_c2.v.dots.d[13] fill,$green {duration: .3} +890ms][!#ms_c2.v.dots.d[14] fill,$green {duration: .3} +910ms][♪type -8dB +100ms]{em}12文字以上{/}の長さにする。[||][<#ms_c2.v.len -300ms][>#ms_c2.v.cmp][br]複雑さより、[!#ms_c2.v.cmp{b} punch {scale: 1.15, duration: .45} -100ms][>#ms_c2.foot][♪ding -8dB]長さが大切です。
+@: [<#ms_g[3]][>#ms_c3][♪pop -7dB]3つ目、[!#ms_c3.v.f2 .on][♪tick -8dB]{em}二段階認証{/}を有効にする。[||][>#ms_c3.v.att][!#ms_c3.v.att to,{x:126, y:-84, duration:0.7, ease:'power2.inOut'} +250ms][♪whoosh -12dB][br]パスワードだけでは、[>#ms_c3.v.x][!#ms_c3.v.f2 .ng][!#ms_c3.v.att shake {x: 8, duration: .38} +50ms][>#ms_c3.v.blk +150ms][>#ms_c3.foot +300ms][♪denied -7dB]ログインできなくなります。
+@: パスワードは[>#ms_strip -350ms][♪whoosh -9dB -50ms]覚えずに、[>#ms_strip.vault][>#ms_strip.b][>#ms_strip.kf[*] {stagger:{each:0.1}} +300ms][>#ms_strip.kl +750ms][!#ms_strip.vault punch {scale: 1.08, duration: .43} +950ms][♪shimmer -8dB +200ms][br]{em}パスワード管理ツール{/}に任せましょう。
 
 *** outro
-se whoosh -9dB +50
-@n: [silence:700][step_done #hdr.st[4] -400][>#ot_emp -500][>#ot_card -400][!#ot_card.i[1] to,{opacity:1, duration:0.35} -50][!#ot_card.i[1].ck recolor,$green][!#ot_card.i[1].ck pop][♪chime -12dB]使い回さない、[!#ot_card.i[2] to,{opacity:1, duration:0.35} -50][!#ot_card.i[2].ck recolor,$green][!#ot_card.i[2].ck pop][♪chime -12dB]長くする、[!#ot_card.i[3] to,{opacity:1, duration:0.35} -50][!#ot_card.i[3].ck recolor,$green][!#ot_card.i[3].ck pop][♪chime -12dB]二段階認証。[||][>#ot_banner][♪shimmer -8dB][br]今日から、自分のアカウントを守りましょう。[silence:2.6s]
-fade out,900
+se whoosh -9dB +50ms
+@n: [silence:700ms][step_done #hdr.st[4] -400ms][>#ot_emp -500ms][>#ot_card -400ms][!#ot_card.i[1] to,{opacity:1, duration:0.35} -50ms][!#ot_card.i[1].ck recolor,$green][!#ot_card.i[1].ck pop][♪chime -12dB]使い回さない、[!#ot_card.i[2] to,{opacity:1, duration:0.35} -50ms][!#ot_card.i[2].ck recolor,$green][!#ot_card.i[2].ck pop][♪chime -12dB]長くする、[!#ot_card.i[3] to,{opacity:1, duration:0.35} -50ms][!#ot_card.i[3].ck recolor,$green][!#ot_card.i[3].ck pop][♪chime -12dB]二段階認証。[||][>#ot_banner][♪shimmer -8dB][br]今日から、自分のアカウントを守りましょう。[silence:2.6s]
+fade out,900ms
 ```

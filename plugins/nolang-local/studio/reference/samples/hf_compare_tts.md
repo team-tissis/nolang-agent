@@ -48,7 +48,7 @@ motion fups { in: {y:10, opacity:0, duration:0.55, ease:'power3.out'} }
 motion fin { in: {opacity:0, duration:0.45, ease:'power1.out'} }
 motion bpop { in: {scale:0.6, opacity:0, duration:0.45, ease:'back.out(2.2)'} }
 motion brd { in: {y:30, scale:0.985, opacity:0, duration:0.7, ease:'power3.out'} }
-cue chap(p, c) = [!#p recolor,#98A3B5,duration=350][!#c recolor,#EEF2F8,duration=350]
+cue chap(p, c) = [!#p recolor,#98A3B5 {duration: .35}][!#c recolor,#EEF2F8 {duration: .35}]
 bgm#music(fade: 250,3600; duck: -6.5) 知的で落ち着いたミニマルなシンセの曲、浮遊感のあるパッドと静かなシンセベルのフレーズ、淡々とした控えめなビート、暗いデータ解説向け
 
 # 全編の地: 暗い放射の地・左上の青と右下の青緑の光 (全編でゆっくり逆向きに漂う)・点の格子 (ゆっくり上へ)・周辺減光
@@ -60,12 +60,12 @@ div#bg_vig(inset: 0; background: radial(#00000000,#00000000@55%,#00000099,50%,48
 
 # 場面の見出し: 番号 (等幅・青緑) + 章名 + 伸びる罫 + mask から上がる 1 行 (場面の頭の 0.3 秒後から組み上がる)
 def header(n, k, h) = div(left: 88px; top: 60px; width: 1650px; height: 114px; in: none)
-  p#n(left: 0px; top: 3px; font-size: 22px; font-family: m; color: $lite; letter-spacing: .06em; delay: 300; in: {x:-16, opacity:0, duration:.45, ease:'power3.out'}; content: {n})
-  p#k(left: 40px; top: 3px; font-size: 22px; font-family: r; color: $t2; letter-spacing: .08em; delay: 360; in: {x:-10, opacity:0, duration:.45, ease:'power3.out'}; content: {k})
-  div#rule(left: .k.right+14; top: 15px; width: 64px; height: 2px; background: #FFFFFF2E; delay: 400; in: {scaleX:0, pivot:'left', duration:.6, ease:'power3.out'})
-  p#h(left: 0px; top: 45px; font-size: 52px; line-height: 1.22; letter-spacing: .01em; delay: 420; in: mask_rise {duration: 0.85, ease: 'power4.out'}; content: {h})
+  p#n(left: 0px; top: 3px; font-size: 22px; font-family: m; color: $lite; letter-spacing: .06em; delay: 300ms; in: {x:-16, opacity:0, duration:.45, ease:'power3.out'}; content: {n})
+  p#k(left: 40px; top: 3px; font-size: 22px; font-family: r; color: $t2; letter-spacing: .08em; delay: 360ms; in: {x:-10, opacity:0, duration:.45, ease:'power3.out'}; content: {k})
+  div#rule(left: .k.right+14; top: 15px; width: 64px; height: 2px; background: #FFFFFF2E; delay: 400ms; in: {scaleX:0, pivot:'left', duration:.6, ease:'power3.out'})
+  p#h(left: 0px; top: 45px; font-size: 52px; line-height: 1.22; letter-spacing: .01em; delay: 420ms; in: mask_rise {duration: 0.85, ease: 'power4.out'}; content: {h})
 # 右上の凡例 (色の四角 + モデル名 ×3)
-def legend = div(left: 1179px; top: 64px; width: 654px; height: 36px; delay: 700; in: {y:-8, opacity:0, duration:.4, ease:'power2.out'})
+def legend = div(left: 1179px; top: 64px; width: 654px; height: 36px; delay: 700ms; in: {y:-8, opacity:0, duration:.4, ease:'power2.out'})
   div#s1(left: 0px; cy: 50%; width: 18px; height: 18px; border-radius: 4px; background: $c31f; border: 2px solid #FFFFFF40)
   p#t1(left: 28px; cy: 50%; font-size: 22px; font-family: r; color: $t2) 3.1 Flash preview（現行）
   div#s2(left: .t1.right+26; cy: 50%; width: 18px; height: 18px; border-radius: 4px; background: $flash)
@@ -73,7 +73,7 @@ def legend = div(left: 1179px; top: 64px; width: 654px; height: 36px; delay: 700
   div#s3(left: .t2.right+26; cy: 50%; width: 18px; height: 18px; border-radius: 4px; background: $lite)
   p#t3(left: .s3.right+10; cy: 50%; font-size: 22px; font-family: r; color: $t2) 3.8 Flash-Lite
 # 下端の注記 (数字の出典を 1 行で)
-def note(t) = p(left: 88px; top: 942px; width: 1744px; font-size: 26px; line-height: 1.5; font-family: r; color: $note; delay: 800; in: {opacity:0, duration:.6, ease:'power1.out'}; content: {t})
+def note(t) = p(left: 88px; top: 942px; width: 1744px; font-size: 26px; line-height: 1.5; font-family: r; color: $note; delay: 800ms; in: {opacity:0, duration:.6, ease:'power1.out'}; content: {t})
 # 題つきの板 (半透明の地 + 細い縁 + 深い影・題 + 副題 + 罫)。題だけの板は box
 def board(t, s, rw) = div(border-radius: 22px; background: linear(#FFFFFF0D,#FFFFFF06,180); border: 2px solid #FFFFFF1A; box-shadow: 0px 34px 90px #0000006B; in: brd)
   p#t(left: 34px; top: 27px; font-size: 30px; font-family: sb; letter-spacing: .02em; content: {t})
@@ -92,7 +92,7 @@ def cand(m, d, c, bd) = div(width: 712px; height: 206px; border-radius: 22px; ba
 # 丸のチェック (青緑の輪 + 描かれるチェック)
 def chk = div(width: 40px; height: 40px)
   shape#o(left: 0px; top: 0px; width: 40px; height: 40px; border-radius: 50%; background: #2FDCAA24; border: 2px solid $lite)
-  icon#k(cx: 50%; cy: 50%; font-size: 24px; name: check; weight: bold; color: $lite; delay: 200; in: draw {duration: 0.4})
+  icon#k(cx: 50%; cy: 50%; font-size: 24px; name: check; weight: bold; color: $lite; delay: 200ms; in: draw {duration: 0.4})
 # 結論の札 (番号の丸 + 題)
 def card(no, t) = div(width: 562px; height: 640px; border-radius: 24px; background: linear(#FFFFFF0E,#FFFFFF06,180); border: 2px solid #FFFFFF1A; box-shadow: 0px 34px 90px #0000006B; in: brd)
   p#no(left: 34px; top: 30px; width: 46px; font-size: 24px; font-family: n; line-height: 1; color: $ink; background: $lite; border-radius: 148px; padding: 12px 0px; text-align: center; in: {scale:0.4, opacity:0, duration:.45, ease:'back.out(2.2)'}; content: {no})
@@ -101,34 +101,34 @@ def card(no, t) = div(width: 562px; height: 640px; border-radius: 24px; backgrou
 # 01 title — 3 本の波形が左から描かれて流れ、題が mask から 2 行で上がり、副題と 3 つのモデルの札・読む語で Flash / Lite が光る
 section#title(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.34, ease:'power1.inOut'})
 group#wave(left: 0px; top: 0px; width: 1920px; height: 1080px; main: keys(at=0 x=0 | at=1 x=-40 ease=none),window=0,4700,forwards)
-  shape#w31(path: "M0 587 L8 587 L16 587 L24 588 L32 588 L40 588 L48 589 L56 589 L64 590 L72 590 L80 590 L88 591 L96 591 L104 591 L112 592 L120 592 L128 592 L136 593 L144 593 L152 594 L160 594 L168 594 L176 594 L184 595 L192 594 L200 594 L208 594 L216 593 L224 592 L232 591 L240 591 L248 590 L256 590 L264 590 L272 590 L280 591 L288 591 L296 593 L304 594 L312 595 L320 596 L328 597 L336 598 L344 598 L352 598 L360 597 L368 596 L376 594 L384 592 L392 590 L400 588 L408 586 L416 584 L424 582 L432 581 L440 579 L448 578 L456 576 L464 575 L472 573 L480 571 L488 568 L496 566 L504 562 L512 559 L520 555 L528 552 L536 548 L544 546 L552 543 L560 542 L568 541 L576 542 L584 543 L592 545 L600 548 L608 551 L616 554 L624 558 L632 561 L640 565 L648 567 L656 570 L664 572 L672 574 L680 576 L688 577 L696 579 L704 580 L712 582 L720 584 L728 587 L736 589 L744 592 L752 595 L760 597 L768 599 L776 601 L784 602 L792 603 L800 602 L808 602 L816 600 L824 599 L832 597 L840 595 L848 594 L856 593 L864 592 L872 592 L880 592 L888 593 L896 594 L904 595 L912 597 L920 598 L928 600 L936 601 L944 602 L952 602 L960 603 L968 603 L976 603 L984 602 L992 602 L1000 601 L1008 601 L1016 601 L1024 601 L1032 601 L1040 601 L1048 601 L1056 601 L1064 600 L1072 600 L1080 599 L1088 598 L1096 597 L1104 596 L1112 595 L1120 593 L1128 592 L1136 590 L1144 589 L1152 588 L1160 587 L1168 586 L1176 586 L1184 585 L1192 585 L1200 585 L1208 585 L1216 585 L1224 586 L1232 586 L1240 586 L1248 586 L1256 587 L1264 587 L1272 587 L1280 587"; background: none; border: 3px solid #8B96A8; opacity: .45; delay: 100; in: draw {duration: 2.6, ease: 'power2.out'})
-  shape#wf(path: "M0 587 L8 587 L16 588 L24 588 L32 588 L40 589 L48 589 L56 589 L64 588 L72 588 L80 588 L88 588 L96 588 L104 588 L112 588 L120 589 L128 589 L136 589 L144 589 L152 589 L160 588 L168 588 L176 587 L184 586 L192 586 L200 586 L208 586 L216 586 L224 586 L232 586 L240 585 L248 584 L256 581 L264 578 L272 574 L280 569 L288 564 L296 559 L304 555 L312 551 L320 549 L328 548 L336 547 L344 548 L352 548 L360 550 L368 551 L376 551 L384 552 L392 553 L400 554 L408 556 L416 559 L424 564 L432 569 L440 576 L448 584 L456 591 L464 599 L472 606 L480 611 L488 615 L496 616 L504 617 L512 616 L520 614 L528 612 L536 610 L544 609 L552 609 L560 610 L568 612 L576 614 L584 615 L592 616 L600 617 L608 616 L616 615 L624 613 L632 611 L640 610 L648 610 L656 611 L664 614 L672 617 L680 622 L688 627 L696 631 L704 634 L712 636 L720 636 L728 633 L736 629 L744 624 L752 617 L760 611 L768 604 L776 599 L784 594 L792 589 L800 585 L808 582 L816 578 L824 573 L832 568 L840 563 L848 557 L856 552 L864 547 L872 543 L880 540 L888 539 L896 540 L904 543 L912 546 L920 551 L928 556 L936 560 L944 564 L952 567 L960 570 L968 571 L976 572 L984 573 L992 574 L1000 575 L1008 576 L1016 578 L1024 580 L1032 582 L1040 584 L1048 585 L1056 586 L1064 586 L1072 586 L1080 585 L1088 584 L1096 583 L1104 583 L1112 583 L1120 583 L1128 584 L1136 585 L1144 587 L1152 588 L1160 589 L1168 590 L1176 591 L1184 591 L1192 591 L1200 591 L1208 591 L1216 590 L1224 590 L1232 589 L1240 589 L1248 589 L1256 588 L1264 588 L1272 587 L1280 587"; background: none; border: 3px solid $flash; opacity: .55; delay: 300; in: draw {duration: 2.6, ease: 'power2.out'})
-  shape#wl(path: "M0 587 L8 587 L16 587 L24 587 L32 587 L40 586 L48 586 L56 586 L64 585 L72 586 L80 586 L88 586 L96 586 L104 586 L112 585 L120 583 L128 581 L136 578 L144 576 L152 573 L160 571 L168 570 L176 569 L184 567 L192 566 L200 564 L208 561 L216 559 L224 558 L232 558 L240 561 L248 565 L256 572 L264 579 L272 588 L280 595 L288 602 L296 606 L304 610 L312 612 L320 614 L328 616 L336 619 L344 622 L352 626 L360 628 L368 630 L376 629 L384 625 L392 620 L400 614 L408 609 L416 605 L424 604 L432 606 L440 611 L448 617 L456 623 L464 627 L472 629 L480 629 L488 626 L496 622 L504 617 L512 613 L520 610 L528 608 L536 605 L544 601 L552 595 L560 585 L568 572 L576 557 L584 541 L592 527 L600 515 L608 507 L616 503 L624 504 L632 508 L640 513 L648 518 L656 522 L664 526 L672 528 L680 532 L688 537 L696 544 L704 553 L712 565 L720 576 L728 587 L736 594 L744 598 L752 599 L760 596 L768 591 L776 587 L784 584 L792 583 L800 586 L808 590 L816 596 L824 602 L832 607 L840 610 L848 612 L856 614 L864 615 L872 618 L880 622 L888 627 L896 634 L904 640 L912 645 L920 647 L928 647 L936 642 L944 636 L952 627 L960 618 L968 610 L976 603 L984 597 L992 593 L1000 589 L1008 585 L1016 581 L1024 577 L1032 572 L1040 568 L1048 565 L1056 564 L1064 564 L1072 565 L1080 568 L1088 572 L1096 575 L1104 578 L1112 579 L1120 580 L1128 580 L1136 579 L1144 579 L1152 579 L1160 579 L1168 580 L1176 581 L1184 582 L1192 583 L1200 583 L1208 584 L1216 584 L1224 584 L1232 585 L1240 585 L1248 586 L1256 586 L1264 587 L1272 587 L1280 587"; background: none; border: 3px solid $lite; opacity: .85; delay: 500; in: draw {duration: 2.6, ease: 'power2.out'})
-div#t_bar(left: 120px; top: 204px; width: 44px; height: 2px; background: $lite; delay: 100; in: {scaleX:0, pivot:'left', duration:.6, ease:'power3.out'})
-p#t_kick(left: 180px; top: 190px; font-size: 22px; font-family: r; color: $t2; letter-spacing: .08em; delay: 200; in: {opacity:0, duration:.6, ease:'power1.out'}) 社内共有 ｜ ナレーション音声 (TTS) の乗り換え検討
-p#t_l1(left: 112px; top: 236px; font-size: 92px; line-height: 1.18; letter-spacing: .01em; delay: 300; in: mask_rise {duration: 1, ease: 'power4.out'}) 音声合成の乗り換え、
-p#t_flash(left: 112px; top: 344px; font-size: 138px; line-height: 1.16; color: $flash; delay: 420; in: mask_rise {duration: 1, ease: 'power4.out'}) Flash
-p#t_ka1(left: 495px; top: 376px; font-size: 104px; line-height: 1.16; color: $t2; delay: 420; in: mask_rise {duration: 1, ease: 'power4.out'}) か
-p#t_lite(left: 615px; top: 344px; font-size: 138px; line-height: 1.16; color: $lite; delay: 420; in: mask_rise {duration: 1, ease: 'power4.out'}) Lite
-p#t_ka2(left: 888px; top: 376px; font-size: 104px; line-height: 1.16; color: $t2; delay: 420; in: mask_rise {duration: 1, ease: 'power4.out'}) か
-p#t_sub(left: 120px; top: 590px; font-size: 30px; font-family: r; color: $t2; delay: 1250; in: fup) Gemini TTS ── 現行の 3.1 Flash preview から、どこへ乗り換えるか
+  shape#w31(path: "M0 587 L8 587 L16 587 L24 588 L32 588 L40 588 L48 589 L56 589 L64 590 L72 590 L80 590 L88 591 L96 591 L104 591 L112 592 L120 592 L128 592 L136 593 L144 593 L152 594 L160 594 L168 594 L176 594 L184 595 L192 594 L200 594 L208 594 L216 593 L224 592 L232 591 L240 591 L248 590 L256 590 L264 590 L272 590 L280 591 L288 591 L296 593 L304 594 L312 595 L320 596 L328 597 L336 598 L344 598 L352 598 L360 597 L368 596 L376 594 L384 592 L392 590 L400 588 L408 586 L416 584 L424 582 L432 581 L440 579 L448 578 L456 576 L464 575 L472 573 L480 571 L488 568 L496 566 L504 562 L512 559 L520 555 L528 552 L536 548 L544 546 L552 543 L560 542 L568 541 L576 542 L584 543 L592 545 L600 548 L608 551 L616 554 L624 558 L632 561 L640 565 L648 567 L656 570 L664 572 L672 574 L680 576 L688 577 L696 579 L704 580 L712 582 L720 584 L728 587 L736 589 L744 592 L752 595 L760 597 L768 599 L776 601 L784 602 L792 603 L800 602 L808 602 L816 600 L824 599 L832 597 L840 595 L848 594 L856 593 L864 592 L872 592 L880 592 L888 593 L896 594 L904 595 L912 597 L920 598 L928 600 L936 601 L944 602 L952 602 L960 603 L968 603 L976 603 L984 602 L992 602 L1000 601 L1008 601 L1016 601 L1024 601 L1032 601 L1040 601 L1048 601 L1056 601 L1064 600 L1072 600 L1080 599 L1088 598 L1096 597 L1104 596 L1112 595 L1120 593 L1128 592 L1136 590 L1144 589 L1152 588 L1160 587 L1168 586 L1176 586 L1184 585 L1192 585 L1200 585 L1208 585 L1216 585 L1224 586 L1232 586 L1240 586 L1248 586 L1256 587 L1264 587 L1272 587 L1280 587"; background: none; border: 3px solid #8B96A8; opacity: .45; delay: 100ms; in: draw {duration: 2.6, ease: 'power2.out'})
+  shape#wf(path: "M0 587 L8 587 L16 588 L24 588 L32 588 L40 589 L48 589 L56 589 L64 588 L72 588 L80 588 L88 588 L96 588 L104 588 L112 588 L120 589 L128 589 L136 589 L144 589 L152 589 L160 588 L168 588 L176 587 L184 586 L192 586 L200 586 L208 586 L216 586 L224 586 L232 586 L240 585 L248 584 L256 581 L264 578 L272 574 L280 569 L288 564 L296 559 L304 555 L312 551 L320 549 L328 548 L336 547 L344 548 L352 548 L360 550 L368 551 L376 551 L384 552 L392 553 L400 554 L408 556 L416 559 L424 564 L432 569 L440 576 L448 584 L456 591 L464 599 L472 606 L480 611 L488 615 L496 616 L504 617 L512 616 L520 614 L528 612 L536 610 L544 609 L552 609 L560 610 L568 612 L576 614 L584 615 L592 616 L600 617 L608 616 L616 615 L624 613 L632 611 L640 610 L648 610 L656 611 L664 614 L672 617 L680 622 L688 627 L696 631 L704 634 L712 636 L720 636 L728 633 L736 629 L744 624 L752 617 L760 611 L768 604 L776 599 L784 594 L792 589 L800 585 L808 582 L816 578 L824 573 L832 568 L840 563 L848 557 L856 552 L864 547 L872 543 L880 540 L888 539 L896 540 L904 543 L912 546 L920 551 L928 556 L936 560 L944 564 L952 567 L960 570 L968 571 L976 572 L984 573 L992 574 L1000 575 L1008 576 L1016 578 L1024 580 L1032 582 L1040 584 L1048 585 L1056 586 L1064 586 L1072 586 L1080 585 L1088 584 L1096 583 L1104 583 L1112 583 L1120 583 L1128 584 L1136 585 L1144 587 L1152 588 L1160 589 L1168 590 L1176 591 L1184 591 L1192 591 L1200 591 L1208 591 L1216 590 L1224 590 L1232 589 L1240 589 L1248 589 L1256 588 L1264 588 L1272 587 L1280 587"; background: none; border: 3px solid $flash; opacity: .55; delay: 300ms; in: draw {duration: 2.6, ease: 'power2.out'})
+  shape#wl(path: "M0 587 L8 587 L16 587 L24 587 L32 587 L40 586 L48 586 L56 586 L64 585 L72 586 L80 586 L88 586 L96 586 L104 586 L112 585 L120 583 L128 581 L136 578 L144 576 L152 573 L160 571 L168 570 L176 569 L184 567 L192 566 L200 564 L208 561 L216 559 L224 558 L232 558 L240 561 L248 565 L256 572 L264 579 L272 588 L280 595 L288 602 L296 606 L304 610 L312 612 L320 614 L328 616 L336 619 L344 622 L352 626 L360 628 L368 630 L376 629 L384 625 L392 620 L400 614 L408 609 L416 605 L424 604 L432 606 L440 611 L448 617 L456 623 L464 627 L472 629 L480 629 L488 626 L496 622 L504 617 L512 613 L520 610 L528 608 L536 605 L544 601 L552 595 L560 585 L568 572 L576 557 L584 541 L592 527 L600 515 L608 507 L616 503 L624 504 L632 508 L640 513 L648 518 L656 522 L664 526 L672 528 L680 532 L688 537 L696 544 L704 553 L712 565 L720 576 L728 587 L736 594 L744 598 L752 599 L760 596 L768 591 L776 587 L784 584 L792 583 L800 586 L808 590 L816 596 L824 602 L832 607 L840 610 L848 612 L856 614 L864 615 L872 618 L880 622 L888 627 L896 634 L904 640 L912 645 L920 647 L928 647 L936 642 L944 636 L952 627 L960 618 L968 610 L976 603 L984 597 L992 593 L1000 589 L1008 585 L1016 581 L1024 577 L1032 572 L1040 568 L1048 565 L1056 564 L1064 564 L1072 565 L1080 568 L1088 572 L1096 575 L1104 578 L1112 579 L1120 580 L1128 580 L1136 579 L1144 579 L1152 579 L1160 579 L1168 580 L1176 581 L1184 582 L1192 583 L1200 583 L1208 584 L1216 584 L1224 584 L1232 585 L1240 585 L1248 586 L1256 586 L1264 587 L1272 587 L1280 587"; background: none; border: 3px solid $lite; opacity: .85; delay: 500ms; in: draw {duration: 2.6, ease: 'power2.out'})
+div#t_bar(left: 120px; top: 204px; width: 44px; height: 2px; background: $lite; delay: 100ms; in: {scaleX:0, pivot:'left', duration:.6, ease:'power3.out'})
+p#t_kick(left: 180px; top: 190px; font-size: 22px; font-family: r; color: $t2; letter-spacing: .08em; delay: 200ms; in: {opacity:0, duration:.6, ease:'power1.out'}) 社内共有 ｜ ナレーション音声 (TTS) の乗り換え検討
+p#t_l1(left: 112px; top: 236px; font-size: 92px; line-height: 1.18; letter-spacing: .01em; delay: 300ms; in: mask_rise {duration: 1, ease: 'power4.out'}) 音声合成の乗り換え、
+p#t_flash(left: 112px; top: 344px; font-size: 138px; line-height: 1.16; color: $flash; delay: 420ms; in: mask_rise {duration: 1, ease: 'power4.out'}) Flash
+p#t_ka1(left: 495px; top: 376px; font-size: 104px; line-height: 1.16; color: $t2; delay: 420ms; in: mask_rise {duration: 1, ease: 'power4.out'}) か
+p#t_lite(left: 615px; top: 344px; font-size: 138px; line-height: 1.16; color: $lite; delay: 420ms; in: mask_rise {duration: 1, ease: 'power4.out'}) Lite
+p#t_ka2(left: 888px; top: 376px; font-size: 104px; line-height: 1.16; color: $t2; delay: 420ms; in: mask_rise {duration: 1, ease: 'power4.out'}) か
+p#t_sub(left: 120px; top: 590px; font-size: 30px; font-family: r; color: $t2; delay: 1250ms; in: fup) Gemini TTS ── 現行の 3.1 Flash preview から、どこへ乗り換えるか
 # モデルの札 3 枚 (色の四角 + 名 + 現行 / 新)
-p#t_c1(left: 120px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1550; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.1 Flash preview  {s}現行{/}
+p#t_c1(left: 120px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1550ms; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.1 Flash preview  {s}現行{/}
   div#sw(left: 18px; cy: 50%; width: 20px; height: 20px; border-radius: 4px; background: $c31f; border: 2px solid #FFFFFF40; overlap: t_c1)
-p#t_c2(left: 483px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1670; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.8 Flash  {s}新{/}
+p#t_c2(left: 483px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1670ms; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.8 Flash  {s}新{/}
   div#sw(left: 18px; cy: 50%; width: 20px; height: 20px; border-radius: 4px; background: $flash; overlap: t_c2)
-p#t_c3(left: 723px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1790; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.8 Flash-Lite  {s}新{/}
+p#t_c3(left: 723px; top: 652px; font-size: 26px; font-family: sb; background: #FFFFFF0D; border: 2px solid #FFFFFF2E; border-radius: 14px; padding: 16px 24px 16px 50px; delay: 1790ms; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 3.8 Flash-Lite  {s}新{/}
   div#sw(left: 18px; cy: 50%; width: 20px; height: 20px; border-radius: 4px; background: $lite; overlap: t_c3)
 
 # 02 背景 — 現行の板 ($923 は「月額」で上がる) → 2 本の曲線の矢印が描かれ候補の板 2 枚 → 比べる軸 (破線の枠と 2 つの札)
 section#bg(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.34, ease:'power1.inOut'})
 header#h2(n: "01"; k: "背景"; h: "乗り換え先を、コストと品質で決める")
 # 下端の章の進行 (9 本・全編に残る sticky)。章ごとに帯が伸び、今の章の名が白くなる
-div#prog.sticky(left: 88px; top: 1014px; width: 1744px; height: 39px; delay: 200; in: {y:10, opacity:0, duration:.6, ease:'power2.out'})
+div#prog.sticky(left: 88px; top: 1014px; width: 1744px; height: 39px; delay: 200ms; in: {y:10, opacity:0, duration:.6, ease:'power2.out'})
   p#lab(left: "0;130;260;390;520;650;780;910;1040"; top: 0px; font-size: 18px; font-family: r; color: $lab; letter-spacing: .06em) ×9 背景;単価;実測;月額;品質;声色;使い方;再合成;結論
   div#track(left: "0;130;260;390;520;650;780;910;1040"; top: 32px; width: 184px; height: 4px; border-radius: 3px; background: #FFFFFF1A) ×9
 progress#pf1(left: 88px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#cur(left: 88px; top: 250px; width: 760px; height: 640px; t: "現行"; s: "ナレーション音声 (TTS)"; rw: 692px; delay: 300)
+board#cur(left: 88px; top: 250px; width: 760px; height: 640px; t: "現行"; s: "ナレーション音声 (TTS)"; rw: 692px; delay: 300ms)
   p#tag(right: 34px; top: 30px; font-size: 18px; font-family: m; letter-spacing: .08em; color: $c31; background: #FFFFFF14; border-radius: 8px; padding: 6px 12px) NOW
   p#model(left: 34px; top: 111px; font-size: 44px; font-family: i; letter-spacing: -.01em) Gemini 3.1 Flash preview
   p#msub(left: 34px; top: 171px; font-size: 24px; font-family: r; color: $t3) 動画生成サービスのナレーションに使用中
@@ -159,15 +159,15 @@ header#h3(n: "02"; k: "単価"; h: "出力単価は {d}$20{/} から {fd}$9{/} �
 legend#lg3
 div#pd1.sticky(left: 88px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf2(left: 284px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b3(left: 88px; top: 244px; width: 1744px; height: 680px; t: "単価"; s: "100 万 token あたり"; rw: 1676px; delay: 250)
+board#b3(left: 88px; top: 244px; width: 1744px; height: 680px; t: "単価"; s: "100 万 token あたり"; rw: 1676px; delay: 250ms)
   p#x2(right: 34px; top: 22px; font-size: 22px; font-family: sb; color: $amber; background: #FFB5471F; border: 2px solid #FFB54780; border-radius: 148px; padding: 9px 18px; in: {scale:0.7, opacity:0, duration:.45, ease:'back.out(2.2)'}) 2027 年 1 月から ×2 (倍額)
   p#ch(left: "23;290;457"; top: 108px; font-size: 22px; font-family: r; color: $t3) ×3 モデル;入力;出力
   div#sep(left: 34px; top: "205;309"; width: 1676px; height: 2px; background: #FFFFFF0F) ×2
-  div#lab(left: 34px; top: "128;232;336"; width: 390px; height: 75px; delay: 300; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3
+  div#lab(left: 34px; top: "128;232;336"; width: 390px; height: 75px; delay: 300ms; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3
     div#sw(left: 0px; top: 10px; width: 18px; height: 18px; border-radius: 4px; background: "$c31f;$flash;$lite")
     p#m(left: 30px; top: 0px; font-size: 28px; font-family: sb) 3.1 Flash preview;3.8 Flash;3.8 Flash-Lite
     p#s(left: 30px; top: 46px; font-size: 20px; font-family: r; color: $t3) 現行;2026 年末まで導入価格;2026 年末まで導入価格
-  p#iv(left: 435px; cy: "153;257;361"; font-size: 40px; font-family: i; delay: 450; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3 $1;$0.5;$0.5
+  p#iv(left: 435px; cy: "153;257;361"; font-size: 40px; font-family: i; delay: 450ms; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3 $1;$0.5;$0.5
   p#n27(left: 528px; cy: "260;364"; font-size: 26px; font-family: i; color: $amber; in: {scale:0.6, opacity:0, duration:.45, ease:'back.out(2.2)', stagger:{each:.15}}) ×2 → $1
   shape#g(left: "685;609"; top: "237;341"; width: "228;152"; height: 60px; path: rect,r=0.15; background: #FFB54712; border: 2px solid $amber; dash: 4,3; in: wipe {dir: 'right', duration: 0.75, ease: 'power2.inOut'}) ×2
   div#f(left: 686px; top: "137;241;345"; width: "507;228;152"; height: 48px; border-radius: 8px; background: "linear($g31,#5F687B,90);linear($gf,#4DA3FF,90);linear($gl,#2FDCAA,90)"; in: {scaleX:0, pivot:'left', duration:.85, ease:'power3.out'}) ×3
@@ -181,7 +181,7 @@ section#measure(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.34, ease:'
 header#h4(n: "03"; k: "実測"; h: "見積もりの土台は、4 日間の実測ログ")
 div#pd2.sticky(left: 284px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf3(left: 478px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b4a(left: 88px; top: 244px; width: 1744px; height: 330px; t: "実測"; s: "4 日間のログ"; rw: 1676px; delay: 250)
+board#b4a(left: 88px; top: 244px; width: 1744px; height: 330px; t: "実測"; s: "4 日間のログ"; rw: 1676px; delay: 250ms)
   div#st(left: "-2;378;760"; top: 105px; width: 554px; height: 180px; in: {y:14, opacity:0, duration:.55, ease:'power3.out'}) ×3
     div#bl(left: 0px; top: 0px; width: 2px; height: 180px; background: #FFFFFF14; opacity: "0;1;1")
     p#k(left: 44px; top: 10px; font-size: 24px; font-family: r; color: $t2) 合成の回数;文字数;音声の長さ
@@ -204,15 +204,15 @@ header#h5(n: "04"; k: "月額"; h: "月額は {d}$923{/} から {fd}$416{/} ・ 
 legend#lg5
 div#pd3.sticky(left: 478px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf4(left: 674px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b5(left: 88px; top: 244px; width: 1744px; height: 680px; t: "月額の見込み"; s: "USD / 月"; rw: 1676px; delay: 250)
-  div#gleg(left: 1240px; top: 26px; width: 470px; height: 30px; delay: 600; in: fin)
+board#b5(left: 88px; top: 244px; width: 1744px; height: 680px; t: "月額の見込み"; s: "USD / 月"; rw: 1676px; delay: 250ms)
+  div#gleg(left: 1240px; top: 26px; width: 470px; height: 30px; delay: 600ms; in: fin)
     shape#s1(left: 0px; cy: 50%; width: 18px; height: 18px; path: rect,r=0.25; background: none; border: 2px solid $amber; dash: 3,2)
     p#t1(left: 28px; cy: 50%; font-size: 22px; font-family: r; color: $t2) 2027 年 1 月〜 (倍額後)
     div#s2(left: 262px; cy: 50%; width: 3px; height: 22px; background: $ref)
     p#t2(left: 278px; cy: 50%; font-size: 22px; font-family: r; color: $t2) 参考: 他社の月額
-  div#gv(left: "263;416;570;723;877;1030"; top: 116px; width: 2px; height: 470px; background: #FFFFFF12; delay: 400; in: {opacity:0, duration:.5}) ×6
-  p#gt(left: "238;391;545;698;852;1005"; top: 596px; width: 75px; font-size: 20px; font-family: i; color: $t3; text-align: center; delay: 400; in: {opacity:0, duration:.5}) ×6 $0;$200;$400;$600;$800;$1000
-  div#lab(left: 34px; top: "116;210;304"; width: 345px; height: 75px; delay: 300; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3
+  div#gv(left: "263;416;570;723;877;1030"; top: 116px; width: 2px; height: 470px; background: #FFFFFF12; delay: 400ms; in: {opacity:0, duration:.5}) ×6
+  p#gt(left: "238;391;545;698;852;1005"; top: 596px; width: 75px; font-size: 20px; font-family: i; color: $t3; text-align: center; delay: 400ms; in: {opacity:0, duration:.5}) ×6 $0;$200;$400;$600;$800;$1000
+  div#lab(left: 34px; top: "116;210;304"; width: 345px; height: 75px; delay: 300ms; in: {y:12, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.1}}) ×3
     div#sw(left: 0px; top: 10px; width: 18px; height: 18px; border-radius: 4px; background: "$c31f;$flash;$lite")
     p#m(left: 30px; top: 0px; font-size: 28px; font-family: sb) 3.1 Flash preview;3.8 Flash;3.8 Flash-Lite
     p#s(left: 30px; top: 46px; font-size: 20px; font-family: r; color: $t3) 現行;導入価格;導入価格
@@ -231,20 +231,20 @@ header#h6(n: "05"; k: "品質"; h: "品質は同じ。速度は {l}Lite{/} が�
 legend#lg6
 div#pd4.sticky(left: 674px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf5(left: 868px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b6a(left: 88px; top: 244px; width: 800px; height: 680px; t: "読み取り一致率"; s: "本番テキスト 80 本"; rw: 730px; delay: 250)
+board#b6a(left: 88px; top: 244px; width: 800px; height: 680px; t: "読み取り一致率"; s: "本番テキスト 80 本"; rw: 730px; delay: 250ms)
   p#eq(right: 34px; top: 22px; font-size: 22px; font-family: sb; color: $lite; background: #2FDCAA1F; border: 2px solid #2FDCAA80; border-radius: 148px; padding: 9px 18px; in: {scale:0.7, opacity:0, duration:.45, ease:'back.out(2.2)'}) 3 モデルで同じ水準
   div#base(left: 54px; top: 424px; width: 692px; height: 2px; background: #FFFFFF2E)
   div#ab(left: "67;223;377"; top: "129;130;130"; width: 130px; height: "154;153;153"; border-radius: 10px 10px 4px 4px; background: "linear($g31,#5F687B,0);linear($gf,#4DA3FF,0);linear($gl,#2FDCAA,0)"; in: {scaleY:0, pivot:'bottom', duration:.9, ease:'power3.out', stagger:{each:.12}}) ×3
   p#av(cx: "110;266;420"; cy: 160px; font-size: 40px; font-family: i; color: "$t1;$flash;$lite"; in: {y:8, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.12}}) ×3 0.856;0.850;0.851
-  p#xl(cx: "110;266;420"; cy: 454px; font-size: 22px; font-family: sb; color: $t2; delay: 400; in: fin) ×3 3.1 Flash pre.;3.8 Flash;3.8 Flash-Lite
+  p#xl(cx: "110;266;420"; cy: 454px; font-size: 22px; font-family: sb; color: $t2; delay: 400ms; in: fin) ×3 3.1 Flash pre.;3.8 Flash;3.8 Flash-Lite
   div#nl(left: 34px; top: 558px; width: 730px; height: 2px; background: #FFFFFF14)
   p#nk(left: 34px; top: 574px; font-size: 22px; font-family: sb; color: $t2; in: fin) 雑音の検出
   div#z(left: "77;233;387"; top: 614px; width: 105px; height: 40px; in: {scale:0.7, opacity:0, duration:.45, ease:'back.out(2.2)', stagger:{each:.12}}) ×3
     chk#ck(left: 0px; top: 0px)
     p#v(left: 51px; cy: 50%; font-size: 34px; font-family: i) 0
     p#u(left: 78px; cy: 50%; font-size: 22px; font-family: r; color: $t2) 件
-board#b6b(left: 918px; top: 244px; width: 914px; height: 680px; t: "遅延"; s: "中央値 (秒) ・ 短いほど速い"; rw: 844px; delay: 370)
-  div#ll(left: 34px; top: "95;157;217"; width: 240px; height: 30px; delay: 400; in: fin) ×3
+board#b6b(left: 918px; top: 244px; width: 914px; height: 680px; t: "遅延"; s: "中央値 (秒) ・ 短いほど速い"; rw: 844px; delay: 370ms)
+  div#ll(left: 34px; top: "95;157;217"; width: 240px; height: 30px; delay: 400ms; in: fin) ×3
     div#sw(left: 0px; cy: 50%; width: 18px; height: 18px; border-radius: 4px; background: "$c31f;$flash;$lite")
     p#m(left: 30px; cy: 50%; font-size: 26px; font-family: sb) 3.1 Flash pre.;3.8 Flash;3.8 Flash-Lite
   div#lb(left: 285px; top: "90;152;212"; width: "279;204;177"; height: 44px; border-radius: 8px; background: "linear($g31,#5F687B,90);linear($gf,#4DA3FF,90);linear($gl,#2FDCAA,90)"; in: {scaleX:0, pivot:'left', duration:.9, ease:'power3.out', stagger:{each:.12}}) ×3
@@ -264,23 +264,23 @@ section#voice(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.34, ease:'po
 header#h7(n: "06"; k: "声色"; h: "{f}Flash{/} と {l}Lite{/} は、同じ声として扱える")
 div#pd5.sticky(left: 868px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf6(left: 1064px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b7a(left: 88px; top: 244px; width: 1000px; height: 680px; t: "声の類似度"; s: "同じ声・同じ文で比較"; rw: 932px; delay: 250)
-  div#vc(left: "155;381"; top: 111px; width: "148;132"; height: 76px; border-radius: 16px; border: 2px solid #FFFFFF2E; background: #FFFFFF0A; delay: 300; in: {scale:0.8, opacity:0, duration:.45, ease:'back.out(2.2)', stagger:{each:.12}}) ×2
+board#b7a(left: 88px; top: 244px; width: 1000px; height: 680px; t: "声の類似度"; s: "同じ声・同じ文で比較"; rw: 932px; delay: 250ms)
+  div#vc(left: "155;381"; top: 111px; width: "148;132"; height: 76px; border-radius: 16px; border: 2px solid #FFFFFF2E; background: #FFFFFF0A; delay: 300ms; in: {scale:0.8, opacity:0, duration:.45, ease:'back.out(2.2)', stagger:{each:.12}}) ×2
     shape#w(left: 27px; cy: 50%; width: 66px; height: 16px; path: "wave,n=3"; background: none; border: "3px solid $flash;3px solid $lite")
     p#t(left: 110px; cy: 50%; font-size: 32px; font-family: i; color: "$flash;$lite") Flash;Lite
-  p#eqs(left: 486px; cy: 148px; font-size: 44px; font-family: i; color: $t3; delay: 500; in: fin) ↔
-  div#ax(left: 75px; top: 381px; width: 850px; height: 4px; border-radius: 3px; background: #FFFFFF24; delay: 500; in: fin)
-  div#tm(left: "49;238;427;616"; top: 393px; width: 2px; height: 10px; background: #FFFFFF40; delay: 500; in: fin) ×4
-  p#tk(left: "30;219;408;597"; top: 411px; width: 60px; font-size: 20px; font-family: i; color: $t3; text-align: center; delay: 500; in: fin) ×4 0.70;0.80;0.90;1.00
+  p#eqs(left: 486px; cy: 148px; font-size: 44px; font-family: i; color: $t3; delay: 500ms; in: fin) ↔
+  div#ax(left: 75px; top: 381px; width: 850px; height: 4px; border-radius: 3px; background: #FFFFFF24; delay: 500ms; in: fin)
+  div#tm(left: "49;238;427;616"; top: 393px; width: 2px; height: 10px; background: #FFFFFF40; delay: 500ms; in: fin) ×4
+  p#tk(left: "30;219;408;597"; top: 411px; width: 60px; font-size: 20px; font-family: i; color: $t3; text-align: center; delay: 500ms; in: fin) ×4 0.70;0.80;0.90;1.00
   div#mg(left: 282px; top: 240px; width: 210px; height: 165px)
-    p#v(cx: 50%; top: 6px; font-size: 44px; font-family: n; line-height: 1; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150) 0.81
-    p#k(cx: 50%; top: 52px; font-size: 20px; font-family: r; color: $t2; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150) 別テキストの揺れ
-    div#stem(cx: 50%; top: 96px; width: 2px; height: 34px; background: #8B96A8; delay: 50; in: {scaleY:0, pivot:'bottom', duration:.4, ease:'power2.out'})
+    p#v(cx: 50%; top: 6px; font-size: 44px; font-family: n; line-height: 1; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150ms) 0.81
+    p#k(cx: 50%; top: 52px; font-size: 20px; font-family: r; color: $t2; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150ms) 別テキストの揺れ
+    div#stem(cx: 50%; top: 96px; width: 2px; height: 34px; background: #8B96A8; delay: 50ms; in: {scaleY:0, pivot:'bottom', duration:.4, ease:'power2.out'})
     div#dot(cx: 50%; top: 128px; width: 30px; height: 30px; border-radius: 15px; background: #8B96A8; in: {scale:0.2, opacity:0, duration:.45, ease:'back.out(2.2)'})
   div#mt(left: 495px; top: 240px; width: 210px; height: 165px; in: {x:-180, duration:.9, ease:'power3.out'})
-    p#v(cx: 50%; top: 6px; font-size: 44px; font-family: n; line-height: 1; color: $lite; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150) 0.885
-    p#k(cx: 50%; top: 52px; font-size: 20px; font-family: r; color: $t2; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150) Flash {d}↔{/} Lite
-    div#stem(cx: 50%; top: 96px; width: 2px; height: 34px; background: $lite; delay: 50; in: {scaleY:0, pivot:'bottom', duration:.4, ease:'power2.out'})
+    p#v(cx: 50%; top: 6px; font-size: 44px; font-family: n; line-height: 1; color: $lite; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150ms) 0.885
+    p#k(cx: 50%; top: 52px; font-size: 20px; font-family: r; color: $t2; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}; delay: 150ms) Flash {d}↔{/} Lite
+    div#stem(cx: 50%; top: 96px; width: 2px; height: 34px; background: $lite; delay: 50ms; in: {scaleY:0, pivot:'bottom', duration:.4, ease:'power2.out'})
     div#dot(cx: 50%; top: 128px; width: 30px; height: 30px; border-radius: 15px; background: $lite; box-shadow: 0px 0px 0px 8px #2FDCAA2E; in: {scale:0.2, opacity:0, duration:.45, ease:'back.out(2.2)'})
   p#gs(cx: 494px; top: 460px; font-size: 22px; font-family: sb; color: $lite; in: fups) 揺れ (0.81) より近い
   div#same(left: 34px; top: 590px; width: 932px; height: 75px; in: fups)
@@ -333,12 +333,12 @@ header#h9(n: "08"; k: "再合成"; h: "失敗テキストも、3.8 なら使え�
 legend#lg9
 div#pd7.sticky(left: 1258px; top: 1046px; width: 184px; height: 4px; background: $t2; in: none)
 progress#pf8(left: 1454px; top: 1046px; width: 184px; height: 4px; background: $t2; until: cut)
-board#b9a(left: 88px; top: 244px; width: 1060px; height: 680px; t: "使える率"; s: "失敗テキスト 120 本を再合成"; rw: 992px; delay: 250)
-  shape#yg(left: 135px; top: "91;161;231;301;371"; width: 861px; height: 3px; path: line_h; border: 2px solid #FFFFFF17; dash: 4,4; delay: 400; in: {opacity:0, duration:.5}) ×5
-  p#yt(left: 52px; width: 60px; cy: "91;161;231;301;371"; font-size: 20px; font-family: i; color: $t3; text-align: right; delay: 400; in: {opacity:0, duration:.5}) ×5 100%;75%;50%;25%;0%
+board#b9a(left: 88px; top: 244px; width: 1060px; height: 680px; t: "使える率"; s: "失敗テキスト 120 本を再合成"; rw: 992px; delay: 250ms)
+  shape#yg(left: 135px; top: "91;161;231;301;371"; width: 861px; height: 3px; path: line_h; border: 2px solid #FFFFFF17; dash: 4,4; delay: 400ms; in: {opacity:0, duration:.5}) ×5
+  p#yt(left: 52px; width: 60px; cy: "91;161;231;301;371"; font-size: 20px; font-family: i; color: $t3; text-align: right; delay: 400ms; in: {opacity:0, duration:.5}) ×5 100%;75%;50%;25%;0%
   div#vb(left: "155;325;497"; top: "273;169;192"; width: 160px; height: "98;202;179"; border-radius: 10px 10px 4px 4px; background: "linear($g31,#5F687B,0);linear($gf,#4DA3FF,0);linear($gl,#2FDCAA,0)"; in: {scaleY:0, pivot:'bottom', duration:.9, ease:'power3.out'}) ×3
   p#vv(cx: "208;378;550"; cy: "247;141;165"; font-size: 48px; font-family: i; color: "$t1;$flash;$lite"; in: fups) ×3 35%;72%;64%
-  p#xl(cx: "208;378;550"; cy: 584px; font-size: 22px; font-family: sb; color: $t2; delay: 500; in: fin) ×3 3.1 Flash pre.;3.8 Flash;3.8 Flash-Lite
+  p#xl(cx: "208;378;550"; cy: 584px; font-size: 22px; font-family: sb; color: $t2; delay: 500ms; in: fin) ×3 3.1 Flash pre.;3.8 Flash;3.8 Flash-Lite
 board#b9b(left: 1178px; top: 244px; width: 654px; height: 680px; t: "内容ブロック"; s: "内容を理由に合成が止まった本数"; rw: 585px)
   div#from(left: 112px; top: 117px; width: 195px; height: 150px; in: {scale:0.7, opacity:0, duration:.45, ease:'back.out(2.2)'})
     p#n(cx: 50%; top: 0px; font-size: 112px; font-family: n; line-height: 1; color: $from) 63
@@ -402,65 +402,65 @@ div#er(left: 645px; top: 951px; width: 1188px; height: 2px; background: #FFFFFF2
 ```timeline.txt
 #v2
 cast n = "明るく澄んだ20代後半から30代の女性のナレーター、落ち着いた明瞭な語りで社内向けの解説を淡々と読む"
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 # title — 波形が描かれ題が上がる・「フラッシュ」「ライト」の語でその語が光る
 *** title
 bgm music
-se hit -3.7dB +200
-@n: [silence:1.6s]音声合成の乗り換え。[!#t_flash glow,#4DA3FFD9,blur=24][=#t_flash +350]フラッシュか、[!#t_lite glow,#2FDCAAD9,blur=24][=#t_lite +350]ライトか。[silence:0.3s]
+se hit -3.7dB +200ms
+@n: [silence:1.6s]音声合成の乗り換え。[!#t_flash glow,#4DA3FFD9 {blur: 24}][=#t_flash +350ms]フラッシュか、[!#t_lite glow,#2FDCAAD9 {blur: 24}][=#t_lite +350ms]ライトか。[silence:0.3s]
 
 # bg — 「月額」で $923・「新しい」で矢印と候補の板 2 枚・「比べます」で比べる軸
 *** bg
 se pad -2.5dB
-@n: [silence:0.5s][!#prog.lab[1] recolor,#EEF2F8,duration=350 -500]現行の3.1フラッシュ プレビューは、[>#cur.big -300][>#cur.per -300][♪accent -2.5dB +550][>#cur.fl +900][>#cur.fk +900][>#cur.fv +900]月額923ドル。[>#a2a -150][>#a2b -50][>#s02q +100][>#cf +200][>#cl +400][>#a2h1 +450][>#a2h2 +530][>#cf.d2 +900][>#cl.d2 +900][♪chime -3.1dB]新しい3.8の2モデルと[>#axes -450][>#axl -450][>#ax1 -100][>#ax2 +60]比べます。[silence:0.3s]
+@n: [silence:0.5s][!#prog.lab[1] recolor,#EEF2F8 {duration: .35} -500ms]現行の3.1フラッシュ プレビューは、[>#cur.big -300ms][>#cur.per -300ms][♪accent -2.5dB +550ms][>#cur.fl +900ms][>#cur.fk +900ms][>#cur.fv +900ms]月額923ドル。[>#a2a -150ms][>#a2b -50ms][>#s02q +100ms][>#cf +200ms][>#cl +400ms][>#a2h1 +450ms][>#a2h2 +530ms][>#cf.d2 +900ms][>#cl.d2 +900ms][♪chime -3.1dB]新しい3.8の2モデルと[>#axes -450ms][>#axl -450ms][>#ax1 -100ms][>#ax2 +60ms]比べます。[silence:0.3s]
 
 # price — 「20ドル」「フラッシュ」「ライト」で横棒が 1 本ずつ伸び、「2027年」で倍額の破線の枠と → $1・「倍額」で札
 *** price
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[1] #prog.lab[2] -500]出力の単価は、100万トークンあたり、[>#b3.f[1] -50][>#b3.hv[1] +400][♪swell -3.7dB]20ドルから、[>#b3.f[2]][>#b3.hv[2] +450]フラッシュ9ドル、[>#b3.f[3]][>#b3.hv[3] +450]ライト6ドルに。[silence:0.25s]
-@: ただし[>#b3.g[1] +400][>#b3.g[2] +580][>#b3.n27[*] +900][>#b3.gv[1] +950][>#b3.gd[1] +950][>#b3.gv[2] +1130][>#b3.gd[2] +1130]2027年1月には、[>#b3.x2 -50][♪tense -1.9dB]倍額になります。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[1] #prog.lab[2] -500ms]出力の単価は、100万トークンあたり、[>#b3.f[1] -50ms][>#b3.hv[1] +400ms][♪swell -3.7dB]20ドルから、[>#b3.f[2]][>#b3.hv[2] +450ms]フラッシュ9ドル、[>#b3.f[3]][>#b3.hv[3] +450ms]ライト6ドルに。[silence:0.25s]
+@: ただし[>#b3.g[1] +400ms][>#b3.g[2] +580ms][>#b3.n27[*] +900ms][>#b3.gv[1] +950ms][>#b3.gd[1] +950ms][>#b3.gv[2] +1130ms][>#b3.gd[2] +1130ms]2027年1月には、[>#b3.x2 -50ms][♪tense -1.9dB]倍額になります。[silence:0.3s]
 
 # measure — 数字が語ごとに上がり、「32トークン」で箱が左から並び「公式の目安」で 25 の線と超えた分が琥珀に
 *** measure
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[2] #prog.lab[3] -500]4日間の実測は、[>#b4a.st[1] -450][>#b4a.st[2] +900][♪accent -2.5dB +900]2万5432回、[>#b4a.st[3] -400]53.9時間ぶんの音声。[silence:0.25s]
-@: [>#b4b +330]1秒あたり[>#b4b.lead -200][>#b4b.lu -200][>#b4b.blk[*] -100][>#b4b.bo[*] +725][♪swell -3.7dB]32トークンと、[>#b4b.mk -100][>#b4b.ml -100][>#b4b.ba[*] +100][>#b4b.ol +300]公式の目安より多めです。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[2] #prog.lab[3] -500ms]4日間の実測は、[>#b4a.st[1] -450ms][>#b4a.st[2] +900ms][♪accent -2.5dB +900ms]2万5432回、[>#b4a.st[3] -400ms]53.9時間ぶんの音声。[silence:0.25s]
+@: [>#b4b +330ms]1秒あたり[>#b4b.lead -200ms][>#b4b.lu -200ms][>#b4b.blk[*] -100ms][>#b4b.bo[*] +725ms][♪swell -3.7dB]32トークンと、[>#b4b.mk -100ms][>#b4b.ml -100ms][>#b4b.ba[*] +100ms][>#b4b.ol +300ms]公式の目安より多めです。[silence:0.3s]
 
 # monthly — 現行の棒と参考の破線は頭に・「フラッシュ」「ライト」で棒・「2027年」で凡例が弾み、金額の語で倍額後の枠
 *** monthly
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[3] #prog.lab[4] -500][>#b5.f[1] +250][>#b5.hv[1] +750][>#b5.rf[1] +750][>#b5.rf[2] +900][>#b5.rt[*] +950]月額の見込みは、[>#b5.f[2]][>#b5.hv[2] +500][♪swell -3.7dB]フラッシュ416ドル、[>#b5.f[3]][>#b5.hv[3] +500]ライト278ドル。[silence:0.25s]
-@: [!#b5.gleg.t1 punch,1.08,duration=500 +110][♪tense -1.9dB +210]2027年からは、[>#b5.g[1] -350][>#b5.gl[1] -50][>#b5.gd[1] -50]831ドルと[>#b5.g[2] -350][>#b5.gl[2] -50][>#b5.gd[2] -50]556ドルです。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[3] #prog.lab[4] -500ms][>#b5.f[1] +250ms][>#b5.hv[1] +750ms][>#b5.rf[1] +750ms][>#b5.rf[2] +900ms][>#b5.rt[*] +950ms]月額の見込みは、[>#b5.f[2]][>#b5.hv[2] +500ms][♪swell -3.7dB]フラッシュ416ドル、[>#b5.f[3]][>#b5.hv[3] +500ms]ライト278ドル。[silence:0.25s]
+@: [!#b5.gleg.t1 punch {scale: 1.08, duration: .5} +110ms][♪tense -1.9dB +210ms]2027年からは、[>#b5.g[1] -350ms][>#b5.gl[1] -50ms][>#b5.gd[1] -50ms]831ドルと[>#b5.g[2] -350ms][>#b5.gl[2] -50ms][>#b5.gd[2] -50ms]556ドルです。[silence:0.3s]
 
 # quality — 「一致率」で縦棒 3 本と同じ水準の札・「雑音」で 0 件・「遅延」で横棒・「ライト」で最速の札と光と長文の棒
 *** quality
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[4] #prog.lab[5] -500]本番のテキスト80本では、[>#b6a.ab[*] -150][>#b6a.av[*] +350][>#b6a.eq +1000]一致率は同じ水準で、[>#b6a.nk -200][>#b6a.z[*]][♪pop -3.1dB +350]雑音もゼロ件。[silence:0.25s]
-@: [>#b6b.lb[*] +230][>#b6b.lv[*] +730]遅延の中央値は、[>#b6b.sh -350][>#b6b.xl[*] -300][>#b6b.xb[*] -200][>#b6b.xv[*] +100][>#b6b.fast +250][!#b6b.lb[3] glow,#2FDCAABF,blur=17 +200][=#b6b.lb[3] +600][♪chime -3.1dB +200]ライトが2.89秒で最速です。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[4] #prog.lab[5] -500ms]本番のテキスト80本では、[>#b6a.ab[*] -150ms][>#b6a.av[*] +350ms][>#b6a.eq +1000ms]一致率は同じ水準で、[>#b6a.nk -200ms][>#b6a.z[*]][♪pop -3.1dB +350ms]雑音もゼロ件。[silence:0.25s]
+@: [>#b6b.lb[*] +230ms][>#b6b.lv[*] +730ms]遅延の中央値は、[>#b6b.sh -350ms][>#b6b.xl[*] -300ms][>#b6b.xb[*] -200ms][>#b6b.xv[*] +100ms][>#b6b.fast +250ms][!#b6b.lb[3] glow,#2FDCAABF {blur: 17} +200ms][=#b6b.lb[3] +600ms][♪chime -3.1dB +200ms]ライトが2.89秒で最速です。[silence:0.3s]
 
 # voice — 「0.885」で点が滑り込み「同じ声」で 0.81 と括弧とチェック → 30 の点 → 「男性」で注意の板・「低め」で線が下がる
 *** voice
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[5] #prog.lab[6] -500]声の類似度は[>#b7a.mt]0.885で、[>#b7a.mg -550][>#gap -100][>#b7a.gs +150][>#b7a.same +450][♪pop -3.1dB +200]同じ声として扱えます。[silence:0.25s]
-@: [>#b7b -550][>#b7b.d30[*] -200][>#b7b.m30 +250]ただ、[>#b7c -150][>#pl1 +300][>#b7c.p31 +400][>#b7c.p38 +400][♪tense -1.9dB]男性の声は、3.8で[>#pdrop -200][>#plow +200][>#b7c.wv][>#b7c.wk +200]低めになるものがあります。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[5] #prog.lab[6] -500ms]声の類似度は[>#b7a.mt]0.885で、[>#b7a.mg -550ms][>#gap -100ms][>#b7a.gs +150ms][>#b7a.same +450ms][♪pop -3.1dB +200ms]同じ声として扱えます。[silence:0.25s]
+@: [>#b7b -550ms][>#b7b.d30[*] -200ms][>#b7b.m30 +250ms]ただ、[>#b7c -150ms][>#pl1 +300ms][>#b7c.p31 +400ms][>#b7c.p38 +400ms][♪tense -1.9dB]男性の声は、3.8で[>#pdrop -200ms][>#plow +200ms][>#b7c.wv][>#b7c.wk +200ms]低めになるものがあります。[silence:0.3s]
 
 # usage — 「日本語」でドーナツ・「単一話者」で人の形と売りの板・「使っていません」で取り消し線と未使用の札
 *** usage
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[6] #prog.lab[7] -500]使い方は、[>#b8a -450][>#arc97 -50][>#b8a.p97 +250][>#b8a.ft +800]日本語が97%で、[>#b8b -450][>#b8b.pr -150][>#b8b.bw][>#b8b.ft +350][>#b8c +190][>#b8c.fes.fe[*] +440]単一話者。フラッシュの売りは、[!#b8c.fes.fe[1].n strike,#B6BFCE][!#b8c.fes.fe[2].n strike,#B6BFCE +140][!#b8c.fes.fe[3].n strike,#B6BFCE +280][>#b8c.fes.fe[1].un +100][>#b8c.fes.fe[2].un +240][>#b8c.fes.fe[3].un +380][!#b8c.fes.fe[1].n recolor,#EEF2F873 +150][!#b8c.fes.fe[2].n recolor,#EEF2F873 +290][!#b8c.fes.fe[3].n recolor,#EEF2F873 +430][>#b8c.ft +500][♪pop -3.1dB +150]使っていません。[silence:0.3s]
+@n: [silence:0.5s][chap #prog.lab[6] #prog.lab[7] -500ms]使い方は、[>#b8a -450ms][>#arc97 -50ms][>#b8a.p97 +250ms][>#b8a.ft +800ms]日本語が97%で、[>#b8b -450ms][>#b8b.pr -150ms][>#b8b.bw][>#b8b.ft +350ms][>#b8c +190ms][>#b8c.fes.fe[*] +440ms]単一話者。フラッシュの売りは、[!#b8c.fes.fe[1].n strike,#B6BFCE][!#b8c.fes.fe[2].n strike,#B6BFCE +140ms][!#b8c.fes.fe[3].n strike,#B6BFCE +280ms][>#b8c.fes.fe[1].un +100ms][>#b8c.fes.fe[2].un +240ms][>#b8c.fes.fe[3].un +380ms][!#b8c.fes.fe[1].n recolor,#EEF2F873 +150ms][!#b8c.fes.fe[2].n recolor,#EEF2F873 +290ms][!#b8c.fes.fe[3].n recolor,#EEF2F873 +430ms][>#b8c.ft +500ms][♪pop -3.1dB +150ms]使っていません。[silence:0.3s]
 
 # retry — 「35%」「フラッシュ」「ライト」で縦棒・「63本」で 63 マス・「4本」で矢印と 4、59 マスが下から沈み 4 マスが濃い琥珀で残る
 *** retry
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[7] #prog.lab[8] -500]失敗テキストを合成し直すと、使える率が[>#b9a.vb[1]][>#b9a.vv[1] +500][♪swell -3.7dB]35%から、[>#b9a.vb[2]][>#b9a.vv[2] +500]フラッシュ72%、[>#b9a.vb[3]][>#b9a.vv[3] +500]ライト64%に。[silence:0.25s]
-@: [>#b9b -170]内容ブロックも、[>#b9b.from -100][>#b9b.kc[*] -50][>#b9b.cell[*] -6]63本から[>#arr9 -350][>#arr9h -50][>#b9b.to][!#b9b.cell[*] to,{opacity:0.14, scale:0.72, duration:0.3, ease:'power1.in', stagger:{each:0.005, from:'end'}} +50][!#b9b.kc[*] to,{backgroundColor:'#FFB547', scale:1.12, duration:0.3} +400][♪accent -2.5dB +450]4本に。[silence:1.0s]
+@n: [silence:0.5s][chap #prog.lab[7] #prog.lab[8] -500ms]失敗テキストを合成し直すと、使える率が[>#b9a.vb[1]][>#b9a.vv[1] +500ms][♪swell -3.7dB]35%から、[>#b9a.vb[2]][>#b9a.vv[2] +500ms]フラッシュ72%、[>#b9a.vb[3]][>#b9a.vv[3] +500ms]ライト64%に。[silence:0.25s]
+@: [>#b9b -170ms]内容ブロックも、[>#b9b.from -100ms][>#b9b.kc[*] -50ms][>#b9b.cell[*] -6ms]63本から[>#arr9 -350ms][>#arr9h -50ms][>#b9b.to][!#b9b.cell[*] to,{opacity:0.14, scale:0.72, duration:0.3, ease:'power1.in', stagger:{each:0.005, from:'end'}} +50ms][!#b9b.kc[*] to,{backgroundColor:'#FFB547', scale:1.12, duration:0.3} +400ms][♪accent -2.5dB +450ms]4本に。[silence:1.0s]
 
 # verdict — 札 3 枚が語ごとに組み上がり、最後に要約の 1 行と罫・黒へ溶けて終わる
 *** verdict
 se pad -2.5dB
-@n: [silence:0.5s][chap #prog.lab[8] #prog.lab[9] -500]結論です。[>#c1 -450][>#c1.no -300][>#c1.rm][♪chime -3.1dB]ライトを主力に、[>#arr10 -350][>#arr10h -50][>#c1.ra -300][>#c1.rs]フラッシュは失敗時の切り札に。[silence:0.25s]
-@: [>#c2 -450][>#c2.no -300][>#c2.fr +50]月額は923ドルから[>#c2.fs -150][>#c2.ar][>#c2.to +150][♪accent -2.5dB +700]約300ドルへ。[>#c2.y27]2027年でも600ドル弱です。[silence:0.25s]
-@: [>#c3 -450][>#c3.no -300][>#c3.q1 -50][♪chime -3.1dB -150]品質は同じで、[>#c3.q2 +50]速度はライトが最速。[>#c3.cau -100][!#c3.cau glow,#FFB54773,blur=23 +500][=#c3.cau +950]男性の声の低音化だけ、[>#er +700][>#el +800]確認しましょう。[silence:2.8s]
-fade out,900
+@n: [silence:0.5s][chap #prog.lab[8] #prog.lab[9] -500ms]結論です。[>#c1 -450ms][>#c1.no -300ms][>#c1.rm][♪chime -3.1dB]ライトを主力に、[>#arr10 -350ms][>#arr10h -50ms][>#c1.ra -300ms][>#c1.rs]フラッシュは失敗時の切り札に。[silence:0.25s]
+@: [>#c2 -450ms][>#c2.no -300ms][>#c2.fr +50ms]月額は923ドルから[>#c2.fs -150ms][>#c2.ar][>#c2.to +150ms][♪accent -2.5dB +700ms]約300ドルへ。[>#c2.y27]2027年でも600ドル弱です。[silence:0.25s]
+@: [>#c3 -450ms][>#c3.no -300ms][>#c3.q1 -50ms][♪chime -3.1dB -150ms]品質は同じで、[>#c3.q2 +50ms]速度はライトが最速。[>#c3.cau -100ms][!#c3.cau glow,#FFB54773 {blur: 23} +500ms][=#c3.cau +950ms]男性の声の低音化だけ、[>#er +700ms][>#el +800ms]確認しましょう。[silence:2.8s]
+fade out,900ms
 ```

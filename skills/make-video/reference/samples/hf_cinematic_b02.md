@@ -31,7 +31,7 @@ bgm#music(duck: -7; fade: 1400,160) 温かく穏やかで少し切ない、ゆ�
 # 凍る沈黙の後に同じ曲を別の箇所 (句の終わり) から入れ直す
 bgm#music_b(duck: -7; fade: 1000,1100) 温かく穏やかで少し切ない、ゆっくりしたピアノソロのポップ、68 BPM、青春の日常や回想の場面向け
 # 字幕: 下の黒帯の中央に細い角ゴシックの生成り色・黒の柔らかい影・板なし・札は文ごとに 0.12 秒で出入り
-subtitle.hug(bottom: 28px; font-size: 36px; letter-spacing: 0.08em; color: $sub; background: none; text-align: center; text-shadow: 0px 0px 8px #000000CC; unit: sentence; lead: 0; tail: 0; hold: off; in: {opacity:0, duration:0.12, ease:'none'}; out: {opacity:0, duration:0.12, ease:'none'})
+subtitle.hug(bottom: 28px; font-size: 36px; letter-spacing: 0.08em; color: $sub; background: none; text-align: center; text-shadow: 0px 0px 8px #000000CC; unit: sentence; lead: 0ms; tail: 0ms; hold: off; in: {opacity:0, duration:0.12, ease:'none'}; out: {opacity:0, duration:0.12, ease:'none'})
 # 全編の質感 (常設・最前面の段・書いた順に重なる)
 # 窓明かりの漏れ: 右上の暖色の光を screen で重ねてゆっくり呼吸させる (hf はショットごとに 0.55 → 0.85 → 0.6)
 div#leak_r(inset: 0; background: radial(#FFD0968C,#FFD09633@45%,#FFD09600@100%,82%,18%); mix-blend-mode: screen; opacity: 0.7; z-index: front; in: none; main: sine {opacity: 0.15, period: 4.4})
@@ -87,37 +87,37 @@ cast boy_a = "明るくエネルギーのある10代後半の男子高校生の�
 cast girl_b = "明るく元気で高めのピッチの10代の女子高校生の声、ハキハキした滑舌" manner="笑いながら悔しがる、女子高校生の自然な声で"
 cast eri = "明るく澄んだ高めのピッチの10代後半の女子高校生の声、クリアで柔らかい" manner="少し照れながらも、みんなと声を揃えて笑顔で"
 # 声の端の無音は 0 (掛け合いの間は台詞の [silence] で書く)
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** quiz
 [>#subtitle]
-fade in,500
+fade in,500ms
 bgm music
-se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=13s fade=600,500
-@ruki: [speed:108%][>#establish +960][>#leak_l +960][!#leak_r to,{opacity:0, duration:0.25, ease:'none'} +960][<#curtain +1210][silence:2.0s]じゃあ次。[>#ruki_quiz -40][<#establish -40][<#leak_l -40][!#leak_r to,{opacity:0.7, duration:0.04} -40]細胞の中でエネルギーをつくる、細胞小器官は？
+se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=13s fade=600ms,500ms
+@ruki: [speed:108%][>#establish +960ms][>#leak_l +960ms][!#leak_r to,{opacity:0, duration:0.25, ease:'none'} +960ms][<#curtain +1210ms][silence:2.0s]じゃあ次。[>#ruki_quiz -40ms][<#establish -40ms][<#leak_l -40ms][!#leak_r to,{opacity:0.7, duration:0.04} -40ms]細胞の中でエネルギーをつくる、細胞小器官は？
 
 *** answer
 @girl_a: [silence:0.05s]ミトコンドリア！
 @boy_a: はやっ！
-@girl_b: [speed:104%][>#eri_walk +850][<#group_shot +850][♪"上履きで教室の床を歩く柔らかい足音" -8dB +850 to=2.2s fade=80,250]言おうと思ったのにー！[silence:0.6s]
+@girl_b: [speed:104%][>#eri_walk +850ms][<#group_shot +850ms][♪"上履きで教室の床を歩く柔らかい足音" -8dB +850ms to=2.2s fade=80ms,250ms]言おうと思ったのにー！[silence:0.6s]
 
 *** sorry
-se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=13s fade=600,500
-@ruki: [manner:慌てて立ち上がりながら、照れくさそうに、でもはっきりと][♪"椅子を後ろに引くガタッという音" -3dB][silence:0.35s][!#ruki_stand shake,2,duration=260 -300]あ、ごめん[silence:0.1s][>#eri_close][<#ruki_stand][silence:1.3s][>#ruki_close][<#eri_close][silence:1.08s]
+se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=13s fade=600ms,500ms
+@ruki: [manner:慌てて立ち上がりながら、照れくさそうに、でもはっきりと][♪"椅子を後ろに引くガタッという音" -3dB][silence:0.35s][!#ruki_stand shake {x: 2, duration: .26} -300ms]あ、ごめん[silence:0.1s][>#eri_close][<#ruki_stand][silence:1.3s][>#ruki_close][<#eri_close][silence:1.08s]
 
 *** tease
 @girl_a: [manner:いたずらっぽく、にやにやしながら、軽いテンポでからかうように][speed:103%][silence:0.13s]えりちゃん、カド ルキに座られて嬉しいもんね
 [<#music]
 
 *** freeze
-@ruki: [♪"残響のある掛け時計の秒針の音、チッ、チッとゆっくり刻む" -2dB +50 to=4.2s fade=0,500][silence:2.05s][>#avert][<#freeze_shot][silence:1.8s]
+@ruki: [♪"残響のある掛け時計の秒針の音、チッ、チッとゆっくり刻む" -2dB +50ms to=4.2s fade=0ms,500ms][silence:2.05s][>#avert][<#freeze_shot][silence:1.8s]
 
 *** resume
 bgm music_b
-se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=6s fade=600,500
+se "朝のスズメのさえずり、チュンチュンと軽やかな屋外の環境音" -10dB to=6s fade=600ms,500ms
 subtitle "じゃ、じゃあ次！ 血液の中で酸素を運ぶ細胞は？"
-@ruki: [manner:照れ隠しで少し早口に、気を取り直して明るく][speed:112%][♪"紙のプリントを持ち上げるカサッという乾いた音" -6dB +30][silence:0.2s]じゃ、じゃあ次！[||]血液の中で酸素を運ぶ細胞は？
-@eri: [silence:0.14s][>#eri_smile +620][<#resume_shot +620][♪"遠くで鳴る学校のチャイム、ゆっくりした鐘の音" -3dB +350 to=1.9s fade=0,700]赤血球！
+@ruki: [manner:照れ隠しで少し早口に、気を取り直して明るく][speed:112%][♪"紙のプリントを持ち上げるカサッという乾いた音" -6dB +30ms][silence:0.2s]じゃ、じゃあ次！[||]血液の中で酸素を運ぶ細胞は？
+@eri: [silence:0.14s][>#eri_smile +620ms][<#resume_shot +620ms][♪"遠くで鳴る学校のチャイム、ゆっくりした鐘の音" -3dB +350ms to=1.9s fade=0ms,700ms]赤血球！
 @girl_b: [<#subtitle][manner:楽しそうに思わず笑う]あははっ
-fade out,600
+fade out,600ms
 ```

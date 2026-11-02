@@ -4,20 +4,21 @@
 
 ```design.txt
 #v2
-# 計画: 明の地 (生成りの紙)・主色は深緑 (見直し後・浮く額)・前の数字は温かい灰。editable: 要素 25/cut・動きは preset と単純 object だけ
+# 計画: 明の地 (生成りの紙)・主色は深緑 (見直し後・浮く額)・前の数字は温かい灰。editable: 動きは preset と単純 object だけ
 # 書体 太い角ゴシック (見出し) + 細い欧文 sans (大きな数字) + 細い角ゴシック (注記)・写真は全面 + 紙色の幕・図は幕の上に板なし
 canvas 1920x1080 bg=#F4F1EA
+lint profile=editable
 theme light
 palette a=#1E6B52 a2=#CFE3D7 b=#B5643C ink=#1D2B33 paper=#F4F1EA mute=#8C8A84 line=#D9D3C7 card=#FFFFFF
 font "太い角ゴシック体、端正で引き締まったビジネス文書の印象"
 fonts e="細いサンセリフの欧文、数字が揃う端正な書体" m="細い角ゴシック体、本文向き"
 photo_style "実写の写真、日本の明るい住まい、柔らかな自然光、落ち着いた中間色、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、画面に文字を表示しない"
-motion title { in: {y:-36, opacity:0, duration:0.7, ease:'power3.out'}; out: fade {duration:0.3} }
-motion big { in: {scale:0.92, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.3} }
-motion div { in: {y:27, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration:0.26} }
-motion row { in: {x:-45, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration:0.24} }
-motion note { in: {opacity:0, duration:0.45, ease:'power2.out'}; out: fade {duration:0.24} }
+motion title { in: fade {duration:0.7}; out: fade {duration:0.3} }
+motion big { in: zoom {ease:'back.out', fade:true, duration:0.6}; out: fade {duration:0.3} }
+motion div { in: rise {duration:0.6}; out: fade {duration:0.26} }
+motion row { in: rise {duration:0.5}; out: fade {duration:0.24} }
+motion note { in: fade {duration:0.45}; out: fade {duration:0.24} }
 div { in: div; border-radius: 18px; background: $card; border: 2px solid $line }
 cut { stagger: sentence }
 def h1(t) = p(font-size: 90px; line-height: 1.2; color: $ink; in: title; content: {t})
@@ -27,7 +28,7 @@ def paper = veil(color: #F4F1EA; opacity: 0.6)
 # 横棒の段 (×N で並べ、印は #名[k]): 札 + 棒 (幅 = 値 ÷ 最大 × 50% — 段の幅の比・棒は左から伸びる) + 棒の右端に値
 def hbar(v, t, n, c=$a) = div(width: 1110px; height: 90px; background: none; border: none)
   p#t(left: 0px; cy: 50%; width: 300px; font-size: 39px; color: $ink; text-align: right; content: {t})
-  div#b(left: 330px; cy: 50%; width: {v}%; height: 60px; border-radius: 6px; background: {c}; border: none; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
+  div#b(left: 330px; cy: 50%; width: {v}%; height: 60px; border-radius: 6px; background: {c}; border: none; in: wipe {duration:0.6})
   p#n(left: .b.right+18; cy: 50%; font-size: 39px; font-family: e; color: {c}; content: {n})
 # 年間の差の札 (右の板): 題 + 大きな数字 + 式
 def diff(v, s) = div(width: 534px; height: 375px)
@@ -42,7 +43,7 @@ section#open
 img#op_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '64% 48%']}) [photo]木のダイニングテーブルに広げた家計簿のノートと公共料金の請求書と電卓、30代夫婦の手元だけ、朝の自然光
 veil#op_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.45)
 kick#op_k(left: 108px; top: 225px) HOUSEHOLD FIXED COSTS
-shape#op_r(left: 108px; top: 279px; width: 144px; height: 4px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.7})
+div#op_r(left: 108px; top: 279px; width: 144px; height: 4px; background: $a; in: wipe {dir: 'right', duration: 0.7})
 h1#op_h(left: 108px; top: 321px; width: 960px; font-weight: 700) 固定費を見直すと、[br]年間いくら浮く?
 sub#op_s(left: 108px; top: 570px) 30 代夫婦のモデルケース (架空) で試算
 
@@ -108,19 +109,19 @@ div#cl_c(left: "108px;428px;748px"; top: 570px; width: 270px; height: 105px; in:
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた30代女性のナレーター、明瞭で知的なビジネス向けの解説口調" speed=105%
-transition = dissolve,300,overlap=300
+transition = dissolve {duration: .3, overlap: .3}
 
 *** open
 [>#subtitle]
 bgm music
-se "静かな朝の室内の環境音、遠くの鳥の声" -8dB to=8s fade=300,1500
+se "静かな朝の室内の環境音、遠くの鳥の声" -8dB to=8s fade=300ms,1500ms
 @narrator: [silence:+0.4s]毎月、自動で出ていく固定費。
 @: [>#op_h]見直すと、一年でいくら浮くのでしょうか。[silence:0.6s]
 
 *** model
 @narrator: [silence:+0.3s]架空の30代夫婦をモデルに、[>#md_r[1]]スマホ、[>#md_r[2]]電気、[>#md_r[3]]サブスクの三つを見直します。
 @: [>#md_d]三つ合わせて、今は毎月3万300円です。[silence:0.5s]
-transition wipe,600,dir=left,overlap=600
+transition wipe {duration: .6, dir: 'left', overlap: .6}
 
 *** phone
 @narrator: [silence:+0.3s]まずはスマホ。[>#ph_c[1]]大手キャリアで2人、月1万6000円。
@@ -136,13 +137,13 @@ transition wipe,600,dir=left,overlap=600
 @narrator: [silence:+0.3s]最後はサブスク。使っていない動画と音楽の三本を、
 @: 解約して、[>#sb_c[1]]月3300円が、[>#sb_c[2]]0円に。
 @: 一年で、[>#sb_d]3万9600円です。[silence:0.5s]
-transition dip,400
+transition dissolve {duration: .4}
 [<#music]
 
 *** total
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.4s][>#tt_c[*] {stagger:{each:0.12}}]三つを合わせると、[>#tt_d][♪"キラリン 21" -2dB]一年で19万800円。
-@: [!#tt_c[1] focus][>#tt_d.s +0]スマホだけで、その7割を占めます。[silence:0.6s]
+@: [>#tt_d.s +0ms]スマホだけで、その7割を占めます。[silence:0.6s]
 
 *** month
 @narrator: [silence:+0.4s][>#mo_h]これは、月の手取りの1か月分近く。
@@ -150,5 +151,5 @@ bgm music2 -1500
 
 *** close
 @narrator: [silence:+0.4s]全部を一度にやる必要はありません。
-@: [>#cl_h]まず1つだけ、[!#cl_c[1] check][♪"決定音" -6dB]今週やってみませんか。[silence:2.5s]
+@: [>#cl_h]まず1つだけ、[♪"決定音" -6dB]今週やってみませんか。[silence:2.5s]
 ```

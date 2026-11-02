@@ -8,17 +8,18 @@
 # 全編の主役は同じ 1 つの L 字ブラケット (基準画像 part) — ワイヤーフレーム / 実物 / 点群 / メッシュ と姿を変えて「向き」の違いを見せる
 # 書体 太い角ゴシック (見出し) + 太い等幅 (数字・英字の小見出し) + 細い角ゴシック (注記)
 canvas 1920x1080 bg=#12161C
+lint profile=editable
 theme dark
 palette a=#F28C28 b=#2EC4B6 bg=#12161C ink=#EEF1F4 mute=#9AA4B1 line=#2A313B panel=#1A1F27E8 ok=#2EC4B6 bad=#E5484D a_t=#F28C2829 b_t=#2EC4B629
 font "太い角ゴシック体、すっきりした現代的な印象"
 fonts e="太い等幅のモノスペース体、数字がそろう" m="細い角ゴシック体、本文向き"
 photo_style "製品の3DCGレンダー、マットな質感、柔らかいスタジオ照明、暗いグラファイトの背景、浅い被写界深度"
 prompt_tail "文字なし、ロゴなし、人物なし"
-motion title { in: {y:-60, scale:0.94, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-24, opacity:0, duration:0.24} }
-motion big { in: {scale:0.6, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
-motion div { in: {y:36, opacity:0, duration:0.45, ease:'power3.out'}; out: fade {duration:0.22} }
-motion row { in: {x:-90, opacity:0, duration:0.4, ease:'power2.out'}; out: fade {duration:0.2} }
-motion note { in: {y:21, opacity:0, duration:0.35, ease:'power2.out'}; out: fade {duration:0.2} }
+motion title { in: zoom {fade:true, duration:0.55}; out: fade {duration:0.24} }
+motion big { in: zoom {ease:'back.out', fade:true, duration:0.45}; out: fade {duration:0.22} }
+motion div { in: rise {duration:0.45}; out: fade {duration:0.22} }
+motion row { in: rise {duration:0.4}; out: fade {duration:0.2} }
+motion note { in: rise {duration:0.35}; out: fade {duration:0.2} }
 div { in: div; border-radius: 21px; border: 2px solid $line; background: $panel }
 cut { stagger: sentence }
 def h1(t) = p(font-size: 84px; line-height: 1.15; color: $ink; in: title; content: {t})
@@ -52,8 +53,8 @@ section#goal
 img#gl_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo][ref:@part]同じ部品の3Dモデルが大きなモニターに表示された作業机、暗い部屋、モニターの光
 num#gl_n(left: 120px; top: 165px) COMMON
 h1#gl_h(left: 120px; top: 225px; font-weight: 700) ゴールは同じ
-div#gl_c(left: 120px; top: 390px; width: 840px; height: 225px; in: rise {y: 36, duration: 0.5})
-  shape#bg(left: 42px; cy: 50%; width: 132px; height: 132px; path: rect,r=0.5; background: $a_t)
+div#gl_c(left: 120px; top: 390px; width: 840px; height: 225px; in: rise {duration: 0.5})
+  div#bg(left: 42px; cy: 50%; width: 132px; height: 132px; border-radius: 33px; background: $a_t)
   icon#i(left: 69px; cy: 50%; font-size: 78px; name: cube; color: $a)
   p#t(left: 210px; cy: 50%; font-size: 51px; color: $ink; line-height: 1.3) パソコンの中の[br]部品の3Dデータ
 body#gl_q(left: 120px; top: 690px) ちがうのは 出発点
@@ -63,7 +64,7 @@ section#f_intro
 img#fi_bg(inset: 0; scrim: 0.5; main: kb {scale: [1, 1.06], focus: ['65% 50%', '68% 48%']}) [photo]方眼紙に描いた鉛筆のスケッチから、橙に光る線の L 字ブラケットの3Dモデルが立ち上がる様子、グラファイトの机
 num#fi_n(left: 120px; top: 225px) 01  FORWARD
 h1#fi_h(left: 120px; top: 285px; font-size: 96px; font-weight: 700) 通常の[br]CADモデリング
-shape#fi_r(left: 120px; top: 555px; width: 240px; height: 4px; path: line_h; background: $a; border: 4px solid $a; in: wipe {dir: 'right', duration: 0.7})
+div#fi_r(left: 120px; top: 555px; width: 240px; height: 4px; background: $a; in: wipe {dir: 'right', duration: 0.7})
 sub#fi_s(left: 120px; top: 600px) アイデアから、ゼロで形を組み立てる
 pill#fi_p(left: 120px; top: 705px) アイデア → 3Dデータ
 
@@ -83,8 +84,8 @@ p#fd_st(left: 120px; top: 705px; font-size: 45px; color: $ink; background: $a_t;
 section#f_use
 img#fu_bg(inset: 0; scrim: 0.55; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]新しい製品の試作品がいくつか並ぶ開発室の机、3D プリンタ、暖かい光
 note#fu_n(left: 120px; top: 225px) 通常の CAD が向いているのは
-div#fu_c(left: 120px; top: 300px; width: 960px; height: 225px; in: rise {y: 36, duration: 0.5})
-  shape#bg(left: 42px; cy: 50%; width: 132px; height: 132px; path: rect,r=0.5; background: $a_t)
+div#fu_c(left: 120px; top: 300px; width: 960px; height: 225px; in: rise {duration: 0.5})
+  div#bg(left: 42px; cy: 50%; width: 132px; height: 132px; border-radius: 33px; background: $a_t)
   icon#i(left: 69px; cy: 50%; font-size: 78px; name: lightbulb; color: $a)
   p#t(left: 210px; cy: 50%; font-size: 54px; color: $ink; line-height: 1.3) 新しい製品を[br]一から設計する
 pill#fu_p(left: 120px; top: 585px; transform: rotate(-4deg)) NEW DESIGN
@@ -93,7 +94,7 @@ section#r_intro
 img#ri_bg(inset: 0; scrim: 0.5; main: kb {scale: [1, 1.06], focus: ['65% 50%', '66% 52%']}) [photo][ref:@part]同じ部品の使い込まれた実物、表面に細かな傷と摩耗、作業台の上に置かれている、横からの柔らかい光
 num#ri_n(left: 120px; top: 225px; color: $b) 02  REVERSE
 h1#ri_h(left: 120px; top: 285px; font-size: 96px; font-weight: 700) リバース[br]モデリング
-shape#ri_r(left: 120px; top: 555px; width: 240px; height: 4px; path: line_h; background: $b; border: 4px solid $b; in: wipe {dir: 'left', duration: 0.7})
+div#ri_r(left: 120px; top: 555px; width: 240px; height: 4px; background: $b; in: wipe {dir: 'left', duration: 0.7})
 sub#ri_s(left: 120px; top: 600px) 今ある実物から出発する
 pill#ri_p(left: 120px; top: 705px; background: $b) 実物 → 3Dデータ
 
@@ -101,7 +102,7 @@ section#r_scan
 img#rs_bg(inset: 0; scrim: 0.45; main: kb {scale: [1, 1.08], focus: ['60% 50%', '62% 48%']}) [photo][ref:@part]同じ部品に青緑の縞模様の光を当てる据え置き型の3Dスキャナー、暗い作業室
 pill#rs_t(left: 120px; top: 165px; background: $b) STEP 1  測る
 h1#rs_h(left: 120px; top: 255px; font-size: 72px; font-weight: 700) 3Dスキャナーで測る
-div#rs_c(left: 120px; top: 420px; width: 720px; height: 300px; in: rise {y: 36, duration: 0.5})
+div#rs_c(left: 120px; top: 420px; width: 720px; height: 300px; in: rise {duration: 0.5})
   p#v(left: 42px; top: 39px; font-size: 108px; font-family: e; color: $b) 300,000
   p#k(left: 45px; top: 186px; font-size: 39px; font-family: m; color: $mute) 点の位置を一気に読み取る (例)
 
@@ -110,8 +111,8 @@ img#rm_bg(inset: 0; scrim: 0.4; main: kb {scale: [1, 1.05], focus: ['30% 50%', '
 pill#rm_t(left: 120px; top: 135px; background: $b) STEP 2  つなぐ
 h1#rm_h(left: 120px; top: 219px; font-size: 72px; font-weight: 700) 点 → 三角形の面
 pill#rm_l1(left: 120px; top: 780px; background: #12161C; color: $b; border: 3px solid $b) 点群
-shape#rm_a(left: 840px; top: 495px; width: 210px; height: 90px; path: arrow_r; background: $b; border: none; in: wipe {dir: 'right', duration: 0.5})
-div#rm_m(left: 1110px; top: 225px; width: 690px; height: 540px; overflow: hidden; in: zoom)
+shape#rm_a(left: 840px; top: 495px; width: 210px; height: 90px; shape: arrow; background: $b; border: none; in: wipe {dir: 'right', duration: 0.5})
+div#rm_m(left: 1110px; top: 225px; width: 690px; height: 540px; in: zoom)
   img#img(left: 0px; top: 0px; width: 690px; height: 540px) [photo][ref:@part]同じ部品の形をした細かい三角形のポリゴンメッシュ、青緑の線、暗い空間
 
 section#r_cad
@@ -135,7 +136,7 @@ section#r_use
 img#ru_bg(inset: 0; scrim: 0.6; main: kb {scale: [1, 1.05], focus: ['50% 50%', '']}) [photo]棚に並んだ古い機械部品と、手で削った木の試作品、柔らかい光の作業場
 note#ru_n(left: 120px; top: 144px) リバースが活きる場面
 div#ru_c(left: 120px; top: "225px;425px;625px"; width: 1050px; height: 180px; in: div) ×3
-  shape#bg(left: 30px; cy: 50%; width: 96px; height: 96px; path: rect,r=0.5; background: $b_t)
+  div#bg(left: 30px; cy: 50%; width: 96px; height: 96px; border-radius: 24px; background: $b_t)
   icon#i(left: 51px; cy: 50%; font-size: 54px; name: "clock-counter-clockwise;hand;puzzle-piece"; color: $b)
   p#t(left: 162px; cy: 50%; font-size: 48px; color: $ink) 図面のない古い部品;手作りの試作品;実物どうしの合わせ
 
@@ -172,18 +173,18 @@ p#cl_t(left: 120px; top: 630px; width: 1680px; font-size: 66px; color: $ink; tex
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた30代女性のナレーター、明るく親しみやすい解説口調、はっきりした発音" speed=108% manner="語りかけるように、やわらかく"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 
 *** open
 [>#subtitle]
 bgm music
 @narrator: [silence:+0.3s]CADモデリングと、リバースモデリング。何がちがうのでしょう。
-@: [>#op_f]どちらも3Dデータを作る方法ですが、[>#op_g][>#op_s]進む向きが、[!#op_g punch]正反対なんです。
+@: [>#op_f]どちらも3Dデータを作る方法ですが、[>#op_g][>#op_s]進む向きが、正反対なんです。
 
 *** goal
-@narrator: [silence:+0.3s]まずは共通点から。どちらも最後は、パソコンの中に、[>#gl_c]部品の3Dデータを[!#gl_c check]作ります。
+@narrator: [silence:+0.3s]まずは共通点から。どちらも最後は、パソコンの中に、[>#gl_c]部品の3Dデータを作ります。
 @: [>#gl_q]ちがうのは、どこから出発するか、です。[silence:+0.6s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** f_intro
 @narrator: [silence:+0.3s]一つ目は、通常のCADモデリング。
@@ -191,44 +192,44 @@ transition wipe,600,dir=left
 
 *** f_flow
 @narrator: [silence:+0.3s]流れはシンプルです。[>#ff_f[1]]スケッチを描き、[>#ff_f[2]]寸法を決めて、[>#ff_f[3]]押し出しや穴あけで立体にします。
-@: [>#ff_f[4]]そのデータをもとに、[!#ff_f[4] tint,$a]製品を作ります。
+@: [>#ff_f[4]]そのデータをもとに、製品を作ります。
 
 *** f_dim
 @narrator: [silence:+0.3s]ポイントは、寸法がすべて「狙った値」だということ。
-@: [>#fd_v1]穴の直径は10ミリ、[>#fd_v2]幅は50ミリ。[!#fd_v1 frame,$a]
-@: 設計者が決めた数字が、[>#fd_st]そのまま[!#fd_st punch +500]データになります。
+@: [>#fd_v1]穴の直径は10ミリ、[>#fd_v2]幅は50ミリ。
+@: 設計者が決めた数字が、[>#fd_st]そのままデータになります。
 
 *** f_use
-@narrator: [silence:+0.3s]だから、[>#fu_c]新しい製品を[>#fu_p +600]一から設計するときに、[!#fu_c tint,$a]ぴったりです。[silence:+0.6s]
-transition wipe,600,dir=left
+@narrator: [silence:+0.3s]だから、[>#fu_c]新しい製品を[>#fu_p +600ms]一から設計するときに、ぴったりです。[silence:+0.6s]
+transition wipe {duration: .6, dir: 'left'}
 
 *** r_intro
 @narrator: [silence:+0.3s]二つ目は、リバースモデリング。こちらは、向きが逆です。
 @: [>#ri_s]すでにある実物から出発して、[>#ri_p]3Dデータを作り直します。
 
 *** r_scan
-se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fade=300,1500
+se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#rs_h]まずは、3Dスキャナーで実物を[>#rs_t]測ります。
-@: [♪"スキャナーが光を走らせる短い電子音" -6dB][!#rs_bg zoom_media,1.1]表面に光を当てて、[>#rs_c]何十万もの点の位置を、[!#rs_c pulse]一気に読み取ります。
+@: [♪"スキャナーが光を走らせる短い電子音" -6dB]表面に光を当てて、[>#rs_c]何十万もの点の位置を、一気に読み取ります。
 
 *** r_mesh
 @narrator: [silence:+0.3s]読み取った点の集まりを、[>#rm_l1]点群と呼びます。
-@: [>#rm_a][>#rm_t][>#rm_h]点と点をつなぐと、[>#rm_m]細かい三角形で覆われた、[!#rm_m frame,$b]メッシュになります。
+@: [>#rm_a][>#rm_t][>#rm_h]点と点をつなぐと、[>#rm_m]細かい三角形で覆われた、メッシュになります。
 
 *** r_cad
 @narrator: [silence:+0.3s]ただし、[>#rc_w]メッシュは、あくまで表面の形だけ。
 @: そこで、[>#rc_c[1]]平らな所には平面、[>#rc_c[2]]丸い所には円筒を当てはめて、[>#rc_st]編集できるCADデータに作り直します。
-@: [!#rc_st punch]ここが、リバースモデリングの中心です。
+@: ここが、リバースモデリングの中心です。
 
 *** r_dim
 @narrator: [silence:+0.3s]そして、ここでの寸法は「測った値」です。
-@: [>#rd_v1]穴は10.03ミリ、[>#rd_v2]幅は49.8ミリ。[!#rd_v1 frame,$b]
+@: [>#rd_v1]穴は10.03ミリ、[>#rd_v2]幅は49.8ミリ。
 @: [>#rd_m]実物のわずかなズレや摩耗も、データに入ってきます。
 
 *** r_use
-@narrator: [silence:+0.3s][>#ru_n]リバースモデリングが役立つのは、[>#ru_c[1] check]図面が残っていない、古い部品の復元。
+@narrator: [silence:+0.3s][>#ru_n]リバースモデリングが役立つのは、[>#ru_c[1]]図面が残っていない、古い部品の復元。
 @: [>#ru_c[2]]手で作った試作品のデータ化。[>#ru_c[3]]そして、実物どうしの合わせの確認です。[silence:+0.6s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** cmp
 @narrator: [silence:+0.3s]二つを並べてみましょう。
@@ -238,10 +239,10 @@ transition wipe,600,dir=left
 [<#music]
 
 *** combo
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.3s]実際の現場では、二つを組み合わせることも多いです。
 @: [>#cb_f[1]]実物を[>#cb_f[2]]スキャンして形を取り込み、[>#cb_f[3]]そこに新しい設計を足していく。
-@: [>#cb_f[4]][!#cb_f[4] tint,$a]良いところ取りの使い方です。
+@: [>#cb_f[4]]良いところ取りの使い方です。
 
 *** close
 @narrator: [silence:+0.3s]まとめると、[>#cl_a]通常のCADは、アイデアから形へ。

@@ -57,7 +57,7 @@ run sm { font-size: 0.72em; color: $sub }
 run small { font-size: 0.8em }
 run mk { marker: #FFC24BA6,40% }
 # おさらいの札を 1 枚ずつ濃くし、顔を一度弾ませる
-cue hl(x) = [!#x to,opacity=1,duration=250][!#x.rp to,scale=1.12,duration=200,repeat=1,yoyo,ease=sine.inOut]
+cue hl(x) = [!#x to,{opacity: 1, duration: .25}][!#x.rp to,{scale: 1.12, duration: .2, repeat: 1, yoyo: true, ease: 'sine.inOut'}]
 p { color: $ink; out: none }
 div { out: none }
 img { out: none }
@@ -65,7 +65,7 @@ icon { out: none }
 shape { out: none }
 group { out: none }
 # 字幕: 白い札 (薄い縁と影)・句 (hf の / ) は台詞の [|] で切る・役の名は役の色・出入りの動きは無い
-subtitle.hug(bottom: 40px; width: 1860px; font-size: 46px; line-height: 1.35; letter-spacing: .02em; color: $ink; background: #FFFFFFF7; border: 2px solid #EBE7DE; border-radius: 20px; padding: 14px 44px 16px 44px; box-shadow: 0px 10px 30px #1E2A4A29; unit: sentence; lead: 0; tail: 250; hold: next,600; in: none; out: none)
+subtitle.hug(bottom: 40px; width: 1860px; font-size: 46px; line-height: 1.35; letter-spacing: .02em; color: $ink; background: #FFFFFFF7; border: 2px solid #EBE7DE; border-radius: 20px; padding: 14px 44px 16px 44px; box-shadow: 0px 10px 30px #1E2A4A29; unit: sentence; lead: 0ms; tail: 250ms; hold: next,600ms; in: none; out: none)
 bgm#music(fade: 350,1400; keys: "0:+6|2.65s:+6|3.15s:0|end-1.7s:0|end-1.2s:+4") 明るく軽快なピアノのリズムが刻む前向きな曲、企業の研修の解説動画向け、落ち着いたテンポ
 
 # 全編の地: 生成りの紙に薄い点の格子
@@ -73,36 +73,36 @@ div#bg_base(inset: 0; background: $bg; pattern: dots,24,#D9D4C88C; z-index: back
 
 # 役の場面の骨組み (def 4 つ)
 # 1. 右上の装飾の丸 (役の色の放射グラデ・場面の間ずっと左下へ漂う)
-def deco(c) = div(left: 1280px; top: -380px; width: 1000px; height: 1000px; background: radial({c},#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: -90, y: 60})
+def deco(c) = div(left: 1280px; top: -380px; width: 1000px; height: 1000px; background: radial({c},#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: -90, y: 60})
 # 2. 左の人物 (役の色の淡い丸 + 床の影 + 透過の人物が浮遊)
 def role_char(img, t) = group(left: 70px; top: 150px; width: 560px; height: 740px)
-  div#circle(left: 30px; top: 210px; width: 500px; height: 500px; border-radius: 1498px; background: {t}; delay: 400; in: {scale:.4, opacity:0, duration:.6, ease:'back.out(1.7)'})
-  shape#floor(left: 130px; top: 699px; width: 300px; height: 34px; border-radius: 50%; background: #1E2A4A1A; delay: 550; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
-  img#char(left: 46px; top: 26px; width: 466px; height: 700px; content: @{img}; object-fit: contain; delay: 470; in: {y:70, opacity:0, duration:.6, ease:'power3.out'}; main: sine {y: -8, period: 2.2})
+  div#circle(left: 30px; top: 210px; width: 500px; height: 500px; border-radius: 1498px; background: {t}; delay: 400ms; in: {scale:.4, opacity:0, duration:.6, ease:'back.out(1.7)'})
+  shape#floor(left: 130px; top: 699px; width: 300px; height: 34px; border-radius: 50%; background: #1E2A4A1A; delay: 550ms; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
+  img#char(left: 46px; top: 26px; width: 466px; height: 700px; content: @{img}; object-fit: contain; delay: 470ms; in: {y:70, opacity:0, duration:.6, ease:'power3.out'}; main: sine {y: -8, period: 2.2})
 # 3. 右上の見出し (ROLE 0N・略称の大字・英語の正式名と和名は略称の語で下から — 正式名の文字は実体の子 en に書く)
 def role_head(n, a, ja, c, s=100, et=54, jt=96) = group(left: 680px; top: 110px; width: 1170px; height: 202px)
-  p#chap(left: 4px; top: 0px; font-size: 26px; font-family: h; letter-spacing: .12em; color: {c}; delay: 500; in: {x:-30, opacity:0, duration:.4, ease:'power3.out'}; content: {n})
-  p#acr(left: 0px; top: 46px; font-size: {s}; font-family: h; line-height: 1; letter-spacing: -.01em; color: {c}; delay: 530; in: {x:-40, opacity:0, duration:.5, ease:'power3.out'}; content: {a})
+  p#chap(left: 4px; top: 0px; font-size: 26px; font-family: h; letter-spacing: .12em; color: {c}; delay: 500ms; in: {x:-30, opacity:0, duration:.4, ease:'power3.out'}; content: {n})
+  p#acr(left: 0px; top: 46px; font-size: {s}; font-family: h; line-height: 1; letter-spacing: -.01em; color: {c}; delay: 530ms; in: {x:-40, opacity:0, duration:.5, ease:'power3.out'}; content: {a})
   p#en(left: .acr.right+34; top: {et}; font-size: 46px; line-height: 1.15; in: {y:24, opacity:0, duration:.45, ease:'power3.out'})
   p#ja(left: .acr.right+34; top: {jt}; font-size: 30px; color: $sub; in: {y:20, opacity:0, duration:.45, ease:'power3.out'}; content: {ja})
 # 4. 下の POINT の帯 (役の色の板が左から開き、文が右から寄る)
 def sum(t, c) = group(left: 680px; top: 760px; width: 1140px; height: 104px)
   div#bg(left: 0px; top: 0px; width: 1140px; height: 104px; border-radius: 22px; background: {c}; box-shadow: 0px 14px 34px #1E2A4A2E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'})
-  p#pt(left: 34px; cy: 50%; font-size: 24px; font-family: h; letter-spacing: .1em; color: #FFFFFF; background: #14182847; border-radius: 10px; padding: 6px 16px; delay: 60; in: {opacity:0, duration:.15}) POINT
-  p#st(left: 174px; cy: 50%; font-size: 50px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 200; in: {x:30, opacity:0, duration:.45, ease:'power2.out'}; content: {t})
+  p#pt(left: 34px; cy: 50%; font-size: 24px; font-family: h; letter-spacing: .1em; color: #FFFFFF; background: #14182847; border-radius: 10px; padding: 6px 16px; delay: 60ms; in: {opacity:0, duration:.15}) POINT
+  p#st(left: 174px; cy: 50%; font-size: 50px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 200ms; in: {x:30, opacity:0, duration:.45, ease:'power2.out'}; content: {t})
 
 # title — 紺の地 (白い点の格子) に斜めの淡い帯 2 本・左に題の組 (シリーズ名 → 黄の札 → 2 行の大字 → 6 色の線 → 6 役の札)・右にチームの絵
 section#title
 div#t_bg(inset: 0; background: $ink; pattern: dots,24,#FFFFFF17; in: none)
 div#t_b1.bleed(left: 900px; top: 120px; width: 1400px; height: 220px; border-radius: 40px; background: #12A4A029; transform: rotate(-14deg); in: {x:300, opacity:0, duration:.9, ease:'power3.out'})
-div#t_b2.bleed(left: 1000px; top: 700px; width: 1400px; height: 220px; border-radius: 40px; background: #FF7A5924; transform: rotate(-14deg); delay: 100; in: {x:300, opacity:0, duration:.9, ease:'power3.out'})
-img#t_team(left: 1110px; top: 350px; width: 760px; height: 507px; content: @team; object-fit: contain; delay: 350; in: {x:120, opacity:0, duration:.8, ease:'power3.out'}; main: keys(at=0 scale=1 | at=0.42 scale=1 | at=1 scale=1.04 ease=none),duration=2700)
-p#t_series(left: 140px; top: 214px; font-size: 30px; letter-spacing: .08em; color: #CFD6E6; delay: 120; in: {y:-20, opacity:0, duration:.5, ease:'power3.out'}) 新入社員研修シリーズ ｜ 動画②　プロダクト開発に関わる役割を知る
-p#t_pill(left: 140px; top: 286px; font-size: 52px; font-family: h; background: $yellow; border-radius: 16px; padding: 8px 30px; delay: 320; in: {scale:.6, opacity:0, duration:.5, ease:'back.out(1.7)'}) 3分でわかる！
-p#t_l1(left: 136px; top: 400px; font-size: 100px; font-family: h; letter-spacing: .01em; color: #FFFFFF; white-space: nowrap; delay: 450; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) PdM・PM・POなど
-p#t_l2(left: 136px; top: 536px; font-size: 114px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 600; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) 開発チームの役割
-div#t_bar(left: 140px; top: 704px; width: 900px; height: 14px; border-radius: 8px; background: linear($pdm,$pm,$po,$bo,$eng,$des,90); delay: 900; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
-p#t_chip(left: "93;171;239;306;373;512"; top: 780px; font-size: 30px; font-family: h; color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border-radius: 148px; padding: 8px 22px; delay: 1050; in: {scale:.5, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.08}}) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
+div#t_b2.bleed(left: 1000px; top: 700px; width: 1400px; height: 220px; border-radius: 40px; background: #FF7A5924; transform: rotate(-14deg); delay: 100ms; in: {x:300, opacity:0, duration:.9, ease:'power3.out'})
+img#t_team(left: 1110px; top: 350px; width: 760px; height: 507px; content: @team; object-fit: contain; delay: 350ms; in: {x:120, opacity:0, duration:.8, ease:'power3.out'}; main: keys(at=0 scale=1 | at=0.42 scale=1 | at=1 scale=1.04 ease=none),duration=2700)
+p#t_series(left: 140px; top: 214px; font-size: 30px; letter-spacing: .08em; color: #CFD6E6; delay: 120ms; in: {y:-20, opacity:0, duration:.5, ease:'power3.out'}) 新入社員研修シリーズ ｜ 動画②　プロダクト開発に関わる役割を知る
+p#t_pill(left: 140px; top: 286px; font-size: 52px; font-family: h; background: $yellow; border-radius: 16px; padding: 8px 30px; delay: 320ms; in: {scale:.6, opacity:0, duration:.5, ease:'back.out(1.7)'}) 3分でわかる！
+p#t_l1(left: 136px; top: 400px; font-size: 100px; font-family: h; letter-spacing: .01em; color: #FFFFFF; white-space: nowrap; delay: 450ms; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) PdM・PM・POなど
+p#t_l2(left: 136px; top: 536px; font-size: 114px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 600ms; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) 開発チームの役割
+div#t_bar(left: 140px; top: 704px; width: 900px; height: 14px; border-radius: 8px; background: linear($pdm,$pm,$po,$bo,$eng,$des,90); delay: 900ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
+p#t_chip(left: "93;171;239;306;373;512"; top: 780px; font-size: 30px; font-family: h; color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border-radius: 148px; padding: 8px 22px; delay: 1050ms; in: {scale:.5, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.08}}) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
 
 # intro — チームの絵と 5 つの職種の札 → 3 つの略称の札が落ちて揺れ、すれ違い、？ と困った新人 → 6 役の札が並び、今回のゴールの帯
 section#intro
@@ -113,9 +113,9 @@ div#hdr.sticky(left: 0px; top: 0px; width: 1920px; height: 110px; z-index: front
   p#c(left: "835;891;939;987;1035;1137"; top: 32px; font-size: 21px; font-family: h; color: #85817A; background: #FFFFFF; border: 3px solid #CFCABF; border-radius: 148px; padding: 6px 16px) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
 #hdr.c.on(color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border: "3px solid $pdm;3px solid $pm;3px solid $po;3px solid $bo;3px solid $eng;3px solid $des"; transform: scale(1.08))
 #hdr.c.done(color: "$pdm;$pm;$po;$bo;$eng;$des"; background: #FFFFFF; border: "3px solid $pdm;3px solid $pm;3px solid $po;3px solid $bo;3px solid $eng;3px solid $des")
-div#in_d1(left: -260px; top: 520px; width: 900px; height: 900px; background: radial(#12A4A029,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
-div#in_d2(left: 1300px; top: -300px; width: 900px; height: 900px; background: radial(#FF7A5924,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
-img#in_team(left: 480px; top: 176px; width: 960px; height: 640px; content: @team; object-fit: contain; delay: 500; in: {y:40, scale:.94, opacity:0, duration:.7, ease:'power3.out'}; out: {scale:.92, opacity:0, duration:.35, ease:'power1.in'}; main: keys(at=0 scale=1 | at=0.13 scale=1 | at=1 scale=1.05 ease=none),duration=6200)
+div#in_d1(left: -260px; top: 520px; width: 900px; height: 900px; background: radial(#12A4A029,#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
+div#in_d2(left: 1300px; top: -300px; width: 900px; height: 900px; background: radial(#FF7A5924,#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
+img#in_team(left: 480px; top: 176px; width: 960px; height: 640px; content: @team; object-fit: contain; delay: 500ms; in: {y:40, scale:.94, opacity:0, duration:.7, ease:'power3.out'}; out: {scale:.92, opacity:0, duration:.35, ease:'power1.in'}; main: keys(at=0 scale=1 | at=0.13 scale=1 | at=1 scale=1.05 ease=none),duration=6200)
 # 5 つの職種の札 (白い丸の icon + 職種の語)
 div#in_b(left: "167;127;1013;1053;967"; top: "167;373;147;333;480"; width: 170px; height: 158px; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(1.7)', stagger:{each:.22}}; out: {opacity:0, duration:.3, ease:'power1.in'}) ×5
   icon#i(cx: 50%; top: 0px; font-size: 52px; name: "compass;calendar-blank;chart-bar;code;pen-nib"; color: "$pdm;$pm;$bo;$eng;$des"; background: #FFFFFF; padding: 26px; box-shadow: 0px 10px 26px #1E2A4A24)
@@ -266,12 +266,12 @@ div#eng_ed(left: 680px; top: 404px; width: 590px; height: 344px; border-radius: 
   div#eb(left: 0px; top: 0px; width: 590px; height: 44px; border-radius: 13,13,0,0; background: #16203A)
   div#dot(left: "12;27;41"; top: 15px; width: 14px; height: 14px; border-radius: 148px; background: "#FF6B6B;#FFC24B;#4CD4A0") ×3
   p#fn(left: 94px; top: 10px; font-size: 18px; font-family: m; color: #8F9BB8) app.js
-  p#l1(left: 24px; top: 60px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 350; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cc}// 商品を検索する{/}
-  p#l2(left: 24px; top: 102px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 680; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}function{/} {cf}search{/}(keyword) {
-  p#l3(left: 54px; top: 142px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1010; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}const{/} items = db.{cf}find{/}(keyword);
-  p#l4(left: 54px; top: 184px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1340; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}return{/} items.{cf}slice{/}({cn}0{/}, {cn}20{/});
-  p#l5(left: 24px; top: 225px; font-size: 26px; font-family: m; color: #E8ECF5; delay: 1670; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) }
-  p#l6(left: 24px; top: 267px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 2000; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cf}test{/}({cs}"検索できる"{/}, ...) {cc}// ✓ OK{/}
+  p#l1(left: 24px; top: 60px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 350ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cc}// 商品を検索する{/}
+  p#l2(left: 24px; top: 102px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 680ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}function{/} {cf}search{/}(keyword) {
+  p#l3(left: 54px; top: 142px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1010ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}const{/} items = db.{cf}find{/}(keyword);
+  p#l4(left: 54px; top: 184px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 1340ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}return{/} items.{cf}slice{/}({cn}0{/}, {cn}20{/});
+  p#l5(left: 24px; top: 225px; font-size: 26px; font-family: m; color: #E8ECF5; delay: 1670ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) }
+  p#l6(left: 24px; top: 267px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 2000ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cf}test{/}({cs}"検索できる"{/}, ...) {cc}// ✓ OK{/}
 # 画面 (スマホの枠に色の棒が上から落ちて組み上がる)
 div#eng_ph(left: 1330px; top: 404px; width: 190px; height: 280px; border-radius: 30px; background: #FFFFFF; border: 8px solid $ink; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})
   div#pb(left: "14;14;14;14;32"; top: "14;44;110;132;154"; width: "99;99;99;99;63"; height: "23;60;16;16;20"; border-radius: 10px; background: "$eng;#D9D3FF;#E8E4DA;#E8E4DA;$po"; in: {y:-30, opacity:0, duration:.35, ease:'back.out(1.6)', stagger:{each:.1}}) ×5
@@ -314,7 +314,7 @@ sum#des_sum(t: 使いやすさと体験を設計する人; c: $des)
 
 # diff — 注意: 見出しの i が脈打ち、3 社の札 (兼ねる・1 人で複数・PM の別の意味) を語ごとに縁で光らせて顔と説明 → 上へ払い、新人と先輩の絵 + 確認のチェックリストに 3 つの ✓
 section#diff
-div#diff_deco(left: -300px; top: -300px; width: 1000px; height: 1000px; background: radial(#FF7A591F,#F6F4EF00@68%); delay: 400; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 90, y: 60})
+div#diff_deco(left: -300px; top: -300px; width: 1000px; height: 1000px; background: radial(#FF7A591F,#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 90, y: 60})
 # 3 社の札 (紺の帯に社名・中に役の札と顔・下に説明)。語ごとに .hl (外側の太い縁 + 少し拡大) で 1 枚ずつ光らせる
 def ccard(t) = div(top: 270px; width: 500px; height: 470px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; in: {y:60, opacity:0, duration:.5, ease:'power3.out'})
   div#hd(left: 0px; top: 0px; width: 500px; height: 96px; border-radius: 16,16,0,0; background: $ink)
@@ -358,7 +358,7 @@ div#diff_chk(left: 960px; top: 300px; width: 860px; height: 450px; background: #
 
 # recap — おさらい: 6 役の札を薄く並べ、役の語ごとに 1 枚ずつ濃くして顔を弾ませる → 全部を沈めて NEXT STEP の帯 → 紺の締めの札
 section#recap
-group#rc_head(delay: 550; in: {y:-30, opacity:0, duration:.5, ease:'power3.out'})
+group#rc_head(delay: 550ms; in: {y:-30, opacity:0, duration:.5, ease:'power3.out'})
   p#s(cx: 960px; top: 128px; font-size: 26px; font-family: h; letter-spacing: .3em; color: $sub) REVIEW
   p#t(cx: 960px; top: 158px; font-size: 64px; font-family: h) おさらい
 div#rc(left: "100;467;833;100;467;833"; top: "187;187;187;381;381;381"; width: 520px; height: 262px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; opacity: .35; in: {y:40, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6
@@ -371,15 +371,15 @@ div#rc_close(left: 326px; top: 438px; width: 1269px; height: 192px; overlap: rc;
   p#t(left: 64px; top: 76px; font-size: 60px; font-family: h; color: #FFFFFF; white-space: nowrap) 役割を知って、チームの会話に参加しよう
 # 締めの札 (最後の句の語から +2050 = 声の直後に紺の全面が溶けて出て、シリーズ名・題・6 色の線が順に)
 div#endcard(inset: 0; background: $ink; z-index: front; overlap: rc,rc_close,rc_head; in: {opacity:0, duration:.5, ease:'power1.inOut'})
-  p#e1(cx: 960px; top: 448px; font-size: 32px; letter-spacing: .08em; color: #CFD6E6; white-space: nowrap; delay: 200; in: {y:20, opacity:0, duration:.4, ease:'power3.out'}) 新入社員研修シリーズ ｜ 動画② プロダクト開発に関わる役割を知る
-  p#e2(cx: 960px; top: 512px; font-size: 64px; font-family: h; color: #FFFFFF; white-space: nowrap; delay: 300; in: {y:24, opacity:0, duration:.45, ease:'power3.out'}) 3分でわかる！ PdM・PM・POなど開発チームの役割
-  div#e3(left: 640px; top: 620px; width: 640px; height: 12px; border-radius: 6px; background: linear($pdm,$pm,$po,$bo,$eng,$des,90); delay: 450; in: {scaleX:0, duration:.5, ease:'power3.out'})
+  p#e1(cx: 960px; top: 448px; font-size: 32px; letter-spacing: .08em; color: #CFD6E6; white-space: nowrap; delay: 200ms; in: {y:20, opacity:0, duration:.4, ease:'power3.out'}) 新入社員研修シリーズ ｜ 動画② プロダクト開発に関わる役割を知る
+  p#e2(cx: 960px; top: 512px; font-size: 64px; font-family: h; color: #FFFFFF; white-space: nowrap; delay: 300ms; in: {y:24, opacity:0, duration:.45, ease:'power3.out'}) 3分でわかる！ PdM・PM・POなど開発チームの役割
+  div#e3(left: 640px; top: 620px; width: 640px; height: 12px; border-radius: 6px; background: linear($pdm,$pm,$po,$bo,$eng,$des,90); delay: 450ms; in: {scaleX:0, duration:.5, ease:'power3.out'})
 ```
 
 ```timeline.txt
 #v2
 cast n = "落ち着いた30代の女性のナレーター、研修の講師のように明るく丁寧に、はっきりと説明する"
-silence head=0 tail=250
+silence head=0ms tail=250ms
 read PdM = ピーディーエム
 read PM = ピーエム
 read PO = ピーオー
@@ -390,61 +390,61 @@ read UX = ユーエックス
 
 *** title
 bgm music
-se whoosh -1dB +50
-se sparkle 0dB +420
+se whoosh -1dB +50ms
+se sparkle 0dB +420ms
 @n: [silence:2.83s]
-transition panel,800,color=#2B3A63,label="はじめに",skew=-12,label_skew=0,dir=left
+transition panel {duration: .8, color: #2B3A63, label: "はじめに", skew: -12, label_skew: 0, dir: 'left'}
 
 *** intro
 [>#subtitle]
-@n: [silence:300][>#hdr -250][>#in_b[*] +900]ITのプロダクト開発では、[|]多くの専門職が一緒に仕事をします。
-@: [<#in_team +530][<#in_b +530][>#in_t1 +880][♪pop_soft -1dB +880][>#in_t2 +2120][♪pop_soft -1dB +2120][>#in_t3 +3040][♪pop_soft -1dB +3040]その中でも「{kpdm}PdM{/}」「{kpm}PM{/}」「{kpo}PO{/}」など、[|][!#in_t1 to,{rotation:4, x:30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'}][!#in_t2 to,{rotation:-4, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +50][!#in_t3 to,{rotation:4, x:-30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +100]似た略称が多く、[!#in_t1 to,{x:380, duration:.5, ease:'power2.inOut'}][!#in_t1 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t2 to,{x:-380, duration:.5, ease:'power2.inOut'}][!#in_t2 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t3 to,{y:-30, duration:.3, repeat:1, yoyo:true, ease:'sine.inOut'} +300][!#in_t1 to,{x:0, duration:.5, ease:'power2.inOut'} +750][!#in_t1 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750][!#in_t2 to,{x:0, duration:.5, ease:'power2.inOut'} +750][!#in_t2 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750][>#in_qm[*] +100][>#in_conf -100][♪ping -1dB]最初は混乱しやすい用語があります。
-@: 今回は、[<#in_t1 -400][<#in_t2 -400][<#in_t3 -400][<#in_qm -400][<#in_conf -400][>#in_rc[*] -50][♪pop -3dB]それぞれが何を考える役割なのかを[|][>#in_goal -50]大まかにつかみましょう。[silence:+310]
-transition panel,800,color=$pdm,label="{lsm}01{/}  PdM",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][>#hdr -250ms][>#in_b[*] +900ms]ITのプロダクト開発では、[|]多くの専門職が一緒に仕事をします。
+@: [<#in_team +530ms][<#in_b +530ms][>#in_t1 +880ms][♪pop_soft -1dB +880ms][>#in_t2 +2120ms][♪pop_soft -1dB +2120ms][>#in_t3 +3040ms][♪pop_soft -1dB +3040ms]その中でも「{kpdm}PdM{/}」「{kpm}PM{/}」「{kpo}PO{/}」など、[|][!#in_t1 to,{rotation:4, x:30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'}][!#in_t2 to,{rotation:-4, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +50ms][!#in_t3 to,{rotation:4, x:-30, duration:.18, repeat:3, yoyo:true, ease:'sine.inOut'} +100ms]似た略称が多く、[!#in_t1 to,{x:380, duration:.5, ease:'power2.inOut'}][!#in_t1 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t2 to,{x:-380, duration:.5, ease:'power2.inOut'}][!#in_t2 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true}][!#in_t3 to,{y:-30, duration:.3, repeat:1, yoyo:true, ease:'sine.inOut'} +300ms][!#in_t1 to,{x:0, duration:.5, ease:'power2.inOut'} +750ms][!#in_t1 to,{y:70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750ms][!#in_t2 to,{x:0, duration:.5, ease:'power2.inOut'} +750ms][!#in_t2 to,{y:-70, duration:.25, ease:'sine.out', repeat:1, yoyo:true} +750ms][>#in_qm[*] +100ms][>#in_conf -100ms][♪ping -1dB]最初は混乱しやすい用語があります。
+@: 今回は、[<#in_t1 -400ms][<#in_t2 -400ms][<#in_t3 -400ms][<#in_qm -400ms][<#in_conf -400ms][>#in_rc[*] -50ms][♪pop -3dB]それぞれが何を考える役割なのかを[|][>#in_goal -50ms]大まかにつかみましょう。[silence:+310ms]
+transition panel {duration: .8, color: $pdm, label: "{lsm}01{/}  PdM", skew: -12, label_skew: 0, dir: 'left'}
 
 *** pdm
-@n: [silence:300][!#hdr.c[1] .on -300]{kpdm}PdM{/}は[>#pdm_head.en][>#pdm_head.ja +180]Product Managerの略です。
-@: [>#pdm_q[1] -50][♪pop_soft -1dB]「どんなプロダクトをつくるのか」[|][>#pdm_q[2] -50][♪pop_soft -1dB]「誰のどんな課題を解決するのか」[|][>#pdm_q[3] -50][♪pop_soft -1dB]「どうすれば事業として成長するのか」など、[|][>#pdm_frame -50][>#pdm_ftag +100][!#pdm_ftag.i to,{rotation:360, duration:1.2, ease:'power2.inOut'} +300][♪click -2dB]プロダクト全体の方向性を考える役割です。
-@: [silence:100]まとめると、{kpdm}PdM{/}は[>#pdm_sum -100][♪chime -1dB]「プロダクトの価値と方向性を考える人」です。[silence:+310]
-transition panel,800,color=$pm,label="{lsm}02{/}  PM",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[1] .on -300ms]{kpdm}PdM{/}は[>#pdm_head.en][>#pdm_head.ja +180ms]Product Managerの略です。
+@: [>#pdm_q[1] -50ms][♪pop_soft -1dB]「どんなプロダクトをつくるのか」[|][>#pdm_q[2] -50ms][♪pop_soft -1dB]「誰のどんな課題を解決するのか」[|][>#pdm_q[3] -50ms][♪pop_soft -1dB]「どうすれば事業として成長するのか」など、[|][>#pdm_frame -50ms][>#pdm_ftag +100ms][!#pdm_ftag.i to,{rotation:360, duration:1.2, ease:'power2.inOut'} +300ms][♪click -2dB]プロダクト全体の方向性を考える役割です。
+@: [silence:100ms]まとめると、{kpdm}PdM{/}は[>#pdm_sum -100ms][♪chime -1dB]「プロダクトの価値と方向性を考える人」です。[silence:+310ms]
+transition panel {duration: .8, color: $pm, label: "{lsm}02{/}  PM", skew: -12, label_skew: 0, dir: 'left'}
 
 *** pm
-@n: [silence:300][!#hdr.c[1] .done -300][!#hdr.c[2] .on -300]{kpm}PM{/}は[>#pm_a.head.en][>#pm_a.head.often][>#pm_a.head.ja +180]Project Managerを指すことが多くあります。
-@: プロジェクトの[>#pm_a.m[1] -50][♪pop_soft -2dB]スケジュール、[>#pm_a.m[2] -50][♪pop_soft -2dB]予算、[>#pm_a.m[3] -50][♪pop_soft -2dB]人員、[>#pm_a.m[4] -50][♪pop_soft -2dB]進捗などを管理し、[|][>#pm_a.gantt -250][>#pm_a.gantt.bar[*] +100][>#pm_a.gantt.ok +1600][>#pm_a.sum +300][♪chime -2dB]計画通りにプロジェクトを進める役割です。
-@: [silence:150][<#pm_a -450][>#pm_vs_title -200][>#pm_vl][♪pop -2dB]{kpdm}PdM{/}が「何を、なぜつくるか」を考えるのに対し、[|][>#pm_vr -100][♪pop -2dB]{kpm}PM{/}は「どうやって計画通りにつくるか」を管理する、[|][>#pm_vs -100][!#pm_vl.kv{mk} marker][!#pm_vr.kv{mk} marker +250][♪click -1dB]という違いがあります。
-@: [>#pm_note -50][!#pm_vr.a to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +900][♪ping 0dB]なお、{kpm}PM{/}という略称が[|]Product Managerを指す企業もあります。[silence:+310]
-transition panel,800,color=$po,label="{lsm}03{/}  PO",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[1] .done -300ms][!#hdr.c[2] .on -300ms]{kpm}PM{/}は[>#pm_a.head.en][>#pm_a.head.often][>#pm_a.head.ja +180ms]Project Managerを指すことが多くあります。
+@: プロジェクトの[>#pm_a.m[1] -50ms][♪pop_soft -2dB]スケジュール、[>#pm_a.m[2] -50ms][♪pop_soft -2dB]予算、[>#pm_a.m[3] -50ms][♪pop_soft -2dB]人員、[>#pm_a.m[4] -50ms][♪pop_soft -2dB]進捗などを管理し、[|][>#pm_a.gantt -250ms][>#pm_a.gantt.bar[*] +100ms][>#pm_a.gantt.ok +1600ms][>#pm_a.sum +300ms][♪chime -2dB]計画通りにプロジェクトを進める役割です。
+@: [silence:150ms][<#pm_a -450ms][>#pm_vs_title -200ms][>#pm_vl][♪pop -2dB]{kpdm}PdM{/}が「何を、なぜつくるか」を考えるのに対し、[|][>#pm_vr -100ms][♪pop -2dB]{kpm}PM{/}は「どうやって計画通りにつくるか」を管理する、[|][>#pm_vs -100ms][!#pm_vl.kv{mk} marker][!#pm_vr.kv{mk} marker +250ms][♪click -1dB]という違いがあります。
+@: [>#pm_note -50ms][!#pm_vr.a to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +900ms][♪ping 0dB]なお、{kpm}PM{/}という略称が[|]Product Managerを指す企業もあります。[silence:+310ms]
+transition panel {duration: .8, color: $po, label: "{lsm}03{/}  PO", skew: -12, label_skew: 0, dir: 'left'}
 
 *** po
-@n: [silence:300][!#hdr.c[2] .done -300][!#hdr.c[3] .on -300]{kpo}PO{/}は[>#po_head.en][>#po_head.ja +180]Product Ownerの略です。
-@: [>#po_p1 -50][!#po_p1.i to,{rotation:360, duration:1.4, ease:'power2.inOut'} +300][♪pop_soft -2dB]スクラム開発などで使われる役割で、[|][>#po_p2 -50][♪pop_soft -2dB]プロダクトの価値が最大になるように、[|][>#po_blog -150][>#po_it[*] +100][♪pop -2dB]やることの一覧である「プロダクトバックログ」の[|][!#po_it[1] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[2] to,{y:-64, duration:.55, ease:'power3.inOut'}][!#po_it[3] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[4] to,{y:-129, duration:.55, ease:'power3.inOut'}][!#po_it[5] to,{y:-64, duration:.55, ease:'power3.inOut'}][>#po_arrow +200][>#po_it[*].no +500][>#po_top +800][!#po_it[2] .first +500][♪click -1dB][♪click -2dB +350]優先順位を決めます。
-@: つまり{kpo}PO{/}は、[>#po_sum -100][♪chime -1dB]「何から先につくるかを決める人」です。[silence:+310]
-transition panel,800,color=$bo,label="{lsm}04{/}  BO",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[2] .done -300ms][!#hdr.c[3] .on -300ms]{kpo}PO{/}は[>#po_head.en][>#po_head.ja +180ms]Product Ownerの略です。
+@: [>#po_p1 -50ms][!#po_p1.i to,{rotation:360, duration:1.4, ease:'power2.inOut'} +300ms][♪pop_soft -2dB]スクラム開発などで使われる役割で、[|][>#po_p2 -50ms][♪pop_soft -2dB]プロダクトの価値が最大になるように、[|][>#po_blog -150ms][>#po_it[*] +100ms][♪pop -2dB]やることの一覧である「プロダクトバックログ」の[|][!#po_it[1] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[2] to,{y:-64, duration:.55, ease:'power3.inOut'}][!#po_it[3] to,{y:129, duration:.55, ease:'power3.inOut'}][!#po_it[4] to,{y:-129, duration:.55, ease:'power3.inOut'}][!#po_it[5] to,{y:-64, duration:.55, ease:'power3.inOut'}][>#po_arrow +200ms][>#po_it[*].no +500ms][>#po_top +800ms][!#po_it[2] .first +500ms][♪click -1dB][♪click -2dB +350ms]優先順位を決めます。
+@: つまり{kpo}PO{/}は、[>#po_sum -100ms][♪chime -1dB]「何から先につくるかを決める人」です。[silence:+310ms]
+transition panel {duration: .8, color: $bo, label: "{lsm}04{/}  BO", skew: -12, label_skew: 0, dir: 'left'}
 
 *** bo
-@n: [silence:300][!#hdr.c[3] .done -300][!#hdr.c[4] .on -300]{kbo}BO{/}は[>#bo_head.en][>#bo_head.ja +180]Business Ownerの略です。
-@: [>#bo_c1 -50][♪pop_soft -2dB]事業の責任者として、[|][>#bo_c2 -50][>#bo_c2.bar[*] +250][♪pop_soft -2dB]売上や利益などの目標を持ち、[|][>#bo_c3 -50][>#bo_c3.stamp][>#bo_c3.coin +100][♪click 0dB +250]予算や投資を判断します。
-@: [>#bo_rel.n2 -100][>#bo_rel.ln[*] +100][>#bo_rel.n1 +300][>#bo_rel.n3 +400][>#bo_rel.lab +450][♪pop_soft -2dB]{kpdm}PdM{/}や{kpo}PO{/}と連携しながら、[|][>#bo_sum -100][♪chime -1dB]「事業の成果に責任を持つ人」です。[silence:+310]
-transition panel,800,color=$eng,label="{lsm}05{/}  エンジニア",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[3] .done -300ms][!#hdr.c[4] .on -300ms]{kbo}BO{/}は[>#bo_head.en][>#bo_head.ja +180ms]Business Ownerの略です。
+@: [>#bo_c1 -50ms][♪pop_soft -2dB]事業の責任者として、[|][>#bo_c2 -50ms][>#bo_c2.bar[*] +250ms][♪pop_soft -2dB]売上や利益などの目標を持ち、[|][>#bo_c3 -50ms][>#bo_c3.stamp][>#bo_c3.coin +100ms][♪click 0dB +250ms]予算や投資を判断します。
+@: [>#bo_rel.n2 -100ms][>#bo_rel.ln[*] +100ms][>#bo_rel.n1 +300ms][>#bo_rel.n3 +400ms][>#bo_rel.lab +450ms][♪pop_soft -2dB]{kpdm}PdM{/}や{kpo}PO{/}と連携しながら、[|][>#bo_sum -100ms][♪chime -1dB]「事業の成果に責任を持つ人」です。[silence:+310ms]
+transition panel {duration: .8, color: $eng, label: "{lsm}05{/}  エンジニア", skew: -12, label_skew: 0, dir: 'left'}
 
 *** eng
-@n: [silence:300][!#hdr.c[4] .done -300][!#hdr.c[5] .on -300][>#eng_head.en][>#eng_head.ja +180]{keng}エンジニア{/}は、[>#eng_steps -200][>#eng_ed -100][♪typing -7dB to=2.2s][!#eng_steps.st[1] .on]設計や[!#eng_steps.st[2] .on]プログラミング、[!#eng_steps.st[3] .on]テストを通して、[|][>#eng_ph -100][>#eng_ph.pb[*] +150][♪pop -3dB]プロダクトを実際につくる役割です。
-@: [>#eng_lf -50][!#eng_ph to,{scale:1.06, duration:.25, repeat:1, yoyo:true, ease:'sine.inOut'}][♪pop_soft -2dB]画面側のフロントエンドや、[>#eng_sv -100][>#eng_lb +100][>#eng_flow +150][>#eng_d1 +400][!#eng_d1 to,{x:80, duration:.8, ease:'none', repeat:4} +400][>#eng_d2 +800][!#eng_d2 to,{x:-80, duration:.8, ease:'none', repeat:4} +800][♪pop_soft -2dB]サーバー側のバックエンドなど、[|]専門もさまざま。[>#eng_sum -100][♪chime -1dB]「技術でプロダクトを形にする人」です。[silence:+310]
-transition panel,800,color=$des,label="{lsm}06{/}  デザイナー",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[4] .done -300ms][!#hdr.c[5] .on -300ms][>#eng_head.en][>#eng_head.ja +180ms]{keng}エンジニア{/}は、[>#eng_steps -200ms][>#eng_ed -100ms][♪typing -7dB to=2.2s][!#eng_steps.st[1] .on]設計や[!#eng_steps.st[2] .on]プログラミング、[!#eng_steps.st[3] .on]テストを通して、[|][>#eng_ph -100ms][>#eng_ph.pb[*] +150ms][♪pop -3dB]プロダクトを実際につくる役割です。
+@: [>#eng_lf -50ms][!#eng_ph to,{scale:1.06, duration:.25, repeat:1, yoyo:true, ease:'sine.inOut'}][♪pop_soft -2dB]画面側のフロントエンドや、[>#eng_sv -100ms][>#eng_lb +100ms][>#eng_flow +150ms][>#eng_d1 +400ms][!#eng_d1 to,{x:80, duration:.8, ease:'none', repeat:4} +400ms][>#eng_d2 +800ms][!#eng_d2 to,{x:-80, duration:.8, ease:'none', repeat:4} +800ms][♪pop_soft -2dB]サーバー側のバックエンドなど、[|]専門もさまざま。[>#eng_sum -100ms][♪chime -1dB]「技術でプロダクトを形にする人」です。[silence:+310ms]
+transition panel {duration: .8, color: $des, label: "{lsm}06{/}  デザイナー", skew: -12, label_skew: 0, dir: 'left'}
 
 *** des
-@n: [silence:300][!#hdr.c[5] .done -300][!#hdr.c[6] .on -300][>#des_head.en][>#des_head.ja +180]{kdes}デザイナー{/}は、[>#des_ph -150][>#des_l1][♪pop_soft -2dB]画面の見た目だけでなく、[|][>#des_ph.ub[*] -100][<#des_l1 -100][>#des_l2 +50][>#des_cur +50][!#des_cur to,{scale:.85, duration:.12, repeat:1, yoyo:true} +550][>#des_ring +580][>#des_ok +750][♪click -1dB +550]ユーザーが迷わず使えるかまで考える役割です。
-@: [>#des_c1 -50][>#des_c2 +600][♪pop_soft -2dB]「UI」や「UX」という言葉もよく使われます。[|][>#des_sum -100][♪chime -1dB]「使いやすさと体験を設計する人」です。[silence:+310]
-transition panel,800,color=$ink,label="注意したいこと",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[5] .done -300ms][!#hdr.c[6] .on -300ms][>#des_head.en][>#des_head.ja +180ms]{kdes}デザイナー{/}は、[>#des_ph -150ms][>#des_l1][♪pop_soft -2dB]画面の見た目だけでなく、[|][>#des_ph.ub[*] -100ms][<#des_l1 -100ms][>#des_l2 +50ms][>#des_cur +50ms][!#des_cur to,{scale:.85, duration:.12, repeat:1, yoyo:true} +550ms][>#des_ring +580ms][>#des_ok +750ms][♪click -1dB +550ms]ユーザーが迷わず使えるかまで考える役割です。
+@: [>#des_c1 -50ms][>#des_c2 +600ms][♪pop_soft -2dB]「UI」や「UX」という言葉もよく使われます。[|][>#des_sum -100ms][♪chime -1dB]「使いやすさと体験を設計する人」です。[silence:+310ms]
+transition panel {duration: .8, color: $ink, label: "注意したいこと", skew: -12, label_skew: 0, dir: 'left'}
 
 *** diff
-@n: [silence:300][!#hdr.c[6] .done -300][>#da.h -100][!#da.h.i to,{scale:1.25, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +300][>#da.a +700][>#da.b +850][>#da.c +1000][>#da.a.p1 +1100][>#da.a.plus +1180][>#da.a.p2 +1260][>#da.b.p1 +1300][>#da.b.p2 +1380][>#da.b.p3 +1460][>#da.c.p1 +1500][♪ping -1dB]ただし、ここで紹介した役割の定義は、[|]企業によって異なることがあります。
-@: [!#da.a .hl -100][>#da.a.av +150][>#da.a.cl +400][♪pop -2dB]たとえば、{kpdm}PdM{/}が{kpo}PO{/}を兼ねる会社や、[|][=#da.a -300][!#da.b .hl -100][>#da.b.av +100][>#da.b.cl +400][=#da.b +1400][!#da.c .hl +1400][>#da.c.c2 +1600][>#da.c.cl +1900][♪pop -2dB]一人で複数の役割を担うチームもあります。
-@: [=#da.c -500][<#da -450][>#diff_ask -100][>#diff_chk][>#diff_chk.ci[*] +250][>#diff_chk.ci[1].ck +600][♪click -2dB +600][>#diff_chk.ci[2].ck +1150][♪click -2dB +1150][>#diff_chk.ci[3].ck +1700][♪click -2dB +1700]配属されたら、自分のチームでは[|]誰がどの役割を担っているのか、確認してみましょう。[silence:+310]
-transition panel,800,color=$ink,label="おさらい",skew=-12,label_skew=0,dir=left
+@n: [silence:300ms][!#hdr.c[6] .done -300ms][>#da.h -100ms][!#da.h.i to,{scale:1.25, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} +300ms][>#da.a +700ms][>#da.b +850ms][>#da.c +1000ms][>#da.a.p1 +1100ms][>#da.a.plus +1180ms][>#da.a.p2 +1260ms][>#da.b.p1 +1300ms][>#da.b.p2 +1380ms][>#da.b.p3 +1460ms][>#da.c.p1 +1500ms][♪ping -1dB]ただし、ここで紹介した役割の定義は、[|]企業によって異なることがあります。
+@: [!#da.a .hl -100ms][>#da.a.av +150ms][>#da.a.cl +400ms][♪pop -2dB]たとえば、{kpdm}PdM{/}が{kpo}PO{/}を兼ねる会社や、[|][=#da.a -300ms][!#da.b .hl -100ms][>#da.b.av +100ms][>#da.b.cl +400ms][=#da.b +1400ms][!#da.c .hl +1400ms][>#da.c.c2 +1600ms][>#da.c.cl +1900ms][♪pop -2dB]一人で複数の役割を担うチームもあります。
+@: [=#da.c -500ms][<#da -450ms][>#diff_ask -100ms][>#diff_chk][>#diff_chk.ci[*] +250ms][>#diff_chk.ci[1].ck +600ms][♪click -2dB +600ms][>#diff_chk.ci[2].ck +1150ms][♪click -2dB +1150ms][>#diff_chk.ci[3].ck +1700ms][♪click -2dB +1700ms]配属されたら、自分のチームでは[|]誰がどの役割を担っているのか、確認してみましょう。[silence:+310ms]
+transition panel {duration: .8, color: $ink, label: "おさらい", skew: -12, label_skew: 0, dir: 'left'}
 
 *** recap
-@n: [silence:300][>#rc[*] +100]最後におさらいです。
-@: [silence:50][hl #rc[1] -50][♪pop_soft -3dB]{kpdm}PdM{/}は方向性、[hl #rc[2] -50][♪pop_soft -3dB]{kpm}PM{/}は計画、[hl #rc[3] -50][♪pop_soft -3dB]{kpo}PO{/}は優先順位、[|][hl #rc[4] -50][♪pop_soft -3dB]{kbo}BO{/}は事業の成果、[hl #rc[5] -50][♪pop_soft -3dB]{keng}エンジニア{/}は技術、[hl #rc[6] -50][♪pop_soft -3dB]{kdes}デザイナー{/}は使いやすさを担います。
-@: [!#rc[*] to,{opacity:.18, duration:.4} -100][!#rc_head to,{opacity:.18, duration:.4} -100][>#rc_close][♪sparkle -1dB]それぞれの役割を知って、[|][>#endcard +2050][<#hdr +2050]チームの会話に参加していきましょう。[silence:1.6s]
+@n: [silence:300ms][>#rc[*] +100ms]最後におさらいです。
+@: [silence:50ms][hl #rc[1] -50ms][♪pop_soft -3dB]{kpdm}PdM{/}は方向性、[hl #rc[2] -50ms][♪pop_soft -3dB]{kpm}PM{/}は計画、[hl #rc[3] -50ms][♪pop_soft -3dB]{kpo}PO{/}は優先順位、[|][hl #rc[4] -50ms][♪pop_soft -3dB]{kbo}BO{/}は事業の成果、[hl #rc[5] -50ms][♪pop_soft -3dB]{keng}エンジニア{/}は技術、[hl #rc[6] -50ms][♪pop_soft -3dB]{kdes}デザイナー{/}は使いやすさを担います。
+@: [!#rc[*] to,{opacity:.18, duration:.4} -100ms][!#rc_head to,{opacity:.18, duration:.4} -100ms][>#rc_close][♪sparkle -1dB]それぞれの役割を知って、[|][>#endcard +2050ms][<#hdr +2050ms]チームの会話に参加していきましょう。[silence:1.6s]
 ```

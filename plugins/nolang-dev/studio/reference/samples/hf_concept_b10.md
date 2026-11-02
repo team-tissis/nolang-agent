@@ -45,14 +45,14 @@ shape { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 icon { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 group { out: {scale:.92, opacity:0, duration:.2, ease:'power2.in'} }
 # 場面の頭の要素は一斉に (hf は場面の頭のカードと札を同じ拍で出す)
-cut { stagger: 0 }
+cut { stagger: 0ms }
 # hf の作り: 字幕は画面の中ほど (下端から 1/3 の高さ) に置き、下は丘の地だけ (色の光が字幕帯に掛かる = caption_collision)・上端の題の札は 2 場面目の頭から出し続ける (spoiler)
 # hf の作り: 開幕の英字・名の札の副題・原則札は 1.2〜2.7 秒で入れ替わる (flash_text)・4 つの資源の札は 1 枚の絵の象限 (duplicate_media)・判子札「手元にあるもので今すぐ動く」は字幕と同文 (duplicate_text)
 # hf の作り: 言い換えの場面とまとめの場面は 5 秒に 8〜9 回の効果音 (払う音・× のブザー・正解音・カード 5 枚の pop) (se_dense)
 lint off=caption_collision,spoiler,flash_text,duplicate_media,duplicate_text,se_dense
 bgm#music(fade: 250,2600) 明るく軽快なアコースティックポップ、弾むアコースティックギターのリフと口笛、軽やかなパーカッション、晴れやかで楽しい
-# 字幕: 白い角丸の札・極太の丸ゴシック・下から少し弾んで出て上へ抜ける・文の中の行で札を替え ([|])、札は次の札か cut の終わりまで残る (tail=10000 = 札の区間の終わりまで)
-subtitle.hug(top: 1300px; width: 1020px; font-size: 56px; line-height: 1.36; text-align: center; color: $ink; background: #FFFFFF; border-radius: 42px; padding: 22px 42px 26px 42px; box-shadow: 0px 18px 40px #785A3C1A; unit: sentence; lead: 0; tail: 10000; hold: next,1200; in: {y:34, scale:.94, opacity:0, duration:.24, ease:'back.out(1.8)'}; out: {y:-14, opacity:0, duration:.14, ease:'power1.in'})
+# 字幕: 白い角丸の札・極太の丸ゴシック・下から少し弾んで出て上へ抜ける・文の中の行で札を替え ([|])、札は次の札か cut の終わりまで残る (tail: 10000ms = 札の区間の終わりまで)
+subtitle.hug(top: 1300px; width: 1020px; font-size: 56px; line-height: 1.36; text-align: center; color: $ink; background: #FFFFFF; border-radius: 42px; padding: 22px 42px 26px 42px; box-shadow: 0px 18px 40px #785A3C1A; unit: sentence; lead: 0ms; tail: 10000ms; hold: next,1200ms; in: {y:34, scale:.94, opacity:0, duration:.24, ease:'back.out(1.8)'}; out: {y:-14, opacity:0, duration:.14, ease:'power1.in'})
 
 # 地 (全編・最背面): 地の色 (語で塗り替える) → 漂う色の光 5 つ → 点の地紋 → 下端の丘 3 つ → 回りながら漂う菱形 5 つ
 div#tint(inset: 0; background: $cream; z-index: back; in: none; out: none)
@@ -96,7 +96,7 @@ def sticker(t, c=$butter, s=40, r=-2) = p(cx: 540px; top: 1090px; font-size: {s}
 
 # title — 開幕: 主人公のカードが傾いて弾み、珊瑚の札「1分でわかる」→ 題が 1 字ずつ上から回って落ち → 英字が横に縮んで締まる・四隅に菱形
 section#title
-div#t_hero(left: 140px; top: 640px; width: 800px; height: 800px; border-radius: 80px; background: #FFFFFF; box-shadow: 0px 30px 60px #785A3C29; delay: 80; in: {scale:.6, rotation:-8, opacity:0, duration:.7, ease:'back.out(1.6)'}; out: {y:120, scale:.7, rotation:6, opacity:0, duration:.24, ease:'power2.in'})
+div#t_hero(left: 140px; top: 640px; width: 800px; height: 800px; border-radius: 80px; background: #FFFFFF; box-shadow: 0px 30px 60px #785A3C29; delay: 80ms; in: {scale:.6, rotation:-8, opacity:0, duration:.7, ease:'back.out(1.6)'}; out: {y:120, scale:.7, rotation:6, opacity:0, duration:.24, ease:'power2.in'})
   img#img(left: 16px; top: 16px; width: 766px; height: 766px; border-radius: 48px; content: @hero; main: kb {scale: [1, 1.07]})
 p#t_chip(cx: 540px; top: 262px; font-size: 58px; font-family: r; line-height: 1; color: #FFFFFF; background: $coral; border: 8px solid #FFFFFF; border-radius: 148px; padding: 18px 48px 22px 48px; box-shadow: 0px 10px 0px #4A3B331A; rotation: -2; in: {scale:.2, rotation:-10, opacity:0, duration:.45, ease:'back.out(2.2)'}; out: {y:-90, opacity:0, duration:.22, ease:'power2.in'}) 1分でわかる
 p#t_title(cx: 540px; top: 400px; font-size: 90px; font-family: m; line-height: 1.1; white-space: nowrap; text-shadow: 0px 8px 0px #FF7E6B47; in: {y:-70, scale:.3, rotation:-14, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:.08}; out: {y:-90, opacity:0, duration:.22, ease:'power2.in'}) エフェクチュエーション
@@ -219,7 +219,7 @@ def kcard(src, l, r=-2) = div(width: 450px; height: 555px; in: {scale:.4, rotati
     img#img(left: 14px; top: 14px; width: 423px; height: 423px; border-radius: 40px; main: none; content: {src})
   p#l(cx: 50%; top: 468px; font-size: 46px; font-family: m; line-height: 1; background: $butter; border: 6px solid #FFFFFF; border-radius: 148px; padding: 14px 32px 18px 32px; box-shadow: 0px 8px 0px #4A3B331A; rotation: {r}; in: {scale:.3, rotation:-6, opacity:0, duration:.45, ease:'back.out(2.2)'}; content: {l})
 kcard#k1(left: 70px; top: 268px; rotation: -2.5; src: "An open laptop showing a cheerful article page made of pastel blocks, small charts and picture placeholders (no readable text), next to a cup of coffee, a notebook and a small potted plant, centered on a plain cream background."; l: "解説記事")
-kcard#k2(left: 560px; top: 268px; rotation: 2.5; delay: 160; in: {scale:.4, rotation:7.5, opacity:0, duration:.55, ease:'back.out(2.2)'}; src: "Two people sitting in comfy armchairs having a lively conversation in a cozy pastel studio, with two small desk microphones on a little round table between them; one gestures while explaining and the other listens with a smile, like a talk show interview."; l: "対談本編動画"; r: 2)
+kcard#k2(left: 560px; top: 268px; rotation: 2.5; delay: 160ms; in: {scale:.4, rotation:7.5, opacity:0, duration:.55, ease:'back.out(2.2)'}; src: "Two people sitting in comfy armchairs having a lively conversation in a cozy pastel studio, with two small desk microphones on a little round table between them; one gestures while explaining and the other listens with a smile, like a talk show interview."; l: "対談本編動画"; r: 2)
 p#ch1(left: 266px; top: 880px; font-size: 46px; font-family: r; line-height: 1; background: #FFFFFF; border: 4px solid $sky; border-radius: 22px; padding: 16px 34px 18px 34px; box-shadow: 0px 8px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) 概要欄
 p#ch2(left: 506px; top: 880px; font-size: 46px; font-family: r; line-height: 1; background: #FFFFFF; border: 4px solid $sky; border-radius: 22px; padding: 16px 34px 18px 34px; box-shadow: 0px 8px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) コメント欄
 p#btn(cx: 540px; top: 1010px; font-size: 64px; font-family: m; line-height: 1; color: #FFFFFF; background: $coral; border: 9px solid #FFFFFF; border-radius: 148px; padding: 30px 60px 34px 60px; box-shadow: 0px 14px 0px #C2432E; white-space: nowrap; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(2.2)'}) リンクからチェック！
@@ -230,49 +230,49 @@ shape#cur(left: 760px; top: 1100px; width: 90px; height: 110px; path: cursor; ba
 ```timeline.txt
 #v2
 cast n = "明るくエネルギッシュな20代の女性ナレーター、高めでクリアな声に微かな吐息、快活なテンポで親しみやすく誠実に語る"
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** title
 bgm music
-se whoosh -8dB +100
-@n: [silence:0.45s][>#t_chip -50][♪pop_high -4dB]1分でわかる、[>#t_title -60][>#t_gems][♪sparkle -2dB to=2.1s][>#t_sub +910]エフェクチュエーション。[silence:0.7s]
+se whoosh -8dB +100ms
+@n: [silence:0.45s][>#t_chip -50ms][♪pop_high -4dB]1分でわかる、[>#t_title -60ms][>#t_gems][♪sparkle -2dB to=2.1s][>#t_sub +910ms]エフェクチュエーション。[silence:0.7s]
 
 *** start
 [>#subtitle]
 se whoosh -8dB
-@n: {hl}新しいこと{/}を始めたい。[<#c1a -140][♪whoosh -8dB -120][>#c1b -50][!#tint fill,#EFEDF5,duration=600]でも、計画が立たないから[br][!#c1b wiggle,2,duration=170,count=3,x=11][♪buzz -6dB]{ng}動けない{/}。[silence:0.95s]
+@n: {hl}新しいこと{/}を始めたい。[<#c1a -140ms][♪whoosh -8dB -120ms][>#c1b -50ms][!#tint fill,#EFEDF5 {duration: .6}]でも、計画が立たないから[br][!#c1b wiggle {rotation: 2, duration: .17, count: 3, x: 11}][♪buzz -6dB]{ng}動けない{/}。[silence:0.95s]
 
 *** term
 se pop_dry -5dB
-[!#tint fill,#FFF7EC,duration=600]
-@n: そんなときに[!#c2 punch,1.045,duration=450][♪idea -3dB]{hl}役立つ{/}のが、[|][>#term -40][>#b2][!#tint fill,#FFF1E6,duration=600][♪sparkle -2dB to=2.1s][<#b2 +550]{hl}エフェクチュエーション{/}です。[silence:0.8s]
+[!#tint fill,#FFF7EC {duration: .6}]
+@n: そんなときに[!#c2 punch {scale: 1.045, duration: .45}][♪idea -3dB]{hl}役立つ{/}のが、[|][>#term -40ms][>#b2][!#tint fill,#FFF1E6 {duration: .6}][♪sparkle -2dB to=2.1s][<#b2 +550ms]{hl}エフェクチュエーション{/}です。[silence:0.8s]
 
 *** point
-[!#tint fill,#FFF7EC,duration=600]
-@n: [>#point][>#b3 +50][♪pop_high -4dB][<#b3 +600]{hl}ポイント{/}は、[|][!#point to,{y:-430, scale:.476, duration:.45, ease:'power3.inOut'} -300][>#c3a -80][♪whoosh -8dB -50][>#l3a +150]{ng}完璧な計画を待つ{/}のでは[>#c3a.ng][!#c3a.img to,{filter:'saturate(.15)', duration:.35}][!#c3a to,{scale:.94, duration:.35}][♪buzz -6dB]なく、[|][>#arrow3 -150][>#c3b -50][♪pop_dry -5dB -50][>#l3b +200]{hl}今あるもの{/}から[>#c3b.ok][!#c3b to,{scale:1.04, duration:.5, ease:'sine.out'}][♪correct -3dB]始めること。[silence:0.85s]
+[!#tint fill,#FFF7EC {duration: .6}]
+@n: [>#point][>#b3 +50ms][♪pop_high -4dB][<#b3 +600ms]{hl}ポイント{/}は、[|][!#point to,{y:-430, scale:.476, duration:.45, ease:'power3.inOut'} -300ms][>#c3a -80ms][♪whoosh -8dB -50ms][>#l3a +150ms]{ng}完璧な計画を待つ{/}のでは[>#c3a.ng][!#c3a.img to,{filter:'saturate(.15)', duration:.35}][!#c3a to,{scale:.94, duration:.35}][♪buzz -6dB]なく、[|][>#arrow3 -150ms][>#c3b -50ms][♪pop_dry -5dB -50ms][>#l3b +200ms]{hl}今あるもの{/}から[>#c3b.ok][!#c3b to,{scale:1.04, duration:.5, ease:'sine.out'}][♪correct -3dB]始めること。[silence:0.85s]
 
 *** means
-@n: [>#tl[1]][♪pop_high -4dB]知識や[>#tl[2] -60][♪pop_dry -4dB]経験、[>#tl[3] -60][♪pop_high -4dB]スキル、[>#tl[4] -60][♪pop_dry -4dB]人脈を使って、[|][<#tl[*] -340][>#c4 -20][♪whoosh -8dB -100]{hl}まず小さく{/}[>#st4 -50][♪xylo -4dB]動いてみる。[silence:0.85s]
+@n: [>#tl[1]][♪pop_high -4dB]知識や[>#tl[2] -60ms][♪pop_dry -4dB]経験、[>#tl[3] -60ms][♪pop_high -4dB]スキル、[>#tl[4] -60ms][♪pop_dry -4dB]人脈を使って、[|][<#tl[*] -340ms][>#c4 -20ms][♪whoosh -8dB -100ms]{hl}まず小さく{/}[>#st4 -50ms][♪xylo -4dB]動いてみる。[silence:0.85s]
 
 *** principles
 se whoosh -8dB
-@n: 失敗しても大きな[>#st5a -50][♪pop_dry -5dB]{hl}痛手{/}に[br]ならない{hl}範囲で試し{/}、[|][!#c5a to,{x:-70, y:40, rotation:-7, scale:.88, duration:.45, ease:'power2.out'} -100][!#c5a.img to,{opacity:.55, duration:.45} -100][<#tag5a -180][<#st5a -180][>#c5b -80][♪whoosh -8dB -120][>#tag5b +50][>#st5b +50][♪pop_dry -5dB +50]{hl}仲間{/}を巻き込み、[|][!#c5a to,{x:-110, y:70, rotation:-11, scale:.8, duration:.45, ease:'power2.out'} -100][!#c5b to,{x:70, y:40, rotation:7, scale:.88, duration:.45, ease:'power2.out'} -100][!#c5b.img to,{opacity:.55, duration:.45} -100][<#tag5b -180][<#st5b -180][>#c5c -80][♪whoosh -8dB -120][>#tag5c +50]思いがけない出来事も[br][>#st5c -350][>#b5][♪correct -3dB][<#b5 +550]{hl}チャンス{/}に変えていきます。[silence:0.95s]
+@n: 失敗しても大きな[>#st5a -50ms][♪pop_dry -5dB]{hl}痛手{/}に[br]ならない{hl}範囲で試し{/}、[|][!#c5a to,{x:-70, y:40, rotation:-7, scale:.88, duration:.45, ease:'power2.out'} -100ms][!#c5a.img to,{opacity:.55, duration:.45} -100ms][<#tag5a -180ms][<#st5a -180ms][>#c5b -80ms][♪whoosh -8dB -120ms][>#tag5b +50ms][>#st5b +50ms][♪pop_dry -5dB +50ms]{hl}仲間{/}を巻き込み、[|][!#c5a to,{x:-110, y:70, rotation:-11, scale:.8, duration:.45, ease:'power2.out'} -100ms][!#c5b to,{x:70, y:40, rotation:7, scale:.88, duration:.45, ease:'power2.out'} -100ms][!#c5b.img to,{opacity:.55, duration:.45} -100ms][<#tag5b -180ms][<#st5b -180ms][>#c5c -80ms][♪whoosh -8dB -120ms][>#tag5c +50ms]思いがけない出来事も[br][>#st5c -350ms][>#b5][♪correct -3dB][<#b5 +550ms]{hl}チャンス{/}に変えていきます。[silence:0.95s]
 
 *** pilot
 se whoosh -8dB
-@n: 未来を[>#st6a -50]{ng}予測{/}するのでは[>#c6a.ng][!#c6a.img to,{filter:'saturate(.2)', duration:.35}][♪buzz -6dB]なく、[|][<#c6a -200][<#st6a -200][!#tint fill,#EEF7FF,duration=600 -100][>#c6b -120][♪whoosh -8dB -150][>#tag6 +100]{hl}行動しながら{/}[br]未来を[>#st6b -250][♪xylo -4dB]つくっていく。[silence:0.85s]
+@n: 未来を[>#st6a -50ms]{ng}予測{/}するのでは[>#c6a.ng][!#c6a.img to,{filter:'saturate(.2)', duration:.35}][♪buzz -6dB]なく、[|][<#c6a -200ms][<#st6a -200ms][!#tint fill,#EEF7FF {duration: .6} -100ms][>#c6b -120ms][♪whoosh -8dB -150ms][>#tag6 +100ms]{hl}行動しながら{/}[br]未来を[>#st6b -250ms][♪xylo -4dB]つくっていく。[silence:0.85s]
 
 *** now
 se whoosh -8dB
-[!#tint fill,#F3F1F7,duration=600]
-@n: 計画がないから[br][>#st7a -100]{ng}動けない{/}のでは[>#c7a.ng][!#c7a.img to,{filter:'saturate(.15)', duration:.35}][♪buzz -6dB]なく、[|][<#c7a -200][<#st7a -200][!#tint fill,#EAF8F1,duration=600 -100][>#c7b -100][♪whoosh -8dB -100]手元にあるもので[>#st7b -300][!#c7b to,{y:-24, duration:.15, ease:'sine.out', repeat:3, yoyo:true}][♪correct -3dB]{hl}今すぐ動く{/}。[silence:1.0s]
+[!#tint fill,#F3F1F7 {duration: .6}]
+@n: 計画がないから[br][>#st7a -100ms]{ng}動けない{/}のでは[>#c7a.ng][!#c7a.img to,{filter:'saturate(.15)', duration:.35}][♪buzz -6dB]なく、[|][<#c7a -200ms][<#st7a -200ms][!#tint fill,#EAF8F1 {duration: .6} -100ms][>#c7b -100ms][♪whoosh -8dB -100ms]手元にあるもので[>#st7b -300ms][!#c7b to,{y:-24, duration:.15, ease:'sine.out', repeat:3, yoyo:true}][♪correct -3dB]{hl}今すぐ動く{/}。[silence:1.0s]
 
 *** recap
-[!#tint fill,#FFF4DC,duration=600]
-@n: [>#rc[*]][♪pop_high -5dB][♪pop_dry -5dB +160][♪pop_high -5dB +320][♪pop_dry -5dB +480][♪pop_high -5dB +640]これが、[|][>#rc_title -50][♪sparkle -2dB to=2.1s][!#rc[*] to,{y:-18, duration:.25, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.08} +300]{hl}エフェクチュエーション{/}の[br]考え方です。[silence:0.85s]
+[!#tint fill,#FFF4DC {duration: .6}]
+@n: [>#rc[*]][♪pop_high -5dB][♪pop_dry -5dB +160ms][♪pop_high -5dB +320ms][♪pop_dry -5dB +480ms][♪pop_high -5dB +640ms]これが、[|][>#rc_title -50ms][♪sparkle -2dB to=2.1s][!#rc[*] to,{y:-18, duration:.25, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.08} +300ms]{hl}エフェクチュエーション{/}の[br]考え方です。[silence:0.85s]
 
 *** cta
 se whoosh -8dB
-[!#tint fill,#FFF7EC,duration=600]
-@n: 詳しい[>#k1.l -80][♪pop_high -4dB]{hl}解説記事{/}や[br][>#k2.l -80][♪pop_dry -4dB]{hl}対談本編動画{/}は、[|][>#ch1 -50][♪pop_high -5dB]{hl}概要欄{/}や[>#ch2 -50][♪pop_dry -5dB]{hl}コメント欄{/}の[>#btn -150]リンクから[br][>#cur -600][!#cur to,{scale:.82, duration:.12, repeat:1, yoyo:true} -20][!#btn punch,0.92,duration=400 -20][♪click][>#downs[*] +300][!#btn to,{scale:1.05, duration:.45, ease:'sine.inOut', repeat:-1, yoyo:true} +800][!#k1 main,float +800][!#k2 main,float +1100]チェックしてみてください！[silence:3.2s]
+[!#tint fill,#FFF7EC {duration: .6}]
+@n: 詳しい[>#k1.l -80ms][♪pop_high -4dB]{hl}解説記事{/}や[br][>#k2.l -80ms][♪pop_dry -4dB]{hl}対談本編動画{/}は、[|][>#ch1 -50ms][♪pop_high -5dB]{hl}概要欄{/}や[>#ch2 -50ms][♪pop_dry -5dB]{hl}コメント欄{/}の[>#btn -150ms]リンクから[br][>#cur -600ms][!#cur to,{scale:.82, duration:.12, repeat:1, yoyo:true} -20ms][!#btn punch {scale: .92, duration: .4} -20ms][♪click][>#downs[*] +300ms][!#btn to,{scale:1.05, duration:.45, ease:'sine.inOut', repeat:-1, yoyo:true} +800ms][!#k1 main,float +800ms][!#k2 main,float +1100ms]チェックしてみてください！[silence:3.2s]
 ```

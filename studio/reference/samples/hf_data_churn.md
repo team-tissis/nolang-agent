@@ -58,7 +58,7 @@ svg bubble_ico = """<svg viewBox="0 0 60 60"><rect x="1" y="1" width="58" height
 p { color: $ink }
 div { border: none }
 # 字幕: 下端中央の半透明の黒い札・数字は黄の欧文 (台詞の {b})・札の中の読点は空白に・cut を割らない (札 = 文、[|] で句に切る)
-subtitle.hug(bottom: 50px; font-size: 38px; line-height: 1.24; letter-spacing: 0.03em; color: #F4F7FC; background: #04070F94; border-radius: 12px; padding: 8px 26px 10px 26px; box-shadow: 0px 6px 24px #00000040; unit: sentence; strip: 、。>space; lead: 50; tail: 0; hold: off; in: {y:8, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power2.in'})
+subtitle.hug(bottom: 50px; font-size: 38px; line-height: 1.24; letter-spacing: 0.03em; color: #F4F7FC; background: #04070F94; border-radius: 12px; padding: 8px 26px 10px 26px; box-shadow: 0px 6px 24px #00000040; unit: sentence; strip: 、。>space; lead: 50ms; tail: 0ms; hold: off; in: {y:8, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power2.in'})
 # 曲: 頭の 1 秒と締めの題だけ前に出し、台詞の間は 6 dB 下げる
 bgm#music(keys: "0:+6|800ms:+6|1300ms:0|end-3s:0|end-2.2s:+6"; fade: 600,1550) ミニマルで知的なディープテック寄りのアンビエント・エレクトロニカ、120 BPM 前後、シンセのアルペジオと柔らかいパッド、控えめなキックとハイハットとサブベース、主旋律なし、データ分析の解説向け
 
@@ -73,7 +73,7 @@ def panel(t, s="", tk=$blue) = div(border-radius: 20px; background: linear(#161F
   p#ps(left: .pt.right+14; cy: 34px; font-size: 20px; color: $ink3; font-family: m; white-space: nowrap; content: {s})
   div#rule(left: 0px; top: 68px; width: 100%; height: 2px; background: $line)
 # 上端の帯の章札 (番号は青緑の欧文 + 題)・場面の頭に下から入り、場面の終わりに上へ抜ける
-def chap(n, t) = div(left: 402px; top: 38px; width: 540px; height: 44px; z-index: front; delay: 50; in: {y:14, opacity:0, duration:0.45, ease:'power3.out'}; out: {y:-14, opacity:0, duration:0.3, ease:'power2.in'})
+def chap(n, t) = div(left: 402px; top: 38px; width: 540px; height: 44px; z-index: front; delay: 50ms; in: {y:14, opacity:0, duration:0.45, ease:'power3.out'}; out: {y:-14, opacity:0, duration:0.3, ease:'power2.in'})
   p#n(left: 0px; cy: 50%; font-size: 20px; font-family: n; letter-spacing: 0.04em; color: $teal; content: {n})
   p#t(left: .n.right+12; cy: 50%; font-size: 22px; white-space: nowrap; content: {t})
 # 丸い札 (既定は黄の地に黒文字・色は実体で上書き)
@@ -109,18 +109,18 @@ veil#grain(grain: 0.05; color: #00000000; z-index: back; in: none)
 section#s01(stagger: {each:0})
 img#title_bg(inset: 0; content: @title_img; main: none; in: keys(at=0 scale=1.12 opacity=0 | at=0.374 scale=1.03 opacity=1 ease=power2.out | at=1 scale=1 ease=none),duration=4280; out: {opacity:0, duration:0.6, ease:'power2.inOut'})
 group#title(left: 150px; top: 330px; width: 1100px; height: 460px; main: keys(at=0 scale=1 | at=1 scale=1.025),window=0,4900,forwards; transform-origin: 0% 50%; out: {y:-18, opacity:0, duration:0.4, ease:'power2.in'})
-  div#kicker(left: 0px; top: 0px; width: 900px; height: 38px; delay: 300; in: {x:-24, opacity:0, duration:0.6, ease:'power3.out'})
+  div#kicker(left: 0px; top: 0px; width: 900px; height: 38px; delay: 300ms; in: {x:-24, opacity:0, duration:0.6, ease:'power3.out'})
     div#ln(left: 0px; cy: 50%; width: 44px; height: 3px; background: $teal)
     p#t(left: 60px; cy: 50%; font-size: 26px; letter-spacing: 0.14em; color: $teal; white-space: nowrap) 社内共有 ｜ 解約分析レポート
-  p#l1(left: 0px; top: 52px; font-size: 92px; font-family: h; line-height: 1.3; letter-spacing: 0.01em; white-space: nowrap; delay: 500; in: {y:124, duration:0.8, ease:'power4.out', clip:true}) 動画生成サービスの解約、
-  p#l2(left: 0px; top: 170px; font-size: 92px; font-family: h; line-height: 1.3; letter-spacing: 0.01em; white-space: nowrap; delay: 660; in: {y:124, duration:0.8, ease:'power4.out', clip:true}) この{a}3か月{/}で分かったこと
-  div#bar(left: 0px; top: 318px; width: 620px; height: 6px; border-radius: 3px; background: linear($teal,$blue,90); delay: 1050; in: {scaleX:0, duration:0.9, ease:'power3.inOut', pivot:'left'})
-  p#meta(left: "0;153;275"; top: "237;237;237"; font-size: 26px; color: $ink2; font-family: m; white-space: nowrap; delay: 1350; in: {y:14, opacity:0, duration:0.5, ease:'power3.out', stagger:{each:0.12}}) ×3 {lb}対象{/} 有料契約者;{lb}期間{/} 7〜9月;{lb}データ{/} 解約・申請・アンケート
+  p#l1(left: 0px; top: 52px; font-size: 92px; font-family: h; line-height: 1.3; letter-spacing: 0.01em; white-space: nowrap; delay: 500ms; in: {y:124, duration:0.8, ease:'power4.out', clip:true}) 動画生成サービスの解約、
+  p#l2(left: 0px; top: 170px; font-size: 92px; font-family: h; line-height: 1.3; letter-spacing: 0.01em; white-space: nowrap; delay: 660ms; in: {y:124, duration:0.8, ease:'power4.out', clip:true}) この{a}3か月{/}で分かったこと
+  div#bar(left: 0px; top: 318px; width: 620px; height: 6px; border-radius: 3px; background: linear($teal,$blue,90); delay: 1050ms; in: {scaleX:0, duration:0.9, ease:'power3.inOut', pivot:'left'})
+  p#meta(left: "0;153;275"; top: "237;237;237"; font-size: 26px; color: $ink2; font-family: m; white-space: nowrap; delay: 1350ms; in: {y:14, opacity:0, duration:0.5, ease:'power3.out', stagger:{each:0.12}}) ×3 {lb}対象{/} 有料契約者;{lb}期間{/} 7〜9月;{lb}データ{/} 解約・申請・アンケート
 
 # s02 現状: 上端の帯が降りて進行が伸び始める・左の板で 1,776 → 1,682 人を棒で比べ、右の板の流れ図 (新規 → 契約者 → 解約) を薄く置いて語で点ける・点が矢印を流れ続け「純増ゼロ」が光る
 section#s02(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 # 上端の帯 (sticky・締めの題で抜く): 左の題・右の期間・細い線に場面の境の目盛り 8 本
-div#hdr.sticky(left: 112px; top: 38px; width: 1696px; height: 60px; z-index: front; delay: 100; in: {y:-12, opacity:0, duration:0.6, ease:'power3.out'}; out: {y:-10, opacity:0, duration:0.6, ease:'power2.in'})
+div#hdr.sticky(left: 112px; top: 38px; width: 1696px; height: 60px; z-index: front; delay: 100ms; in: {y:-12, opacity:0, duration:0.6, ease:'power3.out'}; out: {y:-10, opacity:0, duration:0.6, ease:'power2.in'})
   div#dot(left: 0px; top: 16px; width: 10px; height: 10px; border-radius: 2px; background: linear($teal,$blue,135))
   p#l(left: 24px; cy: 22px; font-size: 21px; letter-spacing: 0.12em; color: #8E9AB2; white-space: nowrap) 解約分析レポート
   p#r(right: 0px; cy: 22px; font-size: 20px; letter-spacing: 0.06em; color: $ink3; font-family: m; white-space: nowrap) 7〜9月 ｜ 社内共有
@@ -130,7 +130,7 @@ div#hdr.sticky(left: 112px; top: 38px; width: 1696px; height: 60px; z-index: fro
 progress#prog.sticky(left: 112px; top: 93px; width: 1696px; height: 3px; background: linear($teal,$blue,90); until: end; z-index: front; overlap: hdr)
 chap#ch2(n: "01"; t: "現状")
 headline#hl2 新規課金があっても、契約者数は{a}増えていない{/}
-panel#p2a(left: 112px; top: 232px; width: 720px; height: 648px; t: "有料契約者数"; s: "各月末時点"; delay: 80)
+panel#p2a(left: 112px; top: 232px; width: 720px; height: 648px; t: "有料契約者数"; s: "各月末時点"; delay: 80ms)
   kpi#k1(left: 44px; top: 104px; l: "6月末"; v: "1,776"; w: 600px; c: $slate2; vc: $ink2)
   div#arrow(left: 44px; top: 318px; width: 600px; height: 50px; in: {y:-10, opacity:0, duration:0.45, ease:'power3.out'})
     icon#i(left: 0px; cy: 50%; font-size: 36px; name: arrow-down; color: #6E7A92)
@@ -138,18 +138,18 @@ panel#p2a(left: 112px; top: 232px; width: 720px; height: 648px; t: "有料契約
   kpi#k2(left: 44px; top: 386px; l: "9月末"; v: "1,682"; w: 568px; c: "linear(#4C8DF0,#86B8FF,90)")
   p#na(left: 44px; top: 598px; font-size: 22px; color: $note; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) バーの長さ ＝ 人数（0 起点）
 # 流れ図: 3 つの枠を 0.32 で先に置き、語で 1 に点ける (点は矢印の上を 0.9 秒で流れ続ける)
-panel#p2b(left: 872px; top: 232px; width: 936px; height: 648px; t: "毎月の出入り"; s: "7〜9月"; tk: $amber; delay: 220)
+panel#p2b(left: 872px; top: 232px; width: 936px; height: 648px; t: "毎月の出入り"; s: "7〜9月"; tk: $amber; delay: 220ms)
   shape#a1(left: 312px; top: 260px; width: 48px; height: 21px; path: arrow_r; background: $teal; border: 4px solid $teal; in: draw {duration: 0.5})
   shape#a2(left: 572px; top: 260px; width: 66px; height: 21px; path: arrow_r; background: $coral; border: 4px solid $coral; in: draw {duration: 0.5})
   shape#fi(left: "206;207;208"; top: "177;177;177"; width: 9px; height: 9px; border-radius: 50%; background: #BFF5EA; in: {opacity:0, duration:0.3}) ×3
   shape#fo(left: "380;381;382"; top: "177;177;177"; width: 9px; height: 9px; border-radius: 50%; background: #FFD0D0; in: {opacity:0, duration:0.3}) ×3
-  div#node_in(left: 30px; top: 170px; width: 276px; height: 200px; border-radius: 18px; background: #35D3B512; border: 3px solid #35D3B58C; opacity: 0.32; delay: 450; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
+  div#node_in(left: 30px; top: 170px; width: 276px; height: 200px; border-radius: 18px; background: #35D3B512; border: 3px solid #35D3B58C; opacity: 0.32; delay: 450ms; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
     p#t(left: 0px; top: 22px; width: 276px; text-align: center; font-size: 26px; color: $teal) 新規課金
     p#v(left: 0px; top: 72px; width: 276px; text-align: center; font-size: 46px; line-height: 1.39; font-family: n; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) 170〜178
     p#u(left: 0px; top: 140px; width: 276px; text-align: center; font-size: 22px; color: $ink3; font-family: m; in: {y:8, opacity:0, duration:0.45, ease:'power3.out'}) 人／月
-  div#core(left: 368px; top: 170px; width: 200px; height: 200px; border-radius: 148px; background: radial(#5B9DFF38,#5B9DFF0A@70%,50%,40%); border: 3px solid #AABEE659; opacity: 0.32; delay: 550; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
+  div#core(left: 368px; top: 170px; width: 200px; height: 200px; border-radius: 148px; background: radial(#5B9DFF38,#5B9DFF0A@70%,50%,40%); border: 3px solid #AABEE659; opacity: 0.32; delay: 550ms; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
     p#t(cx: 50%; cy: 50%; font-size: 26px; white-space: nowrap) 有料契約者
-  div#node_out(left: 646px; top: 118px; width: 250px; height: 304px; border-radius: 18px; background: #FF6B6B12; border: 3px solid #FF6B6B8C; opacity: 0.32; delay: 650; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
+  div#node_out(left: 646px; top: 118px; width: 250px; height: 304px; border-radius: 18px; background: #FF6B6B12; border: 3px solid #FF6B6B8C; opacity: 0.32; delay: 650ms; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})
     p#t(left: 0px; top: 22px; width: 250px; text-align: center; font-size: 26px; color: $coral) 解約成立
     div#r(left: "20;20;20"; top: "52;97;143"; width: 190px; height: 64px; in: {x:16, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.12}}) ×3
       p#m(left: 0px; cy: 50%; font-size: 24px; color: $ink3) 7月;8月;9月
@@ -162,7 +162,7 @@ panel#p2b(left: 872px; top: 232px; width: 936px; height: 648px; t: "毎月の出
 section#s03(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch3(n: "02"; t: "月次の解約率")
 headline#hl3 月次の解約率は {nn}13.2%{/} から {nn}10.8%{/} へ
-panel#p3a(left: 112px; top: 232px; width: 1100px; height: 648px; t: "月次の解約率"; s: "月内の解約成立 ÷ 月初の有料契約"; tk: $coral; delay: 100)
+panel#p3a(left: 112px; top: 232px; width: 1100px; height: 648px; t: "月次の解約率"; s: "月内の解約成立 ÷ 月初の有料契約"; tk: $coral; delay: 100ms)
   div#grid(left: "73;73;73"; top: "80;173;267"; width: 960px; height: 2px; background: $line) ×3
   p#gl(left: "13;13;13;13"; top: "71;165;258;351"; width: 72px; text-align: right; font-size: 20px; color: $ink3; font-family: n) ×4 15%;10%;5%;0%
   div#c1(left: 154px; top: 171px; width: 150px; height: 369px; border-radius: 6px 6px 0px 0px; background: linear(#E26A72,#B9505B,180); in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom'})
@@ -187,7 +187,7 @@ panel#p3a(left: 112px; top: 232px; width: 1100px; height: 648px; t: "月次の�
     p#t1(left: 24px; cy: 50%; font-size: 20px; color: $ink2; font-family: m; white-space: nowrap) 自発的な解約
     div#c2(left: 166px; cy: 50%; width: 14px; height: 14px; border-radius: 4px; background: $amber)
     p#t2(left: 190px; cy: 50%; font-size: 20px; color: $ink2; font-family: m; white-space: nowrap) 決済失敗
-panel#p3b(left: 1252px; top: 232px; width: 556px; height: 648px; t: "9月の内訳"; tk: $amber; delay: 240)
+panel#p3b(left: 1252px; top: 232px; width: 556px; height: 648px; t: "9月の内訳"; tk: $amber; delay: 240ms)
   p#kl(left: 40px; top: 94px; font-size: 24px; color: $ink3) 9月の解約率
   p#kv(left: 36px; top: 146px; font-size: 108px; line-height: 1; font-family: n; letter-spacing: -0.02em; in: {y:12, opacity:0, duration:0.5, ease:'power3.out'}) 10.8%
   # 割合の帯: 破線の枠の上に 8.5 (珊瑚) と 2.3 (黄) が語で左から伸びる
@@ -195,7 +195,7 @@ panel#p3b(left: 1252px; top: 232px; width: 556px; height: 648px; t: "9月の内�
   div#sba(left: 40px; top: 290px; width: 372px; height: 40px; border-radius: 8px 0px 0px 8px; background: $coral; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
   div#sbb(left: 416px; top: 290px; width: 100px; height: 40px; border-radius: 0px 8px 8px 0px; background: $amber; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})
   # 内訳の 2 行 (先に 0.42 で置き、語で 1 にして % を出す)
-  div#r(left: "27;27"; top: "248;301"; width: 476px; height: 70px; opacity: 0.42; delay: 550; in: {opacity:0, duration:0.5}) ×2
+  div#r(left: "27;27"; top: "248;301"; width: 476px; height: 70px; opacity: 0.42; delay: 550ms; in: {opacity:0, duration:0.5}) ×2
     div#chip(left: 0px; cy: 50%; width: 14px; height: 14px; border-radius: 4px; background: "$coral;$amber")
     p#nm(left: 28px; cy: 50%; font-size: 28px) 自発的な解約;決済失敗
     p#pv(right: 0px; cy: 50%; font-size: 46px; font-family: n; in: {opacity:0, duration:0.35}) 8.5%;2.3%
@@ -206,7 +206,7 @@ panel#p3b(left: 1252px; top: 232px; width: 556px; height: 648px; t: "9月の内�
 section#s04(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch4(n: "03"; t: "週次の動き")
 headline#hl4 9月は、週ごとに見ると{a}減っている{/}
-panel#p4a(left: 112px; top: 232px; width: 1060px; height: 648px; t: "週次の解約成立"; s: "件／週"; tk: $coral; delay: 100)
+panel#p4a(left: 112px; top: 232px; width: 1060px; height: 648px; t: "週次の解約成立"; s: "件／週"; tk: $coral; delay: 100ms)
   div#grid(left: "73;73;73"; top: "125;205;285"; width: 920px; height: 2px; background: $line) ×3
   div#base(left: 110px; top: 548px; width: 920px; height: 3px; background: $line2)
   p#gl(left: "13;13;13;13"; top: "117;197;277;357"; width: 72px; text-align: right; font-size: 20px; color: $ink3; font-family: n) ×4 60;40;20;0
@@ -215,10 +215,10 @@ panel#p4a(left: 112px; top: 232px; width: 1060px; height: 648px; t: "週次の�
   shape#line(path: "M127 113 L300 173 L473 213 L647 261"; background: none; border: 4px solid $coral; in: draw {duration: 1.89})
   shape#dot(left: "120;293;466;639"; top: "106;166;206;253"; width: "13;13;13;16"; height: "13;13;13;16"; border-radius: 50%; background: $coral; border: 4px solid #131B33; in: {scale:0, duration:0.35, ease:'back.out(2.5)'}) ×4
   p#vl(left: "87;260;433;607"; top: "71;131;171;219"; width: 120px; text-align: center; font-size: 42px; line-height: 1.14; font-family: n; in: {y:10, opacity:0, duration:0.35, ease:'power3.out'}) ×4 63;48;38;26
-  p#xl(left: "73;247;420;593"; top: "377;377;377;377"; width: 160px; text-align: center; font-size: 22px; color: $ink2; font-family: n; delay: 150; in: {opacity:0, duration:0.5, stagger:{each:0.08}}) ×4 8/31週;9/7週;9/14週;9/21週
+  p#xl(left: "73;247;420;593"; top: "377;377;377;377"; width: 160px; text-align: center; font-size: 22px; color: $ink2; font-family: n; delay: 150ms; in: {opacity:0, duration:0.5, stagger:{each:0.08}}) ×4 8/31週;9/7週;9/14週;9/21週
   div#call(left: 640px; top: 104px; width: 380px; height: 112px; border-radius: 16px; background: #FF6B6B14; border: 2px solid #FF6B6B73; in: {scale:0.85, opacity:0, duration:0.5, ease:'back.out(1.8)'})
     p#t(cx: 50%; cy: 50%; font-size: 58px; font-family: n; color: $ink2; white-space: nowrap) 63 {ar}→{/} {cr}26{/}{un}件{/}
-panel#p4b(left: 1212px; top: 232px; width: 596px; height: 648px; t: "解約の申請"; s: "件／週"; delay: 240)
+panel#p4b(left: 1212px; top: 232px; width: 596px; height: 648px; t: "解約の申請"; s: "件／週"; delay: 240ms)
   div#trk(left: "24;24"; top: "88;168"; width: 400px; height: 42px; border-radius: 0px 8px 8px 0px; background: #AABEE612) ×2
   div#b1(left: 36px; top: 132px; width: 356px; height: 42px; border-radius: 0px 8px 8px 0px; background: $slate2; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
   p#bl(left: "24;24"; top: "64;144"; font-size: 24px; color: $ink2; white-space: nowrap) ×2 7月・8月の平均;9月
@@ -230,7 +230,7 @@ panel#p4b(left: 1212px; top: 232px; width: 596px; height: 648px; t: "解約の�
   shape#ref(left: 390px; top: 124px; width: 3px; height: 182px; path: line_v; border: 3px solid #F4B942B3; dash: 5,4; in: {scaleY:0, opacity:0, duration:0.45, ease:'power2.out', pivot:'top'})
   shape#gap(path: "M220 203 L220 211 L261 211 L261 203"; background: none; border: 3px solid #F4B942D9; in: {opacity:0, duration:0.3})
   badge#badge(left: 292px; top: 326px) 2割少ない
-  div#note(left: 36px; top: 418px; width: 524px; height: 170px; border-radius: 16px; border: 2px solid $line2; background: #35D3B50F; delay: 650; in: {y:16, opacity:0, duration:0.55, ease:'power3.out'})
+  div#note(left: 36px; top: 418px; width: 524px; height: 170px; border-radius: 16px; border: 2px solid $line2; background: #35D3B50F; delay: 650ms; in: {y:16, opacity:0, duration:0.55, ease:'power3.out'})
     p#t0(left: 28px; top: 16px; font-size: 20px; letter-spacing: 0.08em; color: $teal; white-space: nowrap) 申請から成立まで
     p#big(left: 28px; top: 40px; font-size: 76px; line-height: 1.16; font-family: n; color: $teal) 93%
     p#t1(left: 222px; top: 44px; font-size: 26px; white-space: nowrap) の申請が
@@ -240,7 +240,7 @@ panel#p4b(left: 1212px; top: 232px; width: 596px; height: 648px; t: "解約の�
 section#s05(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch5(n: "04"; t: "在籍期間")
 headline#hl5 在籍期間が短いほど、解約率は{a}高い{/}
-panel#p5(left: 112px; top: 232px; width: 1696px; height: 648px; t: "在籍期間別の解約率"; s: "9月"; tk: $coral; delay: 100)
+panel#p5(left: 112px; top: 232px; width: 1696px; height: 648px; t: "在籍期間別の解約率"; s: "9月"; tk: $coral; delay: 100ms)
   div#vg(left: "470;692;914"; top: "61;61;61"; width: 2px; height: 468px; background: $line) ×3
   p#vgl(left: "215;437;659;881"; top: "381;381;381;381"; width: 100px; text-align: center; font-size: 20px; color: $ink3; font-family: n) ×4 0%;10%;20%;30%
   div#axis(left: 370px; top: 88px; width: 3px; height: 476px; background: $line2)
@@ -258,7 +258,7 @@ panel#p5(left: 112px; top: 232px; width: 1696px; height: 648px; t: "在籍期間
 section#s06(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch6(n: "05"; t: "最初の3か月")
 headline#hl6 解約の{an}53%{/}は、契約3か月未満の人
-panel#p6a(left: 112px; top: 232px; width: 820px; height: 648px; t: "契約3か月未満の比重"; s: "9月"; tk: $coral; delay: 100)
+panel#p6a(left: 112px; top: 232px; width: 820px; height: 648px; t: "契約3か月未満の比重"; s: "9月"; tk: $coral; delay: 100ms)
   p#l1(left: 40px; top: 104px; font-size: 26px; color: $ink2; white-space: nowrap; in: {opacity:0, duration:0.4}) 有料契約者（母数）
   shape#rib(path: "M27 156 L150 156 L288 256 L27 256 Z"; background: #FF6B6B24; border: 2px solid #FF6B6B59; dash: 4,4; in: {opacity:0, duration:0.6})
   div#a1(left: 40px; top: 150px; width: 184px; height: 84px; border-radius: 10px 0px 0px 10px; background: linear(#E0525C,#FF7A7A,90); in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
@@ -275,7 +275,7 @@ panel#p6a(left: 112px; top: 232px; width: 820px; height: 648px; t: "契約3か�
     p#t1(left: 24px; cy: 50%; font-size: 20px; color: $ink2; font-family: m; white-space: nowrap) 契約3か月未満
     div#c2(left: 178px; cy: 50%; width: 14px; height: 14px; border-radius: 4px; background: #3A4766)
     p#t2(left: 202px; cy: 50%; font-size: 20px; color: $ink2; font-family: m; white-space: nowrap) 3か月以上
-panel#p6b(left: 972px; top: 232px; width: 836px; height: 648px; t: "解約率の推移"; s: "在籍期間別"; tk: $teal; delay: 240)
+panel#p6b(left: 972px; top: 232px; width: 836px; height: 648px; t: "解約率の推移"; s: "在籍期間別"; tk: $teal; delay: 240ms)
   div#grid(left: "67;67"; top: "147;253"; width: 690px; height: 2px; background: $line) ×2
   div#base(left: 100px; top: 540px; width: 690px; height: 3px; background: $line2)
   p#gl(left: "9;9;9"; top: "138;245;351"; width: 70px; text-align: right; font-size: 20px; color: $ink3; font-family: n) ×3 20%;10%;0%
@@ -284,8 +284,8 @@ panel#p6b(left: 972px; top: 232px; width: 836px; height: 648px; t: "解約率の
   shape#line(path: "M120 260 L293 269 L467 289"; background: none; border: 4px solid $teal; in: draw {duration: 1})
   shape#dot(left: "114;287;460"; top: "254;263;282"; width: "13;13;15"; height: "13;13;15"; border-radius: 50%; background: $teal; border: 4px solid #131B33; in: {scale:0, duration:0.3, ease:'back.out(2.5)'}) ×3
   p#pl(left: "80;253;427"; top: "217;227;246"; width: 120px; text-align: center; font-size: 34px; font-family: n; color: $teal; in: {y:8, opacity:0, duration:0.3}) ×3 9.4%;8.5%;6.7%
-  p#xl(left: "87;260;433"; top: "371;371;371"; width: 100px; text-align: center; font-size: 24px; color: $ink2; delay: 550; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×3 7月;8月;9月
-  div#leg(left: 522px; top: 92px; width: 285px; height: 30px; delay: 650; in: {opacity:0, duration:0.5})
+  p#xl(left: "87;260;433"; top: "371;371;371"; width: 100px; text-align: center; font-size: 24px; color: $ink2; delay: 550ms; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×3 7月;8月;9月
+  div#leg(left: 522px; top: 92px; width: 285px; height: 30px; delay: 650ms; in: {opacity:0, duration:0.5})
     div#c1(left: 0px; cy: 50%; width: 28px; height: 4px; border-radius: 3px; background: $teal)
     p#t1(left: 39px; cy: 50%; font-size: 20px; color: $ink2; font-family: m; white-space: nowrap) 3か月以上
     div#c2(left: 154px; cy: 50%; width: 28px; height: 14px; border-radius: 3px; background: #FF6B6B4D; border: 2px solid #FF6B6BB3)
@@ -295,14 +295,14 @@ panel#p6b(left: 972px; top: 232px; width: 836px; height: 648px; t: "解約率の
 section#s07(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch7(n: "06"; t: "解約理由")
 headline#hl7 解約理由の上位{a}3つ{/}
-panel#p7(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約理由"; s: "9月・アンケート127件"; delay: 80)
+panel#p7(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約理由"; s: "9月・アンケート127件"; delay: 80ms)
   div#vg(left: "549;771;993"; top: "59;59;59"; width: 2px; height: 470px; background: $line) ×3
   p#vgl(left: "294;516;738;960"; top: "377;377;377;377"; width: 100px; text-align: center; font-size: 20px; color: $ink3; font-family: n) ×4 0%;10%;20%;30%
   div#axis(left: 488px; top: 84px; width: 3px; height: 478px; background: $line2)
   div#r(left: "0;0;0;0;0;0"; top: "64;117;171;224;277;331"; width: 1696px; height: 60px) ×6
-    p#lb(left: 110px; cy: 50%; width: 350px; text-align: right; font-size: 30px; color: $ink2; white-space: nowrap; delay: "100;190;280;370;460;550"; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 一時的に使わない;思い通りに作れない;料金;選択なし;クレジットが余る;本数が足りない
-    div#bar(left: 490px; top: 8px; width: "622;533;467;311;222;200"; height: 44px; border-radius: 0px 8px 8px 0px; background: #4A5878; delay: "150;240;330;420;510;600"; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
-    p#vv(left: "961;872;805;650;561;539"; cy: 50%; font-size: 44px; line-height: 1.27; font-family: n; color: $ink2; delay: "550;640;730;820;910;1000"; in: {opacity:0, duration:0.4}) 28%;24%;21%;14%;10%;9%
+    p#lb(left: 110px; cy: 50%; width: 350px; text-align: right; font-size: 30px; color: $ink2; white-space: nowrap; delay: "100ms;190ms;280ms;370ms;460ms;550ms"; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 一時的に使わない;思い通りに作れない;料金;選択なし;クレジットが余る;本数が足りない
+    div#bar(left: 490px; top: 8px; width: "622;533;467;311;222;200"; height: 44px; border-radius: 0px 8px 8px 0px; background: #4A5878; delay: "150ms;240ms;330ms;420ms;510ms;600ms"; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
+    p#vv(left: "961;872;805;650;561;539"; cy: 50%; font-size: 44px; line-height: 1.27; font-family: n; color: $ink2; delay: "550ms;640ms;730ms;820ms;910ms;1000ms"; in: {opacity:0, duration:0.4}) 28%;24%;21%;14%;10%;9%
   div#hi(left: "327;327;327"; top: "69;122;176"; width: "622;533;467"; height: 44px; border-radius: 0px 8px 8px 0px; background: linear(#4C8DF0,#8CBBFF,90); box-shadow: 0px 0px 26px #5B9DFF59; in: {scaleX:0, duration:0.55, ease:'power3.out', pivot:'left'}) ×3
   div#rk(left: "40;40;40"; top: "69;122;176"; width: 44px; height: 44px; border-radius: 148px; background: $blue; in: {scale:0, opacity:0, duration:0.4, ease:'back.out(2.4)'}) ×3
     p#t(cx: 50%; cy: 50%; font-size: 24px; font-family: n; color: #06122A) 1;2;3
@@ -311,8 +311,8 @@ panel#p7(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約理由
 section#s08(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch8(n: "07"; t: "期間別の理由")
 headline#hl8 解約理由は、利用期間で{a}変わる{/}
-panel#p8a(left: 112px; top: 232px; width: 1040px; height: 648px; t: "利用期間別の解約理由"; s: "9月"; delay: 100)
-  div#cl(left: 32px; top: 96px; width: 472px; height: 452px; border-radius: 16px; border: 2px solid $line2; background: #FFFFFF06; delay: 50; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
+panel#p8a(left: 112px; top: 232px; width: 1040px; height: 648px; t: "利用期間別の解約理由"; s: "9月"; delay: 100ms)
+  div#cl(left: 32px; top: 96px; width: 472px; height: 452px; border-radius: 16px; border: 2px solid $line2; background: #FFFFFF06; delay: 50ms; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
     shape#dot(left: 26px; top: 34px; width: 12px; height: 12px; border-radius: 50%; background: $coral)
     p#tg(left: 50px; cy: 40px; font-size: 27px; white-space: nowrap) 初回サイクルで解約
     reason#i1(left: 26px; top: 124px; l: "思い通りに作れない"; v: "34%"; w: 357px)
@@ -323,10 +323,10 @@ panel#p8a(left: 112px; top: 232px; width: 1040px; height: 648px; t: "利用期�
     reason#i3(left: 26px; top: 124px; l: "一時的に使わない"; v: "29%"; w: 304px)
     reason#i4(left: 26px; top: 284px; l: "クレジットが余る"; v: "17%"; w: 178px; c: #5A6B8F; vc: $ink2)
   p#na(left: 34px; top: 574px; font-size: 22px; color: $note; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) バーの長さは 0〜40% の目盛り
-panel#p8b(left: 1192px; top: 232px; width: 616px; height: 648px; t: "機能への不満"; tk: $amber; delay: 240)
-  svg#ico(left: 36px; top: 98px; width: 84px; height: 84px; part: voice_ico; delay: 550; in: {scale:0.8, opacity:0, duration:0.45, ease:'back.out(2)'})
-  p#kind(left: 136px; top: 104px; font-size: 27px; delay: 650; in: {x:-10, opacity:0, duration:0.45, ease:'power3.out'}) 音声系
-  p#kind2(left: 136px; top: 146px; font-size: 21px; color: $ink3; font-family: m; white-space: nowrap; delay: 750; in: {x:-10, opacity:0, duration:0.45, ease:'power3.out'}) 読み間違い・イントネーション
+panel#p8b(left: 1192px; top: 232px; width: 616px; height: 648px; t: "機能への不満"; tk: $amber; delay: 240ms)
+  svg#ico(left: 36px; top: 98px; width: 84px; height: 84px; part: voice_ico; delay: 550ms; in: {scale:0.8, opacity:0, duration:0.45, ease:'back.out(2)'})
+  p#kind(left: 136px; top: 104px; font-size: 27px; delay: 650ms; in: {x:-10, opacity:0, duration:0.45, ease:'power3.out'}) 音声系
+  p#kind2(left: 136px; top: 146px; font-size: 21px; color: $ink3; font-family: m; white-space: nowrap; delay: 750ms; in: {x:-10, opacity:0, duration:0.45, ease:'power3.out'}) 読み間違い・イントネーション
   p#cap(left: 40px; top: 238px; font-size: 21px; color: $ink3; white-space: nowrap; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) 機能への不満に占める割合
   p#from(left: 40px; top: 306px; font-size: 66px; line-height: 1.06; font-family: n; color: $ink3; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) 21%
   shape#arr(left: 184px; top: 318px; width: 70px; height: 46px; path: arrow_r; background: $amber; border: 6px solid $amber; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'})
@@ -337,8 +337,8 @@ panel#p8b(left: 1192px; top: 232px; width: 616px; height: 648px; t: "機能へ�
 section#s09(stagger: {each:0}; out: {y:-16, opacity:0, duration:0.34, ease:'power2.in'})
 chap#ch9(n: "08"; t: "利用行動")
 headline#hl9 解約する人の行動は{a}二極化{/}している
-panel#p9(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約申請者の直前30日の動画作成本数"; s: "申請者に占める割合"; delay: 80)
-  div#scale(left: 1290px; top: 90px; width: 300px; height: 33px; delay: 650; in: {opacity:0, duration:0.5})
+panel#p9(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約申請者の直前30日の動画作成本数"; s: "申請者に占める割合"; delay: 80ms)
+  div#scale(left: 1290px; top: 90px; width: 300px; height: 33px; delay: 650ms; in: {opacity:0, duration:0.5})
     div#sq(left: 0px; cy: 50%; width: 22px; height: 22px; border-radius: 4px; background: #56627E)
     p#t(left: 34px; cy: 50%; font-size: 24px; color: #B4BED0; white-space: nowrap) 1マス ＝ 申請者の1%
   p#n45(left: 120px; top: 150px; width: 420px; text-align: center; font-size: 104px; line-height: 1.06; font-family: n; color: $blue; in: {y:18, scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.8)'}) 45%
@@ -348,31 +348,31 @@ panel#p9(left: 112px; top: 232px; width: 1696px; height: 648px; t: "解約申請
   # hf の作り: 「それ以外」は 10 × 10 の格子の最初の位置の下端に掛かる (格子が分かれた後に出る)
   p#lmid(left: 648px; top: 504px; width: 400px; text-align: center; font-size: 26px; color: $ink2; in: {opacity:0, duration:0.5}) それ以外
 # 100 マスは 3 つの ×N (0 本 45・それ以外 32・10 本以上 23)。最初の位置は 10 × 10 の列順、変種 .split が分かれた先と色 (語で 1 秒かけて補間して移る)
-shape#wb(left: "503;503;503;503;503;503;503;503;503;503;531;531;531;531;531;531;531;531;531;531;559;559;559;559;559;559;559;559;559;559;587;587;587;587;587;587;587;587;587;587;615;615;615;615;615"; top: "255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 100; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×45
-#wb.split(left: "172;172;172;172;172;200;200;200;200;200;228;228;228;228;228;256;256;256;256;256;284;284;284;284;284;312;312;312;312;312;340;340;340;340;340;368;368;368;368;368;396;396;396;396;396"; top: "354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466"; background: $blue; move: 1000,power3.inOut)
-shape#wm(left: "615;615;615;615;615;643;643;643;643;643;643;643;643;643;643;671;671;671;671;671;671;671;671;671;671;699;699;699;699;699;699;699"; top: "395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 370; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×32
-#wm.split(left: "531;531;531;531;559;559;559;559;587;587;587;587;615;615;615;615;643;643;643;643;671;671;671;671;699;699;699;699;727;727;727;727"; top: "368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452"; background: #2B3550; move: 1000,power3.inOut)
-shape#wa(left: "699;699;699;727;727;727;727;727;727;727;727;727;727;755;755;755;755;755;755;755;755;755;755"; top: "451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 562; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×23
-#wa.split(left: "918;918;918;918;918;946;946;946;946;946;974;974;974;974;974;1002;1002;1002;1002;1002;1030;1030;1030"; top: "354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;410;438;466"; background: $amber; move: 1000,power3.inOut)
+shape#wb(left: "503;503;503;503;503;503;503;503;503;503;531;531;531;531;531;531;531;531;531;531;559;559;559;559;559;559;559;559;559;559;587;587;587;587;587;587;587;587;587;587;615;615;615;615;615"; top: "255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 100ms; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×45
+#wb.split(left: "172;172;172;172;172;200;200;200;200;200;228;228;228;228;228;256;256;256;256;256;284;284;284;284;284;312;312;312;312;312;340;340;340;340;340;368;368;368;368;368;396;396;396;396;396"; top: "354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466"; background: $blue; move: 1000ms,power3.inOut)
+shape#wm(left: "615;615;615;615;615;643;643;643;643;643;643;643;643;643;643;671;671;671;671;671;671;671;671;671;671;699;699;699;699;699;699;699"; top: "395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 370ms; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×32
+#wm.split(left: "531;531;531;531;559;559;559;559;587;587;587;587;615;615;615;615;643;643;643;643;671;671;671;671;699;699;699;699;727;727;727;727"; top: "368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452;368;396;424;452"; background: #2B3550; move: 1000ms,power3.inOut)
+shape#wa(left: "699;699;699;727;727;727;727;727;727;727;727;727;727;755;755;755;755;755;755;755;755;755;755"; top: "451;479;507;255;283;311;339;367;395;423;451;479;507;255;283;311;339;367;395;423;451;479;507"; width: 34px; height: 34px; path: rect,r=0.22; background: $slate; border: none; delay: 562ms; in: {scale:0, duration:0.35, ease:'back.out(2)', stagger:{each:0.006}}) ×23
+#wa.split(left: "918;918;918;918;918;946;946;946;946;946;974;974;974;974;974;1002;1002;1002;1002;1002;1030;1030;1030"; top: "354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;354;382;410;438;466;410;438;466"; background: $amber; move: 1000ms,power3.inOut)
 
 # s10 まとめ: 3 枚の札を頭に並べ (1 枚目だけ点灯・2 / 3 枚目は 0.36 で待機)、文の頭で 1 枚ずつ点けて番号を弾ませ中身を出す・最後に札と見出しが上へ抜ける
 section#s10(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.55, ease:'power2.in'})
 chap#ch10(n: "09"; t: "まとめ")
 headline#hl10 まとめ：3か月のデータから言えること
 card#card1(left: 112px; n: "1"; t: "解約率は11%前後で[br]横ばい"; s: "ただし9月は、週ごとに減っている"; cap: "週次の解約成立（件）　8/31週 → 9/21週"; c: $blue; g: "linear(#5B9DFF,#86B8FF,90)")
-  p#t(delay: 50)
-  p#s(delay: 250)
-  p#cap(delay: 700)
+  p#t(delay: 50ms)
+  p#s(delay: 250ms)
+  p#cap(delay: 700ms)
   div#base(left: 32px; top: 525px; width: 472px; height: 3px; background: $line2)
   shape#ml(path: "M41 240 L134 273 L228 295 L321 322"; background: none; border: 4px solid $coral; in: draw {duration: 1.2})
   shape#md(left: "35;128;222;315"; top: "234;267;289;316"; width: "11;11;11;12"; height: "11;11;11;12"; border-radius: 50%; background: $coral; border: 3px solid #141D37; in: {scale:0, duration:0.3, ease:'back.out(2.5)', stagger:{each:0.36}}) ×4
   p#m63(left: 39px; top: 302px; font-size: 34px; font-family: n; in: {opacity:0, duration:0.3}) 63
   p#m26(left: 456px; top: 418px; font-size: 34px; font-family: n; in: {opacity:0, duration:0.3}) 26
-card#card2(left: 692px; n: "2"; t: "勝負は[br]最初の3か月"; s: "3か月未満の解約率が下がらない"; cap: "解約の53%が契約3か月未満"; c: $coral; g: "linear(#E0525C,#FF7A7A,90)"; opacity: 0.36; delay: 140)
+card#card2(left: 692px; n: "2"; t: "勝負は[br]最初の3か月"; s: "3か月未満の解約率が下がらない"; cap: "解約の53%が契約3か月未満"; c: $coral; g: "linear(#E0525C,#FF7A7A,90)"; opacity: 0.36; delay: 140ms)
   p#b20(left: 32px; top: 310px; font-size: 120px; line-height: 1.08; font-family: n; color: $coral; white-space: nowrap; transform-origin: 0% 50%; in: {scale:0.85, opacity:0, duration:0.55, ease:'power3.out'}) 20%{dai}台{/}
   p#b20s(left: 36px; top: 450px; font-size: 24px; color: $ink2; white-space: nowrap; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) 3か月未満の解約率（7〜9月）
   p#imp(left: 36px; top: 496px; font-size: 22px; color: $teal; white-space: nowrap; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) 3か月以上は {nn}9.4% → 6.7%{/} に改善
-card#card3(left: 1272px; n: "3"; t: "まず直す所"; s: "初回サイクルと音声の品質"; cap: "9月の解約アンケートより"; c: $amber; g: "linear(#F4B942,#FFD27A,90)"; opacity: 0.36; delay: 260)
+card#card3(left: 1272px; n: "3"; t: "まず直す所"; s: "初回サイクルと音声の品質"; cap: "9月の解約アンケートより"; c: $amber; g: "linear(#F4B942,#FFD27A,90)"; opacity: 0.36; delay: 260ms)
   div#it1(left: 32px; top: 300px; width: 472px; height: 104px; border-radius: 14px; border: 2px solid $line2; background: #FFFFFF08; in: {x:-16, opacity:0, duration:0.5, ease:'power3.out'})
     svg#ic(left: 18px; top: 22px; width: 60px; height: 60px; part: wand_ico)
     p#it(left: 94px; top: 16px; font-size: 26px; white-space: nowrap) 思い通りに作れない
@@ -385,64 +385,64 @@ card#card3(left: 1272px; n: "3"; t: "まず直す所"; s: "初回サイクルと
 # outro 締めの題: 上端の帯を抜き、題の絵が溶けて戻り、小札 → 2 行 → 下線 → 注記を組んで暗転
 section#outro(stagger: {each:0})
 img#out_bg(inset: 0; content: @title_img; main: kb {scale: [1, 1.04]}; in: {opacity:0, duration:1.6, ease:'power2.inOut'})
-div#ok(left: 150px; top: 356px; width: 900px; height: 38px; delay: 400; in: {x:-20, opacity:0, duration:0.6, ease:'power3.out'})
+div#ok(left: 150px; top: 356px; width: 900px; height: 38px; delay: 400ms; in: {x:-20, opacity:0, duration:0.6, ease:'power3.out'})
   div#ln(left: 0px; cy: 50%; width: 44px; height: 3px; background: $teal)
   p#t(left: 60px; cy: 50%; font-size: 24px; letter-spacing: 0.14em; color: $teal; white-space: nowrap) 解約分析レポート ｜ まとめ
-p#ot1(left: 150px; top: 399px; font-size: 66px; font-family: h; line-height: 1.27; white-space: nowrap; delay: 550; in: {y:24, opacity:0, duration:0.7, ease:'power3.out'}) 動画生成サービスの解約、
-p#ot2(left: 150px; top: 483px; font-size: 66px; font-family: h; line-height: 1.27; white-space: nowrap; delay: 700; in: {y:24, opacity:0, duration:0.7, ease:'power3.out'}) 勝負は{a}最初の3か月{/}
-div#ob(left: 150px; top: 591px; width: 460px; height: 4px; border-radius: 3px; background: linear($teal,$blue,90); delay: 900; in: {scaleX:0, duration:0.8, ease:'power3.inOut', pivot:'left'})
-p#om(left: 150px; top: 624px; font-size: 22px; letter-spacing: 0.06em; color: $ink2; font-family: m; white-space: nowrap; delay: 1150; in: {y:10, opacity:0, duration:0.6, ease:'power3.out'}) 対象　有料契約者 ｜ 期間　7〜9月 ｜ 社内共有
+p#ot1(left: 150px; top: 399px; font-size: 66px; font-family: h; line-height: 1.27; white-space: nowrap; delay: 550ms; in: {y:24, opacity:0, duration:0.7, ease:'power3.out'}) 動画生成サービスの解約、
+p#ot2(left: 150px; top: 483px; font-size: 66px; font-family: h; line-height: 1.27; white-space: nowrap; delay: 700ms; in: {y:24, opacity:0, duration:0.7, ease:'power3.out'}) 勝負は{a}最初の3か月{/}
+div#ob(left: 150px; top: 591px; width: 460px; height: 4px; border-radius: 3px; background: linear($teal,$blue,90); delay: 900ms; in: {scaleX:0, duration:0.8, ease:'power3.inOut', pivot:'left'})
+p#om(left: 150px; top: 624px; font-size: 22px; letter-spacing: 0.06em; color: $ink2; font-family: m; white-space: nowrap; delay: 1150ms; in: {y:10, opacity:0, duration:0.6, ease:'power3.out'}) 対象　有料契約者 ｜ 期間　7〜9月 ｜ 社内共有
 ```
 
 ```timeline.txt
 #v2
 cast n = "落ち着いた30代女性のナレーター、明瞭で聞き取りやすい声、社内の分析報告らしく淡々と丁寧に読む"
-silence head=0 tail=300
+silence head=0ms tail=300ms
 # 切替は書かない (場面は section の out で上へ抜けて消え、次の場面は境目から組み上がる・地と上端の帯は常設)。場面の境目の 0.47 秒前に風切り (前の cut の末尾の無音の間)
 
 *** s01
 [>#subtitle]
 bgm music
-@n: [silence:0.9s][♪air -2.7dB -750][♪deep -4.4dB -280][♪chime -5.4dB +200]この{b}3{/}か月の解約データから、[|]分かったことをまとめます。[silence:0.13s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.9s][♪air -2.7dB -750ms][♪deep -4.4dB -280ms][♪chime -5.4dB +200ms]この{b}3{/}か月の解約データから、[|]分かったことをまとめます。[silence:0.13s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s02
-@n: [silence:0.15s][♪pop -2.7dB +50]有料契約者は、[|][>#p2a.k1 -450][>#p2a.k1.bar -300][>#p2a.k1.n -150][♪chime -3.5dB +50]{b}1,776{/}人から[>#p2a.arrow -750][>#p2a.k2 -500][>#p2a.k2.bar -350][>#p2a.k2.n -150][♪chime -1.9dB +50][>#p2a.na +600]{b}1,682{/}人へ。
-@: [!#p2b.core to,{opacity:1, duration:0.45} -350][!#p2b.core punch,1.06,duration=600 -350][!#p2b.node_in to,{opacity:1, duration:0.45} -100][>#p2b.node_in.v +50][>#p2b.node_in.u +130][>#p2b.a1 +350][>#p2b.fi[1] +900][!#p2b.fi[1] to,{x:39, duration:0.9, ease:'none', repeat:-1} +900][>#p2b.fi[2] +1200][!#p2b.fi[2] to,{x:39, duration:0.9, ease:'none', repeat:-1} +1200][>#p2b.fi[3] +1500][!#p2b.fi[3] to,{x:39, duration:0.9, ease:'none', repeat:-1} +1500][♪sub -4.4dB +50]毎月の新規課金は、解約で[!#p2b.node_out to,{opacity:1, duration:0.45} -450][>#p2b.a2 -200][>#p2b.node_out.r -100][♪sub -4.4dB -100][>#p2b.fo[1] +400][!#p2b.fo[1] to,{x:56, duration:0.9, ease:'none', repeat:-1} +400][>#p2b.fo[2] +700][!#p2b.fo[2] to,{x:56, duration:0.9, ease:'none', repeat:-1} +700][>#p2b.fo[3] +1000][!#p2b.fo[3] to,{x:56, duration:0.9, ease:'none', repeat:-1} +1000]相殺され、[|][>#p2b.res -50][♪deep -3.5dB +50][♪pop -1.9dB +70][>#p2b.res_sub +350][!#p2b.res glow,#F4B94261,blur=47 +500][=#p2b.res +1000]純増はゼロです。[silence:0.38s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s][♪pop -2.7dB +50ms]有料契約者は、[|][>#p2a.k1 -450ms][>#p2a.k1.bar -300ms][>#p2a.k1.n -150ms][♪chime -3.5dB +50ms]{b}1,776{/}人から[>#p2a.arrow -750ms][>#p2a.k2 -500ms][>#p2a.k2.bar -350ms][>#p2a.k2.n -150ms][♪chime -1.9dB +50ms][>#p2a.na +600ms]{b}1,682{/}人へ。
+@: [!#p2b.core to,{opacity:1, duration:0.45} -350ms][!#p2b.core punch {scale: 1.06, duration: .6} -350ms][!#p2b.node_in to,{opacity:1, duration:0.45} -100ms][>#p2b.node_in.v +50ms][>#p2b.node_in.u +130ms][>#p2b.a1 +350ms][>#p2b.fi[1] +900ms][!#p2b.fi[1] to,{x:39, duration:0.9, ease:'none', repeat:-1} +900ms][>#p2b.fi[2] +1200ms][!#p2b.fi[2] to,{x:39, duration:0.9, ease:'none', repeat:-1} +1200ms][>#p2b.fi[3] +1500ms][!#p2b.fi[3] to,{x:39, duration:0.9, ease:'none', repeat:-1} +1500ms][♪sub -4.4dB +50ms]毎月の新規課金は、解約で[!#p2b.node_out to,{opacity:1, duration:0.45} -450ms][>#p2b.a2 -200ms][>#p2b.node_out.r -100ms][♪sub -4.4dB -100ms][>#p2b.fo[1] +400ms][!#p2b.fo[1] to,{x:56, duration:0.9, ease:'none', repeat:-1} +400ms][>#p2b.fo[2] +700ms][!#p2b.fo[2] to,{x:56, duration:0.9, ease:'none', repeat:-1} +700ms][>#p2b.fo[3] +1000ms][!#p2b.fo[3] to,{x:56, duration:0.9, ease:'none', repeat:-1} +1000ms]相殺され、[|][>#p2b.res -50ms][♪deep -3.5dB +50ms][♪pop -1.9dB +70ms][>#p2b.res_sub +350ms][!#p2b.res glow,#F4B94261 {blur: 47} +500ms][=#p2b.res +1000ms]純増はゼロです。[silence:0.38s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s03
-@n: [silence:0.15s]解約率は、[>#p3a.c1 -150][>#p3a.x[1] -150][>#p3a.v[1] +250][♪pop -3.5dB]{b}7{/}月の[>#p3a.c2 -90][>#p3a.x[2] -90][>#p3a.v[2] +310][♪pop -4.4dB -90]{b}13.2%{/}から、[|][>#p3a.c3 -150][>#p3a.x[3] -150][>#p3a.v[3] +250][♪pop -2.7dB]{b}9{/}月は[♪chime -2.7dB +100]{b}10.8%{/}。
-@: [!#p3a.c1 to,{opacity:0.45, duration:0.5} -50][!#p3a.c2 to,{opacity:0.45, duration:0.5} -50][!#p3a.v[1] to,{opacity:0.45, duration:0.5} -50][!#p3a.v[2] to,{opacity:0.45, duration:0.5} -50][!#p3a.x[1] to,{opacity:0.45, duration:0.5} -50][!#p3a.x[2] to,{opacity:0.45, duration:0.5} -50][!#p3a.c3.b to,{y:-4, fill:'#F0B744', duration:0.5, ease:'power2.inOut'} -50][>#p3a.leg +100][>#p3b.kv -200][♪sub -5.4dB -50]内訳は、自発的な解約[>#p3a.lab_a -100][>#p3b.sba -200][!#p3b.r[1] to,{opacity:1, duration:0.4} -150][>#p3b.r[1].pv -50][♪pop -3.5dB]{b}8.5%{/}、[|]決済失敗[>#p3a.lab_b -100][>#p3b.sbb -200][!#p3b.r[2] to,{opacity:1, duration:0.4} -150][>#p3b.r[2].pv -50][>#p3b.nb +400][♪pop -3.5dB]{b}2.3%{/}です。[silence:0.38s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]解約率は、[>#p3a.c1 -150ms][>#p3a.x[1] -150ms][>#p3a.v[1] +250ms][♪pop -3.5dB]{b}7{/}月の[>#p3a.c2 -90ms][>#p3a.x[2] -90ms][>#p3a.v[2] +310ms][♪pop -4.4dB -90ms]{b}13.2%{/}から、[|][>#p3a.c3 -150ms][>#p3a.x[3] -150ms][>#p3a.v[3] +250ms][♪pop -2.7dB]{b}9{/}月は[♪chime -2.7dB +100ms]{b}10.8%{/}。
+@: [!#p3a.c1 to,{opacity:0.45, duration:0.5} -50ms][!#p3a.c2 to,{opacity:0.45, duration:0.5} -50ms][!#p3a.v[1] to,{opacity:0.45, duration:0.5} -50ms][!#p3a.v[2] to,{opacity:0.45, duration:0.5} -50ms][!#p3a.x[1] to,{opacity:0.45, duration:0.5} -50ms][!#p3a.x[2] to,{opacity:0.45, duration:0.5} -50ms][!#p3a.c3.b to,{y:-4, fill:'#F0B744', duration:0.5, ease:'power2.inOut'} -50ms][>#p3a.leg +100ms][>#p3b.kv -200ms][♪sub -5.4dB -50ms]内訳は、自発的な解約[>#p3a.lab_a -100ms][>#p3b.sba -200ms][!#p3b.r[1] to,{opacity:1, duration:0.4} -150ms][>#p3b.r[1].pv -50ms][♪pop -3.5dB]{b}8.5%{/}、[|]決済失敗[>#p3a.lab_b -100ms][>#p3b.sbb -200ms][!#p3b.r[2] to,{opacity:1, duration:0.4} -150ms][>#p3b.r[2].pv -50ms][>#p3b.nb +400ms][♪pop -3.5dB]{b}2.3%{/}です。[silence:0.38s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s04
-@n: [silence:0.15s]ただ{b}9{/}月は、週ごとの解約成立が、[|][>#p4a.area -150][>#p4a.line -150][>#p4a.dot[1] -200][>#p4a.vl[1] -150][>#p4a.dot[2] +430][>#p4a.vl[2] +480][♪blip -3.5dB -250]{b}63{/}件から[>#p4a.dot[3] -380][>#p4a.vl[3] -330][>#p4a.dot[4] +250][>#p4a.vl[4] +300][♪chime -2.7dB +100][>#p4a.call +350]{b}26{/}件まで減りました。
-@: [!#p4a to,{opacity:0.8, duration:0.6} -300][♪pop -3.5dB]申請も、[>#p4b.b1 -300][>#p4b.bv1 +200][>#p4b.b2 +250][>#p4b.b2x +800][>#p4b.bv2 +750][♪pop -4.4dB]{b}7{/}月と{b}8{/}月の平均より[>#p4b.ref -350][>#p4b.gap -200][>#p4b.badge -50][♪tick -1.9dB][♪pop -4.4dB +935]{b}2{/}割少ない水準です。[silence:0.73s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]ただ{b}9{/}月は、週ごとの解約成立が、[|][>#p4a.area -150ms][>#p4a.line -150ms][>#p4a.dot[1] -200ms][>#p4a.vl[1] -150ms][>#p4a.dot[2] +430ms][>#p4a.vl[2] +480ms][♪blip -3.5dB -250ms]{b}63{/}件から[>#p4a.dot[3] -380ms][>#p4a.vl[3] -330ms][>#p4a.dot[4] +250ms][>#p4a.vl[4] +300ms][♪chime -2.7dB +100ms][>#p4a.call +350ms]{b}26{/}件まで減りました。
+@: [!#p4a to,{opacity:0.8, duration:0.6} -300ms][♪pop -3.5dB]申請も、[>#p4b.b1 -300ms][>#p4b.bv1 +200ms][>#p4b.b2 +250ms][>#p4b.b2x +800ms][>#p4b.bv2 +750ms][♪pop -4.4dB]{b}7{/}月と{b}8{/}月の平均より[>#p4b.ref -350ms][>#p4b.gap -200ms][>#p4b.badge -50ms][♪tick -1.9dB][♪pop -4.4dB +935ms]{b}2{/}割少ない水準です。[silence:0.73s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s05
-@n: [silence:0.15s]在籍期間で見ると、[>#p5.r[1] -250][♪pop -3.5dB]{b}1{/}か月未満は[>#p5.r[1].bar -550][>#p5.r[1].vv -50]{b}29%{/}、[|][>#p5.r[2] -250][>#p5.tag_u +500][♪pop -3.5dB]{b}1{/}から{b}3{/}か月は[>#p5.r[2].bar -550][>#p5.r[2].vv -50]{b}19%{/}。
-@: [>#p5.dv -400][>#p5.r[3] -150][>#p5.r[3].bar -100][>#p5.r[3].vv +400][>#p5.r[4] +50][>#p5.r[4].bar +100][>#p5.r[4].vv +600][>#p5.r[5] +250][>#p5.r[5].bar +300][>#p5.r[5].vv +800][>#p5.tag_o +400][♪pop -4.4dB]{b}3{/}か月以上は、[>#p5.br -350][>#p5.hk -50][♪tick -2.7dB]ひとケタ台に下がります。[silence:0.33s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]在籍期間で見ると、[>#p5.r[1] -250ms][♪pop -3.5dB]{b}1{/}か月未満は[>#p5.r[1].bar -550ms][>#p5.r[1].vv -50ms]{b}29%{/}、[|][>#p5.r[2] -250ms][>#p5.tag_u +500ms][♪pop -3.5dB]{b}1{/}から{b}3{/}か月は[>#p5.r[2].bar -550ms][>#p5.r[2].vv -50ms]{b}19%{/}。
+@: [>#p5.dv -400ms][>#p5.r[3] -150ms][>#p5.r[3].bar -100ms][>#p5.r[3].vv +400ms][>#p5.r[4] +50ms][>#p5.r[4].bar +100ms][>#p5.r[4].vv +600ms][>#p5.r[5] +250ms][>#p5.r[5].bar +300ms][>#p5.r[5].vv +800ms][>#p5.tag_o +400ms][♪pop -4.4dB]{b}3{/}か月以上は、[>#p5.br -350ms][>#p5.hk -50ms][♪tick -2.7dB]ひとケタ台に下がります。[silence:0.33s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s06
-@n: [silence:0.15s]{b}3{/}か月未満の人は、母数の[>#p6a.l1 -800][>#p6a.a1 -350][>#p6a.b1 -100][>#p6a.t1 -50][♪pop -3.5dB]{b}25%{/}なのに、[|]解約の[>#p6a.a2 -400][>#p6a.l2 -400][>#p6a.b2 -100][>#p6a.t2 -50][>#p6a.rib +100][>#p6a.leg +500][♪chime -1.9dB +50][♪deep -6.6dB +50]{b}53%{/}を占めます。
-@: [!#p6a to,{opacity:0.8, duration:0.6} -300]{b}3{/}か月以上は[>#p6b.line -300][>#p6b.dot[1] -300][>#p6b.pl[1] -250][>#p6b.dot[2] +180][>#p6b.pl[2] +230][>#p6b.dot[3] +660][>#p6b.pl[3] +710][♪blip -4.4dB -200]改善していますが、[|][>#p6b.band -100][♪pop -4.4dB]{b}3{/}か月未満は[>#p6b.bandl -200]{b}20%{/}台のままです。[silence:0.68s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]{b}3{/}か月未満の人は、母数の[>#p6a.l1 -800ms][>#p6a.a1 -350ms][>#p6a.b1 -100ms][>#p6a.t1 -50ms][♪pop -3.5dB]{b}25%{/}なのに、[|]解約の[>#p6a.a2 -400ms][>#p6a.l2 -400ms][>#p6a.b2 -100ms][>#p6a.t2 -50ms][>#p6a.rib +100ms][>#p6a.leg +500ms][♪chime -1.9dB +50ms][♪deep -6.6dB +50ms]{b}53%{/}を占めます。
+@: [!#p6a to,{opacity:0.8, duration:0.6} -300ms]{b}3{/}か月以上は[>#p6b.line -300ms][>#p6b.dot[1] -300ms][>#p6b.pl[1] -250ms][>#p6b.dot[2] +180ms][>#p6b.pl[2] +230ms][>#p6b.dot[3] +660ms][>#p6b.pl[3] +710ms][♪blip -4.4dB -200ms]改善していますが、[|][>#p6b.band -100ms][♪pop -4.4dB]{b}3{/}か月未満は[>#p6b.bandl -200ms]{b}20%{/}台のままです。[silence:0.68s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s07
-@n: [silence:0.15s]解約理由の上位は、[>#p7.hi[1] -150][>#p7.rk[1] -100][!#p7.r[1].lb recolor,$ink,duration=300 -100][!#p7.r[1].vv recolor,$ink,duration=300 -100][♪pop -3.5dB]一時的に使わない、[|][>#p7.hi[2] -150][>#p7.rk[2] -100][!#p7.r[2].lb recolor,$ink,duration=300 -100][!#p7.r[2].vv recolor,$ink,duration=300 -100][♪pop -3.5dB]思い通りに作れない、[>#p7.hi[3] -150][>#p7.rk[3] -100][!#p7.r[3].lb recolor,$ink,duration=300 -100][!#p7.r[3].vv recolor,$ink,duration=300 -100][♪pop -3.5dB]料金の[!#p7.r[4] to,{opacity:0.55, duration:0.5} -200][!#p7.r[5] to,{opacity:0.55, duration:0.5} -200][!#p7.r[6] to,{opacity:0.55, duration:0.5} -200]{b}3{/}つです。[silence:0.63s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]解約理由の上位は、[>#p7.hi[1] -150ms][>#p7.rk[1] -100ms][!#p7.r[1].lb recolor,$ink {duration: .3} -100ms][!#p7.r[1].vv recolor,$ink {duration: .3} -100ms][♪pop -3.5dB]一時的に使わない、[|][>#p7.hi[2] -150ms][>#p7.rk[2] -100ms][!#p7.r[2].lb recolor,$ink {duration: .3} -100ms][!#p7.r[2].vv recolor,$ink {duration: .3} -100ms][♪pop -3.5dB]思い通りに作れない、[>#p7.hi[3] -150ms][>#p7.rk[3] -100ms][!#p7.r[3].lb recolor,$ink {duration: .3} -100ms][!#p7.r[3].vv recolor,$ink {duration: .3} -100ms][♪pop -3.5dB]料金の[!#p7.r[4] to,{opacity:0.55, duration:0.5} -200ms][!#p7.r[5] to,{opacity:0.55, duration:0.5} -200ms][!#p7.r[6] to,{opacity:0.55, duration:0.5} -200ms]{b}3{/}つです。[silence:0.63s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s08
-@n: [silence:0.15s][♪pop -4.4dB +100]初回サイクルでの解約は、[|]思い通りに作れないが[>#p8a.cl.i1 -700][>#p8a.cl.i1.bar -600][>#p8a.cl.i1.vv -250][>#p8a.cl.i2 +150][>#p8a.cl.i2.bar +250][>#p8a.cl.i2.vv +600][♪chime -2.7dB +50]{b}34%{/}。
-@: [>#p8a.cr -450]{b}1{/}か月以上使った人では、[|][>#p8a.cr.i3 -450][>#p8a.cr.i3.bar -350][>#p8a.cr.i3.vv][♪pop -4.4dB -100]一時的と[>#p8a.cr.i4 -450][>#p8a.cr.i4.bar -350][>#p8a.cr.i4.vv][>#p8a.na +600][♪pop -4.4dB -100]クレジットの余りが目立ちます。
-@: [!#p8a to,{opacity:0.8, duration:0.6} -300][♪sub -5.4dB -50]機能への不満では、[|]読み間違いなど[!#p8b.ico punch,1.12,duration=600 -300][>#p8b.cap +100][>#p8b.from +180]音声系が[>#p8b.arr -450][>#p8b.to -350][♪chime -1.9dB +50]{b}26%{/}に増え、[|][>#p8b.most -50][♪deep -5.4dB]最多になりました。[silence:0.53s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s][♪pop -4.4dB +100ms]初回サイクルでの解約は、[|]思い通りに作れないが[>#p8a.cl.i1 -700ms][>#p8a.cl.i1.bar -600ms][>#p8a.cl.i1.vv -250ms][>#p8a.cl.i2 +150ms][>#p8a.cl.i2.bar +250ms][>#p8a.cl.i2.vv +600ms][♪chime -2.7dB +50ms]{b}34%{/}。
+@: [>#p8a.cr -450ms]{b}1{/}か月以上使った人では、[|][>#p8a.cr.i3 -450ms][>#p8a.cr.i3.bar -350ms][>#p8a.cr.i3.vv][♪pop -4.4dB -100ms]一時的と[>#p8a.cr.i4 -450ms][>#p8a.cr.i4.bar -350ms][>#p8a.cr.i4.vv][>#p8a.na +600ms][♪pop -4.4dB -100ms]クレジットの余りが目立ちます。
+@: [!#p8a to,{opacity:0.8, duration:0.6} -300ms][♪sub -5.4dB -50ms]機能への不満では、[|]読み間違いなど[!#p8b.ico punch {scale: 1.12, duration: .6} -300ms][>#p8b.cap +100ms][>#p8b.from +180ms]音声系が[>#p8b.arr -450ms][>#p8b.to -350ms][♪chime -1.9dB +50ms]{b}26%{/}に増え、[|][>#p8b.most -50ms][♪deep -5.4dB]最多になりました。[silence:0.53s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s09
-@n: [silence:0.15s]行動は[!#wb[*] .split -350][!#wm[*] .split -350][!#wa[*] .split -350][♪sub -3.5dB -100]二極化しています。
-@: 申請者の[>#p9.n45 -200][>#p9.l45 +500][>#p9.lmid +900][♪chime -2.7dB +50]{b}45%{/}は、直前{b}30{/}日に{b}1{/}本も作らず、[|][>#p9.n23 -200][♪chime -2.7dB +50]{b}23%{/}は[>#p9.l23 -200]{b}10{/}本以上作っていました。[silence:0.43s][♪swoosh -3.5dB][silence:0.47s]
+@n: [silence:0.15s]行動は[!#wb[*] .split -350ms][!#wm[*] .split -350ms][!#wa[*] .split -350ms][♪sub -3.5dB -100ms]二極化しています。
+@: 申請者の[>#p9.n45 -200ms][>#p9.l45 +500ms][>#p9.lmid +900ms][♪chime -2.7dB +50ms]{b}45%{/}は、直前{b}30{/}日に{b}1{/}本も作らず、[|][>#p9.n23 -200ms][♪chime -2.7dB +50ms]{b}23%{/}は[>#p9.l23 -200ms]{b}10{/}本以上作っていました。[silence:0.43s][♪swoosh -3.5dB][silence:0.47s]
 
 *** s10
-@n: [silence:0.15s][♪click -1.9dB]解約率は{b}11%{/}前後で横ばいですが、[|][>#card1.ml -300][>#card1.md -300][>#card1.m63 -200][>#card1.m26 +900]{b}9{/}月は週ごとに減っています。
-@: [!#card2 to,{opacity:1, duration:0.45, ease:'power2.out'} -300][!#card2.no punch,1.18,duration=440 -300][>#card2.t -250][>#card2.s -50][>#card2.cap +400][>#card2.b20 +500][>#card2.b20s +1000][>#card2.imp +1250][♪click -1.9dB]勝負は、{b}20%{/}台のままの最初の{b}3{/}か月。
-@: [!#card3 to,{opacity:1, duration:0.45, ease:'power2.out'} -300][!#card3.no punch,1.18,duration=440 -300][>#card3.t -250][>#card3.s -50][>#card3.cap +400][>#card3.it1 +900][♪click -1.9dB]まず直すのは、[|]初回サイクルで思い通りに作れないことと、[|][>#card3.it2 -250]音声の読み間違いです。[silence:0.4s][♪air -5.4dB][silence:0.15s]
+@n: [silence:0.15s][♪click -1.9dB]解約率は{b}11%{/}前後で横ばいですが、[|][>#card1.ml -300ms][>#card1.md -300ms][>#card1.m63 -200ms][>#card1.m26 +900ms]{b}9{/}月は週ごとに減っています。
+@: [!#card2 to,{opacity:1, duration:0.45, ease:'power2.out'} -300ms][!#card2.no punch {scale: 1.18, duration: .44} -300ms][>#card2.t -250ms][>#card2.s -50ms][>#card2.cap +400ms][>#card2.b20 +500ms][>#card2.b20s +1000ms][>#card2.imp +1250ms][♪click -1.9dB]勝負は、{b}20%{/}台のままの最初の{b}3{/}か月。
+@: [!#card3 to,{opacity:1, duration:0.45, ease:'power2.out'} -300ms][!#card3.no punch {scale: 1.18, duration: .44} -300ms][>#card3.t -250ms][>#card3.s -50ms][>#card3.cap +400ms][>#card3.it1 +900ms][♪click -1.9dB]まず直すのは、[|]初回サイクルで思い通りに作れないことと、[|][>#card3.it2 -250ms]音声の読み間違いです。[silence:0.4s][♪air -5.4dB][silence:0.15s]
 
 *** outro
 @n: [<#hdr][<#prog][♪deep -6.6dB][silence:2.6s]
-fade out,900
+fade out,900ms
 ```

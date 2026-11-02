@@ -159,57 +159,57 @@ group#ou_row(left: 60px; top: 1245px; width: 960px; height: 180px; display: grid
 ```timeline.txt
 #v2
 cast narrator = "明るく親しみのある20代後半女性のナレーター、テンポよく語りかける解説口調" speed=110%
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 
 *** hook
 [>#subtitle]
 bgm music
-se "鍋のスープがぐつぐつ煮立つ音" -8dB to=10s fade=300,1500
+se "鍋のスープがぐつぐつ煮立つ音" -8dB to=10s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#hk_k]今、[>#hk_s]若者の行列が絶えない一杯があります。
 @: 真っ赤なスープの、[>#hk_t][>#hk_r >][♪"ジャン！・驚き" +3dB]麻辣湯。
 @: なぜ今、ここまで[>#hk_q]爆発的にヒットしているのでしょうか？[silence:0.4s]
 
 *** map
-se "夜の繁華街のにぎやかなざわめき" -8dB to=9s fade=300,1500
+se "夜の繁華街のにぎやかなざわめき" -8dB to=9s fade=300ms,1500ms
 @narrator: [silence:+0.3s]この動画では、[>#mp_col.mp_l[1]]中身、[>#mp_col.mp_l[2]]ルーツ、[>#mp_col.mp_l[3]]流行の理由、[>#mp_col.mp_l[4]]体への影響、[>#mp_col.mp_l[5]]そして具材の選び方まで、まるごと解説します。
-transition wipe,600,dir=right,overlap=600
+transition wipe {duration: .6, dir: 'right', overlap: .6}
 
 *** parts
 @narrator: [silence:+0.3s]麻辣湯のベースは、[>#pt_grid.pt_c[1]]スープ、[>#pt_grid.pt_c[2]]麻辣タレ、[>#pt_grid.pt_c[3]]具材、[>#pt_grid.pt_c[4]]麺の、
 @: [!#pt_grid.pt_c[*] punch]4つの要素で成り立っています。
 
 *** soup
-se "大きな寸胴鍋がぐつぐつ煮える音" -8dB to=9s fade=300,1500
+se "大きな寸胴鍋がぐつぐつ煮える音" -8dB to=9s fade=300ms,1500ms
 @narrator: [silence:+0.3s]スープは、[>#sp_a]豚骨や鶏ガラをベースにした濃厚な出汁に、
-@: [>#sp_x][>#sp_b >][!#sp_b .on +900]白湯、パイタン状のスープを加えることが多いんです。
+@: [>#sp_x][>#sp_b >][!#sp_b .on +900ms]白湯、パイタン状のスープを加えることが多いんです。
 
 *** mala
 @narrator: [silence:+0.3s]味の決め手は麻辣タレ。
-@: [>#ml_m][!#ml_m punch +200]麻は、花椒によるシビれ。
-@: [>#ml_l][!#ml_l punch +200]辣は、唐辛子による辛味です。
+@: [>#ml_m][!#ml_m punch +200ms]麻は、花椒によるシビれ。
+@: [>#ml_l][!#ml_l punch +200ms]辣は、唐辛子による辛味です。
 
 *** spice
-se "中華鍋で油とスパイスをジュージュー炒める音" -8dB to=10s fade=300,1500
+se "中華鍋で油とスパイスをジュージュー炒める音" -8dB to=10s fade=300ms,1500ms
 @narrator: [silence:+0.3s]さらに[>#sc_grid.sc_c[1]]八角、[>#sc_grid.sc_c[2]]丁香、[>#sc_grid.sc_c[3]]桂皮、[>#sc_grid.sc_c[4]]草果など、
 @: [>#sc_s]数十種類の生薬やスパイスを油で炒めて、香りを引き出します。
-transition wipe,600,dir=right,overlap=600
+transition wipe {duration: .6, dir: 'right', overlap: .6}
 
 *** roots
-se "夜の屋台のにぎわい、遠くの話し声" -8dB to=14s fade=300,1500
+se "夜の屋台のにぎわい、遠くの話し声" -8dB to=14s fade=300ms,1500ms
 @narrator: [silence:+0.3s]ルーツは中国・四川省の屋台料理、[>#rt_a]麻辣燙。
 @: [!#rt_a punch]串に刺した具を鍋で煮て食べる、庶民の味でした。
 @: それが、[>#rt_x1][>#rt_b >]具材を選んで一杯にするファストフード型へと進化し、
-@: [>#rt_x2][>#rt_c >][!#rt_c fill,$gold +900]日本にも広がりました。[silence:0.8s]
-transition wipe,600,dir=right,overlap=600
+@: [>#rt_x2][>#rt_c >][!#rt_c fill,$gold +900ms]日本にも広がりました。[silence:0.8s]
+transition wipe {duration: .6, dir: 'right', overlap: .6}
 [<#music]
 
 *** trend
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.3s]流行の理由は3つ。
 @: [>#tr_col.tr_c[1]][♪"カメラのシャッター音" -2dB]真っ赤な見た目が[!#tr_col.tr_c[1] check]SNS映えすること。
 @: [>#tr_col.tr_c[2]]具材も辛さも[!#tr_col.tr_c[2] check]自分好みにカスタマイズできること。
 @: [>#tr_col.tr_c[3]]そして野菜たっぷりで、[!#tr_col.tr_c[3] check]健康・ダイエット需要に合うことです。
-transition wipe,600,dir=right,overlap=600
+transition wipe {duration: .6, dir: 'right', overlap: .6}
 
 *** merit
 @narrator: [silence:+0.3s]体へのうれしい点も。
@@ -220,21 +220,21 @@ transition wipe,600,dir=right,overlap=600
 @narrator: [silence:+0.3s]ただし注意点も。
 @: スープは[>#ca_a]塩分と[>#ca_b]脂質が多めです。
 @: [>#ca_s][♪"判子を押す"]飲み干さずに、少し残すのがおすすめです。
-transition wipe,600,dir=right,overlap=600
+transition wipe {duration: .6, dir: 'right', overlap: .6}
 
 *** choose
-se "店内のにぎやかな環境音、トングが触れる音" -8dB to=14s fade=300,1500
+se "店内のにぎやかな環境音、トングが触れる音" -8dB to=14s fade=300ms,1500ms
 @narrator: [silence:+0.3s]具材選びは、お店の形式で変わります。
-@: [>#ch_g]グラム売りなら、[>#ch_g.ok][!#ch_g.ok recolor,$b +500]葉物やきのこは軽くてお得、[>#ch_g.ng][!#ch_g.ng recolor,$a +500]肉団子や練り物は重めです。
-@: [>#ch_t]トッピング形式なら、[>#ch_t.ok][!#ch_t.ok recolor,$b +500]たんぱく質を一品足すのが賢い選び方。
+@: [>#ch_g]グラム売りなら、[>#ch_g.ok][!#ch_g.ok recolor,$b +500ms]葉物やきのこは軽くてお得、[>#ch_g.ng][!#ch_g.ng recolor,$a +500ms]肉団子や練り物は重めです。
+@: [>#ch_t]トッピング形式なら、[>#ch_t.ok][!#ch_t.ok recolor,$b +500ms]たんぱく質を一品足すのが賢い選び方。
 
 *** order
 @narrator: [silence:+0.3s]おすすめは、[>#or_col.or_c[1]]青菜ときのこをたっぷり、[>#or_col.or_c[2]]豆腐か鶏肉を一品、[>#or_col.or_c[3]]麺は春雨。
 @: [>#or_s]辛さは控えめから試してみてください。
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 
 *** outro
-se "にぎやかな店内の笑い声と食器の音" -9dB to=10s fade=300,2000
-@narrator: [silence:+0.3s][>#ou_t]仕組みを知れば、[>#ou_s +600]麻辣湯はもっと楽しくなります。
+se "にぎやかな店内の笑い声と食器の音" -9dB to=10s fade=300ms,2000ms
+@narrator: [silence:+0.3s][>#ou_t]仕組みを知れば、[>#ou_s +600ms]麻辣湯はもっと楽しくなります。
 @: [>#ou_row.ou_c[*] {stagger:{each:0.15}}]あなただけの一杯を、組んでみてください。[silence:2.0s]
 ```

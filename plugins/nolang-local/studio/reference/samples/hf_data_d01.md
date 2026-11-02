@@ -51,23 +51,23 @@ sound rise = "低めのビジネス系の上昇する電子音、増えたこと
 sound chime = "中低音のビジネス系の短いチャイム、手順の札"
 sound end = "低めのビジネス系の締めの電子音、題の再掲"
 # 行ごとの 5 つの印を 1 語に畳む (ファネルの段・端末別の段・A/B の段)
-cue frow(r) = [>#r -200][>#r.nm -200][>#r.ct -200][>#r.rt -50][>#r.bar -100][>#r.lost +350]
-cue drow(r) = [>#r][>#r.nm][>#r.sp +50][>#r.pc +170][>#r.vs +450][>#r.vp +450]
-cue abrow(r) = [>#r][>#r.nm][>#r.a +50][>#r.b +200][>#r.va +450][>#r.vb +450]
+cue frow(r) = [>#r -200ms][>#r.nm -200ms][>#r.ct -200ms][>#r.rt -50ms][>#r.bar -100ms][>#r.lost +350ms]
+cue drow(r) = [>#r][>#r.nm][>#r.sp +50ms][>#r.pc +170ms][>#r.vs +450ms][>#r.vp +450ms]
+cue abrow(r) = [>#r][>#r.nm][>#r.a +50ms][>#r.b +200ms][>#r.va +450ms][>#r.vb +450ms]
 image parcel = "[transparent]A small closed cardboard shipping box with a blank paper price tag tied with twine, minimal clean 3D render, warm soft key light from the upper left, gentle shadow underneath, the box fills the frame centered, isolated object on a transparent background. The tag is blank. No text, no letters, no numbers, no logos."
 image phone = "[transparent]A modern smartphone seen from the front, slightly tilted, its screen showing a dark-mode online shop checkout page with a long stack of eleven empty rounded input fields (plain blank rectangles, no readable text) and a small amber button at the bottom. Clean minimal 3D product render, soft cool rim light, crisp edges, the phone fills the frame vertically and is centered, isolated object on a transparent background. No text, no letters, no logos, no hands."
 p { color: $ink }
 div { border: none }
 # 字幕: 下端中央の半透明の黒い札 (細い白の縁)・声と同時に出て声の 0.1 秒後に消える・句末の読点と句点は外す・動きなし
-subtitle.hug(bottom: 40px; font-size: 32px; font-family: m; line-height: 1.35; letter-spacing: 0.02em; color: #F3F6FA; background: #06090DC7; border: 2px solid #FFFFFF0F; border-radius: 12px; padding: 10px 26px 12px 26px; unit: sentence; strip: 、。; lead: 0; tail: 100; hold: off; in: none; out: none)
+subtitle.hug(bottom: 40px; font-size: 32px; font-family: m; line-height: 1.35; letter-spacing: 0.02em; color: #F3F6FA; background: #06090DC7; border: 2px solid #FFFFFF0F; border-radius: 12px; padding: 10px 26px 12px 26px; unit: sentence; strip: 、。; lead: 0ms; tail: 100ms; hold: off; in: none; out: none)
 bgm#music(fade: 1600,3200) ジャズ寄りのエレクトロニカ、エレクトリックピアノとアップライトベースとシンセ、115 BPM 前後、淡々とクールで知的な企業紹介やデータ解説向け、主旋律は控えめ
 
 # 板: ほぼ透明の白の地 + 細い縁 + 角丸 13 (影なし)・下から 16 px 上がって出る
 def panel = div(background: #FFFFFF09; border: 2px solid #FFFFFF16; border-radius: 20px; in: {y:24, opacity:0, duration:0.6, ease:'power3.out'})
 # 場面の頭の 3 点: 琥珀の等幅の英字の小札 → 31 px の見出し → 右上の進行 (番号 + 9 本の目盛り・済みは薄い琥珀・今は琥珀)
-def kicker(t) = p(left: 96px; top: 104px; font-size: 18px; font-family: c; letter-spacing: 0.16em; color: $amber; delay: 220; in: {x:-20, opacity:0, duration:0.5, ease:'power3.out'}; content: {t})
-def stitle(t) = p(left: 96px; top: 132px; font-size: 46px; line-height: 1.2; letter-spacing: 0.01em; delay: 300; in: {x:-28, opacity:0, duration:0.6, ease:'power3.out'}; content: {t})
-def prog(t, c) = div(left: 1454px; top: 60px; width: 370px; height: 18px; delay: 320; in: {opacity:0, duration:0.4, ease:'power1.out'})
+def kicker(t) = p(left: 96px; top: 104px; font-size: 18px; font-family: c; letter-spacing: 0.16em; color: $amber; delay: 220ms; in: {x:-20, opacity:0, duration:0.5, ease:'power3.out'}; content: {t})
+def stitle(t) = p(left: 96px; top: 132px; font-size: 46px; line-height: 1.2; letter-spacing: 0.01em; delay: 300ms; in: {x:-28, opacity:0, duration:0.6, ease:'power3.out'}; content: {t})
+def prog(t, c) = div(left: 1454px; top: 60px; width: 370px; height: 18px; delay: 320ms; in: {opacity:0, duration:0.4, ease:'power1.out'})
   p#t(left: 0px; cy: 50%; font-size: 16px; font-family: c; letter-spacing: 0.08em; color: $ink3; content: {t})
   div#i(left: "62;83;104;125;146;167;188;209;230"; cy: 50%; width: 26px; height: 4px; border-radius: 3px; background: {c}) ×9
 # KPI の札 (上端の色の短い線 + 題 + 欧文の数字 (数え上げ) + 単位 + 等幅の注記)
@@ -109,12 +109,12 @@ img#hero(inset: 0; subject: right 40%; room: left 55%; main: kb {scale: [1.12, 1
 # 写真の暗幕: 左から右へ薄れる幕 + 下から上へ薄れる幕 (題の側を沈める)
 div#shade_l(inset: 0; background: linear(#0A0E14F7,#0A0E14E6@34%,#0A0E1473@62%,#0A0E1433,90); in: none)
 div#shade_b(inset: 0; background: linear(#0A0E14D9,#0A0E1400@34%,0); in: none)
-p#kick(left: 120px; top: 262px; font-size: 22px; font-family: c; letter-spacing: 0.18em; color: $amber; delay: 250; in: {x:-24, opacity:0, duration:0.6, ease:'power3.out'}) EC FUNNEL REVIEW ｜ 直近4週間
-p#h1a(left: 116px; top: 310px; font-size: 112px; line-height: 1.14; letter-spacing: 0.005em; delay: 400; in: {y:40, opacity:0, duration:0.8, ease:'power3.out'}) カゴ落ち、
-p#h1b(left: 116px; top: 438px; font-size: 112px; line-height: 1.14; letter-spacing: 0.005em; delay: 560; in: {y:40, opacity:0, duration:0.8, ease:'power3.out'}) どこで起きている？
-div#rule(left: 120px; top: 578px; width: 96px; height: 4px; border-radius: 3px; background: $amber; delay: 950; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
-p#sub(left: 120px; top: 600px; font-size: 32px; font-family: m; color: $ink2; delay: 1050; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}) こもれび雑貨店 ｜ 購入ファネルの分析と、直す順番の提案
-p#chip(left: "80;364;504"; top: 676px; font-size: 22px; font-family: m; color: $ink2; background: #0A0E148C; border: 2px solid #FFFFFF33; border-radius: 148px; padding: 10px 20px; delay: 1350; in: {y:14, opacity:0, duration:0.5, ease:'power3.out', stagger:{each:0.1}}) ×3 対象：こもれび雑貨店（架空の雑貨 EC）;期間：直近4週間;共有先：プロダクトチーム
+p#kick(left: 120px; top: 262px; font-size: 22px; font-family: c; letter-spacing: 0.18em; color: $amber; delay: 250ms; in: {x:-24, opacity:0, duration:0.6, ease:'power3.out'}) EC FUNNEL REVIEW ｜ 直近4週間
+p#h1a(left: 116px; top: 310px; font-size: 112px; line-height: 1.14; letter-spacing: 0.005em; delay: 400ms; in: {y:40, opacity:0, duration:0.8, ease:'power3.out'}) カゴ落ち、
+p#h1b(left: 116px; top: 438px; font-size: 112px; line-height: 1.14; letter-spacing: 0.005em; delay: 560ms; in: {y:40, opacity:0, duration:0.8, ease:'power3.out'}) どこで起きている？
+div#rule(left: 120px; top: 578px; width: 96px; height: 4px; border-radius: 3px; background: $amber; delay: 950ms; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
+p#sub(left: 120px; top: 600px; font-size: 32px; font-family: m; color: $ink2; delay: 1050ms; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}) こもれび雑貨店 ｜ 購入ファネルの分析と、直す順番の提案
+p#chip(left: "80;364;504"; top: 676px; font-size: 22px; font-family: m; color: $ink2; background: #0A0E148C; border: 2px solid #FFFFFF33; border-radius: 148px; padding: 10px 20px; delay: 1350ms; in: {y:14, opacity:0, duration:0.5, ease:'power3.out', stagger:{each:0.1}}) ×3 対象：こもれび雑貨店（架空の雑貨 EC）;期間：直近4週間;共有先：プロダクトチーム
 
 # overview — 01 全体像: KPI の札 4 枚を語ごとに数え上げ・「67%」で大きな数字の板と 100 マス (67 マスが珊瑚・33 マスが青緑) が組み上がる・2 文目で送料の板 (箱の絵 + 550 円 + 流れ図) と「初めて」の札
 section#overview(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'power2.in'})
@@ -122,13 +122,13 @@ kicker#ov_k 01 — OVERVIEW
 stitle#ov_t 全体像：直近4週間の購入データ
 prog#ov_p(t: "01 / 09"; c: "$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
 # 左上の店の札 (琥珀の角丸の印 + 店名 + 細い縦線 + 題)・overview の頭で出て締めの直前まで cut を跨ぐ (.sticky)
-div#brand.sticky(left: 96px; top: 46px; width: 360px; height: 30px; display: flex; gap: 14px; align-items: center; delay: 100; in: {opacity:0, duration:0.5, ease:'power1.out'}; out: {opacity:0, duration:0.4})
+div#brand.sticky(left: 96px; top: 46px; width: 360px; height: 30px; display: flex; gap: 14px; align-items: center; delay: 100ms; in: {opacity:0, duration:0.5, ease:'power1.out'}; out: {opacity:0, duration:0.4})
   div#mark(width: 26px; height: 26px; border-radius: 8px; background: linear($amber,$amber2,135))
     p#t(cx: 50%; cy: 50%; font-size: 16px; color: $tag_ink) こ
   p#b(font-size: 20px; white-space: nowrap) こもれび雑貨店
   div#i(width: 2px; height: 18px; background: #FFFFFF40)
   p#s(font-size: 20px; font-family: m; color: $ink3; white-space: nowrap) カゴ落ち分析
-kpi#k1(left: 96px; l: 商品ページ閲覧; v: "[count:48,000 start=0 ms=1200 delay=50]"; u: セッション; f: 4週合計; c: $slate; delay: 450)
+kpi#k1(left: 96px; l: 商品ページ閲覧; v: "[count:48,000 start=0 ms=1200 delay=50]"; u: セッション; f: 4週合計; c: $slate; delay: 450ms)
 kpi#k2(left: 536px; l: カート投入; v: "[count:7,200 start=0 ms=1000 delay=50]"; u: 件; f: 閲覧の 15.0%; c: $teal)
 kpi#k3(left: 976px; l: 購入完了; v: "[count:2,376 start=0 ms=1000 delay=50]"; u: 件; f: カートから 33.0%; c: $teal)
 kpi#k4(left: 1416px; l: カゴ落ち（買わずに去った）; v: "[count:4,824 start=0 ms=1000 delay=50]"; u: 件; f: カート投入の 67%; c: $coral)
@@ -163,17 +163,17 @@ section#funnel(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'po
 kicker#fn_k 02 — FUNNEL
 stitle#fn_t 購入ファネル：どの段で離れているか
 prog#fn_p(t: "02 / 09"; c: "#FFB54773;$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
-panel#fn(left: 96px; top: 230px; width: 1728px; height: 452px; delay: 200)
+panel#fn(left: 96px; top: 230px; width: 1728px; height: 452px; delay: 200ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) 購入ファネル（4週合計）{sm}　前の段からの通過率{/}
   p#lg(right: 32px; top: 24px; font-size: 20px; font-family: m; color: $ink2) {te}■{/} 通過　{co}■{/} その段で離脱
-  p#tp1(left: 32px; top: 76px; font-size: 21px; font-family: m; color: $ink2; delay: 450; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 商品ページ閲覧 {nb}48,000{/}
-  div#ar1(left: 276px; top: 92px; width: 40px; height: 2px; background: #FFFFFF4D; delay: 530; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'})
-  p#rate(left: 333px; top: 75px; font-size: 22px; font-family: n; color: $teal; background: #35D0BA1A; border-radius: 8px; padding: 2px 12px; delay: 610; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 15.0%
-  div#ar2(left: 441px; top: 92px; width: 40px; height: 2px; background: #FFFFFF4D; delay: 690; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'})
-  p#tp2(left: 498px; top: 76px; font-size: 21px; font-family: m; color: $ink2; delay: 770; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) カート {nb}7,200{/}
-  p#f1n(left: 32px; top: 140px; font-size: 26px; font-family: m; delay: 750; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) カート
-  p#f1c(left: 196px; top: 140px; width: 112px; text-align: right; font-size: 28px; font-family: n; delay: 750; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 7,200
-  div#f1b(left: 470px; top: 134px; width: 1000px; height: 50px; border-radius: 0px 6px 6px 0px; background: $teal; delay: 800; in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
+  p#tp1(left: 32px; top: 76px; font-size: 21px; font-family: m; color: $ink2; delay: 450ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 商品ページ閲覧 {nb}48,000{/}
+  div#ar1(left: 276px; top: 92px; width: 40px; height: 2px; background: #FFFFFF4D; delay: 530ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'})
+  p#rate(left: 333px; top: 75px; font-size: 22px; font-family: n; color: $teal; background: #35D0BA1A; border-radius: 8px; padding: 2px 12px; delay: 610ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 15.0%
+  div#ar2(left: 441px; top: 92px; width: 40px; height: 2px; background: #FFFFFF4D; delay: 690ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'})
+  p#tp2(left: 498px; top: 76px; font-size: 21px; font-family: m; color: $ink2; delay: 770ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) カート {nb}7,200{/}
+  p#f1n(left: 32px; top: 140px; font-size: 26px; font-family: m; delay: 750ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) カート
+  p#f1c(left: 196px; top: 140px; width: 112px; text-align: right; font-size: 28px; font-family: n; delay: 750ms; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 7,200
+  div#f1b(left: 470px; top: 134px; width: 1000px; height: 50px; border-radius: 0px 6px 6px 0px; background: $teal; delay: 800ms; in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
   # 段の行 ×3 (段名・件数・通過率の札・通過の棒 (幅 = 7,200 を 667 px)・離脱の斜線・離脱の件数)
   div#fr(left: 0px; top: "141;195;248"; width: 1728px; height: 54px) ×3
     p#nm(left: 32px; top: 8px; font-size: 26px; font-family: m; in: {x:-12, opacity:0, duration:0.4, ease:'power3.out'}) 配送先入力;支払い;完了
@@ -200,19 +200,19 @@ section#weekly(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'po
 kicker#wk_k 03 — WEEKLY
 stitle#wk_t 週ごとの推移：カートからの購入率
 prog#wk_p(t: "03 / 09"; c: "#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
-panel#wk(left: 96px; top: 230px; width: 1150px; height: 690px; delay: 200)
+panel#wk(left: 96px; top: 230px; width: 1150px; height: 690px; delay: 200ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) カート投入 → 購入完了の割合{sm}　週ごと・縦軸 0〜50%{/}
-  div#gl(left: 110px; top: "336;272;208;144;80"; width: 980px; height: 2px; background: #FFFFFF12; delay: 400; in: {opacity:0, duration:0.5}) ×5
-  div#base(left: 110px; top: 600px; width: 980px; height: 2px; background: #FFFFFF47; delay: 400; in: {opacity:0, duration:0.5})
-  p#ax(left: 30px; top: "392;328;264;200;136;72"; width: 66px; text-align: right; font-size: 16px; font-family: c; color: $ink3; delay: 400; in: {opacity:0, duration:0.5}) ×6 0%;10%;20%;30%;40%;50%
-  p#xl(cx: "147;320;493;667"; top: 627px; font-size: 22px; font-family: m; color: $ink2; delay: 400; in: {opacity:0, duration:0.5}) ×4 第1週;第2週;第3週;第4週
+  div#gl(left: 110px; top: "336;272;208;144;80"; width: 980px; height: 2px; background: #FFFFFF12; delay: 400ms; in: {opacity:0, duration:0.5}) ×5
+  div#base(left: 110px; top: 600px; width: 980px; height: 2px; background: #FFFFFF47; delay: 400ms; in: {opacity:0, duration:0.5})
+  p#ax(left: 30px; top: "392;328;264;200;136;72"; width: 66px; text-align: right; font-size: 16px; font-family: c; color: $ink3; delay: 400ms; in: {opacity:0, duration:0.5}) ×6 0%;10%;20%;30%;40%;50%
+  p#xl(cx: "147;320;493;667"; top: 627px; font-size: 22px; font-family: m; color: $ink2; delay: 400ms; in: {opacity:0, duration:0.5}) ×4 第1週;第2週;第3週;第4週
   div#band(left: 110px; top: 273px; width: 980px; height: 20px; background: #35D0BA29; in: {scaleY:0, opacity:0, duration:0.6, ease:'power3.out'})
   p#bandl(right: 64px; top: 243px; font-size: 20px; font-family: c; color: $teal_l; in: {opacity:0, duration:0.4}) 32〜34% の帯
 # 折れ線・点・値は板の外 (canvas の座標の path は枠を持てない) に板の上へ重ねる
 shape#wk_line(path: "M211 335 L384 348 L557 335 L731 349"; background: none; border: 3px solid $teal; in: draw {duration: 1.4})
 shape#wk_dot(left: "206;379;552;726"; top: "330;343;330;344"; width: 16px; height: 16px; border-radius: 50%; background: #0F141B; border: 3px solid $teal; in: {scale:0.2, opacity:0, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.42}}) ×4
 p#wk_pl(cx: "211;384;557;731"; top: "303;367;303;368"; font-size: 28px; font-family: n; in: {y:8, opacity:0, duration:0.4, ease:'power3.out', stagger:{each:0.42}}) ×4 34.0%;32.0%;34.0%;31.9%
-panel#wc1(left: 1278px; top: 230px; width: 546px; height: 196px; delay: 600; in: {x:24, opacity:0, duration:0.6, ease:'power3.out'})
+panel#wc1(left: 1278px; top: 230px; width: 546px; height: 196px; delay: 600ms; in: {x:24, opacity:0, duration:0.6, ease:'power3.out'})
   p#t(left: 30px; top: 26px; font-size: 21px; font-family: m; color: $ink2) カート投入（1週あたり）
   p#v(left: 30px; top: 64px; font-size: 52px; line-height: 1.05; font-family: n) 1,750〜1,850{u} 件{/}
   p#n(left: 30px; top: 134px; font-size: 20px; font-family: m; color: $ink3) 母数は毎週ほぼ同じ規模
@@ -229,7 +229,7 @@ section#device(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'po
 kicker#dv_k 04 — DEVICE
 stitle#dv_t デバイス別：スマホと PC
 prog#dv_p(t: "04 / 09"; c: "#FFB54773;#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
-panel#dl(left: 96px; top: 230px; width: 520px; height: 690px; delay: 200)
+panel#dl(left: 96px; top: 230px; width: 520px; height: 690px; delay: 200ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) カート投入 7,200 件の内訳
   p#big(left: 32px; top: 76px; font-size: 128px; line-height: 1; font-family: n; color: $orange; in: none) [count:70 start=0 ms=800]{pc}%{/}
   p#bt(left: 300px; top: 124px; font-size: 32px; in: {opacity:0, duration:0.4}) がスマホ
@@ -238,7 +238,7 @@ panel#dl(left: 96px; top: 230px; width: 520px; height: 690px; delay: 200)
   p#sl1(left: 32px; top: 268px; font-size: 20px; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) スマホ {n16}5,040{/}
   p#sl2(left: 300px; top: 268px; font-size: 20px; font-family: m; color: $ink2; in: {opacity:0, duration:0.4}) PC {n16}2,160{/}
   img#phone(left: 40px; top: 300px; width: 440px; height: 380px; content: @phone; object-fit: contain; main: none; in: {y:30, opacity:0, duration:0.8, ease:'power3.out'})
-panel#dr(left: 648px; top: 230px; width: 1176px; height: 690px; delay: 350)
+panel#dr(left: 648px; top: 230px; width: 1176px; height: 690px; delay: 350ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) 段ごとの通過率{sm}　前の段から{/}
   p#lg(right: 32px; top: 24px; font-size: 20px; font-family: m; color: $ink2) {or}■{/} スマホ　{bl}■{/} PC
   pill#all(left: 32px; top: 70px; color: $orange_l; background: #FF8F5A21; border: 2px solid #FF8F5A8C) すべての段で スマホ ＜ PC
@@ -265,7 +265,7 @@ section#value(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'pow
 kicker#vl_k 05 — CART VALUE
 stitle#vl_t カート金額帯別の購入率
 prog#vl_p(t: "05 / 09"; c: "#FFB54773;#FFB54773;#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
-panel#vc(left: 96px; top: 230px; width: 1200px; height: 690px; delay: 200)
+panel#vc(left: 96px; top: 230px; width: 1200px; height: 690px; delay: 200ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) カート投入 → 購入完了の割合{sm}　金額帯別・縦軸 0〜60%{/}
   div#gl(left: 90px; top: "280;187;93"; width: 1060px; height: 2px; background: #FFFFFF12) ×3
   div#base(left: 90px; top: 560px; width: 1060px; height: 2px; background: #FFFFFF47)
@@ -274,8 +274,8 @@ panel#vc(left: 96px; top: 230px; width: 1200px; height: 690px; delay: 200)
   div#c4(left: 885px; top: 208px; width: 150px; height: 352px; border-radius: 6px 6px 0px 0px; background: $amber; in: {scaleY:0, duration:0.9, ease:'power3.out', pivot:'bottom'})
   p#cv(cx: "133;287;440"; top: "208;203;213"; font-size: 40px; font-family: n; in: {opacity:0, duration:0.4}) ×3 28.0%;29.0%;27.0%
   p#cv4(cx: 960px; top: 156px; font-size: 40px; font-family: n; color: $amber; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(1.6)'}) 50.3%
-  p#cl(cx: "133;287;440;640"; top: 578px; font-size: 22px; font-family: m; color: "$ink;$ink;$ink;$amber_l"; delay: 500; in: {opacity:0, duration:0.5}) ×4 3,000円未満;3,000〜3,999円;4,000〜4,999円;5,000円以上
-  p#cs(cx: "133;287;440;640"; top: 616px; font-size: 18px; font-family: c; color: $ink3; delay: 500; in: {opacity:0, duration:0.5}) ×4 カート投入の 34%;カート投入の 26%;カート投入の 18%;カート投入の 22%
+  p#cl(cx: "133;287;440;640"; top: 578px; font-size: 22px; font-family: m; color: "$ink;$ink;$ink;$amber_l"; delay: 500ms; in: {opacity:0, duration:0.5}) ×4 3,000円未満;3,000〜3,999円;4,000〜4,999円;5,000円以上
+  p#cs(cx: "133;287;440;640"; top: 616px; font-size: 18px; font-family: c; color: $ink3; delay: 500ms; in: {opacity:0, duration:0.5}) ×4 カート投入の 34%;カート投入の 26%;カート投入の 18%;カート投入の 22%
   shape#dv(left: 798px; top: 120px; width: 3px; height: 456px; path: line_v; background: #FFB547B3; border: 3px solid #FFB547B3; dash: 6,5; in: {scaleY:0, duration:0.6, ease:'power3.out', pivot:'top'})
   p#dvl(left: 812px; top: 96px; font-size: 20px; font-family: m; color: $amber_l; in: {opacity:0, duration:0.4}) ← 送料あり ｜ 送料無料 →
   # 送料がかかる 3 本を括る線 (上辺 + 両端の短い縦線)
@@ -284,9 +284,9 @@ panel#vc(left: 96px; top: 230px; width: 1200px; height: 690px; delay: 200)
     div#l(left: 0px; top: 0px; width: 3px; height: 18px; background: #B6C0CDB3)
     div#r(left: 638px; top: 0px; width: 3px; height: 18px; background: #B6C0CDB3)
   p#bkl(cx: 436px; top: 236px; font-size: 24px; in: {y:10, opacity:0, duration:0.45, ease:'power3.out'}) 送料がかかる帯：{i2}どこも{/} 3割前後
-panel#vr(left: 1328px; top: 230px; width: 496px; height: 690px; delay: 350)
-  img#parcel(left: 150px; top: 24px; width: 230px; height: 230px; content: @parcel; object-fit: contain; main: none; delay: 250; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
-  p#l1(left: 32px; top: 290px; font-size: 26px; line-height: 1.45; delay: 450; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'}) 送料 550円[br]{s13}5,000円以上で無料{/}
+panel#vr(left: 1328px; top: 230px; width: 496px; height: 690px; delay: 350ms)
+  img#parcel(left: 150px; top: 24px; width: 230px; height: 230px; content: @parcel; object-fit: contain; main: none; delay: 250ms; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'})
+  p#l1(left: 32px; top: 290px; font-size: 26px; line-height: 1.45; delay: 450ms; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'}) 送料 550円[br]{s13}5,000円以上で無料{/}
   p#l2(left: 32px; top: 410px; font-size: 26px; line-height: 1.45; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'}) 送料がかかる帯は[br]どこも 3割前後
   p#l3(left: 32px; top: 540px; font-size: 26px; line-height: 1.45; color: $amber_l; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'}) 無料になる帯だけ[br]購入率が倍近い
 
@@ -338,19 +338,19 @@ section#survey(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.3, ease:'po
 kicker#sv_k 07 — SURVEY
 stitle#sv_t 離脱した人に聞いた理由
 prog#sv_p(t: "07 / 09"; c: "#FFB54773;#FFB54773;#FFB54773;#FFB54773;#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29")
-panel#svl(left: 96px; top: 230px; width: 500px; height: 690px; delay: 200)
-  img#clip(left: 70px; top: 30px; width: 360px; height: 360px; object-fit: contain; main: none; delay: 300; in: {rotation:-4, y:20, opacity:0, duration:0.8, ease:'power3.out'}) [transparent]A clipboard holding a short questionnaire sheet with six rows of blank checkbox options (plain lines instead of words, no readable text), one checkbox ticked in amber, and a pen resting diagonally on it. Minimal clean 3D render, soft lighting, the clipboard fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
+panel#svl(left: 96px; top: 230px; width: 500px; height: 690px; delay: 200ms)
+  img#clip(left: 70px; top: 30px; width: 360px; height: 360px; object-fit: contain; main: none; delay: 300ms; in: {rotation:-4, y:20, opacity:0, duration:0.8, ease:'power3.out'}) [transparent]A clipboard holding a short questionnaire sheet with six rows of blank checkbox options (plain lines instead of words, no readable text), one checkbox ticked in amber, and a pen resting diagonally on it. Minimal clean 3D render, soft lighting, the clipboard fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
   # 対象と回答 (小さな題 + 23 px の値・題と値は別の文字にして行の高さを分ける)
-  p#m1l(left: 36px; top: 420px; font-size: 22px; color: $ink2; delay: 600; in: {opacity:0, duration:0.5}) 対象
-  p#m1v(left: 36px; top: 452px; width: 458px; font-size: 34px; line-height: 1.45; delay: 600; in: {opacity:0, duration:0.5}) カートに入れて買わなかった[br]会員
-  p#m2l(left: 36px; top: 568px; font-size: 22px; color: $ink2; delay: 600; in: {opacity:0, duration:0.5}) 回答
-  p#m2v(left: 36px; top: 600px; font-size: 34px; line-height: 1.45; delay: 600; in: {opacity:0, duration:0.5}) 400 人・1つ選択
-panel#svr(left: 628px; top: 230px; width: 1196px; height: 690px; delay: 350)
+  p#m1l(left: 36px; top: 420px; font-size: 22px; color: $ink2; delay: 600ms; in: {opacity:0, duration:0.5}) 対象
+  p#m1v(left: 36px; top: 452px; width: 458px; font-size: 34px; line-height: 1.45; delay: 600ms; in: {opacity:0, duration:0.5}) カートに入れて買わなかった[br]会員
+  p#m2l(left: 36px; top: 568px; font-size: 22px; color: $ink2; delay: 600ms; in: {opacity:0, duration:0.5}) 回答
+  p#m2v(left: 36px; top: 600px; font-size: 34px; line-height: 1.45; delay: 600ms; in: {opacity:0, duration:0.5}) 400 人・1つ選択
+panel#svr(left: 628px; top: 230px; width: 1196px; height: 690px; delay: 350ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) 買わなかった理由{sm}　回答 400 人・%（人数）{/}
   div#q(left: 0px; top: "61;123;184;245;307;368"; width: 1196px; height: 84px) ×6
-    p#nm(left: 32px; top: 6px; width: 420px; font-size: 24px; font-family: m; delay: "500;660;820;980;1140;1300"; in: {opacity:0, duration:0.35}) 送料が思ったより高い;ほかの店と比較・検討中だった;入力が面倒;使いたい支払い方法がない;届く日が遅い;その他
-    div#b(left: 470px; top: 2px; width: "354;251;194;137;114;91"; height: 40px; border-radius: 0px 6px 6px 0px; background: "$amber;$slate2;$orange;$slate2;$slate2;$slate2"; delay: "550;710;870;1030;1190;1350"; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
-    p#v(left: "677;574;517;460;437;414"; top: 2px; font-size: 28px; line-height: 1.4; font-family: n; delay: "900;1060;1220;1380;1540;1700"; in: {opacity:0, duration:0.3}) 31%{s13} 124人{/};22%{s13} 88人{/};17%{s13} 68人{/};12%{s13} 48人{/};10%{s13} 40人{/};8%{s13} 32人{/}
+    p#nm(left: 32px; top: 6px; width: 420px; font-size: 24px; font-family: m; delay: "500ms;660ms;820ms;980ms;1140ms;1300ms"; in: {opacity:0, duration:0.35}) 送料が思ったより高い;ほかの店と比較・検討中だった;入力が面倒;使いたい支払い方法がない;届く日が遅い;その他
+    div#b(left: 470px; top: 2px; width: "354;251;194;137;114;91"; height: 40px; border-radius: 0px 6px 6px 0px; background: "$amber;$slate2;$orange;$slate2;$slate2;$slate2"; delay: "550ms;710ms;870ms;1030ms;1190ms;1350ms"; in: {scaleX:0, duration:0.6, ease:'power3.out', pivot:'left'})
+    p#v(left: "677;574;517;460;437;414"; top: 2px; font-size: 28px; line-height: 1.4; font-family: n; delay: "900ms;1060ms;1220ms;1380ms;1540ms;1700ms"; in: {opacity:0, duration:0.3}) 31%{s13} 124人{/};22%{s13} 88人{/};17%{s13} 68人{/};12%{s13} 48人{/};10%{s13} 40人{/};8%{s13} 32人{/}
   pill#sp(left: 924px; top: 274px; color: $orange_l; background: #FF8F5A21; border: 2px solid #FF8F5A8C) 大半はスマホから
 
 # actions — 08 直す順番: 「まず」で 1 枚目 (琥珀の縁・カートの見本の板の送料無料までの目盛りが伸び「あと ◯◯円」の札)・「次に」で 2 枚目 (端末の絵 + 11 → 6 項目・6 が青緑に)・「そして」で 3 枚目 (支払い方法の 3 行)・板の間に ›
@@ -397,65 +397,65 @@ crow#e3(top: 676px; no: 3; c: $amber; m: "まず{em}送料をカートで{/}見�
 
 # endcard — 締め: 暗い幕が溶けて籠の絵が 0.85 → 1 に・題の再掲と副題と琥珀の短い線
 section#endcard(stagger: {each:0})
-div#endbg(inset: 0; background: #080B10F0; delay: 150; in: {opacity:0, duration:0.7, ease:'power2.out'})
+div#endbg(inset: 0; background: #080B10F0; delay: 150ms; in: {opacity:0, duration:0.7, ease:'power2.out'})
 img#basket(left: 820px; top: 230px; width: 280px; height: 280px; object-fit: contain; main: none; in: {scale:0.85, y:16, opacity:0, duration:1.0, ease:'power3.out'}) [transparent]A small woven shopping basket holding a ceramic mug, a rolled linen towel and a tiny potted plant, minimal clean 3D render with soft warm lighting and gentle shadow, three-quarter view, the basket fills the frame centered, isolated object on a transparent background. No text, no letters, no logos.
-p#end_t(cx: 960px; top: 548px; font-size: 56px; delay: 150; in: {y:14, opacity:0, duration:0.8, ease:'power3.out'}) カゴ落ち、どこで起きている？
-p#end_s(cx: 960px; top: 632px; font-size: 24px; font-family: m; color: $ink2; delay: 270; in: {y:14, opacity:0, duration:0.8, ease:'power3.out'}) こもれび雑貨店 ｜ 購入ファネル分析（直近4週間）
-div#end_r(left: 912px; top: 694px; width: 96px; height: 4px; border-radius: 3px; background: $amber; delay: 150; in: {opacity:0, duration:0.7})
+p#end_t(cx: 960px; top: 548px; font-size: 56px; delay: 150ms; in: {y:14, opacity:0, duration:0.8, ease:'power3.out'}) カゴ落ち、どこで起きている？
+p#end_s(cx: 960px; top: 632px; font-size: 24px; font-family: m; color: $ink2; delay: 270ms; in: {y:14, opacity:0, duration:0.8, ease:'power3.out'}) こもれび雑貨店 ｜ 購入ファネル分析（直近4週間）
+div#end_r(left: 912px; top: 694px; width: 96px; height: 4px; border-radius: 3px; background: $amber; delay: 150ms; in: {opacity:0, duration:0.7})
 ```
 
 ```timeline.txt
 #v2
 cast n = "低く落ち着いた30〜40代の男性のナレーター、滑らかで信頼感のある声、社内向けの分析報告を淡々と明瞭に読む" speed=107%
-silence head=0 tail=0
+silence head=0ms tail=0ms
 # 切替は書かない (旧場面は section の out で上へ抜けて消え、新しい場面は境目から組み上がる・地は常設)。場面の頭に風切り・声は境目の 0.35 秒後から
 
 *** title
 [>#subtitle]
 bgm music
-se title -2dB +120
+se title -2dB +120ms
 @n: [silence:0.8s]カゴ落ち、どこで起きている？[silence:0.4s]
 
 *** overview
-se whoosh -5dB +20
-@n: [silence:0.35s][♪pop -6dB +230]直近4週間で、カートに入った[>#k2 -150][>#k3 +700][♪pop -6dB][♪pop -6dB +715]7,200件のうち、[|][>#ov_stat -350][>#ov_waf -200][>#ov_waf.sq[*] +100][♪accent -3dB]67%、[>#k4 -150][>#ov_stat.side -50][>#ov_stat.note -50][♪pop -6dB]4,824件が買わずに去っています。[silence:0.35s]
-@: [>#ov_fee -100]送料は[>#ov_fee.parcel -200][>#ov_fee.fl -100][>#ov_fee.nd[*] +600][>#ov_fee.ar[*] +670][♪pop -6dB]550円。いまは[!#ov_fee.nd[2] tint,$amber][♪tick -7dB]配送先入力の画面で、[>#ov_fee.first -100][>#ov_fee.stem -100][♪accent -3dB]初めて表示されます。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s][♪pop -6dB +230ms]直近4週間で、カートに入った[>#k2 -150ms][>#k3 +700ms][♪pop -6dB][♪pop -6dB +715ms]7,200件のうち、[|][>#ov_stat -350ms][>#ov_waf -200ms][>#ov_waf.sq[*] +100ms][♪accent -3dB]67%、[>#k4 -150ms][>#ov_stat.side -50ms][>#ov_stat.note -50ms][♪pop -6dB]4,824件が買わずに去っています。[silence:0.35s]
+@: [>#ov_fee -100ms]送料は[>#ov_fee.parcel -200ms][>#ov_fee.fl -100ms][>#ov_fee.nd[*] +600ms][>#ov_fee.ar[*] +670ms][♪pop -6dB]550円。いまは[!#ov_fee.nd[2] tint,$amber][♪tick -7dB]配送先入力の画面で、[>#ov_fee.first -100ms][>#ov_fee.stem -100ms][♪accent -3dB]初めて表示されます。[silence:0.2s]
 
 *** funnel
-se whoosh -5dB +20
-@n: [silence:0.35s]カートから先の通過率は[frow fn.fr[1]][♪tick -7dB]55%、[frow fn.fr[2]][♪tick -7dB]75%、[frow fn.fr[3]][♪tick -7dB]80%。購入率は[>#fn.cvt -400][>#fn.cvv -400][♪accent -3dB]33%です。[silence:0.35s]
-@: [>#brk -100]カゴ落ちの[>#brk.seg[*] -50][>#brk.sl1 +300][>#brk.sl2 +300][>#brk.sl3 +300][♪pop -6dB]3分の2、[|][>#fn.fr[1].lv -200][>#fn.fr[2].lv -200][>#fn.fr[3].lv -200][!#brk.sl1{k} recolor,$coral_l,duration=300]3,240件はカートで去っています。[>#fn.hole -150][>#fn.holetag][♪accent -3dB]最大の穴は、カートの直後です。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]カートから先の通過率は[frow fn.fr[1]][♪tick -7dB]55%、[frow fn.fr[2]][♪tick -7dB]75%、[frow fn.fr[3]][♪tick -7dB]80%。購入率は[>#fn.cvt -400ms][>#fn.cvv -400ms][♪accent -3dB]33%です。[silence:0.35s]
+@: [>#brk -100ms]カゴ落ちの[>#brk.seg[*] -50ms][>#brk.sl1 +300ms][>#brk.sl2 +300ms][>#brk.sl3 +300ms][♪pop -6dB]3分の2、[|][>#fn.fr[1].lv -200ms][>#fn.fr[2].lv -200ms][>#fn.fr[3].lv -200ms][!#brk.sl1{k} recolor,$coral_l {duration: .3}]3,240件はカートで去っています。[>#fn.hole -150ms][>#fn.holetag][♪accent -3dB]最大の穴は、カートの直後です。[silence:0.2s]
 
 *** weekly
-se whoosh -5dB +20
-@n: [silence:0.35s]週ごとでも[>#wk_line -300][>#wk_dot[*] -200][>#wk_pl[*] -100][>#wk.band +1300][>#wk.bandl +1500][>#wc2 +1200][♪tick -7dB]32から34%で横ばい。[>#wc3 -100]特定の週の事故ではなく、[♪accent -3dB]構造的な離脱です。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]週ごとでも[>#wk_line -300ms][>#wk_dot[*] -200ms][>#wk_pl[*] -100ms][>#wk.band +1300ms][>#wk.bandl +1500ms][>#wc2 +1200ms][♪tick -7dB]32から34%で横ばい。[>#wc3 -100ms]特定の週の事故ではなく、[♪accent -3dB]構造的な離脱です。[silence:0.2s]
 
 *** device
-se whoosh -5dB +20
-@n: [silence:0.35s]カート投入の[>#dl.big -300][>#dl.bt][>#dl.sp -100][>#dl.pc +350][>#dl.sl1 +400][>#dl.sl2 +400][>#dl.phone +600][drow dr.row[1] +900][drow dr.row[2] +1350][drow dr.row[3] +1800][♪pop -6dB]70%はスマホ。スマホは[>#dr.all -50][♪tick -7dB]全段でPCより低く、購入率は[>#dr.cs -200][>#dr.cp +450][♪accent -3dB]30%対40%。差は[>#dr.note -100][!#dr.row[2].nm recolor,$amber_l,duration=300][♪pop -6dB]入力の重さです。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]カート投入の[>#dl.big -300ms][>#dl.bt][>#dl.sp -100ms][>#dl.pc +350ms][>#dl.sl1 +400ms][>#dl.sl2 +400ms][>#dl.phone +600ms][drow dr.row[1] +900ms][drow dr.row[2] +1350ms][drow dr.row[3] +1800ms][♪pop -6dB]70%はスマホ。スマホは[>#dr.all -50ms][♪tick -7dB]全段でPCより低く、購入率は[>#dr.cs -200ms][>#dr.cp +450ms][♪accent -3dB]30%対40%。差は[>#dr.note -100ms][!#dr.row[2].nm recolor,$amber_l {duration: .3}][♪pop -6dB]入力の重さです。[silence:0.2s]
 
 *** value
-se whoosh -5dB +20
-@n: [silence:0.35s]金額帯別では、[>#vc.col[*] -200][>#vc.cv[*] +350]送料がかかる帯はどれも[>#vc.bk -150][>#vc.bkl -50][>#vr.l2][♪pop -6dB]3割前後。無料になる[>#vc.dv -200][>#vc.dvl][>#vc.c4 +300][♪tick -7dB]5,000円以上だけが、[|][>#vc.cv4 -100][>#vr.l3 +200][♪accent -3dB]50.3%と倍近くです。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]金額帯別では、[>#vc.col[*] -200ms][>#vc.cv[*] +350ms]送料がかかる帯はどれも[>#vc.bk -150ms][>#vc.bkl -50ms][>#vr.l2][♪pop -6dB]3割前後。無料になる[>#vc.dv -200ms][>#vc.dvl][>#vc.c4 +300ms][♪tick -7dB]5,000円以上だけが、[|][>#vc.cv4 -100ms][>#vr.l3 +200ms][♪accent -3dB]50.3%と倍近くです。[silence:0.2s]
 
 *** abtest
-se whoosh -5dB +20
-@n: [silence:0.35s]そこで、[>#aba -300][>#abb +100][>#aba.tag +450][>#abb.tag +700][♪pop -6dB]送料をカートで見せる案を、[>#ab_note -100]2週間、[|][>#abr -300][>#abs -150][♪tick -7dB]半分ずつに分けて試しました。[silence:0.35s]
-@: [abrow abr.row[1] +100][>#abr.n1 +900][♪tick -7dB]カートで去る人は少し増えるものの、[|][abrow abr.row[2] -100][>#abr.n2 +800][abrow abr.row[3] +1600][♪pop -6dB]配送先入力での離脱が大きく減り、[|]購入率は[>#abs.ra -150][♪tick -7dB]30.8%から[>#abs.arr -300][>#abs.rb -150][♪pop -6dB]33.3%へ。[silence:0.35s]
-@: [>#abs.plus][♪rise -3dB]プラス2.5ポイント、[|]4週分なら[>#abs.gain -200][♪accent -3dB]約180件の購入増です。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]そこで、[>#aba -300ms][>#abb +100ms][>#aba.tag +450ms][>#abb.tag +700ms][♪pop -6dB]送料をカートで見せる案を、[>#ab_note -100ms]2週間、[|][>#abr -300ms][>#abs -150ms][♪tick -7dB]半分ずつに分けて試しました。[silence:0.35s]
+@: [abrow abr.row[1] +100ms][>#abr.n1 +900ms][♪tick -7dB]カートで去る人は少し増えるものの、[|][abrow abr.row[2] -100ms][>#abr.n2 +800ms][abrow abr.row[3] +1600ms][♪pop -6dB]配送先入力での離脱が大きく減り、[|]購入率は[>#abs.ra -150ms][♪tick -7dB]30.8%から[>#abs.arr -300ms][>#abs.rb -150ms][♪pop -6dB]33.3%へ。[silence:0.35s]
+@: [>#abs.plus][♪rise -3dB]プラス2.5ポイント、[|]4週分なら[>#abs.gain -200ms][♪accent -3dB]約180件の購入増です。[silence:0.2s]
 
 *** survey
-se whoosh -5dB +20
-@n: [silence:0.35s]アンケートでも、[|]最多は[!#svr.q[1].nm recolor,$amber_l,duration=300][♪accent -3dB]「送料が思ったより高い」の[!#svr.q[1].v punch,1.12,duration=500,pivot=left]31%。[!#svr.q[3].nm recolor,$orange_l,duration=300][♪pop -6dB]「入力が面倒」の[!#svr.q[3].v punch,1.12,duration=500,pivot=left]17%は、大半が[>#svr.sp -100][♪pop -6dB]スマホからでした。[silence:0.2s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]アンケートでも、[|]最多は[!#svr.q[1].nm recolor,$amber_l {duration: .3}][♪accent -3dB]「送料が思ったより高い」の[!#svr.q[1].v punch {scale: 1.12, duration: .5, pivot: 'left'}]31%。[!#svr.q[3].nm recolor,$orange_l {duration: .3}][♪pop -6dB]「入力が面倒」の[!#svr.q[3].v punch {scale: 1.12, duration: .5, pivot: 'left'}]17%は、大半が[>#svr.sp -100ms][♪pop -6dB]スマホからでした。[silence:0.2s]
 
 *** actions
-se whoosh -5dB +20
-@n: [silence:0.35s]直す順番は3つ。[>#a1 -300][>#a1.mock +200][♪chime -4dB]まず、送料をカートで見せ、[>#a1.mock.mf -300][>#a1.mock.msg][>#a1.ch[*] +600]あといくらで無料かを出す。[silence:0.35s]
-@: [>#chev[*] -400][>#a2 -200][>#a2.phone +300][>#a2.k +600][♪chime -4dB]次に、スマホの配送先入力を[>#a2.big -100]11項目から[!#a2.big{six} recolor,$teal,duration=300][>#a2.ch +400][♪pop -6dB]6項目へ。[>#a3 -200][♪chime -4dB]そして、[>#a3.pay[*] -100][>#a3.ch[*] +500]後払いとコンビニ払いを足します。[silence:0.25s]
+se whoosh -5dB +20ms
+@n: [silence:0.35s]直す順番は3つ。[>#a1 -300ms][>#a1.mock +200ms][♪chime -4dB]まず、送料をカートで見せ、[>#a1.mock.mf -300ms][>#a1.mock.msg][>#a1.ch[*] +600ms]あといくらで無料かを出す。[silence:0.35s]
+@: [>#chev[*] -400ms][>#a2 -200ms][>#a2.phone +300ms][>#a2.k +600ms][♪chime -4dB]次に、スマホの配送先入力を[>#a2.big -100ms]11項目から[!#a2.big{six} recolor,$teal {duration: .3}][>#a2.ch +400ms][♪pop -6dB]6項目へ。[>#a3 -200ms][♪chime -4dB]そして、[>#a3.pay[*] -100ms][>#a3.ch[*] +500ms]後払いとコンビニ払いを足します。[silence:0.25s]
 
 *** conclusion
-se swoosh -5dB +20
-@n: [silence:0.35s]カゴ落ちの[>#e1 -300][♪pop -6dB]3分の2はカートの直後。効いているのは送料を[>#e1.s -200]知った瞬間の[>#e2 -200][♪pop -6dB +200]驚きです。[>#e3 -200][!#e3.m{em} recolor,$amber,duration=300 +200][♪accent -3dB]まず送料をカートで見せ、[|]次にスマホの入力を短くしましょう。[<#brand -200][silence:0.25s]
+se swoosh -5dB +20ms
+@n: [silence:0.35s]カゴ落ちの[>#e1 -300ms][♪pop -6dB]3分の2はカートの直後。効いているのは送料を[>#e1.s -200ms]知った瞬間の[>#e2 -200ms][♪pop -6dB +200ms]驚きです。[>#e3 -200ms][!#e3.m{em} recolor,$amber {duration: .3} +200ms][♪accent -3dB]まず送料をカートで見せ、[|]次にスマホの入力を短くしましょう。[<#brand -200ms][silence:0.25s]
 
 *** endcard
 se end -2dB

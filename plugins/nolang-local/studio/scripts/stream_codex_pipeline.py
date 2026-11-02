@@ -42,7 +42,13 @@ def main(arguments: list[str]) -> int:
     try:
         with (stream / "author.out").open("wb") as author_log, (stream / "run.out").open("wb") as run_log:
             author = subprocess.Popen(
-                [sys.executable, str(scripts / "stream_author.py"), "run", str(project), *arguments[1:]],
+                [
+                    sys.executable,
+                    os.environ.get("STREAM_AUTHOR") or str(scripts / "stream_author.py"),
+                    "run",
+                    str(project),
+                    *arguments[1:],
+                ],
                 stdout=author_log,
                 stderr=subprocess.STDOUT,
                 start_new_session=True,
@@ -51,7 +57,7 @@ def main(arguments: list[str]) -> int:
             runner = subprocess.Popen(
                 [
                     sys.executable,
-                    str(scripts / "stream_run.py"),
+                    os.environ.get("STREAM_RUN") or str(scripts / "stream_run.py"),
                     str(project),
                     *shlex.split(os.environ.get("STREAM_RUN_ARGS", "")),
                 ],

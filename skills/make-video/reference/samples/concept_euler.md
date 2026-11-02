@@ -93,7 +93,7 @@ note#c_n(left: 400px; top: 790px) オイラー、1737 年
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた30代男性のナレーター、低めで明瞭、知的で静かな語り口" speed=100%
-transition = dissolve,300,overlap=300
+transition = dissolve {duration: .3, overlap: .3}
 
 *** hook
 [>#subtitle]
@@ -102,16 +102,16 @@ bgm music
 @: [>#h_n]この一本の式が、答えを教えてくれます。[silence:0.5s]
 
 *** zeta
-@narrator: [silence:+0.3s]ゼータ関数は、[>#z_b]自然数のエス乗の逆数を、[>#z_t1][>#z_t2 +150][>#z_t3 +300][>#z_t4 +450][>#z_t5 +600][>#z_t6 +750]ぜんぶ[>#z_b2]足した和です。[silence:+1.0s]
+@narrator: [silence:+0.3s]ゼータ関数は、[>#z_b]自然数のエス乗の逆数を、[>#z_t1][>#z_t2 +150ms][>#z_t3 +300ms][>#z_t4 +450ms][>#z_t5 +600ms][>#z_t6 +750ms]ぜんぶ[>#z_b2]足した和です。[silence:+1.0s]
 
 *** factor
 @narrator: [silence:+0.3s]どんな自然数も、素数の積に[>#f_e2]ただ一通りに分解できます。[silence:0.3s]
-@: [>#f_b]だから各項は、[>#f_p2][>#f_p3 +150][>#f_p5 +300][>#f_p7 +450][>#f_n +900]素数の項の掛け算にほどけます。[silence:+0.8s]
+@: [>#f_b]だから各項は、[>#f_p2][>#f_p3 +150ms][>#f_p5 +300ms][>#f_p7 +450ms][>#f_n +900ms]素数の項の掛け算にほどけます。[silence:+0.8s]
 
 *** product
 @narrator: [silence:+0.3s]オイラー積。[>#p_geo]素数ごとの等比級数をぜんぶ掛け合わせると、自然数の和に戻ります。[silence:0.3s]
 @: [>#p_b][>#p_l]左の和と[>#p_ar][>#p_r]右の積が、同じものになる。[!#p_eq{a} recolor,$b]これが、オイラー積です。[silence:+0.8s]
-transition dissolve,400,overlap=400
+transition dissolve {duration: .4, overlap: .4}
 
 *** close
 @narrator: [silence:+0.3s]エスを1にすると、左辺は[>#c_b1]無限大に発散します。[silence:0.3s]

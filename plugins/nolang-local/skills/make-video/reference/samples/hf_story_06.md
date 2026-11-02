@@ -54,14 +54,14 @@ sound river = "山あいの澄んだ川のせせらぎの環境音"
 # 曲は声の下で 7 dB 沈み、「でも〜消えていきます」で更に 2.5 dB・「1979 年」の着地で 6 dB 一瞬あける (keys の秒は声の実尺から)
 bgm#music(volume: 0dB; duck: -7; fade: 300,1000; keys: "0:0|13.9s:0|14.5s:-2.5|16.6s:-2.5|17.4s:0|26.25s:0|26.4s:-6|27.0s:-6|27.6s:0") 静かで郷愁を誘うゆっくりしたピアノのソロ、切なく温かい旋律、自然ドキュメンタリーの語り向け
 # 字幕: 明朝の白文字 + 濃い落ち影 (板なし)・画面の下 1/5 の上に置く・強調の語は金の極太 {g}
-subtitle(left: 60px; bottom: 392px; width: 960px; font-size: 60px; line-height: 1.42; letter-spacing: 0.04em; color: #FBF7EE; background: none; text-shadow: 0px 3px 10px #000000E6; unit: sentence; lead: 0; in: {y:12, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
+subtitle(left: 60px; bottom: 392px; width: 960px; font-size: 60px; line-height: 1.42; letter-spacing: 0.04em; color: #FBF7EE; background: none; text-shadow: 0px 3px 10px #000000E6; unit: sentence; lead: 0ms; in: {y:12, opacity:0, duration:0.16, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
 # 写真の下の陰 (字幕の地・下 760px で 78% まで) と上の陰 (題の地)
 def shade_b() = div(left: 0px; top: 1160px; width: 1080px; height: 760px; background: linear(#06080700,#0608076B@55%,#060807C7,bottom); border-radius: 24px; in: none)
 def shade_t() = div(left: 0px; top: 0px; width: 1080px; height: 640px; background: linear(#060807B8,#06080759@50%,#06080700,bottom); border-radius: 24px; in: none)
 # 消えた理由の札: 写真 (ゆっくり寄る・左からの暗幕 scrim) + 金の番号 + 太いゴシックの題。右から滑り込む
 def card(n, t, pic) = div(left: 70px; width: 940px; height: 290px; border-radius: 18px; background: $dark; border: 2px solid #FFFFFF1F; box-shadow: 0px 18px 40px #00000080; in: {x:140, opacity:0, duration:0.5, ease:'power3.out'})
   img#ph(inset: 0; content: {pic}; filter: saturate(0.85) contrast(1.05) brightness(1.18); scrim: left,0.86; main: kb {scale: [1, 1.12]})
-  p#num(left: 40px; top: 30px; font-size: 92px; font-family: mb; color: $gold; line-height: 1; palt: off; content: {n})
+  p#num(left: 40px; top: 30px; font-size: 92px; font-family: mb; color: $gold; line-height: 1; content: {n})
   p#lab(left: 44px; bottom: 40px; font-size: 52px; font-family: gh; letter-spacing: 0.04em; white-space: nowrap; content: {t})
 # 全編の質感: 周辺減光 (中央 55% は素通し) + grain (最前面)
 veil#vignette(background: radial(#00000000@55%,#0000008C@100%,50%,46%); z-index: front; in: none)
@@ -83,7 +83,7 @@ group#ttl(out: {y:-24, opacity:0, duration:0.25, ease:'power1.in'})
   p#kicker(cx: 540px; top: 170px; font-size: 30px; font-family: gb; letter-spacing: 0.5em; color: $gold; in: {opacity:0, duration:0.4}) 日本の川の住人
   p#name(cx: 540px; top: 237px; font-size: 118px; font-family: mb; letter-spacing: 0.06em; line-height: 1.1; white-space: nowrap; text-shadow: 0px 6px 30px #00000099; in: {y:40, opacity:0, blur:8, duration:0.5, ease:'power3.out', stagger:0.06}) ニホンカワウソ
   shape#rule(left: 280px; top: 387px; width: 520px; height: 3px; path: rect; background: linear(#E9C27A00,#E9C27A,#E9C27A00,90); in: {scaleX:0, duration:0.6, ease:'power2.out'})
-  p#sci(cx: 540px; top: 408px; font-size: 36px; italic: true; letter-spacing: 0.14em; color: $cream; in: {opacity:0, duration:0.5}) Lutra lutra nippon
+  p#sci(cx: 540px; top: 408px; font-size: 36px; font-style: italic; letter-spacing: 0.14em; color: $cream; in: {opacity:0, duration:0.5}) Lutra lutra nippon
 
 # 暮らし: 泳ぐ (斜めに流れる) → 魚を追う (寄る) → 人のそばの村。「でも」で村の色が抜け、「その姿は」でカワウソだけが溶けて消える
 section#life
@@ -111,7 +111,7 @@ section#year
 div#y_bg(inset: 0; background: $night; border-radius: 24px; in: none)
 img#y_photo(inset: 0; content: @kochi_empty; opacity: 0.2; filter: sepia(1) brightness(0.7); main: kb {scale: [1.18, 1.08]})
 p#soshite(cx: 540px; top: 640px; font-size: 58px; letter-spacing: 0.3em; color: $bone; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) そして
-p#year(left: 99px; top: 760px; font-size: 300px; font-family: mb; line-height: 1; palt: off; text-shadow: 0px 10px 50px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0,0,1380,1460 laps=0,0,0,4 delay=320 ease=ease_in_out]
+p#year(left: 99px; top: 760px; font-size: 300px; font-family: mb; line-height: 1; text-shadow: 0px 10px 50px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0,0,1380,1460 laps=0,0,0,4 delay=320 ease=ease_in_out]
 p#nen(left: year.right+18; top: 904px; font-size: 120px; line-height: 1.3; color: $gold; in: {x:-16, opacity:0, duration:0.35, ease:'power2.out'}) 年
 p#era(cx: 540px; top: 1110px; font-size: 40px; font-family: gb; letter-spacing: 0.5em; color: $stone; in: {opacity:0, duration:0.4}) 昭和54年
 
@@ -158,45 +158,45 @@ p#e3(cx: 540px; cy: 525px; font-size: 30px; font-family: gm; letter-spacing: 0.0
 ```timeline.txt
 #v2
 cast n = "落ち着いた低めの男性のプロのナレーター、静かで情感のあるドキュメンタリーの語り"
-transition = dissolve,300,overlap=300,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, ease: 'power2.out'}
 
 *** open
 [>#subtitle]
 bgm music
-se river -10dB to=14.2s fade=800,1800
-@n: [silence:500][!#intro to,{opacity:0, duration:0.4, ease:'power1.out'} -500]昔、[<#intro]日本の川には……[|][>#peek -20][♪plop -5dB +20][!#ripple ping,#FFFFFFD9,2,interval=370,duration=1300,scale=0.35>1.5 +70]この{g}可愛い動物{/}が[br]普通にいたんです。
-transition dissolve,300,overlap=300
+se river -10dB to=14.2s fade=800ms,1800ms
+@n: [silence:500ms][!#intro to,{opacity:0, duration:0.4, ease:'power1.out'} -500ms]昔、[<#intro]日本の川には……[|][>#peek -20ms][♪plop -5dB +20ms][!#ripple ping,#FFFFFFD9 {count: 2, interval: .37, duration: 1.3, scale: [.35, 1.5]} +70ms]この{g}可愛い動物{/}が[br]普通にいたんです。
+transition dissolve {duration: .3, overlap: .3}
 
 *** title
 [<#subtitle]
-@n: [silence:150][♪airy -6dB -200 to=1.6s fade=0,400][>#ttl.kicker -50][♪shimmer -5dB][>#ttl.name +10][>#ttl.rule +350][>#ttl.sci +500][<#ttl cut-0]ニホンカワウソ。[silence:0.4s]
-transition dissolve,140,overlap=140
+@n: [silence:150ms][♪airy -6dB -200ms to=1.6s fade=0ms,400ms][>#ttl.kicker -50ms][♪shimmer -5dB][>#ttl.name +10ms][>#ttl.rule +350ms][>#ttl.sci +500ms][<#ttl cut-0ms]ニホンカワウソ。[silence:0.4s]
+transition dissolve {duration: .14, overlap: .14}
 
 *** life
 [>#subtitle]
-@n: [♪dive -3dB -90 to=1.6s fade=0,500]川を泳ぎ、[>#fish -50][♪splash -3dB -30][<#swim +100]魚を追いかけ、[|][>#village -70][♪swish -6dB -250][<#fish +350]日本人のすぐそばで[br]暮らしていました。
-@: [!#village.otter to,{filter:'saturate(.28) brightness(.72)', duration:4.4}][!#village.empty to,{filter:'saturate(.28) brightness(.72)', duration:4.4}]でも、いつからか、[|][!#village.otter to,{opacity:0, duration:2.3, ease:'sine.inOut'} +70][♪wind -6dB +120 to=3.5s fade=0,800]その姿は[br]少しずつ消えていきます。
-transition dissolve,320,overlap=320
+@n: [♪dive -3dB -90ms to=1.6s fade=0ms,500ms]川を泳ぎ、[>#fish -50ms][♪splash -3dB -30ms][<#swim +100ms]魚を追いかけ、[|][>#village -70ms][♪swish -6dB -250ms][<#fish +350ms]日本人のすぐそばで[br]暮らしていました。
+@: [!#village.otter to,{filter:'saturate(.28) brightness(.72)', duration:4.4}][!#village.empty to,{filter:'saturate(.28) brightness(.72)', duration:4.4}]でも、いつからか、[|][!#village.otter to,{opacity:0, duration:2.3, ease:'sine.inOut'} +70ms][♪wind -6dB +120ms to=3.5s fade=0ms,800ms]その姿は[br]少しずつ消えていきます。
+transition dissolve {duration: .32, overlap: .32}
 
 *** causes
-@n: [silence:150][>#c_head -130][>#card1][♪low -4dB -220]毛皮をとるために[br]捕まえられ、[|][>#card2][!#card1 to,{opacity:0.5, duration:0.4} +50][♪low -4dB -220]川は開発され、[|][>#card3][!#card2 to,{opacity:0.5, duration:0.4} +50][♪low -4dB -220]水が汚れ、[br][>#card3.more]餌となる魚も[!#card1 to,{opacity:0.85, duration:0.5} +170][!#card2 to,{opacity:0.85, duration:0.5} +170]減っていきました。
-transition dip,600,level=0.55
+@n: [silence:150ms][>#c_head -130ms][>#card1][♪low -4dB -220ms]毛皮をとるために[br]捕まえられ、[|][>#card2][!#card1 to,{opacity:0.5, duration:0.4} +50ms][♪low -4dB -220ms]川は開発され、[|][>#card3][!#card2 to,{opacity:0.5, duration:0.4} +50ms][♪low -4dB -220ms]水が汚れ、[br][>#card3.more]餌となる魚も[!#card1 to,{opacity:0.85, duration:0.5} +170ms][!#card2 to,{opacity:0.85, duration:0.5} +170ms]減っていきました。
+transition dip {duration: .6, level: .55}
 
 *** year
 [<#subtitle]
-@n: [silence:300][♪clock -8dB -250 to=2.45s fade=0,500][>#soshite -30]そして[>#year -370]1979[!#year settle,1.07,duration=600 -110][>#nen -30][>#era +130][♪boom +3dB -210 to=4.6s fade=0,1800]年。[silence:0.3s]
+@n: [silence:300ms][♪clock -8dB -250ms to=2.45s fade=0ms,500ms][>#soshite -30ms]そして[>#year -370ms]1979[!#year settle {scale: 1.07, duration: .6} -110ms][>#nen -30ms][>#era +130ms][♪boom +3dB -210ms to=4.6s fade=0ms,1800ms]年。[silence:0.3s]
 transition cut
 
 *** kochi
 [>#subtitle]
-@n: [silence:200][>#flash -200][!#flash to,{opacity:0, duration:0.42, ease:'power2.out'} -140][♪shutter -3dB -200 to=1.4s][>#loc +200][♪typing -6dB +200 to=1.1s]{g}高知県{/}で最後に確認された[br][>#kochi.focus +40]ニホンカワウソを最後に、[|][!#kochi.otter to,{opacity:0, duration:1.7, ease:'sine.inOut'} +70][♪wind -5dB +20 to=3.5s fade=0,1000]姿を見た人は[br][<#kochi.focus +150]いなくなりました。
+@n: [silence:200ms][>#flash -200ms][!#flash to,{opacity:0, duration:0.42, ease:'power2.out'} -140ms][♪shutter -3dB -200ms to=1.4s][>#loc +200ms][♪typing -6dB +200ms to=1.1s]{g}高知県{/}で最後に確認された[br][>#kochi.focus +40ms]ニホンカワウソを最後に、[|][!#kochi.otter to,{opacity:0, duration:1.7, ease:'sine.inOut'} +70ms][♪wind -5dB +20ms to=3.5s fade=0ms,1000ms]姿を見た人は[br][<#kochi.focus +150ms]いなくなりました。
 
 *** grid
-@n: [silence:150][>#grid.tile[*] -30]かつては日本中にいた動物が、[|][♪clock -8dB -80 to=1.6s fade=0,500][<#grid.tile[8] -30][<#grid.tile[12] +80][<#grid.tile[4] +190][<#grid.tile[11] +300][<#grid.tile[9] +410][<#grid.tile[5] +520][<#grid.tile[10] +630][<#grid.tile[2] +740][<#grid.tile[1] +850][<#grid.tile[7] +960][<#grid.tile[3] +1070][<#grid.tile[6] +1180]たった{g}数十年{/}で、[|][>#memory -130][>#dust -130][>#memory_shade -130]私たちの{g}記憶の中だけ{/}の[br]存在になったので[♪swell -5dB +380 to=3.4s fade=0,1200]す。
-transition dip,1000,color=#FFF1D8,level=0.55
+@n: [silence:150ms][>#grid.tile[*] -30ms]かつては日本中にいた動物が、[|][♪clock -8dB -80ms to=1.6s fade=0ms,500ms][<#grid.tile[8] -30ms][<#grid.tile[12] +80ms][<#grid.tile[4] +190ms][<#grid.tile[11] +300ms][<#grid.tile[9] +410ms][<#grid.tile[5] +520ms][<#grid.tile[10] +630ms][<#grid.tile[2] +740ms][<#grid.tile[1] +850ms][<#grid.tile[7] +960ms][<#grid.tile[3] +1070ms][<#grid.tile[6] +1180ms]たった{g}数十年{/}で、[|][>#memory -130ms][>#dust -130ms][>#memory_shade -130ms]私たちの{g}記憶の中だけ{/}の[br]存在になったので[♪swell -5dB +380ms to=3.4s fade=0ms,1200ms]す。
+transition dip {duration: 1, color: #FFF1D8, level: .55}
 
 *** return
-se river -10dB to=12s fade=1800,1400
-@n: もし、あの日の川に[br]戻れたなら――[|][!#leak to,{x:100, y:60, opacity:0.45, duration:5, ease:'sine.inOut'} -580][>#swimmer -130][>#ripple2 -130]そこには今も、[♪plop -8dB +70][!#ripple2 ping,#FFFFFFB3,2,interval=700,duration=1800,scale=0.4>1.7 +70]カワウソが[br]泳いでいるのでしょう[>#end_shade +430][>#e1 +580][>#e2 +1280][>#e3 +1780][!#leak to,{opacity:0, duration:1.4} +1730]か。[silence:5.0s]
-fade out,1000
+se river -10dB to=12s fade=1800ms,1400ms
+@n: もし、あの日の川に[br]戻れたなら――[|][!#leak to,{x:100, y:60, opacity:0.45, duration:5, ease:'sine.inOut'} -580ms][>#swimmer -130ms][>#ripple2 -130ms]そこには今も、[♪plop -8dB +70ms][!#ripple2 ping,#FFFFFFB3 {count: 2, interval: .7, duration: 1.8, scale: [.4, 1.7]} +70ms]カワウソが[br]泳いでいるのでしょう[>#end_shade +430ms][>#e1 +580ms][>#e2 +1280ms][>#e3 +1780ms][!#leak to,{opacity:0, duration:1.4} +1730ms]か。[silence:5.0s]
+fade out,1000ms
 ```

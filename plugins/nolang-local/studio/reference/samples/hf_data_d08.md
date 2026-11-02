@@ -88,7 +88,7 @@ p { color: $ink }
 # 曲: 頭の 0.3 秒と締めの余韻だけ前に出す
 bgm#music(keys: "0:+7|320ms:+7|620ms:0|end-1.6s:0|end-1.1s:+6"; fade: 0,1600) 明るく軽やかなアコースティックのポップ、木琴とウクレレと手拍子、暮らしの情報やキッチンの解説向け、主旋律は控えめ
 # 字幕: 下の帯の中央に白い札 (黒の縁 + 下に硬い影)・強調の語は朱 (台詞の {e})・札は文 (句は [|] で切り、文を跨ぐ札は [||])
-subtitle.hug(left: 30px; bottom: 372px; width: 1020px; wrap: comma,30; font-size: 42px; font-family: e; line-height: 1.38; color: $ink; background: #FFFFFF; border: 3px solid $ink; border-radius: 26px; box-shadow: 0px 6px 0px $ink; padding: 16px 28px 18px 28px; unit: sentence; lead: 0; in: {y:14, opacity:0, duration:.16, ease:'power2.out'})
+subtitle.hug(left: 30px; bottom: 372px; width: 1020px; wrap: comma,30; font-size: 42px; font-family: e; line-height: 1.38; color: $ink; background: #FFFFFF; border: 3px solid $ink; border-radius: 26px; box-shadow: 0px 6px 0px $ink; padding: 16px 28px 18px 28px; unit: sentence; lead: 0ms; in: {y:14, opacity:0, duration:.16, ease:'power2.out'})
 
 # 全編の地: 縦グラデ・点の格子 (全編で 27 px 上へ流れる)・3 色のぼけ (全編でゆっくり漂う)
 div#bg_base(inset: 0; background: linear(#FFF9EF,#FFF1DC,180); z-index: back; in: none)
@@ -134,7 +134,7 @@ board#st(n: "01"; t: "調査の舞台")
   p#t2(left: .tag.right+20; cy: 57px; font-size: 46px; line-height: 1.1; white-space: nowrap; in: {y:20, opacity:0, duration:.3}) 4週間の廃棄
   bsub#sub(out: {opacity:0, duration:.25}) 架空の地域スーパー
   div#a(inset: 0; out: {x:-60, opacity:0, duration:.24, ease:'power2.in'})
-    img#photo(left: 40px; top: 140px; width: 904px; height: 603px; border-radius: 30px; delay: 200; in: wipe {dir: 'down', duration: 0.7, ease: 'power3.out'}; main: kb {scale: [1.12, 1], ease:'sine.out'}; subject: top 65%; room: bottom 30%) A cozy neighborhood supermarket storefront on a quiet street in a Japanese residential area: a single-story shop with a green-and-cream striped awning, large glass windows showing produce and bread shelves, a couple of shoppers with eco bags, a parked bicycle and potted plants, soft morning light. The shop fills the whole frame edge to edge; the lower-left quarter is plain pavement for a name plate.
+    img#photo(left: 40px; top: 140px; width: 904px; height: 603px; border-radius: 30px; delay: 200ms; in: wipe {dir: 'down', duration: 0.7, ease: 'power3.out'}; main: kb {scale: [1.12, 1], ease:'sine.out'}; subject: top 65%; room: bottom 30%) A cozy neighborhood supermarket storefront on a quiet street in a Japanese residential area: a single-story shop with a green-and-cream striped awning, large glass windows showing produce and bread shelves, a couple of shoppers with eco bags, a parked bicycle and potted plants, soft morning light. The shop fills the whole frame edge to edge; the lower-left quarter is plain pavement for a name plate.
     div#plate(left: 70px; top: 586px; width: 558px; height: 136px; background: #FFFFFF; border-radius: 22px; box-shadow: 0px 10px 24px #00000029; overlap: st.a.photo; in: {x:-40, opacity:0, duration:.45, ease:'back.out(1.6)'})
       p#b(left: 28px; top: 16px; font-size: 54px; line-height: 1.1; white-space: nowrap) まるみ屋 ひばり台店
       p#s(left: 28px; top: 84px; font-size: 26px; font-family: e; color: $ink2; white-space: nowrap) 住宅街にある地域スーパー（架空）
@@ -202,8 +202,8 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
     div#stk(left: 0px; top: 168px; width: 904px; height: 22px; border-radius: 10px; background: #ECE4D8)
     # 3 色の積み上げ (左から 1 本の帯として開く = 3 枚を続けて wipe)
     div#s1(left: 0px; top: 168px; width: 212px; height: 22px; border-radius: 10px 0px 0px 10px; background: $souzai; in: wipe {dir: 'right', duration: 0.33, ease: 'none'})
-    div#s2(left: 212px; top: 168px; width: 142px; height: 22px; background: $seika; delay: 330; in: wipe {dir: 'right', duration: 0.22, ease: 'none'})
-    div#s3(left: 354px; top: 168px; width: 104px; height: 22px; background: $pan; delay: 550; in: wipe {dir: 'right', duration: 0.15, ease: 'power2.out'})
+    div#s2(left: 212px; top: 168px; width: 142px; height: 22px; background: $seika; delay: 330ms; in: wipe {dir: 'right', duration: 0.22, ease: 'none'})
+    div#s3(left: 354px; top: 168px; width: 104px; height: 22px; background: $pan; delay: 550ms; in: wipe {dir: 'right', duration: 0.15, ease: 'power2.out'})
     div#half(left: 452px; top: 154px; width: 4px; height: 50px; border-radius: 3px; background: $ink)
   # 金額の段: 1kg あたりの売値の札 ×3 が語ごとに弾む
   div#summ(left: 40px; top: 868px; width: 904px; height: 190px; in: {opacity:0, duration:.3})
@@ -250,15 +250,15 @@ section#exp
 board#ex(n: "04"; t: "実験：値引きを2時間早く")
   bsub#sub 2週間
   div#a(inset: 0; out: {y:-40, opacity:0, duration:.24, ease:'power2.in'})
-    group#clk(left: 58px; top: 160px; width: 380px; height: 380px; delay: 100; in: {scale:.7, opacity:0, duration:.5, ease:'back.out(1.6)'})
+    group#clk(left: 58px; top: 160px; width: 380px; height: 380px; delay: 100ms; in: {scale:.7, opacity:0, duration:.5, ease:'back.out(1.6)'})
       svg#face(left: 0px; top: 0px; width: 380px; height: 380px; part: clockface)
       svg#arc(left: 0px; top: 0px; width: 380px; height: 380px; part: clockarc; in: {opacity:0, duration:.3})
       # 針は時計と同じ 253 px 四方の svg (中心 = 時計の中心) に描き、既定の中心軸で回す (時針 210° = 7 時)
       svg#hh(left: 0px; top: 0px; width: 380px; height: 380px; part: hhand; transform: rotate(210deg))
       svg#mh(left: 0px; top: 0px; width: 380px; height: 380px; part: mhand)
       shape#cdot(left: 176px; top: 176px; width: 28px; height: 28px; border-radius: 50%; background: $a)
-    p#tl(left: 476px; top: 170px; font-size: 30px; font-family: e; color: $ink2; delay: 200; in: {opacity:0, duration:.3}) 半額シールを貼る時刻
-    p#t19(left: 476px; top: 222px; font-size: 74px; color: #A79C92; delay: 300; in: {x:30, opacity:0, duration:.35}) 19:00
+    p#tl(left: 476px; top: 170px; font-size: 30px; font-family: e; color: $ink2; delay: 200ms; in: {opacity:0, duration:.3}) 半額シールを貼る時刻
+    p#t19(left: 476px; top: 222px; font-size: 74px; color: #A79C92; delay: 300ms; in: {x:30, opacity:0, duration:.35}) 19:00
     p#t17(left: 476px; top: 322px; font-size: 128px; line-height: 1; color: $a; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) 17:00
     p#early(left: 480px; top: 470px; font-size: 32px; background: $mk; border-radius: 14px; padding: 6px 16px 8px 16px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2)'}) 2時間 早く！
     # 商品の札 ×2 (絵 + 名)・右上に半額シールを判子で
@@ -311,7 +311,7 @@ board#ex(n: "04"; t: "実験：値引きを2時間早く")
 section#home
 board#hm(n: "05"; t: "家庭でできる1つの工夫")
   p#ttl(font-size: 44px)
-  p#q(left: 40px; top: 130px; width: 904px; text-align: center; font-size: 32px; line-height: 1.32; in: {y:20, opacity:0, duration:.4}; delay: 50) 店頭アンケート：{mk}同じ物を二重に買って捨てた{/}ことが[br]月1回以上ある人の割合
+  p#q(left: 40px; top: 130px; width: 904px; text-align: center; font-size: 32px; line-height: 1.32; in: {y:20, opacity:0, duration:.4}; delay: 50ms) 店頭アンケート：{mk}同じ物を二重に買って捨てた{/}ことが[br]月1回以上ある人の割合
   # 比べる 2 列 (題 3 段 + 100 マス + 大きい % + 人数)
   div#ga(left: 24px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #FFF1EC; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
@@ -373,36 +373,36 @@ board#sm(n: "まとめ"; t: "今日のポイント")
 ```timeline.txt
 #v2
 cast n = "明るく親しみやすい若い女性のナレーター、はっきりした声でテンポよく語りかける" speed=115%
-silence head=0 tail=220
+silence head=0ms tail=220ms
 
 *** title
 [>#subtitle]
 bgm music
-@n: [silence:500][♪swoosh -5dB -380][>#kick -400][>#l1 -320][>#bd[*] -50]スーパーの食品ロス。その[>#l2 -80][♪perc -60]{e}半分{/}は、たった[>#l3 -100][!#l3{mk} marker +120][♪kira -9dB][!#bd[1] to,{opacity:1, duration:.2} +300][!#bd[1].img to,{filter:'saturate(1)', duration:.25} +300][!#bd[1] punch,1.12,duration=320 +300][♪pop -2dB +300][!#bd[2] to,{opacity:1, duration:.2} +440][!#bd[2].img to,{filter:'saturate(1)', duration:.25} +440][!#bd[2] punch,1.12,duration=320 +440][♪pop -2dB +440][!#bd[3] to,{opacity:1, duration:.2} +580][!#bd[3].img to,{filter:'saturate(1)', duration:.25} +580][!#bd[3] punch,1.12,duration=320 +580][♪pop -2dB +580][!#bd[*].img to,{y:-8, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.15} +1000]{e}3つの棚{/}から出ていました。
+@n: [silence:500ms][♪swoosh -5dB -380ms][>#kick -400ms][>#l1 -320ms][>#bd[*] -50ms]スーパーの食品ロス。その[>#l2 -80ms][♪perc -60ms]{e}半分{/}は、たった[>#l3 -100ms][!#l3{mk} marker +120ms][♪kira -9dB][!#bd[1] to,{opacity:1, duration:.2} +300ms][!#bd[1].img to,{filter:'saturate(1)', duration:.25} +300ms][!#bd[1] punch {scale: 1.12, duration: .32} +300ms][♪pop -2dB +300ms][!#bd[2] to,{opacity:1, duration:.2} +440ms][!#bd[2].img to,{filter:'saturate(1)', duration:.25} +440ms][!#bd[2] punch {scale: 1.12, duration: .32} +440ms][♪pop -2dB +440ms][!#bd[3] to,{opacity:1, duration:.2} +580ms][!#bd[3].img to,{filter:'saturate(1)', duration:.25} +580ms][!#bd[3] punch {scale: 1.12, duration: .32} +580ms][♪pop -2dB +580ms][!#bd[*].img to,{y:-8, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true, stagger:.15} +1000ms]{e}3つの棚{/}から出ていました。
 
 *** stage
-@n: [silence:200][♪scene -5dB -200]架空のスーパー「[>#st.a.plate -50][♪pophi -3dB]まるみ屋 ひばり台店」で、[|][>#st.a.chips[*] -50][♪pop -3dB -50][♪pop -3dB +100][♪pop -3dB +250]{e}4週間{/}、廃棄を毎日[>#st.a.note]量りました。
-@: [<#st.a -250][<#st.ttl -250][<#st.sub -250][>#st.t2 -50][>#st.b -30][♪swoosh -6dB -250]合計[!#st.b.total count][♪perc -2dB][♪pophi -4dB +1000]{e}1,840kg{/}、売値で[>#st.b.yen -50][♪register -5dB][>#st.b.note1 +300]{e}151万8,500円{/}分。[>#st.b.rule -200][>#st.b.perday -50][>#st.b.eq +350][>#st.b.bl +450][>#st.b.bt[*] +100][♪pop -8dB +50][♪pop -8dB +600][♪pop -8dB +1150]毎日、2Lペットボトル[>#st.b.bv][♪pophi -2dB][>#st.b.note2 +300]{e}33本{/}分です。
+@n: [silence:200ms][♪scene -5dB -200ms]架空のスーパー「[>#st.a.plate -50ms][♪pophi -3dB]まるみ屋 ひばり台店」で、[|][>#st.a.chips[*] -50ms][♪pop -3dB -50ms][♪pop -3dB +100ms][♪pop -3dB +250ms]{e}4週間{/}、廃棄を毎日[>#st.a.note]量りました。
+@: [<#st.a -250ms][<#st.ttl -250ms][<#st.sub -250ms][>#st.t2 -50ms][>#st.b -30ms][♪swoosh -6dB -250ms]合計[!#st.b.total count][♪perc -2dB][♪pophi -4dB +1000ms]{e}1,840kg{/}、売値で[>#st.b.yen -50ms][♪register -5dB][>#st.b.note1 +300ms]{e}151万8,500円{/}分。[>#st.b.rule -200ms][>#st.b.perday -50ms][>#st.b.eq +350ms][>#st.b.bl +450ms][>#st.b.bt[*] +100ms][♪pop -8dB +50ms][♪pop -8dB +600ms][♪pop -8dB +1150ms]毎日、2Lペットボトル[>#st.b.bv][♪pophi -2dB][>#st.b.note2 +300ms]{e}33本{/}分です。
 
 *** shelves
-@n: [silence:200][♪scene -5dB -200][>#sh.rows.r[*] {stagger:{each:.07}} +50][♪swoosh -8dB +50]最多は[>#sh.band.b1 -50][!#sh.rows.r[1].nm punch,1.16,duration=360,pivot=left][♪pop -4dB]惣菜。[||][>#sh.band.b2 -50][!#sh.rows.r[2].nm punch,1.16,duration=360,pivot=left][♪pop -4dB]青果、[>#sh.band.b3 -50][!#sh.rows.r[3].nm punch,1.16,duration=360,pivot=left][♪pop -4dB]パンと続き、[|][>#sh.sumw -50][>#sh.sumw.s1 +150][>#sh.sumw.s2 +150][>#sh.sumw.s3 +150]この3つで[!#sh.sumw.pct count -100][!#sh.sumw.pct punch,1.1,duration=400,pivot=left +700][♪kira -9dB]{e}50.5%{/}です。
-@: でも[!#sh.tg.knob to,{x:147, duration:.3, ease:'power2.inOut'}][!#sh.tg.w recolor,$ink,duration=200][!#sh.tg.m recolor,#FFFFFF,duration=200 +100][<#sh.uw][>#sh.um +150][<#sh.band][<#sh.sw][<#sh.lg][<#sh.rows.r[*].vw +50][!#sh.rows.r[2].bar to,{scaleX:0.2727, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[3].bar to,{scaleX:0.8182, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[4].bar to,{scaleX:0.4118, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[5].bar to,{scaleX:1.3629, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[6].bar to,{scaleX:1.2732, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[7].bar to,{scaleX:0.4544, duration:.6, ease:'power3.inOut', pivot:'left'} +120][!#sh.rows.r[2] to,{y:288, duration:.7, ease:'power3.inOut'} +250][!#sh.rows.r[3] to,{y:96, duration:.7, ease:'power3.inOut'} +250][!#sh.rows.r[4] to,{y:192, duration:.7, ease:'power3.inOut'} +250][!#sh.rows.r[5] to,{y:-288, duration:.7, ease:'power3.inOut'} +250][!#sh.rows.r[6] to,{y:-288, duration:.7, ease:'power3.inOut'} +250][>#sh.rows.r[*].vm +800][>#sh.rk1 +950][>#sh.rk2 +1100][<#sh.sumw +100][♪click][♪register -5dB +50][♪pophi -5dB +750]{e}金額{/}では話が別。[>#sh.summ]1kgあたり、[|][>#sh.summ.pc[1]][♪pop -3dB]精肉{e}1,500円{/}、[|][>#sh.summ.pc[2]][♪pop -3dB]惣菜{e}1,100円{/}、青果は[>#sh.summ.pc[3]][♪pop -3dB][>#sh.summ.note +400]{e}300円{/}。
-@: 重さか金額かで、[|][>#sh.point -100][♪pophi -3dB]「大きい棚」は{e}入れ替わります{/}。
+@n: [silence:200ms][♪scene -5dB -200ms][>#sh.rows.r[*] {stagger:{each:.07}} +50ms][♪swoosh -8dB +50ms]最多は[>#sh.band.b1 -50ms][!#sh.rows.r[1].nm punch {scale: 1.16, duration: .36, pivot: 'left'}][♪pop -4dB]惣菜。[||][>#sh.band.b2 -50ms][!#sh.rows.r[2].nm punch {scale: 1.16, duration: .36, pivot: 'left'}][♪pop -4dB]青果、[>#sh.band.b3 -50ms][!#sh.rows.r[3].nm punch {scale: 1.16, duration: .36, pivot: 'left'}][♪pop -4dB]パンと続き、[|][>#sh.sumw -50ms][>#sh.sumw.s1 +150ms][>#sh.sumw.s2 +150ms][>#sh.sumw.s3 +150ms]この3つで[!#sh.sumw.pct count -100ms][!#sh.sumw.pct punch {scale: 1.1, duration: .4, pivot: 'left'} +700ms][♪kira -9dB]{e}50.5%{/}です。
+@: でも[!#sh.tg.knob to,{x:147, duration:.3, ease:'power2.inOut'}][!#sh.tg.w recolor,$ink {duration: .2}][!#sh.tg.m recolor,#FFFFFF {duration: .2} +100ms][<#sh.uw][>#sh.um +150ms][<#sh.band][<#sh.sw][<#sh.lg][<#sh.rows.r[*].vw +50ms][!#sh.rows.r[2].bar to,{scaleX:0.2727, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[3].bar to,{scaleX:0.8182, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[4].bar to,{scaleX:0.4118, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[5].bar to,{scaleX:1.3629, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[6].bar to,{scaleX:1.2732, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[7].bar to,{scaleX:0.4544, duration:.6, ease:'power3.inOut', pivot:'left'} +120ms][!#sh.rows.r[2] to,{y:288, duration:.7, ease:'power3.inOut'} +250ms][!#sh.rows.r[3] to,{y:96, duration:.7, ease:'power3.inOut'} +250ms][!#sh.rows.r[4] to,{y:192, duration:.7, ease:'power3.inOut'} +250ms][!#sh.rows.r[5] to,{y:-288, duration:.7, ease:'power3.inOut'} +250ms][!#sh.rows.r[6] to,{y:-288, duration:.7, ease:'power3.inOut'} +250ms][>#sh.rows.r[*].vm +800ms][>#sh.rk1 +950ms][>#sh.rk2 +1100ms][<#sh.sumw +100ms][♪click][♪register -5dB +50ms][♪pophi -5dB +750ms]{e}金額{/}では話が別。[>#sh.summ]1kgあたり、[|][>#sh.summ.pc[1]][♪pop -3dB]精肉{e}1,500円{/}、[|][>#sh.summ.pc[2]][♪pop -3dB]惣菜{e}1,100円{/}、青果は[>#sh.summ.pc[3]][♪pop -3dB][>#sh.summ.note +400ms]{e}300円{/}。
+@: 重さか金額かで、[|][>#sh.point -100ms][♪pophi -3dB]「大きい棚」は{e}入れ替わります{/}。
 
 *** days
-@n: [silence:200][♪scene -5dB -200][>#dy.col[*] +80][>#dy.cv[*] +300][>#dy.avg +800][>#dy.avgl +1100][♪swoosh -8dB +80]曜日別では[>#dy.tmax][!#dy.col[7] to,{scaleX:1.12, duration:.18, ease:'power2.out'}][!#dy.col[7] to,{scaleX:1, duration:.18, ease:'power2.in'} +180][♪pophi -3dB]{e}日曜{/}が最多で、[>#dy.tmin]火曜の[>#dy.bai -100][♪kira -10dB]{e}約1.8倍{/}。
-@: [>#dy.w[1] +140][♪pop -3dB +140]昼の客足に合わせて多めに作った惣菜が、[|][>#dy.arw -250][>#dy.w[2]][♪pop -3dB]{e}夕方{/}、[>#dy.stamp -250][♪stamp -2dB +50]売れ残るんです。
+@n: [silence:200ms][♪scene -5dB -200ms][>#dy.col[*] +80ms][>#dy.cv[*] +300ms][>#dy.avg +800ms][>#dy.avgl +1100ms][♪swoosh -8dB +80ms]曜日別では[>#dy.tmax][!#dy.col[7] to,{scaleX:1.12, duration:.18, ease:'power2.out'}][!#dy.col[7] to,{scaleX:1, duration:.18, ease:'power2.in'} +180ms][♪pophi -3dB]{e}日曜{/}が最多で、[>#dy.tmin]火曜の[>#dy.bai -100ms][♪kira -10dB]{e}約1.8倍{/}。
+@: [>#dy.w[1] +140ms][♪pop -3dB +140ms]昼の客足に合わせて多めに作った惣菜が、[|][>#dy.arw -250ms][>#dy.w[2]][♪pop -3dB]{e}夕方{/}、[>#dy.stamp -250ms][♪stamp -2dB +50ms]売れ残るんです。
 
 *** exp
-@n: [silence:200][♪scene -5dB -200]そこで、[>#ex.a.it[*] -100][♪pop -4dB]惣菜とパンの{e}半額シール{/}を[|][!#ex.a.clk.mh to,{rotation:-720, duration:.95, ease:'power2.inOut'}][!#ex.a.clk.hh to,{rotation:150, duration:.95, ease:'power2.inOut'}][>#ex.a.clk.arc +500][!#ex.a.t19 strike,$ink +300][♪click -5dB +100][♪click -5dB +320][♪click -5dB +540][♪click -5dB +760]{e}2時間早め{/}、[>#ex.a.t17 -150][>#ex.a.early +250]17時に[>#ex.a.it[1].st -170][>#ex.a.it[2].st +30][>#ex.a.notea +300][♪stamp +50][♪stamp -1dB +250]貼ってみると、
-@: [<#ex.a -220][>#ex.b -20][>#ex.b.res.b1 +100][>#ex.b.res.b3 +200][>#ex.b.res.b2 +570][>#ex.b.res.b4 +690][>#ex.b.res.v1 +720][>#ex.b.res.v2 +800][>#ex.b.res.v3 +880][>#ex.b.res.v4 +960][♪swoosh -6dB -50]2週間で、廃棄は[>#ex.b.res.d1 -200][>#ex.b.res.d2 -50]{e}約3割{/}、[>#ex.b.res.tot -200][!#ex.b.res.tot.b settle,1.3,duration=350][♪correct -5dB]{e}93kg{/}減。
-@: [>#ex.b.rc -50][>#ex.b.rc.l1 +150][>#ex.b.rc.l2 +470][♪swoosh -8dB -20]値下げが増えた分を引いても、[|][>#ex.b.rc.sum -100][!#ex.b.rc.sum.b settle,1.4,duration=350][♪register -3dB]{e}5万9,000円{/}分ロスが減りました。
+@n: [silence:200ms][♪scene -5dB -200ms]そこで、[>#ex.a.it[*] -100ms][♪pop -4dB]惣菜とパンの{e}半額シール{/}を[|][!#ex.a.clk.mh to,{rotation:-720, duration:.95, ease:'power2.inOut'}][!#ex.a.clk.hh to,{rotation:150, duration:.95, ease:'power2.inOut'}][>#ex.a.clk.arc +500ms][!#ex.a.t19 strike,$ink +300ms][♪click -5dB +100ms][♪click -5dB +320ms][♪click -5dB +540ms][♪click -5dB +760ms]{e}2時間早め{/}、[>#ex.a.t17 -150ms][>#ex.a.early +250ms]17時に[>#ex.a.it[1].st -170ms][>#ex.a.it[2].st +30ms][>#ex.a.notea +300ms][♪stamp +50ms][♪stamp -1dB +250ms]貼ってみると、
+@: [<#ex.a -220ms][>#ex.b -20ms][>#ex.b.res.b1 +100ms][>#ex.b.res.b3 +200ms][>#ex.b.res.b2 +570ms][>#ex.b.res.b4 +690ms][>#ex.b.res.v1 +720ms][>#ex.b.res.v2 +800ms][>#ex.b.res.v3 +880ms][>#ex.b.res.v4 +960ms][♪swoosh -6dB -50ms]2週間で、廃棄は[>#ex.b.res.d1 -200ms][>#ex.b.res.d2 -50ms]{e}約3割{/}、[>#ex.b.res.tot -200ms][!#ex.b.res.tot.b settle {scale: 1.3, duration: .35}][♪correct -5dB]{e}93kg{/}減。
+@: [>#ex.b.rc -50ms][>#ex.b.rc.l1 +150ms][>#ex.b.rc.l2 +470ms][♪swoosh -8dB -20ms]値下げが増えた分を引いても、[|][>#ex.b.rc.sum -100ms][!#ex.b.rc.sum.b settle {scale: 1.4, duration: .35}][♪register -3dB]{e}5万9,000円{/}分ロスが減りました。
 
 *** home
-@n: [silence:200][♪scene -5dB -200]家庭では、[>#hm.ga -250][>#hm.gb -100][>#hm.vs +200][>#hm.ga.don[*] +100][>#hm.ga.doff[*] +260][>#hm.gb.don[*] +500][>#hm.gb.doff[*] +568][♪pop -5dB]冷蔵庫を確かめず[|]買い物に行く人の[!#hm.ga.don[*] fill,#E8502F,duration=200 stagger=12 -200][>#hm.ga.pct count -120][♪pophi -3dB]{e}40%{/}が、[|][>#hm.ga.cnt]月1回以上、{e}二重買い{/}で食品を捨てていました。
-@: 確かめる人は[!#hm.gb.don[*] fill,#24935C,duration=200 stagger=20 -300][>#hm.gb.pct count -120][>#hm.gb.cnt +300][♪pophi -3dB]{e}17%{/}。
-@: [>#hm.tip][♪swoosh -6dB +20]出かける前に、冷蔵庫を{e}スマホで1枚{/}[>#hm.fl +220][!#hm.fl to,{opacity:0, duration:.45, ease:'power2.out'} +280][!#hm.tip.img to,{rotation:-4, duration:.12, yoyo:true, repeat:1} +220][♪shutter +220]撮るだけで、[|]二重買いは[!#hm.tip.p{hb} punch,1.25,duration=400][♪correct -5dB]{e}半分以下{/}になりえます。
+@n: [silence:200ms][♪scene -5dB -200ms]家庭では、[>#hm.ga -250ms][>#hm.gb -100ms][>#hm.vs +200ms][>#hm.ga.don[*] +100ms][>#hm.ga.doff[*] +260ms][>#hm.gb.don[*] +500ms][>#hm.gb.doff[*] +568ms][♪pop -5dB]冷蔵庫を確かめず[|]買い物に行く人の[!#hm.ga.don[*] fill,#E8502F {duration: .2} {stagger: {each: .012}} -200ms][>#hm.ga.pct count -120ms][♪pophi -3dB]{e}40%{/}が、[|][>#hm.ga.cnt]月1回以上、{e}二重買い{/}で食品を捨てていました。
+@: 確かめる人は[!#hm.gb.don[*] fill,#24935C {duration: .2} {stagger: {each: .02}} -300ms][>#hm.gb.pct count -120ms][>#hm.gb.cnt +300ms][♪pophi -3dB]{e}17%{/}。
+@: [>#hm.tip][♪swoosh -6dB +20ms]出かける前に、冷蔵庫を{e}スマホで1枚{/}[>#hm.fl +220ms][!#hm.fl to,{opacity:0, duration:.45, ease:'power2.out'} +280ms][!#hm.tip.img to,{rotation:-4, duration:.12, yoyo:true, repeat:1} +220ms][♪shutter +220ms]撮るだけで、[|]二重買いは[!#hm.tip.p{hb} punch {scale: 1.25, duration: .4}][♪correct -5dB]{e}半分以下{/}になりえます。
 
 *** wrap
-@n: [silence:200][♪scene -5dB -200][>#sm.c1 -100][>#sm.c1.no][♪pop -3dB]ロスの半分は{e}3つの棚{/}から。[>#sm.c2 -100][>#sm.c2.no][♪pop -3dB]値引きは{e}2時間早く{/}。[||][>#sm.c3 -100][>#sm.c3.no][♪pop -3dB][!#sm to,{scale:1.02, duration:3.2, ease:'sine.inOut'}]家では、{e}冷蔵庫を1枚{/}[♪kira -8dB +1500]。[silence:1.7s]
+@n: [silence:200ms][♪scene -5dB -200ms][>#sm.c1 -100ms][>#sm.c1.no][♪pop -3dB]ロスの半分は{e}3つの棚{/}から。[>#sm.c2 -100ms][>#sm.c2.no][♪pop -3dB]値引きは{e}2時間早く{/}。[||][>#sm.c3 -100ms][>#sm.c3.no][♪pop -3dB][!#sm to,{scale:1.02, duration:3.2, ease:'sine.inOut'}]家では、{e}冷蔵庫を1枚{/}[♪kira -8dB +1500ms]。[silence:1.7s]
 ```

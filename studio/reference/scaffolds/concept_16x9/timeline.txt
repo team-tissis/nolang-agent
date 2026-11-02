@@ -1,6 +1,6 @@
 #v2
 cast narrator = "明るくテンポのいい30代のナレーター、はっきりした発音で聞き手に語りかける" speed=110% manner="語りかけるように、要点は少し熱を込めて"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 # TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える
 
 *** title
@@ -27,7 +27,7 @@ bgm music
 [<#music]
 
 *** wrap
-bgm music2 -1500
+bgm music2 -1500ms
 # TODO 役割 = 一言で言うと — 章の札 (02) + 概念を言い換えた結論の 1 文 (全面の絵 + 大きな語)
 @narrator: [silence:+0.4s]目的から[>#wr_v]逆算しない。[>#wr_s]手元から、始める。
 

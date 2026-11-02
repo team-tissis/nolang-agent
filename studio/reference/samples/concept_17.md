@@ -109,15 +109,15 @@ p#cl_c(left: 660px; top: 1485px; font-size: 45px; color: $paper; background: $b;
 ```timeline.txt
 #v2
 cast narrator = "明るくやさしい30代女性のナレーター、料理番組のように親しみやすく語りかける" speed=110% manner="やさしく語りかけるように"
-transition = wipe,500,dir=right,overlap=500
+transition = wipe {duration: .5, dir: 'right', overlap: .5}
 
 *** open
 [>#subtitle]
 bgm music
-se "キッチンで湯気が立つ静かな環境音、食器が軽く触れる音" -8dB to=6s fade=300,1500
-@narrator: [silence:+0.3s][>#op_k]10分でできる、[>#op_t +200]和風きのこパスタ。
+se "キッチンで湯気が立つ静かな環境音、食器が軽く触れる音" -8dB to=6s fade=300ms,1500ms
+@narrator: [silence:+0.3s][>#op_k]10分でできる、[>#op_t +200ms]和風きのこパスタ。
 @: [>#op_s]バター醤油で香ばしく、[>#op_n][!#op_n punch]2人分を作ります。
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 
 *** ing
 @narrator: [silence:+0.3s][>#ig_h]材料はこちら。[>#ig_c.ig_i[1]]スパゲッティ200グラム、[>#ig_c.ig_i[2]]しめじ1パック、[>#ig_c.ig_i[3]]えのき半袋。
@@ -125,30 +125,30 @@ transition dissolve,300,overlap=300
 @: 仕上げに、刻みのりと青ねぎを[>#ig_c.ig_i[7]]適量です。
 
 *** s1
-se "大きな鍋でお湯がぐつぐつ沸騰する音" -8dB to=6s fade=300,1500
+se "大きな鍋でお湯がぐつぐつ沸騰する音" -8dB to=6s fade=300ms,1500ms
 @narrator: [silence:+0.3s]まずは、塩を入れたお湯でパスタを[>#s1_c][>#s1_c.t1]茹でます。
 @: 袋の表示より[>#s1_c.t2][>#s1_st][♪"キラリン 21" -5dB]1分短く。[>#s1_c.q check]フライパンで仕上げるからです。[silence:0.8s]
 
 *** s2
-se "フライパンでバターがじゅうじゅう溶ける音" -8dB to=8s fade=300,1500
+se "フライパンでバターがじゅうじゅう溶ける音" -8dB to=8s fade=300ms,1500ms
 @narrator: [silence:+0.3s]フライパンにバターとにんにくを入れ、[>#s2_h]弱火で[>#s2_c][>#s2_c.t1]香りを出します。
 @: 香りが立ったら[>#s2_c.t2][>#s2_c.q][!#s2_h .hot][!#s2_h punch][♪"強火できのこを炒めるじゅわっという音" -4dB]強火にして、きのこを炒めます。
 [<#music]
 
 *** tip
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.3s][>#tp_k]ここがコツ。[>#tp_t]きのこは触らずに、焼き付けること。
 @: [>#tp_s]じっと待つと、[>#tp_st][♪"ジャン！・驚き" +3dB]ぐっと[!#tp_t recolor,$c]香ばしくなります。
 
 *** s3
-se "フライパンで湯気が立ちぐつぐつ煮立つ音" -8dB to=6s fade=300,1500
+se "フライパンで湯気が立ちぐつぐつ煮立つ音" -8dB to=6s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#s3_a]茹で汁をお玉1杯加えて、[>#s3_b][>#s3_c][>#s3_c.t1][♪"醤油を回しかけるじゅっという音" -5dB]醤油を回しかけ、
 @: [>#s3_c.t2][>#s3_c.q]よく混ぜて[!#s3_c.t2{m} marker,$c][!#s3_c punch]乳化させます。
 
 *** s4
 @narrator: [silence:+0.3s][>#s4_c]茹で上がったパスタを入れて、[>#s4_c.t1][♪"トングで麺を和える音" -6dB]さっと和えたら、
 @: [>#s4_c.q]お皿に盛って、[>#s4_a]刻みのりと[>#s4_b][>#s4_c.t2]青ねぎをのせれば[!#s4_a .done][!#s4_b .done][!#s4_c check]完成です。[silence:1.0s]
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 
 *** close
 @narrator: [silence:+0.3s][>#cl_t]今日の晩ごはんに、どうぞ。[>#cl_a][>#cl_b >][>#cl_c >][silence:2.0s]

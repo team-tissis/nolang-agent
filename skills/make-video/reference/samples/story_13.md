@@ -107,35 +107,35 @@ tel#cl_t(left: 72px; top: 1230px; font-size: 72px; transform: rotate(-3deg)) お
 cast narrator = "明るくテンポのいい30代男性のナレーター、とぼけた味のある語り口で聞き手に語りかける" speed=112% manner="楽しそうに、軽快に"
 cast ogai = "40代の男性、威厳のある明治の文士風の声、気難しく堅い話し方"
 cast pass = "気さくな中年男性、江戸っ子風の早口でからっとした話し方"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 
 *** open
 [>#subtitle]
 bgm music
-se "山の峠の環境音、風と遠くの鳥の声" -8dB to=6s fade=300,1500
+se "山の峠の環境音、風と遠くの鳥の声" -8dB to=6s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#op_y][>#op_d]1888年、9月5日。
 @: 群馬と長野の境、[>#op_r]碓氷峠で、[>#op_t]とんでもない鉄道が[!#op_t punch]開業しました。
 
 *** horse
-se "馬の蹄の音とレールの軋む音" -8dB to=6s fade=300,1500
+se "馬の蹄の音とレールの軋む音" -8dB to=6s fade=300ms,1500ms
 @narrator: [silence:+0.3s]その名も、[>#hs_n]碓氷馬車鉄道。
 @: 急な山を越えるため、[>#hs_t]なんと馬が電車を[♪"馬のいななき" -3dB]引っ張るんです。
 @: [>#hs_s]動力は、[!#hs_s punch]馬一頭。[silence:0.4s]
-transition wipe,500,dir=left,overlap=500
+transition wipe {duration: .5, dir: 'left', overlap: .5}
 
 *** ogai
-se "古い木造の客車が軋む音" -8dB to=5s fade=300,1200
+se "古い木造の客車が軋む音" -8dB to=5s fade=300ms,1200ms
 @narrator: [silence:+0.3s]この珍鉄道に乗り込んだのが、[>#og_c]文豪・森鴎外。
 @ogai: [>#og_q]ふむ、[!#og_q pop]楽しみだ。
 
 *** rage
-se "ガタガタと激しく揺れる木の車輪の音" -8dB to=7s fade=200,1500
+se "ガタガタと激しく揺れる木の車輪の音" -8dB to=7s fade=200ms,1500ms
 @narrator: [silence:+0.3s]ところが車内は、[>#rg_row.rg_k[1]]馬の臭いと、[>#rg_row.rg_k[2]]ガタガタの[!#rg_p shake][!#rg_v shake][!#rg_row.rg_k[1] shake][!#rg_row.rg_k[2] shake]大揺れ。
 @ogai: [>#rg_t]臭いと揺れが、[!#rg_t{a} recolor,$a][>#rg_s][♪"打撃　パンチ03-1(ドライ)"]最悪だ!
 @narrator: [!#rg_row.rg_k[*] tint,$a]文豪、大激怒です。
 
 *** slow
-se "のどかな山道の環境音、遠くの鳥" -8dB to=8s fade=300,1500
+se "のどかな山道の環境音、遠くの鳥" -8dB to=8s fade=300ms,1500ms
 @narrator: [silence:+0.3s]しかも、[>#sl_t]とにかく遅い。
 @: [>#sl_b]坂をのんびり登る馬の横を、[!#sl_b.h to,{x:110, duration:3.2, ease:'none'}][!#sl_b.w to,{x:420, duration:3.2, ease:'power1.inOut'}]歩く人が、すいすい追い越していきます。
 @: [!#sl_b.w punch][!#sl_t{a} recolor,$a]歩きの勝ちです。
@@ -143,21 +143,21 @@ se "のどかな山道の環境音、遠くの鳥" -8dB to=8s fade=300,1500
 *** walk
 @pass: [silence:+0.3s][>#wk_t]こりゃ、歩いた方が早いや!
 @narrator: あまりの遅さに、[>#wk_i[*] {stagger:{each:0.18}}][♪"足音" -6dB to=2s]途中で降りて歩き出す乗客が、[>#wk_s][!#wk_s punch]続出したそうです。
-[<#music -400]
+[<#music -400ms]
 
 *** down
-bgm music2 -800
-se "猛スピードで走る車輪の轟音と風切り音" -8dB to=8s fade=100,1500
+bgm music2 -800ms
+se "猛スピードで走る車輪の轟音と風切り音" -8dB to=8s fade=100ms,1500ms
 @narrator: [silence:+0.3s][>#dn_k]ところが下り坂では、一転。
 @: [>#dn_br]ブレーキが[!#dn_br{x} strike,$a][>#dn_ng]効かず、[♪"急ブレーキの金属が軋む音" -3dB]客車は猛スピードで駆け下ります。
 @pass: [!#dn_p shake][!#dn_v shake][!#dn_k shake][!#dn_br shake][!#dn_ng shake]ひぃぃ、止まらなーい!
 @narrator: [>#dn_t][♪"ジャン！・驚き" +3dB]まるでジェットコースター状態!
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 [<#music2]
 
 *** close
-bgm music3 -1500
-se "夕暮れの山の環境音、ひぐらしと風" -8dB to=10s fade=500,2000
+bgm music3 -1500ms
+se "夕暮れの山の環境音、ひぐらしと風" -8dB to=10s fade=500ms,2000ms
 @narrator: [silence:+0.4s]その5年後、[>#cl_y]アプト式の鉄道が開通し、[>#cl_n]馬車鉄道は、あっさり引退。
 @: 9月5日は、[>#cl_t]馬が峠を越えた、ちょっと笑える記念日なのです。[silence:3.0s]
 ```

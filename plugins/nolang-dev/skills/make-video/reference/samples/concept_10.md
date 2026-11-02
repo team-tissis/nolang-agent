@@ -102,35 +102,35 @@ body#cl_n(left: 72px; top: 1425px) まず一つ、{a}関わって{/}みる
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた40代男性のナレーター、低めで穏やか、知的で静かな語り口" speed=100%
-transition = dissolve,300,overlap=300
+transition = dissolve {duration: .3, overlap: .3}
 
 *** hook
 [>#subtitle]
 bgm music
-se "屋外の静かな風の音、遠くの鳥" -8dB to=7s fade=300,1500
-@narrator: [silence:+0.3s][>#h_o1]やりたいことが[>#h_ar]見つかってから[>#h_o2][>#h_n +300]選ぶ。[silence:0.4s]
+se "屋外の静かな風の音、遠くの鳥" -8dB to=7s fade=300ms,1500ms
+@narrator: [silence:+0.3s][>#h_o1]やりたいことが[>#h_ar]見つかってから[>#h_o2][>#h_n +300ms]選ぶ。[silence:0.4s]
 @: [>#h_h][>#h_k]この順番、[!#h_o1 to,{x:561, duration:0.9, ease:'power2.inOut', arc:0.3}][!#h_o2 to,{x:-561, duration:0.9, ease:'power2.inOut', arc:-0.3}][!#h_n text,"選択 → やりたいこと"]逆かもしれません。[silence:0.8s]
 
 *** worry
 @narrator: [silence:+0.3s][>#w_h]やりたいことがないまま、[>#w_c]就職で迷う人は[!#w_c.t{m} marker,$a]多いのではないでしょうか。[!#w_c.i pulse][silence:0.4s]
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 
 *** sartre
-se "静かなカフェの環境音、遠くの食器の音" -8dB to=15s fade=300,1500
+se "静かなカフェの環境音、遠くの食器の音" -8dB to=15s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#s_h]サルトルは、[>#s_q]気持ちで決めると言った[>#s_qn]教え子の話をしています。
 @: サルトルの考えを要約すると、[>#s_b]気持ちは[>#s_a]行動で[>#s_ar]形づくられるので、[!#s_q.t{s} strike,$a][>#s_c]行動の手引きにはできない。[silence:0.4s]
 
 *** study
 @narrator: [silence:+0.3s][>#st_k]ある研究では、[>#st_h]興味は見つけるものと考える人ほど、[>#st_l]興味の幅が[!#st_bar to,{scaleX:0.3, duration:0.9, ease:'power2.inOut'}][!#st_bar recolor,$line]狭い[>#st_c]傾向がありました。[silence:0.4s]
-transition dip,400
+transition dip {duration: .4}
 [<#music]
 
 *** concl
-bgm music2 -1500
-se "朝の庭の静かな環境音、小鳥のさえずり" -8dB to=13s fade=300,1500
-@narrator: [silence:+0.3s]結論は、[>#c_h]やりたいことを、選ぶ前の[!#c_h{a} underline,$a +300]条件にはできない、ということ。[silence:0.5s]
+bgm music2 -1500ms
+se "朝の庭の静かな環境音、小鳥のさえずり" -8dB to=13s fade=300ms,1500ms
+@narrator: [silence:+0.3s]結論は、[>#c_h]やりたいことを、選ぶ前の[!#c_h{a} underline,$a +300ms]条件にはできない、ということ。[silence:0.5s]
 @: [>#c_r1]意識が向いてから関わるのではなく、[!#c_r1.t{x} strike,$a][>#c_r2]関わるから[♪"水差しで鉢に水をそそぐ音" -6dB][!#c_r2 .on][!#c_r2.t{a} marker,#B5523B40]意識が向く。[silence:0.5s]
 
 *** close
-@narrator: [silence:+0.3s][>#cl_h]見つかったら選ぶ、で止めているものは[>#cl_rule]ありますか。[>#cl_n +600][silence:3.0s]
+@narrator: [silence:+0.3s][>#cl_h]見つかったら選ぶ、で止めているものは[>#cl_rule]ありますか。[>#cl_n +600ms][silence:3.0s]
 ```

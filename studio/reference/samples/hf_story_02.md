@@ -24,18 +24,18 @@ sound hyoshigi = "拍子木を打つ鋭く乾いた音"
 sound slide = "小さなスライドホイッスルの高く可愛い下降音"
 sound taiko = "和太鼓の大太鼓を一打、低く重く響く"
 sfx off
-cut { stagger: 0 }
+cut { stagger: 0ms }
 img { in: none; out: none }
 p { out: none }
 div { out: none }
 bgm#music(fade: 600,60; keys: "0:0") ファゴットとマリンバとアコースティックギターが跳ねる、とぼけて愉快な軽いコメディ曲
 # 字幕 (白の極太 + 紺の縁・中央・話者札は上・文ごとの札・16 字を超える文は読点で 2 行)
-subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; stroke: #0D1222,4; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0; tail: 250; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
+subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; -webkit-text-stroke: 4px #0D1222; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0ms; tail: 250ms; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
 
 # 2 段テロップ (Dela・前置き 白 52 / 落ち 黄 75 (9 字以上は 65)・-2° 傾き・拡大から back で着地・落ちは着地後に横に揺れる)
 def telop(setup, punchline, punch_size=75) = group(left: 0px; top: 1030px; width: 1080px; height: 255px)
-  p#setup(cx: 50%; top: 0px; overlap: self.punch; font-size: 78px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: $ink,5; text-shadow: 0px 8px 0px #0000008C; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.6, opacity:0, rotation:-4, duration:.28, ease:'back.out(2.2)'}; content: {setup})
-  p#punch(cx: 50%; top: 93px; font-size: {punch_size}; font-family: d; line-height: 1.12; color: $punch; stroke: $ink,5; text-shadow: 0px 10px 0px #00000099; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.7, opacity:0, rotation:3, duration:.3, ease:'back.out(2.6)'}; content: {punchline})
+  p#setup(cx: 50%; top: 0px; overlap: self.punch; font-size: 78px; font-family: d; line-height: 1.12; color: #FFFFFF; -webkit-text-stroke: 5px $ink; text-shadow: 0px 8px 0px #0000008C; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.6, opacity:0, rotation:-4, duration:.28, ease:'back.out(2.2)'}; content: {setup})
+  p#punch(cx: 50%; top: 93px; font-size: {punch_size}; font-family: d; line-height: 1.12; color: $punch; -webkit-text-stroke: 5px $ink; text-shadow: 0px 10px 0px #00000099; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.7, opacity:0, rotation:3, duration:.3, ease:'back.out(2.6)'}; content: {punchline})
 
 # 組織図の部品 (hf の svg を節点ごとに切った物: 結線 2 段・役員 / 管理職 / 社員の札・資格証・赤い ×)。× と社員の資格証は語で動かすので別の部品
 svg links_upper = """<svg viewBox="0 0 900 640"><path d="M450 150 V215 M250 215 H650 M250 215 V260 M650 215 V260" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.85"/></svg>"""
@@ -117,45 +117,45 @@ telop#inhouse_pro(setup: "業界のプロ？"; punchline: "社内のプロ。")
 
 ```timeline.txt
 #v2
-# cut = 6 場面 = 次の絵が右 38% から被さって来る境目 (旧場面は動かない・0.26 秒)・その頭に風切り音。cut の中の絵替えは [>#次の絵][<#前の絵 +350] で重ねて替える
+# cut = 6 場面 = 次の絵が右 38% から被さって来る境目 (旧場面は動かない・0.26 秒)・その頭に風切り音。cut の中の絵替えは [>#次の絵][<#前の絵 +350ms] で重ねて替える
 # 落ちは毎 cut 同じ型: 前置きの 1 行目を cut の途中で出し、落ちの 2 行目を語で効果音 (チーン / 拍子木 / 太鼓) と同時に落として、着地の後に揺らす
 cast sub = "爽やかで少し高めの若い男性の声、20代、明瞭で誠実な話し方" speed=106% manner="上司を褒めるように、にこやかで丁寧な口調。心から感心しているように明るく" label="部下" label_fill=$sub
 cast boss = "低めで穏やかなシニア男性の声、60代、温かく語りかける話し方" speed=106% manner="偉そうで得意げな中年の上司。余裕たっぷりに胸を張って" label="上司" label_fill=$boss
-silence head=0 tail=0
-transition = slide,260,dir=left,offset=38%,opacity=0,overlap=260,ease=power3.out
+silence head=0ms tail=0ms
+transition = slide {duration: .26, dir: 'left', offset: '38%', opacity: 0, overlap: .26, ease: 'power3.out'}
 
 # 帯の決め語が弾む → 組織図が組み上がり、「管理職」「上層部」の語で × を叩きつけ、「資格」の語で社員の資格証が脈打つ → 落ちのあと絵を驚きの部下へ
 *** org_chart
 [>#subtitle]
 bgm music
-@sub: [silence:0.4s][♪pop -7dB -280][!#title_bar.title{big} punch,1.35,duration=350 -100][>#org_dim +500][>#org +550][>#org.upper +650][>#org.lower +750][<#nobody cut-100]管理職も[>#org.mgr_l.cross -160][>#org.mgr_r.cross -80][♪stamp -2dB -80]上層部[>#org.exec.cross][♪stamp -2dB +70]も、業界の[!#org.staff[*].cert to,{scale:1.18, duration:.25, yoyo:true, repeat:1, ease:'sine.inOut', stagger:.08} -20]資格を持ってません[>#nobody +480][♪chiin -3dB +480][>#nobody.punch +600][!#nobody.punch shake,6,duration=240 +900]でした。[<#org_dim -360][<#org -360][>#sub_surprised -110][<#desk_wide +240]てっきり、持ってるものかと。[silence:1.15s]
+@sub: [silence:0.4s][♪pop -7dB -280ms][!#title_bar.title{big} punch {scale: 1.35, duration: .35} -100ms][>#org_dim +500ms][>#org +550ms][>#org.upper +650ms][>#org.lower +750ms][<#nobody cut-100ms]管理職も[>#org.mgr_l.cross -160ms][>#org.mgr_r.cross -80ms][♪stamp -2dB -80ms]上層部[>#org.exec.cross][♪stamp -2dB +70ms]も、業界の[!#org.staff[*].cert to,{scale:1.18, duration:.25, yoyo:true, repeat:1, ease:'sine.inOut', stagger:.08} -20ms]資格を持ってません[>#nobody +480ms][♪chiin -3dB +480ms][>#nobody.punch +600ms][!#nobody.punch shake {x: 6, duration: .24} +900ms]でした。[<#org_dim -360ms][<#org -360ms][>#sub_surprised -110ms][<#desk_wide +240ms]てっきり、持ってるものかと。[silence:1.15s]
 
 # 上司の自慢 → 褒める部下に替えて前置き → 「効率的」に落ち + 拍子木 → 「ですねえ」で照れる上司を打ち込む
 *** promoted
 @boss: 資格がなくても、ここまで来たからな。[silence:0.3s]
-@sub: [>#sub_praise][<#boss_smug +350][>#rank_first][<#rank_first cut-50]取得より先に、出世を済ませたんですね。[>#rank_first.punch -450][♪hyoshigi -5dB -450][!#rank_first.punch shake,6,duration=240 -150]効率的[>#boss_blush][<#sub_praise +350]ですねえ。[silence:0.75s]
+@sub: [>#sub_praise][<#boss_smug +350ms][>#rank_first][<#rank_first cut-50ms]取得より先に、出世を済ませたんですね。[>#rank_first.punch -450ms][♪hyoshigi -5dB -450ms][!#rank_first.punch shake {x: 6, duration: .24} -150ms]効率的[>#boss_blush][<#sub_praise +350ms]ですねえ。[silence:0.75s]
 
 # 質問 → うなずく上司 (横流れ) → メモする部下と前置き → 落ちは「主義」の語で
 *** experience
 @sub: 資格取得を勧めないんですか？[silence:0.3s]
-@boss: [>#boss_nod][<#sub_ask +350]経験が大事だからね。[silence:0.35s]
-@sub: [>#sub_memo][<#boss_nod +350][<#self_report cut-50]なるほど。[>#self_report]合格発表のない実力[>#self_report.punch][♪hyoshigi -5dB][!#self_report.punch shake,6,duration=240 +300]主義。[silence:1.3s]
+@boss: [>#boss_nod][<#sub_ask +350ms]経験が大事だからね。[silence:0.35s]
+@sub: [>#sub_memo][<#boss_nod +350ms][<#self_report cut-50ms]なるほど。[>#self_report]合格発表のない実力[>#self_report.punch][♪hyoshigi -5dB][!#self_report.punch shake {x: 6, duration: .24} +300ms]主義。[silence:1.3s]
 
 # 制度を尋ねる → はぐらかす上司の打ち込み → 下降音で「おや」の部下 → 文末に前置きと落ちを続けて
 *** ask_rules
 @sub: では、この制度の仕組みは？[silence:0.3s]
-@boss: [>#boss_dodge][<#paper_offer +350]詳しい者に聞いてくれ。[silence:0.85s]
-@sub: [>#sub_puzzled -750][<#boss_dodge -400][♪slide -8dB -780][<#not_expert cut-50]詳しい者って、そちらではなかったんです[>#not_expert +400][♪chiin -3dB +400][>#not_expert.punch +520][!#not_expert.punch shake,6,duration=240 +820]ね。[silence:1.75s]
+@boss: [>#boss_dodge][<#paper_offer +350ms]詳しい者に聞いてくれ。[silence:0.85s]
+@sub: [>#sub_puzzled -750ms][<#boss_dodge -400ms][♪slide -8dB -780ms][<#not_expert cut-50ms]詳しい者って、そちらではなかったんです[>#not_expert +400ms][♪chiin -3dB +400ms][>#not_expert.punch +520ms][!#not_expert.punch shake {x: 6, duration: .24} +820ms]ね。[silence:1.75s]
 
 # 胸を張る上司 → 拍手する部下と前置き → 文末の「ね」で落ちと照れる上司の打ち込みを同時に
 *** overview
 @boss: 俺は全体を見てるんだ。[silence:0.3s]
-@sub: [>#sub_clap][<#boss_window +350][<#top_decides cut-50]なるほど。[>#top_decides]専門知識は現場調達。決定権だけは自前なんです[>#boss_blush_close][<#sub_clap +350][>#top_decides.punch][♪hyoshigi -5dB][!#top_decides.punch shake,6,duration=240 +300]ね。[silence:1.35s]
+@sub: [>#sub_clap][<#boss_window +350ms][<#top_decides cut-50ms]なるほど。[>#top_decides]専門知識は現場調達。決定権だけは自前なんです[>#boss_blush_close][<#sub_clap +350ms][>#top_decides.punch][♪hyoshigi -5dB][!#top_decides.punch shake {x: 6, duration: .24} +300ms]ね。[silence:1.35s]
 
 # 締め: 語りかけ → 笑顔の寄りと前置き → BGM を止めて真顔 + 減光 → 「社内のプロ」に落ち + 太鼓で絵とテロップが揺れる
 *** deadpan
 @sub: 資格だけで実力は決まりません。でも、肩書きだけでも[br]決まりません。[silence:0.35s]
-@: [>#sub_smile_close][<#sub_talk +350][>#inhouse_pro +50]業界のプロかと思ったら、[silence:0.75s]
-[<#music -650]
-@: [>#sub_deadpan -650][<#sub_smile_close -300][>#vignette -650]社内のプロ[>#inhouse_pro.punch +420][♪taiko +7dB +420][!#sub_deadpan shake,11,duration=420 +420][!#inhouse_pro shake,7,duration=360 +490]でした。[silence:1.85s]
+@: [>#sub_smile_close][<#sub_talk +350ms][>#inhouse_pro +50ms]業界のプロかと思ったら、[silence:0.75s]
+[<#music -650ms]
+@: [>#sub_deadpan -650ms][<#sub_smile_close -300ms][>#vignette -650ms]社内のプロ[>#inhouse_pro.punch +420ms][♪taiko +7dB +420ms][!#sub_deadpan shake {x: 11, duration: .42} +420ms][!#inhouse_pro shake {x: 7, duration: .36} +490ms]でした。[silence:1.85s]
 ```

@@ -1,17 +1,17 @@
 #v2
 cast narrator = "明るくテンポのいい30代のナレーター、はっきりした発音で聞き手に語りかける" speed=110% manner="語りかけるように、要点は少し熱を込めて"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 # TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える
 
 *** open
 bgm music
 # TODO 役割 = つかみ (絵) — 全面の写真に短い語 1 つ、問いを 1 文 (字幕なし・語は少なく)・場の音を絵に結ぶ (`se` 行・`to=` で切る)
-se "酒蔵の静けさ、湯気の立つ音と遠くの水音" -8dB to=6s fade=500,1500
+se "酒蔵の静けさ、湯気の立つ音と遠くの水音" -8dB to=6s fade=500ms,1500ms
 @narrator: [>#op_w]一滴に、一年を。[silence:1.0s]
 
 *** scene1
 # TODO 役割 = 場面 1 — 写真 1 枚に 1 文 (語は印の語の前・絵は頭)・場面が変わるごとに場の音も変える
-se "初夏の棚田を渡る風と稲の葉ずれ、遠くの鳥" -8dB to=6s fade=500,1500
+se "初夏の棚田を渡る風と稲の葉ずれ、遠くの鳥" -8dB to=6s fade=500ms,1500ms
 @narrator: [>#s1_w]米が育ち、水が育てる。[silence:1.0s]
 
 *** scene2
@@ -20,7 +20,7 @@ se "初夏の棚田を渡る風と稲の葉ずれ、遠くの鳥" -8dB to=6s fad
 [<#music]
 
 *** scene3
-bgm music2 -1500
+bgm music2 -1500ms
 # TODO 役割 = 場面 3 — 写真 1 枚に 1 文 (結論の 1 語を大きく)・絵の中の動作には foley を語に `[♪]`
 @narrator: [silence:+0.4s][>#s3_w][♪"グラスに酒を注ぐ澄んだ音" -6dB]その一杯は、一年の時間だ。[silence:1.0s]
 

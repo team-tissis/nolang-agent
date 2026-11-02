@@ -10,6 +10,7 @@
     "sounds.md",
     "craft.md",
     "craft.NOTICE.md",
+    "rules.md",
     "samples/",
     "scaffolds/"
   ],
@@ -20,5 +21,8 @@
     "raw:authoring.md",
     "raw:capabilities.md",
     "craft:craft.md"
-  ]
+  ],
+  "editable": {
+    "max_shadow_kinds": 1
+  }
 }

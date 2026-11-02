@@ -12,7 +12,7 @@ from stream_author import REFERENCE  # 隣の file — 文書一式の dir (bund
 
 HERE = Path(__file__).resolve().parent
 SCAFFOLDS = REFERENCE / "scaffolds"
-SCHEMA_VERSION = 10  # domain.constants.draft_composer.DRAFT_COMPOSER_SCHEMA_VERSION (test が同じ値か見る)
+SCHEMA_VERSION = 11  # domain.constants.draft_composer.DRAFT_COMPOSER_SCHEMA_VERSION (test が同じ値か見る)
 KINDS = ("data", "concept", "compare", "story", "cinematic")
 
 

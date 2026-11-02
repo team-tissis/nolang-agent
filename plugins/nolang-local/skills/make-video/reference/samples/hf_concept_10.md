@@ -25,7 +25,7 @@ run m { marker: $sand,36% }
 run q { color: $accent }
 p { color: $ink }
 # 場面の要素は一斉に左へ抜ける (hf の leave: x -26 px・0.4 s)・頭の組み上がりは一斉
-cut { stagger: 0; out: {x:-26, opacity:0, duration:.4, ease:'power1.in'} }
+cut { stagger: 0ms; out: {x:-26, opacity:0, duration:.4, ease:'power1.in'} }
 sound page = "紙のページを1枚めくる乾いた短いペラッという音"
 sound sweep = "中域の柔らかいノイズが滑らかに上がっていくスゥーッという音"
 sound airy = "空気感のある短い風のようなノイズのシュッという音、回想に入る瞬間の"
@@ -37,16 +37,16 @@ sound accent2 = "空間的な響きの柔らかいシンセのベルが上がる
 # hf の作り: 曲は声より 11.5 LU 下 (engine の既定 = 台詞中 11 LU 下のまま・gap は書かない)
 bgm#music(fade: 800,3200) 静かでゆっくりしたアンビエント、繊細なソロピアノに温かいシンセパッドと柔らかなチェロ、内省的で穏やかに広がる
 # 字幕: 板なし・墨色の細い角ゴシック・画面の下 1/4 の位置・0.14 s の fade だけ
-subtitle(left: 30px; top: 1446px; width: 1020px; font-size: 46px; line-height: 1.58; letter-spacing: .02em; text-align: center; color: $ink; font-family: r; background: none; border: none; box-shadow: none; padding: 0px; unit: sentence; lead: 0; tail: 110; hold: off; in: {opacity:0, duration:.14}; out: {opacity:0, duration:.14})
+subtitle(left: 30px; top: 1446px; width: 1020px; font-size: 46px; line-height: 1.58; letter-spacing: .02em; text-align: center; color: $ink; font-family: r; background: none; border: none; box-shadow: none; padding: 0px; unit: sentence; lead: 0ms; tail: 110ms; hold: off; in: {opacity:0, duration:.14}; out: {opacity:0, duration:.14})
 # 地: 点の地紋 + 中央が明るく縁がくすむ周辺の明るみ + 内側 24 px の細い枠 (全編・最背面)
 div#grain(inset: 0; pattern: dots,5,#7864460A; z-index: back; border-radius: 24px; in: none; out: none)
 div#vignette(inset: 0; background: radial(#FFFFFF59,#FFFFFF00@60%,#785F3C1A,50%,45%); z-index: back; border-radius: 24px; in: none; out: none)
 div#frame(left: 36px; top: 36px; width: 1008px; height: 1848px; border: 2px solid #A08C6E47; border-radius: 6px; z-index: back; in: none; out: none)
 
 # 上端の章札 (煉瓦色の字 + 両脇の短い線)・場面の頭に右から
-def label(t) = p(cx: 540px; top: 196px; font-size: 30px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100; in: {x:30, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
+def label(t) = p(cx: 540px; top: 196px; font-size: 30px; letter-spacing: .32em; color: $accent; rules: both,36,1,#C2643F8C,17; delay: 100ms; in: {x:30, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
 # 中央の線画 (透過・枠の中に収める)・右から入ってゆっくり寄る
-def illus = img(object-fit: contain; in: {x:36, opacity:0, duration:.8, ease:'power2.out'}; delay: 50)
+def illus = img(object-fit: contain; in: {x:36, opacity:0, duration:.8, ease:'power2.out'}; delay: 50ms)
 # 文字の段: 前置き (標準の明朝・灰)・主文 (太い明朝)・注記 (小さな角ゴシック・灰)
 def lead(t) = p(cx: 540px; font-family: sr; color: $sub; letter-spacing: .03em; in: {y:16, opacity:0, duration:.55, ease:'power2.out'}; content: {t})
 def tel(t) = p(cx: 540px; font-family: s; line-height: 1.3; letter-spacing: .03em; in: {y:20, opacity:0, duration:.65, ease:'power2.out'}; content: {t})
@@ -71,7 +71,7 @@ card#card_a(top: 470px)
   img#i(left: 26px; cy: 50%; width: 230px; height: 230px; object-fit: contain) [transparent]少し傾けた虫眼鏡が小さなきらめきをのぞいている
   p#s(cx: 532px; top: 64px; font-family: s; font-size: 50px; color: $sub) やりたいことが
   p#t(cx: 532px; top: 126px; font-family: s; font-size: 86px) 見つかる
-badge#b1(left: 62px; top: 588px; n: "1"; delay: 330)
+badge#b1(left: 62px; top: 588px; n: "1"; delay: 330ms)
 shape#arr1(left: 561px; top: 784px; width: 48px; height: 112px; path: arrow_d,head=line; background: $accent; border: 4px solid $accent; in: draw {duration: 0.45})
 card#card_b(top: 910px)
   img#i(left: 26px; cy: 50%; width: 230px; height: 230px; object-fit: contain) [transparent]テーブルに扇形に広げた 3 枚のカードから片手が 1 枚を選び取っている
@@ -122,7 +122,7 @@ section#study
 label#lab4 ある研究
 # 明滅して点く絵 (0 → 0.28 で止まり → 1)
 img#im5(left: 70px; top: 352px; width: 940px; height: 590px; object-fit: contain; aspect: 16:10; main: kb {scale: [1, 1.06]}; in: keys(at=0 opacity=0 | at=0.6 opacity=0.28 | at=0.71 opacity=0.28 | at=1),duration=420) [transparent]左の懐中電灯がとても細い光の筋で小さな本を 1 冊だけ照らしている、周りにギター・鉢植え・カメラ・絵筆・地球儀・サッカーボールが光の外に塗りなしの細い線だけで置かれている
-p#cite6(right: 120px; top: 1004px; font-size: 24px; color: $sub; italic: true; letter-spacing: .02em; in: {y:8, opacity:0, duration:.6, ease:'power2.out'}) O’Keefe, Dweck & Walton (2018)
+p#cite6(right: 120px; top: 1004px; font-size: 24px; color: $sub; font-style: italic; letter-spacing: .02em; in: {y:8, opacity:0, duration:.6, ease:'power2.out'}) O’Keefe, Dweck & Walton (2018)
 tel#t6a(top: 1052px; font-size: 70px; in: {y:18, opacity:0, duration:.7, ease:'power2.out'}) {q}「{/}興味は見つけるもの{q}」{/}
 lead#t6b(top: 1158px; font-size: 44px) と考える人ほど
 # 興味の幅: 札 + 寸法線 (|—|) — 線は中心へ scaleX で縮み、両端の縦棒は x で寄り、札も中央へ寄る (寸法線の shape は幅を補間しないので 3 本の群に分ける)
@@ -136,7 +136,7 @@ p#wn(left: 658px; cy: 1308px; font-family: s; font-size: 66px; color: $accent; i
 # conclusion — 結論: 「選ぶ前の条件」の板に □ やりたいこと → 語で題が煉瓦色・取り消し線・× と灰・下に「できない」+ 下線 (章札は次の場面へ跨ぐ)
 section#conclusion
 label#lab5.sticky 結論
-div#cc7(left: 130px; top: 400px; width: 820px; height: 520px; background: $card; border: 3px solid $cardline; border-radius: 30px; box-shadow: 0px 18px 40px #5A46281A; delay: 100; in: {y:30, opacity:0, duration:.8, ease:'power2.out'})
+div#cc7(left: 130px; top: 400px; width: 820px; height: 520px; background: $card; border: 3px solid $cardline; border-radius: 30px; box-shadow: 0px 18px 40px #5A46281A; delay: 100ms; in: {y:30, opacity:0, duration:.8, ease:'power2.out'})
   p#head(cx: 50%; top: 62px; font-family: s; font-size: 62px; letter-spacing: .06em) 選ぶ前の条件
   div#rule(left: 90px; top: 172px; width: 640px; height: 2px; background: $cardline)
   div#item(left: 0px; top: 250px; width: 820px; height: 160px; in: {y:12, opacity:0, duration:.55, ease:'power2.out'})
@@ -171,44 +171,44 @@ tel#t9c(top: 1228px; font-size: 96px; in: {y:18, opacity:0, duration:.7, ease:'p
 ```timeline.txt
 #v2
 cast n = "落ち着いた低音域の若い男性ナレーター、芯の通ったクリアな声で、一定のテンポで静かに穏やかに語る" speed=95%
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** order
 [>#subtitle]
 bgm music start=13.7s
-@n: [silence:0.7s]やりたいことが見つかって[>#arr1 -100]から[>#card_b -200][>#b2]選ぶ。[silence:0.5s]
+@n: [silence:0.7s]やりたいことが見つかって[>#arr1 -100ms]から[>#card_b -200ms][>#b2]選ぶ。[silence:0.5s]
 [<#subtitle]
-@: [>#t2a -50]この[!#b1 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}][!#b2 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}]順番[!#card_a to,{y:440, arc:.1, duration:.95, ease:'power2.inOut'} +220][!#card_b to,{y:-440, arc:.1, duration:.95, ease:'power2.inOut'} +220][♪sweep -2dB +180]、[>#t2b -100]逆[>#circ2 +350][♪circle -3dB +300]かもし[!#card_b .hot]れません。[silence:1.15s]
+@: [>#t2a -50ms]この[!#b1 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}][!#b2 to,{scale:1.18, duration:.22, ease:'power1.out', repeat:1, yoyo:true}]順番[!#card_a to,{y:440, arc:.1, duration:.95, ease:'power2.inOut'} +220ms][!#card_b to,{y:-440, arc:.1, duration:.95, ease:'power2.inOut'} +220ms][♪sweep -2dB +180ms]、[>#t2b -100ms]逆[>#circ2 +350ms][♪circle -3dB +300ms]かもし[!#card_b .hot]れません。[silence:1.15s]
 
 *** lost
 se page -2.5dB
 [>#subtitle]
-@n: [silence:0.55s][>#t3a]やりたいことがないまま、[br][>#t3b -100]就職で[!#t3b{m} marker]迷う人は多いのではないでしょうか。[silence:0.8s]
+@n: [silence:0.55s][>#t3a]やりたいことがないまま、[br][>#t3b -100ms]就職で[!#t3b{m} marker]迷う人は多いのではないでしょうか。[silence:0.8s]
 
 *** sartre
 se page -2.5dB
-@n: [silence:0.6s][>#nm -50][>#nm2 +250]サルトルは、[>#q3 -150]気持ちで[>#src3]決めると言った[br]教え子の話をしています。[silence:0.55s]
+@n: [silence:0.6s][>#nm -50ms][>#nm2 +250ms]サルトルは、[>#q3 -150ms]気持ちで[>#src3]決めると言った[br]教え子の話をしています。[silence:0.55s]
 
 *** clay
-@n: [silence:0.45s]サルトルの考えを要約すると、[br][>#r1b -100]気持ちは[>#r1a -100]行動で[>#r1arr -150][♪pencil -1dB -150][>#r1l]形づくられるので、[|][>#r2a -200][>#r2b -200]行[>#r2arr][>#r2l +80]動の手引きには[>#x5 -50][♪pencil -1dB -50]で[!#r2a .off -50][!#r2b .off -50][!#r2a.t recolor,$gray -50][!#r2b.t recolor,$gray -50]きない。[silence:1.0s]
+@n: [silence:0.45s]サルトルの考えを要約すると、[br][>#r1b -100ms]気持ちは[>#r1a -100ms]行動で[>#r1arr -150ms][♪pencil -1dB -150ms][>#r1l]形づくられるので、[|][>#r2a -200ms][>#r2b -200ms]行[>#r2arr][>#r2l +80ms]動の手引きには[>#x5 -50ms][♪pencil -1dB -50ms]で[!#r2a .off -50ms][!#r2b .off -50ms][!#r2a.t recolor,$gray -50ms][!#r2b.t recolor,$gray -50ms]きない。[silence:1.0s]
 [<#lab3]
 
 *** study
 se page -2.5dB
-se switch +330 -3dB
-@n: [silence:0.6s][>#cite6 +300]ある研究では、[br][>#t6a -100]興味は見つけるものと[>#t6b -100]考える[>#wlab -200][>#wbar -200]人ほど、[|]興味の幅[♪airy -3dB +120][!#wbar.line to,{scaleX:.191, duration:.85, ease:'power3.inOut'} +170][!#wbar.tl to,{x:177, duration:.85, ease:'power3.inOut'} +170][!#wbar.tr to,{x:-178, duration:.85, ease:'power3.inOut'} +170][!#wlab to,{x:177, duration:.85, ease:'power3.inOut'} +170]が[>#wn +200]狭い傾向がありました。[silence:1.3s]
+se switch +330ms -3dB
+@n: [silence:0.6s][>#cite6 +300ms]ある研究では、[br][>#t6a -100ms]興味は見つけるものと[>#t6b -100ms]考える[>#wlab -200ms][>#wbar -200ms]人ほど、[|]興味の幅[♪airy -3dB +120ms][!#wbar.line to,{scaleX:.191, duration:.85, ease:'power3.inOut'} +170ms][!#wbar.tl to,{x:177, duration:.85, ease:'power3.inOut'} +170ms][!#wbar.tr to,{x:-178, duration:.85, ease:'power3.inOut'} +170ms][!#wlab to,{x:177, duration:.85, ease:'power3.inOut'} +170ms]が[>#wn +200ms]狭い傾向がありました。[silence:1.3s]
 
 *** conclusion
 se page -2.5dB
-@n: [silence:0.6s]結論は、[>#cc7.item -150]やりたいことを、[br]選ぶ前の[!#cc7.head recolor,$accent -100][>#t7a -100]条件に[>#cc7.item.st][♪pencil -1dB]は[>#t7b -50]で[>#cc7.item.x]き[!#cc7.item.t recolor,$gray][♪accent -2dB][!#t7b{m} marker +50]ない、ということ。[silence:0.65s]
+@n: [silence:0.6s]結論は、[>#cc7.item -150ms]やりたいことを、[br]選ぶ前の[!#cc7.head recolor,$accent -100ms][>#t7a -100ms]条件に[>#cc7.item.st][♪pencil -1dB]は[>#t7b -50ms]で[>#cc7.item.x]き[!#cc7.item.t recolor,$gray][♪accent -2dB][!#t7b{m} marker +50ms]ない、ということ。[silence:0.65s]
 
 *** reverse
-@n: [silence:0.45s][>#r8a -50]意識が[>#arr8 -100]向いてから[>#r8b -100]関わる[>#x8][♪pencil -1dB]のではなく、[<#x8 -250][<#arr8 -250][!#r8a to,{x:540, arc:.15, duration:.9, ease:'power2.inOut'} -250][!#r8b to,{x:-540, arc:.15, duration:.9, ease:'power2.inOut'} -250][♪sweep -3dB -340]関わるか[>#arr8b -60][!#r8a .hot -60][!#r8b .hot -60][>#t8 -80]ら[!#im6 to,{y:-8, duration:1.2, ease:'sine.inOut'}][♪accent2 -2.5dB +150][!#t8{m} marker +200]意識が向く。[silence:1.25s]
+@n: [silence:0.45s][>#r8a -50ms]意識が[>#arr8 -100ms]向いてから[>#r8b -100ms]関わる[>#x8][♪pencil -1dB]のではなく、[<#x8 -250ms][<#arr8 -250ms][!#r8a to,{x:540, arc:.15, duration:.9, ease:'power2.inOut'} -250ms][!#r8b to,{x:-540, arc:.15, duration:.9, ease:'power2.inOut'} -250ms][♪sweep -3dB -340ms]関わるか[>#arr8b -60ms][!#r8a .hot -60ms][!#r8b .hot -60ms][>#t8 -80ms]ら[!#im6 to,{y:-8, duration:1.2, ease:'sine.inOut'}][♪accent2 -2.5dB +150ms][!#t8{m} marker +200ms]意識が向く。[silence:1.25s]
 [<#lab5]
 
 *** question
 se page -2.5dB
 [<#subtitle]
-@n: [silence:0.65s][>#t9a -50]見つかったら選ぶ、で[>#t9b -150]止めているものは[>#t9c -100]ありま[!#t9b{m} marker]すか。[silence:3.72s]
-fade out,900
+@n: [silence:0.65s][>#t9a -50ms]見つかったら選ぶ、で[>#t9b -150ms]止めているものは[>#t9c -100ms]ありま[!#t9b{m} marker]すか。[silence:3.72s]
+fade out,900ms
 ```

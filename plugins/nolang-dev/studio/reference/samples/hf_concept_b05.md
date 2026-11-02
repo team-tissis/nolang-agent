@@ -34,7 +34,7 @@ div { border: none; out: none }
 img { out: none }
 group { out: none }
 shape { out: none }
-cut { stagger: 0 }
+cut { stagger: 0ms }
 sound doom = "重く響く映画的な低音の衝撃音、破滅を告げる一撃"
 sound riser = "短いホラーのライザー、逆再生のノイズが膨らんで鋭く切れる"
 sound bighit = "金属的に響く劇的なドーンという衝撃音と長い残響"
@@ -67,10 +67,10 @@ image sleep = "[photo]Photorealistic cinematic photo of a young Japanese adult s
 bgm#music 冷たく暗く緊張感のあるシネマティックなアンビエント、シンセパッドと合唱と遠い打楽器、遅い四拍子、宇宙の静かな恐怖
 bgm#piano 静かで穏やかなソロピアノ、ゆっくりした安心させる目覚めの曲
 # 字幕: 白の極太 + 黒の太い縁 + 落ち影・句ごとの札 (句は台詞の [|])・強調の語は黄 {y}
-subtitle.hug(bottom: 370px; padding: 18px 0px; font-size: 62px; line-height: 1.28; text-align: center; color: #FFFFFF; stroke: #05060B,13; text-shadow: 0px 10px 26px #000000A6; background: none; unit: sentence; lead: 0; in: {y:18, scale:.94, opacity:0, duration:.14, ease:'power2.out'})
+subtitle.hug(bottom: 370px; padding: 18px 0px; font-size: 62px; line-height: 1.28; text-align: center; color: #FFFFFF; -webkit-text-stroke: 13px #05060B; text-shadow: 0px 10px 26px #000000A6; background: none; unit: sentence; lead: 0ms; in: {y:18, scale:.94, opacity:0, duration:.14, ease:'power2.out'})
 # 画面中央上部のテロップ (群): 場面の頭に 1.45 倍から弾んで出る・行は tl の段 (極太の見出し書体 + 黒の太い縁取り)
 def telop = group(left: 30px; top: 178px; width: 1020px; height: 510px; transform-origin: 50% 40%; in: {scale:1.45, opacity:0, duration:.24, ease:'back.out(2.4)'})
-def tl(t, s, w) = p(left: 0px; width: 1020px; text-align: center; color: #FFFFFF; font-family: d; font-size: {s}; line-height: 1.35; white-space: nowrap; stroke: #05060B,{w}; text-shadow: 0px 10px 26px #000000A6; content: {t})
+def tl(t, s, w) = p(left: 0px; width: 1020px; text-align: center; color: #FFFFFF; font-family: d; font-size: {s}; line-height: 1.35; white-space: nowrap; -webkit-text-stroke: {w} #05060B; text-shadow: 0px 10px 26px #000000A6; content: {t})
 # 上 4 割の暗幕 (テロップの下地・どの写真の場面にも)
 def topshade = div(left: 0px; top: 0px; width: 1080px; height: 760px; background: linear(#0000009E,#00000059@55%,#00000000,180); border-radius: 24px; in: none)
 # 図の白い名札 (極太・中央揃え・ふわっと出る)
@@ -102,7 +102,7 @@ group#h_label(left: 514px; top: 1200px; width: 566px; height: 135px; in: {x:40, 
   p#small(left: 96px; top: 69px; width: 390px; font-size: 38px; color: $pale; white-space: nowrap; text-shadow: 0px 4px 14px #000000E6) 太陽の約23万分の1
 # 吸い込まれる地球 (静止 = 渦の外側の始点・語で 5 区間の to を続けて中心へ)
 img#h_earth.bleed(left: 922px; top: 1216px; width: 190px; height: 190px; content: @earth; object-fit: contain; in: {opacity:0, duration:.05})
-p#h_q(left: 620px; top: 790px; width: 300px; font-family: d; font-size: 300px; line-height: 1; text-align: center; color: $red; stroke: #05060B,17; text-shadow: 0px 10px 26px #000000A6; transform: rotate(12deg); in: {scale:.2, rotation:-32, opacity:0, duration:.38, ease:'back.out(2.6)'}; out: {opacity:0, duration:.15}) ？
+p#h_q(left: 620px; top: 790px; width: 300px; font-family: d; font-size: 300px; line-height: 1; text-align: center; color: $red; -webkit-text-stroke: 17px #05060B; text-shadow: 0px 10px 26px #000000A6; transform: rotate(12deg); in: {scale:.2, rotation:-32, opacity:0, duration:.38, ease:'back.out(2.6)'}; out: {opacity:0, duration:.15}) ？
 # 巻き戻しの走査線 + 札
 div#h_rew(inset: 0; pattern: hatch,90,#FFFFFF12,5,1; border-radius: 24px; in: {opacity:0, duration:.08})
   p#tag(left: 60px; top: 1215px; width: 360px; text-align: center; font-size: 46px; padding: 6px 22px; border: 4px solid #FFFFFF; border-radius: 10px; background: #00000059) ◀◀ 巻き戻し
@@ -118,18 +118,18 @@ veil#h_flash(color: #FFFFFF; opacity: 1; z-index: curtain; in: {opacity:0, durat
 section#shock
 img#s_space(inset: 0; content: @space; main: none)
 # 地球の奥の半周 (円盤の下の写し — 前の半周は見えない)
-group#s_orb_b(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
+group#s_orb_b(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350ms; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy_b(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: 0.024})
     img#earth_b(left: 468px; top: 938px; width: 146px; height: 146px; content: @earth; object-fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 img#s_bh(left: 276px; top: 746px; width: 528px; height: 528px; content: @bh_disc; object-fit: contain; in: {y:120, scale:1.18, duration:.9, ease:'power3.out'})
-shape#s_orbit(left: 140px; top: 870px; width: 800px; height: 280px; border-radius: 50%; background: none; border: 4px solid #9FE6FFB3; delay: 200; in: draw {duration: 1.1})
+shape#s_orbit(left: 140px; top: 870px; width: 800px; height: 280px; border-radius: 50%; background: none; border: 4px solid #9FE6FFB3; delay: 200ms; in: draw {duration: 1.1})
 #s_orbit.bold(border: 8px solid #BFF0FFE6)
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
-group#s_tr(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
+group#s_tr(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350ms; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
   group#ty(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: '0.010;0.983;0.956;0.929;0.902;0.875;0.848'})
     shape#d(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; border-radius: 50%; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)
-group#s_orb(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
+group#s_orb(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350ms; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: 0.024})
     img#earth(left: 468px; top: 938px; width: 146px; height: 146px; content: @earth; object-fit: contain; main: sine {scale: 0.19, period: 4.804, phase_offset: 0.024})
 chip#s_c1(left: 92px; width: 338px; text-align: center) 質量 {b}＝ 同じ{/}
@@ -148,18 +148,18 @@ section#why
 img#w_space(inset: 0; content: @space; opacity: .8; main: none)
 div#w_grid(inset: 0; pattern: grid,60,#78B4FF59; opacity: .28; border-radius: 24px; in: none)
 topshade#w_shade
-p#w_formula(left: 90px; top: 520px; width: 900px; font-size: 74px; line-height: 1.35; text-align: center; padding: 26px 0px; border-radius: 26px; background: #060C1CD1; border: 3px solid #8CBEFF99; box-shadow: 0px 10px 30px #00000080; delay: 250; in: {y:40, opacity:0, duration:.4, ease:'power3.out'}) 重力 ∝ {m}質量{/} ÷ {d}距離{/}²
+p#w_formula(left: 90px; top: 520px; width: 900px; font-size: 74px; line-height: 1.35; text-align: center; padding: 26px 0px; border-radius: 26px; background: #060C1CD1; border: 3px solid #8CBEFF99; box-shadow: 0px 10px 30px #00000080; delay: 250ms; in: {y:40, opacity:0, duration:.4, ease:'power3.out'}) 重力 ∝ {m}質量{/} ÷ {d}距離{/}²
 group#w_diag(left: 0px; top: 0px; width: 1080px; height: 1920px; in: none)
-  lab#name(left: 40px; top: 762px; width: 460px; delay: 550) 太陽
+  lab#name(left: 40px; top: 762px; width: 460px; delay: 550ms) 太陽
   lab#name2(left: 40px; top: 762px; width: 460px; color: $lilac; in: {opacity:0, duration:.2}) ブラックホール
-  img#sun(left: 70px; top: 880px; width: 360px; height: 360px; content: @sun; object-fit: contain; delay: 450; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
+  img#sun(left: 70px; top: 880px; width: 360px; height: 360px; content: @sun; object-fit: contain; delay: 450ms; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
   div#bh(left: 195px; top: 1005px; width: 112px; height: 112px; border-radius: 50%; background: #000000; border: 4px solid #FFECC8F2; box-shadow: 0px 0px 26px 8px #FFC882BF; in: {scale:.2, opacity:0, duration:.35, ease:'back.out(2)'})
   p#radius(left: 10px; top: 1208px; width: 520px; font-size: 48px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180 delay=450]{/} km
   shape#dline(points: "227,673 527,673"; background: none; border: 4px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
   lab#dlab(left: 340px; top: 920px; width: 450px; color: $cyan; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.15}) 距離
   div#line(left: 340px; top: 1006px; width: 450px; height: 8px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 14px #5FE0FFCC; border-radius: 24px; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
   p#dist(left: 300px; top: 910px; width: 540px; font-size: 62px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250]万 km
-  img#earth(left: 795px; top: 926px; width: 170px; height: 170px; content: @earth; object-fit: contain; delay: 750; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
+  img#earth(left: 795px; top: 926px; width: 170px; height: 170px; content: @earth; object-fit: contain; delay: 750ms; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
   p#pull(left: 350px; top: 1040px; width: 460px; font-size: 54px; text-align: center; white-space: nowrap; in: {x:40, opacity:0, duration:.35, ease:'power2.out'}) ◀── 引力
 # hf の作り: 判子は薄めた図の上に重ねる (overlap)
 stamp#w_stamp(overlap: w_diag.dist,w_diag.pull; left: 240px; top: 952px; width: 600px; font-size: 92px; c: $ok; bg: #001A12F0; transform: rotate(-8deg); in: {scale:2.2, rotation:-6, opacity:0, duration:.28, ease:'back.out(2.6)'}) 変わらない！
@@ -256,7 +256,7 @@ telop#t_freeze_c
 section#relief
 group#r_a(left: 0px; top: 0px; width: 1080px; height: 1920px; in: none)
   img#sunrise(inset: 0; content: "[photo]Cinematic photo of a warm, gentle sunrise seen from space over the curved horizon of planet Earth, a soft golden sun peeking over the blue atmosphere glow near the center, thin clouds below, horizon in the lower third, hopeful, calm and reassuring"; main: kb {scale: [1.14, 1], focus: ['50% 52%', '50% 52%']})
-  div#glow(inset: 0; background: radial(#FFC87873,#FFAA5000@45%,50%,52%); border-radius: 24px; delay: 200; in: {opacity:0, duration:1.2, ease:'power2.out'})
+  div#glow(inset: 0; background: radial(#FFC87873,#FFAA5000@45%,50%,52%); border-radius: 24px; delay: 200ms; in: {opacity:0, duration:1.2, ease:'power2.out'})
   div#dim(inset: 0; background: #040610A8; border-radius: 24px; in: {opacity:0, duration:.35})
   topshade#shade
 group#r_b(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity:0, duration:.2})
@@ -284,7 +284,7 @@ telop#t_relief_c
 # 誘導: ぼかした寝顔の上にプロフィールの札 (丸い icon・名前・赤いフォローの釦) が下から弾み、icon に輪・釦を押すと「フォロー中 ✓」に替わる
 section#cta
 img#c_bg(inset: 0; content: @sleep; filter: blur(36px) brightness(.6); main: none)
-div#c_card(left: 110px; top: 760px; width: 860px; height: 470px; border-radius: 40px; background: #0A0E1CDB; border: 3px solid #FFFFFF2E; box-shadow: 0px 20px 60px #00000099; delay: 100; in: {y:90, opacity:0, duration:.5, ease:'back.out(1.6)'})
+div#c_card(left: 110px; top: 760px; width: 860px; height: 470px; border-radius: 40px; background: #0A0E1CDB; border: 3px solid #FFFFFF2E; box-shadow: 0px 20px 60px #00000099; delay: 100ms; in: {y:90, opacity:0, duration:.5, ease:'back.out(1.6)'})
   img#avatar(left: 60px; top: 60px; width: 190px; height: 190px; border-radius: 50%; border: 6px solid $chip; content: @blackhole; object-fit: cover; object-position: 49% 39%; zoom: 250%)
   p#name(left: 290px; top: 92px; width: 540px; font-size: 54px; white-space: nowrap) 宇宙の思考実験ラボ
   p#handle(left: 292px; top: 170px; width: 510px; font-size: 36px; color: #AAB4C8; white-space: nowrap) @uchu_shiko_lab
@@ -300,37 +300,37 @@ telop#t_cta
 ```timeline.txt
 #v2
 cast n = "知的でテンポのよい若い男性ナレーター、落ち着いた低めの声にスピード感と宇宙の静かな緊張感をにじませる"
-silence head=0 tail=0
-transition = dissolve,300,overlap=300
+silence head=0ms tail=0ms
+transition = dissolve {duration: .3, overlap: .3}
 
 *** hook
 [>#subtitle]
 bgm music
-@n: [silence:450][♪doom +4dB -450][♪riser -4dB -450 start=1.02s][!#h_sun to,{scale:1.06, duration:2.44, ease:'none'} -450][!#h_sun.img to,{rotation:4, duration:2.5, ease:'none'} -450][!#h_sun.glow to,{opacity:.45, duration:.55, ease:'sine.inOut', repeat:3, yoyo:true} -450][!#t_hook to,{scale:1.035, duration:1.6, ease:'sine.inOut', repeat:3, yoyo:true}]もしも太陽が突然、[|][!#h_sun to,{scale:.012, rotation:28, duration:.85, ease:'power3.in'} +373][!#h_sun.core to,{opacity:1, scale:1.6, duration:.85, ease:'power2.in'} +373][♪bighit +7dB +1063][>#h_flash +1183][!#h_flash to,{opacity:0, duration:.55, ease:'power2.out'} +1233][<#h_sun none +1203][>#h_bh +1223][!#h_bh to,{rotation:14, duration:4.4, ease:'none'} +1223][>#h_ring +1223][!#h_ring to,{scale:6.5, opacity:0, duration:1, ease:'power2.out'} +1223][!#h_space shake,18,duration=500 +1223][!#h_bh shake,18,duration=500 +1223]同じ質量の{y}ブラックホール{/}に[|][>#h_label +132][♪comet +612]なったらどうなる？[|][♪suck -3dB -186 start=5s to=8.2s fade=300,800][<#h_label -50][>#h_earth -50][!#h_earth to,{x:-420, y:123, scale:.921, rotation:23, duration:.477, ease:'none'} -50][!#h_earth to,{x:-855, y:-162, scale:.78, rotation:65, duration:.318, ease:'none'} +427][!#h_earth to,{x:-320, y:-282, scale:.569, rotation:127, duration:.318, ease:'none'} +745][!#h_earth to,{x:-471, y:-118, scale:.366, rotation:187, duration:.239, ease:'none'} +1063][!#h_earth to,{x:-477, y:-182, scale:.12, rotation:260, opacity:0, duration:.239, ease:'none'} +1302]地球は一瞬で{y}吸い込まれる{/}…[|][>#h_q][>#h_rew +150][!#h_earth to,{x:-322, y:-152, scale:.472, rotation:156, opacity:1, duration:.5, ease:'power1.in'} +150][!#h_earth to,{x:-666, y:-336, scale:.692, rotation:91, duration:.47, ease:'power1.out'} +650][!#h_bh shake,x=4,y=0,duration=600 +150][<#h_q +850][♪doom +7dB +850]と思っていませんか？[silence:220]
+@n: [silence:450ms][♪doom +4dB -450ms][♪riser -4dB -450ms start=1.02s][!#h_sun to,{scale:1.06, duration:2.44, ease:'none'} -450ms][!#h_sun.img to,{rotation:4, duration:2.5, ease:'none'} -450ms][!#h_sun.glow to,{opacity:.45, duration:.55, ease:'sine.inOut', repeat:3, yoyo:true} -450ms][!#t_hook to,{scale:1.035, duration:1.6, ease:'sine.inOut', repeat:3, yoyo:true}]もしも太陽が突然、[|][!#h_sun to,{scale:.012, rotation:28, duration:.85, ease:'power3.in'} +373ms][!#h_sun.core to,{opacity:1, scale:1.6, duration:.85, ease:'power2.in'} +373ms][♪bighit +7dB +1063ms][>#h_flash +1183ms][!#h_flash to,{opacity:0, duration:.55, ease:'power2.out'} +1233ms][<#h_sun none +1203ms][>#h_bh +1223ms][!#h_bh to,{rotation:14, duration:4.4, ease:'none'} +1223ms][>#h_ring +1223ms][!#h_ring to,{scale:6.5, opacity:0, duration:1, ease:'power2.out'} +1223ms][!#h_space shake {x: 18, duration: .5} +1223ms][!#h_bh shake {x: 18, duration: .5} +1223ms]同じ質量の{y}ブラックホール{/}に[|][>#h_label +132ms][♪comet +612ms]なったらどうなる？[|][♪suck -3dB -186ms start=5s to=8.2s fade=300ms,800ms][<#h_label -50ms][>#h_earth -50ms][!#h_earth to,{x:-420, y:123, scale:.921, rotation:23, duration:.477, ease:'none'} -50ms][!#h_earth to,{x:-855, y:-162, scale:.78, rotation:65, duration:.318, ease:'none'} +427ms][!#h_earth to,{x:-320, y:-282, scale:.569, rotation:127, duration:.318, ease:'none'} +745ms][!#h_earth to,{x:-471, y:-118, scale:.366, rotation:187, duration:.239, ease:'none'} +1063ms][!#h_earth to,{x:-477, y:-182, scale:.12, rotation:260, opacity:0, duration:.239, ease:'none'} +1302ms]地球は一瞬で{y}吸い込まれる{/}…[|][>#h_q][>#h_rew +150ms][!#h_earth to,{x:-322, y:-152, scale:.472, rotation:156, opacity:1, duration:.5, ease:'power1.in'} +150ms][!#h_earth to,{x:-666, y:-336, scale:.692, rotation:91, duration:.47, ease:'power1.out'} +650ms][!#h_bh shake {x: 4, y: 0, duration: .6} +150ms][<#h_q +850ms][♪doom +7dB +850ms]と思っていませんか？[silence:220ms]
 transition cut
 
 *** shock
-@: [silence:330][>#s_flash -330][!#s_flash to,{opacity:0, duration:.3, ease:'power2.out'} -290][!#s_space shake,16,duration=400 -330][!#s_bh shake,16,duration=400 -330][!#s_orb.oy.earth main,square,alpha=1,freq_ms=4804,phase_offset=0.024 +20][!#s_orb_b.oy_b.earth_b main,square,alpha=-1,freq_ms=4804,phase_offset=0.024 +20][>#s_c1 +250]実は、質量が変わらないため[|][>#s_c2][♪camera -3dB +786]{y}重力もそのまま{/}。[|][<#s_c1 -120][<#s_c2 -120][>#s_c3]地球は{y}吸い込まれず{/}、[|][>#s_c4][!#s_orbit .bold][=#s_orbit +300][♪comet2 +1dB +828]これまで通り{y}公転{/}を続けます。[silence:200]
-transition dissolve,300,overlap=300
+@: [silence:330ms][>#s_flash -330ms][!#s_flash to,{opacity:0, duration:.3, ease:'power2.out'} -290ms][!#s_space shake {x: 16, duration: .4} -330ms][!#s_bh shake {x: 16, duration: .4} -330ms][!#s_orb.oy.earth main,square,alpha=1,freq_ms=4804,phase_offset=0.024 +20ms][!#s_orb_b.oy_b.earth_b main,square,alpha=-1,freq_ms=4804,phase_offset=0.024 +20ms][>#s_c1 +250ms]実は、質量が変わらないため[|][>#s_c2][♪camera -3dB +786ms]{y}重力もそのまま{/}。[|][<#s_c1 -120ms][<#s_c2 -120ms][>#s_c3]地球は{y}吸い込まれず{/}、[|][>#s_c4][!#s_orbit .bold][=#s_orbit +300ms][♪comet2 +1dB +828ms]これまで通り{y}公転{/}を続けます。[silence:200ms]
+transition dissolve {duration: .3, overlap: .3}
 
 *** why
-@: [silence:200]重力の強さを決めるのは、[|][!#w_formula{m} punch,1.25,duration=360][!#w_diag.sun punch,1.12,duration=400][>#w_diag.dline +400][>#w_diag.dlab +400][!#w_diag.dlab punch,1.15,duration=360 +450][!#w_formula{d} punch,1.25,duration=360 +450]{y}質量と距離{/}だけ。[|][♪suck -5dB -31 start=6s to=8.3s fade=400,500][>#w_diag.radius +50][!#w_diag.sun to,{scale:.05, rotation:90, duration:2.18, ease:'power3.in'} +500]太陽が半径わずか[|][♪impact +3dB +545][>#w_diag.bh +1206][<#w_diag.name none +1156][<#w_diag.sun none +1256][>#w_diag.name2 +1276][!#w_diag.radius punch,1.12,duration=300 +1256]{y}3キロ{/}に縮んでも、[|][♪sweep -3dB -26][<#w_diag.dlab -50][>#w_diag.line][>#w_diag.dist][<#w_diag.dline +900][!#w_diag.earth punch,1.15,duration=360 +1150]{y}1億5000万キロ{/}離れた[|][>#w_diag.pull][!#w_diag.pull to,{x:-21, duration:.35, repeat:3, yoyo:true, ease:'sine.inOut'} +400]地球が受ける引力は、[|][♪click -1dB -91][!#w_diag to,{opacity:.32, duration:.25} -50][>#w_stamp][♪impact +7dB +779]{y}まったく変わりません{/}。[silence:220]
-transition dissolve,120,overlap=120
+@: [silence:200ms]重力の強さを決めるのは、[|][!#w_formula{m} punch {scale: 1.25, duration: .36}][!#w_diag.sun punch {scale: 1.12, duration: .4}][>#w_diag.dline +400ms][>#w_diag.dlab +400ms][!#w_diag.dlab punch {scale: 1.15, duration: .36} +450ms][!#w_formula{d} punch {scale: 1.25, duration: .36} +450ms]{y}質量と距離{/}だけ。[|][♪suck -5dB -31ms start=6s to=8.3s fade=400ms,500ms][>#w_diag.radius +50ms][!#w_diag.sun to,{scale:.05, rotation:90, duration:2.18, ease:'power3.in'} +500ms]太陽が半径わずか[|][♪impact +3dB +545ms][>#w_diag.bh +1206ms][<#w_diag.name none +1156ms][<#w_diag.sun none +1256ms][>#w_diag.name2 +1276ms][!#w_diag.radius punch {scale: 1.12, duration: .3} +1256ms]{y}3キロ{/}に縮んでも、[|][♪sweep -3dB -26ms][<#w_diag.dlab -50ms][>#w_diag.line][>#w_diag.dist][<#w_diag.dline +900ms][!#w_diag.earth punch {scale: 1.15, duration: .36} +1150ms]{y}1億5000万キロ{/}離れた[|][>#w_diag.pull][!#w_diag.pull to,{x:-21, duration:.35, repeat:3, yoyo:true, ease:'sine.inOut'} +400ms]地球が受ける引力は、[|][♪click -1dB -91ms][!#w_diag to,{opacity:.32, duration:.25} -50ms][>#w_stamp][♪impact +7dB +779ms]{y}まったく変わりません{/}。[silence:220ms]
+transition dissolve {duration: .12, overlap: .12}
 
 *** light
-@: [silence:330][♪drone -7dB -288 to=5s fade=0,2000][♪heart -88 to=4.6s fade=0,1200][!#l_a.bh to,{scale:1.129, rotation:5, duration:5.3, ease:'none'} -330][!#l_a.bh shake,12,duration=350 -280][!#l_a.red pulse,5,opacity=0.35>0.95,duration=950 -80]ただし、{y}本当の恐怖{/}はここから。[|][<#t_light_a none -50][>#t_light_a2 -50][>#l_a.rays][!#l_a.rays to,{scale:.3, duration:1.6, ease:'power2.in'} +200]{y}ブラックホール{/}は、[|][<#l_a.rays +850]{y}光を一切出しません{/}。[|][♪tick -2dB -2 to=2.3s][<#t_light_a2 none -50][>#t_light_b -50][>#l_b -50][<#l_a +150][!#l_b.ph to,{scale:1.07, duration:4.05, ease:'none'} -50][!#l_b.glow to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} -50][>#l_b.timer +100]{y}8分20秒後{/}、[|]地球の空から[|][<#l_b.timer.num none -50][>#l_b.timer.num2 -50][♪bighit +4dB +308][!#music to,{volume:-13dB, duration:.1} +308][!#music to,{volume:0dB, duration:.1} +1408][!#l_b.glow to,{scale:.01, opacity:0, duration:.4, ease:'power3.in'} +300][>#l_b.ph.night +450][<#l_b.timer +800][<#t_light_b none +1500]{y}太陽が消える{/}のです。[silence:220]
-transition dissolve,450,overlap=450
+@: [silence:330ms][♪drone -7dB -288ms to=5s fade=0ms,2000ms][♪heart -88ms to=4.6s fade=0ms,1200ms][!#l_a.bh to,{scale:1.129, rotation:5, duration:5.3, ease:'none'} -330ms][!#l_a.bh shake {x: 12, duration: .35} -280ms][!#l_a.red pulse {count: 5, opacity: [.35, .95], duration: .95} -80ms]ただし、{y}本当の恐怖{/}はここから。[|][<#t_light_a none -50ms][>#t_light_a2 -50ms][>#l_a.rays][!#l_a.rays to,{scale:.3, duration:1.6, ease:'power2.in'} +200ms]{y}ブラックホール{/}は、[|][<#l_a.rays +850ms]{y}光を一切出しません{/}。[|][♪tick -2dB -2ms to=2.3s][<#t_light_a2 none -50ms][>#t_light_b -50ms][>#l_b -50ms][<#l_a +150ms][!#l_b.ph to,{scale:1.07, duration:4.05, ease:'none'} -50ms][!#l_b.glow to,{scale:1.15, duration:.25, repeat:3, yoyo:true, ease:'sine.inOut'} -50ms][>#l_b.timer +100ms]{y}8分20秒後{/}、[|]地球の空から[|][<#l_b.timer.num none -50ms][>#l_b.timer.num2 -50ms][♪bighit +4dB +308ms][!#music to,{volume:-13dB, duration:.1} +308ms][!#music to,{volume:0dB, duration:.1} +1408ms][!#l_b.glow to,{scale:.01, opacity:0, duration:.4, ease:'power3.in'} +300ms][>#l_b.ph.night +450ms][<#l_b.timer +800ms][<#t_light_b none +1500ms]{y}太陽が消える{/}のです。[silence:220ms]
+transition dissolve {duration: .45, overlap: .45}
 
 *** freeze
-@: [silence:330][♪wind -4dB -230 to=12s fade=1000,1200][<#f_a.night +300][>#f_a.tint +800][>#f_a.frost +800][♪ice +3dB +370][!#t_freeze_a.l text,"1週間後" +600][!#t_freeze_a.n count +650]わずか1週間で、[|]地球の平均気温は[|][♪sweep -1dB +44][!#t_freeze_a.n punch,1.12,duration=240 +450]{y}マイナス18度{/}。[|][!#t_freeze_a.l text,"1年後" +20][<#t_freeze_a.n none +100][>#t_freeze_a.n2 +100][!#t_freeze_a.n2 count +100]1年後には、[|][♪impact -1dB +21][♪sweep +201][!#t_freeze_a.n2 punch,1.16,duration=280 +550][!#f_a shake,8,duration=300 +500][♪camera -1dB +1091]{y}マイナス73度{/}。[|][<#t_freeze_a none][>#t_freeze_b][>#f_b][<#f_snow none][>#f_a2 +720][♪sweep -3dB +700]海も街も{y}凍りつき{/}、[|][<#t_freeze_b none][>#t_freeze_c][>#f_c -100]地球は漆黒の宇宙を[|]ひとり回り続ける、[|][♪sparkle +1dB +1283]{y}氷の星{/}になります。[silence:400]
+@: [silence:330ms][♪wind -4dB -230ms to=12s fade=1000ms,1200ms][<#f_a.night +300ms][>#f_a.tint +800ms][>#f_a.frost +800ms][♪ice +3dB +370ms][!#t_freeze_a.l text,"1週間後" +600ms][!#t_freeze_a.n count +650ms]わずか1週間で、[|]地球の平均気温は[|][♪sweep -1dB +44ms][!#t_freeze_a.n punch {scale: 1.12, duration: .24} +450ms]{y}マイナス18度{/}。[|][!#t_freeze_a.l text,"1年後" +20ms][<#t_freeze_a.n none +100ms][>#t_freeze_a.n2 +100ms][!#t_freeze_a.n2 count +100ms]1年後には、[|][♪impact -1dB +21ms][♪sweep +201ms][!#t_freeze_a.n2 punch {scale: 1.16, duration: .28} +550ms][!#f_a shake {x: 8, duration: .3} +500ms][♪camera -1dB +1091ms]{y}マイナス73度{/}。[|][<#t_freeze_a none][>#t_freeze_b][>#f_b][<#f_snow none][>#f_a2 +720ms][♪sweep -3dB +700ms]海も街も{y}凍りつき{/}、[|][<#t_freeze_b none][>#t_freeze_c][>#f_c -100ms]地球は漆黒の宇宙を[|]ひとり回り続ける、[|][♪sparkle +1dB +1283ms]{y}氷の星{/}になります。[silence:400ms]
 [<#music]
-transition dissolve,600,overlap=600
+transition dissolve {duration: .6, overlap: .6}
 
 *** relief
-bgm piano -270
-@: [silence:400]でも、{y}安心してください{/}。[|][<#t_relief_a none][>#t_relief_b][>#r_a.dim -100][>#r_b -100][>#r_b.star][>#r_b.l3 +200][>#r_b.l4 +450]太陽は{y}ブラックホール{/}になるには[|][>#r_b.sun -150][>#r_b.l1 -50][>#r_b.l2 +200][!#r_b.sun shake,x=5,y=0,duration=400 +350]{y}軽すぎる{/}ため、[|][♪click -3dB -4][>#r_b.stamp +100]そんな日は{y}永遠に来ません{/}。[|][♪sparkle -5dB -134][<#t_relief_b none][>#t_relief_c][>#r_c -50][<#r_b none +450][>#r_c.z[1] +250][>#r_c.z[2] +600][>#r_c.z[3] +950][!#r_c.z[1] to,{y:-40, duration:1.6, ease:'sine.inOut'} +600][!#r_c.z[2] to,{y:-40, duration:1.6, ease:'sine.inOut'} +950][!#r_c.z[3] to,{y:-40, duration:1.6, ease:'sine.inOut'} +1300]今夜も、{y}ぐっすり{/}眠れますね。[silence:200]
-transition dissolve,350,overlap=350
+bgm piano -270ms
+@: [silence:400ms]でも、{y}安心してください{/}。[|][<#t_relief_a none][>#t_relief_b][>#r_a.dim -100ms][>#r_b -100ms][>#r_b.star][>#r_b.l3 +200ms][>#r_b.l4 +450ms]太陽は{y}ブラックホール{/}になるには[|][>#r_b.sun -150ms][>#r_b.l1 -50ms][>#r_b.l2 +200ms][!#r_b.sun shake {x: 5, y: 0, duration: .4} +350ms]{y}軽すぎる{/}ため、[|][♪click -3dB -4ms][>#r_b.stamp +100ms]そんな日は{y}永遠に来ません{/}。[|][♪sparkle -5dB -134ms][<#t_relief_b none][>#t_relief_c][>#r_c -50ms][<#r_b none +450ms][>#r_c.z[1] +250ms][>#r_c.z[2] +600ms][>#r_c.z[3] +950ms][!#r_c.z[1] to,{y:-40, duration:1.6, ease:'sine.inOut'} +600ms][!#r_c.z[2] to,{y:-40, duration:1.6, ease:'sine.inOut'} +950ms][!#r_c.z[3] to,{y:-40, duration:1.6, ease:'sine.inOut'} +1300ms]今夜も、{y}ぐっすり{/}眠れますね。[silence:200ms]
+transition dissolve {duration: .35, overlap: .35}
 
 *** cta
-@: [silence:200][♪sweep -3dB -185]ほかの思考実験は、[|][>#c_arrow -100][!#c_card.avatar ping,$chip,3,interval=800,duration=800,scale=1>1.35][!#c_arrow to,{y:-12, duration:.3, repeat:5, yoyo:true, ease:'sine.inOut'} +200][♪click +1dB +77][>#c_card.tap +150][!#c_card.tap to,{scale:1.6, opacity:0, duration:.45, ease:'power2.out'} +150][!#c_card.follow punch,0.94,duration=160 +150][<#c_card.follow +310][>#c_card.following +310]{y}プロフィール{/}からチェック！[silence:1.5s]
+@: [silence:200ms][♪sweep -3dB -185ms]ほかの思考実験は、[|][>#c_arrow -100ms][!#c_card.avatar ping,$chip {count: 3, interval: .8, duration: .8, scale: [1, 1.35]}][!#c_arrow to,{y:-12, duration:.3, repeat:5, yoyo:true, ease:'sine.inOut'} +200ms][♪click +1dB +77ms][>#c_card.tap +150ms][!#c_card.tap to,{scale:1.6, opacity:0, duration:.45, ease:'power2.out'} +150ms][!#c_card.follow punch {scale: .94, duration: .16} +150ms][<#c_card.follow +310ms][>#c_card.following +310ms]{y}プロフィール{/}からチェック！[silence:1.5s]
 ```

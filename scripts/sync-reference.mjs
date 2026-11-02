@@ -26,6 +26,7 @@ const STUDIO_SKIP = new Set(["__pycache__", ".DS_Store"]);
 const SKILL_MD = ".agents/skills/nolang-draft-studio/SKILL.md";
 const REFERENCE = "libs/ai/llm_prompts/draft_author/reference";
 const AUTHOR_CORE = "libs/ai/llm_prompts/draft_author/author_core.py";
+const CUT_STAGES = "libs/ai/llm_prompts/draft_author/cut_stages.py";
 const SCRIPTS = "agent_client/scripts";
 const TESTS = "agent_client/tests";
 // `nolang make` (stream_make.sh --remote) が読む物だけ — 著者の文書一式 (reference/ は contract.json の manifest どおり丸ごと) と
@@ -34,13 +35,25 @@ const TESTS = "agent_client/tests";
 const STUDIO_FILES = [
   ["SKILL.md", SKILL_MD],
   ["reference", REFERENCE],
-  // author_core.py の正本は libs — bundle では scripts の隣に同梱する (stream_author は repo 内なら libs を読む)
+  // author_core.py・cut_stages.py の正本は libs — bundle では scripts の隣に同梱する (stream_author._shipped は repo 内なら libs を読む)
   ["scripts/author_core.py", AUTHOR_CORE],
+  ["scripts/cut_stages.py", CUT_STAGES],
   ["scripts/README.md", `${SCRIPTS}/README.md`],
   ["tests/__init__.py", `${TESTS}/__init__.py`],
   ["tests/test_stream_engine.py", `${TESTS}/test_stream_engine.py`],
   // studio_rules.py は backend 1874c9ecd5 で server 側 (`GET drafts/rules/`) へ移った — stream_run は台帳を API から受ける
-  ...["stream_make.sh", "stream_pipeline.sh", "stream_author.py", "stream_codex.py", "stream_codex_pipeline.py", "stream_run.py", "studio_new.py"].map(
+  ...[
+    "stream_make.sh",
+    "stream_pipeline.sh",
+    "stream_api.py",
+    "stream_author.py",
+    "stream_codex.py",
+    "stream_codex_pipeline.py",
+    "stream_run.py",
+    "stream_stages.py",
+    "studio_new.py",
+    "upload_asset.py",
+  ].map(
     (name) => [`scripts/${name}`, `${SCRIPTS}/${name}`],
   ),
 ];
@@ -64,25 +77,19 @@ function gitCommit(dir) {
   }
 }
 
-// 規則の台帳 (SKILL.md の「Rule names and fixes」の 1 段落) を 1 規則 1 行に
-// 先頭の版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる。
+// 束の rules.md (backend の `draft_check.rules.rules_markdown()` が台帳から作る・1 規則 1 行) の見出しの後ろに版の行を足す。
+// 版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる。
 // `Docs:` の行は文書ごとの指紋 — ずれた文書だけを `nolang_draft_reference` で server の現行から読む
-function rulesMarkdown(skillMd, version) {
-  const line = skillMd.split("\n").find((l) => l.startsWith("Rule names and fixes"));
-  if (!line) throw new Error('SKILL.md に「Rule names and fixes」の段落が無い');
-  const body = line.slice(line.indexOf("): ") + 3);
-  const items = body.split("・`").map((item, i) => (i === 0 ? item : "`" + item));
+function rulesMarkdown(bundleRules, version) {
+  const lines = bundleRules.split("\n");
+  if (!lines[0].startsWith("# ")) throw new Error("束の rules.md が見出しで始まっていない");
   return [
-    "# Rule names and fixes for check findings",
+    lines[0],
     "",
     `Version of these documents: contract: ${version.contract} · reference_hash: ${version.reference_hash} · synced_at: ${version.synced_at}`,
     "",
     `Docs: ${Object.entries(version.docs).map(([row, hash]) => `${row} ${hash}`).join(" · ")}`,
-    "",
-    "The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.",
-    "",
-    ...items.map((item) => `- ${item}`),
-    "",
+    ...lines.slice(1),
   ].join("\n");
 }
 
@@ -97,8 +104,9 @@ for (const [rel, srcRel] of STUDIO_FILES) {
 }
 // import できない写しを出荷しない (10-23 の craft.md の欠けと同じ型の事故を塞ぐ)
 const streamAuthor = await readFile(join(STUDIO_DEST, "scripts/stream_author.py"), "utf8");
-if (streamAuthor.includes("author_core") && !existsSync(join(STUDIO_DEST, "scripts/author_core.py")))
-  throw new Error("stream_author.py が author_core を import するのに、写した元に scripts/author_core.py が無い");
+for (const name of ["author_core", "cut_stages"])
+  if (streamAuthor.includes(`_shipped("${name}")`) && !existsSync(join(STUDIO_DEST, `scripts/${name}.py`)))
+    throw new Error(`stream_author.py が ${name} を import するのに、写した元に scripts/${name}.py が無い`);
 
 // 文書一式の版: 写した studio/reference/ の指紋 (JS) を、backend の正本の実装 (author_core.reference_hash_of — server と client が
 // 使う python) の値と突き合わせる。食い違えば言語間の算法がずれている — 出荷すると全 run が「古い plugin」と判定されて毎回取り直す
@@ -121,7 +129,7 @@ const py = JSON.parse(
 if (py.hash !== reference_hash) throw new Error(`文書一式の指紋が JS (${reference_hash.slice(0, 16)}) と python (${py.hash.slice(0, 16)}) で違う`);
 if (JSON.stringify(py.docs) !== JSON.stringify(docs)) throw new Error(`文書ごとの指紋が JS と python で違う: ${JSON.stringify(docs)} ≠ ${JSON.stringify(py.docs)}`);
 const synced_at = new Date().toISOString();
-await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, SKILL_MD), "utf8"), { contract, reference_hash, synced_at, docs }));
+await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, REFERENCE, "rules.md"), "utf8"), { contract, reference_hash, synced_at, docs }));
 
 const git = gitCommit(from);
 const source = {
@@ -133,7 +141,7 @@ const source = {
   contract,
   reference_hash,
   docs,
-  files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (SKILL.md から生成)", "../../../studio/ (skill 一式)"],
+  files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (束の rules.md + 版の行)", "../../../studio/ (skill 一式)"],
 };
 await writeFile(join(DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");
 console.error(`reference/ を写した (commit ${source.commit || "不明"})。npm run build でプラグインにも反映する`);

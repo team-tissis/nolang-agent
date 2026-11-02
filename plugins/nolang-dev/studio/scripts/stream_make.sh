@@ -1,6 +1,6 @@
 #!/bin/bash
 # 依頼文 1 つから stream (製品と同じ段取り: 著者 low 1 call → cut ごとの担当 balanced → check / 直し → 素材 → 確定 → 投入 → 製品の DraftStreamRun が描く) で動画を作る。
-# usage (repo root から):
+# usage (配布の client — 描画は NoLang API (`--remote`)。repo の手元の run は repo の dev 入口 (studio_make.sh) が同じ引数で):
 #   bash agent_client/scripts/stream_make.sh tmp/studio/<name> --type concept|data|compare|story|cinematic \
 #        (--request <file> | --request-text "…") [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 台本の分量に合わせる)]
 #        [--mode light|standard|plus|super]   (役の flag の組。light = 著者 low・担当なし・直し severe / standard = 既定 (著者 low・担当 balanced・直し severe) /
@@ -23,18 +23,17 @@
 #                              全スタイル) なら著者経路 (--ref と同じ) へ自動で倒れる。--type は不要・縦横は親に合わせる)
 #        [--speech <speech_file_id>[,<id>]]   (持ち込み音声 = upload 済みの音声。server が文字起こしし、その clip を切って使う動画を作る・
 #                                              --remote だけ)
-#        [--remote http://host:18000 --token <OAuth の access token>]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る)
+#        --remote http://host:18000 [--token <OAuth の access token>]   (描画を NoLang API に任せる = 製品の draft stream・視聴 URL が先に出る。
+#                                          token の省略時は Claude Code の MCP の OAuth token)
 #        [--samples a.md,b.md | <file>]   (見本 2 本・file は 1 行目が `a.md,b.md` = 前の run の stream/samples.txt をそのまま渡せる。
 #                                          省略時は reference/samples/ の hf_<type>_* 2 本 (同じ題材を除き同じ向きを先に) = stream_author.py の pick_samples)
 # 出来上がり: <project>/studio/out/video.mp4 (再生開始の時点から製品の HLS (static/video_generate/<process>/) が伸びる)・stream/run.jsonl に時刻の記録。
 # 前提は SKILL.md の「前提 (環境)」。--engine claude (既定) / codex の CLI と login が要る。
 set -eu
 S=$(cd "$(dirname "$0")" && pwd)
-ROOT=$(cd "$S/../.." && pwd)  # repo の root (plugin で入れた skill なら repo は無い → --remote だけ)
 PY=${PYTHON:-$([ -x /opt/venv/bin/python ] && echo /opt/venv/bin/python || echo python3)}
-[ $# -ge 1 ] || { sed -n 2,28p "$0"; exit 2; }
+[ $# -ge 1 ] || { sed -n 2,29p "$0"; exit 2; }
 P=$($PY -c 'import os, sys; print(os.path.abspath(sys.argv[1]))' "$1"); shift  # project は絶対 path (repo の root へ cd しても同じ)
-if [ -f "$ROOT/pyproject.toml" ]; then cd "$ROOT"; IN_REPO=1; else IN_REPO=""; fi
 ENGINE=claude
 TYPE=""; ASPECT=16:9; SECONDS_=auto; EFFORT=low; STAFF=balanced; STAFF_WARN=""; REQ_FILE=""; REQ_TEXT=""; SAMPLES=""; REMOTE=""; TOKEN=""; FIX=severe; REVIEW=""; ASSETS=""; EDITABLE=""; REF=""; SPEECH=""; BRIEF=""; EDIT=""
 # --mode = 役の flag の組 (先に読んで既定を置き換える・明示の役の flag が上書き)。表は CLI `nolang make` と同じ。
@@ -118,17 +117,18 @@ echo "$TYPE $ASPECT $SECONDS_${EDITABLE:+ editable}" > "$P/params.txt"
 # profile=editable の規則を効かせる
 [ -n "$EDITABLE" ] && export NOLANG_STUDIO_PROFILE=editable
 if [ -n "$REQ_FILE" ]; then cp "$REQ_FILE" "$P/request.txt"; else printf '%s\n' "$REQ_TEXT" > "$P/request.txt"; fi
-[ -n "$IN_REPO" ] && export PYTHONPATH=$ROOT
 [ -e "$P/studio/design.txt" ] || $PY "$S/studio_new.py" "$P/studio" "$TYPE" "$ASPECT" "$SECONDS_" | tail -1
-if [ -n "$IN_REPO" ]; then $PY "$ROOT/.agents/skills/nolang-draft-studio/scripts/studio_server.py" start 2>&1 | head -1; fi   # 既に起動中なら何もしない (check / warm / 窓 / 束ねが Django の起動を毎回払わないため)
-[ -n "$IN_REPO" ] || [ -n "$REMOTE" ] || { echo "repo の外では --remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
+# 運ぶ先 (orchestrator) と著者の script — 既定は配布の物 (`--remote` = NoLang API)。repo の dev 入口 (studio_make.sh) が手元の run
+# (STREAM_RUN) と比べ用の著者 (STREAM_AUTHOR) に差し替える
+RUN=${STREAM_RUN:-$S/stream_run.py}; AUTHOR=${STREAM_AUTHOR:-$S/stream_author.py}; export STREAM_RUN=$RUN STREAM_AUTHOR=$AUTHOR
+[ "$RUN" != "$S/stream_run.py" ] || [ -n "$REMOTE" ] || { echo "--remote <NoLang API> が要る (素材・描画は server)" >&2; exit 2; }
 export STREAM_RUN_ARGS="${STAFF:+--staff $STAFF}${STAFF_WARN:+ --staff-warn} --fix $FIX${REVIEW:+ --review $REVIEW}${ASSETS:+ --staff-assets}${BRIEF:+ --author-brief}${EDITABLE:+ --editable}${REMOTE:+ --remote $REMOTE}${TOKEN:+ --token $TOKEN}"
 # 参照の動画: --edit / --ref か依頼文の `[video:<id>]` (最初の 1 つ)。src と「ユーザーが選んだ形」の節を project/reference.json に (著者が読む)
 [ -n "$REF" ] || REF=$EDIT
 [ -n "$REF" ] || REF=$(grep -oE '\[video:[0-9a-fA-F-]{36}\]' "$P/request.txt" | head -1 | sed -E 's/^\[video:(.*)\]$/\1/' || true)
 if [ -n "$REF" ]; then
   # shellcheck disable=SC2086
-  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-ref "$REF" $STREAM_RUN_ARGS || {
+  $PY "$RUN" "$P" --fetch-ref "$REF" $STREAM_RUN_ARGS || {
     [ -z "$EDIT" ] || { echo "編集の対象 $EDIT の src を取れない (stream/run.jsonl の reference_failed)" >&2; exit 1; }
     echo "参照 $REF の src を取れない — 参照なしで書く (stream/run.jsonl の reference_failed)" >&2
   }
@@ -136,7 +136,7 @@ fi
 # 持ち込み音声: server の文字起こしの clip 台帳と `@clip` の書き方を project/speech.json に (著者が読む・転写を待つ)。取れなければ止める
 if [ -n "$SPEECH" ]; then
   # shellcheck disable=SC2086
-  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_run.py" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
+  $PY "$RUN" "$P" --fetch-speech "$SPEECH" $STREAM_RUN_ARGS || { echo "持ち込み音声 $SPEECH の文字起こしを取れない (stream/run.jsonl の speech_failed)" >&2; exit 1; }
 fi
 # 編集 (--edit): 著者を飛ばし、編集役が stored src に依頼の patch を当てる。patch にならない依頼 (作り直し級・編集役の失敗) は
 # 著者経路 (上で取った reference.json を参照に) へそのまま倒れる
@@ -148,11 +148,11 @@ if [ -n "$EDIT" ]; then
   echo "edit: $P (対象 $EDIT・$ASPECT・編集役 medium・直し $FIX)"
   EC=0
   # shellcheck disable=SC2086
-  env ${IN_REPO:+PYTHONPATH=$ROOT} $PY "$S/stream_author.py" edit "$P" --effort medium > "$P/stream/editor.out" 2>&1 || EC=$?
+  $PY "$AUTHOR" edit "$P" --effort medium > "$P/stream/editor.out" 2>&1 || EC=$?
   if [ $EC = 0 ]; then
     RAN_EDIT=1
     # shellcheck disable=SC2086
-    env ${IN_REPO:+PYTHONPATH=$ROOT STUDIO_SERVER_SOCK=$ROOT/tmp/studio/.server/sock} $PY "$S/stream_run.py" "$P" $STREAM_RUN_ARGS --edit > "$P/stream/run.out" 2>&1 || true
+    $PY "$RUN" "$P" $STREAM_RUN_ARGS --edit > "$P/stream/run.out" 2>&1 || true
   elif [ $EC = 4 ]; then
     echo "edit: 変更なし — 項目の判定は $P/edit/verdict.json (patch の対象が無い)"
     exit 0
@@ -197,5 +197,5 @@ if video.exists():
 elif by("remote_started"):  # --remote: 描画と配信は server (手元に mp4 は無い)
     print(f"video: server — {by('remote_started')[0]['watch_url']} (status: GET /v1/unstable/videos/<id>/)")
 else:
-    print("video: なし (stream/run.out と weave/*/out/check_*.txt を見る)")
+    print("video: なし (stream/run.out と stream/run.jsonl の check event を見る)")
 PYEOF

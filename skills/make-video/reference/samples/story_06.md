@@ -100,50 +100,50 @@ h1#ed_h(left: 72px; top: 234px; font-size: 69px; font-weight: 700) あの日の{
 ```timeline.txt
 #v2
 cast n = "落ち着いた30代女性のナレーター、やさしく語りかける、少し郷愁を帯びた調子" speed=100%
-transition = dissolve,300,overlap=300
+transition = dissolve {duration: .3, overlap: .3}
 
 *** hook
 [>#subtitle]
 bgm music
-se "山あいの小川のせせらぎ、遠くの鳥の声" -8dB to=6s fade=300,1500
-@n: [silence:+0.3s]昔、日本の川には……[silence:0.5s][!#hk_p zoom_media,1.1]この可愛い動物が普通にいたんです。[silence:0.4s]
+se "山あいの小川のせせらぎ、遠くの鳥の声" -8dB to=6s fade=300ms,1500ms
+@n: [silence:+0.3s]昔、日本の川には……[silence:0.5s][!#hk_p zoom_media {scale: 1.1}]この可愛い動物が普通にいたんです。[silence:0.4s]
 
 *** name
-se "川の水中の泡の音と水のはねる音" -8dB to=5s fade=300,1200
+se "川の水中の泡の音と水のはねる音" -8dB to=5s fade=300ms,1200ms
 @n: [silence:+0.3s][>#nm_c]ニホンカワウソ。[silence:0.4s]
 @: [>#nm_s]川を泳ぎ、[♪"水に飛び込む" -8dB]魚を追いかけ、
 
 *** life
-se "夏の田舎の川辺の環境音、せせらぎと蝉の声" -8dB to=5s fade=300,1200
+se "夏の田舎の川辺の環境音、せせらぎと蝉の声" -8dB to=5s fade=300ms,1200ms
 @n: [silence:+0.2s][>#lf_h]日本人の[!#lf_h{a} underline,$a]すぐそばで暮らしていました。[silence:0.5s]
 
 *** vanish
-se "夕暮れの川辺に吹く寂しい風の音" -8dB to=6s fade=300,1500
+se "夕暮れの川辺に吹く寂しい風の音" -8dB to=6s fade=300ms,1500ms
 @n: [silence:+0.3s]でも、いつからか、[>#vn_h]その姿は少しずつ[!#vn_p to,{filter:'saturate(0)', duration:1.8}]消えていきます。[silence:0.6s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** causes
-se "遠くの工事現場の重機の低い音" -10dB to=9s fade=300,1500
+se "遠くの工事現場の重機の低い音" -10dB to=9s fade=300ms,1500ms
 @n: [silence:+0.3s][>#cz_col.cz[1]]毛皮をとるために捕まえられ、
 @: [>#cz_col.cz[2]]川は開発され、
 @: [>#cz_col.cz[3]]水が汚れ、[>#cz_col.cz[4]]餌となる魚も[!#cz_p to,{filter:'saturate(0)', duration:1.5}]減っていきました。[silence:0.6s]
-transition dip,400
-[<#music -400]
+transition dip {duration: .4}
+[<#music -400ms]
 
 *** last
-se "夕暮れの静かな清流の音、ひぐらしの声" -8dB to=10s fade=500,2000
+se "夕暮れの静かな清流の音、ひぐらしの声" -8dB to=10s fade=500ms,2000ms
 @n: [silence:+0.4s]そして[>#ls_n]1979年。[silence:0.5s]
-@: [>#ls_t]高知県で[!#ls_t{b} underline,$b]最後に確認されたニホンカワウソを最後に、姿を見た人は[!#ls_n recolor,$b,duration=900]いなくなりました。[silence:0.8s]
+@: [>#ls_t]高知県で[!#ls_t{b} underline,$b]最後に確認されたニホンカワウソを最後に、姿を見た人は[!#ls_n recolor,$b {duration: .9}]いなくなりました。[silence:0.8s]
 
 *** memory
-bgm music2 -1500
-se "静かな風の音" -10dB to=8s fade=500,2000
+bgm music2 -1500ms
+se "静かな風の音" -10dB to=8s fade=500ms,2000ms
 @n: [silence:+0.3s]かつては日本中にいた動物が、
 @: [>#mm_s]たった数十年で、[>#mm_h]私たちの[!#mm_h{b} underline,$b]記憶の中だけの存在になったのです。[silence:0.8s]
-transition dissolve,300,overlap=300
+transition dissolve {duration: .3, overlap: .3}
 
 *** ending
-se "朝の澄んだ川のせせらぎと小鳥のさえずり" -8dB to=10s fade=500,2500
+se "朝の澄んだ川のせせらぎと小鳥のさえずり" -8dB to=10s fade=500ms,2500ms
 @n: [silence:+0.4s][>#ed_h]もし、あの日の川に戻れたなら――[silence:0.5s]
-@: そこには今も、[!#ed_p zoom_media,1.1,duration=2500]カワウソが泳いでいるのでしょうか。[silence:3.0s]
+@: そこには今も、[!#ed_p zoom_media {scale: 1.1, duration: 2.5}]カワウソが泳いでいるのでしょうか。[silence:3.0s]
 ```

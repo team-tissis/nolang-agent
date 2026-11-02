@@ -53,12 +53,12 @@ svg dots = """<svg viewBox="0 0 34 22"><circle cx="4" cy="17" r="3" fill="#f5b54
 p { color: $tx; line-height: 1.2 }
 div { border: none }
 # 字幕: 下端中央に地なしの白い字 + 濃い影 (下の暗い帯の上)・句末の約物は外す・声の 0.08 秒前に出て声と同時に消える
-subtitle.hug(left: 140px; bottom: 66px; width: 1640px; font-size: 33px; font-family: m; line-height: 1.2; letter-spacing: 0.03em; color: #E6EDF4; text-shadow: 0px 2px 14px #000000E6; background: none; border: none; box-shadow: none; text-align: center; unit: sentence; strip: 、。; lead: 80; tail: 0; hold: off; in: {y:10, opacity:0, duration:0.2, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
+subtitle.hug(left: 140px; bottom: 66px; width: 1640px; font-size: 33px; font-family: m; line-height: 1.2; letter-spacing: 0.03em; color: #E6EDF4; text-shadow: 0px 2px 14px #000000E6; background: none; border: none; box-shadow: none; text-align: center; unit: sentence; strip: 、。; lead: 80ms; tail: 0ms; hold: off; in: {y:10, opacity:0, duration:0.2, ease:'power2.out'}; out: {opacity:0, duration:0.14, ease:'power1.in'})
 # 曲: 最後の 2.7 秒だけ前に出してから消える (hf は同じ曲の末尾を大きめの音量で重ねる)
 bgm#music(fade: 1200,2200; keys: "end-2.7s:0|end-1.8s:+4") 知的で落ち着いたサイエンス系のシンセとピアノの曲、軽いビートと柔らかいパッド、データや研究の解説向け、主旋律は控えめ
 
 # 板: 紺の縦グラデ + 細い縁 + 深い影・頭の行 (等幅の小札「01 ／ 前提」 + 25 px の題 + 補足) と下の罫・場面の頭から 0.2 秒で下から上がる
-def board(k, t, s="") = div(border-radius: 22px; background: linear(#151F2FEB,#0B111BF0,180); border: 2px solid $line; box-shadow: 0px 40px 90px #00000080; delay: 200; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
+def board(k, t, s="") = div(border-radius: 22px; background: linear(#151F2FEB,#0B111BF0,180); border: 2px solid $line; box-shadow: 0px 40px 90px #00000080; delay: 200ms; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
   p#k(left: 44px; top: 28px; font-size: 20px; font-family: c; letter-spacing: 0.14em; color: $tx3; white-space: nowrap; content: {k})
   p#t(left: 44px; top: 60px; font-size: 38px; font-family: m; letter-spacing: 0.01em; white-space: nowrap; content: {t})
   p#s(left: .t.right+16; top: 74px; font-size: 22px; color: $tx2; white-space: nowrap; content: {s})
@@ -79,7 +79,7 @@ def rowlab2(ch, nm, c=$va, ink=$ink) = div(left: 44px; width: 240px; height: 46p
   p#c(left: 0px; cy: 50%; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: {ink}; background: {c}; border-radius: 12px; padding: 10px 0px; content: {ch})
   p#nm(left: 63px; cy: 50%; font-size: 26px; font-family: m; white-space: nowrap; content: {nm})
 # 右上の章札 (青緑の番号 + 題)・場面の頭に下から入り、場面の終わりに上へ抜ける
-def sec = p(right: 96px; cy: 56px; font-size: 20px; font-family: c; letter-spacing: 0.06em; white-space: nowrap; z-index: front; delay: 100; in: {y:10, opacity:0, duration:0.4, ease:'power2.out'}; out: {y:-10, opacity:0, duration:0.3, ease:'power2.in'})
+def sec = p(right: 96px; cy: 56px; font-size: 20px; font-family: c; letter-spacing: 0.06em; white-space: nowrap; z-index: front; delay: 100ms; in: {y:10, opacity:0, duration:0.4, ease:'power2.out'}; out: {y:-10, opacity:0, duration:0.3, ease:'power2.in'})
 # 信頼区間の横線 (両端に縦の小さな棒・中心から伸びる)
 def ci(c) = div(height: 8px; border-radius: 4px; background: {c}; in: {scaleX:0, duration:0.7, ease:'power3.out'})
   div#l(left: 0px; cy: 50%; width: 3px; height: 24px; border-radius: 2px; background: {c})
@@ -131,11 +131,11 @@ section#title(stagger: {each:0}; out: {y:-14, opacity:0, blur:8, duration:0.32, 
 img#hero(inset: 0; subject: right 45%; room: left 50%; main: keys(at=0 scale=1.12 opacity=0 | at=0.197 scale=1 opacity=1 ease=power2.out | at=1 scale=0.97 ease=none),duration=8118,pivot=72%,45%; in: none; out: {y:-14, opacity:0, blur:8, duration:0.32, ease:'power2.in'}) [photo]暗い紺の空間に浮かぶ SaaS の料金ページ。半透明のガラスの料金プランのカード 2 枚が横に並び、その上に光るトグルスイッチが 1 つ。左のカードは暖かい琥珀の光、右のカードは冷たい青みの光、縁に青緑の光、柔らかい靄、浅い被写界深度。カードとスイッチは画面の右半分 (中心は横 70%) に置き、左半分はほぼ真っ暗な空き (題の文字の場所)、下の 2 割は暗い床の反射。ミニマルで上質な技術の雰囲気、文字・数字・ロゴ・UI の表記なし
 div#shade_l(inset: 0; background: linear(#060A11F7,#060A11DB@36%,#060A114D@58%,#060A1100@74%,90); in: none; out: {y:-14, opacity:0, blur:8, duration:0.32, ease:'power2.in'})
 div#shade_b(inset: 0; background: linear(#060A1100@68%,#060A11E6,180); in: none; out: {y:-14, opacity:0, blur:8, duration:0.32, ease:'power2.in'})
-div#kk(left: 120px; top: 214px; width: 960px; height: 38px; delay: 300; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
+div#kk(left: 120px; top: 214px; width: 960px; height: 38px; delay: 300ms; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'})
   div#bar(left: 0px; cy: 50%; width: 52px; height: 3px; background: $amber)
   p#t(left: 68px; cy: 50%; font-size: 32px; font-family: m; letter-spacing: 0.06em; color: $amber; white-space: nowrap) 料金ページの A/B テスト
-p#l1(left: 120px; top: 276px; font-size: 138px; font-family: b; line-height: 1.1; white-space: nowrap; delay: 450; in: {y:166, duration:0.9, ease:'power4.out', clip:true}) {am}年額{/}を
-p#l2(left: 120px; top: 435px; font-size: 138px; font-family: b; line-height: 1.1; white-space: nowrap; delay: 610; in: {y:166, duration:0.9, ease:'power4.out', clip:true}) 先に見せたら
+p#l1(left: 120px; top: 276px; font-size: 138px; font-family: b; line-height: 1.1; white-space: nowrap; delay: 450ms; in: {y:166, duration:0.9, ease:'power4.out', clip:true}) {am}年額{/}を
+p#l2(left: 120px; top: 435px; font-size: 138px; font-family: b; line-height: 1.1; white-space: nowrap; delay: 610ms; in: {y:166, duration:0.9, ease:'power4.out', clip:true}) 先に見せたら
 p#sub(left: 120px; top: 633px; font-size: 32px; color: $tx2; white-space: nowrap; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'}) 架空のタスク管理 SaaS「ノートレイル」
 # 3 つの数字 (2・3 つ目は左に細い縦線)
 div#st(left: "80;313;497"; top: 718px; width: "233;184;220"; height: 117px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.18}}) ×3
@@ -203,8 +203,8 @@ board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／
   p#lg1(left: 904px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 推定値
   div#lg_ln(left: 996px; cy: 87px; width: 30px; height: 4px; border-radius: 3px; background: $tx2)
   p#lg2(left: 1036px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 95% 信頼区間
-  div#gv(left: "378;443;507;573;637;702"; top: 168px; width: 2px; height: 446px; background: #94A3B81F; delay: 250; in: {opacity:0, duration:0.6}) ×6
-  p#ax(cx: "378;443;507;573;637;702"; top: 628px; font-size: 18px; font-family: c; color: $tx3; delay: 250; in: {opacity:0, duration:0.6}) ×6 2.8%;3.0%;3.2%;3.4%;3.6%;3.8%
+  div#gv(left: "378;443;507;573;637;702"; top: 168px; width: 2px; height: 446px; background: #94A3B81F; delay: 250ms; in: {opacity:0, duration:0.6}) ×6
+  p#ax(cx: "378;443;507;573;637;702"; top: 628px; font-size: 18px; font-family: c; color: $tx3; delay: 250ms; in: {opacity:0, duration:0.6}) ×6 2.8%;3.0%;3.2%;3.4%;3.6%;3.8%
   rowlab#la(top: 255px; ch: A; nm: 現行（月額が先）; sb: "398 / 12,840 人")
   rowlab#lb(top: 394px; ch: B; nm: 年額が先; sb: "441 / 12,810 人"; c: $cyan)
   rowlab#lc(top: 536px; ch: C; nm: 3 段の比較表; sb: "390 / 12,790 人"; c: "#526076"; ink: "#F4F7FA")
@@ -248,9 +248,9 @@ board#wk(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}03{/} ／
   p#lt1(left: 854px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) B 年額が先
   div#lg2(left: 986px; cy: 87px; width: 30px; height: 4px; border-radius: 3px; background: $va)
   p#lt2(left: 1026px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) A 現行
-  div#gh(left: 153px; top: "127;175;225;273;322;371;420"; width: 890px; height: 2px; background: "#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B84D"; delay: 250; in: {opacity:0, duration:0.6}) ×7
-  p#yl(left: 64px; cy: "127;175;225;273;322;371;420"; width: 75px; text-align: right; font-size: 18px; font-family: c; color: #7A889A; delay: 250; in: {opacity:0, duration:0.6}) ×7 4.0%;3.8%;3.6%;3.4%;3.2%;3.0%;2.8%
-  p#xl(cx: "182;329;476;622"; cy: 668px; font-size: 22px; color: $tx2; white-space: nowrap; delay: 250; in: {opacity:0, duration:0.6}) ×4 1 週目;2 週目;3 週目;4 週目
+  div#gh(left: 153px; top: "127;175;225;273;322;371;420"; width: 890px; height: 2px; background: "#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B84D"; delay: 250ms; in: {opacity:0, duration:0.6}) ×7
+  p#yl(left: 64px; cy: "127;175;225;273;322;371;420"; width: 75px; text-align: right; font-size: 18px; font-family: c; color: #7A889A; delay: 250ms; in: {opacity:0, duration:0.6}) ×7 4.0%;3.8%;3.6%;3.4%;3.2%;3.0%;2.8%
+  p#xl(cx: "182;329;476;622"; cy: 668px; font-size: 22px; color: $tx2; white-space: nowrap; delay: 250ms; in: {opacity:0, duration:0.6}) ×4 1 週目;2 週目;3 週目;4 週目
   # hf の作り: B と A の間の面は 9% の青緑 (check はこの面の上の数字を low_contrast に数えるが、面はほぼ透明で読める)
   shape#area(path: "M182 159 L329 281 L476 310 L622 303 L622 327 L476 352 L329 335 L182 374 Z"; background: #3DD9EB17; in: {opacity:0, duration:0.8})
   shape#lb(path: "M182 159 L329 281 L476 310 L622 303"; background: none; border: 4px solid $cyan; in: draw {duration: 1.2})
@@ -292,9 +292,9 @@ board#sh(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}04{/} ／
   p#lt1(left: 1023px; cy: 87px; font-size: 21px; color: $tx2) 年額
   div#lq2(left: 1094px; cy: 87px; width: 18px; height: 18px; border-radius: 4px; background: $blue)
   p#lt2(left: 1122px; cy: 87px; font-size: 21px; color: $tx2) 月額
-  rowlab#la(top: 202px; ch: A; nm: 現行; sb: "課金 398 人"; delay: 250)
-  rowlab#lb(top: 352px; ch: B; nm: 年額が先; sb: "課金 441 人"; c: $cyan; delay: 350)
-  rowlab#lc(top: 502px; ch: C; nm: 3 段比較表; sb: "課金 390 人"; c: "#526076"; ink: "#F4F7FA"; delay: 450)
+  rowlab#la(top: 202px; ch: A; nm: 現行; sb: "課金 398 人"; delay: 250ms)
+  rowlab#lb(top: 352px; ch: B; nm: 年額が先; sb: "課金 441 人"; c: $cyan; delay: 350ms)
+  rowlab#lc(top: 502px; ch: C; nm: 3 段比較表; sb: "課金 390 人"; c: "#526076"; ink: "#F4F7FA"; delay: 450ms)
   div#tr(left: 330px; top: "124;224;324"; width: 800px; height: 84px; border-radius: 12px; background: #94A3B80F) ×3
     div#m(left: 0px; top: 0px; width: 800px; height: 84px; border-radius: 12px; background: linear(#5B8DEFBF,#5B8DEF8C,90); in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
     div#y(left: 0px; top: 0px; width: "117;219;160"; height: 84px; border-radius: 8,0,0,8; background: $amber; box-shadow: 4px 0px 18px #00000059; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
@@ -360,7 +360,7 @@ board#sl(left: 96px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 
     shape#tip(points: "58,1 69,-10 80,1"; background: #2A1A24; border: 2px solid #FF6B8180)
     p#b1(left: 28px; top: 22px; font-size: 21px; color: $tx2; white-space: nowrap) B で増えた問い合わせの多くは
     p#b2(left: 28px; top: 56px; font-size: 32px; font-family: b; color: #FFD5DC; white-space: nowrap) 「年額の途中解約・返金はできるか」
-board#sr(left: 972px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 副作用"; t: "年額の返金申請"; s: "14 日以内"; delay: 320)
+board#sr(left: 972px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 副作用"; t: "年額の返金申請"; s: "14 日以内"; delay: 320ms)
   img#ic(left: 660px; top: 8px; width: 150px; height: 150px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]紙のレシートと、1 枚の金色の硬貨を回り込む曲がった戻りの矢印の、艶のある 3D の icon。柔らかな珊瑚のピンクと琥珀の色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。文字・数字なし
   div#pa(left: "80;102;124"; top: 204px; width: 26px; height: 26px; border-radius: 6px; background: #8B99AD; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×3
   p#c(left: 44px; top: "131;211;291"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
@@ -380,14 +380,14 @@ board#nt(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}07{/} ／
   p#lt1(left: 981px; cy: 87px; font-size: 21px; color: $tx2) 返金後
   shape#lq2(left: 1072px; top: 78px; width: 18px; height: 18px; path: rect,r=0.25; background: none; border: 2px solid #94A3B899; dash: 2,2)
   p#lt2(left: 1101px; cy: 87px; font-size: 21px; color: $tx2) 返金前
-  rowlab2#la(top: 206px; ch: A; nm: 現行; delay: 200)
-  rowlab2#lb(top: 346px; ch: B; nm: 年額が先; c: $cyan; delay: 300)
-  rowlab2#lc(top: 486px; ch: C; nm: 3 段比較表; c: "#526076"; ink: "#F4F7FA"; delay: 400)
+  rowlab2#la(top: 206px; ch: A; nm: 現行; delay: 200ms)
+  rowlab2#lb(top: 346px; ch: B; nm: 年額が先; c: $cyan; delay: 300ms)
+  rowlab2#lc(top: 486px; ch: C; nm: 3 段比較表; c: "#526076"; ink: "#F4F7FA"; delay: 400ms)
   shape#g(left: 300px; top: "133;227;320"; width: "348;409;351"; height: 58px; path: rect,r=0.18; background: none; border: 2px solid #94A3B873; dash: 4,4; in: {opacity:0, duration:0.4}) ×3
-  div#b(left: 300px; top: "133;227;320"; width: "348;409;351"; height: 58px; border-radius: 10px; background: "linear(#6F7E93,#A6B3C4,90);linear(#1AA9BD,#62E6F3,90);linear(#4A5870,#71819A,90)"; delay: 350; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
+  div#b(left: 300px; top: "133;227;320"; width: "348;409;351"; height: 58px; border-radius: 10px; background: "linear(#6F7E93,#A6B3C4,90);linear(#1AA9BD,#62E6F3,90);linear(#4A5870,#71819A,90)"; delay: 350ms; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
   # hf は「返金」の語で 1,243 → 1,231 と 0.8 秒で数え下げる — 語で [count:] の文字に差し替える (出ている値から数える)
-  p#v(left: "564;625;567"; top: "129;223;316"; font-size: 38px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; delay: 800; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 1,243{s15} 円{/};1,462{s15} 円{/};1,253{s15} 円{/}
-  p#sw(left: "564;625;567"; top: "161;255;348"; font-size: 20px; color: $tx3; white-space: nowrap; delay: 800; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 返金前;返金前;返金前
+  p#v(left: "564;625;567"; top: "129;223;316"; font-size: 38px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 1,243{s15} 円{/};1,462{s15} 円{/};1,253{s15} 円{/}
+  p#sw(left: "564;625;567"; top: "161;255;348"; font-size: 20px; color: $tx3; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 返金前;返金前;返金前
   p#nn(left: 300px; top: 610px; font-size: 21px; color: $tx3; white-space: nowrap; in: {opacity:0, duration:0.5}) ※ 年額の返金申請（14 日以内）の分を差し引いた推計
   callout#co(left: 1190px; top: 34px; width: 500px; height: 700px)
     kick#k(left: 36px; top: 36px) B − A（返金後）
@@ -419,45 +419,45 @@ ccard#c3(left: 1268px; n: "03"; l: 次の検証; h: "返金条件を明記した
 ```timeline.txt
 #v2
 cast n = "明瞭でやや高めの音域の20代の男性のナレーター、粒立ちの良いハキハキした発声で、落ち着いて技術解説を伝える" speed=110%
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** title
 [>#subtitle]
 bgm music
-@n: [silence:0.85s][♪whoosh -1dB -800]料金ページで、年額を先に見せたら、[|]どうなるのか。[>#sub -150][>#st[*] +450]タスク管理 SaaS「ノートレイル」の、[♪tick -3.6dB +50][♪tick -4.2dB +250][♪tick -4.2dB +450]A/B テストで[♪whoosh2 -1.2dB +260]す。[silence:0.05s]
+@n: [silence:0.85s][♪whoosh -1dB -800ms]料金ページで、年額を先に見せたら、[|]どうなるのか。[>#sub -150ms][>#st[*] +450ms]タスク管理 SaaS「ノートレイル」の、[♪tick -3.6dB +50ms][♪tick -4.2dB +250ms][♪tick -4.2dB +450ms]A/B テストで[♪whoosh2 -1.2dB +260ms]す。[silence:0.05s]
 
 *** setup
-@n: [silence:0.45s][>#price.y +50][>#price.mo.lab +300][>#price.mo.pay[*] +350][♪pop -5.3dB +150]年額プランは、[>#price.mo.free[*] -50][>#price.mo.fl +50][♪bell -2.1dB +100]2 か月分お得。[>#vh -200][>#ca -50][>#cb +100][>#cc +250][♪pop -5.3dB +50][♪pop -5.6dB +200][♪pop -5.6dB +350]4 週間、訪問者を [>#info +100]3 つの案に振り分けました。
-@: [>#ca.glow][!#ca to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][♪tick -4dB]A は月額が先、[<#ca.glow][>#cb.glow][!#cb to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][!#cb.mock.seg.on glow,#F5B54740,blur=0,spread=5 +150][=#cb.mock.seg.on +850][♪click -3.2dB +50]B は年額が先、[|][!#cb.glow to,{opacity:0.45, duration:0.3}][>#cc.glow][!#cc to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][>#cc.mock.col[*] +50][♪tick -4dB]C は 3 段の比較表で[♪whoosh2 -1.2dB +240]す。[silence:0.05s]
+@n: [silence:0.45s][>#price.y +50ms][>#price.mo.lab +300ms][>#price.mo.pay[*] +350ms][♪pop -5.3dB +150ms]年額プランは、[>#price.mo.free[*] -50ms][>#price.mo.fl +50ms][♪bell -2.1dB +100ms]2 か月分お得。[>#vh -200ms][>#ca -50ms][>#cb +100ms][>#cc +250ms][♪pop -5.3dB +50ms][♪pop -5.6dB +200ms][♪pop -5.6dB +350ms]4 週間、訪問者を [>#info +100ms]3 つの案に振り分けました。
+@: [>#ca.glow][!#ca to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][♪tick -4dB]A は月額が先、[<#ca.glow][>#cb.glow][!#cb to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][!#cb.mock.seg.on glow,#F5B54740 {blur: 0, spread: 5} +150ms][=#cb.mock.seg.on +850ms][♪click -3.2dB +50ms]B は年額が先、[|][!#cb.glow to,{opacity:0.45, duration:0.3}][>#cc.glow][!#cc to,{scale:1.03, duration:0.25, ease:'power1.inOut', yoyo:true, repeat:1}][>#cc.mock.col[*] +50ms][♪tick -4dB]C は 3 段の比較表で[♪whoosh2 -1.2dB +240ms]す。[silence:0.05s]
 
 *** conv
-@n: [silence:0.45s][>#cv.la -50][>#cv.lb +100][>#cv.lc +250]有料転換率は、[>#cv.cia][>#cv.da][♪pop -5.3dB +50]A が [>#cv.va -100][>#cv.ca +200]3.10%、[>#cv.cib][>#cv.db][♪pop -5.3dB +50]B が [>#cv.vb -100][>#cv.cb +200][>#cv.cic +600][>#cv.dc +600][>#cv.vc +750][>#cv.cc +850][♪tick -4.8dB +700]3.44%。
-@: [>#cv.df -100][♪pop -5.6dB +50]ただ、[>#cv.df.ci -50][>#cv.df.ax][>#cv.df.dp +200][>#cv.df.dd +200]差の信頼区間は[>#cv.df.dn][!#cv.df.ax.zero to,{scaleY:1.25, duration:0.2, ease:'power1.inOut'}][!#cv.df.ax.zero to,{scaleY:1, duration:0.2, ease:'power1.inOut'} +200]ゼロをまたぎ、[|][>#cv.df.vd]統計的には[>#cv.df.nt +300]言い[♪burst -4dB +30]切れませ[♪whoosh2 -1.2dB +250]ん。[silence:0.1s]
+@n: [silence:0.45s][>#cv.la -50ms][>#cv.lb +100ms][>#cv.lc +250ms]有料転換率は、[>#cv.cia][>#cv.da][♪pop -5.3dB +50ms]A が [>#cv.va -100ms][>#cv.ca +200ms]3.10%、[>#cv.cib][>#cv.db][♪pop -5.3dB +50ms]B が [>#cv.vb -100ms][>#cv.cb +200ms][>#cv.cic +600ms][>#cv.dc +600ms][>#cv.vc +750ms][>#cv.cc +850ms][♪tick -4.8dB +700ms]3.44%。
+@: [>#cv.df -100ms][♪pop -5.6dB +50ms]ただ、[>#cv.df.ci -50ms][>#cv.df.ax][>#cv.df.dp +200ms][>#cv.df.dd +200ms]差の信頼区間は[>#cv.df.dn][!#cv.df.ax.zero to,{scaleY:1.25, duration:0.2, ease:'power1.inOut'}][!#cv.df.ax.zero to,{scaleY:1, duration:0.2, ease:'power1.inOut'} +200ms]ゼロをまたぎ、[|][>#cv.df.vd]統計的には[>#cv.df.nt +300ms]言い[♪burst -4dB +30ms]切れませ[♪whoosh2 -1.2dB +250ms]ん。[silence:0.1s]
 
 *** weekly
-@n: [silence:0.45s][>#wk.pb1][>#wk.pa1 +120]差は [>#wk.g1][>#wk.gl1 +100][♪bell -2.1dB +50]1 週目に集中し、[|][>#wk.lb][>#wk.la][>#wk.pb2 +250][>#wk.pa2 +300][>#wk.g2 +400][>#wk.gl2 +400][>#wk.pb3 +550][>#wk.pa3 +600][>#wk.g3 +700][>#wk.gl3 +700][>#wk.pb4 +850][>#wk.pa4 +900][>#wk.g4 +1000][>#wk.gl4 +1000][>#wk.area +1000][♪tick -4.4dB +250][♪tick -4.4dB +550][♪tick -4.4dB +850]その後は 0.1〜0.2 ポイントに[>#wk.rb -200][>#wk.rl]縮小。
-@: [>#wk.co -200][>#wk.co.ic][!#wk.co.ic to,{y:-10, rotation:6, duration:1.4, ease:'sine.inOut', yoyo:true, repeat:1} +700][♪blip -2.8dB +50]物珍しさの効果かもしれませ[♪whoosh2 -1.2dB +190]ん。[silence:0.05s]
+@n: [silence:0.45s][>#wk.pb1][>#wk.pa1 +120ms]差は [>#wk.g1][>#wk.gl1 +100ms][♪bell -2.1dB +50ms]1 週目に集中し、[|][>#wk.lb][>#wk.la][>#wk.pb2 +250ms][>#wk.pa2 +300ms][>#wk.g2 +400ms][>#wk.gl2 +400ms][>#wk.pb3 +550ms][>#wk.pa3 +600ms][>#wk.g3 +700ms][>#wk.gl3 +700ms][>#wk.pb4 +850ms][>#wk.pa4 +900ms][>#wk.g4 +1000ms][>#wk.gl4 +1000ms][>#wk.area +1000ms][♪tick -4.4dB +250ms][♪tick -4.4dB +550ms][♪tick -4.4dB +850ms]その後は 0.1〜0.2 ポイントに[>#wk.rb -200ms][>#wk.rl]縮小。
+@: [>#wk.co -200ms][>#wk.co.ic][!#wk.co.ic to,{y:-10, rotation:6, duration:1.4, ease:'sine.inOut', yoyo:true, repeat:1} +700ms][♪blip -2.8dB +50ms]物珍しさの効果かもしれませ[♪whoosh2 -1.2dB +190ms]ん。[silence:0.05s]
 
 *** share
-@n: [silence:0.45s][>#sh.tr[1].m -100][>#sh.tr[2].m +20][>#sh.tr[3].m +140][♪rise -6.4dB +100]はっきり動いたのは、[>#sh.tr[1].y][>#sh.tr[2].y +150][>#sh.tr[3].y +300][>#sh.tr[1].ml +500][>#sh.tr[2].ml +600][>#sh.tr[3].ml +700]年額を選んだ人の割合。
-@: [>#sh.co -200][>#sh.co.k]A の [>#sh.tr[1].yl -50][>#sh.co.p1][♪tick -4.2dB]22% に対し、[>#sh.co.ar -100]B は [>#sh.tr[2].yl -50][>#sh.co.p2][>#sh.tr[3].yl +450][>#sh.co.mon +550][>#sh.nt +800][♪bell -2.1dB +50]41% と、[>#sh.co.bd]ほぼ倍で[♪whoosh2 -1.2dB +600]す。[silence:0.4s]
+@n: [silence:0.45s][>#sh.tr[1].m -100ms][>#sh.tr[2].m +20ms][>#sh.tr[3].m +140ms][♪rise -6.4dB +100ms]はっきり動いたのは、[>#sh.tr[1].y][>#sh.tr[2].y +150ms][>#sh.tr[3].y +300ms][>#sh.tr[1].ml +500ms][>#sh.tr[2].ml +600ms][>#sh.tr[3].ml +700ms]年額を選んだ人の割合。
+@: [>#sh.co -200ms][>#sh.co.k]A の [>#sh.tr[1].yl -50ms][>#sh.co.p1][♪tick -4.2dB]22% に対し、[>#sh.co.ar -100ms]B は [>#sh.tr[2].yl -50ms][>#sh.co.p2][>#sh.tr[3].yl +450ms][>#sh.co.mon +550ms][>#sh.nt +800ms][♪bell -2.1dB +50ms]41% と、[>#sh.co.bd]ほぼ倍で[♪whoosh2 -1.2dB +600ms]す。[silence:0.4s]
 
 *** revenue
-@n: [silence:0.45s][>#rv.c1 +50][>#rv.c2 +250][>#rv.lt +350][>#rv.lbase +390][>#rv.lx[*] +430][>#rv.lb[*] +500][>#rv.lv[*] +900][>#rv.lbd +1300][♪pop -5.6dB +100]初年度の売上を推計すると、[|][>#rv.rt -300][>#rv.rbase -260][>#rv.rx[*] -220][>#rv.rb[*]][>#rv.rv[*]][♪rise -6.8dB +50]訪問者 1 人あたりで、B が A より [>#rv.rbd][♪blip -2.8dB +50]17.6% 多い。
-@: [>#rv.bn -100]効いたのは転換率より、[>#rv.bn.ul][♪tick -4.2dB]年額の割合で[♪whoosh2 -1.2dB +350]す。[silence:0.15s]
+@n: [silence:0.45s][>#rv.c1 +50ms][>#rv.c2 +250ms][>#rv.lt +350ms][>#rv.lbase +390ms][>#rv.lx[*] +430ms][>#rv.lb[*] +500ms][>#rv.lv[*] +900ms][>#rv.lbd +1300ms][♪pop -5.6dB +100ms]初年度の売上を推計すると、[|][>#rv.rt -300ms][>#rv.rbase -260ms][>#rv.rx[*] -220ms][>#rv.rb[*]][>#rv.rv[*]][♪rise -6.8dB +50ms]訪問者 1 人あたりで、B が A より [>#rv.rbd][♪blip -2.8dB +50ms]17.6% 多い。
+@: [>#rv.bn -100ms]効いたのは転換率より、[>#rv.bn.ul][♪tick -4.2dB]年額の割合で[♪whoosh2 -1.2dB +350ms]す。[silence:0.15s]
 
 *** side
-@n: [silence:0.45s][♪tension -0.6dB +50]ただし、副作用も。
-@: [>#sl.ic -100]料金の問い合わせは[>#sl.b[*]]訪問 1,000 人あたり、[|][>#sl.la -50][>#sl.lc +200][♪pop -5.6dB]4.0 件から [>#sl.lb -50][!#sl.b[2] glow,#FF859799,blur=20][=#sl.b[2] +600][>#sl.bub +450][♪pop -5dB]6.8 件に。
-@: [>#sr.ic -100][>#sr.pa[*] +150][>#sr.pb[*] +300][>#sr.pc[*] +450][♪tick -4.7dB +200]年額の返金申請も、[>#sr.ra -50]3.4% から [>#sr.rb -50][>#sr.rc +400][♪tick -4.2dB]6.1% に[>#sr.nt +200]上がりまし[♪whoosh2 -1.2dB +150]た。[silence:0.05s]
+@n: [silence:0.45s][♪tension -0.6dB +50ms]ただし、副作用も。
+@: [>#sl.ic -100ms]料金の問い合わせは[>#sl.b[*]]訪問 1,000 人あたり、[|][>#sl.la -50ms][>#sl.lc +200ms][♪pop -5.6dB]4.0 件から [>#sl.lb -50ms][!#sl.b[2] glow,#FF859799 {blur: 20}][=#sl.b[2] +600ms][>#sl.bub +450ms][♪pop -5dB]6.8 件に。
+@: [>#sr.ic -100ms][>#sr.pa[*] +150ms][>#sr.pb[*] +300ms][>#sr.pc[*] +450ms][♪tick -4.7dB +200ms]年額の返金申請も、[>#sr.ra -50ms]3.4% から [>#sr.rb -50ms][>#sr.rc +400ms][♪tick -4.2dB]6.1% に[>#sr.nt +200ms]上がりまし[♪whoosh2 -1.2dB +150ms]た。[silence:0.05s]
 
 *** net
-@n: [silence:0.45s]それでも、[>#nt.g[*]][!#nt.b[1] to,{scaleX:0.99, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[2] to,{scaleX:0.971, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.b[3] to,{scaleX:0.987, duration:0.8, ease:'power2.inOut', pivot:'left'} +200][!#nt.v[1] text,"[count:1,231]{s15} 円{/}" +200][!#nt.v[2] text,"[count:1,419]{s15} 円{/}" +200][!#nt.v[3] text,"[count:1,237]{s15} 円{/}" +200][!#nt.sw[1] text,"返金後 ／ 返金前 1,243" +350][!#nt.sw[2] text,"返金後 ／ 返金前 1,462" +350][!#nt.sw[3] text,"返金後 ／ 返金前 1,253" +350][♪whoosh -2.4dB +100]返金を差し引いた売上で、[|][>#nt.co -250]B は A を、[>#nt.co.big -50][♪bell -2.1dB +50]15.2% [>#nt.nn][>#nt.co.pre]上回ります。
-@: [>#nt.co.cn -50][♪tick -4.4dB +50]C は、A と[!#nt.b[3] glow,#71819A99,blur=18][=#nt.b[3] +600]ほぼ同じでし[♪whoosh2 -1.2dB +370]た。[silence:0.2s]
+@n: [silence:0.45s]それでも、[>#nt.g[*]][!#nt.b[1] to,{scaleX:0.99, duration:0.8, ease:'power2.inOut', pivot:'left'} +200ms][!#nt.b[2] to,{scaleX:0.971, duration:0.8, ease:'power2.inOut', pivot:'left'} +200ms][!#nt.b[3] to,{scaleX:0.987, duration:0.8, ease:'power2.inOut', pivot:'left'} +200ms][!#nt.v[1] text,"[count:1,231]{s15} 円{/}" +200ms][!#nt.v[2] text,"[count:1,419]{s15} 円{/}" +200ms][!#nt.v[3] text,"[count:1,237]{s15} 円{/}" +200ms][!#nt.sw[1] text,"返金後 ／ 返金前 1,243" +350ms][!#nt.sw[2] text,"返金後 ／ 返金前 1,462" +350ms][!#nt.sw[3] text,"返金後 ／ 返金前 1,253" +350ms][♪whoosh -2.4dB +100ms]返金を差し引いた売上で、[|][>#nt.co -250ms]B は A を、[>#nt.co.big -50ms][♪bell -2.1dB +50ms]15.2% [>#nt.nn][>#nt.co.pre]上回ります。
+@: [>#nt.co.cn -50ms][♪tick -4.4dB +50ms]C は、A と[!#nt.b[3] glow,#71819A99 {blur: 18}][=#nt.b[3] +600ms]ほぼ同じでし[♪whoosh2 -1.2dB +370ms]た。[silence:0.2s]
 
 *** conc
-@n: [silence:0.45s][>#ttl -200][♪chime -2.4dB +50]結論です。
-@: [>#c1 -150][>#c1.li[*] +250][♪pop -5.3dB +50]B を採用し、[|][>#c2 -150][>#c2.li[*] +250][♪pop -5.3dB +50]年額の途中解約と返金の条件を、料金ページに明記。
-@: [>#c3 -150][♪pop -5.3dB +50]次は、明記した B と現行の B を、[>#c3.li[1] -100]4 週間比べ、[|][>#c3.li[2] -100]1 週目を除いた転換率と、[>#c3.li[3] -100]90 日後の返金・継続で判定しま[♪chime -3.2dB +740]す。[silence:2.3s]
-fade out,900
+@n: [silence:0.45s][>#ttl -200ms][♪chime -2.4dB +50ms]結論です。
+@: [>#c1 -150ms][>#c1.li[*] +250ms][♪pop -5.3dB +50ms]B を採用し、[|][>#c2 -150ms][>#c2.li[*] +250ms][♪pop -5.3dB +50ms]年額の途中解約と返金の条件を、料金ページに明記。
+@: [>#c3 -150ms][♪pop -5.3dB +50ms]次は、明記した B と現行の B を、[>#c3.li[1] -100ms]4 週間比べ、[|][>#c3.li[2] -100ms]1 週目を除いた転換率と、[>#c3.li[3] -100ms]90 日後の返金・継続で判定しま[♪chime -3.2dB +740ms]す。[silence:2.3s]
+fade out,900ms
 ```

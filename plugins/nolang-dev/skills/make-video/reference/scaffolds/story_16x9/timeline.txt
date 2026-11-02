@@ -1,6 +1,6 @@
 #v2
 cast narrator = "明るくテンポのいい30代のナレーター、はっきりした発音で聞き手に語りかける" speed=110% manner="語りかけるように、要点は少し熱を込めて"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 # TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える
 # 台詞のある人物は声を分ける (cast を 1 人ずつ・話し方は cast の manner= で) — 1 人の語りで読むと平坦に聞こえる
 cast owner = "50 代の男性のパン職人、低めで温かい声、少し訛りのある素朴な話し方"
@@ -9,9 +9,9 @@ cast owner = "50 代の男性のパン職人、低めで温かい声、少し訛
 [>#subtitle]
 bgm music
 # TODO 役割 = つかみ (shot 1) — 全面の絵に状況を 1 文 (絵は頭・文は語で)・場の音を絵に結ぶ (`se` 行・−8 dB・cut の尺まで `to=`)
-se "早朝の商店街の環境音、遠くの鳥の声とシャッターを開ける音" -8dB to=6s fade=300,1500
+se "早朝の商店街の環境音、遠くの鳥の声とシャッターを開ける音" -8dB to=6s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#hk_h]ある朝、町の小さなパン屋の売上が、半分になりました。
-[<#music -400]
+[<#music -400ms]
 
 *** shock
 # TODO 役割 = 反応 (shot 2) — 人物の表情の寄り + 人物の声で短い語 1 つ・数字は stat の段で語で
@@ -22,7 +22,7 @@ se "早朝の商店街の環境音、遠くの鳥の声とシャッターを開�
 bgm music2
 # TODO 役割 = 原因 (shot 3) — 出来事の絵 + 1 文 (章の変わり目なので切替を変える)
 @narrator: [silence:+0.3s][>#cs_h]駅前に、大型店ができたのです。[silence:0.8s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** empty
 # TODO 役割 = 影響 (shot 4) — 静かな絵 + 短い 1 文 (間を取る)
@@ -35,9 +35,9 @@ transition wipe,600,dir=left
 
 *** action
 # TODO 役割 = 行動 (shot 6) — 動きのある絵 + 語で出す数字 (stat・山場なので切替を強く)・動作の音 (foley) を絵に結ぶ
-se "自転車のペダルと車輪の回る音、朝の住宅街" -8dB to=5s fade=200,1200
+se "自転車のペダルと車輪の回る音、朝の住宅街" -8dB to=5s fade=200ms,1200ms
 @narrator: [silence:+0.3s][>#ac_v]配達を始めると、[>#ac_st]3か月で[!#ac_st punch]120件。[silence:0.8s]
-transition flash,300
+transition flash {duration: .3}
 
 *** turn
 # TODO 役割 = 結果 (shot 7) — 結果の絵 + 数字を 1 つ大きく (語で出す)
@@ -45,5 +45,5 @@ transition flash,300
 
 *** close
 # TODO 役割 = 締め (shot 8) — その後どうなったか 1 文 + 余韻の 1 文・絵は冒頭と別の新しい 1 枚 (末尾は書かなければ 3 秒残る・fade out は頼まれた時だけ)
-se "夕方の商店街の賑わい、遠くの話し声と自転車のベル" -8dB to=6s fade=500,2000
+se "夕方の商店街の賑わい、遠くの話し声と自転車のベル" -8dB to=6s fade=500ms,2000ms
 @narrator: [silence:+0.4s]いまでは配達が、売上の3割を支えています。[>#cl_v]店は、動いた。[silence:3.0s]

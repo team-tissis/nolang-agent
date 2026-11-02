@@ -106,7 +106,7 @@ p#ed_f(left: 60px; top: 1230px; width: 960px; font-size: 177px; text-align: cent
 ```timeline.txt
 #v2
 cast n = "早口でテンポのいい20代男性、熱量の高いオタクの一人語り、畳み掛けるように話す" speed=125% manner="早口で畳み掛ける、少し大げさに"
-transition = push,300,dir=left
+transition = push {duration: .3, dir: 'left'}
 
 *** hook
 [>#subtitle]
@@ -120,28 +120,28 @@ bgm music
 @: [!#cs_row.cs_c[2] dim]分身の術を習得していない自分を呪った。[silence:0.4s]
 
 *** heat
-se "真夏の野外の蝉の声と熱気、遠くのサウンドチェックの音" -8dB to=9s fade=300,1500
+se "真夏の野外の蝉の声と熱気、遠くのサウンドチェックの音" -8dB to=9s fade=300ms,1500ms
 @n: [silence:+0.2s]そして当日、[>#ht_n count]気温36度。
 @: [>#ht_col.ht_r[1]]日焼け止めは汗で流れ、[>#ht_col.ht_r[2]]タオルは絞れる。
 @: それでも、[>#ht_s][!#ht_s punch]最前は譲らない。[silence:0.6s]
-[<#music -400]
+[<#music -400ms]
 
 *** climax
 bgm music2
-se "野外フェスの大歓声とライブの轟音" -8dB to=10s fade=200,1500
+se "野外フェスの大歓声とライブの轟音" -8dB to=10s fade=200ms,1500ms
 @n: [silence:+0.2s]イントロの一音目で、[>#cx_fl][!#cx_fl to,{opacity:0, duration:.4}]全部飛んだ。
 @: [>#cx_row.cx_r[1]]体力ゼロ、[>#cx_row.cx_r[2]]声ガラガラ、[>#cx_row.cx_r[3]]足は棒。
-@: [!#cx_row.cx_r[*] dim]でも、[>#cx_w][>#cx_cf][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0,800]完全勝利。俺たちが、[!#cx_w pulse]夏そのものだった。[silence:0.6s]
-transition wipe,500,dir=left
+@: [!#cx_row.cx_r[*] dim]でも、[>#cx_w][>#cx_cf][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0ms,800ms]完全勝利。俺たちが、[!#cx_w pulse]夏そのものだった。[silence:0.6s]
+transition wipe {duration: .5, dir: 'left'}
 
 *** phil
 @n: [silence:+0.3s]いいか、よく聞け。
 @: [>#ph_a]音源を聴くことと、[>#ph_ne][>#ph_b]現場で[!#ph_b{c} recolor,$a]浴びることは、
-@: [>#ph_s][♪"打撃　パンチ03-1(ドライ)"][♪"打撃　パンチ03-4(ディレイ)" -4dB +160]全くの別物である。[silence:0.5s]
-transition dissolve,300,overlap=300
+@: [>#ph_s][♪"打撃　パンチ03-1(ドライ)"][♪"打撃　パンチ03-4(ディレイ)" -4dB +160ms]全くの別物である。[silence:0.5s]
+transition dissolve {duration: .3, overlap: .3}
 
 *** close
-se "夜の野外会場を抜ける風と遠くの花火の音" -8dB to=8s fade=300,2000
+se "夜の野外会場を抜ける風と遠くの花火の音" -8dB to=8s fade=300ms,2000ms
 @n: [silence:+0.3s]次回、[>#ed_l]来年のタイテ解禁まで、[>#ed_d count]あと300日。[silence:0.5s]
-@: [>#ed_f][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0,800][!#ed_f shake]震えて待て。[silence:2.0s]
+@: [>#ed_f][♪"オノマトペ 衝撃13-2（長）" +3dB to=2.5s fade=0ms,800ms][!#ed_f shake]震えて待て。[silence:2.0s]
 ```

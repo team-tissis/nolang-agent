@@ -1,6 +1,6 @@
 #v2
 cast narrator = "明るくテンポのいい30代のナレーター、はっきりした発音で聞き手に語りかける" speed=110% manner="語りかけるように、要点は少し熱を込めて"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 # TODO 台詞は架空の例文。構造は各 cut の「役割 =」の行だけ拾い、台詞は題材の文に置き換える — 印 [>#名] の名は design の #id と揃える
 
 *** title
@@ -20,7 +20,7 @@ bgm music
 [<#music]
 
 *** verdict
-bgm music2 -1500
+bgm music2 -1500ms
 # TODO 役割 = 判定 — 章の札 (02) + 全面の絵 + どちらをどんな時に選ぶかを 1 文で言い切る
 @narrator: [silence:+0.4s][>#vd_v]深く考える日は朝、[>#vd_s]手を動かす日は夜。
 

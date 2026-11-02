@@ -1,22 +1,23 @@
 {
   "from": "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   "ref": "claude-draft-src",
-  "commit": "9a3ee2ef0c",
+  "commit": "8e346678ce",
   "dirty": false,
-  "synced_at": "2026-11-01T03:21:48.545Z",
+  "synced_at": "2026-11-02T13:33:16.594Z",
   "contract": 1,
-  "reference_hash": "fab53f2c29892e5719c2ca4a56d1fd688be7bedfb89312cff5921c6062acaad4",
+  "reference_hash": "af163d40f956f53632e367a4ed305b8b7ceb530134b6c719e3dd3f202ee16c8d",
   "docs": {
-    "contract.json": "ef39cb227d4f",
-    "spec.md": "3c33649dd3a1",
-    "authoring.md": "98aa228a62bd",
-    "capabilities.md": "47d6966f6303",
-    "looks.md": "7ec769916902",
-    "sounds.md": "a75b4c250730",
+    "contract.json": "30e435347147",
+    "spec.md": "9f5798c02d55",
+    "authoring.md": "1b6e08ac67c2",
+    "capabilities.md": "ed9f16f7f56d",
+    "looks.md": "574ec4c08974",
+    "sounds.md": "e7cfa3490eff",
     "craft.md": "a84cbcce63ec",
     "craft.NOTICE.md": "b5f807351e39",
-    "samples/": "5e9d6dfcaf9e",
-    "scaffolds/": "4946fc4afb33"
+    "rules.md": "6370de2e9d17",
+    "samples/": "d0e46f4d953a",
+    "scaffolds/": "47023826b930"
   },
   "files": [
     "spec.md",
@@ -26,7 +27,7 @@
     "sounds.md",
     "scaffolds/",
     "samples/",
-    "rules.md (SKILL.md から生成)",
+    "rules.md (束の rules.md + 版の行)",
     "../../../studio/ (skill 一式)"
   ]
 }

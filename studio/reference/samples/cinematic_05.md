@@ -70,30 +70,30 @@ shape#close_r(left: 780px; top: 729px; width: 360px; height: 3px; path: line_h; 
 ```timeline.txt
 #v2
 cast n = "低く落ち着いた40代男性のナレーター、深く柔らかい声" speed=90% manner="ゆっくり、間を大きく取って静かに語る"
-transition = dissolve,300,overlap=300,ease=power2.inOut
+transition = dissolve {duration: .3, overlap: .3, ease: 'power2.inOut'}
 read 奥多摩 = おくたま
 
 *** dawn
 [>#subtitle]
-fade in,1200
+fade in,1200ms
 bgm music
-se "夜明け前の渓流のせせらぎ、静かな水の音" -8dB to=8s fade=800,1500
-[>#dawn_l +600]
-@n: [silence:1.5s][>#dawn_t]朝、[>#dawn_r]四時。[>#dawn_s][!#dawn_t dim,0.55,duration=900]沢は、まだ眠っている。[silence:0.3s][>#dawn_glow][!#dawn_s{m} recolor,$a,duration=1200][silence:0.9s]
+se "夜明け前の渓流のせせらぎ、静かな水の音" -8dB to=8s fade=800ms,1500ms
+[>#dawn_l +600ms]
+@n: [silence:1.5s][>#dawn_t]朝、[>#dawn_r]四時。[>#dawn_s][!#dawn_t dim {opacity: .55, duration: .9}]沢は、まだ眠っている。[silence:0.3s][>#dawn_glow][!#dawn_s{m} recolor,$a {duration: 1.2}][silence:0.9s]
 
 *** mist
-se "朝の森の鳥のさえずり、遠くの沢の音" -8dB to=9s fade=600,1500
-@n: [silence:0.8s]靄が、[>#mist_b][>#mist_sun +300][♪"朝の森で鳥が一羽鳴き出す澄んだ声" -6dB +400]ほどけていく。[silence:0.6s][>#mist_h][>#mist_r][silence:2.4s]
+se "朝の森の鳥のさえずり、遠くの沢の音" -8dB to=9s fade=600ms,1500ms
+@n: [silence:0.8s]靄が、[>#mist_b][>#mist_sun +300ms][♪"朝の森で鳥が一羽鳴き出す澄んだ声" -6dB +400ms]ほどけていく。[silence:0.6s][>#mist_h][>#mist_r][silence:2.4s]
 
 *** cast
-se "渓流の水音と森の鳥の声" -8dB to=8s fade=400,1500
-@n: [silence:0.6s][♪"釣り竿を振るヒュッという風切り音" -4dB][>#cast_t]一投目。[>#cast_q][<#cast_t][<#cast_v][♪"小さな仕掛けが水面に落ちるポチャンという音" -6dB +600]糸が、[!#cast_q to,{filter:'brightness(1.2)', duration:.9}]光をひいた。[silence:1.5s]
+se "渓流の水音と森の鳥の声" -8dB to=8s fade=400ms,1500ms
+@n: [silence:0.6s][♪"釣り竿を振るヒュッという風切り音" -4dB][>#cast_t]一投目。[>#cast_q][<#cast_t][<#cast_v][♪"小さな仕掛けが水面に落ちるポチャンという音" -6dB +600ms]糸が、[!#cast_q to,{filter:'brightness(1.2)', duration:.9}]光をひいた。[silence:1.5s]
 
 *** light
-se "浅瀬を流れる澄んだ水の音、ときどき鳥の声" -8dB to=10s fade=400,1500
-@n: [silence:1.0s]水面に、[>#light_k]光。[silence:0.8s][>#light_b]その下を、[>#light_s][!#light_k recolor,$mute,duration=900][♪"水中を魚がすっと横切る小さな水の揺らぎの音" -8dB]影がよぎる。[silence:1.0s][>#light_ln][silence:1.0s]
+se "浅瀬を流れる澄んだ水の音、ときどき鳥の声" -8dB to=10s fade=400ms,1500ms
+@n: [silence:1.0s]水面に、[>#light_k]光。[silence:0.8s][>#light_b]その下を、[>#light_s][!#light_k recolor,$mute {duration: .9}][♪"水中を魚がすっと横切る小さな水の揺らぎの音" -8dB]影がよぎる。[silence:1.0s][>#light_ln][silence:1.0s]
 
 *** close
-se "静かな渓流の水音と朝の鳥のさえずり" -8dB to=11s fade=600,2500
-@n: [silence:0.8s][>#close_k]奥多摩。[silence:0.6s][>#close_c1]東京から2時間、[>#close_c2]音のない朝。[silence:1.0s][>#close_r][!#close_c2{m} recolor,$a,duration=1200][silence:2.0s]
+se "静かな渓流の水音と朝の鳥のさえずり" -8dB to=11s fade=600ms,2500ms
+@n: [silence:0.8s][>#close_k]奥多摩。[silence:0.6s][>#close_c1]東京から2時間、[>#close_c2]音のない朝。[silence:1.0s][>#close_r][!#close_c2{m} recolor,$a {duration: 1.2}][silence:2.0s]
 ```

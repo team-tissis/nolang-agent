@@ -48,20 +48,20 @@ sound data = "コンピューターが解析するピピピピという連続し
 sound mesh = "デジタルに音色が変わりながら上がるサイバーの起動音ヒュイーン"
 sound emph = "柔らかいシンセベルの高い和音のポーン"
 # 工程の板の点灯 (地と縁・番号の丸・字の色・小さく弾む) と済み (地を戻し字を少し沈める)
-cue on(x, c) = [!#x .on][!#x.n fill,{c}][!#x.t recolor,$ink][!#x.s recolor,$sub][!#x punch,1.03,duration=360]
+cue on(x, c) = [!#x .on][!#x.n fill,{c}][!#x.t recolor,$ink][!#x.s recolor,$sub][!#x punch {scale: 1.03, duration: .36}]
 cue done(x) = [=#x][!#x.t recolor,$done][!#x.s recolor,$st_t]
 bgm#music(fade: 800,3200) 軽快にシンコペーションするピアノのリズムに一定の電子ビートと温かいシンセパッドが重なる、明るくモダンで邪魔にならない、企業のプレゼンや技術解説向け
 # 字幕: 白い札 (下に寄せ・文ごと・句末の約物は外す・長い文は台詞の [|] で 2 枚に)
-subtitle.hug(bottom: 44px; font-family: m; font-size: 40px; line-height: 1.3; color: $ink; background: #FFFFFFF0; border-radius: 18px; padding: 14px 36px 16px 36px; box-shadow: 0 8px 26px #14213D1F; unit: sentence; strip: 、。; lead: 0; tail: 0; hold: off; in: {y:10, opacity:0, duration:.16, ease:'power2.out'}; out: {opacity:0, duration:.12, ease:'power1.in'})
+subtitle.hug(bottom: 44px; font-family: m; font-size: 40px; line-height: 1.3; color: $ink; background: #FFFFFFF0; border-radius: 18px; padding: 14px 36px 16px 36px; box-shadow: 0 8px 26px #14213D1F; unit: sentence; strip: 、。; lead: 0ms; tail: 0ms; hold: off; in: {y:10, opacity:0, duration:.16, ease:'power2.out'}; out: {opacity:0, duration:.12, ease:'power1.in'})
 
 # 部品: 白い板 (角丸 + 柔らかい影)
 def card = div(border-radius: 26px; background: #FFFFFF; box-shadow: 0 18px 50px #14213D1A)
 # 英字の小見出し + 題 (場面の頭に印なしで置く)
-def khead(k, t) = div(left: 130px; top: 64px; width: 1350px; height: 90px; delay: 200; in: up)
+def khead(k, t) = div(left: 130px; top: 64px; width: 1350px; height: 90px; delay: 200ms; in: up)
   p#k(left: 0px; top: 0px; font-family: e; font-size: 20px; letter-spacing: .22em; color: $sub; content: {k})
   p#t(left: 0px; top: 24px; font-size: 50px; line-height: 1.05; content: {t})
 # 章の見出し: 画面の中央に 1.75 倍で出て 1 秒待ち、左上へ縮んで収まる (hf の chapterHead = keys の入場 1 本)
-def chead(n, t, s, c, w) = div(left: 130px; top: 64px; width: {w}; height: 69px; delay: 250; in: keys(at=0 x=267 y=273 scale=1.75 opacity=0 | at=0.28 x=267 y=273 scale=1.75 opacity=1 ease=power3.out | at=0.67 x=267 y=273 scale=1.75 | at=1 ease=power3.inOut),duration=1800)
+def chead(n, t, s, c, w) = div(left: 130px; top: 64px; width: {w}; height: 69px; delay: 250ms; in: keys(at=0 x=267 y=273 scale=1.75 opacity=0 | at=0.28 x=267 y=273 scale=1.75 opacity=1 ease=power3.out | at=0.67 x=267 y=273 scale=1.75 | at=1 ease=power3.inOut),duration=1800)
   p#n(left: 0px; bottom: 0px; font-family: e; font-size: 64px; line-height: .9; color: {c}; content: {n})
   p#t(left: 105px; bottom: 0px; font-size: 50px; line-height: 1.05; content: {t})
   p#s(left: .t.right+22; bottom: 6px; font-family: m; font-size: 24px; color: $sub; white-space: nowrap; content: {s})
@@ -92,15 +92,15 @@ progress#prog(left: 0px; top: 1074px; width: 1920px; height: 6px; background: li
 
 # s1 開幕: 右に半分 CAD の線画・半分実物の金具の写真、左に題 (小見出し → 青 → と → 橙) が組み上がり、語で下線が伸びる・「なにが違う？」と逆向きの矢印 2 本
 section#s1
-img#s1_hero(left: 700px; top: 70px; width: 1240px; height: 698px; bleed; delay: 100; in: {scale:1.08, opacity:0, duration:1.2, ease:'power2.out'}; main: kb {scale: [1.04, 1.04], focus: ['45% 50%', '55% 50%']}) [photo]アルミを削り出したL字の取り付けブラケット（丸いボルト穴が2つ）が1つ、斜め45度から見た姿で中央に。左半分は青く光る精密なCADのワイヤーフレームと細い作図線、右半分はヘアラインの金属の実物で柔らかい反射、縦の境目でくっきり分かれる。ごく明るい冷たい灰色の継ぎ目のないスタジオの背景が画面の縁へ溶ける、拡散した柔らかい光、ミニマルで現代的な工業デザイン
-div#s1_k(left: 130px; top: 176px; width: 450px; height: 36px; delay: 300; in: {y:16, opacity:0, duration:.55, ease:'power3.out'})
+img#s1_hero(left: 700px; top: 70px; width: 1240px; height: 698px; bleed; delay: 100ms; in: {scale:1.08, opacity:0, duration:1.2, ease:'power2.out'}; main: kb {scale: [1.04, 1.04], focus: ['45% 50%', '55% 50%']}) [photo]アルミを削り出したL字の取り付けブラケット（丸いボルト穴が2つ）が1つ、斜め45度から見た姿で中央に。左半分は青く光る精密なCADのワイヤーフレームと細い作図線、右半分はヘアラインの金属の実物で柔らかい反射、縦の境目でくっきり分かれる。ごく明るい冷たい灰色の継ぎ目のないスタジオの背景が画面の縁へ溶ける、拡散した柔らかい光、ミニマルで現代的な工業デザイン
+div#s1_k(left: 130px; top: 176px; width: 450px; height: 36px; delay: 300ms; in: {y:16, opacity:0, duration:.55, ease:'power3.out'})
   div#bar(left: 0px; cy: 50%; width: 46px; height: 4px; border-radius: 3px; background: $ink)
   p#t(left: 62px; cy: 50%; font-size: 30px; letter-spacing: .08em; color: $sub) 3分でわかる
 div#s1_cad_u(left: 130px; top: 336px; width: 690px; height: 14px; border-radius: 8px; background: $blue; opacity: .22; in: {scaleX:0, pivot:'left', duration:.6, ease:'power3.out'})
-p#s1_cad(left: 130px; top: 230px; font-size: 104px; line-height: 1.22; color: $blue; delay: 450; in: {y:44, opacity:0, duration:.7, ease:'power3.out'}) CADモデリング
-p#s1_to(left: 138px; top: 370px; font-size: 50px; color: $sub; delay: 700; in: {y:20, opacity:0, duration:.55, ease:'power3.out'}) と
+p#s1_cad(left: 130px; top: 230px; font-size: 104px; line-height: 1.22; color: $blue; delay: 450ms; in: {y:44, opacity:0, duration:.7, ease:'power3.out'}) CADモデリング
+p#s1_to(left: 138px; top: 370px; font-size: 50px; color: $sub; delay: 700ms; in: {y:20, opacity:0, duration:.55, ease:'power3.out'}) と
 div#s1_rev_u(left: 130px; top: 550px; width: 940px; height: 14px; border-radius: 8px; background: $orange; opacity: .22; in: {scaleX:0, pivot:'left', duration:.7, ease:'power3.out'})
-p#s1_rev(left: 130px; top: 444px; font-size: 104px; line-height: 1.22; color: $orange; delay: 850; in: {y:44, opacity:0, duration:.7, ease:'power3.out'}) リバースモデリング
+p#s1_rev(left: 130px; top: 444px; font-size: 104px; line-height: 1.22; color: $orange; delay: 850ms; in: {y:44, opacity:0, duration:.7, ease:'power3.out'}) リバースモデリング
 p#s1_q(left: 130px; top: 700px; font-size: 64px; color: #FFFFFF; background: $ink; border-radius: 14px; padding: 6px 26px 10px 26px; in: {y:20, opacity:0, duration:.55, ease:'power3.out'}) なにが違う？
 shape#s1_ar_b(left: 141px; top: 826px; width: 394px; height: 40px; path: arrow_r,head=fill; background: $blue; border: 10px solid $blue; in: {x:-90, opacity:0, duration:.55, ease:'power3.out'})
 shape#s1_ar_o(left: 582px; top: 870px; width: 394px; height: 40px; path: arrow_l,head=fill; background: $orange; border: 10px solid $orange; in: {x:90, opacity:0, duration:.55, ease:'power3.out'})
@@ -108,7 +108,7 @@ shape#s1_ar_o(left: 582px; top: 870px; width: 394px; height: 40px; path: arrow_l
 # s2 ひとことで: 点線の丸の置き場 6 つを先に敷き、上の段は左から右へ (アイデア → 形 → 製品)、下の段は右から左へ (実物 → 測る → 設計データ) 語ごとに弾んで埋まる
 section#s2
 khead#s2_head(k: "IN A WORD"; t: "ひとことで言うと、{m}進む「向き」が逆{/}")
-shape#s2_ph(left: "463;730;997;997;730;463"; top: "217;217;217;430;430;430"; width: 150px; height: 150px; path: rect,r=0.5; background: #FFFFFF80; border: 3px solid $ph; dash: 6,6; delay: 350; in: {opacity:0, duration:.4, ease:'power3.out', stagger:{each:.05}}) ×6
+shape#s2_ph(left: "463;730;997;997;730;463"; top: "217;217;217;430;430;430"; width: 150px; height: 150px; path: rect,r=0.5; background: #FFFFFF80; border: 3px solid $ph; dash: 6,6; delay: 350ms; in: {opacity:0, duration:.4, ease:'power3.out', stagger:{each:.05}}) ×6
 pill#s2_l1(left: 130px; top: 370px; t: "CADモデリング"; c: $blue; in: {x:-40, opacity:0, duration:.55, ease:'power3.out'})
 pill#s2_l2(left: 130px; top: 690px; t: "リバースモデリング"; c: $orange; in: {x:-40, opacity:0, duration:.55, ease:'power3.out'})
 p#s2_fwd(left: 130px; top: 470px; font-size: 30px; color: $blue_d; in: {x:-20, opacity:0, duration:.55, ease:'power3.out'}) 向き →
@@ -146,20 +146,20 @@ card#req(left: 430px; top: 346px; width: 460px; height: 310px; in: up; out: {x:4
 # 等角の L 字 (群 iso: 正面 = スケッチの輪郭の変種・残り 4 面は潰れた形で出て押し出しで伸びる・穴 2 つ・群ごと上下に浮く)
 group#iso
 shape#iso.front(path: "M251.3,211.7 M644.5,538.0 M253.3,477.3 L541.3,477.3 L541.3,443.7 L286.9,443.7 L286.9,261.3 L253.3,261.3 Z"; background: #2563EB0F; border: 4px solid $blue; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: draw {duration: 1.7})
-#iso.front.iso(path: "M251.3,211.7 M644.5,538.0 M306.7,444.0 L530.6,505.3 L530.6,477.6 L332.8,423.5 L332.8,273.2 L306.7,266.0 Z"; background: $f1; border: 3px solid $blue_d; move: 700,power2.inOut)
-#iso.front.long(path: "M251.3,211.7 M644.5,538.0 M269.4,454.2 L567.9,536.0 L567.9,508.3 L295.5,433.7 L295.5,283.4 L269.4,276.3 Z"; move: 1100,power2.inOut)
+#iso.front.iso(path: "M251.3,211.7 M644.5,538.0 M306.7,444.0 L530.6,505.3 L530.6,477.6 L332.8,423.5 L332.8,273.2 L306.7,266.0 Z"; background: $f1; border: 3px solid $blue_d; move: 700ms,power2.inOut)
+#iso.front.long(path: "M251.3,211.7 M644.5,538.0 M269.4,454.2 L567.9,536.0 L567.9,508.3 L295.5,433.7 L295.5,283.4 L269.4,276.3 Z"; move: 1100ms,power2.inOut)
 shape#iso.top_h(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L530.6,477.6 L332.8,423.5 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.top_h.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L605.2,425.3 L407.4,371.1 Z"; move: 1300,power2.inOut)
-#iso.top_h.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L567.9,508.3 L642.5,456.0 L370.1,381.3 Z"; move: 1100,power2.inOut)
+#iso.top_h.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L605.2,425.3 L407.4,371.1 Z"; move: 1300ms,power2.inOut)
+#iso.top_h.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L567.9,508.3 L642.5,456.0 L370.1,381.3 Z"; move: 1100ms,power2.inOut)
 shape#iso.end_h(path: "M251.3,211.7 M644.5,538.0 M530.6,505.3 L530.6,505.3 L530.6,477.6 L530.6,477.6 Z"; background: $f2; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.end_h.ext(path: "M251.3,211.7 M644.5,538.0 M530.6,505.3 L605.2,453.0 L605.2,425.3 L530.6,477.6 Z"; move: 1300,power2.inOut)
-#iso.end_h.long(path: "M251.3,211.7 M644.5,538.0 M567.9,536.0 L642.5,483.6 L642.5,456.0 L567.9,508.3 Z"; move: 1100,power2.inOut)
+#iso.end_h.ext(path: "M251.3,211.7 M644.5,538.0 M530.6,505.3 L605.2,453.0 L605.2,425.3 L530.6,477.6 Z"; move: 1300ms,power2.inOut)
+#iso.end_h.long(path: "M251.3,211.7 M644.5,538.0 M567.9,536.0 L642.5,483.6 L642.5,456.0 L567.9,508.3 Z"; move: 1100ms,power2.inOut)
 shape#iso.inner_v(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L332.8,423.5 L332.8,273.2 L332.8,273.2 Z"; background: $f3; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.inner_v.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L407.4,371.1 L407.4,220.8 L332.8,273.2 Z"; move: 1300,power2.inOut)
-#iso.inner_v.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L370.1,381.3 L370.1,231.1 L295.5,283.4 Z"; move: 1100,power2.inOut)
+#iso.inner_v.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L407.4,371.1 L407.4,220.8 L332.8,273.2 Z"; move: 1300ms,power2.inOut)
+#iso.inner_v.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L370.1,381.3 L370.1,231.1 L295.5,283.4 Z"; move: 1100ms,power2.inOut)
 shape#iso.top_v(path: "M251.3,211.7 M644.5,538.0 M306.7,266.0 L332.8,273.2 L332.8,273.2 L306.7,266.0 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.top_v.ext(path: "M251.3,211.7 M644.5,538.0 M306.7,266.0 L332.8,273.2 L407.4,220.8 L381.3,213.7 Z"; move: 1300,power2.inOut)
-#iso.top_v.long(path: "M251.3,211.7 M644.5,538.0 M269.4,276.3 L295.5,283.4 L370.1,231.1 L344.0,223.9 Z"; move: 1100,power2.inOut)
+#iso.top_v.ext(path: "M251.3,211.7 M644.5,538.0 M306.7,266.0 L332.8,273.2 L407.4,220.8 L381.3,213.7 Z"; move: 1300ms,power2.inOut)
+#iso.top_v.long(path: "M251.3,211.7 M644.5,538.0 M269.4,276.3 L295.5,283.4 L370.1,231.1 L344.0,223.9 Z"; move: 1100ms,power2.inOut)
 shape#iso.ha(points: "543.6,465.3 544.8,464.3 545.7,463.2 546.3,462.1 546.6,461.0 546.5,459.8 546.1,458.7 545.4,457.6 544.3,456.6 542.9,455.6 541.3,454.8 539.4,454.0 537.3,453.3 535.0,452.8 532.6,452.4 530.1,452.1 527.5,452.0 524.9,452.0 522.4,452.2 519.9,452.5 517.5,453.0 515.3,453.6 513.3,454.3 511.5,455.2 510.0,456.1 508.8,457.1 507.9,458.1 507.3,459.2 507.0,460.4 507.1,461.5 507.5,462.6 508.3,463.7 509.3,464.7 510.7,465.7 512.3,466.6 514.2,467.4 516.3,468.0 518.6,468.6 521.0,469.0 523.5,469.2 526.1,469.3 528.7,469.3 531.3,469.1 533.7,468.8 536.1,468.3 538.3,467.7 540.3,467.0 542.1,466.2"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
 shape#iso.hb(points: "343.3,317.1 343.2,314.9 342.9,312.8 342.5,310.9 341.9,309.2 341.1,307.8 340.2,306.7 339.2,305.9 338.0,305.4 336.8,305.2 335.5,305.4 334.1,305.9 332.8,306.7 331.4,307.8 330.1,309.2 328.8,310.8 327.5,312.7 326.4,314.8 325.4,317.1 324.5,319.5 323.7,321.9 323.1,324.5 322.6,327.0 322.4,329.4 322.3,331.8 322.4,334.1 322.6,336.2 323.1,338.1 323.7,339.7 324.5,341.1 325.4,342.3 326.4,343.1 327.5,343.6 328.8,343.7 330.1,343.6 331.4,343.1 332.8,342.3 334.1,341.2 335.5,339.8 336.8,338.1 338.0,336.2 339.2,334.1 340.2,331.9 341.1,329.5 341.9,327.0 342.5,324.5 342.9,322.0 343.2,319.5"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
 # スケッチの寸法 (細い線と端の目盛り + 欧文の数字)
@@ -184,7 +184,7 @@ group#isodim(in: {opacity:0, duration:.4}; out: {opacity:0, duration:.3, ease:'p
   shape#b(left: 774px; top: 808px; width: 12px; height: 12px; border-radius: 50%; background: $blue_d)
   p#tag(left: 540px; top: 780px; width: 124px; font-family: e; font-size: 30px; text-align: center; color: $blue_d; background: #FFFFFF; border: 3px solid $blue; border-radius: 14px; padding: 12px 0px) 120
   shape#cur(left: 628px; top: 814px; width: 34px; height: 48px; path: cursor; background: $ink; border: 3px solid #FFFFFF; in: {x:90, y:-60, opacity:0, duration:.6, ease:'power3.out'}; out: {opacity:0, duration:.3, ease:'power2.in'})
-#isodim.l.long(path: "M257.1,479.3 M559.7,575.3 M259.1,491.5 L557.7,573.3"; move: 1100,power2.inOut)
+#isodim.l.long(path: "M257.1,479.3 M559.7,575.3 M259.1,491.5 L557.7,573.3"; move: 1100ms,power2.inOut)
 # 作業の履歴の板 (右の工程と入れ替わる)・項目 4 つ + 意図の帯
 card#tree(left: 1240px; top: 196px; width: 550px; height: 690px; in: up; out: {x:40, opacity:0, duration:.35, ease:'power2.in'})
   p#h(left: 36px; top: 34px; font-size: 34px) 作業の手順が残る
@@ -255,8 +255,8 @@ group#worn(in: {y:24, opacity:0, duration:.6, ease:'power3.out'})
   shape#blob(path: "M539.5,297.3 M680.9,424.0 M678.9,360.7 L675.4,374.3 L666.9,385.6 L656.4,393.9 L646.2,400.2 L636.5,405.4 L626.9,409.6 L617.0,412.4 L606.7,413.9 L595.9,414.8 L584.0,415.5 L570.8,414.4 L557.8,409.6 L547.6,400.1 L542.3,387.3 L541.5,373.6 L543.3,360.7 L546.0,348.6 L549.8,337.1 L555.8,326.7 L564.4,318.4 L574.7,312.9 L585.4,309.3 L595.9,306.4 L606.7,304.1 L618.0,303.6 L629.3,306.0 L639.8,311.1 L649.5,317.8 L659.2,325.6 L668.7,335.0 L676.2,346.8 Z"; background: #FFFFFF; border: 4px solid $orange)
   shape#cideal(points: "668.0,360.7 666.8,372.6 663.3,384.1 657.7,394.7 650.0,404.0 640.7,411.7 630.1,417.3 618.6,420.8 606.7,422.0 594.7,420.8 583.2,417.3 572.6,411.7 563.3,404.0 555.7,394.7 550.0,384.1 546.5,372.6 545.3,360.7 546.5,348.7 550.0,337.2 555.7,326.6 563.3,317.3 572.6,309.7 583.2,304.0 594.7,300.5 606.7,299.3 618.6,300.5 630.1,304.0 640.7,309.7 650.0,317.3 657.7,326.6 663.3,337.2 666.8,348.7"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
   p#rk(cx: 910px; top: 690px; font-size: 30px; color: $orange_d) ゆがみ
-#worn.wavy.ok(path: "M151.3,335.7 M395.3,419.3 M153.3,344.0 L159.3,344.0 L165.3,344.0 L171.3,344.0 L177.3,344.0 L183.3,344.0 L189.3,344.0 L195.3,344.0 L201.3,344.0 L207.3,344.0 L213.3,344.0 L219.3,344.0 L225.3,344.0 L231.3,344.0 L237.3,344.0 L243.3,344.0 L249.3,344.0 L255.3,344.0 L261.3,344.0 L267.3,344.0 L273.3,344.0 L279.3,344.0 L285.3,344.0 L291.3,344.0 L297.3,344.0 L303.3,344.0 L309.3,344.0 L315.3,344.0 L321.3,344.0 L327.3,344.0 L333.3,344.0 L339.3,344.0 L345.3,344.0 L351.3,344.0 L357.3,344.0 L363.3,344.0 L369.3,344.0 L375.3,344.0 L381.3,344.0 L387.3,344.0 L393.3,344.0 L393.3,417.3 L153.3,417.3 Z"; background: #2563EB1F; border: 4px solid $blue; move: 900,power2.inOut)
-#worn.blob.ok(path: "M539.5,297.3 M680.9,424.0 M668.0,360.7 L666.8,372.6 L663.3,384.1 L657.7,394.7 L650.0,404.0 L640.7,411.7 L630.1,417.3 L618.6,420.8 L606.7,422.0 L594.7,420.8 L583.2,417.3 L572.6,411.7 L563.3,404.0 L555.7,394.7 L550.0,384.1 L546.5,372.6 L545.3,360.7 L546.5,348.7 L550.0,337.2 L555.7,326.6 L563.3,317.3 L572.6,309.7 L583.2,304.0 L594.7,300.5 L606.7,299.3 L618.6,300.5 L630.1,304.0 L640.7,309.7 L650.0,317.3 L657.7,326.6 L663.3,337.2 L666.8,348.7 Z"; border: 4px solid $blue; move: 900,power2.inOut)
+#worn.wavy.ok(path: "M151.3,335.7 M395.3,419.3 M153.3,344.0 L159.3,344.0 L165.3,344.0 L171.3,344.0 L177.3,344.0 L183.3,344.0 L189.3,344.0 L195.3,344.0 L201.3,344.0 L207.3,344.0 L213.3,344.0 L219.3,344.0 L225.3,344.0 L231.3,344.0 L237.3,344.0 L243.3,344.0 L249.3,344.0 L255.3,344.0 L261.3,344.0 L267.3,344.0 L273.3,344.0 L279.3,344.0 L285.3,344.0 L291.3,344.0 L297.3,344.0 L303.3,344.0 L309.3,344.0 L315.3,344.0 L321.3,344.0 L327.3,344.0 L333.3,344.0 L339.3,344.0 L345.3,344.0 L351.3,344.0 L357.3,344.0 L363.3,344.0 L369.3,344.0 L375.3,344.0 L381.3,344.0 L387.3,344.0 L393.3,344.0 L393.3,417.3 L153.3,417.3 Z"; background: #2563EB1F; border: 4px solid $blue; move: 900ms,power2.inOut)
+#worn.blob.ok(path: "M539.5,297.3 M680.9,424.0 M668.0,360.7 L666.8,372.6 L663.3,384.1 L657.7,394.7 L650.0,404.0 L640.7,411.7 L630.1,417.3 L618.6,420.8 L606.7,422.0 L594.7,420.8 L583.2,417.3 L572.6,411.7 L563.3,404.0 L555.7,394.7 L550.0,384.1 L546.5,372.6 L545.3,360.7 L546.5,348.7 L550.0,337.2 L555.7,326.6 L563.3,317.3 L572.6,309.7 L583.2,304.0 L594.7,300.5 L606.7,299.3 L618.6,300.5 L630.1,304.0 L640.7,309.7 L650.0,317.3 L657.7,326.6 L663.3,337.2 L666.8,348.7 Z"; border: 4px solid $blue; move: 900ms,power2.inOut)
 p#c_intent(left: 380px; top: 788px; font-size: 32px; color: $blue_d; background: #FFFFFF; border: 3px solid $blue; border-radius: 14px; padding: 10px 22px; box-shadow: 0 8px 24px #14213D1F; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 設計の意図を読み取って、形を整える
 
 # s5 比べる: 2 列の色の見出し → 4 行 (項目名 → 青の欄 → 橙の欄 を語ごと)
@@ -321,8 +321,8 @@ p#sm3(cx: 960px; top: 735px; font-size: 44px; color: $sub; in: {y:20, opacity:0,
 ```timeline.txt
 #v2
 cast n = "落ち着いたトーンで非常にクリアで聞き取りやすい20〜30代の大人の女性のナレーター、親しみやすく丁寧で安定したテンポ" speed=108%
-silence head=0 tail=250
-transition = dissolve,400,overlap=200
+silence head=0ms tail=250ms
+transition = dissolve {duration: .4, overlap: .2}
 read CAD = キャド
 read 3D = スリーディー
 read 点群 = てんぐん
@@ -331,56 +331,56 @@ read 真円 = しんえん
 *** s1
 [>#subtitle]
 bgm music
-se title +200
-@n: [silence:1.2s]ものづくりの現場でよく聞く、[|][>#s1_cad_u][♪pop -2dB -50]「CADモデリング」と、[>#s1_rev_u][♪pop -2dB -50]「リバースモデリング」。
-@: [>#s1_q +100]名前は似ていますが、じつは進む向きが[>#s1_ar_b -100][♪swish -2dB -100][>#s1_ar_o +50]正反対です。[silence:0.4s]
+se title +200ms
+@n: [silence:1.2s]ものづくりの現場でよく聞く、[|][>#s1_cad_u][♪pop -2dB -50ms]「CADモデリング」と、[>#s1_rev_u][♪pop -2dB -50ms]「リバースモデリング」。
+@: [>#s1_q +100ms]名前は似ていますが、じつは進む向きが[>#s1_ar_b -100ms][♪swish -2dB -100ms][>#s1_ar_o +50ms]正反対です。[silence:0.4s]
 
 *** s2
-se soft +100
-@: [silence:0.5s][>#s2_l1]通常のCADモデリングは、[|]頭の中の[>#s2_n1][♪pop2 -4dB][>#s2_a1 +350]アイデアから[>#s2_n2][♪pop2 -4dB][>#s2_a2 +350]形をつくり、それが[>#s2_n3][♪pop2 -4dB][>#s2_fwd +300]製品になります。
-@: [>#s2_l2]リバースモデリングはその[>#s2_rev]逆。すでにある[>#s2_n4][♪pop2 -4dB][>#s2_a3 +350]実物から[>#s2_n5][>#s2_a4 +350]出発して、[>#s2_n6][♪pop2 -4dB]設計データをつくります。[silence:0.4s]
+se soft +100ms
+@: [silence:0.5s][>#s2_l1]通常のCADモデリングは、[|]頭の中の[>#s2_n1][♪pop2 -4dB][>#s2_a1 +350ms]アイデアから[>#s2_n2][♪pop2 -4dB][>#s2_a2 +350ms]形をつくり、それが[>#s2_n3][♪pop2 -4dB][>#s2_fwd +300ms]製品になります。
+@: [>#s2_l2]リバースモデリングはその[>#s2_rev]逆。すでにある[>#s2_n4][♪pop2 -4dB][>#s2_a3 +350ms]実物から[>#s2_n5][>#s2_a4 +350ms]出発して、[>#s2_n6][♪pop2 -4dB]設計データをつくります。[silence:0.4s]
 
 *** s3
-se chapter +50
-@: [silence:0.5s][>#s3_vp +1250][>#s3_ptitle +1400][>#s3_st[*] +1450]まずは、通常のCADモデリングから。
-@: [on #s3_st[1] $blue][>#req +150]出発点は「こんなものをつくりたい」という[♪pop -4dB]アイデアと、[|][>#req.l[1] -200][>#req.l[2] +150]仕様や[>#req.l[3]]寸法です。
-@: [done #s3_st[1]][on #s3_st[2] $blue][<#req -150][♪soft -2dB][>#iso][>#iso.front +100]平面にスケッチを描いて[>#sk_dims -100]寸法を入れ、
-@: [!#iso.front .iso -700][<#sk_dims -750][>#iso.top_h +50][>#iso.end_h +50][>#iso.inner_v +50][>#iso.top_v +50][!#iso.top_h .ext +80][!#iso.end_h .ext +80][!#iso.inner_v .ext +80][!#iso.top_v .ext +80][done #s3_st[2]][on #s3_st[3] $blue][♪swish -3dB]押し出しや回転といった操作で、[>#s3_chip]立体に起こしていきます。
-@: [done #s3_st[3]][on #s3_st[4] $blue][>#isodim +100]多くのCADでは、寸法の[>#isodim.cur -800][!#isodim.cur to,{scale:0.82, duration:.09, yoyo:true, repeat:1} -100][!#isodim.tag text,"160"][♪click -2dB][!#iso.front .long +350][!#iso.top_h .long +350][!#iso.end_h .long +350][!#iso.inner_v .long +350][!#iso.top_v .long +350][!#isodim.l .long +350][!#isodim.a to,{x:-56, y:15, duration:1.1, ease:'power2.inOut'} +350][!#isodim.b to,{x:56, y:46, duration:1.1, ease:'power2.inOut'} +350][!#isodim.tag to,{y:30, duration:1.1, ease:'power2.inOut'} +350][!#isodim.cur main,ramp,y=20,freq_ms=1100,window=0,1100 +350][<#isodim.cur +1150]数値を変えると、[|]形もそれに合わせて更新されます。
-@: [<#s3_st fade -100][<#s3_ptitle fade -100][<#isodim +100][>#tree][>#tree.it[1] +350][>#tree.it[2] +600][>#tree.it[3] +850][>#iso.ha +850][>#tree.it[4] +1100][>#iso.hb +1100][!#iso to,{y:-10, duration:1.7, ease:'sine.inOut', repeat:5, yoyo:true} +1400][♪pop2 -4dB +100]設計者の[>#tree.intent -100]意図が、寸法や作業の手順として、[|]最初からデータに残るのが特徴です。
-@: できあがった3Dモデルは、[|][<#tree -450][>#fc1 -100][♪pop2 -5dB]図面や[>#fc2 -100][♪pop2 -5dB]試作、[>#fc3 -100][♪pop2 -5dB]製造へとつながります。[silence:0.4s]
+se chapter +50ms
+@: [silence:0.5s][>#s3_vp +1250ms][>#s3_ptitle +1400ms][>#s3_st[*] +1450ms]まずは、通常のCADモデリングから。
+@: [on #s3_st[1] $blue][>#req +150ms]出発点は「こんなものをつくりたい」という[♪pop -4dB]アイデアと、[|][>#req.l[1] -200ms][>#req.l[2] +150ms]仕様や[>#req.l[3]]寸法です。
+@: [done #s3_st[1]][on #s3_st[2] $blue][<#req -150ms][♪soft -2dB][>#iso][>#iso.front +100ms]平面にスケッチを描いて[>#sk_dims -100ms]寸法を入れ、
+@: [!#iso.front .iso -700ms][<#sk_dims -750ms][>#iso.top_h +50ms][>#iso.end_h +50ms][>#iso.inner_v +50ms][>#iso.top_v +50ms][!#iso.top_h .ext +80ms][!#iso.end_h .ext +80ms][!#iso.inner_v .ext +80ms][!#iso.top_v .ext +80ms][done #s3_st[2]][on #s3_st[3] $blue][♪swish -3dB]押し出しや回転といった操作で、[>#s3_chip]立体に起こしていきます。
+@: [done #s3_st[3]][on #s3_st[4] $blue][>#isodim +100ms]多くのCADでは、寸法の[>#isodim.cur -800ms][!#isodim.cur to,{scale:0.82, duration:.09, yoyo:true, repeat:1} -100ms][!#isodim.tag text,"160"][♪click -2dB][!#iso.front .long +350ms][!#iso.top_h .long +350ms][!#iso.end_h .long +350ms][!#iso.inner_v .long +350ms][!#iso.top_v .long +350ms][!#isodim.l .long +350ms][!#isodim.a to,{x:-56, y:15, duration:1.1, ease:'power2.inOut'} +350ms][!#isodim.b to,{x:56, y:46, duration:1.1, ease:'power2.inOut'} +350ms][!#isodim.tag to,{y:30, duration:1.1, ease:'power2.inOut'} +350ms][!#isodim.cur main,ramp,y=20,freq_ms=1100,window=0,1100 +350ms][<#isodim.cur +1150ms]数値を変えると、[|]形もそれに合わせて更新されます。
+@: [<#s3_st fade -100ms][<#s3_ptitle fade -100ms][<#isodim +100ms][>#tree][>#tree.it[1] +350ms][>#tree.it[2] +600ms][>#tree.it[3] +850ms][>#iso.ha +850ms][>#tree.it[4] +1100ms][>#iso.hb +1100ms][!#iso to,{y:-10, duration:1.7, ease:'sine.inOut', repeat:5, yoyo:true} +1400ms][♪pop2 -4dB +100ms]設計者の[>#tree.intent -100ms]意図が、寸法や作業の手順として、[|]最初からデータに残るのが特徴です。
+@: できあがった3Dモデルは、[|][<#tree -450ms][>#fc1 -100ms][♪pop2 -5dB]図面や[>#fc2 -100ms][♪pop2 -5dB]試作、[>#fc3 -100ms][♪pop2 -5dB]製造へとつながります。[silence:0.4s]
 
 *** s4
-se chapter +50
-@: [silence:0.5s][>#s4_vp +1050][>#s4_ptitle +1200][>#s4_st[*] +1250]続いて、リバースモデリングです。
-@: [on #s4_st[1] $orange][>#ph_old -400]出発点は、手元にある[♪soft -2dB]実物。[||]たとえば、[|][>#stamp -100]図面が残っていない古い部品です。
-@: [done #s4_st[1]][on #s4_st[2] $orange][<#stamp -200][>#ph_scan -150]まず、[>#scan][>#scan.bar][♪scan -3dB -100][<#scan.bar +2700]3Dスキャナーで表面の形を測ります。
-@: [done #s4_st[2]][on #s4_st[3] $orange][<#ph_scan -100][<#ph_old -100][>#rv][>#rv.rev +50][>#rv.rev.cloud +50]すると、[♪data -8dB]無数の点の集まり[>#c_pc -100]「点群データ」が得られます。
-@: [done #s4_st[3]][on #s4_st[4] $orange][<#c_pc -100]点どうしを[>#rv.rev.mesh -100][♪mesh -6dB][!#rv.rev.cloud to,{opacity:0.55, duration:.6} +1200]三角形の面でつなぐと、[|][>#c_mesh -100]「メッシュ」と呼ばれる表面のデータになります。
-@: [<#c_mesh -100][!#rv.rev to,{scale:1.85, duration:1.3, ease:'power2.inOut', pivot:'47.2%,64.1%'} +50]ただ、メッシュのままでは、[|][>#qtag -150][♪pop -4dB][>#c_hard +100]寸法を変えるような編集がしにくいんです。
-@: [<#qtag -150][<#c_hard -150][=#rv.rev -50]そこで、メッシュを下敷きに[done #s4_st[4]][on #s4_st[5] $orange][>#rv.rev.top_h -100][>#rv.rev.inner_v +60][>#rv.rev.front +220][>#rv.rev.end_h +380][>#rv.rev.top_v +540][<#rv.rev.cloud][!#rv.rev.mesh to,{opacity:0.35, duration:.7} +200]平面や[>#rv.rev.ha -100][>#rv.rev.hb +100]円筒といった形を当てはめ、[|][>#rv.rev.edges -100][♪emph -4dB -100][<#rv.rev.mesh][>#c_cad -100]CADで扱えるモデルに作り直します。
-@: [<#c_cad -100][!#rv.rev to,{opacity:0.1, duration:.5}][♪soft -3dB][>#c_pt +100][>#worn +600]ポイントは、測ったままを写すのではないこと。
+se chapter +50ms
+@: [silence:0.5s][>#s4_vp +1050ms][>#s4_ptitle +1200ms][>#s4_st[*] +1250ms]続いて、リバースモデリングです。
+@: [on #s4_st[1] $orange][>#ph_old -400ms]出発点は、手元にある[♪soft -2dB]実物。[||]たとえば、[|][>#stamp -100ms]図面が残っていない古い部品です。
+@: [done #s4_st[1]][on #s4_st[2] $orange][<#stamp -200ms][>#ph_scan -150ms]まず、[>#scan][>#scan.bar][♪scan -3dB -100ms][<#scan.bar +2700ms]3Dスキャナーで表面の形を測ります。
+@: [done #s4_st[2]][on #s4_st[3] $orange][<#ph_scan -100ms][<#ph_old -100ms][>#rv][>#rv.rev +50ms][>#rv.rev.cloud +50ms]すると、[♪data -8dB]無数の点の集まり[>#c_pc -100ms]「点群データ」が得られます。
+@: [done #s4_st[3]][on #s4_st[4] $orange][<#c_pc -100ms]点どうしを[>#rv.rev.mesh -100ms][♪mesh -6dB][!#rv.rev.cloud to,{opacity:0.55, duration:.6} +1200ms]三角形の面でつなぐと、[|][>#c_mesh -100ms]「メッシュ」と呼ばれる表面のデータになります。
+@: [<#c_mesh -100ms][!#rv.rev to,{scale:1.85, duration:1.3, ease:'power2.inOut', pivot:'47.2%,64.1%'} +50ms]ただ、メッシュのままでは、[|][>#qtag -150ms][♪pop -4dB][>#c_hard +100ms]寸法を変えるような編集がしにくいんです。
+@: [<#qtag -150ms][<#c_hard -150ms][=#rv.rev -50ms]そこで、メッシュを下敷きに[done #s4_st[4]][on #s4_st[5] $orange][>#rv.rev.top_h -100ms][>#rv.rev.inner_v +60ms][>#rv.rev.front +220ms][>#rv.rev.end_h +380ms][>#rv.rev.top_v +540ms][<#rv.rev.cloud][!#rv.rev.mesh to,{opacity:0.35, duration:.7} +200ms]平面や[>#rv.rev.ha -100ms][>#rv.rev.hb +100ms]円筒といった形を当てはめ、[|][>#rv.rev.edges -100ms][♪emph -4dB -100ms][<#rv.rev.mesh][>#c_cad -100ms]CADで扱えるモデルに作り直します。
+@: [<#c_cad -100ms][!#rv.rev to,{opacity:0.1, duration:.5}][♪soft -3dB][>#c_pt +100ms][>#worn +600ms]ポイントは、測ったままを写すのではないこと。
 @: 実物には、[!#worn.lk to,{scale:1.15, duration:.2, yoyo:true, repeat:1}]すり減りや[!#worn.rk to,{scale:1.15, duration:.2, yoyo:true, repeat:1}]ゆがみがあるからです。
-@: 「本来は[!#worn.wideal to,{opacity:0.9, duration:.3} -350][!#worn.wavy .ok][♪emph -5dB][!#worn.ls text,"本来の形" +200][!#worn.ls recolor,$blue +200][!#worn.lk text,"本来はまっすぐ" +300][!#worn.lk recolor,$blue_d +300]まっすぐな面のはず」「[!#worn.cideal to,{opacity:0.9, duration:.3} -300][!#worn.blob .ok +100][♪emph -5dB][!#worn.rs text,"本来の形" +400][!#worn.rs recolor,$blue +400][!#worn.rk text,"本来は真円" +450][!#worn.rk recolor,$blue_d +450]この穴は真円のはず」と、[|][>#c_intent -100]設計の意図を読み取りながら形を整えます。[silence:0.4s]
+@: 「本来は[!#worn.wideal to,{opacity:0.9, duration:.3} -350ms][!#worn.wavy .ok][♪emph -5dB][!#worn.ls text,"本来の形" +200ms][!#worn.ls recolor,$blue +200ms][!#worn.lk text,"本来はまっすぐ" +300ms][!#worn.lk recolor,$blue_d +300ms]まっすぐな面のはず」「[!#worn.cideal to,{opacity:0.9, duration:.3} -300ms][!#worn.blob .ok +100ms][♪emph -5dB][!#worn.rs text,"本来の形" +400ms][!#worn.rs recolor,$blue +400ms][!#worn.rk text,"本来は真円" +450ms][!#worn.rk recolor,$blue_d +450ms]この穴は真円のはず」と、[|][>#c_intent -100ms]設計の意図を読み取りながら形を整えます。[silence:0.4s]
 
 *** s5
-se chapter -1dB +50
-@: [silence:0.5s][>#th_b +200][>#th_o +450]二つの違いを並べてみましょう。
-@: [>#r[1].rl -50][>#r[1].ln][>#r[1].cb +150][♪pop2 -4dB]出発点は、アイデアか、[>#r[1].co -150]実物か。
-@: [>#r[2].rl -50][>#r[2].ln][>#r[2].cb +150][♪pop2 -4dB]流れは、データからモノへ、か、[>#r[2].co -150]モノからデータへ、か。
-@: [>#r[3].rl -50][>#r[3].ln][>#r[3].cb +150][♪pop2 -4dB]主に扱うのは、寸法つきの形状か、[>#r[3].co -150]点群やメッシュか。
-@: [>#r[4].rl -50][>#r[4].cb +150][♪pop2 -4dB]難しさは、ゼロから考えることと、[|][>#r[4].co -150]測った形から意図を読み取ることです。[silence:0.4s]
+se chapter -1dB +50ms
+@: [silence:0.5s][>#th_b +200ms][>#th_o +450ms]二つの違いを並べてみましょう。
+@: [>#r[1].rl -50ms][>#r[1].ln][>#r[1].cb +150ms][♪pop2 -4dB]出発点は、アイデアか、[>#r[1].co -150ms]実物か。
+@: [>#r[2].rl -50ms][>#r[2].ln][>#r[2].cb +150ms][♪pop2 -4dB]流れは、データからモノへ、か、[>#r[2].co -150ms]モノからデータへ、か。
+@: [>#r[3].rl -50ms][>#r[3].ln][>#r[3].cb +150ms][♪pop2 -4dB]主に扱うのは、寸法つきの形状か、[>#r[3].co -150ms]点群やメッシュか。
+@: [>#r[4].rl -50ms][>#r[4].cb +150ms][♪pop2 -4dB]難しさは、ゼロから考えることと、[|][>#r[4].co -150ms]測った形から意図を読み取ることです。[silence:0.4s]
 
 *** s6
-se soft -1dB +100
-@: [silence:0.5s][>#u1 -100]新しい製品を一から考えるなら、通常のCADモデリング。
-@: [>#u2 -350][♪pop -4dB]図面のない部品の作り直しや、手作りの[♪pop -4dB]試作品のデータ化には、[|]リバースモデリングが活躍します。
-@: [!#u1 to,{opacity:0.16, duration:.5} -100][!#u2 to,{opacity:0.16, duration:.5} -100][>#combo +50][>#combo.n1 +350]実際には、[>#combo.a1 -100][>#combo.n2 +250]スキャンデータをもとに[>#combo.a2 -100]CADで[>#combo.n3]改良するなど、[|]両方を[♪swish -3dB -100]組み合わせることも多いです。[silence:0.4s]
+se soft -1dB +100ms
+@: [silence:0.5s][>#u1 -100ms]新しい製品を一から考えるなら、通常のCADモデリング。
+@: [>#u2 -350ms][♪pop -4dB]図面のない部品の作り直しや、手作りの[♪pop -4dB]試作品のデータ化には、[|]リバースモデリングが活躍します。
+@: [!#u1 to,{opacity:0.16, duration:.5} -100ms][!#u2 to,{opacity:0.16, duration:.5} -100ms][>#combo +50ms][>#combo.n1 +350ms]実際には、[>#combo.a1 -100ms][>#combo.n2 +250ms]スキャンデータをもとに[>#combo.a2 -100ms]CADで[>#combo.n3]改良するなど、[|]両方を[♪swish -3dB -100ms]組み合わせることも多いです。[silence:0.4s]
 
 *** s7
-se chapter -1dB +50
-@: [silence:0.5s][>#sm1 -50][>#sm1.ar +350]アイデアから形をつくるのが、CADモデリング。
-@: [>#sm2 -50][>#sm2.ar +350]今ある形から設計データを起こすのが、[|]リバースモデリング。
-@: [>#sm3]向きの違いをつかめば、使い分けもすっきり見え[♪emph -2dB +700]てきます。[silence:1.6s]
-fade out,1000
+se chapter -1dB +50ms
+@: [silence:0.5s][>#sm1 -50ms][>#sm1.ar +350ms]アイデアから形をつくるのが、CADモデリング。
+@: [>#sm2 -50ms][>#sm2.ar +350ms]今ある形から設計データを起こすのが、[|]リバースモデリング。
+@: [>#sm3]向きの違いをつかめば、使い分けもすっきり見え[♪emph -2dB +700ms]てきます。[silence:1.6s]
+fade out,1000ms
 ```

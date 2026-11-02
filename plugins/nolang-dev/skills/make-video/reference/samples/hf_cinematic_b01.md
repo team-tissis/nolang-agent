@@ -56,14 +56,14 @@ div#sunglow(left: 482px; top: 222px; width: 495px; height: 495px; border-radius:
 img#rice_fg.bleed(left: -200px; top: 1120px; width: 760px; height: 1352px; opacity: 0.95; filter: blur(10px) brightness(0.85); transform: rotate(-1.6deg); transform-origin: 40% 100%; main: none; in: none) [transparent]Close-up of five or six ripe golden Japanese rice stalks heavy with grain, the ears drooping gracefully, rising from the bottom edge of the frame and occupying the lower 60% of the frame, backlit by warm low morning sunlight with glowing golden rim light on the grains and fine awns, tiny dew drops. Sharp focus, photorealistic macro detail. Isolated subject, nothing else in the frame.
 mist#mist1.bleed(left: 80px; top: 980px; width: 420px; height: 420px; opacity: 0.55; main: constant {scaleX: 3.1})
 mist#mist2.bleed(left: 800px; top: 1120px; width: 360px; height: 360px; opacity: 0.45; main: constant {scaleX: 3.33})
-copy#copy1(a: "酒は、"; b: "田から生まれる。"; d: 165)
+copy#copy1(a: "酒は、"; b: "田から生まれる。"; d: 165ms)
 
 # 水: 渓流 → 「育ち」で木桶に注ぐ水 → 言い終わりで柄杓のしずく (3 枚を語で硬く切る)
 section#water
 img#stream_photo(inset: 0; main: kb {scale: [1.07, 1.13], focus: ['50% 85%', '50% 56%']}) [photo]Crystal-clear spring water flowing over smooth mossy stones in a shaded mountain stream near a sake brewery, early morning light filtering through tall cedar trees, gentle silver highlights on the moving water surface, slight motion blur in the water, very close low angle.
 img#pour_photo(inset: 0; main: kb {scale: [1.05, 1.11], focus: ['36% 55%', '70% 58%']}) [photo]Inside an old wooden Japanese sake brewery: pure clear water pours in a smooth glassy stream from a bamboo spout into a large round wooden tub (kioke) bound with bamboo hoops, the water surface rippling, splashes catching soft side light from a small latticed window; aged dark cedar walls and thick beams in the background; quiet early morning.
 img#ladle_photo(inset: 0; main: kb {scale: [1.06, 1.15], focus: ['54% 35%', '54% 33%']}) [photo]Macro photograph of a single crystal-clear water droplet hanging from the edge of a wooden ladle (hishaku), about to fall; the droplet acts like a lens refracting the warm window light; background is the dim interior corner of an old wooden sake brewery with aged beams and wooden tanks, beautifully blurred.
-copy#copy2(a: "米が育ち、"; b: "水が育てる。"; d: 275)
+copy#copy2(a: "米が育ち、"; b: "水が育てる。"; d: 275ms)
 
 # 醸す: 甑の湯気 (透過の湯気 2 枚が下から立ちのぼる) → 蒸米を広げる手 → 麹をほぐす手 → もろみの泡 → 櫂を入れる蔵人の後ろ姿
 section#brew
@@ -74,7 +74,7 @@ img#hands_photo(inset: 0; main: kb {scale: [1.09, 1.09], focus: ['32% 55%', '78%
 img#koji_photo(inset: 0; main: kb {scale: [1.05, 1.12], focus: ['58% 60%', '64% 64%']}) [photo]In a cedar-paneled koji room (koji-muro) of a sake brewery, a brewer's hands gently breaking apart and crumbling koji rice dusted with fine white mold on a shallow wooden tray, warm low tungsten light, fine detail of the rice grains, intimate and quiet. Faces are never visible; only hands, back or a partial side view.
 img#moromi_photo(inset: 0; main: kb {scale: [1.08, 1.14], focus: ['50% 55%', '50% 59%']}) [photo]Close-up looking down into a large fermentation tank of sake mash (moromi): a creamy pale surface covered with countless small bubbles and soft foam, a few bubbles bursting, soft light from above, dark rim of the wooden tank.
 img#brewer_photo(inset: 0; main: kb {scale: [1.04, 1.1], focus: ['32% 42%', '25% 45%']}) [photo]A sake brewer seen from behind, wearing white work clothes and a white head towel, quietly stirring a large wooden fermentation vat with a long wooden paddle, inside a dim old brewery with tall wooden tanks, a shaft of soft light falling through drifting steam. Faces are never visible; only hands, back or a partial side view.
-copy#copy3(a: "そして、"; b: "人の手が醸していく。"; d: 220)
+copy#copy3(a: "そして、"; b: "人の手が醸していく。"; d: 220ms)
 
 # 一滴: 袋から垂れるしずく (縦に pan) → 「季節」で漆の器に落ちる一滴の寄り・着水に合わせて金の波紋が 3 重に広がる → 黒い幕で暗転
 section#drip
@@ -84,7 +84,7 @@ img#drop_photo(inset: 0; main: kb {scale: [1.03, 1.12], focus: ['50% 56%', '50% 
 shape#ripple1(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
 shape#ripple2(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
 shape#ripple3(left: 270px; top: 1492px; width: 540px; height: 120px; border-radius: 50%; background: none; border: 3px solid #FFE2AA8C; box-shadow: 0px 0px 10px #FFDCA059; mix-blend-mode: screen; opacity: 0.6; overlap: drop_photo, ripple1, ripple2; in: {scaleX:0.13, scaleY:0.16, duration:2.2, ease:'power1.out'})
-copy#copy4(a: "一滴に、"; b: "季節をとじこめて。"; d: 220)
+copy#copy4(a: "一滴に、"; b: "季節をとじこめて。"; d: 220ms)
 veil#blackout(color: #000000; opacity: 1; z-index: curtain; in: {opacity:0, duration:0.5, ease:'sine.in'})
 
 # 瓶: 黒から明ける石の台の瓶 (0.3 s 後に光の帯が画面の左の外から右の外へ流れる — 静止の位置は画面の内側に置き、main の keys で外から外へ) → 同じ絵の寄り (ラベルの「田恵」)
@@ -97,7 +97,7 @@ img#label_photo(inset: 0; content: @bottle; main: kb {scale: [1.34, 1.4], focus:
 section#pour
 img#glass_photo(inset: 0; main: kb {scale: [1.03, 1.09], focus: ['66% 50%', '72% 55%']}) [photo]Close-up of a hand pouring clear sake from a slender matte black bottle into a thin delicate stemmed glass on a dark wooden counter; the stream of sake catches warm golden backlight with glints and reflections; dark refined background. Faces are never visible; only hands, back or a partial side view.
 img#toast_photo(inset: 0; main: kb {scale: [1.03, 1.09], focus: ['60% 7%', '60% 58%']}) [photo]Over-the-shoulder shot from behind a person standing at the edge of a golden Japanese rice field at dawn, holding up a delicate stemmed glass of clear sake toward the misty sunrise; the glass glows with warm light; only the hand, the glass and part of the shoulder are visible; the rice field and mist are softly out of focus. Faces are never visible; only hands, back or a partial side view.
-copy#copy5(a: "田の恵みを、"; b: "あなたの杯に。"; d: 330)
+copy#copy5(a: "田の恵みを、"; b: "あなたの杯に。"; d: 330ms)
 
 # 社名: 霧の田 (引いていく) に 3 枚の霧が流れ、太鼓の一打で縦組みの「田恵」が 1 字ずつぼけから浮かぶ → 落款 → 中央の罫が下へ伸びる → DENEI → 日本酒
 section#brand
@@ -115,37 +115,37 @@ p#sub(cx: 540px; top: 1172px; font-size: 32px; letter-spacing: 0.55em; color: #2
 ```timeline.txt
 #v2
 cast n = "落ち着いた低く深い響きの大人の男性ナレーター、息を含んだ滑らかな声で、静かに上品に間を取って語る"
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** field
-fade in,1000
+fade in,1000ms
 bgm music
-se wind -8dB to=5.4s fade=1200,1200
-se sparrow -14dB +300 to=4.5s fade=800,1000
-@n: [!#sunglow to,{opacity:0.9, scale:1.14, duration:4.8, ease:'sine.inOut'}][!#rice_fg to,{x:70, y:-40, rotation:1.2, scale:1.18, duration:4.8, ease:'none'}][!#mist1 to,{x:200, duration:4.8, ease:'none'}][!#mist2 to,{x:-200, duration:4.8, ease:'none'}][>#copy1 +900][<#copy1 +3400][silence:4.2s]
-transition dissolve,600,overlap=600
+se wind -8dB to=5.4s fade=1200ms,1200ms
+se sparrow -14dB +300ms to=4.5s fade=800ms,1000ms
+@n: [!#sunglow to,{opacity:0.9, scale:1.14, duration:4.8, ease:'sine.inOut'}][!#rice_fg to,{x:70, y:-40, rotation:1.2, scale:1.18, duration:4.8, ease:'none'}][!#mist1 to,{x:200, duration:4.8, ease:'none'}][!#mist2 to,{x:-200, duration:4.8, ease:'none'}][>#copy1 +900ms][<#copy1 +3400ms][silence:4.2s]
+transition dissolve {duration: .6, overlap: .6}
 
 *** water
-se stream -6dB to=4.5s fade=400,700
-@n: [silence:0.8s][>#copy2 -50]米が[>#pour_photo +430][<#stream_photo +530][♪tub -4dB +390 to=1.7s fade=100,450]育ち、水が育て[<#copy2 +120][>#ladle_photo +220][<#pour_photo +320][♪drop +970]る。[silence:1.34s]
+se stream -6dB to=4.5s fade=400ms,700ms
+@n: [silence:0.8s][>#copy2 -50ms]米が[>#pour_photo +430ms][<#stream_photo +530ms][♪tub -4dB +390ms to=1.7s fade=100ms,450ms]育ち、水が育て[<#copy2 +120ms][>#ladle_photo +220ms][<#pour_photo +320ms][♪drop +970ms]る。[silence:1.34s]
 
 *** brew
-@n: [silence:1.92s][>#hands_photo -380][<#steam_photo -280][<#steam_a -280][<#steam_b -280][>#copy3 -50]そして、[>#koji_photo +140][<#hands_photo +240][♪rice -6dB +190 to=1.5s fade=100,400]人の手が醸してい[<#copy3 +270][>#moromi_photo +310][<#koji_photo +410][♪bubbles -8dB +270 to=1.8s fade=200,500][>#brewer_photo +1820][<#moromi_photo +1920]く。[silence:3.41s]
-transition dissolve,600,overlap=600
+@n: [silence:1.92s][>#hands_photo -380ms][<#steam_photo -280ms][<#steam_a -280ms][<#steam_b -280ms][>#copy3 -50ms]そして、[>#koji_photo +140ms][<#hands_photo +240ms][♪rice -6dB +190ms to=1.5s fade=100ms,400ms]人の手が醸してい[<#copy3 +270ms][>#moromi_photo +310ms][<#koji_photo +410ms][♪bubbles -8dB +270ms to=1.8s fade=200ms,500ms][>#brewer_photo +1820ms][<#moromi_photo +1920ms]く。[silence:3.41s]
+transition dissolve {duration: .6, overlap: .6}
 
 *** drip
-@n: [silence:1.95s][♪drip -4dB -1300][♪drip -6dB -450][>#copy4 -50]一滴[♪drip -5dB +90]に、[>#drop_photo +150][<#shizuku_photo +250][♪drop +500][>#ripple1 +520][!#ripple1 to,{opacity:0, duration:1.8, ease:'sine.in'} +870][>#ripple2 +850][!#ripple2 to,{opacity:0, duration:1.8, ease:'sine.in'} +1200][>#ripple3 +1250][!#ripple3 to,{opacity:0, duration:1.8, ease:'sine.in'} +1600]季節をとじこめ[<#copy4 +610]て。[silence:1.86s][>#blackout][silence:0.5s]
+@n: [silence:1.95s][♪drip -4dB -1300ms][♪drip -6dB -450ms][>#copy4 -50ms]一滴[♪drip -5dB +90ms]に、[>#drop_photo +150ms][<#shizuku_photo +250ms][♪drop +500ms][>#ripple1 +520ms][!#ripple1 to,{opacity:0, duration:1.8, ease:'sine.in'} +870ms][>#ripple2 +850ms][!#ripple2 to,{opacity:0, duration:1.8, ease:'sine.in'} +1200ms][>#ripple3 +1250ms][!#ripple3 to,{opacity:0, duration:1.8, ease:'sine.in'} +1600ms]季節をとじこめ[<#copy4 +610ms]て。[silence:1.86s][>#blackout][silence:0.5s]
 
 *** bottle
-fade in,1100
-@n: [♪glass -6dB +20][>#sweep +320][>#label_photo +3000][<#bottle_photo +3100][silence:5.99s]
+fade in,1100ms
+@n: [♪glass -6dB +20ms][>#sweep +320ms][>#label_photo +3000ms][<#bottle_photo +3100ms][silence:5.99s]
 
 *** pour
-se pour -4dB to=3.3s fade=150,600
-@n: [silence:0.53s][>#copy5 -50]田の恵みを、あなたの杯[>#toast_photo +170][<#glass_photo +270][<#copy5 +330]に。[silence:3.48s]
-transition dissolve,800,overlap=800
+se pour -4dB to=3.3s fade=150ms,600ms
+@n: [silence:0.53s][>#copy5 -50ms]田の恵みを、あなたの杯[>#toast_photo +170ms][<#glass_photo +270ms][<#copy5 +330ms]に。[silence:3.48s]
+transition dissolve {duration: .8, overlap: .8}
 
 *** brand
-@n: [!#mist3 to,{x:240, duration:8.3, ease:'none'}][!#mist4 to,{x:-260, duration:8.3, ease:'none'}][!#mist5 to,{x:-120, duration:8.3, ease:'none'}][silence:1.8s][>#logo -1400][♪taiko -2dB -1420 fade=0,300][>#seal -300][>#rule -200][>#latin +100][>#sub +700]日本酒、田恵。[silence:4.42s]
-fade out,1000
+@n: [!#mist3 to,{x:240, duration:8.3, ease:'none'}][!#mist4 to,{x:-260, duration:8.3, ease:'none'}][!#mist5 to,{x:-120, duration:8.3, ease:'none'}][silence:1.8s][>#logo -1400ms][♪taiko -2dB -1420ms fade=0ms,300ms][>#seal -300ms][>#rule -200ms][>#latin +100ms][>#sub +700ms]日本酒、田恵。[silence:4.42s]
+fade out,1000ms
 ```

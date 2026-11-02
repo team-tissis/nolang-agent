@@ -24,7 +24,7 @@ art "Cinematic semi-realistic digital painting, volumetric lighting, subtle film
 prompt_tail "Vertical 9:16 portrait composition, the main subject large and centered in the middle of the frame, the scene fills the whole frame from top to bottom. Absolutely no text, no letters, no numbers, no logos, no watermarks, no UI text."
 # 字幕の強調 = 赤枠 × 黄の字 (hf の .hl: border 10px / radius 12 / padding 0 21px を 2/3 に)
 run h { color: $y; background: #0E0406CC; border: 8px solid $red; border-radius: 12px; padding: 14px }
-cut { stagger: 0 }
+cut { stagger: 0ms }
 p { color: #FFFFFF; out: {opacity:0, duration:0.3, ease:'power1.in'} }
 div { border: none; out: {opacity:0, duration:0.3, ease:'power1.in'} }
 svg { out: {opacity:0, duration:0.3, ease:'power1.in'} }
@@ -73,17 +73,17 @@ bgm#doc(fade: 400,2100) 不穏で不気味な社会派ドキュメンタリー�
 bgm#hope(fade: 600,3200) 明るく温かく穏やかな希望の曲、三拍子のクラシカルなピアノと弦楽、後半に向けて壮大に広がる
 # 字幕: 画面の中ほど (y 841) に白文字 + 黒の縁 + 黒い光彩・句の割り方は台詞の [|]・句点だけ外す
 # hf の作り: 字幕を下端でなく画面の中ほどに置き、下 3 割は暗幕だけ
-subtitle.hug(left: 40px; top: 1262px; width: 1000px; font-size: 62px; line-height: 1.42; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; stroke: #000000,5; text-shadow: 0px 4px 26px #000000D9; background: none; unit: sentence; strip: 。; lead: 50; tail: 450; hold: off; in: {y:34, opacity:0, duration:0.32, ease:'power3.out'}; out: {y:-18, opacity:0, duration:0.22, ease:'power2.in'})
+subtitle.hug(left: 40px; top: 1262px; width: 1000px; font-size: 62px; line-height: 1.42; letter-spacing: 0.02em; text-align: center; color: #FFFFFF; -webkit-text-stroke: 5px #000000; text-shadow: 0px 4px 26px #000000D9; background: none; unit: sentence; strip: 。; lead: 50ms; tail: 450ms; hold: off; in: {y:34, opacity:0, duration:0.32, ease:'power3.out'}; out: {y:-18, opacity:0, duration:0.22, ease:'power2.in'})
 
 # 暗幕 (上 62% → 20〜50% は素通し → 下 90%) + 周辺減光の子 (章ごとに濃さを語で変える)
 def shade() = div(inset: 0; background: linear(#03050C9E,#03050C00@20%,#03050C00@50%,#03050CB3@66%,#03050CDB@84%,#03050CE6,180); border-radius: 24px; in: none; out: none)
   div#v(inset: 0; background: radial(#00000000@42%,#000000C7,50%,44%); opacity: 0.85; border-radius: 24px; in: none; out: none)
 # 見出しの白文字 (黒の縁 + 黒い光彩・下から上がる)
-def head(t, s=67) = p(width: 960px; text-align: center; font-size: {s}; line-height: 1.2; letter-spacing: 0.03em; stroke: #000000,4; text-shadow: 0px 4px 26px #000000D9; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}; content: {t})
+def head(t, s=67) = p(width: 960px; text-align: center; font-size: {s}; line-height: 1.2; letter-spacing: 0.03em; -webkit-text-stroke: 4px #000000; text-shadow: 0px 4px 26px #000000D9; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}; content: {t})
 # 主役の語の札 = 赤枠 × 黄の文字 (判子: 1.9 倍から縮んで叩きつける)
 def key(t, s=85) = p(font-size: {s}; line-height: 1.15; letter-spacing: 0.04em; color: $y; background: #0C0406D6; border: 12px solid $red; border-radius: 18px; padding: 8px 40px 20px 40px; box-shadow: 0px 0px 60px #E60012A6; text-shadow: 0px 4px 0px #00000099; in: {scale:1.9, opacity:0, duration:0.26, ease:'power4.in'}; content: {t})
 # 章扉の薄い巨大な番号 (4 秒かけて濃く・大きく)
-def bignum(t, c=#FFFFFF29) = p(cx: 540px; top: 300px; font-size: 620px; line-height: 1; letter-spacing: -0.02em; color: #FFFFFF1A; stroke: {c},3; in: {opacity:0, scale:0.85, duration:4.4, ease:'power1.out'}; content: {t})
+def bignum(t, c=#FFFFFF29) = p(cx: 540px; top: 300px; font-size: 620px; line-height: 1; letter-spacing: -0.02em; color: #FFFFFF1A; -webkit-text-stroke: 3px {c}; in: {opacity:0, scale:0.85, duration:4.4, ease:'power1.out'}; content: {t})
 # 左上の章札 (赤の丸に黄の番号 + 線の icon + 題・赤の縁の暗いピル)
 def chap(n, ic, t, w, tw) = div(left: 56px; top: 176px; width: {w}; height: 76px; background: #080A14BD; border: 3px solid $red; border-radius: 148px; in: {x:-40, opacity:0, duration:0.4, ease:'power3.out'}; out: {opacity:0, duration:0.3})
   p#n(left: 8px; cy: 50%; width: 58px; font-size: 30px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 148px; padding: 15px 0px; content: {n})
@@ -98,7 +98,7 @@ def orb(ic) = div(top: 640px; width: 360px; height: 360px; border-radius: 180px;
 def pillar(n, ic, l1, k, l2) = div(left: 44px; width: 992px; height: 182px; background: #080C18D6; border: 3px solid #FFFFFF29; border-radius: 22px; box-shadow: 0px 10px 40px #00000080; in: {x:160, opacity:0, duration:0.5, ease:'power3.out'}; out: {opacity:0, duration:0.35, ease:'power1.in'})
   div#edge(left: 0px; top: 0px; width: 14px; height: 176px; background: $red; border-radius: 20px 0px 0px 20px)
   p#n(left: 38px; cy: 50%; width: 76px; font-size: 46px; line-height: 1; text-align: center; color: $y; background: $red; border-radius: 148px; padding: 15px 0px; content: {n})
-  svg#i(left: 136px; cy: 50%; width: 96px; height: 96px; part: {ic}; delay: 150; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.7)'})
+  svg#i(left: 136px; cy: 50%; width: 96px; height: 96px; part: {ic}; delay: 150ms; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(1.7)'})
   p#l1(left: 255px; top: 18px; width: 705px; font-size: 48px; line-height: 1.42; content: {l1})
   p#k(left: 252px; top: 84px; font-size: 48px; line-height: 1.22; background: #0E040680; border: 6px solid #E6001200; border-radius: 12px; padding: 0px 9px 4px 9px; content: {k})
   p#l2(left: .k.right+3; top: 87px; width: 322px; font-size: 48px; line-height: 1.42; content: {l2})
@@ -142,7 +142,7 @@ key#wall_key(cx: 540px; cy: 747px; width: 678px; text-align: center; s: 93; in: 
 section#problem
 img#problem_photo(inset: 0; content: @alone; filter: blur(18px); main: kb {scale: [1.12, 1.18]})
 bignum#s4n 01
-svg#s4i(left: 426px; top: 506px; width: 230px; height: 230px; part: mag; overlap: s4n; delay: 50; in: {rotation:-25, scale:0.6, opacity:0, duration:0.9, ease:'back.out(1.6)'})
+svg#s4i(left: 426px; top: 506px; width: 230px; height: 230px; part: mag; overlap: s4n; delay: 50ms; in: {rotation:-25, scale:0.6, opacity:0, duration:0.9, ease:'back.out(1.6)'})
 key#s4l(cx: 540px; cy: 818px; s: 39; overlap: s4n; letter-spacing: 0.12em; border: 8px solid $red; border-radius: 12px; padding: 6px 30px 10px 30px; box-shadow: 0px 0px 22px #E6001273; in: {scale:1.7, opacity:0, duration:0.26, ease:'power4.in'}) 問題点
 head#s4h1(cx: 540px; cy: 968px) 被害者が
 key#s4h2(cx: 540px; cy: 1136px; width: 831px; text-align: center; s: 69; line-height: 1.22; border: 10px solid $red; border-radius: 12px; padding: 4px 30px 14px 30px; box-shadow: 0px 0px 22px #E6001273; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げづらい
@@ -167,7 +167,7 @@ orb#o2(left: 600px; ic: folder)
 section#longterm
 img#time_photo(inset: 0; main: kb {scale: [1.06, 1.17], focus: ['50% 40%', '50% 43%']}) A dim room at night: torn pages of a wall calendar fly through the air, a large wall clock looms in the background, and on the desk a smartphone screen glows with many unread message bubbles shown only as shapes. Days passing while suffering continues. Gloomy blue light, slow and heavy atmosphere. Color palette: deep navy, midnight blue and cold cyan glow with small accents of warning red.
 div#stretch(left: 160px; top: 1392px; width: 760px; height: 16px; background: #FFFFFF24; border-radius: 8px; in: {opacity:0, duration:0.2}; out: {opacity:0, duration:0.25})
-  div#fill(left: 0px; top: 0px; width: 760px; height: 16px; background: linear(#FF9A00,$red,90); border-radius: 8px; box-shadow: 0px 0px 18px #FF3C00CC; delay: 100; in: {scaleX:0.02, duration:1.76, ease:'power1.inOut', pivot:'left'})
+  div#fill(left: 0px; top: 0px; width: 760px; height: 16px; background: linear(#FF9A00,$red,90); border-radius: 8px; box-shadow: 0px 0px 18px #FF3C00CC; delay: 100ms; in: {scaleX:0.02, duration:1.76, ease:'power1.inOut', pivot:'left'})
 
 # 章扉 02: 白い閃光 → ぼかした法の絵に「02」・盾の icon・「だからこそ、」と判子の「法律が必要です」
 section#law
@@ -200,8 +200,8 @@ div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: 
 head#s10a(cx: 540px; cy: 744px) テクノロジー犯罪は
 group#vk(left: 0px; top: 780px; width: 1080px; height: 339px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
   key#m(cx: 50%; cy: 50%; s: 93) 見えない暴力
-  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 12px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220; in: keys(at=0 x=-11 opacity=0.8 | at=0.2 x=7 opacity=0.8 | at=0.4 x=-5 opacity=0.8 | at=0.6 x=3 opacity=0.8 | at=0.8 x=-6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
-  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 12px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220; in: keys(at=0 x=11 opacity=0.8 | at=0.2 x=-7 opacity=0.8 | at=0.4 x=5 opacity=0.8 | at=0.6 x=-3 opacity=0.8 | at=0.8 x=6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 12px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220ms; in: keys(at=0 x=-11 opacity=0.8 | at=0.2 x=7 opacity=0.8 | at=0.4 x=-5 opacity=0.8 | at=0.6 x=3 opacity=0.8 | at=0.8 x=-6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 12px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220ms; in: keys(at=0 x=11 opacity=0.8 | at=0.2 x=-7 opacity=0.8 | at=0.4 x=5 opacity=0.8 | at=0.6 x=-3 opacity=0.8 | at=0.8 x=6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
 
 # 社会全体で守る: 光の輪を囲む手の絵・「社会全体」で中央から金色の輪が 4 重に 3 回広がる
 section#society
@@ -212,7 +212,7 @@ shape#ring(left: 440px; top: 960px; width: 201px; height: 201px; border-radius: 
 section#voice_up
 img#dawn_zoom(inset: 0; content: @dawn; object-fit: cover; object-position: bottom; zoom: 260%; main: kb {scale: [1.08, 1], focus: ['50% 100%', '50% 100%']})
 bignum#s12n(c: #FFD68C38) 03
-svg#s12i(left: 420px; top: 572px; width: 240px; height: 240px; part: sprout; overlap: s12n; delay: 180; in: {y:40, scale:0.6, opacity:0, duration:1.2, ease:'power3.out'})
+svg#s12i(left: 420px; top: 572px; width: 240px; height: 240px; part: sprout; overlap: s12n; delay: 180ms; in: {y:40, scale:0.6, opacity:0, duration:1.2, ease:'power3.out'})
 key#s12h1(cx: 540px; cy: 938px; s: 69; line-height: 1.22; border: 10px solid $red; border-radius: 12px; padding: 4px 30px 14px 30px; box-shadow: 0px 0px 22px #E6001273; in: {y:40, opacity:0, duration:0.45, ease:'power3.out'}) 声を上げられる
 head#s12h2(cx: 540px; cy: 1110px) 社会へ
 
@@ -241,82 +241,82 @@ key#t2d(cx: 540px; cy: 1056px; width: 801px; text-align: center; s: 75; in: {sca
 #v2
 cast n = "落ち着いた低音の男性ナレーター、響きが豊かで滑らかな声、知的で信頼感のあるドキュメンタリーの語り"
 cast v = "息を多く含んだ柔らかく繊細な若い女性の声、小さく不安げにつぶやく"
-silence head=0 tail=0
-transition = dissolve,400,overlap=400,ease=power1.inOut
+silence head=0ms tail=0ms
+transition = dissolve {duration: .4, overlap: .4, ease: 'power1.inOut'}
 
 *** hook
 bgm doc
-@n: [silence:0.55s][!#city shake,30,duration=240 -550][!#gs1 to,{x:-135, opacity:1, duration:0.01} -550][!#gs1 to,{x:68, duration:0.07, ease:'steps(1)'} -480][!#gs1 to,{x:-45, duration:0.07, ease:'steps(1)'} -410][!#gs1 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs2 to,{x:105, opacity:1, duration:0.01} -550][!#gs2 to,{x:-52, duration:0.07, ease:'steps(1)'} -480][!#gs2 to,{x:34, duration:0.07, ease:'steps(1)'} -410][!#gs2 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs3 to,{x:-75, opacity:1, duration:0.01} -550][!#gs3 to,{x:38, duration:0.07, ease:'steps(1)'} -480][!#gs3 to,{x:-26, duration:0.07, ease:'steps(1)'} -410][!#gs3 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs4 to,{x:165, opacity:1, duration:0.01} -550][!#gs4 to,{x:-82, duration:0.07, ease:'steps(1)'} -480][!#gs4 to,{x:54, duration:0.07, ease:'steps(1)'} -410][!#gs4 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][!#gs5 to,{x:-105, opacity:1, duration:0.01} -550][!#gs5 to,{x:52, duration:0.07, ease:'steps(1)'} -480][!#gs5 to,{x:-36, duration:0.07, ease:'steps(1)'} -410][!#gs5 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320][♪impact_bass -550][♪glitch_short -5dB -530][!#scan to,{y:1950, duration:1.1, ease:'power1.inOut'} -500][<#scan +800][♪swing_low -9dB -50][>#t1a]テクノロジー犯罪を[>#t1b][♪swing_low -9dB -50]抑制する法律が[>#t1c -200][♪impact_thud +40][!#t1a shake,9,duration=320 +40][!#t1b shake,9,duration=320 +40][!#t1c shake,9,duration=320 +40]必要です。[silence:0.55s]
-transition dissolve,450,overlap=450
+@n: [silence:0.55s][!#city shake {x: 30, duration: .24} -550ms][!#gs1 to,{x:-135, opacity:1, duration:0.01} -550ms][!#gs1 to,{x:68, duration:0.07, ease:'steps(1)'} -480ms][!#gs1 to,{x:-45, duration:0.07, ease:'steps(1)'} -410ms][!#gs1 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320ms][!#gs2 to,{x:105, opacity:1, duration:0.01} -550ms][!#gs2 to,{x:-52, duration:0.07, ease:'steps(1)'} -480ms][!#gs2 to,{x:34, duration:0.07, ease:'steps(1)'} -410ms][!#gs2 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320ms][!#gs3 to,{x:-75, opacity:1, duration:0.01} -550ms][!#gs3 to,{x:38, duration:0.07, ease:'steps(1)'} -480ms][!#gs3 to,{x:-26, duration:0.07, ease:'steps(1)'} -410ms][!#gs3 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320ms][!#gs4 to,{x:165, opacity:1, duration:0.01} -550ms][!#gs4 to,{x:-82, duration:0.07, ease:'steps(1)'} -480ms][!#gs4 to,{x:54, duration:0.07, ease:'steps(1)'} -410ms][!#gs4 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320ms][!#gs5 to,{x:-105, opacity:1, duration:0.01} -550ms][!#gs5 to,{x:52, duration:0.07, ease:'steps(1)'} -480ms][!#gs5 to,{x:-36, duration:0.07, ease:'steps(1)'} -410ms][!#gs5 to,{x:0, opacity:0, duration:0.08, ease:'steps(1)'} -320ms][♪impact_bass -550ms][♪glitch_short -5dB -530ms][!#scan to,{y:1950, duration:1.1, ease:'power1.inOut'} -500ms][<#scan +800ms][♪swing_low -9dB -50ms][>#t1a]テクノロジー犯罪を[>#t1b][♪swing_low -9dB -50ms]抑制する法律が[>#t1c -200ms][♪impact_thud +40ms][!#t1a shake {x: 9, duration: .32} +40ms][!#t1b shake {x: 9, duration: .32} +40ms][!#t1c shake {x: 9, duration: .32} +40ms]必要です。[silence:0.55s]
+transition dissolve {duration: .45, overlap: .45}
 
 *** life
 [>#subtitle]
-@n: [silence:0.45s][♪whoosh_soft -6dB -450 to=1.3s]いま、私たちの生活は[br]便利になった一方で、[|][>#shadow_photo -120][>#life_shade -120][!#shadow_photo shake,30,duration=240 -120][♪glitch_short -2dB -140][♪drone_dark -13dB -120 fade=400,1500 to=5.4s]見えない場所で[br]人を傷つける[|]“[♪impact_thud -6dB]{h}テクノロジー犯罪{/}”が[br][>#up_line -150][>#up_head -150][♪swing_low -9dB -100]増えています。[silence:0.4s]
+@n: [silence:0.45s][♪whoosh_soft -6dB -450ms to=1.3s]いま、私たちの生活は[br]便利になった一方で、[|][>#shadow_photo -120ms][>#life_shade -120ms][!#shadow_photo shake {x: 30, duration: .24} -120ms][♪glitch_short -2dB -140ms][♪drone_dark -13dB -120ms fade=400ms,1500ms to=5.4s]見えない場所で[br]人を傷つける[|]“[♪impact_thud -6dB]{h}テクノロジー犯罪{/}”が[br][>#up_line -150ms][>#up_head -150ms][♪swing_low -9dB -100ms]増えています。[silence:0.4s]
 
 *** wall
-@n: [silence:0.4s][♪whoosh_sharp -6dB -300]でも――[|]この問題には、[br]まだ[>#wall_key -250][♪door_slam +10][♪impact_bighit -6dB +10 to=4.3s fade=0,1500][!#wall_key shake,9,duration=320 -10]{h}大きな壁{/}があります。[silence:1.25s]
+@n: [silence:0.4s][♪whoosh_sharp -6dB -300ms]でも――[|]この問題には、[br]まだ[>#wall_key -250ms][♪door_slam +10ms][♪impact_bighit -6dB +10ms to=4.3s fade=0ms,1500ms][!#wall_key shake {x: 9, duration: .32} -10ms]{h}大きな壁{/}があります。[silence:1.25s]
 [<#subtitle]
-transition dissolve,350,overlap=350
+transition dissolve {duration: .35, overlap: .35}
 
 *** problem
-@n: [silence:0.45s][♪whoosh_swish -6dB -450][>#s4l -120][♪piano_chord -6dB -50][!#s4l shake,9,duration=320 +120][!#s4i shake,9,duration=320 +120]問題点。[>#s4h1 -80]被害者が[>#s4h2 -80][!#s4h2 punch,1.16,duration=440]声を上げづらい。[silence:0.2s]
-transition dissolve,600,overlap=600
+@n: [silence:0.45s][♪whoosh_swish -6dB -450ms][>#s4l -120ms][♪piano_chord -6dB -50ms][!#s4l shake {x: 9, duration: .32} +120ms][!#s4i shake {x: 9, duration: .32} +120ms]問題点。[>#s4h1 -80ms]被害者が[>#s4h2 -80ms][!#s4h2 punch {scale: 1.16, duration: .44}]声を上げづらい。[silence:0.2s]
+transition dissolve {duration: .6, overlap: .6}
 
 *** voices
 [>#subtitle]
-@n: [silence:0.6s][>#ch1 -200]テクノロジー犯罪の被害者は、[silence:0.55s]
+@n: [silence:0.6s][>#ch1 -200ms]テクノロジー犯罪の被害者は、[silence:0.55s]
 [<#subtitle]
-@v: [>#w1 -150][♪whoosh_soft -12dB -200 to=1.3s][!#w1 to,{y:-16, duration:9.4, ease:'none'} +450]恥ずかしい…[silence:0.6s]
-@: [>#w2 -150][!#w1 dim,0.55 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w2 to,{y:-16, duration:7.1, ease:'none'} +450]怖い…[silence:0.6s]
-@: [>#w3 -150][!#w2 dim,0.55 -100][!#w1 dim,0.4 -100][♪whoosh_soft -12dB -200 to=1.3s][!#w3 to,{y:-16, duration:5.1, ease:'none'} +450]どう相談したらいいのか分からない…[silence:0.9s]
+@v: [>#w1 -150ms][♪whoosh_soft -12dB -200ms to=1.3s][!#w1 to,{y:-16, duration:9.4, ease:'none'} +450ms]恥ずかしい…[silence:0.6s]
+@: [>#w2 -150ms][!#w1 dim {opacity: .55} -100ms][♪whoosh_soft -12dB -200ms to=1.3s][!#w2 to,{y:-16, duration:7.1, ease:'none'} +450ms]怖い…[silence:0.6s]
+@: [>#w3 -150ms][!#w2 dim {opacity: .55} -100ms][!#w1 dim {opacity: .4} -100ms][♪whoosh_soft -12dB -200ms to=1.3s][!#w3 to,{y:-16, duration:5.1, ease:'none'} +450ms]どう相談したらいいのか分からない…[silence:0.9s]
 [>#subtitle]
-@n: [♪heartbeat -11dB -400 fade=800,1600 to=6.2s][>#alone_zoom -120][>#zoom_shade -120][!#shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][!#zoom_shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][<#w1 +700][<#w2 +700][<#w3 +700]そんな気持ちを抱えたまま、[|]{h}ひとりで苦しんで{/}しまうことが[br]多いんです。[silence:0.6s]
-transition dissolve,120,overlap=120
+@n: [♪heartbeat -11dB -400ms fade=800ms,1600ms to=6.2s][>#alone_zoom -120ms][>#zoom_shade -120ms][!#shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][!#zoom_shade.v to,{opacity:1, duration:3.5, ease:'power1.inOut'}][<#w1 +700ms][<#w2 +700ms][<#w3 +700ms]そんな気持ちを抱えたまま、[|]{h}ひとりで苦しんで{/}しまうことが[br]多いんです。[silence:0.6s]
+transition dissolve {duration: .12, overlap: .12}
 
 *** digital
-@n: [silence:0.4s][!#digital_photo shake,30,duration=240 -400][♪glitch_rhythm -6dB -400][!#shade.v to,{opacity:0.7, duration:1} -400]デジタル空間で起きる被害は、[|][>#o1 -100][♪swing_low -8dB -100]周囲から{h}見えにくく{/}、[|][>#o2 -100][!#o1 to,{opacity:0.55, scale:0.92, duration:0.4} -100][♪swing_low -8dB -100]{h}証拠の集め方{/}も[br]分からない。[silence:0.15s]
-transition dissolve,450,overlap=450
+@n: [silence:0.4s][!#digital_photo shake {x: 30, duration: .24} -400ms][♪glitch_rhythm -6dB -400ms][!#shade.v to,{opacity:0.7, duration:1} -400ms]デジタル空間で起きる被害は、[|][>#o1 -100ms][♪swing_low -8dB -100ms]周囲から{h}見えにくく{/}、[|][>#o2 -100ms][!#o1 to,{opacity:0.55, scale:0.92, duration:0.4} -100ms][♪swing_low -8dB -100ms]{h}証拠の集め方{/}も[br]分からない。[silence:0.15s]
+transition dissolve {duration: .45, overlap: .45}
 
 *** longterm
-@n: [silence:0.45s][♪whoosh_soft -6dB -300 to=1.3s]だから相談が[♪riser -7dB -130 fade=2500,0]遅れ、[|]被害が[>#stretch -100][♪impact_thud -5dB]{h}長期化{/}[<#stretch +1200]してしまう。[silence:1.3s]
+@n: [silence:0.45s][♪whoosh_soft -6dB -300ms to=1.3s]だから相談が[♪riser -7dB -130ms fade=2500ms,0ms]遅れ、[|]被害が[>#stretch -100ms][♪impact_thud -5dB]{h}長期化{/}[<#stretch +1200ms]してしまう。[silence:1.3s]
 [<#ch1]
 [<#doc]
 [<#subtitle]
-transition dissolve,500,overlap=500
+transition dissolve {duration: .5, overlap: .5}
 
 *** law
-bgm hope +390
-@n: [silence:0.6s][>#flash -90][!#flash to,{opacity:0, duration:0.45} -10][>#s8i -60][♪impact_bass -1dB -60][>#s8h1 -50][♪pad_swell -12dB +140 fade=600,2000]だからこそ、[>#s8k -200][♪impact_thud -2dB +40][!#s8h1 shake,9,duration=320 +40][!#s8i shake,9,duration=320 +40][!#s8k shake,9,duration=320 +40]法律が必要です。[silence:0.5s]
+bgm hope +390ms
+@n: [silence:0.6s][>#flash -90ms][!#flash to,{opacity:0, duration:0.45} -10ms][>#s8i -60ms][♪impact_bass -1dB -60ms][>#s8h1 -50ms][♪pad_swell -12dB +140ms fade=600ms,2000ms]だからこそ、[>#s8k -200ms][♪impact_thud -2dB +40ms][!#s8h1 shake {x: 9, duration: .32} +40ms][!#s8i shake {x: 9, duration: .32} +40ms][!#s8k shake {x: 9, duration: .32} +40ms]法律が必要です。[silence:0.5s]
 
 *** pillars
-@n: [silence:0.4s][>#pl1 -120][♪whoosh_swish -8dB -170][♪chime_soft -13dB -20][>#ch2 +100]被害者が[!#pl1.k .on][!#pl1.k punch,1.16,duration=440]安心して相談できる仕組み。[silence:0.6s]
-@: [>#team_photo -170][>#team_shade -170][>#pl2 -120][!#pl1 dim,0.62,duration=350 -120][♪whoosh_swish -8dB -170][♪chime_soft -13dB -20]専門機関が[!#pl2.k .on][!#pl2.k punch,1.16,duration=440]迅速に動けるルール。[silence:0.6s]
-@: [>#law_photo -150][>#law_shade -150][>#pl3 -120][!#pl2 dim,0.62,duration=350 -120][♪whoosh_swish -8dB -170][♪chime_soft -13dB -20]匿名性を悪用した加害行為を、[!#pl3.k .on][!#pl3.k punch,1.16,duration=440]確実に取り締まるための法整[=#pl1 +440][=#pl2 +440]備。[silence:1.1s]
-transition dissolve,120,overlap=120
+@n: [silence:0.4s][>#pl1 -120ms][♪whoosh_swish -8dB -170ms][♪chime_soft -13dB -20ms][>#ch2 +100ms]被害者が[!#pl1.k .on][!#pl1.k punch {scale: 1.16, duration: .44}]安心して相談できる仕組み。[silence:0.6s]
+@: [>#team_photo -170ms][>#team_shade -170ms][>#pl2 -120ms][!#pl1 dim {opacity: .62, duration: .35} -120ms][♪whoosh_swish -8dB -170ms][♪chime_soft -13dB -20ms]専門機関が[!#pl2.k .on][!#pl2.k punch {scale: 1.16, duration: .44}]迅速に動けるルール。[silence:0.6s]
+@: [>#law_photo -150ms][>#law_shade -150ms][>#pl3 -120ms][!#pl2 dim {opacity: .62, duration: .35} -120ms][♪whoosh_swish -8dB -170ms][♪chime_soft -13dB -20ms]匿名性を悪用した加害行為を、[!#pl3.k .on][!#pl3.k punch {scale: 1.16, duration: .44}]確実に取り締まるための法整[=#pl1 +440ms][=#pl2 +440ms]備。[silence:1.1s]
+transition dissolve {duration: .12, overlap: .12}
 
 *** violence
-@n: [silence:0.2s][!#violence_photo shake,30,duration=240 -200][♪glitch_long -6dB -200 to=1.8s][>#s10a -60]テクノロジー犯罪は“[>#vk -220][♪impact_bighit -3dB +20 to=4.3s fade=0,1500][♪glitch_short -6dB +20][!#s10a shake,9,duration=320 +20][!#vk shake,9,duration=320 +20]見えない[!#vk.ghost_r to,{opacity:0.75, x:-8, duration:0.05} +500][!#vk.ghost_c to,{opacity:0.75, x:-8, duration:0.05} +500][!#vk.ghost_r to,{opacity:0, x:0, duration:0.08} +620][!#vk.ghost_c to,{opacity:0, x:0, duration:0.08} +620][♪glitch_short -11dB +500]暴力”。[silence:0.2s]
+@n: [silence:0.2s][!#violence_photo shake {x: 30, duration: .24} -200ms][♪glitch_long -6dB -200ms to=1.8s][>#s10a -60ms]テクノロジー犯罪は“[>#vk -220ms][♪impact_bighit -3dB +20ms to=4.3s fade=0ms,1500ms][♪glitch_short -6dB +20ms][!#s10a shake {x: 9, duration: .32} +20ms][!#vk shake {x: 9, duration: .32} +20ms]見えない[!#vk.ghost_r to,{opacity:0.75, x:-8, duration:0.05} +500ms][!#vk.ghost_c to,{opacity:0.75, x:-8, duration:0.05} +500ms][!#vk.ghost_r to,{opacity:0, x:0, duration:0.08} +620ms][!#vk.ghost_c to,{opacity:0, x:0, duration:0.08} +620ms][♪glitch_short -11dB +500ms]暴力”。[silence:0.2s]
 [<#vk.m fade][<#vk.ghost_r fade][<#vk.ghost_c fade]
-transition dissolve,600,overlap=600
+transition dissolve {duration: .6, overlap: .6}
 
 *** society
 [>#subtitle]
-@n: [silence:0.6s][♪whoosh_soft -7dB -250 to=1.3s][!#shade.v to,{opacity:0.55, duration:1.2} -200]見えないからこそ、[|][>#ring -400][!#ring ping,#FFD68C,4,interval=320,duration=1250,scale=0.4>4.2 -400][!#ring ping,#FFD68C,4,interval=320,duration=1250,scale=0.4>4.2 +900][!#ring ping,#FFD68C,3,interval=320,duration=1250,scale=0.4>4.2 +1300][♪chime_soft -11dB -100]{h}社会全体で守る{/}仕組みが[br]必要です。[silence:1.2s]
+@n: [silence:0.6s][♪whoosh_soft -7dB -250ms to=1.3s][!#shade.v to,{opacity:0.55, duration:1.2} -200ms]見えないからこそ、[|][>#ring -400ms][!#ring ping,#FFD68C {count: 4, interval: .32, duration: 1.25, scale: [.4, 4.2]} -400ms][!#ring ping,#FFD68C {count: 4, interval: .32, duration: 1.25, scale: [.4, 4.2]} +900ms][!#ring ping,#FFD68C {count: 3, interval: .32, duration: 1.25, scale: [.4, 4.2]} +1300ms][♪chime_soft -11dB -100ms]{h}社会全体で守る{/}仕組みが[br]必要です。[silence:1.2s]
 [<#ch2]
 [<#subtitle]
-transition dissolve,700,overlap=700
+transition dissolve {duration: .7, overlap: .7}
 
 *** voice_up
-@n: [silence:0.7s][♪windchime -11dB -420 fade=0,1500 to=4.5s][>#s12h1 -60][!#s12h1 punch,1.16,duration=440]声を上げられる[>#s12h2 -60]社会へ。[silence:0.4s]
-transition dissolve,600,overlap=600
+@n: [silence:0.7s][♪windchime -11dB -420ms fade=0ms,1500ms to=4.5s][>#s12h1 -60ms][!#s12h1 punch {scale: 1.16, duration: .44}]声を上げられる[>#s12h2 -60ms]社会へ。[silence:0.4s]
+transition dissolve {duration: .6, overlap: .6}
 
 *** bubbles
-@v: [silence:0.6s][>#ch3 -40][>#b1 -150][♪chime_soft -11dB -120]相談していいんだ。[silence:0.7s]
-@n: [>#b2 -150][♪chime_soft -10dB -120]あなたは[!#b2.k .on][!#b2.k punch,1.16,duration=440]ひとりじゃない。[silence:0.1s]
+@v: [silence:0.6s][>#ch3 -40ms][>#b1 -150ms][♪chime_soft -11dB -120ms]相談していいんだ。[silence:0.7s]
+@n: [>#b2 -150ms][♪chime_soft -10dB -120ms]あなたは[!#b2.k .on][!#b2.k punch {scale: 1.16, duration: .44}]ひとりじゃない。[silence:0.1s]
 [<#b2 fade]
-transition dissolve,800,overlap=800
+transition dissolve {duration: .8, overlap: .8}
 
 *** closing
-@n: [silence:0.8s][♪whoosh_soft -9dB -290 to=1.3s][>#t2a -60]そう言える社会をつくるために、[>#t2b -60]テクノロジー犯罪を[>#t2c -60]抑制する法律は[>#t2d -200][♪impact_thud -1dB +40][!#t2a shake,9,duration=320 +40][!#t2b shake,9,duration=320 +40][!#t2c shake,9,duration=320 +40][!#t2d shake,9,duration=320 +40]欠かせません。[silence:0.4s][♪windchime -14dB fade=0,1500 to=3.5s][silence:1.7s][<#ch3][silence:1.5s]
-fade out,1000
+@n: [silence:0.8s][♪whoosh_soft -9dB -290ms to=1.3s][>#t2a -60ms]そう言える社会をつくるために、[>#t2b -60ms]テクノロジー犯罪を[>#t2c -60ms]抑制する法律は[>#t2d -200ms][♪impact_thud -1dB +40ms][!#t2a shake {x: 9, duration: .32} +40ms][!#t2b shake {x: 9, duration: .32} +40ms][!#t2c shake {x: 9, duration: .32} +40ms][!#t2d shake {x: 9, duration: .32} +40ms]欠かせません。[silence:0.4s][♪windchime -14dB fade=0ms,1500ms to=3.5s][silence:1.7s][<#ch3][silence:1.5s]
+fade out,1000ms
 ```

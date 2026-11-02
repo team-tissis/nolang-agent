@@ -15,7 +15,7 @@ import threading
 import time
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
@@ -251,7 +251,7 @@ class SubmissionTest(unittest.TestCase):
     def test_killed_role_stops_codex_but_keeps_claude_failure_handling(self):
         for engine in ("claude", "codex"):
             with self.subTest(engine=engine), tempfile.TemporaryDirectory() as directory:
-                run = runner.Run.__new__(runner.Run)
+                run = runner.RemoteRun.__new__(runner.RemoteRun)
                 run.st = Path(directory)
                 run.env = os.environ.copy()
                 with patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": engine}):
@@ -261,27 +261,25 @@ class SubmissionTest(unittest.TestCase):
 
     def test_cancel_during_render_wait_requests_remote_abort(self):
         with tempfile.TemporaryDirectory() as directory:
-            run = runner.Run.__new__(runner.Run)
+            run = runner.RemoteRun.__new__(runner.RemoteRun)
             run.st = Path(directory)
             run.video_id = "video"
-            run.stream_proc = None
+            run.api = Mock()
             (run.st / "engine.failed").write_text("中断")
             with (
                 patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": "codex"}),
                 patch.object(run, "abort") as abort,
-                patch.object(run, "remote_get") as poll,
                 patch.object(run, "log"),
             ):
-                self.assertEqual(run.remote_wait(), 1)
+                self.assertEqual(run.wait(), 1)
                 abort.assert_called_once()
-                poll.assert_not_called()
+                run.api.get.assert_not_called()
 
     def test_end_waits_for_author_success_and_failure_prevents_submission(self):
         for failed in (False, True):
             with self.subTest(failed=failed), tempfile.TemporaryDirectory() as directory:
-                run = runner.Run.__new__(runner.Run)
+                run = runner.RemoteRun.__new__(runner.RemoteRun)
                 run.st = Path(directory)
-                run.remote = "http://unused.invalid"
                 run.video_id = "video"
                 result: list[object] = []
                 with (

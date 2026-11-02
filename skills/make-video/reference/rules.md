@@ -1,10 +1,10 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: fab53f2c29892e5719c2ca4a56d1fd688be7bedfb89312cff5921c6062acaad4 · synced_at: 2026-11-01T03:21:48.545Z
+Version of these documents: contract: 1 · reference_hash: af163d40f956f53632e367a4ed305b8b7ceb530134b6c719e3dd3f202ee16c8d · synced_at: 2026-11-02T13:33:16.594Z
 
-Docs: contract.json ef39cb227d4f · spec.md 3c33649dd3a1 · authoring.md 98aa228a62bd · capabilities.md 47d6966f6303 · looks.md 7ec769916902 · sounds.md a75b4c250730 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · samples/ 5e9d6dfcaf9e · scaffolds/ 4946fc4afb33
+Docs: contract.json 30e435347147 · spec.md 9f5798c02d55 · authoring.md 1b6e08ac67c2 · capabilities.md ed9f16f7f56d · looks.md 574ec4c08974 · sounds.md e7cfa3490eff · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · rules.md 6370de2e9d17 · samples/ d0e46f4d953a · scaffolds/ 47023826b930
 
-The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_draft_check` (and the render-time lint). Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
+The per-rule fixes for `findings[].rule` returned by check (`studio.py check` / `nolang check` / `nolang_draft_check`, and the render-time lint), generated from the two ledgers, check's `draft_check/rules.py` and the product's `quality_rules.py`. Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
 - `empty_cut` place a picture or a card
 - `shrunk` change the width or the text size (widen the frame / drop `width:` to fit the text / shorten the wording)
@@ -39,4 +39,4 @@ The per-rule fixes for `findings[].rule` returned by `nolang check` / `nolang_dr
 - `font_not_pinned` the font could not be resolved as in production and was measured with the default font (run check where the DB is; bring the font description closer to a catalog font)
 - `synthetic_bold` the family has no bold face (there is no browser synthetic bold) → pick a family with weights via `font-family:` or drop the font-weight
 - `ghost_dissolve` in a 400 ms+ dissolve, the previous cut's large text or picture shows through into the next cut (a layer without out, or a transition dissolving from before the boundary) → set `overlap=` equal to the duration (text with out finishes fading by the boundary); pictures and cards without out take `[<#name fade]` at the cut's end
-- `photo_hidden` a veil of opacity 0.7+ covers 90%+ of a full-bleed photo for 3+ seconds (the photo washes out / sinks dark) → move the photo to one side (text on the ground side), or cap the veil at 0.6 and put a band / board only under the text。
+- `photo_hidden` a veil of opacity 0.7+ covers 90%+ of a full-bleed photo for 3+ seconds (the photo washes out / sinks dark) → move the photo to one side (text on the ground side), or cap the veil at 0.6 and put a band / board only under the text

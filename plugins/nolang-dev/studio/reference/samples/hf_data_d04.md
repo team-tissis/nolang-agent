@@ -75,7 +75,7 @@ svg burst8 = """<svg viewBox="-430 -430 860 860"><path d="M372 100L401 107M-100 
 image girl = "縦長 9:16 のイラスト。夜遅く、ベッドで横向きに寝そべり、ふわふわの紺色の毛布をかけた日本の女子高校生 (黒髪のショートボブ、ゆったりしたラベンダー色のパジャマ)。顔の近くで光るスマートフォンを持ち、スマホの青白い光が眠そうな半目の顔を照らす。小さな寝室: 三日月と瞬く星の見える窓、枕の上のぬいぐるみ。構図: ベッドと少女は画面の下 45% だけに収め、上半分は落ち着いた暗い夜の壁と窓だけでほとんど何も描かず、大きな題の文字を置く余白にする" aspect=9:16
 bgm#music(fade: 400,1600) おしゃれで懐かしい中くらいのテンポのシティポップ、サイン波のシンセの旋律にエレキギター・エレキベース・ドラム、夜の都会のゆったりした雰囲気、ボーカルなし
 # 字幕: 下寄りの黒い半透明の角丸の札・白の太字 32 px・数字だけ黄 ({y})・札は文ごと (台詞の [|] で句に割る)・札は声の後 60 ms で閉じ、同じ場面の次の文までは hold で残る (文の間の無音は次の文の頭に置く = 札の後ろに無音が無い)。場面の末の無音 70〜100 ms は tail より長いので、札は次の場面へ跨がない (hf は板が替わる時に札が消える)
-subtitle.hug(left: 50px; top: 1424px; width: 980px; font-size: 48px; line-height: 1.32; letter-spacing: 0.01em; text-align: center; color: #FFFFFF; background: #090A24C7; border: 2px solid #FFFFFF1A; border-radius: 30px; padding: 14px 34px 16px 34px; unit: sentence; strip: 。; lead: 40; tail: 60; in: {y:14, scale:0.96, opacity:0, duration:0.16, ease:'power2.out'})
+subtitle.hug(left: 50px; top: 1424px; width: 980px; font-size: 48px; line-height: 1.32; letter-spacing: 0.01em; text-align: center; color: #FFFFFF; background: #090A24C7; border: 2px solid #FFFFFF1A; border-radius: 30px; padding: 14px 34px 16px 34px; unit: sentence; strip: 。; lead: 40ms; tail: 60ms; in: {y:14, scale:0.96, opacity:0, duration:0.16, ease:'power2.out'})
 
 # 全編の地: 夜の街の絵 (ゆっくり引く) + 紫とピンクのぼけた光 (漂う) + 瞬く星 46 (大きさの 3 群・群ごとの周期) + 上下の陰
 img#bg_base(inset: 0; z-index: back; main: kb {scale: [1.134, 1.05], focus: ['50% 46%', '50% 54%']}) 縦長の夜空の背景。深い藍色から青紫へのなめらかなグラデーションに小さな星と柔らかく光る点が散り、右上の隅に小さな光る三日月。画面の最下部 (下 16%) だけに、静かな日本の住宅街の平らなシルエット (屋根・小さな集合住宅・電柱と電線) と暖かい黄色の灯りの窓がいくつか。中央は大きく空いた何もない夜空。人物なし
@@ -124,27 +124,27 @@ group#ttl(out: {y:-40, opacity:0, duration:0.3, ease:'power2.in'})
 # 01 睡眠時間の分布: 平均が回って決まり、5 本の縦棒が順に伸びる →「35%」で 6 時間未満の 2 本をピンクに、残りを沈め、かぎと札 →「3人に1人」の判子
 section#dist(stagger: {each:0})
 # 常設の上端 (2 場面目から sticky): 題の札 + 章の丸 5 つ (今の章が黄に点く)
-div#hchip.sticky(left: 48px; top: 140px; width: 412px; height: 64px; border-radius: 32px; background: #FFFFFF1A; border: 2px solid #FFFFFF24; delay: 100; in: {x:-40, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: {opacity:0, duration:0.3})
+div#hchip.sticky(left: 48px; top: 140px; width: 412px; height: 64px; border-radius: 32px; background: #FFFFFF1A; border: 2px solid #FFFFFF24; delay: 100ms; in: {x:-40, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: {opacity:0, duration:0.3})
   svg#m(left: 18px; cy: 50%; width: 36px; height: 36px; part: moon)
   p#t(left: 66px; cy: 50%; font-size: 30px) 高校生の睡眠 × スマホ
-p#pd.sticky(left: "505;543;581;619;657"; top: 148px; width: 46px; font-size: 22px; font-family: p; text-align: center; color: $ink3; background: #FFFFFF14; border: 2px solid #FFFFFF24; border-radius: 148px; padding: 10px 0px; delay: 150; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.05}}; out: {opacity:0, duration:0.3}) ×5 1;2;3;4;5
+p#pd.sticky(left: "505;543;581;619;657"; top: 148px; width: 46px; font-size: 22px; font-family: p; text-align: center; color: $ink3; background: #FFFFFF14; border: 2px solid #FFFFFF24; border-radius: 148px; padding: 10px 0px; delay: 150ms; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.05}}; out: {opacity:0, duration:0.3}) ×5 1;2;3;4;5
 #pd.on(color: $navy; background: $yellow; border: 2px solid $yellow)
 board#b2(n: "01"; t: "平日の睡眠時間")
   # 主役の数字: 平均 + 時と分が別々に回る (odometer)
   # 板と一緒に 0 時間 00 分で出て、「平均」の語で回り始める
-  div#hero(left: 44px; top: 140px; width: 900px; height: 146px; delay: 300; in: {scale:0.8, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'})
+  div#hero(left: 44px; top: 140px; width: 900px; height: 146px; delay: 300ms; in: {scale:0.8, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'})
     p#lab(left: 0px; cy: 50%; font-size: 40px; color: $ink2; background: #FFFFFF1A; border-radius: 16px; padding: 6px 18px) 平均
     p#h(left: 130px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:6 start=0 roll ms=1000]
     p#hu(left: 231px; top: 66px; font-size: 58px) 時間
     p#m(left: 346px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:21 start=0 roll ms=1080,1160]
     p#mu(left: 542px; top: 66px; font-size: 58px) 分
   # 縦棒 5 本 (1% = 6.67 px・下端 600 から上へ伸びる)・値・軸の札 (時間帯 / 人数)
-  div#base(left: 52px; top: 898px; width: 880px; height: 3px; background: #FFFFFF59; delay: 400; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'})
-  div#col(left: "56;173;291;408;525"; top: "547;420;347;460;560"; width: 112px; height: "53;180;253;140;40"; border-radius: 20px 20px 0px 0px; background: $sky; delay: 500; in: {scaleY:0, duration:0.7, ease:'back.out(1.4)', pivot:'bottom', stagger:{each:0.12}}) ×5
+  div#base(left: 52px; top: 898px; width: 880px; height: 3px; background: #FFFFFF59; delay: 400ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'})
+  div#col(left: "56;173;291;408;525"; top: "547;420;347;460;560"; width: 112px; height: "53;180;253;140;40"; border-radius: 20px 20px 0px 0px; background: $sky; delay: 500ms; in: {scaleY:0, duration:0.7, ease:'back.out(1.4)', pivot:'bottom', stagger:{each:0.12}}) ×5
   # 35% の語でピンクに点く 2 本 (角ごとの角丸の棒は fill の印で塗り替えられないので、同じ形の色の棒を重ねて溶かす)
   div#hot(left: "56;173"; top: "547;420"; width: 112px; height: "53;180"; border-radius: 20px 20px 0px 0px; background: $pink; overlap: b2.col; in: {opacity:0, duration:0.3}) ×2
-  p#colv(cx: "93;211;328;445;563"; top: "504;377;304;417;517"; font-size: 46px; delay: 850; in: {scale:0.5, y:16, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×5 8%;27%;38%;21%;6%
-  p#colx(cx: "93;211;328;445;563"; top: 912px; font-size: 32px; line-height: 1.3; text-align: center; delay: 600; in: {scale:0.9, y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.12}}) ×5 5時間[br]{sb}未満{/}[br]{sn}99人{/};5〜6[br]{sb}時間{/}[br]{sn}334人{/};6〜7[br]{sb}時間{/}[br]{sn}470人{/};7〜8[br]{sb}時間{/}[br]{sn}259人{/};8時間[br]{sb}以上{/}[br]{sn}74人{/}
+  p#colv(cx: "93;211;328;445;563"; top: "504;377;304;417;517"; font-size: 46px; delay: 850ms; in: {scale:0.5, y:16, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×5 8%;27%;38%;21%;6%
+  p#colx(cx: "93;211;328;445;563"; top: 912px; font-size: 32px; line-height: 1.3; text-align: center; delay: 600ms; in: {scale:0.9, y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.12}}) ×5 5時間[br]{sb}未満{/}[br]{sn}99人{/};5〜6[br]{sb}時間{/}[br]{sn}334人{/};6〜7[br]{sb}時間{/}[br]{sn}470人{/};7〜8[br]{sb}時間{/}[br]{sn}259人{/};8時間[br]{sb}以上{/}[br]{sn}74人{/}
   # 6 時間未満のかぎと札 (語で出る)
   svg#brk(left: 84px; top: 548px; width: 288px; height: 34px; part: brk; in: {scaleX:0.3, opacity:0, duration:0.35, ease:'back.out(2)'})
   div#pill(left: 62px; top: 398px; width: 312px; height: 132px; border-radius: 30px; background: $pink; box-shadow: 0px 12px 30px #FF5C9E59; in: {scale:0.4, y:30, opacity:0, duration:0.5, ease:'back.out(2.2)'})
@@ -169,16 +169,16 @@ board#b3(n: "02"; t: "スマホを手から離す時刻")
     p#v(left: .k1.right+14; cy: 50%; font-size: 44px; font-family: p; color: $yellow) 約30分
     p#k2(left: .v.right+14; cy: 50%; font-size: 34px) 短く
   # 目盛り (0〜8 時間・1 分 = 0.867 px)
-  div#grid(left: "195;299;403;507;611"; top: 270px; width: 2px; height: 690px; background: #FFFFFF17; delay: 400; in: {opacity:0, duration:0.4}) ×5
-  p#tick(cx: "195;299;403;507;611"; top: 968px; font-size: 24px; color: $ink3; font-family: m; delay: 400; in: {opacity:0, duration:0.4}) ×5 0;2;4;6;8時間
+  div#grid(left: "195;299;403;507;611"; top: 270px; width: 2px; height: 690px; background: #FFFFFF17; delay: 400ms; in: {opacity:0, duration:0.4}) ×5
+  p#tick(cx: "195;299;403;507;611"; top: 968px; font-size: 24px; color: $ink3; font-family: m; delay: 400ms; in: {opacity:0, duration:0.4}) ×5 0;2;4;6;8時間
   # 行 = 札 (時刻 + 人数) + 棒 (幅 = 分 × 0.867) + 棒の中の右寄せの値
   div#row(left: 0px; top: "181;273;365;457;549"; width: 984px; height: 120px) ×5
-    p#a(left: 40px; top: 18px; font-size: 34px; delay: "450;580;710;840;970"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 22時より前;22〜23時;23〜24時;24時以降;見ながら寝落ち
-    p#b(left: 40px; top: 66px; font-size: 26px; color: $ink3; font-family: m; delay: "450;580;710;840;970"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 136人・11%;297人・24%;408人・33%;272人・22%;123人・10%
-    div#bar(left: 292px; top: 22px; width: "381;357;327;298;287"; height: 70px; border-radius: 0px 20px 20px 0px; background: $muted; delay: "500;630;760;890;1020"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
+    p#a(left: 40px; top: 18px; font-size: 34px; delay: "450ms;580ms;710ms;840ms;970ms"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 22時より前;22〜23時;23〜24時;24時以降;見ながら寝落ち
+    p#b(left: 40px; top: 66px; font-size: 26px; color: $ink3; font-family: m; delay: "450ms;580ms;710ms;840ms;970ms"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 136人・11%;297人・24%;408人・33%;272人・22%;123人・10%
+    div#bar(left: 292px; top: 22px; width: "381;357;327;298;287"; height: 70px; border-radius: 0px 20px 20px 0px; background: $muted; delay: "500ms;630ms;760ms;890ms;1020ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
     # 語で色が変わる棒 (ミント / 沈める紺 / ピンクを同じ形で重ねて溶かす)
     div#hot(left: 292px; top: 22px; width: "381;357;327;298;287"; height: 70px; border-radius: 0px 20px 20px 0px; background: "$mint;$dim;$dim;$pink;$pink"; overlap: b3.row.bar; in: {opacity:0, duration:0.3})
-    p#val(left: 292px; cy: 57px; width: "368;344;314;285;274"; font-size: 34px; text-align: right; delay: "1000;1130;1260;1390;1520"; in: {opacity:0, duration:0.3}) 7時間19分;6時間52分;6時間18分;5時間44分;5時間31分
+    p#val(left: 292px; cy: 57px; width: "368;344;314;285;274"; font-size: 34px; text-align: right; delay: "1000ms;1130ms;1260ms;1390ms;1520ms"; in: {opacity:0, duration:0.3}) 7時間19分;6時間52分;6時間18分;5時間44分;5時間31分
   # 22 時前との差 (斜線のピンクの枠 + 差の分)・7 時間 19 分の黄の基準線
   div#ghost(left: "493;482"; top: "472;564"; width: "82;94"; height: 70px; border-radius: 0px 20px 20px 0px; background: #FF5C9E29; pattern: hatch,45,#FF5C9E6B,13,7; border: 3px solid $pink; in: {scaleX:0, opacity:0, duration:0.45, ease:'power3.out', pivot:'left', stagger:{each:0.12}}) ×2
   p#glab(cx: "534;529"; cy: "496;588"; font-size: 26px; text-shadow: 0px 2px 6px #0A0A28E6; overlap: b3.ghost; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×2 −95分;−108分
@@ -196,14 +196,14 @@ svg#fx3(left: 14px; top: 1100px; width: 400px; height: 400px; part: burst3; over
 # 03 朝の眠気と居眠り: 凡例と目盛りを先に置き、黄の線 → ピンクの線が左から描かれ、点と値が順に弾む →「段階的」で札と右端の値を弾ませる・右下に居眠りの少女
 section#sleepy(stagger: {each:0})
 board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
-  div#lg(left: 44px; top: "113;144"; width: 900px; height: 36px; delay: 300; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.12}}) ×2
+  div#lg(left: 44px; top: "113;144"; width: 900px; height: 36px; delay: 300ms; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.12}}) ×2
     div#sw(left: 0px; cy: 50%; width: 52px; height: 8px; border-radius: 4px; background: "$yellow;$pink")
     div#dot(left: 16px; cy: 50%; width: 24px; height: 24px; border-radius: 148px; background: "$yellow;$pink"; box-shadow: 0px 0px 0px 4px #1D2060)
     p#t(left: 68px; cy: 50%; font-size: 30px) 朝とても眠い{e}（全体 43%・528人）{/};授業中に週3回以上 居眠り{e}（全体 18%・222人）{/}
   # 目盛り (0〜60%・1% = 5.07 px・0% は 573)
-  div#gl(left: 110px; top: "573;472;371;269"; width: 820px; height: 2px; background: #FFFFFF1A; delay: 300; in: {opacity:0, duration:0.4}) ×4
-  p#yt(left: 21px; width: 75px; cy: "573;472;371;269"; font-size: 24px; text-align: right; color: $ink3; font-family: m; delay: 300; in: {opacity:0, duration:0.4}) ×4 0%;20%;40%;60%
-  p#xt(cx: "113;230;347;463;580"; cy: 898px; font-size: 27px; color: $ink2; delay: 300; in: {opacity:0, duration:0.4}) ×5 22時前;22〜23時;23〜24時;24時以降;寝落ち
+  div#gl(left: 110px; top: "573;472;371;269"; width: 820px; height: 2px; background: #FFFFFF1A; delay: 300ms; in: {opacity:0, duration:0.4}) ×4
+  p#yt(left: 21px; width: 75px; cy: "573;472;371;269"; font-size: 24px; text-align: right; color: $ink3; font-family: m; delay: 300ms; in: {opacity:0, duration:0.4}) ×4 0%;20%;40%;60%
+  p#xt(cx: "113;230;347;463;580"; cy: 898px; font-size: 27px; color: $ink2; delay: 300ms; in: {opacity:0, duration:0.4}) ×5 22時前;22〜23時;23〜24時;24時以降;寝落ち
   # 線 (左から描く)・面 (薄く溶ける)・点 (弾む)・値 (上がる) を系列ごとに
   svg#aa(left: 158px; top: 368px; width: 720px; height: 502px; part: area_a; in: {opacity:0, duration:0.8})
   svg#ab(left: 158px; top: 368px; width: 720px; height: 502px; part: area_b; in: {opacity:0, duration:0.8})
@@ -216,14 +216,14 @@ board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
   div#step(left: 44px; top: 962px; width: 408px; height: 68px; border-radius: 32px; background: #FFD23F24; border: 3px solid $yellow; in: {scale:0.5, y:10, opacity:0, duration:0.45, ease:'back.out(2.2)'})
     svg#i(left: 24px; cy: 50%; width: 34px; height: 34px; part: trend)
     p#t(left: 69px; cy: 50%; font-size: 30px) 遅いほど 段階的に増加
-  img#sleepy(left: 716px; top: 918px; width: 240px; height: 240px; object-fit: contain; delay: 600; in: {scale:0.5, y:40, rotation:8, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent][ref:@girl]授業中に机で居眠りする同じ少女 (紺のブレザーにピンクのリボンの制服): 開いたノートと鉛筆の上で組んだ腕に頭をのせ、目を閉じ、鼻から小さな丸い鼻ちょうちん。机ごと全体が入る斜め 3/4 の見下ろし、細い白のふちどりのステッカー、枠いっぱいに大きく
-  note#note(top: 1062px; delay: 800; in: {opacity:0, duration:0.4}) ※スマホを手から離す時刻別・自己申告
+  img#sleepy(left: 716px; top: 918px; width: 240px; height: 240px; object-fit: contain; delay: 600ms; in: {scale:0.5, y:40, rotation:8, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent][ref:@girl]授業中に机で居眠りする同じ少女 (紺のブレザーにピンクのリボンの制服): 開いたノートと鉛筆の上で組んだ腕に頭をのせ、目を閉じ、鼻から小さな丸い鼻ちょうちん。机ごと全体が入る斜め 3/4 の見下ろし、細い白のふちどりのステッカー、枠いっぱいに大きく
+  note#note(top: 1062px; delay: 800ms; in: {opacity:0, duration:0.4}) ※スマホを手から離す時刻別・自己申告
 
 # 04 2 週間の実験: 2 部屋の絵 → ルールの札 (22:30 が弾む) → 札 2 枚 → 参加の帯 → 文の頭で前半が上へ抜け、結果の 4 行 (前 → 後) が組み上がる
 section#exp(stagger: {each:0})
 board#b5(n: "04"; t: "2週間の実験")
   div#parta(left: 0px; top: 0px; width: 984px; height: 1150px; out: {y:-40, opacity:0, duration:0.3, ease:'power2.in'})
-    img#room(left: 40px; top: 168px; width: 904px; height: 540px; border-radius: 34px; border: 3px solid #FFFFFF2E; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 250; in: {scale:0.85, y:30, opacity:0, duration:0.5, ease:'back.out(2.2)'}) [ref:@girl]夜の小さな日本の家の、壁を挟んで隣り合う 2 部屋の断面図を横長の画面いっぱいに描く (周りに黒い余白や額縁を作らない)。左の部屋 (居間): 小さな棚の上でスマートフォンが立てて充電され、画面は暗く、充電ケーブルがミント色にやさしく光る。右の部屋 (寝室): 同じ少女がベッドで目を閉じて安らかに眠り、窓から三日月が見える。真ん中に閉じたドアのある壁。スマホが寝ている少女と別の部屋にあることがはっきり分かる。左上と右下に札が乗るので、そこは壁と床の平らな面にする
+    img#room(left: 40px; top: 168px; width: 904px; height: 540px; border-radius: 34px; border: 3px solid #FFFFFF2E; main: kb {scale: [1.12, 1], ease:'power1.out'}; delay: 250ms; in: {scale:0.85, y:30, opacity:0, duration:0.5, ease:'back.out(2.2)'}) [ref:@girl]夜の小さな日本の家の、壁を挟んで隣り合う 2 部屋の断面図を横長の画面いっぱいに描く (周りに黒い余白や額縁を作らない)。左の部屋 (居間): 小さな棚の上でスマートフォンが立てて充電され、画面は暗く、充電ケーブルがミント色にやさしく光る。右の部屋 (寝室): 同じ少女がベッドで目を閉じて安らかに眠り、窓から三日月が見える。真ん中に閉じたドアのある壁。スマホが寝ている少女と別の部屋にあることがはっきり分かる。左上と右下に札が乗るので、そこは壁と床の平らな面にする
     p#pinphone(left: 94px; top: 214px; font-size: 28px; color: $navy; background: $mint; border-radius: 30px; padding: 15px 22px; box-shadow: 0px 8px 20px #0000004D; overlap: b5.parta.room; in: {scale:0.5, y:10, opacity:0, duration:0.4, ease:'back.out(2.2)'}) スマホは別の部屋で充電
     p#pinbed(left: 632px; top: 616px; font-size: 28px; color: $navy; background: #FFFFFF; border-radius: 30px; padding: 15px 22px; box-shadow: 0px 8px 20px #0000004D; overlap: b5.parta.room; in: {scale:0.5, y:10, opacity:0, duration:0.4, ease:'back.out(2.2)'}) 寝室にスマホなし
     # ルールの札 (黄の縁 + 上辺に乗る題の札 + 大きな時刻)
@@ -239,28 +239,28 @@ board#b5(n: "04"; t: "2週間の実験")
       p#pc(left: 4px; top: 118px; font-size: 24px; color: $ink3; font-family: m) 続けられた人 90%
   # 結果 (語で出す容器・中の要素は容器からの遅れで組み上がる)
   div#res(left: 0px; top: 0px; width: 984px; height: 1150px)
-    p#rc(left: 40px; top: 170px; font-size: 27px; background: #FFD23F24; border: 2px solid $yellow; border-radius: 30px; padding: 14px 22px; delay: 50; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 22:30 別の部屋で充電 ×2週間・続けた76人
+    p#rc(left: 40px; top: 170px; font-size: 27px; background: #FFD23F24; border: 2px solid $yellow; border-radius: 30px; padding: 14px 22px; delay: 50ms; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 22:30 別の部屋で充電 ×2週間・続けた76人
     # 行 = 題 + 前 (薄い) → 矢印 → 後 (大きいポップ体)・2・3 行目はミントの地
-    div#rr(left: 40px; top: "168;299;429;560"; width: 904px; height: 180px; border-radius: 30px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "2px solid #FFFFFF1A;2px solid #39E0B88C;2px solid #39E0B88C;2px solid #FFFFFF1A"; delay: 150; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
+    div#rr(left: 40px; top: "168;299;429;560"; width: 904px; height: 180px; border-radius: 30px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "2px solid #FFFFFF1A;2px solid #39E0B88C;2px solid #39E0B88C;2px solid #FFFFFF1A"; delay: 150ms; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
       p#k(left: 28px; top: 22px; font-size: 32px; line-height: 1.3) 寝る時刻[br]{ks}平日の平均{/};睡眠時間[br]{ks}平日の平均{/};朝とても眠い;週3回以上の居眠り
       p#bef(left: 330px; top: 30px; width: 230px; font-size: 38px; text-align: right; color: $ink3) 0時31分;6時間04分;44人 58%;22人 29%
       svg#arr(left: 578px; top: 22.5%; width: 44px; height: 36px; part: "arr_gray;arr_mint;arr_mint;arr_gray")
       p#aft(left: 632px; top: 20px; font-size: 48px; font-family: p; line-height: 1.25) 23時58分;6時間41分;26人 {as}34%{/};13人 {as}17%{/}
-    p#dl1(left: 69px; top: 358px; font-size: 30px; color: $navy; background: $sky; border-radius: 26px; padding: 10px 20px; delay: 600; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 33分 早く
+    p#dl1(left: 69px; top: 358px; font-size: 30px; color: $navy; background: $sky; border-radius: 26px; padding: 10px 20px; delay: 600ms; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 33分 早く
     p#dl2(left: 69px; top: 555px; font-size: 30px; color: $navy; background: $mint; border-radius: 26px; padding: 10px 20px; in: {scale:0.3, opacity:0, duration:0.45, ease:'back.out(3)'}) +37分
     # 前 (灰) と後 (ミント) の細い棒 (割合の長さ)
-    div#mba(left: 370px; top: "504;635"; width: "220;110"; height: 18px; border-radius: 0px 9px 9px 0px; background: #6E73B0; delay: 700; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
+    div#mba(left: 370px; top: "504;635"; width: "220;110"; height: 18px; border-radius: 0px 9px 9px 0px; background: #6E73B0; delay: 700ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
     div#mbb(left: 370px; top: "524;655"; width: "129;65"; height: 18px; border-radius: 0px 9px 9px 0px; background: $mint; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
-    p#mla(left: "475;365"; top: "499;630"; font-size: 24px; color: $ink3; delay: "350;450"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 実験前 58%;実験前 29%
-    p#mlb(left: "384;320"; top: "519;650"; font-size: 24px; delay: "350;450"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 2週間後 34%;2週間後 17%
-    note#note(top: 1060px; delay: 1000; in: {opacity:0, duration:0.4}) ※希望者だけの実験で、比べる対照の群はありません
+    p#mla(left: "475;365"; top: "499;630"; font-size: 24px; color: $ink3; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 実験前 58%;実験前 29%
+    p#mlb(left: "384;320"; top: "519;650"; font-size: 24px; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 2週間後 34%;2週間後 17%
+    note#note(top: 1060px; delay: 1000ms; in: {opacity:0, duration:0.4}) ※希望者だけの実験で、比べる対照の群はありません
 svg#fx5(left: 590px; top: 476px; width: 520px; height: 520px; part: burst5; overlap: b5; in: {scale:0.652, opacity:0, duration:0.55, ease:'power2.out'}; out: {opacity:0, duration:0.3, ease:'power1.in'}; bleed)
 
 # 05 続けるコツ: 理由の 2 枚 (1 枚目が弾んで icon が震える) → 目覚まし時計が傾いて弾み震える + コツの 3 行 → 黄の下線
 section#tip(stagger: {each:0})
 board#b6(n: "05"; t: "続けるコツ")
-  p#lead(left: 44px; top: 174px; font-size: 36px; delay: 300; in: {scale:0.9, y:16, opacity:0, duration:0.4, ease:'power2.out'}) 続けられなかった{b8}8{/}人の理由で多かったのは…
-  div#rsn(left: "27;341"; top: 290px; width: 432px; height: 250px; border-radius: 34px; background: "#FF5C9E1F;#FFFFFF12"; border: "2px solid #FF5C9EB3;2px solid #FFFFFF24"; delay: "500;650"; in: {scale:0.6, y:30, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
+  p#lead(left: 44px; top: 174px; font-size: 36px; delay: 300ms; in: {scale:0.9, y:16, opacity:0, duration:0.4, ease:'power2.out'}) 続けられなかった{b8}8{/}人の理由で多かったのは…
+  div#rsn(left: "27;341"; top: 290px; width: 432px; height: 250px; border-radius: 34px; background: "#FF5C9E1F;#FFFFFF12"; border: "2px solid #FF5C9EB3;2px solid #FFFFFF24"; delay: "500ms;650ms"; in: {scale:0.6, y:30, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
     svg#ic(cx: 50%; top: 12%; width: 110px; height: 110px; part: "rsn_alarm;rsn_chat")
     p#t(cx: 50%; top: 160px; font-size: 40px) 目覚ましがスマホ;友だちへの返信
   img#alarm(left: 30px; top: 628px; width: 430px; height: 430px; object-fit: contain; in: {scale:0.3, y:60, rotation:-20, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent]かわいいレトロな双子ベルの目覚まし時計: 月の黄色の本体、ピンクのベルとハンマー、目盛りだけの丸い白い文字盤 (数字なし)、短い針 2 本、鳴っていることを示すベルのまわりの小さな曲線。細い白のふちどりのステッカー、枠いっぱいに大きく
@@ -271,7 +271,7 @@ svg#fx6(left: -27px; top: 759px; width: 640px; height: 640px; part: burst6; over
 # まとめ: 結論の 3 枚 (番号 + 大きな数字 + 色の下線 + 文) が順に弾み、注記の板は「数字は」で出て「原因が」で縁が黄に 2 度光る
 section#summary(stagger: {each:0})
 board#b7(n: "まとめ"; nw: 93)
-  div#sm(left: 40px; top: "88;252;416"; width: 904px; height: 214px; border-radius: 32px; background: #FFFFFF0F; border: 2px solid #FFFFFF1F; delay: 350; in: {scale:0.85, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.2}}) ×3
+  div#sm(left: 40px; top: "88;252;416"; width: 904px; height: 214px; border-radius: 32px; background: #FFFFFF0F; border: 2px solid #FFFFFF1F; delay: 350ms; in: {scale:0.85, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.2}}) ×3
     p#n(left: 24px; top: 24px; width: 54px; font-size: 30px; font-family: p; text-align: center; color: $navy; background: $yellow; border-radius: 148px; padding: 12px 0px) 1;2;3
     p#st(left: 24px; top: 84px; font-size: 76px; font-family: p; line-height: 1.2) 35{u}%{/};95{u}分差{/};+37{u}分{/}
     div#bar(left: 24px; top: 86%; width: 220px; height: 8px; border-radius: 4px; background: "$pink;$yellow;$mint")
@@ -293,47 +293,47 @@ svg#fx8(left: 110px; top: 570px; width: 860px; height: 860px; part: burst8; over
 ```timeline.txt
 #v2
 cast n = "明るくクリアな若い女性のナレーター、10 代後半から 20 代前半、ピッチはやや高めでハキハキとエネルギッシュ、親しみやすく聞き取りやすい" speed=115%
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** hook
 bgm music
-@n: [silence:350][>#glow -350][♪vibe -1.4dB -300][>#bz_l -300][>#bz_r -300][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} -300][!#bz_l to,{opacity:0, duration:0.3} +250][!#bz_r to,{opacity:0, duration:0.3} +250][!#bz_l to,{opacity:1, duration:0.18} +600][!#bz_r to,{opacity:1, duration:0.18} +600][♪vibe -5.2dB +600][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} +600][!#bz_l to,{opacity:0, duration:0.3} +1150][!#bz_r to,{opacity:0, duration:0.3} +1150][!#glow to,{opacity:0.55, scale:0.92, duration:0.6, repeat:5, yoyo:true, ease:'sine.inOut'} +1250][>#q.l1][♪pop_hi -5.2dB +20][>#q.l2 +280]寝る前のスマホ、何時に手放してる？[silence:250]
+@n: [silence:350ms][>#glow -350ms][♪vibe -1.4dB -300ms][>#bz_l -300ms][>#bz_r -300ms][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} -300ms][!#bz_l to,{opacity:0, duration:0.3} +250ms][!#bz_r to,{opacity:0, duration:0.3} +250ms][!#bz_l to,{opacity:1, duration:0.18} +600ms][!#bz_r to,{opacity:1, duration:0.18} +600ms][♪vibe -5.2dB +600ms][!#glow to,{x:6, duration:0.05, repeat:9, yoyo:true, ease:'none'} +600ms][!#bz_l to,{opacity:0, duration:0.3} +1150ms][!#bz_r to,{opacity:0, duration:0.3} +1150ms][!#glow to,{opacity:0.55, scale:0.92, duration:0.6, repeat:5, yoyo:true, ease:'sine.inOut'} +1250ms][>#q.l1][♪pop_hi -5.2dB +20ms][>#q.l2 +280ms]寝る前のスマホ、何時に手放してる？[silence:250ms]
 [>#subtitle]
-@: [<#q -350][>#heroshade -150][♪whoosh_swing -6dB -100][>#ttl.kicker -50][!#glow to,{opacity:0.35, duration:0.5} -50][>#ttl.t1 +30][♪rise_pop -6dB +130][>#ttl.t2 +150][>#ttl.t3 +310][>#ttl.ul +650][>#ttl.ch1 +700][>#ttl.ch2 +820][>#ttl.ch3 +940][>#ttl.fict +1150]全国の高校生、[br][♪tick -9dB -50 to=1.4s]{y}1,236人{/}に聞きました。[silence:80]
+@: [<#q -350ms][>#heroshade -150ms][♪whoosh_swing -6dB -100ms][>#ttl.kicker -50ms][!#glow to,{opacity:0.35, duration:0.5} -50ms][>#ttl.t1 +30ms][♪rise_pop -6dB +130ms][>#ttl.t2 +150ms][>#ttl.t3 +310ms][>#ttl.ul +650ms][>#ttl.ch1 +700ms][>#ttl.ch2 +820ms][>#ttl.ch3 +940ms][>#ttl.fict +1150ms]全国の高校生、[br][♪tick -9dB -50ms to=1.4s]{y}1,236人{/}に聞きました。[silence:80ms]
 
 *** dist
 se whoosh_short -4.4dB
-@: [silence:320][!#pd[1] .on -120][♪pop_soft -6dB +230][♪pop_soft -7dB +380][♪pop_soft -7dB +530]平日の睡眠は、[br][♪tick -10dB to=1.4s]平均[!#b2.hero.h count +110][!#b2.hero.m count +110]{y}6時間21分{/}[♪sparkle -7dB +500]。
-@: [silence:220]6時間未満の人が[>#b2.hot[*] -100][!#b2.col[3] to,{opacity:0.4, duration:0.3} -100][!#b2.col[4] to,{opacity:0.4, duration:0.3} -100][!#b2.col[5] to,{opacity:0.4, duration:0.3} -100][!#b2.colv[3] to,{opacity:0.62, duration:0.3} -100][!#b2.colv[4] to,{opacity:0.62, duration:0.3} -100][!#b2.colv[5] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[3] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[4] to,{opacity:0.62, duration:0.3} -100][!#b2.colx[5] to,{opacity:0.62, duration:0.3} -100][>#b2.brk -50][>#b2.pill][♪pop_hi -6dB -50][♪sparkle -8dB +150][>#fx2 +150][<#fx2 +400]{y}35%{/}と、[|][>#b2.stamp -50][♪rise_pop -6dB]{y}3人に1人{/}を超えます。[silence:80]
+@: [silence:320ms][!#pd[1] .on -120ms][♪pop_soft -6dB +230ms][♪pop_soft -7dB +380ms][♪pop_soft -7dB +530ms]平日の睡眠は、[br][♪tick -10dB to=1.4s]平均[!#b2.hero.h count +110ms][!#b2.hero.m count +110ms]{y}6時間21分{/}[♪sparkle -7dB +500ms]。
+@: [silence:220ms]6時間未満の人が[>#b2.hot[*] -100ms][!#b2.col[3] to,{opacity:0.4, duration:0.3} -100ms][!#b2.col[4] to,{opacity:0.4, duration:0.3} -100ms][!#b2.col[5] to,{opacity:0.4, duration:0.3} -100ms][!#b2.colv[3] to,{opacity:0.62, duration:0.3} -100ms][!#b2.colv[4] to,{opacity:0.62, duration:0.3} -100ms][!#b2.colv[5] to,{opacity:0.62, duration:0.3} -100ms][!#b2.colx[3] to,{opacity:0.62, duration:0.3} -100ms][!#b2.colx[4] to,{opacity:0.62, duration:0.3} -100ms][!#b2.colx[5] to,{opacity:0.62, duration:0.3} -100ms][>#b2.brk -50ms][>#b2.pill][♪pop_hi -6dB -50ms][♪sparkle -8dB +150ms][>#fx2 +150ms][<#fx2 +400ms]{y}35%{/}と、[|][>#b2.stamp -50ms][♪rise_pop -6dB]{y}3人に1人{/}を超えます。[silence:80ms]
 
 *** phone
 se whoosh_short -4.4dB
-@: [silence:320][=#pd[1] -120][!#pd[2] .on -120][♪pop_soft -7dB +130][♪pop_soft -8dB +330][♪pop_soft -8dB +530]手放す時刻別に見ると、[|][>#b3.row[1].hot -50][!#b3.row[1].val recolor,$navy,duration=300 -50][!#b3.row[1] punch,1.04,duration=360,pivot=left -50][♪chime_soft -7dB]22時前は{y}7時間19分{/}。
-@: [silence:220][>#b3.row[4].hot -50][!#b3.row[4].val recolor,$navy,duration=300 -50][!#b3.row[4] punch,1.04,duration=360,pivot=left -50][>#b3.row[2].hot -50][>#b3.row[3].hot -50][♪pop_hi -7dB]24時以降は{y}5時間44分{/}、[|][>#b3.row[5].hot -50][!#b3.row[5].val recolor,$navy,duration=300 -50][!#b3.row[5] punch,1.04,duration=360,pivot=left -50][♪pop_hi -7dB]見ながら寝落ちは[br]{y}5時間31分{/}。
-@: [silence:250]1時間遅いごとに[br][>#b3.per30 -100][♪click -8dB]{y}約30分{/}短く、[|][>#b3.ref -50][>#b3.reflab -50][♪whoosh_short -7dB +100][>#b3.ghost[*] +250][>#b3.glab[*] +550]22時前と24時以降では[br][>#b3.call95 -150][>#b3.call95.big -50][>#b3.call95.bar +150][♪sparkle -6dB][>#fx3 +50][<#fx3 +300]{y}95分{/}の差です。[silence:100]
+@: [silence:320ms][=#pd[1] -120ms][!#pd[2] .on -120ms][♪pop_soft -7dB +130ms][♪pop_soft -8dB +330ms][♪pop_soft -8dB +530ms]手放す時刻別に見ると、[|][>#b3.row[1].hot -50ms][!#b3.row[1].val recolor,$navy {duration: .3} -50ms][!#b3.row[1] punch {scale: 1.04, duration: .36, pivot: 'left'} -50ms][♪chime_soft -7dB]22時前は{y}7時間19分{/}。
+@: [silence:220ms][>#b3.row[4].hot -50ms][!#b3.row[4].val recolor,$navy {duration: .3} -50ms][!#b3.row[4] punch {scale: 1.04, duration: .36, pivot: 'left'} -50ms][>#b3.row[2].hot -50ms][>#b3.row[3].hot -50ms][♪pop_hi -7dB]24時以降は{y}5時間44分{/}、[|][>#b3.row[5].hot -50ms][!#b3.row[5].val recolor,$navy {duration: .3} -50ms][!#b3.row[5] punch {scale: 1.04, duration: .36, pivot: 'left'} -50ms][♪pop_hi -7dB]見ながら寝落ちは[br]{y}5時間31分{/}。
+@: [silence:250ms]1時間遅いごとに[br][>#b3.per30 -100ms][♪click -8dB]{y}約30分{/}短く、[|][>#b3.ref -50ms][>#b3.reflab -50ms][♪whoosh_short -7dB +100ms][>#b3.ghost[*] +250ms][>#b3.glab[*] +550ms]22時前と24時以降では[br][>#b3.call95 -150ms][>#b3.call95.big -50ms][>#b3.call95.bar +150ms][♪sparkle -6dB][>#fx3 +50ms][<#fx3 +300ms]{y}95分{/}の差です。[silence:100ms]
 
 *** sleepy
 se whoosh_short -4.4dB
-@: [silence:350][=#pd[2] -150][!#pd[3] .on -150][>#b4.la][>#b4.da[*]][>#b4.aa +300][>#b4.va[*] +100][♪tick -10dB +50 to=1.4s][!#b4.sleepy to,{y:-10, duration:0.9, yoyo:true, repeat:5, ease:'sine.inOut'} +850]朝の眠気も[br][>#b4.lb][>#b4.db[*]][>#b4.ab +300][>#b4.vb[*] +100][♪tick -10dB +50 to=1.4s]授業中の居眠りも、[|]遅いほど[br][>#b4.step -100][!#b4.va[5] punch,1.25,duration=400 +100][!#b4.vb[5] punch,1.25,duration=400 +100][♪pop_hi -7dB]{y}段階的に{/}増えます。[silence:430]
+@: [silence:350ms][=#pd[2] -150ms][!#pd[3] .on -150ms][>#b4.la][>#b4.da[*]][>#b4.aa +300ms][>#b4.va[*] +100ms][♪tick -10dB +50ms to=1.4s][!#b4.sleepy to,{y:-10, duration:0.9, yoyo:true, repeat:5, ease:'sine.inOut'} +850ms]朝の眠気も[br][>#b4.lb][>#b4.db[*]][>#b4.ab +300ms][>#b4.vb[*] +100ms][♪tick -10dB +50ms to=1.4s]授業中の居眠りも、[|]遅いほど[br][>#b4.step -100ms][!#b4.va[5] punch {scale: 1.25, duration: .4} +100ms][!#b4.vb[5] punch {scale: 1.25, duration: .4} +100ms][♪pop_hi -7dB]{y}段階的に{/}増えます。[silence:430ms]
 
 *** exp
 se whoosh_short -4.4dB
-@: [silence:420][=#pd[3] -220][!#pd[4] .on -220]そこで、[>#b5.parta.rule -150][>#b5.parta.rule.time -50][♪pop_hi -6dB]{y}22時30分{/}に[br]スマホを[>#b5.parta.pinphone -50][>#b5.parta.pinbed +300][♪chime_soft -8dB +100]別の部屋で充電する、[|][>#b5.parta.part +100][>#b5.parta.part.fill +300][♪click -8dB]{y}2週間{/}の実験。
-@: [silence:300][<#b5.parta -250][>#b5.res -100][♪whoosh_short -6dB -100]続けた[♪pop_soft -7dB]76人は、[br]睡眠が[!#b5.res.rr[2].aft punch,1.12,duration=400 -50][>#b5.res.dl2 -50][♪chime_ok -7dB][>#fx5 +50][<#fx5 +300]{y}37分{/}増え、[|]朝とても眠い人は[br][♪sparkle -7dB +250]{y}58%{/}から[>#b5.res.mbb[*] -100][!#b5.res.rr[3].aft punch,1.12,duration=400 -50]{y}34%{/}に減りました。[silence:100]
+@: [silence:420ms][=#pd[3] -220ms][!#pd[4] .on -220ms]そこで、[>#b5.parta.rule -150ms][>#b5.parta.rule.time -50ms][♪pop_hi -6dB]{y}22時30分{/}に[br]スマホを[>#b5.parta.pinphone -50ms][>#b5.parta.pinbed +300ms][♪chime_soft -8dB +100ms]別の部屋で充電する、[|][>#b5.parta.part +100ms][>#b5.parta.part.fill +300ms][♪click -8dB]{y}2週間{/}の実験。
+@: [silence:300ms][<#b5.parta -250ms][>#b5.res -100ms][♪whoosh_short -6dB -100ms]続けた[♪pop_soft -7dB]76人は、[br]睡眠が[!#b5.res.rr[2].aft punch {scale: 1.12, duration: .4} -50ms][>#b5.res.dl2 -50ms][♪chime_ok -7dB][>#fx5 +50ms][<#fx5 +300ms]{y}37分{/}増え、[|]朝とても眠い人は[br][♪sparkle -7dB +250ms]{y}58%{/}から[>#b5.res.mbb[*] -100ms][!#b5.res.rr[3].aft punch {scale: 1.12, duration: .4} -50ms]{y}34%{/}に減りました。[silence:100ms]
 
 *** tip
 se whoosh_short -4.4dB
-@: [silence:350][=#pd[4] -150][!#pd[5] .on -150][♪pop_soft -7dB +200][♪pop_soft -8dB +350]続かなかった理由は[br][!#b6.rsn[1] to,{scale:1.07, duration:0.18, yoyo:true, repeat:1, ease:'power2.out'} -50][!#b6.rsn[1].ic to,{rotation:8, duration:0.08, repeat:7, yoyo:true, ease:'none'} +200][♪pop_hi -7dB]「目覚ましがスマホ」。
-@: [>#b6.alarm -100][!#b6.alarm to,{rotation:6, duration:0.06, repeat:13, yoyo:true, ease:'none'} +450][>#b6.tip +50][♪alarm -6dB to=1.5s][♪rise_pop -9dB +50][>#fx6 +250][<#fx6 +500]{y}目覚まし時計{/}を用意するのが、[br][>#b6.tipline]続けるコツです。[silence:80]
+@: [silence:350ms][=#pd[4] -150ms][!#pd[5] .on -150ms][♪pop_soft -7dB +200ms][♪pop_soft -8dB +350ms]続かなかった理由は[br][!#b6.rsn[1] to,{scale:1.07, duration:0.18, yoyo:true, repeat:1, ease:'power2.out'} -50ms][!#b6.rsn[1].ic to,{rotation:8, duration:0.08, repeat:7, yoyo:true, ease:'none'} +200ms][♪pop_hi -7dB]「目覚ましがスマホ」。
+@: [>#b6.alarm -100ms][!#b6.alarm to,{rotation:6, duration:0.06, repeat:13, yoyo:true, ease:'none'} +450ms][>#b6.tip +50ms][♪alarm -6dB to=1.5s][♪rise_pop -9dB +50ms][>#fx6 +250ms][<#fx6 +500ms]{y}目覚まし時計{/}を用意するのが、[br][>#b6.tipline]続けるコツです。[silence:80ms]
 
 *** summary
 se whoosh_short -4.4dB
-@: [silence:320][♪pop_soft -7dB +80][♪pop_soft -7dB +280][♪pop_soft -7dB +480]ただし、[>#b7.notes -100][♪click -9dB]数字は自己申告。
-@: [!#b7.notes.hl to,{opacity:1, duration:0.3, repeat:3, yoyo:true}]原因がスマホだけとは[br]言い切れません。[silence:70]
+@: [silence:320ms][♪pop_soft -7dB +80ms][♪pop_soft -7dB +280ms][♪pop_soft -7dB +480ms]ただし、[>#b7.notes -100ms][♪click -9dB]数字は自己申告。
+@: [!#b7.notes.hl to,{opacity:1, duration:0.3, repeat:3, yoyo:true}]原因がスマホだけとは[br]言い切れません。[silence:70ms]
 [<#hchip][<#pd]
 
 *** end
 se whoosh_swing -6dB
 [<#subtitle]
-@: [silence:280][>#ea -80][>#eb -20][♪chime_ok -6dB +200][>#morning +300][>#fx8 +550][<#fx8 +800][>#src +600][!#morning to,{y:-14, duration:0.7, yoyo:true, repeat:3, ease:'sine.inOut'} +950]今夜は、スマホを別の部屋へ。[silence:2.1s]
+@: [silence:280ms][>#ea -80ms][>#eb -20ms][♪chime_ok -6dB +200ms][>#morning +300ms][>#fx8 +550ms][<#fx8 +800ms][>#src +600ms][!#morning to,{y:-14, duration:0.7, yoyo:true, repeat:3, ease:'sine.inOut'} +950ms]今夜は、スマホを別の部屋へ。[silence:2.1s]
 ```

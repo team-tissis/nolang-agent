@@ -31,7 +31,7 @@ run hot { color: #FF4FA8 }
 run gold { color: #FFD84A }
 run m { marker: $y,45% }
 run no { color: $c; font-family: dot }
-cut { stagger: 0 }
+cut { stagger: 0ms }
 p { color: #FFFFFF; out: none }
 div { border: none; out: none }
 img { out: none }
@@ -73,21 +73,21 @@ bgm#music_a(volume: 2dB; lowpass: 650; fade: 400,60) 疾走感のあるアップ
 bgm#music_b(volume: 5dB; fade: 0,50) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 bgm#music_c(volume: 6dB; fade: 0,40) 疾走感のあるアップテンポの明るい EDM ポップ、シンセのリードと力強いドラム、夏フェスの高揚感
 # 字幕: 画面中央に 1 句ずつ、極太の丸ゴシック・紺の太い縁・マゼンタの光・ポンと弾んで出て次の句まで残る
-subtitle.hug(bottom: 710px; padding: 0px; font-size: 150px; font-family: d; line-height: 1.12; color: #FFFFFF; stroke: #0B0730,9; text-shadow: 0px 0px 22px #FF28C8E6; background: none; text-align: center; unit: segment; strip: 、。; lead: 0; tail: 0; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
+subtitle.hug(bottom: 710px; padding: 0px; font-size: 150px; font-family: d; line-height: 1.12; color: #FFFFFF; -webkit-text-stroke: 9px #0B0730; text-shadow: 0px 0px 22px #FF28C8E6; background: none; text-align: center; unit: segment; strip: 、。; lead: 0ms; tail: 0ms; hold: next; in: {scale:.62, opacity:0, duration:.16, ease:'back.out(1.7)'}; out: {opacity:0, duration:.05})
 # 句の型 (札の頭の [card:型]): 小さい前置き・決め語 (傾いて弾む)・驚き・判子・色ずれの分身・熱・突進・被弾・復活・沈む・勝利の金・冷たい音源・熱いフェス
 subtitle.small(font-size: 112px; in: {scale:.7, opacity:0, duration:.16, ease:'back.out(1.7)'})
 subtitle.big85(font-size: 128px)
 subtitle.hit(font-size: 168px; rotation: -3; in: {scale:.45, rotation:-3, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.hit85(font-size: 128px; rotation: -3; in: {scale:.45, rotation:-3, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.huh(font-size: 225px; in: {scale:.3, opacity:0, duration:.18, ease:'back.out(1.7)'})
-subtitle.stamp(font-size: 168px; color: $red; stroke: #FFFFFF,9; text-shadow: 0px 0px 26px #FF2448E6; background: #FFFFFFEB; border: 14px solid $red; border-radius: 26px; padding: 0px 46px; rotation: -10; in: {scale:3.2, rotation:-14, opacity:0, duration:.16, ease:'power4.in'})
+subtitle.stamp(font-size: 168px; color: $red; -webkit-text-stroke: 9px #FFFFFF; text-shadow: 0px 0px 26px #FF2448E6; background: #FFFFFFEB; border: 14px solid $red; border-radius: 26px; padding: 0px 46px; rotation: -10; in: {scale:3.2, rotation:-14, opacity:0, duration:.16, ease:'power4.in'})
 subtitle.clone(in: {scale:.6, opacity:0, duration:.18, ease:'back.out(1.7)'})
 subtitle.heat(font-size: 160px; in: {scale:.45, rotation:-6, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.dash(in: {scale:1.4, opacity:0, duration:.18, ease:'power4.out'})
 subtitle.damage(font-size: 165px; in: {scale:1.5, opacity:0, duration:.12, ease:'power4.out'})
 subtitle.revive(font-size: 170px; color: #B6FFE9; text-shadow: 0px 0px 30px #3FFFB0; in: {scale:.45, rotation:-6, opacity:0, duration:.2, ease:'back.out(1.7)'})
 subtitle.dim(font-size: 120px; color: #B9B4D8; text-shadow: 0px 0px 0px #00000000; in: {scale:.9, opacity:0, duration:.3, ease:'power2.out'})
-subtitle.victory(font-size: 214px; stroke: #2A0B00,10; text-shadow: 0px 0px 40px #FFC83C; in: {scale:.2, opacity:0, duration:.34, ease:'back.out(1.7)'}; main: sine {scale: 0.06, period: 1})
+subtitle.victory(font-size: 214px; -webkit-text-stroke: 10px #2A0B00; text-shadow: 0px 0px 40px #FFC83C; in: {scale:.2, opacity:0, duration:.34, ease:'back.out(1.7)'}; main: sine {scale: 0.06, period: 1})
 subtitle.cool(font-size: 112px)
 
 # 部品: 写真カード (白の細い縁 + 青緑の光・下を暗く)・情報パネル (濃紺の半透明 + 薄い縁)・閃光の幕・字幕と同じ見た目の design の文字
@@ -96,7 +96,7 @@ def card(p) = div(left: 80px; top: 250px; width: 920px; height: 800px; border-ra
   div#shade(inset: 0; background: linear(#08042800@58%,#080428C7,180))
 def panel(h) = div(left: 80px; top: 1230px; width: 920px; height: {h}; border-radius: 30px; background: #080526CC; border: 3px solid #FFFFFF47; box-shadow: 0px 0px 36px #00E5FF47; in: {y:80, scale:.92, opacity:0, duration:.28, ease:'power3.out'})
 def flash(o) = veil(color: #FFFFFF; opacity: {o}; z-index: curtain; in: none)
-def capword(t, s=107) = p(font-size: {s}; font-family: d; line-height: 1.12; stroke: #0B0730,9; text-shadow: 0px 0px 22px #FF28C8E6; content: {t})
+def capword(t, s=107) = p(font-size: {s}; font-family: d; line-height: 1.12; -webkit-text-stroke: 9px #0B0730; text-shadow: 0px 0px 22px #FF28C8E6; content: {t})
 # タイムテーブルの枠 (地 + 文字)・地図のピン (色の点 + 名札・輪は ping で広げる)・HP の段 (名 + 枠 + 赤の地 + 緑の残量 + ダメージ数字)
 def blk(t, bg, fg=#FFFFFF8C, s=20) = div(width: 380px; border-radius: 14px; background: {bg})
   p#t(left: 16px; cy: 50%; font-size: {s}; color: {fg}; content: {t})
@@ -133,10 +133,10 @@ section#hook
 card#c1(p: "[photo]真夜中の暗い寝室。ベッドのシーツの上に置かれたスマートフォンが画面を上にして強く発光している（画面は青白く光っているだけで文字やアイコンは無い）。画面の光が周囲をほのかに照らし、窓の外から赤いネオンの光が差し込む。縦構図、シネマティック、浅い被写界深度、青と赤の色調。")
   img#p(main: kb {scale: [1.18, 1], ease:'power1.out'})
   # 画面の光 (静止は 1.6 倍で消えた姿・入場で 0.4 倍の濃い光から広がる)
-  div#glow1(left: 141px; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFF2,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; delay: 120; in: {scale:.25, opacity:.95, duration:.9, ease:'power2.out'})
+  div#glow1(left: 141px; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFF2,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; delay: 120ms; in: {scale:.25, opacity:.95, duration:.9, ease:'power2.out'})
   div#glow2(left: 141px; top: 150px; width: 640px; height: 640px; border-radius: 148px; background: radial(#8CF0FFE6,#8CF0FF00@70%); mix-blend-mode: screen; opacity: 0; in: {scale:.25, opacity:.9, duration:.9, ease:'power2.out'})
 # 通知のバナー (アプリの icon + 未読の赤丸 + 3 行)・題に黄の下帯が語で伸びる
-div#notif(left: 110px; top: 300px; width: 860px; height: 200px; border-radius: 36px; background: #F8F8FFF0; box-shadow: 0px 0px 40px #00E5FFBF; delay: 100; in: {y:-260, scale:.9, opacity:0, duration:.42, ease:'back.out(1.6)'})
+div#notif(left: 110px; top: 300px; width: 860px; height: 200px; border-radius: 36px; background: #F8F8FFF0; box-shadow: 0px 0px 40px #00E5FFBF; delay: 100ms; in: {y:-260, scale:.9, opacity:0, duration:.42, ease:'back.out(1.6)'})
   div#icon(left: 30px; cy: 50%; width: 120px; height: 120px; border-radius: 30px; background: linear(#00E5FF,#6A3BFF@50%,#FF2BD6,135))
     p#t(cx: 50%; cy: 50%; font-size: 38px; font-family: d) FES
   p#badge(left: 117px; top: 22px; font-size: 34px; background: $red; border: 4px solid #FFFFFF; border-radius: 148px; padding: 2px 16px; in: {scale:.2, opacity:0, duration:.22, ease:'back.out(1.7)'}) 1
@@ -235,7 +235,7 @@ div#half_l(left: 70px; top: 250px; width: 440px; height: 800px; border-radius: 4
   img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]暗い部屋の机の上に置かれたワイヤレスイヤホンとそのケース、横に画面の消えたスマートフォン。冷たい青い光だけが当たる、静かでミニマルな構図。プロダクト写真、縦構図。
   div#tint(inset: 0; background: #143CA059; mix-blend-mode: multiply)
   p#lbl(cx: 220px; top: 30px; font-size: 40px; background: #1D5DFF; border-radius: 148px; padding: 8px 22px) 音源
-div#half_r(left: 570px; top: 250px; width: 440px; height: 800px; border-radius: 40px; background: #0A0630; border: 4px solid #FFDCEBF2; box-shadow: 0px 0px 60px 14px #FF2B78BF; delay: 80; in: {x:300, scale:.9, opacity:0, duration:.3, ease:'power3.out'})
+div#half_r(left: 570px; top: 250px; width: 440px; height: 800px; border-radius: 40px; background: #0A0630; border: 4px solid #FFDCEBF2; box-shadow: 0px 0px 60px 14px #FF2B78BF; delay: 80ms; in: {x:300, scale:.9, opacity:0, duration:.3, ease:'power3.out'})
   img#p(inset: 0; main: kb {scale: [1.1, 1], ease:'none'}) [photo]野外フェスのステージ脇にそびえる巨大なスピーカーの壁（ラインアレイ）をローアングルで見上げた縦構図の写真。重低音で空気が震えるような迫力、赤とマゼンタのステージ照明、スモークと光の粒。
   p#lbl(cx: 220px; top: 30px; font-size: 40px; background: $red; border-radius: 148px; padding: 8px 22px) フェス
 # 赤の × (白の縁取り・2 本の棒を ±45°)
@@ -244,7 +244,7 @@ group#xmark(left: 90px; top: 447px; width: 400px; height: 400px; in: {scale:1.8,
   div#b(left: 0px; top: 183px; width: 400px; height: 34px; border-radius: 16px; background: $red; box-shadow: 0px 0px 0px 6px #FFFFFF; rotation: -45)
 # 衝撃の輪 (同じ枠に 4 つ重ねる = 位置を instance ごとに書く・0.15 倍から入場で 400 px へ・退場で 2.6 倍に広がって消える・0.12 秒おき)
 shape#sring(left: "240;240;240;240"; top: 350px; width: 600px; height: 600px; border-radius: 50%; background: none; border: 16px solid #FF6EC8; opacity: .95; in: {scale:.15, duration:.25, ease:'power1.out'}; out: {scale:2.6, opacity:0, duration:.45, ease:'power1.out'}; bleed) ×4
-p#neq(cx: 540px; cy: 620px; font-size: 300px; line-height: 1; stroke: #FF2BD6,7; text-shadow: 0px 0px 30px #FF2BD6; in: {scale:3, rotation:-30, opacity:0, duration:.18, ease:'power4.in'}; out: {scale:.6, opacity:0, duration:.2}) ≠
+p#neq(cx: 540px; cy: 620px; font-size: 300px; line-height: 1; -webkit-text-stroke: 7px #FF2BD6; text-shadow: 0px 0px 30px #FF2BD6; in: {scale:3, rotation:-30, opacity:0, duration:.18, ease:'power4.in'}; out: {scale:.6, opacity:0, duration:.2}) ≠
 panel#cmp(h: 340px)
   p#lh(left: 30px; top: 24px; font-size: 44px; color: #7FE3FF; letter-spacing: .08em) 音源
   p#li(left: 30px; top: 88px; font-size: 40px; line-height: 1.55; color: #E9E6FF; opacity: .78) 耳で聴く[br]いつでも[br]何度でも
@@ -285,46 +285,46 @@ flash#fl_end(o: .95)
 # cut = hf の 6 場面 (限界突破は「完全勝利」の閃光で全面の 1 枚へ切るので 2 cut)。境目は斜めの光の帯が左から右へ払う (0.34 秒・境界の前後に半分ずつ)
 # 字幕は 1 句 1 札 ([|] で hf の句の割り方どおりに切る)・札の頭の [card:型] で句ごとの見た目と入り方を替える・語の色は台詞の {y} {o} …
 cast n = "明るくハキハキした若い男性の声、10代後半から20代前半、元気でエネルギッシュ" manner="早口でまくし立てる熱狂的なオタク。少し大げさでドラマチックに、リズミカルに畳み掛ける"
-silence head=0 tail=0
-transition = wipe,340,dir=right,overlap=170,angle=14,bars=linear(#00E5FF00,#00E5FF@30%,#FFFFFF,#FF2BD6@70%,#FF2BD600),470
+silence head=0ms tail=0ms
+transition = wipe {duration: .34, dir: 'right', overlap: .17, angle: 14, bars: 'linear(#00E5FF00,#00E5FF@30%,#FFFFFF,#FF2BD6@70%,#FF2BD600),470'}
 
 # 解禁: バイブ + 通知音で開け、語ごとに 光 / 時計の拍 / 未読の 1 / バナーの寄り / 題の下帯・「は？」でスクラッチ + 全面を灰に + 籠った曲を止める
 *** hook
 [>#subtitle]
 bgm music_a
 # 曲は語の印で開けないので、2 区間目は cut 頭からの ms で「待って」の語に合わせて頭から入れる
-bgm music_b +7600
-@n: [silence:450][♪vibe -5dB -430][♪notif +3dB -350][!#digits.colon to,{opacity:.15, duration:.5, repeat:9, yoyo:true} -450][card:small]ピロン。[|][>#c1.glow2 -90][!#digits punch,1.14,duration=280][>#hayakuchi +100]午前{y}0時{/}、[|][>#notif.badge +150]通知が{y}一件{/}。[|][card:big85][♪sweep -4dB -50][!#notif to,{scale:1.07, duration:.18, ease:'power2.out'}]タイムテーブル[|][card:hit][!#notif.title{m} marker -50]{y}解禁{/}。[|][card:huh][♪scratch -100][<#music_a][>#desat1][!#c1 to,{scale:1.18, duration:.12, ease:'power4.out'}][!#notif shake,9,duration=300 +50]……{r}は？{/}
+bgm music_b +7600ms
+@n: [silence:450ms][♪vibe -5dB -430ms][♪notif +3dB -350ms][!#digits.colon to,{opacity:.15, duration:.5, repeat:9, yoyo:true} -450ms][card:small]ピロン。[|][>#c1.glow2 -90ms][!#digits punch {scale: 1.14, duration: .28}][>#hayakuchi +100ms]午前{y}0時{/}、[|][>#notif.badge +150ms]通知が{y}一件{/}。[|][card:big85][♪sweep -4dB -50ms][!#notif to,{scale:1.07, duration:.18, ease:'power2.out'}]タイムテーブル[|][card:hit][!#notif.title{m} marker -50ms]{y}解禁{/}。[|][card:huh][♪scratch -100ms][<#music_a][>#desat1][!#c1 to,{scale:1.18, duration:.12, ease:'power4.out'}][!#notif shake {x: 9, duration: .3} +50ms]……{r}は？{/}
 # 「待って」×3: 字幕を閉じ、語ごとに 待て が傾いて叩きつけられ、カードが揺れ、白が瞬く
-@| [<#subtitle][<#desat1 -20][!#c1 to,{scale:1, duration:.2, ease:'power2.out'}][>#wait[1]][♪cymbal][♪swish -2dB][!#c1 shake,12,duration=220][>#fl_w[1]][!#fl_w[1] to,{opacity:0, duration:.2}]待って[>#wait[2]][♪swish -2dB][!#c1 shake,12,duration=220][>#fl_w[2]][!#fl_w[2] to,{opacity:0, duration:.2}]待って[>#wait[3]][♪swish -2dB][!#c1 shake,12,duration=220][>#fl_w[3]][!#fl_w[3] to,{opacity:0, duration:.2}]待って。
+@| [<#subtitle][<#desat1 -20ms][!#c1 to,{scale:1, duration:.2, ease:'power2.out'}][>#wait[1]][♪cymbal][♪swish -2dB][!#c1 shake {x: 12, duration: .22}][>#fl_w[1]][!#fl_w[1] to,{opacity:0, duration:.2}]待って[>#wait[2]][♪swish -2dB][!#c1 shake {x: 12, duration: .22}][>#fl_w[2]][!#fl_w[2] to,{opacity:0, duration:.2}]待って[>#wait[3]][♪swish -2dB][!#c1 shake {x: 12, duration: .22}][>#fl_w[3]][!#fl_w[3] to,{opacity:0, duration:.2}]待って。
 
 # 絶望: 推し 2 つが段に光る → SAME TIME の黄枠が点滅 → 東西のピン (輪が広がる) と点線 → 判子「被り確定」で全体が揺れる → 分身の色ずれ
 *** clash
 [>#subtitle]
-@n: [!#chap text,"{no}02{/} 絶望"][!#chap pop][♪sweep -3dB -30][>#tt.ow +20][>#tt.oe +220]{y}推し{/}と推しが、[|][card:hit][♪sweep -3dB -30][>#tt.band][>#tt.same]{y}同じ時間{/}。[|][card:small]しかも[|][♪dash -2dB -100 to=1s][>#c2.pinw][!#c2.pinw.dot ping,#3FB5FF,5,interval=800,duration=800,scale=1.65>4.4][>#c2.pine +350][!#c2.pine.dot ping,#FF4A6A,5,interval=800,duration=800,scale=1.65>4.4 +350]東と西の[|][card:hit][>#c2.dash -100][>#c2.dist +200]{y}端と端{/}。[|][!#tt shake,7,duration=250 +100]タイテ{y}被り{/}、[|][card:stamp][♪stamp +3dB][♪shock +1dB to=2.8s][>#tt.stamp][!#tt.ow to,{opacity:.6, duration:.2} +100][!#tt.oe to,{opacity:.6, duration:.2} +100][!#tt shake,12,duration=300 +160][!#c2 shake,12,duration=300 +160]{red}確定{/}。[|][!#tt to,{opacity:.35, duration:.3}]人類は[|][card:clone][♪glitch -2dB][>#gl][>#gr][!#c2 to,{scale:.94, duration:.6, ease:'power2.out'}]なぜ{y}分身{/}[|][card:clone][♪glitch -5dB]できないのか。
+@n: [!#chap text,"{no}02{/} 絶望"][!#chap pop][♪sweep -3dB -30ms][>#tt.ow +20ms][>#tt.oe +220ms]{y}推し{/}と推しが、[|][card:hit][♪sweep -3dB -30ms][>#tt.band][>#tt.same]{y}同じ時間{/}。[|][card:small]しかも[|][♪dash -2dB -100ms to=1s][>#c2.pinw][!#c2.pinw.dot ping,#3FB5FF {count: 5, interval: .8, duration: .8, scale: [1.65, 4.4]}][>#c2.pine +350ms][!#c2.pine.dot ping,#FF4A6A {count: 5, interval: .8, duration: .8, scale: [1.65, 4.4]} +350ms]東と西の[|][card:hit][>#c2.dash -100ms][>#c2.dist +200ms]{y}端と端{/}。[|][!#tt shake {x: 7, duration: .25} +100ms]タイテ{y}被り{/}、[|][card:stamp][♪stamp +3dB][♪shock +1dB to=2.8s][>#tt.stamp][!#tt.ow to,{opacity:.6, duration:.2} +100ms][!#tt.oe to,{opacity:.6, duration:.2} +100ms][!#tt shake {x: 12, duration: .3} +160ms][!#c2 shake {x: 12, duration: .3} +160ms]{red}確定{/}。[|][!#tt to,{opacity:.35, duration:.3}]人類は[|][card:clone][♪glitch -2dB][>#gl][>#gr][!#c2 to,{scale:.94, duration:.6, ease:'power2.out'}]なぜ{y}分身{/}[|][card:clone][♪glitch -5dB]できないのか。
 
 # 灼熱: セミの場の音・温度が 25.0 → 36.0℃ と数えて帯が伸び、危険が点滅 → 日陰 0% → スポドリが転がり込み、陽炎とぬるい札 → 「走る」で流線とカードが左へ流れ、札と板が抜ける
 *** heat
-@n: [!#chap text,"{no}03{/} 灼熱"][!#chap pop][♪sweep -3dB -50][♪cicada -5dB -150 to=3.6s fade=200,1600][!#thermo.track.fill to,{w:324, duration:.7, ease:'power2.out'}][!#thermo.num punch,1.1,duration=240 +605][>#thermo.danger +650][!#thermo.danger to,{opacity:.35, duration:.2, repeat:7, yoyo:true} +900][card:heat]気温{o}36度{/}、[|][card:heat][>#thermo.shade0]日陰{o}ゼロ{/}、[|][♪swish -3dB][>#bottle]スポドリは[|][>#nurui][>#waves][!#waves to,{y:-30, duration:.5, yoyo:true, repeat:1}][!#bottle to,{rotation:-14, duration:.25, yoyo:true, repeat:1} +200]もう{y}ぬるい{/}。[|][card:dash][♪run -2dB][♪dash -2dB to=1s][>#speed][!#speed to,{x:-600, duration:.9, ease:'none'}][!#c3 to,{x:-140, duration:.88, ease:'power2.in'}][<#bottle +150][<#nurui +150][<#waves +150][<#thermo +150]それでも{cy}走る{/}。
+@n: [!#chap text,"{no}03{/} 灼熱"][!#chap pop][♪sweep -3dB -50ms][♪cicada -5dB -150ms to=3.6s fade=200ms,1600ms][!#thermo.track.fill to,{w:324, duration:.7, ease:'power2.out'}][!#thermo.num punch {scale: 1.1, duration: .24} +605ms][>#thermo.danger +650ms][!#thermo.danger to,{opacity:.35, duration:.2, repeat:7, yoyo:true} +900ms][card:heat]気温{o}36度{/}、[|][card:heat][>#thermo.shade0]日陰{o}ゼロ{/}、[|][♪swish -3dB][>#bottle]スポドリは[|][>#nurui][>#waves][!#waves to,{y:-30, duration:.5, yoyo:true, repeat:1}][!#bottle to,{rotation:-14, duration:.25, yoyo:true, repeat:1} +200ms]もう{y}ぬるい{/}。[|][card:dash][♪run -2dB][♪dash -2dB to=1s][>#speed][!#speed to,{x:-600, duration:.9, ease:'none'}][!#c3 to,{x:-140, duration:.88, ease:'power2.in'}][<#bottle +150ms][<#nurui +150ms][<#waves +150ms][<#thermo +150ms]それでも{cy}走る{/}。
 
 # 限界突破: 曲数が 03 → 05 → LAST SONG と替わり、被弾の語で残量が削れ (ダメージ数字・揺れ・閃光・赤枠の点滅・膝のポラロイド)、「全部」で全回復 + 歓声、「限界？」で曲を止めて周辺減光と灰・鼓動
 *** limit
-@n: [!#chap text,"{no}04{/} 限界突破"][!#chap pop]{y}3曲目{/}で[|][card:damage][♪dmg1 +2dB][!#hud.r[1].grn to,{w:44, duration:.3, ease:'power3.out'}][>#hud.r[1].dmg][<#hud.r[1].dmg +700][!#c4 shake,13,duration=300][>#fl_voice][!#fl_voice to,{opacity:0, duration:.15}]声が{dmg}枯れ{/}、[|][!#hud.cnt text,"05 / 12"][!#hud.cnt pop]{y}5曲目{/}で[|][card:damage][>#shoe -50][♪dmg2 +2dB][!#hud.r[2].grn to,{w:27, duration:.3, ease:'power3.out'}][!#hud.r[3].grn to,{w:82, duration:.4, ease:'power3.out'} +50][>#hud.r[2].dmg][>#hud.r[3].dmg +120][<#hud.r[2].dmg +750][<#hud.r[3].dmg +750][!#c4 shake,15,duration=320][>#fl_knee][!#fl_knee to,{opacity:0, duration:.15}][>#hud.warn +50][!#hud.warn to,{opacity:.1, duration:.14, repeat:5, yoyo:true} +100]膝が{dmg}笑い{/}、[|][<#shoe +100][♪riser -2dB -150][!#hud.cnt text,"LAST SONG"][!#hud.cnt recolor,#FFD84A][!#c4.p zoom_media,1.16,duration=880]{y}ラスト{/}の[|]{y}イントロ{/}で[|][card:revive][♪revive +2dB][♪cheer -3dB to=1.4s][<#hud.warn][!#c4.p zoom_media,1.07,duration=1300][!#hud.r[*].grn to,{w:550, duration:.3, ease:'power3.out', stagger:.07}][>#fl_revive][!#fl_revive to,{opacity:0, duration:.4}][!#hud glow,#3FFFB0,blur=53]全部[|][card:revive][>#full]生き返る。[|][card:dim][<#full][<#music_b][♪heart +3dB][>#vig][>#desat2][!#hud to,{opacity:.25, duration:.25}][!#c4 punch,1.04,duration=240]限界？[|][♪heart +3dB][!#c4 punch,1.05,duration=240][<#desat2 +350]知らん。
-[<#vig cut-0]
+@n: [!#chap text,"{no}04{/} 限界突破"][!#chap pop]{y}3曲目{/}で[|][card:damage][♪dmg1 +2dB][!#hud.r[1].grn to,{w:44, duration:.3, ease:'power3.out'}][>#hud.r[1].dmg][<#hud.r[1].dmg +700ms][!#c4 shake {x: 13, duration: .3}][>#fl_voice][!#fl_voice to,{opacity:0, duration:.15}]声が{dmg}枯れ{/}、[|][!#hud.cnt text,"05 / 12"][!#hud.cnt pop]{y}5曲目{/}で[|][card:damage][>#shoe -50ms][♪dmg2 +2dB][!#hud.r[2].grn to,{w:27, duration:.3, ease:'power3.out'}][!#hud.r[3].grn to,{w:82, duration:.4, ease:'power3.out'} +50ms][>#hud.r[2].dmg][>#hud.r[3].dmg +120ms][<#hud.r[2].dmg +750ms][<#hud.r[3].dmg +750ms][!#c4 shake {x: 15, duration: .32}][>#fl_knee][!#fl_knee to,{opacity:0, duration:.15}][>#hud.warn +50ms][!#hud.warn to,{opacity:.1, duration:.14, repeat:5, yoyo:true} +100ms]膝が{dmg}笑い{/}、[|][<#shoe +100ms][♪riser -2dB -150ms][!#hud.cnt text,"LAST SONG"][!#hud.cnt recolor,#FFD84A][!#c4.p zoom_media {scale: 1.16, duration: .88}]{y}ラスト{/}の[|]{y}イントロ{/}で[|][card:revive][♪revive +2dB][♪cheer -3dB to=1.4s][<#hud.warn][!#c4.p zoom_media {scale: 1.07, duration: 1.3}][!#hud.r[*].grn to,{w:550, duration:.3, ease:'power3.out', stagger:.07}][>#fl_revive][!#fl_revive to,{opacity:0, duration:.4}][!#hud glow,#3FFFB0 {blur: 53}]全部[|][card:revive][>#full]生き返る。[|][card:dim][<#full][<#music_b][♪heart +3dB][>#vig][>#desat2][!#hud to,{opacity:.25, duration:.25}][!#c4 punch {scale: 1.04, duration: .24}]限界？[|][♪heart +3dB][!#c4 punch {scale: 1.05, duration: .24}][<#desat2 +350ms]知らん。
+[<#vig cut-0ms]
 
 transition cut
 
 # 完全勝利: 白の閃光で全面のステージへ・爆発 + シンバル + 歓声・曲を山から・放射光が回り、紙吹雪、PERFECT VICTORY
 *** victory
 bgm music_c start=56.6s
-@n: [♪boom +6dB -50][♪cymbal +2dB][♪cheer +2dB -50 to=3.2s fade=200,1400][>#fl_vic][!#fl_vic to,{opacity:0, duration:.5, ease:'power2.out'}][!#vimg shake,17,duration=400 +50][!#rays to,{rotation:40, duration:1.04, ease:'none'}][>#perfect +180][card:victory]{gold}完全勝利{/}。[silence:0.4s]
+@n: [♪boom +6dB -50ms][♪cymbal +2dB][♪cheer +2dB -50ms to=3.2s fade=200ms,1400ms][>#fl_vic][!#fl_vic to,{opacity:0, duration:.5, ease:'power2.out'}][!#vimg shake {x: 17, duration: .4} +50ms][!#rays to,{rotation:40, duration:1.04, ease:'none'}][>#perfect +180ms][card:victory]{gold}完全勝利{/}。[silence:0.4s]
 
 # 持論: 2 枚のカードが左右から → 「音源」で左が寄る → 「フェス」で右が弾み左が沈む → 「別物」で ≠ + 閃光 + 重低音 → 「鼓膜」で左に × → 「細胞」で右が中央へ寄り輪が 4 重に広がる
 *** theory
-@n: [!#chap text,"{no}05{/} 持論"][!#chap pop][card:small][♪pikiin -3dB]いいか。[|][card:cool][>#cmp][!#half_l to,{scale:1.04, duration:.25, ease:'power2.out'}]{cl}音源{/}を聴くことと、[|][♪dash -2dB -50 to=1s][!#half_l to,{scale:.96, opacity:.75, duration:.25}][!#half_r to,{scale:1.07, duration:.2, ease:'back.out'}]{y}フェス{/}で[|][>#cmp.cr][!#half_r shake,9,duration=300]{hot}浴びる{/}ことは、[|]全くの[|][card:hit][♪bass +2dB][>#neq][>#fl_neq +150][!#fl_neq to,{opacity:0, duration:.3} +150][!#half_l shake,9,duration=300 +160][!#half_r shake,9,duration=300 +160][!#cmp shake,9,duration=300 +160]{y}別物{/}である。[|][>#xmark +250][!#half_l to,{opacity:.4, duration:.2} +300]{y}鼓膜{/}じゃない、[|][card:hit85][♪bass -2dB][<#neq -50][!#half_r to,{x:-250, scale:1.12, duration:.35, ease:'power3.inOut'}][<#half_l][<#xmark][>#sring[1] -150][>#sring[2] -30][>#sring[3] +90][>#sring[4] +210][<#sring[1] +100][<#sring[2] +220][<#sring[3] +340][<#sring[4] +460]{y}細胞{/}で聴くんだ。
+@n: [!#chap text,"{no}05{/} 持論"][!#chap pop][card:small][♪pikiin -3dB]いいか。[|][card:cool][>#cmp][!#half_l to,{scale:1.04, duration:.25, ease:'power2.out'}]{cl}音源{/}を聴くことと、[|][♪dash -2dB -50ms to=1s][!#half_l to,{scale:.96, opacity:.75, duration:.25}][!#half_r to,{scale:1.07, duration:.2, ease:'back.out'}]{y}フェス{/}で[|][>#cmp.cr][!#half_r shake {x: 9, duration: .3}]{hot}浴びる{/}ことは、[|]全くの[|][card:hit][♪bass +2dB][>#neq][>#fl_neq +150ms][!#fl_neq to,{opacity:0, duration:.3} +150ms][!#half_l shake {x: 9, duration: .3} +160ms][!#half_r shake {x: 9, duration: .3} +160ms][!#cmp shake {x: 9, duration: .3} +160ms]{y}別物{/}である。[|][>#xmark +250ms][!#half_l to,{opacity:.4, duration:.2} +300ms]{y}鼓膜{/}じゃない、[|][card:hit85][♪bass -2dB][<#neq -50ms][!#half_r to,{x:-250, scale:1.12, duration:.35, ease:'power3.inOut'}][<#half_l][<#xmark][>#sring[1] -150ms][>#sring[2] -30ms][>#sring[3] +90ms][>#sring[4] +210ms][<#sring[1] +100ms][<#sring[2] +220ms][<#sring[3] +340ms][<#sring[4] +460ms]{y}細胞{/}で聴くんだ。
 
 # 予告: 風の上昇音 → 「第2弾」でジャーン + 斜めの帯が流れ出す → タオルに星 3 つ → 字幕を閉じて「震えて待て」(震え → 写しの色ずれ → 爆発 + 閃光で上へ跳ね、曲を止める)
 *** next
-@n: [!#chap text,"{no}06{/} 予告"][!#chap pop][♪riser -3dB -600]{y}来週{/}、[|][card:hit][♪jaan +1dB][>#band -50][!#band.t to,{x:-1600, duration:4.4, ease:'none'} -50][!#next_box.l2 punch,1.12,duration=300]{y}第2弾{/}発表。[|][♪sweep -4dB -30][>#c6.sp[1]][<#c6.sp[1] +250][>#c6.sp[2] +150][<#c6.sp[2] +400][>#c6.sp[3] +300][<#c6.sp[3] +550]{y}タオル{/}洗って、
-@| [<#subtitle][♪tremble -3dB to=2s][>#shiver][!#shiver shake,6,duration=2000 +200][!#c6 shake,5,duration=2000 +200][!#next_box shake,5,duration=2000 +200][>#shiver.gc +480][>#shiver.gm +480][♪boom +6dB +480][♪cymbal +2dB +480][<#music_c +480][>#fl_end +480][!#fl_end to,{opacity:0, duration:.6, ease:'power2.out'} +480][!#shiver to,{y:-390, scale:1.12, duration:.32, ease:'back.out'} +520][!#c6 to,{opacity:.4, duration:.3} +550]震えて待て。[silence:1.6s]
+@n: [!#chap text,"{no}06{/} 予告"][!#chap pop][♪riser -3dB -600ms]{y}来週{/}、[|][card:hit][♪jaan +1dB][>#band -50ms][!#band.t to,{x:-1600, duration:4.4, ease:'none'} -50ms][!#next_box.l2 punch {scale: 1.12, duration: .3}]{y}第2弾{/}発表。[|][♪sweep -4dB -30ms][>#c6.sp[1]][<#c6.sp[1] +250ms][>#c6.sp[2] +150ms][<#c6.sp[2] +400ms][>#c6.sp[3] +300ms][<#c6.sp[3] +550ms]{y}タオル{/}洗って、
+@| [<#subtitle][♪tremble -3dB to=2s][>#shiver][!#shiver shake {x: 6, duration: 2} +200ms][!#c6 shake {x: 5, duration: 2} +200ms][!#next_box shake {x: 5, duration: 2} +200ms][>#shiver.gc +480ms][>#shiver.gm +480ms][♪boom +6dB +480ms][♪cymbal +2dB +480ms][<#music_c +480ms][>#fl_end +480ms][!#fl_end to,{opacity:0, duration:.6, ease:'power2.out'} +480ms][!#shiver to,{y:-390, scale:1.12, duration:.32, ease:'back.out'} +520ms][!#c6 to,{opacity:.4, duration:.3} +550ms]震えて待て。[silence:1.6s]
 ```

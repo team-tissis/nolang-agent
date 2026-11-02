@@ -40,7 +40,7 @@ svg sun = """<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="#0B0
 svg check = """<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#0B0B0C"/><path d="m6.8 12.4 3.4 3.4 7-7.4" fill="none" stroke="#FFD21F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>"""
 bgm#music(keys: "0:+4.5|550ms:0|end-1.7s:0|end-1.3s:+4"; fade: 0,850) 明るく爽やかで軽快なアコースティックギターとドラムのポップ、四拍子、豆知識のショート動画向け
 # 字幕: 白文字 + 黒の太い縁 + 落ち影・句末の約物は外す・語の色は台詞の {y}
-subtitle.hug(left: 50px; bottom: 412px; width: 980px; padding: 0px; font-size: 72px; line-height: 1.3; letter-spacing: 0.01em; color: #FFFFFF; stroke: #000000,6; text-shadow: 0px 6px 10px #00000073; background: none; unit: sentence; strip: 、。; lead: 0; in: {y:18, scale:0.96, opacity:0, duration:0.16, ease:'back.out(2)'})
+subtitle.hug(left: 50px; bottom: 412px; width: 980px; padding: 0px; font-size: 72px; line-height: 1.3; letter-spacing: 0.01em; color: #FFFFFF; -webkit-text-stroke: 6px #000000; text-shadow: 0px 6px 10px #00000073; background: none; unit: sentence; strip: 、。; lead: 0ms; in: {y:18, scale:0.96, opacity:0, duration:0.16, ease:'back.out(2)'})
 # 左上の小札 (黄の縦棒 + 黄文字)・場面の頭に印なしで置き、絵と一緒に出る
 def kicker(t) = div(left: 72px; top: 200px; width: 936px; height: 72px; in: {x:-24, opacity:0, duration:0.25, ease:'power1.out'})
   div#bar(left: 0px; cy: 50%; width: 12px; height: 50px; background: $y; border-radius: 3px)
@@ -158,33 +158,33 @@ p#end_tags(cx: "153;307;513"; cy: 660px; font-size: 40px; color: $y; background:
 ```timeline.txt
 #v2
 cast n = "爽やかな若い男性のナレーター、明るくはっきりした声でテンポよく語る" speed=110%
-silence head=0 tail=0
-transition = dissolve,320,overlap=320,color=#000000,zoom=1.08,ease=power2.out
+silence head=0ms tail=0ms
+transition = dissolve {duration: .32, overlap: .32, color: #000000, zoom: 1.08, ease: 'power2.out'}
 
 *** hook
 [>#subtitle]
 bgm music
-@n: [silence:300][>#quiz.q -300][♪whoosh -3.4dB -300][>#quiz.line -250][>#quiz.black][♪impact +2.1dB -10][>#quiz.mark +320][♪question +2.6dB +320][!#quiz to,{scale:1.04, duration:3.591, ease:'none'} +600]突然ですが、[|]なぜ車のタイヤって[|][!#quiz.mark to,{rotation:-10, scale:1.15, duration:0.18, ease:'power2.out', repeat:1, yoyo:true}][♪question -0.9dB]{y}黒い{/}[<#quiz cut-0]と思いますか？[silence:220]
+@n: [silence:300ms][>#quiz.q -300ms][♪whoosh -3.4dB -300ms][>#quiz.line -250ms][>#quiz.black][♪impact +2.1dB -10ms][>#quiz.mark +320ms][♪question +2.6dB +320ms][!#quiz to,{scale:1.04, duration:3.591, ease:'none'} +600ms]突然ですが、[|]なぜ車のタイヤって[|][!#quiz.mark to,{rotation:-10, scale:1.15, duration:0.18, ease:'power2.out', repeat:1, yoyo:true}][♪question -0.9dB]{y}黒い{/}[<#quiz cut-0ms]と思いますか？[silence:220ms]
 
 *** latex
-@: [silence:120]実は、[>#latex_head -50][♪pop -0.9dB -50]ゴムそのものは[|]本来、[>#not_black -50][♪stamp +0.4dB -20][>#sap_fact]{y}黒くありません{/}。[silence:120]
+@: [silence:120ms]実は、[>#latex_head -50ms][♪pop -0.9dB -50ms]ゴムそのものは[|]本来、[>#not_black -50ms][♪stamp +0.4dB -20ms][>#sap_fact]{y}黒くありません{/}。[silence:120ms]
 
 *** carbon
-@: [silence:120]タイヤには[|][>#carbon_badge -60][♪shine +2.1dB -40][>#carbon_meaning +200]『{y}カーボンブラック{/}』という[|][<#kick_cause][<#carbon_badge][<#carbon_meaning][>#mill_black -50][>#mill_photo -50][>#mill_shade -50][♪whoosh -1.7dB -150][<#powder_photo +270][>#kick_mix +100][>#eq_rubber +200][♪pop +0.4dB +200][>#eq_plus +400][>#eq_carbon +520][♪pop +0.4dB +520][>#eq_equals +760]黒い素材が[|][>#eq_tire +170][♪pinpon +1dB +170]加えられています。[silence:100]
+@: [silence:120ms]タイヤには[|][>#carbon_badge -60ms][♪shine +2.1dB -40ms][>#carbon_meaning +200ms]『{y}カーボンブラック{/}』という[|][<#kick_cause][<#carbon_badge][<#carbon_meaning][>#mill_black -50ms][>#mill_photo -50ms][>#mill_shade -50ms][♪whoosh -1.7dB -150ms][<#powder_photo +270ms][>#kick_mix +100ms][>#eq_rubber +200ms][♪pop +0.4dB +200ms][>#eq_plus +400ms][>#eq_carbon +520ms][♪pop +0.4dB +520ms][>#eq_equals +760ms]黒い素材が[|][>#eq_tire +170ms][♪pinpon +1dB +170ms]加えられています。[silence:100ms]
 
 *** tread
-@: [silence:120]この素材には、[|]タイヤを[>#row_tough -50][♪pop +1.6dB -50]{y}丈夫に{/}して、[|][>#row_wear -50][♪pop +1.6dB -50]{y}摩耗しにくく{/}する[|]効果があります。[silence:120]
+@: [silence:120ms]この素材には、[|]タイヤを[>#row_tough -50ms][♪pop +1.6dB -50ms]{y}丈夫に{/}して、[|][>#row_wear -50ms][♪pop +1.6dB -50ms]{y}摩耗しにくく{/}する[|]効果があります。[silence:120ms]
 
 *** uv
-@: [silence:120]さらに、[|][>#row_uv -50][!#row_tough to,{opacity:0.55, duration:0.3} -50][!#row_wear to,{opacity:0.55, duration:0.3} -50][♪shine +0.4dB -50]{y}紫外線{/}による[|]ゴムの{y}劣化を抑える{/}[|]効果もあります。[silence:180]
+@: [silence:120ms]さらに、[|][>#row_uv -50ms][!#row_tough to,{opacity:0.55, duration:0.3} -50ms][!#row_wear to,{opacity:0.55, duration:0.3} -50ms][♪shine +0.4dB -50ms]{y}紫外線{/}による[|]ゴムの{y}劣化を抑える{/}[|]効果もあります。[silence:180ms]
 [<#kick_effect none][<#row_tough none][<#row_wear none]
 
 *** design
-@: [silence:120]つまり、[|][>#design_head -50]タイヤが黒いのは[|][>#design_word -50]{y}単なるデザイン{/}[>#design_strike -50][♪swish +2.6dB -80]では[|][>#design_not -50][♪stamp +2.6dB -40]ありません。[silence:380]
+@: [silence:120ms]つまり、[|][>#design_head -50ms]タイヤが黒いのは[|][>#design_word -50ms]{y}単なるデザイン{/}[>#design_strike -50ms][♪swish +2.6dB -80ms]では[|][>#design_not -50ms][♪stamp +2.6dB -40ms]ありません。[silence:380ms]
 
 *** drive
-@: [silence:120][>#chip_long -40][♪pop +1.6dB -40]{y}長く{/}[>#chip_tough -35][♪pop +1.6dB -35]{y}丈夫に{/}、[|][>#chip_safe -40][♪pop +1.6dB -40]{y}安全に{/}[>#craft_line]使うための[|]工夫だったんです。[silence:220]
+@: [silence:120ms][>#chip_long -40ms][♪pop +1.6dB -40ms]{y}長く{/}[>#chip_tough -35ms][♪pop +1.6dB -35ms]{y}丈夫に{/}、[|][>#chip_safe -40ms][♪pop +1.6dB -40ms]{y}安全に{/}[>#craft_line]使うための[|]工夫だったんです。[silence:220ms]
 
 *** end
-@: [silence:120][>#end_lead +150]身近だけど[|]意外と知らない、[|][>#end_main -50][♪chime +2.1dB -50][>#end_tags[*] +700]{y}タイヤの秘密{/}でした！[silence:1.7s]
+@: [silence:120ms][>#end_lead +150ms]身近だけど[|]意外と知らない、[|][>#end_main -50ms][♪chime +2.1dB -50ms][>#end_tags[*] +700ms]{y}タイヤの秘密{/}でした！[silence:1.7s]
 ```

@@ -7,14 +7,14 @@ Assets (speaker, BGM, fonts, pictures) are written as descriptions.
 
 | Kit | Mood / suited subjects | `palette` | `font` / `fonts` | Motion (`motion`) / `transition` | Never |
 |---|---|---|---|---|---|
-| Precise grid | precision · SaaS · data · dev | dark `#141414` · one accent (electric blue / amber) | 太い角ゴシック / 細い角ゴシック・数字は等幅寄りの欧文グロテスクで 80〜180px | tight / `dissolve,300,overlap=300` or hard cut | decorative transitions · rounded corners |
-| Quiet luxury | luxury goods · corporate · keynotes | black + white + one navy or gold | 細い角ゴシックの大文字 + 字間広め / 明朝・数字は細めの欧文セリフ | no overshoot / `dissolve,300,overlap=300,ease=power2.inOut` | fast motion · crowding |
-| Teardown | tech launches · warnings · defiance | black + one red or yellow | 極太の角ゴシック + 等幅・数字は極太の欧文グロテスク | tight / `wipe,400,dir=left` or hard cut | soft eases · centered alignment |
-| Giant type | launches · announcements · music | two vivid colors + black | 極太の角ゴシック (画面幅の 8 割)・数字も極太の欧文サンセリフ | bouncy / `push,300` | small text · too much whitespace |
-| Flowing data | AI · the future · science | navy + a teal glow | 細い角ゴシック + 等幅・数字は欧文の等幅 | slow dissolves / `dissolve,300,overlap=300,zoom=1.06` | ruler ticks · legends |
-| Soft signal | health · personal stories · brand | light (unbleached or pale) + one warm color | 明朝 + 細い角ゴシック・数字は丸みのある欧文サンセリフ | no overshoot / `dissolve,300,overlap=300` | hard-cornered cards · black |
-| Folk-craft colors | food · regions · festivals · consumer | light + 2–3 vivid colors | 太い丸ゴシック + 筆の見出し・数字は太い丸ゴシック | bouncy / `wipe,600,dir=right` | grays · thin text |
-| Shadow and cut | incidents · exposés · film | black + white + one red | 極太の明朝 + 細い欧文・数字はクラシックな欧文セリフ | slow dissolves / `dip,400` `zoom` | bright grounds · rounded corners |
+| Precise grid | precision · SaaS · data · dev | dark `#141414` · one accent (electric blue / amber) | 太い角ゴシック / 細い角ゴシック・数字は等幅寄りの欧文グロテスクで 80〜180px | tight / `dissolve {duration: .3, overlap: .3}` or hard cut | decorative transitions · rounded corners |
+| Quiet luxury | luxury goods · corporate · keynotes | black + white + one navy or gold | 細い角ゴシックの大文字 + 字間広め / 明朝・数字は細めの欧文セリフ | no overshoot / `dissolve {duration: .3, overlap: .3, ease: 'power2.inOut'}` | fast motion · crowding |
+| Teardown | tech launches · warnings · defiance | black + one red or yellow | 極太の角ゴシック + 等幅・数字は極太の欧文グロテスク | tight / `wipe {duration: .4, dir: 'left'}` or hard cut | soft eases · centered alignment |
+| Giant type | launches · announcements · music | two vivid colors + black | 極太の角ゴシック (画面幅の 8 割)・数字も極太の欧文サンセリフ | bouncy / `push {duration: .3}` | small text · too much whitespace |
+| Flowing data | AI · the future · science | navy + a teal glow | 細い角ゴシック + 等幅・数字は欧文の等幅 | slow dissolves / `dissolve {duration: .3, overlap: .3, zoom: 1.06}` | ruler ticks · legends |
+| Soft signal | health · personal stories · brand | light (unbleached or pale) + one warm color | 明朝 + 細い角ゴシック・数字は丸みのある欧文サンセリフ | no overshoot / `dissolve {duration: .3, overlap: .3}` | hard-cornered cards · black |
+| Folk-craft colors | food · regions · festivals · consumer | light + 2–3 vivid colors | 太い丸ゴシック + 筆の見出し・数字は太い丸ゴシック | bouncy / `wipe {duration: .6, dir: 'right'}` | grays · thin text |
+| Shadow and cut | incidents · exposés · film | black + white + one red | 極太の明朝 + 細い欧文・数字はクラシックな欧文セリフ | slow dissolves / `dip {duration: .4}` `zoom` | bright grounds · rounded corners |
 
 Only in cuts where text overlays a full-bleed picture and might land on the picture's subject, declare the subject's place on the side opposite the text — `img#p(inset: 0; subject: top 35%; room: bottom 55%) 説明` with the text in the bottom 55%. The declaration is a wish ("weight over there; the text side stays a quiet background") — the subject's size and framing are decided by the body prompt. A picture with `face=` or `room=` is redone once, with a sentence pulling it into range, when the generated picture's face (subject) lands on the text side (the second take is kept even if it misses — check's table shows「作り直し 1 回」). Do not write it on pictures whose text never sits on the subject (small cards, text on bands, text outside the picture) — written everywhere, the pictures settle into one identical composition.
 

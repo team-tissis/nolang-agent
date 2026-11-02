@@ -187,7 +187,7 @@ p#cl_t(left: 120px; top: 630px; width: 1680px; font-size: 66px; color: $ink; tex
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた30代女性のナレーター、明るく親しみやすい解説口調、はっきりした発音" speed=108% manner="語りかけるように、やわらかく"
-transition = dissolve,300,overlap=300,zoom=1.04,ease=power2.out
+transition = dissolve {duration: .3, overlap: .3, zoom: 1.04, ease: 'power2.out'}
 
 *** open
 [>#subtitle]
@@ -198,11 +198,11 @@ bgm music
 *** goal
 @narrator: [silence:+0.3s]まずは共通点から。どちらも最後は、パソコンの中に、[>#gl_c]部品の3Dデータを[!#gl_c check]作ります。
 @: [>#gl_q]ちがうのは、[!#gl_q{k} recolor,$a]どこから出発するか、です。[silence:+0.6s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** f_intro
 @narrator: [silence:+0.3s]一つ目は、通常のCADモデリング。
-@: 頭の中のイメージや図面をもとに、[>#fi_s]ゼロから[!#fi_s{k} recolor,$a +300]形を組み立てる方法です。[>#fi_p]
+@: 頭の中のイメージや図面をもとに、[>#fi_s]ゼロから[!#fi_s{k} recolor,$a +300ms]形を組み立てる方法です。[>#fi_p]
 
 *** f_flow
 @narrator: [silence:+0.3s]流れはシンプルです。[>#ff_row.ff_f[1]]スケッチを描き、[>#ff_a[1]][>#ff_row.ff_f[2]]寸法を決めて、[>#ff_a[2]][>#ff_row.ff_f[3]]押し出しや穴あけで立体にします。
@@ -211,20 +211,20 @@ transition wipe,600,dir=left
 *** f_dim
 @narrator: [silence:+0.3s]ポイントは、寸法がすべて「狙った値」だということ。
 @: [>#fd_v1]穴の直径は10ミリ、[>#fd_v2]幅は50ミリ。[!#fd_v1 frame,$a]
-@: 設計者が決めた数字が、[>#fd_st]そのまま[!#fd_st punch +500]データになります。
+@: 設計者が決めた数字が、[>#fd_st]そのまま[!#fd_st punch +500ms]データになります。
 
 *** f_use
-@narrator: [silence:+0.3s]だから、[>#fu_c]新しい製品を[>#fu_p +600]一から設計するときに、[!#fu_c tint,$a]ぴったりです。[silence:+0.6s]
-transition wipe,600,dir=left
+@narrator: [silence:+0.3s]だから、[>#fu_c]新しい製品を[>#fu_p +600ms]一から設計するときに、[!#fu_c tint,$a]ぴったりです。[silence:+0.6s]
+transition wipe {duration: .6, dir: 'left'}
 
 *** r_intro
 @narrator: [silence:+0.3s]二つ目は、リバースモデリング。こちらは、向きが逆です。
-@: [>#ri_s]すでにある[!#ri_s{k} recolor,$b +300]実物から出発して、[>#ri_p]3Dデータを作り直します。
+@: [>#ri_s]すでにある[!#ri_s{k} recolor,$b +300ms]実物から出発して、[>#ri_p]3Dデータを作り直します。
 
 *** r_scan
-se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fade=300,1500
+se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fade=300ms,1500ms
 @narrator: [silence:+0.3s][>#rs_h]まずは、3Dスキャナーで実物を[>#rs_t]測ります。
-@: [♪"スキャナーが光を走らせる短い電子音" -6dB][!#rs_bg zoom_media,1.1]表面に光を当てて、[>#rs_c]何十万もの点の位置を、[!#rs_c pulse]一気に読み取ります。
+@: [♪"スキャナーが光を走らせる短い電子音" -6dB][!#rs_bg zoom_media {scale: 1.1}]表面に光を当てて、[>#rs_c]何十万もの点の位置を、[!#rs_c pulse]一気に読み取ります。
 
 *** r_mesh
 @narrator: [silence:+0.3s]読み取った点の集まりを、[>#rm_l1]点群と呼びます。
@@ -243,7 +243,7 @@ se "静かな作業室の空調の音、低い機械のうなり" -8dB to=10s fa
 *** r_use
 @narrator: [silence:+0.3s][>#ru_n]リバースモデリングが役立つのは、[>#ru_col.ru_c[1] check]図面が残っていない、古い部品の復元。
 @: [>#ru_col.ru_c[2] check]手で作った試作品のデータ化。[>#ru_col.ru_c[3] check]そして、実物どうしの合わせの確認です。[silence:+0.6s]
-transition wipe,600,dir=left
+transition wipe {duration: .6, dir: 'left'}
 
 *** cmp
 @narrator: [silence:+0.3s]二つを並べてみましょう。
@@ -253,7 +253,7 @@ transition wipe,600,dir=left
 [<#music]
 
 *** combo
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.3s]実際の現場では、二つを組み合わせることも多いです。
 @: [>#cb_row.cb_f[1]]実物を[>#cb_a[1]][>#cb_row.cb_f[2]]スキャンして形を取り込み、[>#cb_a[2]][>#cb_row.cb_f[3]]そこに新しい設計を足していく。
 @: [>#cb_a[3]][>#cb_row.cb_f[4]][!#cb_row.cb_f[4] tint,$a]良いところ取りの使い方です。

@@ -144,19 +144,19 @@ group#cl_row(left: 108px; top: 570px; width: 900px; height: 105px; display: grid
 ```timeline.txt
 #v2
 cast narrator = "落ち着いた30代女性のナレーター、明瞭で知的なビジネス向けの解説口調" speed=105%
-transition = dissolve,300,overlap=300
+transition = dissolve {duration: .3, overlap: .3}
 
 *** open
 [>#subtitle]
 bgm music
-se "静かな朝の室内の環境音、遠くの鳥の声" -8dB to=8s fade=300,1500
+se "静かな朝の室内の環境音、遠くの鳥の声" -8dB to=8s fade=300ms,1500ms
 @narrator: [silence:+0.4s]毎月、自動で出ていく固定費。
 @: [>#op_h]見直すと、[!#op_h{t} underline,$a]一年でいくら浮くのでしょうか。[silence:0.6s]
 
 *** model
 @narrator: [silence:+0.3s]架空の30代夫婦をモデルに、[>#md_col.md_r[1]]スマホ、[>#md_col.md_r[2]]電気、[>#md_col.md_r[3]]サブスクの三つを見直します。
 @: [>#md_l][>#md_t][>#md_v]三つ合わせて、今は毎月3万300円です。[silence:0.5s]
-transition wipe,600,dir=left,overlap=600
+transition wipe {duration: .6, dir: 'left', overlap: .6}
 
 *** phone
 @narrator: [silence:+0.3s]まずはスマホ。[>#ph_col.ph_c[1]]大手キャリアで2人、月1万6000円。
@@ -170,13 +170,13 @@ transition wipe,600,dir=left,overlap=600
 
 *** subs
 @narrator: [silence:+0.3s]最後はサブスク。[>#sb_row.sb_k[*] {stagger:{each:0.12}}]使っていない動画と音楽の三本を、
-@: [!#sb_row.sb_k[1].t strike,$b][!#sb_row.sb_k[2].t strike,$b +150][!#sb_row.sb_k[3].t strike,$b +300]解約して、[>#sb_col.sb_c[1]]月3300円が、[>#sb_col.sb_c[2]]0円に。
+@: [!#sb_row.sb_k[1].t strike,$b][!#sb_row.sb_k[2].t strike,$b +150ms][!#sb_row.sb_k[3].t strike,$b +300ms]解約して、[>#sb_col.sb_c[1]]月3300円が、[>#sb_col.sb_c[2]]0円に。
 @: 一年で、[>#sb_d][!#sb_d.v count]3万9600円です。[silence:0.5s]
-transition dip,400
+transition dip {duration: .4}
 [<#music]
 
 *** total
-bgm music2 -1500
+bgm music2 -1500ms
 @narrator: [silence:+0.4s][>#tt_col.tt_c[*] {stagger:{each:0.12}}]三つを合わせると、[>#tt_lb][>#tt_v][♪"キラリン 21" -2dB]一年で19万800円。
 @: [!#tt_col.tt_c[1] focus][>#tt_s]スマホだけで、その7割を占めます。[silence:0.6s]
 

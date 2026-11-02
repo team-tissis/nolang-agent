@@ -14,15 +14,16 @@ import し (package init を通らない)、nolang-agent への sync が配布 b
 
 from __future__ import annotations
 
+import difflib
 import functools
 import hashlib
 import json
 import re
 import unicodedata
-from collections.abc import Callable
+from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TypeGuard
+from typing import Protocol, TypeGuard
 
 # ===== 文書の置き場 =====
 
@@ -307,26 +308,49 @@ def is_verbatim(plan: str, request: str) -> bool:
     return VERBATIM_MARK in plan or VERBATIM_REQUEST.search(request) is not None
 
 
-def editable_note(editable: bool) -> str:
+@dataclass(frozen=True)
+class EditableLimits:
+    """編集可能モードの量の線 (`editable_note` が prompt に差し込む)。正本は server の `EditableProfile` (domain の定数
+    `EDITABLE_MAX_*`) — 製品はそこから組み (`EditableProfile.author_limits`)、配布 client は文書一式の contract.json の
+    `editable` (test が domain の定数と突き合わせる) から読む (`editable_limits`)。"""
+
+    max_shadow_kinds: int
+
+
+def editable_limits(reference_dir: Path) -> EditableLimits:
+    """文書一式の contract.json の `editable` → 量の線。欠け・型違いは ValueError (古い束を黙って既定値で埋めない)。"""
+    raw = read_contract_json(reference_dir).get("editable")
+    if not _is_json_object(raw):
+        raise ValueError("contract.json: editable (編集可能モードの量の線) が無い")
+    values = {key: raw.get(key) for key in ("max_shadow_kinds",)}
+    ints = {key: value for key, value in values.items() if isinstance(value, int) and not isinstance(value, bool)}
+    if len(ints) != len(values):
+        raise ValueError(f"contract.json: editable の値が整数でない: {values}")
+    return EditableLimits(max_shadow_kinds=ints["max_shadow_kinds"])
+
+
+def editable_note(limits: EditableLimits | None) -> str:
     """編集可能モードの作法の節 (著者・担当・直し役の prompt に同じ節)。投入の門 (intake) が同じ規則 (`editable_*`) を DEFECT にする
-    ので、書く前に守る方が速い。閾値の正本は `domain_services/video_draft/editable_profile.py` — この文は既定値を写した作法。"""
-    if not editable:
+    ので、書く前に守る方が速い。量の線は `limits` (正本は domain の定数) を差し込む — None = 編集可能モードでない。"""
+    if limits is None:
         return ""
-    return """
-Editable mode (the user will adjust this video themselves in the editor — write only inside the editable vocabulary. Breaking
-it turns the submission into a DEFECT `editable_*`: the cut loses time in fix round-trips, or its motion is mechanically replaced with a fade):
-- At most 25 elements per cut (×N counts as N). Fold information into one card (×N items, bullet rows) (add cuts only while planning — never split a cut during fixes).
-- At most 2 word-bound state changes (`[!…]` `[=…]`) per cut — spend them on one hero emphasis and one still split (standing-figure expression and pose switches do not count).
-- Do not use group / camera / svg / counting numbers (`[count:]`). Partial color / size `{tok}` runs, and `.sticky` layers
-  that persist across cuts (a standing band, a logo card), are fine (a run cannot be the target of a word mark `[!…]`).
-- Write motion only in these forms (positive examples — they are enough for a good screen):
-  `in: fade`, `in: pop`, `in:{y:40, opacity:0, duration:.5}`, `in:{x:-40, opacity:0, duration:.4, ease:'power2.out'}`,
-  `out: fade`, `out:{opacity:0, duration:.3}`; a picture's ambient is `main: kb {scale: [1, 1.06]}`; a card's or text's
-  ambient is `main: float` (a gentle bob); a diagram's ambient is `main: pulse`.
-  Forms that cannot be used (the gate rejects them and the cut is delayed): `keys(at=…)` keyframe rows, `path:`, ambient motions other than float / pulse (`main: sway`, per-glyph `wave`, …),
-  filter tweens, and coefficient easings like `ease:'back.out(1.7)'` (word easings only).
-- At most 3 fonts; one box-shadow, reused through a def (default to flat boards). Align text sizes to three tiers — heading / body / card — with defs.
-- When the user picked a reference video, the quantity lines above relax to what the reference uses — copy the reference's
+    return f"""
+Editable mode (the user will adjust this video themselves in the editor). Write `lint profile=editable` in the root: with that
+line the engine lowers your src into the editor's vocabulary by itself — an element with children (a card and its texts) is
+drawn as separate layers that take the parent's entrance, ambient, opacity and filter; `{{…}}` object entrances, keys, paths and
+coefficient easings become plain motions (no state keys); a single static `scale:` is baked into the size. Small visual drift
+from that rounding is accepted, so write as you normally would. Only these cannot be rounded and turn the submission into a
+DEFECT `editable_*` (the cut loses time in fix round-trips, or the offending mark is mechanically stripped):
+- Word-bound state changes are dropped: `[!…]` / `[=…]` marks (except a standing figure's expression / pose switch) and
+  `stagger: …,dim` are not drawn in editable mode (they would be state keys), so do not rely on them. Show a change by bringing
+  in another element with `[>…]` (a frame, a highlighted copy, the next card); emphasis is static (a `{{tok}}` run, a colored card).
+- No group / camera / svg / counting numbers (`[count:]`); no `{{tok}}` run as a mark target; no filter (color) tweens in `in:` / `out:` / `main:`.
+- On an element with children, no rotation / `transform: rotate` / `clip-path` / `overflow: hidden` (only a group could draw them over
+  the children) — put them on a childless sibling. No static skew / 3D / translate transforms anywhere.
+- Cut transitions: `transition fade {{duration: .6}}` / `dissolve {{duration: .3}}` / `wipe {{duration: .6, dir: 'left'}}` / `push` / `slide` / `zoom {{…}}` with `overlap` `zoom` `ease` and a trailing `se=`;
+  `fade out,N` at the last cut and `fade in,N` at the first cut's head are fine — no `panel` curtain and no `bars`.
+- At most {limits.max_shadow_kinds} box-shadow kind, reused through a def (default to flat boards). Align text sizes to three tiers — heading / body / card — with defs.
+- When the user picked a reference video, the shadow line above relaxes to what the reference uses — copy the reference's
   root and persistent layers (frames, logo cards, mascots, the subtitle box) as they are (see "the shape the user chose" below).
 """
 
@@ -374,20 +398,20 @@ AUTHOR_BRIEF_NOTE = (
     " cut's brief points at another cut's thing (the opening's …, the earlier …), state its color and shape in that brief.\n"
     "Give the film one signature transition: craft the root `transition=` to the film's mood instead of a plain dissolve, at"
     " the richness of these real moves —\n"
-    "- `wipe,620,dir=left,angle=16,bars=#1E1B4B,520;#FF4F9A,600;#FFE14D,440` (an angled sweep in the"
-    " film's own hex colors; a glow is `bars=linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180`);\n"
-    '- `slide,600,dir=right,offset=8%,opacity=0,se="ページをめくる音" -4dB` or with `drift=240,dim=0.38` (a page turn);\n'
-    "- `dissolve,320,overlap=320,color=#0A0F1A,zoom=1.08` (rising out of the dark) · `push,500,dir=up` · `none,300` (hard"
+    "- `wipe {duration: .62, dir: 'left', angle: 16, bars: '#1E1B4B,520;#FF4F9A,600;#FFE14D,440'}` (an angled sweep in the"
+    " film's own hex colors; a glow is `bars: 'linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180'`);\n"
+    "- `slide {duration: .6, dir: 'right', offset: '8%', opacity: 0} se=\"ページをめくる音\" -4dB` or with `drift: 240, dim: .38` (a page turn);\n"
+    "- `dissolve {duration: .32, overlap: .32, color: '#0A0F1A', zoom: 1.08}` (rising out of the dark) · `push {duration: .5, dir: 'up'}` · `none {duration: .3}` (hard"
     " documentary cuts).\n"
-    "Keep the window 300–850 ms and pick `dir=` to fit this film (not every film sweeps left). Every transition sounds its"
+    "Keep the window 0.3–0.85 s and pick `dir` to fit this film (not every film sweeps left). Every transition sounds its"
     " own `切替音` matched to its motion; to give the film its own transition voice write a family name alone"
     ' (`se="切替音 ポロロン"` for a cheerful film, `キラキラ` elegant, `シュワーン` TV energy, `拍子木` Japanese — sounds.md) and'
     " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn)."
     " A quiet film (cinematic, story, anything the ambience carries) wants silent joins: write `se=none` on the root"
     " `transition=` and let the ambience and the picture carry the cut; sound at most the one turn that deserves it. A whoosh on"
-    " every cut of a snowbound cabin is noise, not craft. One kind per film — but play that kind: vary its ms per cut like tempo (a 120 ms melt on a quick beat, 800 on a"
+    " every cut of a snowbound cabin is noise, not craft. One kind per film — but play that kind: vary its duration per cut like tempo (a 0.12 s melt on a quick beat, 0.8 on a"
     " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
-    ' `transition panel,800,color=$色,label="01 原因",skew=-12` (a curtain — never the root default or on'
+    " `transition panel {duration: .8, color: '$色', label: \"01 原因\", skew: -12}` (a curtain — never the root default or on"
     " the last cut).\n"
 )
 
@@ -408,7 +432,7 @@ def author_prompt(
     reference: str = "",
     speech: str = "",
     *,
-    editable: bool,
+    editable: EditableLimits | None,
     referenced: bool = False,
     brief: bool = False,
 ) -> str:
@@ -455,7 +479,7 @@ The mechanics of draft src (facts of the machine):
 - Image generation does not keep eras, shapes or counts straight; a description with two scenes becomes a stacked two-picture composite. To draw the same thing in two or more pictures, put
   `image name = "…"` in the root and derive each picture with `[ref:@name]`. Nobody gets to look at the generated pictures, so clear the spot where text goes with `subject:` / `room:`.
 {length_rule}
-{editable_note(editable)}{editable_author_note(editable, referenced=referenced)}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
+{editable_note(editable)}{editable_author_note(editable is not None, referenced=referenced)}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
 === plan ===
 name: what this cut shows and how it moves (target seconds · N sentences — 0 for a voiceless cut)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
 === root_design ===
@@ -540,7 +564,7 @@ def fix_prompt(
     review: bool = False,
     shots: list[str] | None = None,
     reference_note: str = "",
-    editable: bool,
+    editable: EditableLimits | None,
 ) -> str:
     """own_root = この cut が根の持ち主 (動画の最初の live な cut・根が流れる前) — 根の 2 block も直せる (`@ root_design 行`)。他の cut
     の直し役は根と前の cut の定義を変えない (参考として見るだけ)。review = 見直し (厳しい監督として指摘に出ない弱い所・崩れも探す・
@@ -570,7 +594,7 @@ def fix_prompt(
     if f" {LENGTH_RULE} " in findings:
         trim = (
             f"Only because the findings include {LENGTH_RULE} (the speech length missed the cut's target) you may delete whole speech lines (`@` lines)"
-            " sentence by sentence (never a voiceless line `@名: [silence:N]` or a held `[silence:N]` beat — those pauses are the piece's rhythm, not"
+            " sentence by sentence (never a voiceless line `@名: [silence:2s]` or a held `[silence:2s]` beat — those pauses are the piece's rhythm, not"
             " length), or add new one-sentence lines (never change the characters of the lines you keep; do not meet the target with fast"
             " talking, `[speed:]`, or packed `[silence:]`). Delete supporting sentences first (keep numbers and conclusions). For elements a deleted"
             " line's marks brought in, move the marks to a kept line's word or delete the element too. An added sentence must continue the surrounding"
@@ -1037,3 +1061,688 @@ def apply_edit_reply(design: str, timeline: str, reply: str) -> AppliedEdit:
         deleted=tuple(deleted),
         root_changed=root_changed,
     )
+
+
+# ===== cut の block の text 操作 (製品の orchestrator と配布 client の stream_run の共有) =====
+# 直し役の出力の事後処理・最後の手段・定義の移動・機械の直し。規則は bench の実測で決めた物 (各関数の注記) — 製品と client が同じ
+# 実装を通る (片方だけ直すと lane で結果が食い違う)。block = cut の design の block + `---timeline---` + timeline の block。
+
+# cut の block の字下げ無しの行で定義される要素の名 (`img#cl_p(inset: 0; …)`・`kick#cl_k(…)`)。字下げの子は親の名の下に付く
+TOP_DEF = re.compile(r"^([A-Za-z][\w-]*)#([A-Za-z0-9_]+)", re.M)
+# 自動で改名する名: `_` か数字を含む物 (`cl_p`・`h2`)。`hd` `bar` のような短い名は根の物を意図して書いた事もあるので直し役に任せる
+RENAMABLE = re.compile(r"^[a-z]+(?:_[a-z0-9_]+|[0-9][a-z0-9_]*)$")
+# grammar の予約 lane と予約語 (domain `RESERVED_LAYER_NAMES` と同じ集合 — domain は libs を import できないので値を持つ。一致は
+# `libs/tests/ai/llm_core/test_draft_author_prompts.py` が縛る)。層の名に書くと DEFECT:NAME — 根の 1 行で全 cut が直し役に回ったので
+# 機械で改名する
+RESERVED_NAMES = frozenset({"bg", "se", "subtitle", "cut", "screen", "self", "prev"})
+# cut の block に書ける名のある定義 (grammar の CUT_DEFINITION_ROOTS) — 持ち主はその block の cut。字下げの子の行も定義の一部
+_NAMED_DEF = re.compile(r"^(def|svg|sound|image|motion|run|cue)\s+([A-Za-z_][\w-]*)\b")
+_DEF_CHILD = re.compile(r"^[ \t]+[A-Za-z_][\w-]*#([A-Za-z_][\w-]*)", re.M)
+# 台詞の効果音の説明 (warm の鍵) と、台詞行の印 (効果音の `[♪…]` を除く)
+_SE = re.compile(r'\[♪"([^"]+)"')
+_MARK_NOT_SE = re.compile(r"\[(?!♪)[^\[\]]*\]")
+# 投入検査の render 文から editable_motion の的 (層の dotted path) と slot を引く (機械 degrade の的)
+_EDITABLE_MOTION = re.compile(
+    r"DEFECT:editable_motion\b.*?#(?P<name>[\w.\[\]]+) の (?P<slot>motion_in|motion_out|motion_main|in|out|main)\b"
+)
+_MOTION_SLOT_GROUP = {
+    "in": "in",
+    "motion_in": "in",
+    "out": "out",
+    "motion_out": "out",
+    "main": "main",
+    "motion_main": "main",
+}
+# 投入検査の render 文から editable_state_marks の印の綴り (`印 [!#名 …] —`) を引く (機械 degrade の的)
+_EDITABLE_MARK = re.compile(r"DEFECT:editable_state_marks\b.*?印 (?P<mark>\[[!=][^\]]*\])")
+# 幕の cut 切替の行 (editable_transition の的) と、色帯の key
+_CURTAIN_LINE = re.compile(r"^[ \t]*transition[ \t]+(?:dip|flash|panel)\b.*\n?", re.M)
+_BARS_KEY = re.compile(r",bars=[^,\n]*(?:;[^,\n]*)*")
+# V104 の静的な見た目の宣言 (editable_style の的) — 行の `(宣言)` の中の `key: 値` を落とす
+_STYLE_DECL_KEYS = frozenset(
+    {"blend", "mask", "scale", "skew", "skewX", "skewY", "rotateX", "rotateY", "perspective", "origin"}
+)
+# 子を持つ要素に書くと群でしか子ごとに描けない宣言 (editable_scope の的) — 字下げの子を持つ行から落とす (`transform` は rotate の時)
+_SHEET_DECL_KEYS = frozenset({"rotation", "clip-path", "overflow", "overflow-x", "overflow-y"})
+# svg に焼く箱の行で、焼く絵を変えない宣言 (位置・動き・重なり) と、素材にならない行の tag
+_BOX_SKIP = frozenset(
+    {"left", "top", "right", "bottom", "cx", "cy", "x", "y", "z-index", "in", "out", "main", "overlap"}
+)
+_NOT_BOX = frozenset({"p", "h1", "h2", "h3", "h4", "span", "subtitle", "img", "def", "cue"})
+_ELEMENT_HEAD = re.compile(r"^[a-z][\w-]*#([\w-]+)\(")  # design の最上位の要素の行 (`p#名(` — 字下げなし)
+_ELEMENT_LINE = re.compile(r"^(\s*)[a-z][\w-]*#([\w-]+)")  # design の要素の行 (`  p#名(` — 字下げで親子)
+
+
+def unquoted_chars(text: str, start: int = 0) -> Iterator[tuple[int, str]]:
+    """text[start:] のうち文字列の外の字を (位置, 字) で — 括弧の対応や区切りを数える scanner が文字列の中を見ないために。
+    文字列の切り方は tokenize と同じ (`\"\"\"…\"\"\"` は生の本文・`\"…\"` は逃げ `\\x` を 2 字で 1 つ) に、HTML 形の `'…'`
+    (GSAP の object の値 `ease: 'power2.out'`・逃げなし) を足した物。閉じない文字列は末尾まで。grammar (`grammar.lexicon`) も
+    これを使う (配布 client と同じ 1 本)。"""
+    position = start
+    while position < len(text):
+        char = text[position]
+        if text.startswith('"""', position):
+            end = text.find('"""', position + 3)
+            position = len(text) if end < 0 else end + 3
+            continue
+        if char in "'\"":
+            position += 1
+            while position < len(text) and text[position] != char:
+                position += 2 if char == '"' and text[position] == "\\" else 1
+            position += 1
+            continue
+        yield position, char
+        position += 1
+
+
+def split_top_level(body: str, sep: str = ";") -> list[str]:
+    """body を top-level の sep で割る (括弧 `(){}[]` と quote の中は割らない) — `(宣言)` の中身を宣言ごとに・切替の引数を `,` で。"""
+    parts: list[str] = []
+    depth = 0
+    start = 0
+    for k, ch in unquoted_chars(body):
+        if ch in "({[":
+            depth += 1
+        elif ch in ")}]":
+            depth -= 1
+        elif ch == sep and depth == 0:
+            parts.append(body[start:k])
+            start = k + 1
+    parts.append(body[start:])
+    return parts
+
+
+def split_block(name: str, text: str) -> tuple[str, str] | None:
+    """cut の block の text を (design, timeline) に割る。頭の `section#名` を著者が落としていたら補う (落とすとその要素は doc の中で
+    前の cut の物になる — s9 03: hook の写真が本体の cut で開いて `~` の継続が割れた)。`---timeline---` が無ければ None。"""
+    if TIMELINE_SEP not in text:
+        return None
+    design, timeline = text.split(TIMELINE_SEP, 1)
+    design = design.strip("\n") + "\n"
+    if not re.search(r"^section#", design, re.M):
+        design = f"section#{name}\n" + design
+    return design, timeline.strip("\n") + "\n"
+
+
+def join_block(design: str, timeline: str) -> str:
+    return design + TIMELINE_SEP + "\n" + timeline
+
+
+def named_defs(design: str) -> list[tuple[str, str, str]]:
+    """design の block の名のある定義 (種, 名, 行 + 字下げの子の text)。"""
+    out: list[tuple[str, str, str]] = []
+    lines = design.split("\n")
+    k = 0
+    while k < len(lines):
+        m = _NAMED_DEF.match(lines[k])
+        if m is None:
+            k += 1
+            continue
+        j = k + 1
+        while j < len(lines) and (lines[j].startswith((" ", "\t")) or not lines[j].strip()):
+            if not lines[j].strip() and (j + 1 >= len(lines) or not lines[j + 1].startswith((" ", "\t"))):
+                break
+            j += 1
+        out.append((m.group(1), m.group(2), "\n".join(lines[k:j]).rstrip("\n") + "\n"))
+        k = j
+    return out
+
+
+def def_children(text: str) -> set[str]:
+    """名のある定義の字下げの子の名 — 後の cut は実体の子を `実体.子` で参照する。"""
+    return set(_DEF_CHILD.findall(text))
+
+
+def def_signature(text: str) -> str:
+    """名のある定義の引数の形 = 名の直後の `(…)` (引数の並びと既定値・括弧の入れ子を数える・空白は詰める)。引数の無い定義は空。"""
+    head = text.split("\n", 1)[0]
+    m = _NAMED_DEF.match(head)
+    rest = head[m.end() :].lstrip() if m else ""
+    depth = 0
+    for k, ch in enumerate(rest if rest.startswith("(") else ""):
+        depth += {"(": 1, ")": -1}.get(ch, 0)
+        if depth == 0:
+            return re.sub(r"\s+", "", rest[: k + 1])
+    return ""
+
+
+def add_defs(block: str, text: str) -> str:
+    """定義の text を block の design (`section#` の行の次) に足す (既にあればそのまま)。"""
+    if not text.strip() or text.strip() in block:
+        return block
+    m = re.search(r"^section#[^\n]*\n", block, re.M)
+    at = m.end() if m else 0
+    return block[:at] + text + block[at:]
+
+
+def drop_token(line: str, token: str) -> str:
+    """行から著者の綴りを 1 つ消す (宣言なら隣の `;` も 1 つ) — `grammar.unshown._without` と同じ消し方。"""
+    at = line.find(token)
+    before, after = line[:at], line[at + len(token) :]
+    if not token.startswith("["):
+        if after.lstrip().startswith(";"):
+            after = after.lstrip()[1:].lstrip()
+        elif before.rstrip().endswith(";"):
+            before = before.rstrip()[:-1].rstrip()
+    return before + after
+
+
+def rows_naming_layers(text: str, layers: Sequence[str]) -> tuple[set[int], int]:
+    """text (cut の block) の中で層の名を指す行 (section の `#名(`・印の `#名`) の 0 始まりの行番号と、見つかった層の数。板の子の層
+    (`板._board`) は板の名でも (板の出現の印は `[>#板]`)、×N の実体 (`row[2]`) と子 (`板.k`) は書いた名 (`#row(…) ×2`・字下げの
+    `#k`) でも引く。"""
+    lines = text.split("\n")
+    rows: set[int] = set()
+    hit = 0
+    for layer in layers:
+        owner = layer.split("._")[0]
+        leaf = re.sub(r"\[\d+\]", "", owner.rsplit(".", 1)[-1])
+        names = {name for name in (layer, owner, leaf) if name and name != "-"}
+        if not names:
+            continue
+        pattern = re.compile(r"#(?:" + "|".join(re.escape(name) for name in names) + r")(?![\w.])")
+        found = {k for k, line in enumerate(lines) if pattern.search(line)}
+        if found:
+            rows |= found
+            hit += 1
+    return rows, hit
+
+
+def revert_changed_regions(before: str, after: str, bad: set[int]) -> str | None:
+    """after (直し役の出力) のうち、bad (0 始まりの行番号) を含む変更の塊 (before との差分の塊) を before の行に戻した text。bad が
+    変更の塊の外にしか無ければ None (直し役の変更が原因ではない)。"""
+    b_lines, a_lines = before.split("\n"), after.split("\n")
+    out = list(a_lines)
+    hit = False
+    for tag, i1, i2, j1, j2 in reversed(difflib.SequenceMatcher(None, b_lines, a_lines, autojunk=False).get_opcodes()):
+        if tag == "equal":
+            continue
+        # 消した塊 (j1 == j2) は境界の行が壊れる — その行も塊に含めて見る
+        if any(j1 <= k < max(j2, j1 + 1) for k in bad):
+            out[j1:j2] = b_lines[i1:i2]
+            hit = True
+    return "\n".join(out) if hit else None
+
+
+def prune_orphan_elements(before: str, after: str, text: str) -> str:
+    """直し役が足した最上位の要素 (before に無く after にある) のうち、after の timeline では印で出していたのに、塊の戻し (text) で
+    その印が消えた物の定義 (と残った印) を text から落とす。印を失った要素は cut の頭から末尾まで出っぱなしの層になり、他の文字に
+    重なる (10-30 c15 super の learn: レビューが足した台詞の行ごと `[>#learn_q +300]` が戻り、`p#learn_q` だけ残って cut 全体に居座った)。"""
+
+    def parts(s: str) -> tuple[list[str], str]:
+        d, _sep, t = s.partition(TIMELINE_SEP)
+        return d.split("\n"), t
+
+    def names(lines: list[str]) -> set[str]:
+        return {m.group(1) for line in lines if (m := _ELEMENT_HEAD.match(line))}
+
+    def marked(timeline: str, name: str) -> bool:
+        return re.search(r"#" + re.escape(name) + r"(?![\w-])", timeline) is not None
+
+    b_design, _ = parts(before)
+    a_design, a_timeline = parts(after)
+    n_design, n_timeline = parts(text)
+    orphans = {n for n in names(a_design) - names(b_design) if marked(a_timeline, n) and not marked(n_timeline, n)}
+    if not orphans:
+        return text
+    out: list[str] = []
+    skip = False
+    for line in n_design:
+        m = _ELEMENT_HEAD.match(line)
+        if m is not None:
+            skip = m.group(1) in orphans
+        elif skip and line.strip() and not line.startswith((" ", "\t")):
+            skip = False  # 字下げの子を抜けた
+        if not skip:
+            out.append(line)
+    for n in orphans:  # 残った印 (`[<#名]` 等) — 名を抜き、空になった印を消す
+        n_timeline = re.sub(r",?#" + re.escape(n) + r"(?![\w-])[^\],]*", "", n_timeline)
+    n_timeline = re.sub(r"\[[>!<=~]\s*\]", "", n_timeline)
+    return "\n".join(out) + TIMELINE_SEP + n_timeline
+
+
+def edit_lines(now: str, fixed: str) -> str:
+    """戻した直し役の edit の本文 (`+` = 直し役が書いた行・`-` = 今の行) — 次の直し役に「効かなかった」と見せる。"""
+    diff = difflib.unified_diff(now.split("\n"), fixed.split("\n"), lineterm="", n=0)
+    return "\n".join(line for line in diff if line[:1] in "+-" and not line.startswith(("---", "+++")))
+
+
+def _decl_span(line: str) -> tuple[int, int] | None:
+    """行の最初の `(宣言)` の開きと閉じの位置 (quote の中の括弧は数えない)。無い・閉じなければ None。"""
+    open_at = line.find("(")
+    if open_at < 0:
+        return None
+    depth = 0
+    for k, ch in unquoted_chars(line, open_at):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                return open_at, k
+    return None
+
+
+def degrade_motion_decls(line: str, slots: set[str] | None) -> tuple[str, int]:
+    """行の `(宣言)` の中の動きの宣言を編集可能 profile の preset へ機械で寄せる (editable_motion の最後の網 — 層を落とさない)。
+    slots = 書き換える slot。None = blanket (的の行が引けなかった時): object 形の `in:`/`out:` を `fade` に・custom 形
+    (`{…}`/keys/波形) の `main:` を落とす (named の `main: kb {…}` は残す)。戻り = (行, 書き換えた数)。"""
+    span = _decl_span(line)
+    if span is None:
+        return line, 0
+    open_at, close_at = span
+    changed = 0
+    kept: list[str] = []
+    for part in split_top_level(line[open_at + 1 : close_at]):
+        head = re.match(r"\s*(in|out|main)\s*:", part)
+        if head is None:
+            kept.append(part)
+            continue
+        key = head.group(1)
+        value = part[head.end() :]
+        if slots is not None and key not in slots:
+            kept.append(part)
+            continue
+        if slots is None and key in ("in", "out") and "{" not in value:
+            kept.append(part)  # preset 語のまま
+            continue
+        if (
+            slots is None
+            and key == "main"
+            and not (value.lstrip().startswith("{") or "keys" in value or "waveform" in value)
+        ):
+            kept.append(part)  # named の main (kb 等) は残す
+            continue
+        changed += 1
+        if key in ("in", "out"):
+            kept.append(f"{part[: head.start(1)]}{key}: fade")
+        # main は decl ごと落とす (常時の custom は preset に写せない)
+    if not changed:
+        return line, 0
+    return line[: open_at + 1] + ";".join(kept).strip("; ") + line[close_at:], changed
+
+
+def degrade_editable_motion(block: str, defects: Sequence[str], *, drop_marks: bool = False) -> tuple[str, int]:
+    """editable_motion の機械 degrade (最後の網): 違反した層の `in:`/`out:` を `fade` に、custom の `main:` を落として層と台詞を残す
+    — motion 違反だけで cut が落ちない受け入れ条件の実装。的は投入検査の render 文 (`#名 の slot`) から引き、design の行 (def の行を
+    含む) を書き換える。的の行が引けなければ (def の実体名と定義名の揺れ等) design 全行を blanket で寄せる。drop_marks = その層を的に
+    した `[!#層 …]` / `[=#層 …]` の印も落とす (台詞と効果音は残す) — 動きが timeline の印から来た時 (engine が `!` の効果を層の
+    motion に畳む) の網。戻り = (block, 書き換えた宣言と落とした印の数)。"""
+    if not any("editable_motion" in d for d in defects):
+        return block, 0
+    rows = [m for d in defects if (m := _EDITABLE_MOTION.search(d)) is not None]
+    design, sep, rest = block.partition(TIMELINE_SEP)
+    lines = design.split("\n")
+    changed = 0
+    targets = [(m.group("name").split(".")[-1], _MOTION_SLOT_GROUP[m.group("slot")]) for m in rows]
+    for idx, line in enumerate(lines):
+        hits = {slot for leaf, slot in targets if re.search(rf"#{re.escape(leaf)}(?=[(.\s]|$)", line)}
+        if hits:
+            lines[idx], k = degrade_motion_decls(line, hits)
+            changed += k
+    if changed == 0:
+        for idx, line in enumerate(lines):
+            lines[idx], k = degrade_motion_decls(line, None)
+            changed += k
+    if drop_marks and targets:
+        leaves = {re.escape(leaf) for leaf, _slot in targets}
+        mark = re.compile(rf"\[[!=]#(?:{'|'.join(sorted(leaves))})(?=[\s\],.{{\[]|$)[^\]]*\]")
+        rest, n = mark.subn("", rest)
+        changed += n
+    return ("\n".join(lines) + sep + rest, changed) if changed else (block, 0)
+
+
+def _strip_style_decls(line: str, *, sheet: bool = False) -> tuple[str, int]:
+    """行の `(宣言)` の中から V104 の静的な見た目 (`_STYLE_DECL_KEYS`・`italic` の flag) と `dim` の stagger を落とし、破線の枠を実線に。
+    戻り = (行, 落とした数)。"""
+    span = _decl_span(line)
+    if span is None:
+        return line, 0
+    open_at, close_at = span
+    changed = 0
+    kept: list[str] = []
+    for part in split_top_level(line[open_at + 1 : close_at]):
+        head = re.match(r"\s*([A-Za-z-]+)\s*:", part)
+        if head is None:
+            kept.append(part)
+            continue
+        key = head.group(1)
+        if key in _STYLE_DECL_KEYS or (
+            sheet and (key in _SHEET_DECL_KEYS or (key == "transform" and "rotate" in part))
+        ):
+            changed += 1
+            continue
+        values = [t.strip() for t in part[head.end() :].split(",")]
+        if key == "stagger" and "dim" in values:
+            rest = [t for t in values if t != "dim"]
+            changed += 1
+            if rest:
+                kept.append(f"{part[: head.end()]} {','.join(rest)}")
+            continue
+        if key in ("style", "font") and re.search(r"\bitalic\b", part):
+            part, n = re.subn(r"\s*\bitalic\b", "", part)
+            changed += n
+        if key == "border" and re.search(r"\bdashed\b", part):
+            part, n = re.subn(r"\bdashed\b", "solid", part)
+            changed += n
+        kept.append(part)
+    if not changed:
+        return line, 0
+    return line[: open_at + 1] + ";".join(kept).strip("; ") + line[close_at:], changed
+
+
+def degrade_editable_marks(block: str, defects: Sequence[str]) -> tuple[str, int]:
+    """状態 key と編集画面に無い見た目の機械 degrade (editable_state_marks / editable_transition / editable_style の最後の網):
+    投入検査の render 文が名指す `!` / `=` の印を台詞から落とし (台詞と効果音は残す)、`stagger` の `dim` を外し、幕の cut 切替の行と
+    `bars=` を落とし、blend / mask / 斜体 / 静的な transform / 破線の宣言を落とす。戻り = (block, 落とした数)。"""
+    rules = ("editable_state_marks", "editable_transition", "editable_style", "editable_scope")
+    if not any(rule in d for rule in rules for d in defects):
+        return block, 0
+    design, sep, rest = block.partition(TIMELINE_SEP)
+    changed = 0
+    marks = {m.group("mark") for d in defects if (m := _EDITABLE_MARK.search(d)) is not None}
+    for mark in sorted(marks, key=len, reverse=True):
+        rest, n = re.subn(re.escape(mark), "", rest)
+        changed += n
+    if any("editable_transition" in d for d in defects):
+        rest, n = _CURTAIN_LINE.subn("", rest)
+        changed += n
+        rest, n = _BARS_KEY.subn("", rest)
+        changed += n
+    if any(rule in d for rule in ("editable_style", "editable_state_marks", "editable_scope") for d in defects):
+        sheet = any("editable_scope" in d for d in defects)
+        lines = design.split("\n")
+        for idx, line in enumerate(lines):
+            has_children = (
+                idx + 1 < len(lines) and lines[idx + 1][:1] in (" ", "\t") and line[:1] not in (" ", "\t", "")
+            )
+            lines[idx], n = _strip_style_decls(line, sheet=sheet and has_children)
+            changed += n
+        design = "\n".join(lines)
+    return (design + sep + rest, changed) if changed else (block, 0)
+
+
+def block_span(lines: Sequence[str], which: str, cut: str) -> tuple[int, int] | None:
+    """doc の design / timeline の行の中で cut の block の [頭の行, 次の cut の頭の行) (1 始まり)。`section#cut` / `*** cut` から次の
+    cut の頭まで。無ければ None。"""
+    head, nxt = (
+        (re.compile(rf"^section#{re.escape(cut)}\b"), re.compile(r"^section#"))
+        if which == "design"
+        else (re.compile(rf"^\*\*\* {re.escape(cut)}\s*$"), re.compile(r"^\*\*\* "))
+    )
+    start = next((k for k, line in enumerate(lines, start=1) if head.match(line)), None)
+    if start is None:
+        return None
+    end = next((k for k, line in enumerate(lines[start:], start=start + 1) if nxt.match(line)), len(lines) + 1)
+    return start, end
+
+
+def block_in_doc(design: str, timeline: str, cut: str) -> str | None:
+    """doc の中の cut の block を cut の block の形 (design + `---timeline---` + timeline) で。"""
+    parts: list[str] = []
+    for which, text in (("design", design), ("timeline", timeline)):
+        lines = text.split("\n")
+        span = block_span(lines, which, cut)
+        if span is None:
+            return None
+        parts.append("\n".join(lines[span[0] - 1 : span[1] - 1]).strip("\n") + "\n")
+    return join_block(parts[0], parts[1])
+
+
+class LocatedDefect(Protocol):
+    """check の欠陥の場所 (製品の `grammar.lexicon.Defect`・client の `stream_api.Defect` が満たす)。"""
+
+    @property
+    def level(self) -> str: ...
+
+    @property
+    def file(self) -> str: ...
+
+    @property
+    def line(self) -> int: ...
+
+
+def drop_defect_lines(design: str, timeline: str, cut: str, defects: Sequence[LocatedDefect]) -> tuple[str, str, int]:
+    """doc の DEFECT のうち cut の block の行を指す物を doc から外す → (design, timeline, 直した行の数)。design の行はその行と字下げの
+    子を消す。timeline の台詞行は消さずに印 (効果音の `[♪…]` は残す) だけ落とす — 消した層を指す印の DEFECT で台詞 (TTS の元) まで
+    消えて「台詞行が無い」に連鎖した (o6_03)。block の頭 (section / *** の行) は落とさない。"""
+    texts = {"design": design, "timeline": timeline}
+    total = 0
+    for which in ("design", "timeline"):
+        lines = texts[which].split("\n")
+        span = block_span(lines, which, cut)
+        if span is None:
+            continue
+        start, end = span
+        kill: set[int] = set()
+        stripped: dict[int, str] = {}
+        for d in defects:
+            if d.level != "DEFECT" or d.file != f"{which}.txt":
+                continue
+            n = d.line
+            if not (start < n < end) or n in kill or n in stripped:
+                continue
+            row = lines[n - 1]
+            if which == "timeline" and row.lstrip().startswith("@"):
+                bare = _MARK_NOT_SE.sub("", row)
+                if bare != row:
+                    stripped[n] = bare
+                    continue
+            kill.add(n)
+            j = n + 1
+            while j < end and lines[j - 1].startswith((" ", "\t")):
+                kill.add(j)
+                j += 1
+        if kill or stripped:
+            total += len(kill) + len(stripped)
+            texts[which] = "\n".join(stripped.get(k, line) for k, line in enumerate(lines, start=1) if k not in kill)
+    return texts["design"], texts["timeline"], total
+
+
+BoxKey = tuple[str, frozenset[str], str]
+AssetKey = tuple[frozenset[str], frozenset[str], frozenset[str], frozenset[BoxKey]]
+
+
+def box_key(line: str) -> BoxKey | None:
+    """箱 (div / shape / veil / def の実体 / icon …) の行から焼く絵を決める物 (型・大きさ・塗り・縁・影・中身)。暗い palette の div は
+    既定で glass・gradient / 影つきの箱は svg に焼かれ、直しがその行を足す / 変えると seal の時に描き直す (3〜7 s・o27_03) — warm の
+    鍵に入れて掛け直す。位置と動きは焼く絵を変えない。"""
+    m = re.match(r"^\s*([A-Za-z_][\w-]*)(?:#\S*)?\(((?:[^()]|\([^()]*\))*)\)\s*(.*)$", line)
+    if m is None or m.group(1) in _NOT_BOX:
+        return None
+    decls = split_top_level(m.group(2))
+    kept = frozenset(d.strip() for d in decls if d.strip() and d.split(":", 1)[0].strip() not in _BOX_SKIP)
+    return (m.group(1), kept, m.group(3).strip())
+
+
+def asset_key(text: str) -> AssetKey:
+    """cut の text のうち素材を決める物 (絵の説明文・台詞の文字 (印を除く)・効果音の説明・svg に焼く箱の見た目) — 同じなら warm を
+    掛け直さない (位置だけの直しは絵も声も変えない)。並びと重複は素材を変えないので集合で見る (直し役が img の行を書き直して 2 行に
+    なり、同じ絵なのに warm を掛け直した・o7_03 situation 17 s)。"""
+    lines = text.splitlines()
+    pictures = frozenset(m.group(1).strip() for line in lines if (m := PICTURE_LINE.match(line)))
+    speech = frozenset(without_marks(line) for line in lines if line.lstrip().startswith("@"))
+    boxes = frozenset(k for line in lines if (k := box_key(line)) is not None)
+    return (pictures, speech, frozenset(_SE.findall(text)), boxes)
+
+
+# ===== 直しの段の定数と尺の指摘 (製品と client の共有) =====
+
+# 見直し (レビュー) の回数 — 静止画を見せて 1 回 (10-27 裁定: 静止画なしのレビューも 2 回目も置かない)。直し役の 2 回の上限には数えない
+REVIEW_ROUNDS = 1
+# 台詞の尺の指摘: check の見積りが cut の予算から ±20% (短い cut は ±2.5 s — 文 1 本より細かく寄せない) を超えたら直し役に文の刈り込み
+# / 足しを頼む。締めの cut の予算は依頼の残りを 10〜30 s の範囲で (弾性)
+LENGTH_TOLERANCE = 0.2
+LENGTH_SLACK_S = 2.5
+CLOSING_BUDGET_S = (10.0, 30.0)
+
+
+def closing_budget(requested: float, before: float) -> float:
+    """締めの cut の予算 (弾性): 依頼の目安から前の live な cut の見込みを引いた残りを CLOSING_BUDGET_S の範囲で。"""
+    low, high = CLOSING_BUDGET_S
+    return min(max(requested - before, low), high)
+
+
+def length_finding(estimate: float, budget: float, timeline: str) -> str:
+    """check の見積り (字数 × 話速 + 間) が cut の予算から LENGTH_TOLERANCE (か LENGTH_SLACK_S の大きい方) を超えて外れたら、直し役
+    への指摘の 1 行 (文を丸ごと消す / 足す本数つき)。外れていない・声のある台詞行が無ければ空。逐語の動画と最初の cut に掛けないのは
+    呼び手 (逐語は依頼の台本の改変になる・最初の cut は再生開始の臨界路で、ずれは締めの cut の弾性が吸う)。"""
+    gap = estimate - budget
+    if abs(gap) <= max(budget * LENGTH_TOLERANCE, LENGTH_SLACK_S):
+        return ""
+    # 声の無い行 (`@名: [silence:2s]`) は演出の間 — 数えず、声の無い cut (章の札・題の間) は文の足し引きで寄せない (足すと間が台詞に化ける)
+    lines = sum(1 for line in timeline.splitlines() if line.lstrip().startswith("@") and spoken(line))
+    if not lines:
+        return ""
+    per = estimate / lines
+    n = min(max(round(abs(gap) / per), 1), 2)
+    verb = "delete" if gap > 0 else "add"
+    return (
+        f"warn {LENGTH_RULE} (cut): estimated speech {estimate:.0f} s / this cut's target {budget:.0f} s ({gap:+.0f} s;"
+        f" one speech line ≈ {per:.0f} s) — {verb} {n} whole speech line(s) (whole sentences; do not meet it with fast"
+        " talking or packed pauses)"
+    )
+
+
+# ===== check の autofix (lint の `Finding.autofix` = `操作:引数` の解釈) =====
+
+# 積極的に当てる機械の直し — 直し方が正解として一つに決まり、問題を隠さず、著者が書いた物を消さない (design の `\n`・根から継いだ
+# 切替と書いた out の二重 (out を残して切替を cut に)・言い切ってから切り替える / 切替が済んでから話し始める 0.5 秒以下の間)。他
+# (0.5 秒を超える間・切替を短く溶かす・文字を板の上に出す) は消極的: 問題は消えるが LLM ならもっと良い直し方 (構成・位置・切替の種)
+# を選べる — 後に担当や warn を直す直し役が残る間は当てずに指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の
+# 間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は 40-74 で負け)。積極 / 消極は規則で決める (同じ `transition` の操作でも
+# double_exit の `cut` は積極・ghost_dissolve の短い dissolve は消極)
+AUTOFIX_SURE_SILENCE_S = 0.5
+_SILENCE_TAIL = re.compile(r"\[silence:\+([\d.]+)s\]\s*$")
+_SILENCE_AT = re.compile(r"\[silence:\+([\d.]+)s\]")
+
+
+def _add_silence(line: str, seconds: float, *, head: bool) -> str:
+    """台詞の行の頭 (話者の後) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。"""
+    if head:
+        speaker = _SPEAKER.match(line)
+        cut = speaker.end() if speaker else 0
+        rest = line[cut:]
+        lead = rest[: len(rest) - len(rest.lstrip())]
+        if (old := _SILENCE_AT.match(rest[len(lead) :])) is not None:
+            total = float(old.group(1)) + seconds
+            return line[:cut] + lead + f"[silence:+{total:.2f}s]" + rest[len(lead) + old.end() :]
+        return line[:cut] + lead + f"[silence:+{seconds:.2f}s]" + rest[len(lead) :]
+    if (old := _SILENCE_TAIL.search(line)) is not None:
+        return line[: old.start()] + f"[silence:+{float(old.group(1)) + seconds:.2f}s]"
+    return line.rstrip() + f"[silence:+{seconds:.2f}s]"
+
+
+def _element_spans(lines: Sequence[str]) -> dict[str, tuple[int, int, str]]:
+    """design の行 → 要素の path (字下げで親の名を `.` で繋ぐ) → (行の始め, 子を含む終わり, 親の path)。"""
+    spans: dict[str, tuple[int, int, str]] = {}
+    stack: list[tuple[int, str]] = []
+    for at, line in enumerate(lines):
+        hit = _ELEMENT_LINE.match(line)
+        if hit is None:
+            continue
+        indent = len(hit.group(1))
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        parent = stack[-1][1] if stack else ""
+        path = f"{parent}.{hit.group(2)}" if parent else hit.group(2)
+        end = at + 1
+        while end < len(lines) and lines[end].strip() and len(lines[end]) - len(lines[end].lstrip()) > indent:
+            end += 1
+        spans[path] = (at, end, parent)
+        stack.append((indent, path))
+    return spans
+
+
+def autofix_is_sure(rule: str, autofix: str, sure_rules: frozenset[str]) -> bool:
+    """積極的な機械の直しか (台帳の `sure` の規則 ``sure_rules`` — 製品は `draft_check.rules.sure_rules`・stream は API `drafts/rules/`
+    の行 — と 0.5 秒以下の無音)。"""
+    op, _, arg = autofix.partition(":")
+    return rule in sure_rules or (op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S)
+
+
+# 切替の行 `種 {…} [se=…]` (object の文字列の中の `{` `}` は数えない)
+_TRANSITION_LINE_RE = re.compile(
+    r"""^(?P<kind>[a-z]+)(?:\s*(?P<obj>\{(?:[^{}'"]|'[^']*'|"[^"]*")*\}))?(?:\s+(?P<se>se=.*))?$"""
+)
+_AUTOFIX_TRANSITION_KEYS = frozenset({"duration", "overlap"})  # autofix が替える key (他は書いたまま)
+
+
+def _object_items(obj: str | None) -> list[str]:
+    """`{a: 1, b: 'x,y'}` → `["a: 1", "b: 'x,y'"]` (top-level の `,` で割る)。"""
+    return [item.strip() for item in split_top_level(obj[1:-1], ",") if item.strip()] if obj else []
+
+
+def _object_key(item: str) -> str:
+    return item.partition(":")[0].strip()
+
+
+def apply_autofix(
+    block: str, fixes: Sequence[tuple[str, str]], *, sure_only: bool = False, sure_rules: frozenset[str] = frozenset()
+) -> tuple[str, list[int]]:
+    """check の指摘のうち直し方が一つに決まる物 (fixes = (規則, autofix) の列 — autofix は lint が計算した `操作:引数`) を cut の
+    block に当てる → (直した block, 当てた fixes の index)。当たらない指摘 (行が見つからない・形が違う) は飛ばす。
+    - `silence_tail:秒` 最後の台詞の末尾の無音 (切替が台詞に掛かる) / `silence_head:秒` 最初の台詞の頭の無音 (入場が切替の窓に入る)
+    - `transition:種 {duration: 秒, overlap: 秒}` cut の切替の行の種・尺・overlap を替える (object の他の key — 向き・帯 — と
+      `se=` は残す)・`transition:cut` は
+      切替の行の無い cut に `transition cut` を足す (根から継いだ切替と書いた out の二重掛け — 書いた out を残す)
+    - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
+    - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
+    sure_only = 積極的な直し (`autofix_is_sure` — 台帳の sure の規則 ``sure_rules`` と短い無音) だけ当てる (後に LLM が残る時)。"""
+    design, sep, timeline = block.partition(TIMELINE_SEP)
+    if not sep:
+        return block, []
+    dlines, tlines = design.split("\n"), timeline.split("\n")
+    speech = [at for at, line in enumerate(tlines) if line.lstrip().startswith("@")]
+    applied: list[int] = []
+    for index, (rule, autofix) in enumerate(fixes):
+        if not autofix or (sure_only and not autofix_is_sure(rule, autofix, sure_rules)):
+            continue
+        op, _, arg = autofix.partition(":")
+        before = (list(dlines), list(tlines))
+        if op in ("silence_tail", "silence_head") and speech:
+            at = speech[-1] if op == "silence_tail" else speech[0]
+            tlines[at] = _add_silence(tlines[at], float(arg), head=op == "silence_head")
+        elif op == "transition":
+            lines = [at for at, line in enumerate(tlines) if line.lstrip().startswith("transition ")]
+            if (
+                lines
+                and (old := _TRANSITION_LINE_RE.match(tlines[lines[-1]].strip().removeprefix("transition ").strip()))
+                is not None
+            ):
+                new = _TRANSITION_LINE_RE.match(arg)
+                items = _object_items(new.group("obj")) if new is not None else []
+                kept = [
+                    item
+                    for item in _object_items(old.group("obj"))
+                    if _object_key(item) not in _AUTOFIX_TRANSITION_KEYS
+                ]
+                kind = new.group("kind") if new is not None else arg
+                body = f" {{{', '.join([*items, *kept])}}}" if items or kept else ""
+                tlines[lines[-1]] = f"transition {kind}{body}" + (f" {old.group('se')}" if old.group("se") else "")
+            elif not lines:
+                last = max(at for at, line in enumerate(tlines) if line.strip())
+                tlines.insert(last + 1, "transition " + arg)
+        elif op == "br":
+            fence = False
+            for at, line in enumerate(dlines):
+                if '"""' in line:
+                    fence = fence if line.count('"""') % 2 == 0 else not fence
+                    continue
+                if not fence and "\\n" in line:
+                    dlines[at] = line.replace("\\n", "[br]")
+        elif op == "move_after":
+            mine, _, theirs = arg.partition(":")
+            spans = _element_spans(dlines)
+            if (
+                mine in spans
+                and theirs in spans
+                and spans[mine][2] == spans[theirs][2]
+                and spans[mine][0] < spans[theirs][0]
+            ):
+                (start, end, _), (_, over_end, _) = spans[mine], spans[theirs]
+                moved = dlines[start:end]
+                dlines = dlines[:start] + dlines[end:over_end] + moved + dlines[over_end:]
+        if (dlines, tlines) != before:
+            applied.append(index)
+    return "\n".join(dlines) + sep + "\n".join(tlines), applied

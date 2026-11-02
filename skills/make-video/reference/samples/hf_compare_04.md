@@ -34,8 +34,8 @@ run k { color: $kw }
 run r { color: $red }
 run o { color: $orange }
 run p { color: $ok }
-cue turn_chair(a, d, e=power2.inOut) = [!#top_view.chair to,rotation={a},duration={d},ease={e},pivot=97.14%,5.88%][!#top_view.axis to,rotation={a},duration={d},ease={e},pivot=97.14%,5.88%]
-cue tick(x) = [>#x.box_fill][>#x.mark +80]
+cue turn_chair(a, d, e=power2.inOut) = [!#top_view.chair to,{rotation: {a}, duration: {d}, ease: {e}, pivot: '97.14% 5.88%'}][!#top_view.axis to,{rotation: {a}, duration: {d}, ease: {e}, pivot: '97.14% 5.88%'}]
+cue tick(x) = [>#x.box_fill][>#x.mark +80ms]
 cue bumper_in(b) = [>#b.s][>#b.t][>#b.u]
 cue bumper_out(b) = [<#b.s][<#b.t][<#b.u]
 p { line-height: 1; out: none }
@@ -44,7 +44,7 @@ img { out: none }
 svg { out: none }
 shape { out: none }
 icon { out: none }
-subtitle.hug(bottom: 40px; font-size: 46px; line-height: 1.46; text-align: center; color: $ink; background: #FFFFFFF5; border-radius: 26px; padding: 32px 64px 26px 64px; border: 4px solid $gray; box-shadow: 0px 12px 32px #192D4638; label: top_left; unit: sentence; lead: 150; tail: 300; hold: off; in: {y:22, opacity:0, duration:0.3, ease:'power3.out'}; out: {y:10, opacity:0, duration:0.2, ease:'power2.in'})
+subtitle.hug(bottom: 40px; font-size: 46px; line-height: 1.46; text-align: center; color: $ink; background: #FFFFFFF5; border-radius: 26px; padding: 32px 64px 26px 64px; border: 4px solid $gray; box-shadow: 0px 12px 32px #192D4638; label: top_left; unit: sentence; lead: 150ms; tail: 300ms; hold: off; in: {y:22, opacity:0, duration:0.3, ease:'power3.out'}; out: {y:10, opacity:0, duration:0.2, ease:'power2.in'})
 subtitle.staff(border: 4px solid $navy)
 subtitle.student(border: 4px solid $mint)
 bgm#music(duck: -6; volume: 6dB; fade: 800,2400; keys: "0:+5|15s:+5|30s:0") 明るく温かく穏やかなアコースティックのピアノとギター、弦と鉄琴、日常と希望の雰囲気の遅めの曲
@@ -92,13 +92,13 @@ svg top_callout = """<svg viewBox="0 0 880 600"><line x1="282" y1="411" x2="236"
 # title — 開幕: 写真が寄りながら現れ、左の余白に題札 (前置き・字ごとに上がる 2 行・下線の帯)・「基本手順」で 3 つの目次の札
 section#title(stagger: {each:0})
 img#title_photo(inset: 0; content: @hero; main: keys(at=0 scale=1.12 opacity=0 | at=0.31 scale=1 opacity=1 ease=power2.out | at=0.999 scale=1.035 ease=none),duration=8450,pivot=70%,55%)
-div#title_veil(inset: 0; background: linear(#FBF7EFF7,#FBF7EFEB@36%,#FBF7EF00@56%,90); border-radius: 24px; delay: 150; in: {opacity:0, duration:0.8, ease:'power2.out'})
+div#title_veil(inset: 0; background: linear(#FBF7EFF7,#FBF7EFEB@36%,#FBF7EF00@56%,90); border-radius: 24px; delay: 150ms; in: {opacity:0, duration:0.8, ease:'power2.out'})
 group#title_card(out: {x:-60, opacity:0, duration:0.35, ease:'power2.in'})
-p#title_card.kicker(left: 112px; top: 210px; font-size: 32px; letter-spacing: 0.08em; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 10px 26px 10px 26px; delay: 450; in: {x:-40, opacity:0, duration:0.5, ease:'power3.out'}) 介護の基本技術
-p#title_card.line1(left: 112px; top: 297px; font-size: 82px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 650; in: {y:46, opacity:0, duration:0.5, ease:'power3.out', stagger:.05}) 車椅子への
-shape#title_card.bar(left: 106px; top: 486px; width: 783px; height: 30px; path: rect,r=0.25; background: $bar; delay: 1450; in: {scaleX:0, duration:0.6, ease:'power2.inOut', pivot:'left'})
-p#title_card.line2(left: 112px; top: 398px; font-size: 108px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 900; in: {y:60, opacity:0, duration:0.55, ease:'power3.out', stagger:.05}) 安全な移乗介助
-p#title_card.sub(left: 112px; top: 548px; font-size: 50px; letter-spacing: 0.12em; color: $mint; delay: 1650; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) ― 基本手順 ―
+p#title_card.kicker(left: 112px; top: 210px; font-size: 32px; letter-spacing: 0.08em; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 10px 26px 10px 26px; delay: 450ms; in: {x:-40, opacity:0, duration:0.5, ease:'power3.out'}) 介護の基本技術
+p#title_card.line1(left: 112px; top: 297px; font-size: 82px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 650ms; in: {y:46, opacity:0, duration:0.5, ease:'power3.out', stagger:.05}) 車椅子への
+shape#title_card.bar(left: 106px; top: 486px; width: 783px; height: 30px; path: rect,r=0.25; background: $bar; delay: 1450ms; in: {scaleX:0, duration:0.6, ease:'power2.inOut', pivot:'left'})
+p#title_card.line2(left: 112px; top: 398px; font-size: 108px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 900ms; in: {y:60, opacity:0, duration:0.55, ease:'power3.out', stagger:.05}) 安全な移乗介助
+p#title_card.sub(left: 112px; top: 548px; font-size: 50px; letter-spacing: 0.12em; color: $mint; delay: 1650ms; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) ― 基本手順 ―
 div#title_card.agenda(left: "75;197;363"; top: 651px; width: "111;153;130"; height: 70px; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 6px 18px #23446B24; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)', stagger: {each: 0.14}}) ×3
   p#n(left: 10px; cy: 50%; width: 50px; font-size: 28px; text-align: center; color: #FFFFFF; background: "$mint;$mint;$orange"; border-radius: 148px; padding: 10px 0px) 1;2;✓
   p#t(left: 74px; cy: 50%; font-size: 32px; color: $navy) 準備;位置調整;まとめ
@@ -119,7 +119,7 @@ group#brake_zoom(main: keys(at=0 scale=1 | at=1 scale=1.2 ease=sine.inOut),windo
   img#photo(inset: 0; main: none) [ref:@hero]介護実習室。介護ベッドの横に置かれた自走式車椅子の横に介護スタッフがしゃがみ、後輪のすぐ前のブレーキレバーを右手でしっかり押してロックしている。スタッフは手元のブレーキを確認しながら、顔を少し上げて学生たちに語りかけている。背景で学生3人が身を乗り出して手元をのぞき込んでいる。
   shape#ring(left: 855px; top: 705px; width: 160px; height: 160px; border-radius: 50%; background: none; border: 9px solid $orange; in: draw {duration: 0.45})
 heading#brake_head(s: "いちばん大切なこと"; t: "ブレーキの確認"; w: 288)
-p#click_word(left: 1006px; top: 556px; font-size: 76px; letter-spacing: 0.04em; color: $orange; stroke: #FFFFFF,7; transform: rotate(-8deg); in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(3)'}; out: {y:-16, opacity:0, duration:0.3, ease:'power2.in'}) カチッ
+p#click_word(left: 1006px; top: 556px; font-size: 76px; letter-spacing: 0.04em; color: $orange; -webkit-text-stroke: 7px #FFFFFF; transform: rotate(-8deg); in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(3)'}; out: {y:-16, opacity:0, duration:0.3, ease:'power2.in'}) カチッ
 img#brake_inset(left: 1360px; top: 196px; width: 400px; height: 400px; border-radius: 1498px; border: 10px solid #FFFFFF; box-shadow: 0px 14px 36px #192D464D; content: @closeup; main: kb {scale: [1.18, 1], ease:'power2.out'}; in: {scale:0.4, opacity:0, duration:0.55, ease:'back.out(2.2)'})
 p#brake_cap(left: 1300px; top: 616px; width: 520px; font-size: 38px; line-height: 1.35; text-align: center; color: $navy; background: #FFFFFFF5; border-radius: 18px; padding: 16px 20px 18px 20px; box-shadow: 0px 8px 22px #192D462E; in: {y:20, opacity:0, duration:0.45, ease:'power3.out'}) {o}ブレーキレバー{/}を押して[br]確実にロック
 p#brake_check(left: 1318px; top: 760px; font-size: 32px; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 16px 26px 18px 68px; box-shadow: 0px 8px 20px #2E9C7A59; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)'}) 左右両方のブレーキを確認
@@ -153,21 +153,21 @@ bumper#bumper2.sticky(s: "STEP 2"; t: "位置調整"; u: "ベッドと車椅子�
 # angle — STEP 2: 格子の地に写真と上から見た図を並べ、「角度」で軸・「15度」「30度」で車椅子を回し、角度の札と扇の明滅
 section#angle(stagger: {each:0})
 div#angle_bg(inset: 0; background: $cream; pattern: grid,40,#23446B0F; border-radius: 24px)
-heading#angle_head(s: "ステップ2"; t: "ベッドと車椅子の角度"; w: 389; delay: 350)
-img#angle_photo(left: 56px; top: 262px; width: 852px; height: 484px; border-radius: 26px; border: 8px solid #FFFFFF; box-shadow: 0px 14px 34px #192D4638; main: kb {scale: [1, 1.08], focus: ['40% 60%', '40% 60%']}; delay: 300; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'}) [ref:@hero]介護実習室を斜め上から見下ろした構図。介護ベッドの長い辺の中央に、利用者役の学生B（短い黒髪の男性）が端座位で座っている（足は床につけ、ベッドの外側を向いている）。介護スタッフが、学生Bのすぐ横に車椅子を置き、ベッドの側面に対して浅い斜め（約20〜30度）の角度に向きを整えている。車椅子の座面は学生Bの方を向いている。学生Aと学生Cが横で見学している。
-p#angle_cap(left: 56px; top: 762px; width: 852px; font-size: 36px; text-align: center; color: $navy; delay: 750; in: {y:18, opacity:0, duration:0.45, ease:'power3.out'}) ベッドのすぐ横に、斜めに置く
-div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius: 28px; background: #FFFFFF; box-shadow: 0px 14px 34px #192D462E; delay: 400; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'})
+heading#angle_head(s: "ステップ2"; t: "ベッドと車椅子の角度"; w: 389; delay: 350ms)
+img#angle_photo(left: 56px; top: 262px; width: 852px; height: 484px; border-radius: 26px; border: 8px solid #FFFFFF; box-shadow: 0px 14px 34px #192D4638; main: kb {scale: [1, 1.08], focus: ['40% 60%', '40% 60%']}; delay: 300ms; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'}) [ref:@hero]介護実習室を斜め上から見下ろした構図。介護ベッドの長い辺の中央に、利用者役の学生B（短い黒髪の男性）が端座位で座っている（足は床につけ、ベッドの外側を向いている）。介護スタッフが、学生Bのすぐ横に車椅子を置き、ベッドの側面に対して浅い斜め（約20〜30度）の角度に向きを整えている。車椅子の座面は学生Bの方を向いている。学生Aと学生Cが横で見学している。
+p#angle_cap(left: 56px; top: 762px; width: 852px; font-size: 36px; text-align: center; color: $navy; delay: 750ms; in: {y:18, opacity:0, duration:0.45, ease:'power3.out'}) ベッドのすぐ横に、斜めに置く
+div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius: 28px; background: #FFFFFF; box-shadow: 0px 14px 34px #192D462E; delay: 400ms; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'})
   p#badge(left: 30px; top: 22px; font-size: 27px; color: $gray; background: $tag; border-radius: 10px; padding: 6px 18px 8px 18px) 上から見た図
-  top_part#bed(pt: top_bed; delay: 100; in: fade {duration: 0.45})
-  top_part#person(pt: top_person; delay: 220; in: fade {duration: 0.45})
+  top_part#bed(pt: top_bed; delay: 100ms; in: fade {duration: 0.45})
+  top_part#person(pt: top_person; delay: 220ms; in: fade {duration: 0.45})
   top_part#edge(pt: top_edge; in: fade {duration: 0.35})
   top_part#sector(pt: top_sector; in: fade {duration: 0.35})
   top_part#sector2(pt: top_sector2; in: {opacity:0, duration:0.5, ease:'sine.inOut'}; out: {opacity:0, duration:0.5, ease:'sine.inOut'})
   top_part#range(pt: top_range; in: fade {duration: 0.35})
   shape#arc(path: "M 191 293 Q 198 318 210 340"; background: none; border: 9px solid $orange; in: draw {duration: 0.6})
   svg#axis(left: 226px; top: 354px; width: 350px; height: 170px; part: top_axis; in: fade {duration: 0.35})
-  svg#chair(left: 226px; top: 354px; width: 350px; height: 170px; part: top_chair; delay: 300; in: {x:260, opacity:0, duration:0.65, ease:'power3.out'})
-  top_part#chair_label(pt: top_chair_label; delay: 750; in: fade {duration: 0.4})
+  svg#chair(left: 226px; top: 354px; width: 350px; height: 170px; part: top_chair; delay: 300ms; in: {x:260, opacity:0, duration:0.65, ease:'power3.out'})
+  top_part#chair_label(pt: top_chair_label; delay: 750ms; in: fade {duration: 0.4})
   top_part#callout(pt: top_callout; in: pop {scale: 0.6, duration: 0.5, ease: 'back(2)', pivot: '13.4%,68.5%'})
 bumper_back#bumper3_back.sticky(c: $mint_l)
 bumper#bumper3.sticky(s: "POINT"; t: "まとめ"; u: "移乗介助のポイント")
@@ -176,7 +176,7 @@ bumper#bumper3.sticky(s: "POINT"; t: "まとめ"; u: "移乗介助のポイン�
 section#summary(stagger: {each:0})
 img#sum_photo(inset: 0; main: kb {scale: [1.12, 1.16], focus: ['87% 46%', '81% 42%']}) [ref:@hero]介護実習室。介護ベッドの端に座る高齢の女性利用者（白髪のショートヘア、薄いピンクのカーディガン）の前で、介護スタッフがしゃがんで目線を合わせ、両手で利用者の手をやさしく取りながら笑顔で声をかけている。ベッドのすぐ横には車椅子が斜めに置かれている。少し離れて学生3人が温かく見守っている。午後のやわらかな光。
 div#sum_veil(inset: 0; background: linear(#FBF7EF00,#FBF7EF00@56%,#FBF7EF66@70%,#FBF7EFBF,90); border-radius: 24px)
-div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius: 28px; background: #FFFFFFF7; box-shadow: 0px 16px 40px #192D463D; delay: 200; in: {x:80, opacity:0, duration:0.55, ease:'power3.out'})
+div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius: 28px; background: #FFFFFFF7; box-shadow: 0px 16px 40px #192D463D; delay: 200ms; in: {x:80, opacity:0, duration:0.55, ease:'power3.out'})
   p#head(left: 40px; top: 34px; font-size: 46px; color: $navy) 移乗介助のポイント
   shape#rule(left: 40px; top: 98px; width: 588px; height: 4px; path: rect; background: $bar)
   div#item(left: 40px; top: "82;161;239;318"; width: 588px; height: 118px; background: $panel; border-radius: 24px; in: {y:24, opacity:0, duration:0.4, ease:'power3.out'}) ×4
@@ -188,11 +188,11 @@ div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius:
 
 # end — 締め: 開幕の題札を cream の地の中央に組み直す
 section#end(stagger: {each:0})
-p#end_kicker(cx: 960px; top: 352px; font-size: 32px; letter-spacing: 0.08em; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 10px 26px 10px 26px; delay: 400; in: {y:20, opacity:0, duration:0.45, ease:'power3.out'}) 介護の基本技術
-p#end_line1(cx: 960px; top: 435px; font-size: 76px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 520; in: {y:26, opacity:0, duration:0.5, ease:'power3.out'}) 車椅子への
-shape#end_bar(left: 584px; top: 612px; width: 754px; height: 30px; path: rect,r=0.25; background: $bar; delay: 1000; in: {scaleX:0, duration:0.6, ease:'power2.inOut', pivot:'left'})
-p#end_line2(cx: 960px; top: 528px; font-size: 104px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 660; in: {y:30, opacity:0, duration:0.55, ease:'power3.out'}) 安全な移乗介助
-p#end_sub(cx: 960px; top: 678px; font-size: 50px; letter-spacing: 0.12em; color: $mint; delay: 1100; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) ― 基本手順 ―
+p#end_kicker(cx: 960px; top: 352px; font-size: 32px; letter-spacing: 0.08em; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 10px 26px 10px 26px; delay: 400ms; in: {y:20, opacity:0, duration:0.45, ease:'power3.out'}) 介護の基本技術
+p#end_line1(cx: 960px; top: 435px; font-size: 76px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 520ms; in: {y:26, opacity:0, duration:0.5, ease:'power3.out'}) 車椅子への
+shape#end_bar(left: 584px; top: 612px; width: 754px; height: 30px; path: rect,r=0.25; background: $bar; delay: 1000ms; in: {scaleX:0, duration:0.6, ease:'power2.inOut', pivot:'left'})
+p#end_line2(cx: 960px; top: 528px; font-size: 104px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 660ms; in: {y:30, opacity:0, duration:0.55, ease:'power3.out'}) 安全な移乗介助
+p#end_sub(cx: 960px; top: 678px; font-size: 50px; letter-spacing: 0.12em; color: $mint; delay: 1100ms; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) ― 基本手順 ―
 ```
 
 ```timeline.txt
@@ -200,30 +200,30 @@ p#end_sub(cx: 960px; top: 678px; font-size: 50px; letter-spacing: 0.12em; color:
 cast narr = "低く響く安定感のある20代の男性のナレーター、落ち着いた明瞭な声で淡々と丁寧に伝える" label="ナレーション" label_fill=$gray
 cast staff = "柔らかく息まじりの低めの声の30代の女性の介護スタッフ、優しく親しみやすい話し方" label="介護スタッフ" label_fill=$navy subtitle=.staff
 cast student = "高めで明るく快活な20歳前後の女性の介護学生、ハキハキと元気な話し方" label="介護学生" label_fill=$mint subtitle=.student
-silence head=0 tail=0
+silence head=0ms tail=0ms
 
 *** title
 [>#subtitle]
 bgm music
-se title +300
-@narr: [silence:1.5s]今回は、車椅子への安全な移乗介助の[br][>#title_card.agenda[*]][♪pop -3dB +50]基本手順について学んでいきましょう。[silence:0.32s][<#title_card][silence:0.22s][>#bumper1_back][♪trans][>#bumper1 +70][bumper_in #bumper1 +300][silence:0.53s]
+se title +300ms
+@narr: [silence:1.5s]今回は、車椅子への安全な移乗介助の[br][>#title_card.agenda[*]][♪pop -3dB +50ms]基本手順について学んでいきましょう。[silence:0.32s][<#title_card][silence:0.22s][>#bumper1_back][♪trans][>#bumper1 +70ms][bumper_in #bumper1 +300ms][silence:0.53s]
 
 *** brake
-@staff: [silence:0.9s][bumper_out #bumper1 -570][<#bumper1 -510][<#bumper1_back -450][>#progress -600][>#chapter1 -400][>#progress.track[1].bar -300][!#progress.step[1] recolor,$mint,duration=50 -300][>#brake_head -100]まず一番大切なのは、[br]車椅子の[>#brake_zoom.ring][!#brake_zoom.ring ping,#FFB36B,2,interval=730,duration=700,scale=0.9>1.6 +50][>#click_word +40][<#click_word +1300][♪click +40]{k}ブレーキ{/}が[>#brake_inset -50][♪whoosh -5dB -50][>#brake_cap +300]しっかりかかっているかの[>#brake_check -350][♪check -1dB -300]確認です。[silence:0.35s]
-transition dissolve,330,overlap=330
+@staff: [silence:0.9s][bumper_out #bumper1 -570ms][<#bumper1 -510ms][<#bumper1_back -450ms][>#progress -600ms][>#chapter1 -400ms][>#progress.track[1].bar -300ms][!#progress.step[1] recolor,$mint {duration: .05} -300ms][>#brake_head -100ms]まず一番大切なのは、[br]車椅子の[>#brake_zoom.ring][!#brake_zoom.ring ping,#FFB36B {count: 2, interval: .73, duration: .7, scale: [.9, 1.6]} +50ms][>#click_word +40ms][<#click_word +1300ms][♪click +40ms]{k}ブレーキ{/}が[>#brake_inset -50ms][♪whoosh -5dB -50ms][>#brake_cap +300ms]しっかりかかっているかの[>#brake_check -350ms][♪check -1dB -300ms]確認です。[silence:0.35s]
+transition dissolve {duration: .33, overlap: .33}
 
 *** ng
-@student: [silence:0.43s][!#ng_photo to,{x:-74, y:-28, scale:1.07, duration:2.5, ease:'sine.out', pivot:'0%,0%'} -380][♪whoosh -7dB -430]{k}ブレーキ{/}がかかっていないと、[br][!#ng_photo to,{x:-600, duration:0.65, ease:'power3.inOut'} -150][>#ng_panel -150][>#ng_card -100][>#ng_chair -100][♪whoosh -4dB -100][!#ng_card.person to,{x:-120, y:-64, duration:0.55, ease:'power2.out'} +350]立ち上がった時に[!#ng_chair to,{x:206, duration:1, ease:'power2.out'}][!#ng_chair.rear_wheel to,{rotation:163, duration:1, ease:'power2.out'}][!#ng_chair.caster to,{rotation:560, duration:1, ease:'power2.out'}][>#ng_chair.streaks -50][<#ng_chair.streaks +750]車椅子が動いちゃって[>#ng_card.burst -50][>#ng_card.danger][♪warn -1dB +20]{r}危険{/}なんだね。
+@student: [silence:0.43s][!#ng_photo to,{x:-74, y:-28, scale:1.07, duration:2.5, ease:'sine.out', pivot:'0%,0%'} -380ms][♪whoosh -7dB -430ms]{k}ブレーキ{/}がかかっていないと、[br][!#ng_photo to,{x:-600, duration:0.65, ease:'power3.inOut'} -150ms][>#ng_panel -150ms][>#ng_card -100ms][>#ng_chair -100ms][♪whoosh -4dB -100ms][!#ng_card.person to,{x:-120, y:-64, duration:0.55, ease:'power2.out'} +350ms]立ち上がった時に[!#ng_chair to,{x:206, duration:1, ease:'power2.out'}][!#ng_chair.rear_wheel to,{rotation:163, duration:1, ease:'power2.out'}][!#ng_chair.caster to,{rotation:560, duration:1, ease:'power2.out'}][>#ng_chair.streaks -50ms][<#ng_chair.streaks +750ms]車椅子が動いちゃって[>#ng_card.burst -50ms][>#ng_card.danger][♪warn -1dB +20ms]{r}危険{/}なんだね。
 subtitle "その通りです。[br]次に、ベッドと車椅子の{k}角度{/}を{k}15度から30度{/}に配置します。"
-@staff: [silence:0.62s][<#chapter1 cut-0][<#ng_card -450][<#ng_chair -450][<#ng_panel -400][!#ng_photo to,{x:0, y:0, scale:1.18, duration:0.8, ease:'power3.inOut', pivot:'0%,0%'} -400][>#ok_circle +100][♪correct -1dB +80]その通りです。[silence:0.13s][>#bumper2_back][♪trans][>#bumper2 +70][bumper_in #bumper2 +300][silence:0.53s]
+@staff: [silence:0.62s][<#chapter1 cut-0ms][<#ng_card -450ms][<#ng_chair -450ms][<#ng_panel -400ms][!#ng_photo to,{x:0, y:0, scale:1.18, duration:0.8, ease:'power3.inOut', pivot:'0%,0%'} -400ms][>#ok_circle +100ms][♪correct -1dB +80ms]その通りです。[silence:0.13s][>#bumper2_back][♪trans][>#bumper2 +70ms][bumper_in #bumper2 +300ms][silence:0.53s]
 
 *** angle
 subtitle "その通りです。[br]次に、ベッドと車椅子の{k}角度{/}を{k}15度から30度{/}に配置します。"
-@staff: [silence:0.15s][<#chapter2 cut-0][bumper_out #bumper2 +180][<#bumper2 +240][<#bumper2_back +300][>#chapter2 +200][>#progress.track[2].bar +200][!#progress.step[2] recolor,$mint,duration=50 +200][♪whoosh -6dB +450]次に、ベッドと車椅子の[>#top_view.edge][>#top_view.axis]角度を[turn_chair -15 550][>#top_view.range +200][>#top_view.sector +200]15度から[turn_chair -30 600 power2.inOut -50][>#top_view.arc -50][turn_chair -22 550 power2.out +750][>#top_view.callout +550][♪pop -1dB +550][>#top_view.sector2 +1200][<#top_view.sector2 +1700]30度に配置します。[silence:0.47s][>#bumper3_back][♪trans][>#bumper3 +70][bumper_in #bumper3 +300][silence:0.53s]
+@staff: [silence:0.15s][<#chapter2 cut-0ms][bumper_out #bumper2 +180ms][<#bumper2 +240ms][<#bumper2_back +300ms][>#chapter2 +200ms][>#progress.track[2].bar +200ms][!#progress.step[2] recolor,$mint {duration: .05} +200ms][♪whoosh -6dB +450ms]次に、ベッドと車椅子の[>#top_view.edge][>#top_view.axis]角度を[turn_chair -15 .55][>#top_view.range +200ms][>#top_view.sector +200ms]15度から[turn_chair -30 .6 power2.inOut -50ms][>#top_view.arc -50ms][turn_chair -22 .55 power2.out +750ms][>#top_view.callout +550ms][♪pop -1dB +550ms][>#top_view.sector2 +1200ms][<#top_view.sector2 +1700ms]30度に配置します。[silence:0.47s][>#bumper3_back][♪trans][>#bumper3 +70ms][bumper_in #bumper3 +300ms][silence:0.53s]
 
 *** summary
-@narr: [silence:1.0s][<#chapter3 cut-0][<#progress cut-0][bumper_out #bumper3 -670][<#bumper3 -610][<#bumper3_back -550][>#chapter3 -650][>#progress.track[3].bar -650][!#progress.step[3] recolor,$orange,duration=50 -650][>#points.item[1] -700][tick #points.item[1] -600][♪check -4dB -630][>#points.item[2] -550][tick #points.item[2] -450][>#points.item[3] -100][tick #points.item[3] +250][♪check -2dB +250]{k}声かけ{/}を忘れず、[br][>#points.item[4] -100][tick #points.item[4] +250][♪check -2dB +250]{k}利用者のペース{/}に合わせて[!#points glow,#9FE0C9E6,blur=0,spread=7]安全に移乗を行いましょう。[silence:0.4s][♪kira -2dB][silence:0.85s]
-transition dissolve,300,overlap=300,ease=power2.inOut
+@narr: [silence:1.0s][<#chapter3 cut-0ms][<#progress cut-0ms][bumper_out #bumper3 -670ms][<#bumper3 -610ms][<#bumper3_back -550ms][>#chapter3 -650ms][>#progress.track[3].bar -650ms][!#progress.step[3] recolor,$orange {duration: .05} -650ms][>#points.item[1] -700ms][tick #points.item[1] -600ms][♪check -4dB -630ms][>#points.item[2] -550ms][tick #points.item[2] -450ms][>#points.item[3] -100ms][tick #points.item[3] +250ms][♪check -2dB +250ms]{k}声かけ{/}を忘れず、[br][>#points.item[4] -100ms][tick #points.item[4] +250ms][♪check -2dB +250ms]{k}利用者のペース{/}に合わせて[!#points glow,#9FE0C9E6 {blur: 0, spread: 7}]安全に移乗を行いましょう。[silence:0.4s][♪kira -2dB][silence:0.85s]
+transition dissolve {duration: .3, overlap: .3, ease: 'power2.inOut'}
 
 *** end
 @narr: [silence:3.4s]
