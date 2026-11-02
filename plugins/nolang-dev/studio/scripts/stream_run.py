@@ -668,6 +668,12 @@ class Run:
                     detail = e.read().decode("utf-8", "replace")
                     if e.code in (502, 503, 504):
                         error: RuntimeError = Unreachable(f"{op} -> {e.code}: {detail[:600]}")
+                    elif e.code >= 500 and op in self._RESENDABLE:
+                        # server の 500 (check の例外) は 1 回だけ呼び直し、それでも駄目なら届かなかった扱い (Unreachable —
+                        # `guarded` は cut を落とさず投入の門に任せる)。11-02 dev 67aca628: check の 500 で段が死んで intro が消えた
+                        error = Unreachable(f"{op} -> {e.code}: {detail[:600]}")
+                        if attempt >= 1:
+                            raise error from e
                     elif e.code != 400:
                         raise RuntimeError(f"{op} -> {e.code}: {detail[:600]}") from e
                     else:
@@ -1873,7 +1879,9 @@ class Run:
         """cut c を著者の版 (担当が触る前・solo/author_cut_<c>.txt) に差し替える。著者の版に無い名のある定義で後の cut が使う物 (後の
         cut の thread が移した定義・壊れた cut から移った定義) は残す。著者の版が無いか、差し替えても今と同じなら何もしない → 差し替えたか。"""
         keep, src = self.solo / f"author_cut_{c}.txt", self.solo / f"cut_{c}.txt"
-        if not keep.exists():
+        # brief の著者版は台詞と絵コンテだけ (design 0 行) — 差し替えると絵の無い cut が通って staged になる (11-02 dev 67aca628
+        # cli_flow が真っ白)。brief では使わず、残りの最後の手段 (DEFECT の行を落とす) と落とすかの判断を呼び手に任せる
+        if self.brief or not keep.exists():
             return False
         with self.name_lock:
             now, author = src.read_text(), keep.read_text()
