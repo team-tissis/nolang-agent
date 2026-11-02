@@ -483,12 +483,11 @@ def _element_spans(lines: list[str]) -> dict[str, tuple[int, int, str]]:
 # を選べる — 後に担当や warn を直す直し役が残る間は当てずに指摘のまま渡し、LLM がもう見ない段で当てる (10-26 bench: 0.5 秒以下の
 # 間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は 40-74 で負け)。積極 / 消極は規則で決める (同じ `transition` の操作でも
 # double_exit の `cut` は積極・ghost_dissolve の短い dissolve は消極)
-AUTOFIX_SURE_RULES = frozenset({"literal_newline", "double_exit"})
 AUTOFIX_SURE_SILENCE_S = 0.5
 
 
 def apply_autofix(
-    block: str, findings: list[dict[str, str]], *, sure_only: bool = False
+    block: str, findings: list[dict[str, str]], *, sure_only: bool = False, sure_rules: frozenset[str] = frozenset()
 ) -> tuple[str, list[dict[str, str]]]:
     """check の指摘のうち直し方が一つに決まる物 (`autofix` — lint が計算した `操作:引数`) を cut の block (design
     `---timeline---` timeline) に当てる → (直した block, 当てた指摘)。当たらない指摘 (行が見つからない・形が違う) は飛ばす。
@@ -497,7 +496,7 @@ def apply_autofix(
       切替の行の無い cut に `transition cut` を足す (根から継いだ切替と書いた out の二重掛け — 書いた out を残す)
     - `move_after:文字:隠す側` 隠れた文字の行 (と子) を隠す側の行 (と子) の後へ (同じ親の兄弟の時だけ)
     - `br` design の文字の中の `\\n` を `[br]` に (`\"\"\"` の source の中は見ない — timeline の台詞は対象外)
-    sure_only = 積極的な直し (`AUTOFIX_SURE_RULES` と短い無音) だけ当てる (後に LLM が残る時)。"""
+    sure_only = 積極的な直し (台帳の `sure` の規則 `sure_rules` — API `drafts/rules/` から — と短い無音) だけ当てる (後に LLM が残る時)。"""
     design, sep, timeline = block.partition("---timeline---")
     if not sep:
         return block, []
@@ -506,7 +505,7 @@ def apply_autofix(
     applied: list[dict[str, str]] = []
     for finding in findings:
         op, _, arg = str(finding.get("autofix") or "").partition(":")
-        sure = finding.get("rule") in AUTOFIX_SURE_RULES or (
+        sure = finding.get("rule") in sure_rules or (
             op in ("silence_tail", "silence_head") and float(arg) <= AUTOFIX_SURE_SILENCE_S
         )
         if sure_only and not sure:

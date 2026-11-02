@@ -538,7 +538,10 @@ class Run:
         self.video_id: str | None = None  # run の video (start で決まる)
         self.watch_url = ""  # 視聴 URL (remote だけ・`WATCH` / `PLAYABLE` の行に出す)
         self.root_submitted = False
-        self.fixed: frozenset[str] = frozenset()  # 直し役に回す規則 = 製品の台帳の fixed (run の頭で `rules` から)
+        # 誰が直すか = 製品の台帳の who (run の頭で `rules` から): fixer = 直し役 (LLM)・machine = 機械の直し (sure = 担当の前に当てる)・
+        # author = 著者・担当に見せるだけ (直し役にも機械にも渡さない)
+        self.who: dict[str, str] = {}
+        self.sure: frozenset[str] = frozenset()
         self.staff_effort = staff  # 担当 (cut を仕上げる) の effort。None = 担当なし
         self.staff_warn = staff_warn  # 担当に warn の指摘も渡す (`--staff-warn`・既定は DEFECT と severe だけ)
         self.fix_effort = fix  # 直し役の effort (low 固定)。None = 直し役なし (レビューもその機構を使うので無し)
@@ -1164,19 +1167,36 @@ class Run:
                 f["cut"] = c
 
     def to_fix(self, f: dict[str, object]) -> bool:
-        """fix を回す指摘か: severe は全部 (`--fix severe` と同じ — warn も直す run が standard より直さない事が無いように)・
-        warn は台帳の直しの列の規則だけ (docs/draft_src_v2/quality.md)。"""
-        return f.get("severity") == "severe" or (f.get("severity") == "warn" and f.get("rule") in self.fixed)
+        """直し役 (LLM) の指摘か = 台帳の who=fixer (docs/draft_src_v2/quality.md)。severity は見ない — 段は `fix_finding`。"""
+        return self.who.get(str(f.get("rule")), "author") == "fixer"
 
     def fix_finding(self, f: dict[str, object]) -> bool:
-        """直し役に回す指摘か (`fix_scope`): defect = 隠れる文字だけ (一番避けたい崩れで、機械の直し move_after は字の札どうしに
-        届かない)・severe = severe 全部 (担当後の severe は cut の 9%・大半は担当が作る — 隠れる文字 / 画面の外)・warn = severe
-        全部と台帳の直しの列の warn (`to_fix`)。"""
+        """直し役に回す指摘か (`fix_scope` = who=fixer の規則の severity の閾値): defect = 隠れる文字だけ (一番避けたい崩れで、機械の
+        直し move_after は字の札どうしに届かない)・severe = fixer の severe (担当後の severe は cut の 9%・大半は担当が作る — 隠れる
+        文字 / 画面の外)・warn = fixer の severe / warn。"""
+        if not self.to_fix(f):
+            return False
         if self.fix_scope == "warn":
-            return self.to_fix(f)
+            return True
         if self.fix_scope == "severe":
             return f.get("severity") == "severe"
         return f.get("rule") == "occluded" and f.get("severity") == "severe"
+
+    def root_layer(self, c: str, f: dict[str, object]) -> bool:
+        """指摘の層が根の物 (字幕・根に書いた要素) で、cut c がその持ち主でない = c の直し役には直せない (根は凍っている)。
+        渡すと直し役が cut の block に根の行を書き直して DEFECT:ROOT_AFTER_CUT になり、丸ごと戻しを 2 回繰り返す
+        (10-28: 字幕の offscreen で 40 run・185 回)。"""
+        if self.owns_root(c):
+            return False
+        layer = str(f.get("layer") or "")
+        base = layer.split(".")[0].split("[")[0]
+        return base == "subtitle" or base in self.root_layers()
+
+    def root_layers(self) -> frozenset[str]:
+        """根に書いた要素の名 (`型#名(…)` の名)。"""
+        path = self.solo / "root_design.txt"
+        text = path.read_text() if path.exists() else ""
+        return frozenset(m.group(1) for m in re.finditer(r"^\s*[a-z_]+#([A-Za-z_][\w]*)", text, re.MULTILINE))
 
     def attribute_unlocated(
         self, c: str, cuts: list[str], unlocated: list[Defect], *, root_extra: str = ""
@@ -1501,7 +1521,11 @@ class Run:
                 autofixes += 1
                 continue  # 直した text を check し直す (直し役の回数に数えない)
             last = ((self.solo / f"cut_{c}.txt").read_text(), mine)
-            fixes = [f for f in mine if self.fix_finding(f)]
+            fixes = [f for f in mine if self.fix_finding(f) and not self.root_layer(c, f)]
+            if skipped := [f for f in mine if self.fix_finding(f) and self.root_layer(c, f)]:
+                self.log(
+                    cut=c, event="root_layer_skipped", round=rnd, layers=sorted({str(f.get("layer")) for f in skipped})
+                )
             self.log(
                 cut=c,
                 event="check",
@@ -1574,12 +1598,11 @@ class Run:
                     self.mark_broken(c, "DEFECT after 2 fixes")
                 break
             findings = "\n".join(d.text for d in defects[:40])
+            # 直し役には直す指摘だけ (他を見せると直しに行き、台帳が author に残した規則まで触る — 11-02 dev e466f4af: spoiler に従って
+            # グラフの印を後ろへ)。レビューだけはその cut の severe / warn を全部見せる (10-27 裁定)
             rest = (
-                [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes]
-                if self.fix_scope == "warn" or reviews > 0
-                else []
-            )  # レビューと warn も直す直し役にはその cut の severe / warn を全部見せる (レビューに warn は常に渡す — 10-27 裁定。
-            # defect / severe の run の 2 回目以降の直し役は直す指摘だけ — warn を見せると直しに行く)
+                [f for f in mine if f.get("severity") in ("severe", "warn") and f not in fixes] if reviews > 0 else []
+            )
             for f in (fixes + rest)[:24]:
                 findings += f"\n{f.get('severity')} {f.get('rule')} ({f.get('layer', '')}): {f.get('message', '')} — {f.get('hint', '')}"
             # レビュー (全 cut 1 回目) に添えるだけ — 尺だけでは呼ばない・2 回目以降の直し役 (指摘だけを直す) に文を足させると
@@ -2496,7 +2519,10 @@ class Run:
         src = self.solo / f"cut_{c}.txt"
         with self.name_lock:
             text, applied = apply_autofix(
-                src.read_text(), [f for f in findings if f.get("autofix")], sure_only=sure_only
+                src.read_text(),
+                [f for f in findings if f.get("autofix") and self.who.get(str(f.get("rule")), "author") != "author"],
+                sure_only=sure_only,
+                sure_rules=self.sure,
             )
             if applied:
                 src.write_text(text)
@@ -3036,9 +3062,9 @@ class Run:
             print(f"開始できない: {gate}", flush=True)
             return 1
         rules = self.rules_payload if self.rules_payload is not None else self.call("rules")
-        self.fixed = frozenset(
-            str(row["name"]) for row in rules.get("rules", []) if isinstance(row, dict) and row.get("fixed")
-        )
+        rows = [row for row in rules.get("rules", []) if isinstance(row, dict)]
+        self.who = {str(row["name"]): str(row.get("who") or "author") for row in rows}
+        self.sure = frozenset(str(row["name"]) for row in rows if row.get("sure"))
         self.start()
         if self.video_id is None:
             self.log(event="start_failed")
