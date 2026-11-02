@@ -281,18 +281,19 @@ class Run(cut_stages.CutStages, ABC):
             return []
 
     @staticmethod
-    def drop_defect_lines(dd: Path, c: str) -> int:
-        """doc (dd) の out/defects.json のうち cut c の block の行を指す DEFECT を doc の file から外す → 直した行の数。"""
+    def drop_defect_lines(dd: Path, c: str) -> list[dict[str, object]]:
+        """doc (dd) の out/defects.json のうち cut c の block の行を指す DEFECT を doc の file から外す → 落とした物の記録 (空 = 何も
+        落とさない・`author_core.drop_defect_lines`)。"""
         defects = Run.read_defects(dd)
         if not defects:
-            return 0
-        design, timeline, total = author_core.drop_defect_lines(
+            return []
+        design, timeline, dropped = author_core.drop_defect_lines(
             (dd / "design.txt").read_text(), (dd / "timeline.txt").read_text(), c, defects
         )
-        if total:
+        if dropped:
             (dd / "design.txt").write_text(design)
             (dd / "timeline.txt").write_text(timeline)
-        return total
+        return dropped
 
     # ---- check と改名 ----
     @property
@@ -492,7 +493,7 @@ class Run(cut_stages.CutStages, ABC):
         )
         pictures: list[dict[str, str]] = []
         if self.keep_assets:
-            text, pictures = restore_pictures(author, text)
+            text, pictures = restore_pictures(author, text, root=self.root_design or "")
         (self.solo / f"staff_cut_{c}.txt").write_text(
             text
         )  # 担当の版を分けて残す (cut_<名>.txt は直し役が上書きする最終の版)

@@ -118,11 +118,11 @@ def kpi(l, v, u, f) = div(width: 500px; height: 306px; background: #FFFFFF; bord
   p#v(left: 34px; cy: 136px; font-size: 90px; line-height: 1; font-family: n; letter-spacing: -0.02em; content: {v})
   p#u(left: .v.right+10; cy: 159px; font-size: 32px; color: $ink2; content: {u})
   p#f(left: 36px; cy: 261px; font-size: 21px; color: $muted; font-family: m; content: {f})
-kpi#s2_k1(left: 780px; top: 268px; l: "年間の使用量"; v: "[count:384,000 start=0 ms=1200 delay=100]"; u: "kWh"; f: "スマートメーター30分値の年間合計")
-kpi#s2_k3(left: 780px; top: 594px; l: "平均単価"; v: "[count:30.5 start=0 ms=1000 delay=240]"; u: "円/kWh"; f: "電気代 ÷ 使用量")
-kpi#s2_k4(left: 1300px; top: 594px; l: "社員1人あたり"; v: "[count:5.9 start=0 ms=1000 delay=280]"; u: "万円/年"; f: "1,171万円 ÷ 200人")
+kpi#s2_k1(left: 780px; top: 268px; l: "年間の使用量"; v: "[count:384,000 start=0 ms=1200ms delay=100ms]"; u: "kWh"; f: "スマートメーター30分値の年間合計")
+kpi#s2_k3(left: 780px; top: 594px; l: "平均単価"; v: "[count:30.5 start=0 ms=1000ms delay=240ms]"; u: "円/kWh"; f: "電気代 ÷ 使用量")
+kpi#s2_k4(left: 1300px; top: 594px; l: "社員1人あたり"; v: "[count:5.9 start=0 ms=1000ms delay=280ms]"; u: "万円/年"; f: "1,171万円 ÷ 200人")
 # 主役の札: 緑の縁と縦の淡いグラデ・左端の緑の短い棒・数字は緑
-kpi#s2_k2(left: 1300px; top: 268px; l: "年間の電気代"; v: "[count:1,171 start=0 ms=1100 delay=100]"; u: "万円"; f: "昨年度（4月〜3月）の実績"; background: linear(#F2FBF7,#FFFFFF@60%,180); border: 3px solid $green; in: {y:30, scale:0.96, opacity:0, duration:0.6, ease:'power3.out'})
+kpi#s2_k2(left: 1300px; top: 268px; l: "年間の電気代"; v: "[count:1,171 start=0 ms=1100ms delay=100ms]"; u: "万円"; f: "昨年度（4月〜3月）の実績"; background: linear(#F2FBF7,#FFFFFF@60%,180); border: 3px solid $green; in: {y:30, scale:0.96, opacity:0, duration:0.6, ease:'power3.out'})
   p#v(color: $green_d)
   div#bar(left: 0px; top: 30px; width: 8px; height: 40px; border-radius: 0px 6px 6px 0px; background: $green)
 
@@ -234,19 +234,19 @@ def glass = div(left: 1060px; width: 740px; border-radius: 22px; background: #FF
 def glab(t) = p(left: 32px; cy: 42px; font-size: 24px; color: #C9D4EE; content: {t})
 glass#s6_a1(top: 262px; height: 196px)
   glab#l 夜間・休日の平均電力
-  p#v(left: 30px; cy: 130px; font-size: 100px; line-height: 1; font-family: n; color: #FFFFFF; letter-spacing: -0.02em) [count:19 start=0 ms=800 delay=150]
+  p#v(left: 30px; cy: 130px; font-size: 100px; line-height: 1; font-family: n; color: #FFFFFF; letter-spacing: -0.02em) [count:19 start=0 ms=800ms delay=150ms]
   p#u(left: .v.right+10; cy: 156px; font-size: 32px; color: #D9E2F5) kW
   p#nt(left: 330px; top: 96px; font-size: 20px; line-height: 1.45; color: #B9C6E4; font-family: m) 夜間＝平日19時〜翌9時[br]休日＝終日
 glass#s6_a2(top: 474px; height: 220px)
   glab#l 年間使用量に占める割合
-  p#v(left: 30px; cy: 110px; font-size: 76px; line-height: 1; font-family: n; color: #FFFFFF; letter-spacing: -0.02em) [count:31 start=0 ms=900 delay=150]
+  p#v(left: 30px; cy: 110px; font-size: 76px; line-height: 1; font-family: n; color: #FFFFFF; letter-spacing: -0.02em) [count:31 start=0 ms=900ms delay=150ms]
   p#u(left: .v.right+10; cy: 126px; font-size: 32px; color: #D9E2F5) %
   p#nt(left: 250px; cy: 118px; font-size: 20px; color: #B9C6E4; font-family: m) 119,040 kWh ／ 384,000 kWh
   div#tr(left: 32px; top: 168px; width: 676px; height: 30px; border-radius: 15px; background: #FFFFFF1F)
   div#fill(left: 32px; top: 168px; width: 210px; height: 30px; border-radius: 15px; background: linear(#7C95FF,#A98CFF,90); in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
 glass#s6_a3(top: 710px; height: 190px)
   glab#l 電気代にすると
-  p#v(left: 30px; cy: 122px; font-size: 92px; line-height: 1; font-family: n; color: $mint; letter-spacing: -0.02em) [count:363 start=0 ms=1000 delay=150]
+  p#v(left: 30px; cy: 122px; font-size: 92px; line-height: 1; font-family: n; color: $mint; letter-spacing: -0.02em) [count:363 start=0 ms=1000ms delay=150ms]
   p#u(left: .v.right+10; cy: 144px; font-size: 32px; color: $mint) 万円/年
 # 内訳の板: 3 色の帯 (41 / 37 / 22%) が語ごとに左から伸び、止められる 2 つの上にかぎと緑の札・下に 3 行の凡例
 glass#s6_b(top: 262px; height: 638px)
@@ -282,15 +282,15 @@ def mcard(no, tg, tgc, tgf, h, res, kwh) = div(top: 262px; width: 532px; height:
     p#v(left: .s.right+8; cy: 45px; font-size: 86px; line-height: 1; font-family: n; color: $green_d; letter-spacing: -0.02em; content: {res})
     p#u(left: .v.right+8; cy: 66px; font-size: 30px; color: $green_d) 万円
   p#kwh(left: 34px; cy: 602px; font-size: 22px; color: $muted; font-family: m; in: {y:12, opacity:0, duration:0.45, ease:'power3.out'}; content: {kwh})
-mcard#s8_c1(left: 120px; no: "01"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "空調の設定温度を1℃見直し"; res: "[count:51.5 start=0 ms=900 delay=100]"; kwh: "16,900 kWh／年")
+mcard#s8_c1(left: 120px; no: "01"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "空調の設定温度を1℃見直し"; res: "[count:51.5 start=0 ms=900ms delay=100ms]"; kwh: "16,900 kWh／年")
   img#pic(left: 150px; top: 26px; width: 260px; height: 230px; object-fit: contain; main: sine {y: -8, period: 3.2}; delay: 150ms; in: {scale:0.85, y:10, duration:0.8, ease:'back.out(1.8)'}) [transparent]白くすっきりした壁掛けのオフィス用エアコン 1 台からやわらかな風の線が流れ、その横に空の液晶の白いリモコンが浮かぶ。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 34px; top: "225;249"; width: 8px; height: 8px; border-radius: 148px; background: $green) ×2
   p#li(left: 54px; cy: "228;251"; font-size: 22px; color: $ink2; font-family: m) ×2 夏 26℃→27℃／冬 22℃→21℃;空調の電力を10%削減
-mcard#s8_c2(left: 693px; no: "02"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "待機電力・消し忘れ対策"; res: "[count:142.8 start=0 ms=900 delay=100]"; kwh: "46,800 kWh／年")
+mcard#s8_c2(left: 693px; no: "02"; tg: "工事なし"; tgc: $green_d; tgf: $green_l; h: "待機電力・消し忘れ対策"; res: "[count:142.8 start=0 ms=900ms delay=100ms]"; kwh: "46,800 kWh／年")
   img#pic(left: 150px; top: 26px; width: 260px; height: 230px; object-fit: contain; main: sine {y: -8, period: 3.2}; delay: 150ms; in: {scale:0.85, y:10, duration:0.8, ease:'back.out(1.8)'}) [transparent]デスクトップのモニター 1 台と、プラグを抜いて電源を切る電源タップ、丸い時計のタイマーの印と小さな三日月の印。省エネの考え方、単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 34px; top: "225;249;272"; width: 8px; height: 8px; border-radius: 148px; background: $green) ×3
   p#li(left: 54px; cy: "228;251;275"; font-size: 22px; color: $ink2; font-family: m) ×3 OA機器の自動電源オフ;照明・空調のタイマー;止められる分の3分の2を削減
-mcard#s8_c3(left: 1268px; no: "03"; tg: "工事あり　960万円"; tgc: #8A5300; tgf: #FFF3DF; h: "照明のLED化"; res: "[count:148.2 start=0 ms=900 delay=100]"; kwh: "48,600 kWh／年")
+mcard#s8_c3(left: 1268px; no: "03"; tg: "工事あり　960万円"; tgc: #8A5300; tgf: #FFF3DF; h: "照明のLED化"; res: "[count:148.2 start=0 ms=900ms delay=100ms]"; kwh: "48,600 kWh／年")
   img#pic(left: 150px; top: 26px; width: 260px; height: 230px; object-fit: contain; main: sine {y: -8, period: 3.2}; delay: 150ms; in: {scale:0.85, y:10, duration:0.8, ease:'back.out(1.8)'}) [transparent]白い清潔な光でやわらかく輝く、現代的な薄い正方形の LED 天井照明パネル 1 枚を少し下から斜めに見上げた形、省エネを表す小さな葉の印。単体の物、背景は透明、枠いっぱいに大きく。白・明るい灰・ミントグリーン・空色に小さな琥珀色の差し色
   div#dot(left: 34px; top: "225;249"; width: 8px; height: 8px; border-radius: 148px; background: $green) ×2
   p#li(left: 54px; cy: "228;251"; font-size: 22px; color: $ink2; font-family: m) ×2 蛍光灯→LED（照明の電力55%減）;工事費は約6.5年で回収
@@ -320,7 +320,7 @@ card#s9_card(left: 120px; top: 262px; width: 1090px; height: 640px)
 # 合計の板 (淡い緑のグラデ + 緑の縁): 削減額・罫・割合・前後の金額・kWh・注記
 div#s9_total(left: 1250px; top: 262px; width: 550px; height: 640px; border-radius: 24px; background: linear(#E9F8F1,#FFFFFF@75%,180); border: 3px solid #BFE6D4; box-shadow: 0px 14px 34px #13222B12; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
   p#lab(left: 44px; cy: 58px; font-size: 26px; color: $ink2) 年間の削減額
-  p#v(left: 40px; cy: 154px; font-size: 124px; line-height: 1; font-family: n; color: $green_d; letter-spacing: -0.02em) [count:342.5 start=0 ms=1100 delay=150]
+  p#v(left: 40px; cy: 154px; font-size: 124px; line-height: 1; font-family: n; color: $green_d; letter-spacing: -0.02em) [count:342.5 start=0 ms=1100ms delay=150ms]
   p#u(left: .v.right+8; cy: 186px; font-size: 38px; color: $green_d) 万円
   div#ln(left: 44px; top: 262px; width: 462px; height: 2px; background: #CFE7DC)
   div#pct(left: 44px; top: 290px; width: 462px; height: 81px; in: {y:14, opacity:0, duration:0.6, ease:'power3.out'})

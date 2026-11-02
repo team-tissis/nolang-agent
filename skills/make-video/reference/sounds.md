@@ -13,12 +13,12 @@ So:
 Rules:
 
 - **At most 3 per cut** (automatic sounds don't count). Don't answer a motion finding with a sound (fix motion with motion). If the lint `se_dense` fires (8+ in 5 seconds), cut some.
-- Automatic sounds are added by compile to the timeline it renders as `[♪"…" -8dB]` (at a transition boundary, the sound of that transition's `切替音` family — e.g. `se "カメラモーション03-09(中高　リバーブ)" -12dB -200 to=800` for a 400 ms dissolve at the head of the next cut; transitions under 400 ms get no automatic sound) (your timeline.txt does not change; only at the front of your own marks, `[>#名]` and `[!#名 count|check|pop|…]` — marks the defaults added get none). Per element, the declaration `se: "音"` swaps the sound and `se: none` removes it (a removed sound still counts as played for thinning — removing the head of a run does not move the sound to the next element). Write `se=` on a transition and only that one shot plays.
+- Automatic sounds are added by compile to the timeline it renders as `[♪"…" -8dB]` (at a transition boundary, the sound of that transition's `切替音` family — e.g. `se "カメラモーション03-09(中高　リバーブ)" -12dB -200ms to=800ms` for a 400 ms dissolve at the head of the next cut; transitions under 400 ms get no automatic sound) (your timeline.txt does not change; only at the front of your own marks, `[>#名]` and `[!#名 count|check|pop|…]` — marks the defaults added get none). Per element, the declaration `se: "音"` swaps the sound and `se: none` removes it (a removed sound still counts as played for thinning — removing the head of a run does not move the sound to the next element). Write `se=` on a transition and only that one shot plays.
 - Text, diagrams and arrows make no sound on appearance (a click on every text entrance sounded cheap and plinky). On a word where the author wrote `[♪]`, that word's automatic sound does not play (no doubling). Identical automatic sounds at the same instant fold into one shot.
 - **Automatic sounds (`sfx on`) are thinned per cut by compile**: one shot per word, and across words the same sound stops playing from the second word in a row (the count restarts at a word with a different sound). Even in a build where every sentence head gets the same pop (`cut { stagger: sentence }` + `in: card`), the pop plays only at the head of the run. The author's `[♪]` / `se` are never thinned, and no automatic sound is layered on that word (it does count toward a same-sound run).
 - **The loudness of a shot is placed by the engine from the floor**: the engine adds the gain that puts the asset's max 2 LU above the floor at the instant of firing (voice if present, else music, else silence) (+8 dB during speech; clamp −6 to +9). The author's `-6dB` is relative on top of that, meaning "a little below the floor". Write 0 dB and it will be heard. Ambience (`to=end`) is not floor-relative.
 - **Cut sounds longer than 3 seconds** (`se_long`). The mixer plays across scenes to the end, so a 23-second chime keeps ringing under the next 3 cuts. When a shot with no written length intent (`to=` `peak=` `start=` `fade=`) lands on an asset over 3.5 seconds, the engine cuts it at 3 seconds and eases out over 600 ms (insurance for when a description-matched shot lands on an ambience loop). An end stopped with `to=` eases out over 300 ms unless you write the tail of fade= (no abrupt cutoff). Identical sounds at the same instant (word + offset) are folded into one shot by the engine.
-  A sound with a peak: align the peak to the word with `peak=山の秒` and end with `to=` or `fade=0,600`: `[♪"ドラムロール" peak=4.4s]` = the 4.4-second peak lands on the word (it starts playing 4.4 seconds earlier).
+  A sound with a peak: align the peak to the word with `peak=山の秒` and end with `to=` or `fade=0ms,600ms`: `[♪"ドラムロール" peak=4.4s]` = the 4.4-second peak lands on the word (it starts playing 4.4 seconds earlier).
 - To layer, offset and lower: `[♪"打撃　パンチ03-1(ドライ)"][♪"打撃　パンチ03-4(ディレイ)" -4dB +160ms]` (hf's impact + reverb).
 - Writing by name keeps retrieval stable (the names in the tables below exist under the same names in LOCAL / STG / PROD). Sounds not in the tables are written as descriptions (`[♪"氷がピキピキと凍る音"]`).
   The length of a description-matched sound shows in the src.json pin (`duration_ms`) or in check's `se_long`.
@@ -46,7 +46,7 @@ A second or later listen carries the previous drops over without showing them in
 In the p8 verdicts over 20 videos, only hf was praised for sound (6 times: the balance of water and ambience, the sizzle of pouring, the "ペタペタ" text with its sound effect). NoLang got 0, and
 the measured src had 0 `se` lines, 1-7 uses of `[♪]`, and ambience (long `to=` sounds) in 5 / 20 videos. What is missing is not the number of sounds but sounds tied to the picture:
 
-- **Ambience**: one at the head of a full-picture cut (`se "早朝の商店街の環境音、遠くの鳥" -8dB to=6s fade=300,1500`; cut it at the cut's length; change it whenever the place changes). Loudness −8 dB: p9's −12 to −16 dB sank below the BGM (−33), and the floor in voiceless moments sat 8 LU lower than hf (hf's story floor is 7-10 LU under the voice).
+- **Ambience**: one at the head of a full-picture cut (`se "早朝の商店街の環境音、遠くの鳥" -8dB to=6s fade=300ms,1500ms`; cut it at the cut's length; change it whenever the place changes). Loudness −8 dB: p9's −12 to −16 dB sank below the BGM (−33), and the floor in voiceless moments sat 8 LU lower than hf (hf's story floor is 7-10 LU under the voice).
 - **Foley**: one on the word of an action inside the picture (`[♪"グラスに酒を注ぐ澄んだ音" -6dB]`; steam, water, fire, footsteps, paper).
 - **Onomatopoeia text**: `[♪]` on the same word (`p#名(…) ペタペタ` + `[♪"ペタペタと貼る音"]`) — never the text alone or the sound alone.
 - Decorative pops (`sfx on`) win no praise. story / cinematic may go `sfx off` and keep only ambience and foley.
@@ -168,7 +168,7 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 | Applause (short) | `拍手04-3（短）` | neutral | 3.9 s | `to=2s` |
 | Drumroll → cymbal | `結果発表01-2` | playful | 8.0 s | build-up → reveal; `peak=` puts the peak on the reveal word |
 | Drumroll (plain) | `ドラムロール` | playful | 6.2 s | peak 4.4 s → `[♪"ドラムロール" peak=4.4s]` |
-| Deep bass impact (boom) | `オノマトペ 衝撃13-2（長）` | serious | 8.8 s | peak 0.5 s, long reverb → `to=2.5s fade=0,800` |
+| Deep bass impact (boom) | `オノマトペ 衝撃13-2（長）` | serious | 8.8 s | peak 0.5 s, long reverb → `to=2.5s fade=0ms,800ms` |
 | Heartbeat (tense build-up) | `心臓の鼓動音` | serious | 5.3 s | peak 3.3 s, `to=3.5s` |
 | Game clear | `ベルのゲームクリア音` | playful | 3.7 s | |
 | Bright orchestral close (a happy ending) | `エンディング 01` | neutral | 4.6 s | |
@@ -178,17 +178,17 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 
 | Use | Name | Tone | Length | Notes |
 |---|---|---|---|---|
-| Deep cinematic hit (a title, a turning point, a solemn achievement) | `Big Hits` | serious | 4.3 s | peak 1.3 s, `to=3s fade=0,800` |
-| Trailer-ending metallic impact | `ムービー予告動画のラスト風SE` | serious | 4.8 s | peak 0.7 s, `to=3s fade=0,800` |
-| Slow-motion sub-bass impact | `スローモーション攻撃` | serious | 6.6 s | `to=3s fade=0,800` |
+| Deep cinematic hit (a title, a turning point, a solemn achievement) | `Big Hits` | serious | 4.3 s | peak 1.3 s, `to=3s fade=0ms,800ms` |
+| Trailer-ending metallic impact | `ムービー予告動画のラスト風SE` | serious | 4.8 s | peak 0.7 s, `to=3s fade=0ms,800ms` |
+| Slow-motion sub-bass impact | `スローモーション攻撃` | serious | 6.6 s | `to=3s fade=0ms,800ms` |
 | Rumbling impact (an earthquake, a collapse) | `地響き` | serious | 3.0 s | |
 | Ominous rising swell (a threat appears) | `ラスボス・強敵が現れる時の音` | serious | 2.1 s | |
 | Cinematic logo (bass drop + sparkle; an opening, a final title) | `サウンドロゴ01` | serious | 6.0 s | peak 0.7 s, `to=4s` |
 | Choir and strings swell (the vastness of space or nature) | `天使06-3(短)` | serious | 3.4 s | peak 0.8 s |
 | Ethereal pad swell (a new chapter, wonder) | `チャプター開始` | serious | 6.9 s | peak 2.8 s, `to=4s` |
-| Quiet accent on a sober fact (one clear metal tap, long thin tail) | `フィンガーシンバル03-1（長）` | serious | 4.3 s | `to=3s fade=0,800` |
+| Quiet accent on a sober fact (one clear metal tap, long thin tail) | `フィンガーシンバル03-1（長）` | serious | 4.3 s | `to=3s fade=0ms,800ms` |
 | Heavy low bell (an ominous fact, a warning) | `チャイム08` | serious | 3.3 s | |
-| Temple bell (Japanese, history, remembrance) | `お寺の鐘１` | serious | 7.6 s | `to=4s fade=0,1500` |
+| Temple bell (Japanese, history, remembrance) | `お寺の鐘１` | serious | 7.6 s | `to=4s fade=0ms,1500ms` |
 
 ### Long sounds (ambience, loops) — `to=` required
 
@@ -202,4 +202,4 @@ Band families split in two on a `panel` (in on the cover, out on the leave — f
 
 **Leave music loudness and ducking to the engine defaults**: just `bgm#music 説明`; during speech the music sits 11 LU under the voice, in long pauses (over 1 second) and at the tail it automatically steps 2 dB forward (duck −2, attack 200 / release 500; it does not come back up in sentence breaks under 0.6 s), and after the last word it steps forward and fades away. Do not write `volume:` (the default +7dB = 9 LU under the voice = hf's loudness; lower it too far and the music becomes inaudible behind the speech). For an instant where ambience should stand out, stop the music with `[<#名]`. `bgm#名(duck: off)` is only for when the music is the lead.
 
-A track shorter than its layer's length repeats on a cycle (the default; the track's tail fade becomes the seam as is, so pick a long track for a long video). Lowering / restoring the BGM on a word is the marks `[!#music to,{volume:-13dB, duration:.1}]` … `[!#music to,{volume:0dB, duration:.6}]` (dB from the track's default loudness; they stay attached to the word even when the speech length shifts); a build-up measured from the tail is the root's `bgm#名(keys: "end-6s:-9|end-4s:0") 説明`. To change tracks, write a mark-only line `[<#名]` at the end of the previous cut → `bgm 名2 -1500` at the head of the next cut (with `bgm#名2 説明` in the design root; -1500 = a crossfade overlapping the previous track's fade-out by 1.5 seconds); for an impact cut, write only `[<#名 -400ms]` at the end of the previous cut and let the ambience carry it. Unwritten fades are 1.5 s / 2 s (at a switch the previous track's last 2 seconds overlap the next track's first 1.5 seconds; at the tail the track plays through 1/3 of the silence after the last word (default 3 s) before fading — write a shorter silence and the afterglow shrinks too).
+A track shorter than its layer's length repeats on a cycle (the default; the track's tail fade becomes the seam as is, so pick a long track for a long video). Lowering / restoring the BGM on a word is the marks `[!#music to,{volume:-13dB, duration:.1}]` … `[!#music to,{volume:0dB, duration:.6}]` (dB from the track's default loudness; they stay attached to the word even when the speech length shifts); a build-up measured from the tail is the root's `bgm#名(keys: "end-6s:-9|end-4s:0") 説明`. To change tracks, write a mark-only line `[<#名]` at the end of the previous cut → `bgm 名2 -1500ms` at the head of the next cut (with `bgm#名2 説明` in the design root; -1500 = a crossfade overlapping the previous track's fade-out by 1.5 seconds); for an impact cut, write only `[<#名 -400ms]` at the end of the previous cut and let the ambience carry it. Unwritten fades are 1.5 s / 2 s (at a switch the previous track's last 2 seconds overlap the next track's first 1.5 seconds; at the tail the track plays through 1/3 of the silence after the last word (default 3 s) before fading — write a shorter silence and the afterglow shrinks too).

@@ -141,7 +141,7 @@ p#sub(left: 120px; top: 633px; font-size: 32px; color: $tx2; white-space: nowrap
 div#st(left: "80;313;497"; top: 718px; width: "233;184;220"; height: 117px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.18}}) ×3
   div#sep(left: 0px; top: 0px; width: 2px; height: 117px; background: $line2; opacity: "0;1;1")
   p#k(left: "0;29;29"; top: 12px; font-size: 20px; letter-spacing: 0.12em; color: $tx3) 期間;比較;訪問者
-  p#v(left: "0;29;29"; cy: 80px; font-size: 46px; font-family: m; white-space: nowrap) 9/1〜9/28{s15} 4 週間{/};3 案{s15} A・B・C{/};[count:38,440 start=0 ms=1100]{s15} 人{/}
+  p#v(left: "0;29;29"; cy: 80px; font-size: 46px; font-family: m; white-space: nowrap) 9/1〜9/28{s15} 4 週間{/};3 案{s15} A・B・C{/};[count:38,440 start=0 ms=1100ms]{s15} 人{/}
 
 # setup 前提: 上端の帯が明ける・左の板に月額と年額 (12 マスのうち 2 マスが点線 = 2 か月分お得)・右に 3 案の画面の模型が並び、案の名の語で縁が順に光る
 section#setup(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.32, ease:'power2.in'})
@@ -172,12 +172,12 @@ board#price(left: 96px; top: 140px; width: 610px; height: 760px; k: "{cy}01{/} �
       shape#brk(path: "M0 0 L0 9 L51 9 L51 0"; background: none; border: 2px solid $amber)
       p#t(cx: 50%; top: 20px; font-size: 22px; font-family: b; color: $amber; white-space: nowrap) 2 か月分お得
 p#vh(left: 740px; top: 146px; font-size: 34px; font-family: m; white-space: nowrap; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'}) 3 つの案　{s15}訪問者をランダムに振り分け{/}
-vcard#ca(left: 740px; ch: A; tl: 月額を先に表示; sb: 現行の料金ページ; n: "[count:12,840 start=0 ms=900 delay=1470]{s13} 人{/}")
+vcard#ca(left: 740px; ch: A; tl: 月額を先に表示; sb: 現行の料金ページ; n: "[count:12,840 start=0 ms=900ms delay=1470ms]{s13} 人{/}")
   p#tag(left: 87px; top: 30px; font-size: 18px; color: $tx2; border: 2px solid $line2; border-radius: 148px; padding: 3px 12px) 現行
   mockp#mock(left: 24px; top: 176px; on: 月額; off: 年額; pr: "{pb}4,980{/}円 / 月"; c: $blue; ink: "#08101C")
-vcard#cb(left: 1110px; ch: B; tl: 年額を先に表示; sb: 月額は切り替えタブ; n: "[count:12,810 start=0 ms=900 delay=1420]{s13} 人{/}"; c: $cyan; gc: $cyan; gs: "#3DD9EB59")
+vcard#cb(left: 1110px; ch: B; tl: 年額を先に表示; sb: 月額は切り替えタブ; n: "[count:12,810 start=0 ms=900ms delay=1420ms]{s13} 人{/}"; c: $cyan; gc: $cyan; gs: "#3DD9EB59")
   mockp#mock(left: 24px; top: 176px; on: 年額; off: 月額; pr: "{pb}49,800{/}円 / 年"; c: $amber; ink: "#1C1306")
-vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チーム向け; n: "[count:12,790 start=0 ms=900 delay=1370]{s13} 人{/}"; c: "#526076"; ink: "#F4F7FA"; gc: "#8796AB")
+vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チーム向け; n: "[count:12,790 start=0 ms=900ms delay=1370ms]{s13} 人{/}"; c: "#526076"; ink: "#F4F7FA"; gc: "#8796AB")
   # C の模型: 3 段の比較表 (月額・年額・チームの列)・「C は」の語で列が順に弾む
   div#mock(left: 24px; top: 176px; width: 296px; height: 262px; border-radius: 14px; background: #0B121D; border: 2px solid #94A3B82E)
     div#bar(left: 2px; top: 2px; width: 292px; height: 26px; border-radius: 8,8,0,0; background: #94A3B814)
@@ -191,7 +191,7 @@ vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チ�
 # 期間・振り分け・合計の帯 (合計は数え上げ)
 div#info(left: 740px; top: 760px; width: 1084px; height: 120px; border-radius: 18px; border: 2px solid $line; background: #0D141FCC; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
   p#k(left: "24;279;507"; top: 24px; font-size: 20px; letter-spacing: 0.1em; color: $tx3; white-space: nowrap) ×3 期間;振り分け;訪問者 合計
-  p#v(left: "24;279;507"; top: 52px; font-size: 36px; font-family: m; white-space: nowrap) ×3 9/1〜9/28{s14} 4 週間{/};ランダム{s14} 3 案に振り分け{/};[count:38,440 start=0 ms=1000 delay=200]{s14} 人{/}
+  p#v(left: "24;279;507"; top: 52px; font-size: 36px; font-family: m; white-space: nowrap) ×3 9/1〜9/28{s14} 4 週間{/};ランダム{s14} 3 案に振り分け{/};[count:38,440 start=0 ms=1000ms delay=200ms]{s14} 人{/}
   div#vl(left: "253;481"; top: 26px; width: 2px; height: 68px; background: $line2) ×2
 
 # conv 転換率: 6 本の目盛りの上に A・B・C の推定値 (点) と 95% 信頼区間 (横線) を語で伸ばす → 右の小板で差 +0.34 を数え、差の区間が 0 をまたぐ所で赤い判定の札
@@ -223,7 +223,7 @@ board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／
   # 差の小板: +0.34 pt を数え、差の区間 (白) と 0 より下の端 (赤) を伸ばし、赤い縁の判定の札が傾いて着地
   callout#df(left: 1190px; top: 34px; width: 500px; height: 700px; border: 2px solid $line)
     p#l(left: 34px; top: 24px; font-size: 24px; color: $tx2; white-space: nowrap) B と A の差
-    p#n(left: 30px; top: 86px; font-size: 128px; font-family: b; line-height: 1; letter-spacing: -0.02em; white-space: nowrap) +[count:0.34 start=0 ms=800 delay=150]{pt} pt{/}
+    p#n(left: 30px; top: 86px; font-size: 128px; font-family: b; line-height: 1; letter-spacing: -0.02em; white-space: nowrap) +[count:0.34 start=0 ms=800ms delay=150ms]{pt} pt{/}
     p#ci(left: 34px; top: 246px; font-size: 21px; font-family: c; color: $tx2; white-space: nowrap; in: {opacity:0, duration:0.5}) 95% 信頼区間 −0.09 〜 +0.78 pt
     div#ax(left: 0px; top: 285px; width: 500px; height: 120px; in: {opacity:0, duration:0.5})
       div#gl(left: 40px; top: 45px; width: 420px; height: 2px; background: #94A3B840)
@@ -335,7 +335,7 @@ board#rv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}05{/} ／
   p#rt(left: 924px; top: 236px; font-size: 26px; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) 訪問者 1 人あたり{s13} 円{/}
   div#rbase(left: 924px; top: 600px; width: 760px; height: 2px; background: $line2; in: {opacity:0, duration:0.5})
   div#rb(left: "660;813;967"; top: "259;234;258"; width: 132px; height: "141;166;142"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
-  p#rv(cx: "704;857;1011"; top: "227;202;226"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.3}) ×3 [count:1,243 start=0 ms=800 delay=100];[count:1,462 start=0 ms=800 delay=220];[count:1,253 start=0 ms=800 delay=340]
+  p#rv(cx: "704;857;1011"; top: "227;202;226"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.3}) ×3 [count:1,243 start=0 ms=800ms delay=100ms];[count:1,462 start=0 ms=800ms delay=220ms];[count:1,253 start=0 ms=800ms delay=340ms]
   p#rbd(left: 1372px; top: 244px; font-size: 40px; font-family: b; color: #061317; background: $cyan; border-radius: 148px; padding: 8px 22px; white-space: nowrap; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) +17.6%
   p#rx(cx: "704;857;1011"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
   div#bn(left: 44px; top: 682px; width: 1641px; height: 64px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
@@ -392,7 +392,7 @@ board#nt(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}07{/} ／
   callout#co(left: 1190px; top: 34px; width: 500px; height: 700px)
     kick#k(left: 36px; top: 36px) B − A（返金後）
     # 写し: hf は小板が出た時点で +0.0% を置き「15.2」の語で数え始める — ここは数字を語で出し、出ると同時に数える
-    p#big(left: 30px; top: 108px; font-size: 112px; font-family: b; line-height: 1; letter-spacing: -0.02em; color: $cyan; white-space: nowrap; in: {opacity:0, duration:0.2}) +[count:15.2 start=0 ms=900]%
+    p#big(left: 30px; top: 108px; font-size: 112px; font-family: b; line-height: 1; letter-spacing: -0.02em; color: $cyan; white-space: nowrap; in: {opacity:0, duration:0.2}) +[count:15.2 start=0 ms=900ms]%
     p#pre(left: 36px; top: 250px; font-size: 24px; line-height: 1.5; color: $tx2; white-space: nowrap; in: {opacity:0, duration:0.5}) 返金前は {w}+17.6%{/}[br]返金を差し引いても差は残る
     div#hr(left: 36px; top: 360px; width: 428px; height: 2px; background: $line)
     div#cn(left: 36px; top: 392px; width: 435px; height: 150px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})

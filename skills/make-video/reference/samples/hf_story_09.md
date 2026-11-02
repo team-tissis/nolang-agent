@@ -81,7 +81,7 @@ shade#charge_shade
 group#riders(left: 118px; top: 570px; in: {y:24, opacity:0, duration:0.4, ease:'power2.out'})
   p#cap(left: 6px; top: 0px; font-size: 32px; font-family: k; color: $gold; letter-spacing: 0.24em; out: fade {duration: 0.25}) 甲冑の騎馬武者
   p#pre(left: 0px; top: 186px; overlap: riders.num; font-size: 64px; font-family: s; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) 約
-  p#num(left: 72px; top: 46px; font-size: 236px; font-family: s; letter-spacing: -0.01em; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) [count:400 roll ms=1150,1000,850]
+  p#num(left: 72px; top: 46px; font-size: 236px; font-family: s; letter-spacing: -0.01em; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) [count:400 roll ms=1150ms,1000ms,850ms]
   p#unit(left: 495px; top: 150px; overlap: riders.num; font-size: 120px; font-family: s; text-shadow: 0px 6px 28px #00000099; out: fade {duration: 0.25}) 騎
 
 # 題: 鎧の武者の寄りが暗く沈み、閃光と太鼓で題字が着地・英字は字間が締まり、地名がせり上がる
@@ -156,7 +156,7 @@ veil#sky_fl(color: #FFFFFF; opacity: 0.55; z-index: curtain; in: none)
 veil#sky_fl2(color: #FFFFFF; opacity: 0.32; z-index: curtain; in: none)
 img#sky_photo(inset: 0; content: @sky; main: kb {scale: [1.3, 1.3], focus: ['50% 96%', '50% 7%'], ease:'sine.inOut'})
 # 争奪の寄り: 語で切り替わり、2.2 秒だけ揺れる
-group#scramble(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none; main: noise {x: 6, y: 6, period: 0.07, window: '0,2200'})
+group#scramble(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none; main: noise {x: 6, y: 6, period: 0.07, window: '0ms,2200ms'})
 img#scramble.photo(inset: 0; in: none; main: kb {scale: [1.06, 1.2], focus: ['', '58% 41%'], ease:'power1.out'}) [photo]Intense close action photograph: several samurai riders on horseback crowd together, reaching up high with long riding whips to catch a small sacred flag fluttering down from the sky, horses jostling, banners on their backs tangling, dust lit by the sun, a dense crowd of riders behind them. Photorealistic, telephoto, dynamic diagonal composition. No readable text, no letters.
 shade#sky_shade
 scene_label#sky_label(when: "2日目・午後1時から"; what: "神旗争奪戦"; where: "雲雀ヶ原祭場地")

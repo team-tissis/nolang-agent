@@ -148,14 +148,14 @@ div#dg(left: 96px; top: 210px; width: 1130px; height: 640px)
 div#st6(left: 1290px; top: 230px; width: 540px; height: 270px; in: up)
   div#rule(left: 0px; top: 0px; width: 540px; height: 2px; background: $ink)
   p#l(left: 0px; top: 26px; font-size: 22px; color: $ink2) 読み比べる研究（無作為化比較試験）
-  p#v(left: 0px; top: 72px; font-size: 132px; line-height: 1; font-family: n; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:6 start=0 roll ms=1000]
+  p#v(left: 0px; top: 72px; font-size: 132px; line-height: 1; font-family: n; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:6 start=0 roll ms=1000ms]
   p#u(left: .v.right+14; top: 135px; font-size: 46px) 本
   div#mini(left: "0;36;72;108;144;180"; top: 222px; width: 44px; height: 44px; background: $card; border: 2px solid $ink2; border-radius: 8px) ×6
     p#t(cx: 50%; cy: 50%; font-size: 22px; font-family: n) A;B;C;D;E;F
 div#st682(left: 1290px; top: 543px; width: 540px; height: 262px; in: up)
   div#rule(left: 0px; top: 0px; width: 540px; height: 2px; background: $ink)
   p#l(left: 0px; top: 26px; font-size: 22px; color: $ink2) 参加者の合計
-  p#v(left: 0px; top: 75px; font-size: 132px; line-height: 1; font-family: n; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:682 start=0 roll ms=1400,1520,1640]
+  p#v(left: 0px; top: 75px; font-size: 132px; line-height: 1; font-family: n; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:682 start=0 roll ms=1400ms,1520ms,1640ms]
   p#u(left: .v.right+14; top: 138px; font-size: 46px) 人
   p#f(left: 0px; top: 228px; font-size: 18px; font-family: m; color: $ink3) 各研究で運動群と対照群に半数ずつ
 # 常設の上端の帯 (sticky・「運動群」の語から締めの題まで): 左に小札と題、右に架空データの札、下の細い線の上を進行が伸びる
@@ -298,12 +298,12 @@ panel#fp2(left: 1346px; top: 236px; width: 478px; height: 360px; hd: "判定")
 # hf の作り: 「小〜中程度の効果」の札は板が消えた後の語に出る (見えない) ので写さない
 panel#fp3(left: 1346px; top: 236px; width: 478px; height: 308px; hd: "まとめた効果（ランダム効果モデル）")
   p#g(left: 30px; top: 102px; font-size: 54px; font-family: n; font-style: italic) g =
-  p#v(left: .g.right+18; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $ochre; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:0.34 start=0 roll ms=1350,1470,1590]
+  p#v(left: .g.right+18; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $ochre; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:0.34 start=0 roll ms=1350ms,1470ms,1590ms]
   p#ci(left: 30px; top: 188px; font-size: 21px; font-family: m; color: $ink2) 95% 信頼区間 {nb}0.11 〜 0.58{/}
 # 右の板 4: 0.34 を言い換えると (約 63% が 4 秒かけて回り、100 個の点のうち 63 個が順に青緑に)
 panel#fp4(left: 1346px; top: 236px; width: 478px; height: 656px; hd: "0.34 を言い換えると")
   p#y(left: 30px; top: 129px; font-size: 30px) 約
-  p#v(left: .y.right+6; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $teal; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:63 start=0 roll ms=3890,4010 ease=ease_in_out]
+  p#v(left: .y.right+6; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $teal; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:63 start=0 roll ms=3890ms,4010ms ease=ease_in_out]
   p#u(left: .v.right+6; top: 123px; font-size: 44px) %
   shape#dot(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310;310;310;310;310;310;310;310;333;333;333;333;333;333;333;333;333;333;356;356;356;356;356;356;356;356;356;356;380;380;380;380;380;380;380;380;380;380"; width: 26px; height: 26px; border-radius: 50%; background: $slate_l; border: 2px solid #C4CBD3) ×100
   shape#fill(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310"; width: 26px; height: 26px; border-radius: 50%; background: $teal; in: {scale:0, duration:0.3, ease:'back.out(2)', stagger:{each:0.035}}) ×63
@@ -321,7 +321,7 @@ panel#fp5(left: 1346px; top: 236px; width: 478px; height: 422px; hd: "まとめ�
 # 右の板 6: 研究間の異質性 (I² = 54% が回り、0〜100% の帯が 54% まで伸びる)
 panel#fp6(left: 1346px; top: 236px; width: 478px; height: 376px; hd: "研究間の異質性")
   p#g(left: 30px; top: 108px; font-size: 50px; font-family: n; font-style: italic) I² =
-  p#v(left: .g.right+14; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $ochre; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:54 start=0 roll ms=1300,1420]
+  p#v(left: .g.right+14; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $ochre; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:54 start=0 roll ms=1300ms,1420ms]
   p#u(left: .v.right+6; top: 123px; font-size: 44px) %
   div#mt(left: 30px; top: 194px; width: 418px; height: 30px; border-radius: 6px; background: $paper2)
   div#mf(left: 30px; top: 194px; width: 226px; height: 30px; border-radius: 6px 0px 0px 6px; background: $ochre_f; in: {scaleX:0, duration:1.2, ease:'power3.out', pivot:'left'})

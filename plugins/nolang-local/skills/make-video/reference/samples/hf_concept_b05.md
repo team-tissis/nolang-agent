@@ -154,11 +154,11 @@ group#w_diag(left: 0px; top: 0px; width: 1080px; height: 1920px; in: none)
   lab#name2(left: 40px; top: 762px; width: 460px; color: $lilac; in: {opacity:0, duration:.2}) ブラックホール
   img#sun(left: 70px; top: 880px; width: 360px; height: 360px; content: @sun; object-fit: contain; delay: 450ms; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
   div#bh(left: 195px; top: 1005px; width: 112px; height: 112px; border-radius: 50%; background: #000000; border: 4px solid #FFECC8F2; box-shadow: 0px 0px 26px 8px #FFC882BF; in: {scale:.2, opacity:0, duration:.35, ease:'back.out(2)'})
-  p#radius(left: 10px; top: 1208px; width: 520px; font-size: 48px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180 delay=450]{/} km
+  p#radius(left: 10px; top: 1208px; width: 520px; font-size: 48px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180ms delay=450ms]{/} km
   shape#dline(points: "227,673 527,673"; background: none; border: 4px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
   lab#dlab(left: 340px; top: 920px; width: 450px; color: $cyan; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.15}) 距離
   div#line(left: 340px; top: 1006px; width: 450px; height: 8px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 14px #5FE0FFCC; border-radius: 24px; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
-  p#dist(left: 300px; top: 910px; width: 540px; font-size: 62px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250]万 km
+  p#dist(left: 300px; top: 910px; width: 540px; font-size: 62px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250ms]万 km
   img#earth(left: 795px; top: 926px; width: 170px; height: 170px; content: @earth; object-fit: contain; delay: 750ms; in: {scale:.3, opacity:0, duration:.4, ease:'back.out(2.2)'})
   p#pull(left: 350px; top: 1040px; width: 460px; font-size: 54px; text-align: center; white-space: nowrap; in: {x:40, opacity:0, duration:.35, ease:'power2.out'}) ◀── 引力
 # hf の作り: 判子は薄めた図の上に重ねる (overlap)
@@ -197,7 +197,7 @@ group#l_b.bleed(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity
   div#glow.bleed(left: 387px; top: -22px; width: 520px; height: 520px; border-radius: 50%; background: radial(#FFFFFF,#FFFAD7E6@14%,#FFDC7859@40%,#FFC85A00@70%,50%,50%); in: none)
   div#timer(left: 190px; top: 900px; width: 700px; height: 290px; border-radius: 30px; background: #040A18B8; border: 3px solid #FFD43BBF; box-shadow: 0px 12px 36px #0000008C; in: {y:30, opacity:0, duration:.3, ease:'power2.out'}; out: {opacity:0, duration:.4})
     p#lab(left: 0px; top: 16px; width: 700px; text-align: center; font-size: 40px; color: #FFE9A8; white-space: nowrap) 太陽の光が地球に届くまで
-    p#num(left: 0px; top: 75px; width: 700px; text-align: center; font-size: 168px; line-height: 1.12; white-space: nowrap) [count:00:00 start=08:20 ms=1930 delay=200]
+    p#num(left: 0px; top: 75px; width: 700px; text-align: center; font-size: 168px; line-height: 1.12; white-space: nowrap) [count:00:00 start=08:20 ms=1930ms delay=200ms]
     # 数え終えた 00:00 を語で赤の 00:00 に差し替える (数える数字の p は recolor の変種に色が乗らない)
     p#num2(left: 0px; top: 75px; width: 700px; text-align: center; font-size: 168px; line-height: 1.12; white-space: nowrap; color: $red; in: none) 00:00
 telop#t_light_a
@@ -243,8 +243,8 @@ group#f_c(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity:0, du
 # hf の作り: 凍った街の写真は 2 回使う (duplicate_media)・消灯した街の写真を凍った街に重ねて溶かす (photo_hidden)
 telop#t_freeze_a
   tl#l(top: 0px; s: 70px; w: 11) いまの平均気温
-  tl#n(top: 86px; s: 190px; w: 17; color: $ice) [count:-18 start=15 ms=2380]℃
-  tl#n2(top: 86px; s: 190px; w: 17; color: $ice; in: none) [count:-73 start=-18 ms=1260]℃
+  tl#n(top: 86px; s: 190px; w: 17; color: $ice) [count:-18 start=15 ms=2380ms]℃
+  tl#n2(top: 86px; s: 190px; w: 17; color: $ice; in: none) [count:-73 start=-18 ms=1260ms]℃
 telop#t_freeze_b
   tl#a(top: 0px; s: 92px; w: 13) 海も街も
   tl#b(top: 110px; s: 104px; w: 15; color: $ice) 凍りつく

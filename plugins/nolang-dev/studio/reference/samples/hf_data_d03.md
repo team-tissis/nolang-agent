@@ -144,7 +144,7 @@ p#s01_t1(left: 110px; cy: 406px; font-size: 80px; font-family: h; line-height: 1
 # 「800人の本音」の黄の下帯 (文字の下の段・語で左から伸びる)
 div#s01_mark(left: 272px; top: 556px; width: 561px; height: 30px; border-radius: 6px; background: $mark; in: {scaleX:0, duration:0.5, ease:'power2.inOut', pivot:'left'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'})
 p#s01_t2a(left: 110px; cy: 540px; font-size: 80px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700ms; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'}) 社員
-p#s01_t2n(left: 276px; cy: 534px; font-size: 120px; font-family: n; line-height: 1; color: $brand; letter-spacing: -0.02em; delay: 700ms; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'}) [count:800 start=0 ms=1300 delay=100]
+p#s01_t2n(left: 276px; cy: 534px; font-size: 120px; font-family: n; line-height: 1; color: $brand; letter-spacing: -0.02em; delay: 700ms; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'}) [count:800 start=0 ms=1300ms delay=100ms]
 p#s01_t2b(left: s01_t2n.right+9; cy: 540px; font-size: 80px; font-family: h; line-height: 1.12; letter-spacing: 0.01em; delay: 700ms; in: mask_rise {duration: 0.8, ease: 'power4.out'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'}) 人の本音
 div#s01_rule(left: 110px; top: 633px; width: 72px; height: 6px; border-radius: 3px; background: linear(#2F80ED,#12B5A6,90); delay: 1150ms; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'})
 p#s01_ci1(left: 110px; cy: 684px; font-size: 30px; delay: 1250ms; in: {y:14, opacity:0, duration:0.55, ease:'power3.out'}; out: {y:-26, opacity:0, duration:0.42, ease:'power2.in'}) 株式会社ソラリンク 全社員アンケート
@@ -174,7 +174,7 @@ board#b2(no: "01"; t: "調査の概要"; m: "株式会社ソラリンク ｜ 人
   svg#ring(left: 96px; top: 156px; width: 400px; height: 400px; part: ring; delay: 300ms; in: {opacity:0, duration:0.4, ease:'power1.out'})
   shape#arc(path: "M197.5 130.8 L206.0 131.1 L214.4 132.1 L222.7 133.8 L230.9 136.2 L238.8 139.1 L246.5 142.7 L253.9 146.9 L260.9 151.7 L267.6 157.0 L273.7 162.8 L279.4 169.1 L284.6 175.9 L289.2 183.0 L293.3 190.5 L296.7 198.2 L299.5 206.2 L301.7 214.4 L303.2 222.8 L304.0 231.2 L304.2 239.7 L303.7 248.2 L302.5 256.6 L300.6 264.9 L298.1 273.0 L295.0 280.9 L291.2 288.5 L286.9 295.8 L281.9 302.7 L276.5 309.2 L270.5 315.3 L264.1 320.8 L257.3 325.9 L250.1 330.3 L242.5 334.2 L234.7 337.5 L226.6 340.1 L218.4 342.1 L210.0 343.5 L201.5 344.1 L193.0 344.1 L184.6 343.4 L176.2 342.1 L167.9 340.0 L159.9 337.4 L152.1 334.0 L144.5 330.1 L137.3 325.6 L130.5 320.6 L124.1 315.0 L118.2 308.9 L112.8 302.4 L107.9 295.4 L103.6 288.1 L99.8 280.5 L96.7 272.6 L94.3 264.5 L92.4 256.2 L91.3 247.8 L90.8 239.3 L91.0 230.8"; background: none; border: 44px solid $brand; in: draw {duration: 2.49})
   # 2 桁の数える数は語の count まで start の値 (0%) で止まる — 輪と一緒に「0%」で出し、弧を描く語で数える
-  p#dv(cx: 296px; cy: 333px; font-size: 118px; font-family: n; line-height: 1; delay: 300ms; in: {opacity:0, duration:0.4, ease:'power1.out'}) [count:76 start=0 ms=2490]{u46}%{/}
+  p#dv(cx: 296px; cy: 333px; font-size: 118px; font-family: n; line-height: 1; delay: 300ms; in: {opacity:0, duration:0.4, ease:'power1.out'}) [count:76 start=0 ms=2490ms]{u46}%{/}
   p#dl(cx: 296px; cy: 416px; font-size: 26px; color: $ink2; delay: 300ms; in: {opacity:0, duration:0.4, ease:'power1.out'}) 回答率
   p#cap(cx: 296px; cy: 612px; font-size: 26px; in: {y:14, opacity:0, duration:0.55, ease:'power3.out'}) 社員{n24}1,050{/}人中{n24}800{/}人が回答
   # 事実の 4 行 (小さな題 + 太い値 + 補足・下に罫)
@@ -204,7 +204,7 @@ board#b3(no: "02"; t: "いまの働き方"; m: "回答者 800人"; f: "出典：
     div#bar(left: 0px; cy: 50%; width: 12px; height: 84px; border-radius: 6px; background: "$full;$hyb;$rem")
     p#nm(left: 34px; cy: 50px; font-size: 38px; font-family: h; line-height: 1.2) フル出社;ハイブリッド;ほぼリモート
     p#nt(left: 34px; cy: 92px; font-size: 22px; font-family: m; color: $ink2) 週5日 出社;週2〜3日 出社;週1日以下 出社
-    p#pc(right: 172px; cy: 66px; font-size: 84px; font-family: n; line-height: 1) [count:18 start=0 ms=800]{u48}%{/};[count:47 start=0 ms=800]{u48}%{/};[count:35 start=0 ms=800]{u48}%{/}
+    p#pc(right: 172px; cy: 66px; font-size: 84px; font-family: n; line-height: 1) [count:18 start=0 ms=800ms]{u48}%{/};[count:47 start=0 ms=800ms]{u48}%{/};[count:35 start=0 ms=800ms]{u48}%{/}
     p#ct(right: 0px; cy: 69px; font-size: 26px; color: $ink2) {nk}144{/}人;{nk}376{/}人;{nk}280{/}人
   # 実績の板 (題 + 数える週 2.2 日 + 月〜金の 5 枠が 2.2 日分だけ左から埋まる)
   div#kpi(left: 735px; top: 600px; width: 968px; height: 142px; border-radius: 22px; background: $tint; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
@@ -215,7 +215,7 @@ board#b3(no: "02"; t: "いまの働き方"; m: "回答者 800人"; f: "出典：
     p#v0(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1) 0.0
     p#d(left: 414px; cy: 82px; font-size: 30px; font-family: h) 日
     div#wf(left: "387;435;483"; top: 36px; width: "43;43;9"; height: 42px; border-radius: 8px; background: $brand; in: {scaleX:0, duration:0.3, ease:'none', pivot:'left'}) ×3
-    p#v(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1; in: none) [count:2.2 start=0 ms=900]
+    p#v(left: 291px; cy: 72px; font-size: 76px; font-family: n; line-height: 1; in: none) [count:2.2 start=0 ms=900ms]
     p#wl(cx: "408.5;456.5;504.5;552.5;600.5"; cy: 98px; font-size: 16px; color: $ink2) ×5 月;火;水;木;金
 
 # s04 満足度: 左に全体の大きな数字 (数えて下の棒が 64% 伸びる)・右に目盛りと 3 本の横棒 (語ごとに伸びて数える)・全体 64% の破線・「最も高い」の札・フル出社とハイブリッドの差のかぎと 31 ポイント
@@ -225,7 +225,7 @@ board#b4(no: "03"; t: "働き方への満足度"; m: "5段階で「4以上」と
   p#lg(right: 56px; cy: 770px; font-size: 18px; font-family: m; color: $ink2; delay: 500ms; in: {opacity:0, duration:0.5, ease:'power1.out'}) {cf}■{/} フル出社　{ch}■{/} ハイブリッド　{cr}■{/} ほぼリモート　{ci}━{/} 全体の満足度
   div#hero(left: 56px; top: 152px; width: 440px; height: 590px; border-radius: 24px; background: $tint; delay: 400ms; in: {y:22, opacity:0, duration:0.55, ease:'power3.out'})
     p#l(left: 40px; cy: 122px; font-size: 32px; font-family: h) 全体
-    p#v(left: 40px; cy: 236px; font-size: 150px; font-family: n; line-height: 1) [count:64 start=0 ms=900]{u43}%{/}
+    p#v(left: 40px; cy: 236px; font-size: 150px; font-family: n; line-height: 1) [count:64 start=0 ms=900ms]{u43}%{/}
     p#s(left: 40px; cy: 340px; font-size: 27px; color: $ink2) {nk}515{/}人 ／ {nk}800{/}人
     div#tr(left: 40px; top: 402px; width: 360px; height: 22px; border-radius: 12px; background: #FFFFFF)
     div#bar(left: 40px; top: 402px; width: 231px; height: 22px; border-radius: 12px; background: $brand; in: {scaleX:0, duration:0.9, ease:'power2.out', pivot:'left'})
@@ -242,13 +242,13 @@ board#b4(no: "03"; t: "働き方への満足度"; m: "5段階で「4以上」と
   div#f_hyb(left: 825px; top: 424px; width: 590px; height: 64px; border-radius: 0px 6px 6px 0px; background: $hyb; in: {scaleX:0, duration:0.8, ease:'power2.out', pivot:'left'})
   div#f_rem(left: 825px; top: 604px; width: 542px; height: 64px; border-radius: 0px 6px 6px 0px; background: $rem; in: {scaleX:0, duration:0.8, ease:'power2.out', pivot:'left'})
   div#v_full(left: 1179px; top: 222px; width: 180px; height: 110px; in: {opacity:0, duration:0.3, ease:'power1.out'})
-    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:41 start=0 ms=800]{u54}%{/}
+    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:41 start=0 ms=800ms]{u54}%{/}
     p#pc(left: 0px; cy: 84px; font-size: 20px; font-family: m; color: $ink2) {nn}59{/} / {nn}144{/}人
   div#v_hyb(left: 1432px; top: 402px; width: 180px; height: 110px; in: {opacity:0, duration:0.3, ease:'power1.out'})
-    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:72 start=0 ms=800]{u54}%{/}
+    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:72 start=0 ms=800ms]{u54}%{/}
     p#pc(left: 0px; cy: 84px; font-size: 20px; font-family: m; color: $ink2) {nn}271{/} / {nn}376{/}人
   div#v_rem(left: 1384px; top: 582px; width: 180px; height: 110px; in: {opacity:0, duration:0.3, ease:'power1.out'})
-    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:66 start=0 ms=800]{u54}%{/}
+    p#pv(left: 0px; cy: 38px; font-size: 52px; font-family: n; line-height: 1) [count:66 start=0 ms=800ms]{u54}%{/}
     p#pc(left: 0px; cy: 84px; font-size: 20px; font-family: m; color: $ink2) {nn}185{/} / {nn}280{/}人
   # 全体 64% の破線 (上から下へ伸びる) と札
   shape#refl(path: "M898.7 128 L898.7 465"; background: none; border: 3px solid $ink; dash: 5,4; in: draw {duration: 0.6})
@@ -290,7 +290,7 @@ board#b6(no: "05"; t: "孤独を感じることがある"; m: "回答者 800人"
   p#lg(right: 56px; cy: 770px; font-size: 18px; font-family: m; color: $ink2; delay: 500ms; in: {opacity:0, duration:0.5, ease:'power1.out'}) {cf}■{/} フル出社　{ch}■{/} ハイブリッド　{cr}■{/} ほぼリモート　{cg}■{/} 年代（20代を強調）
   div#hero(left: 56px; top: 152px; width: 400px; height: 255px; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
     p#l(left: 0px; cy: 22px; font-size: 30px; font-family: h) 全体
-    p#v(left: 0px; cy: 130px; font-size: 140px; font-family: n; line-height: 1) [count:26 start=0 ms=900]{u43}%{/}
+    p#v(left: 0px; cy: 130px; font-size: 140px; font-family: n; line-height: 1) [count:26 start=0 ms=900ms]{u43}%{/}
     p#s(left: 0px; cy: 226px; font-size: 26px; color: $ink2) {nk}206{/}人 ／ {nk}800{/}人
   img#pic(left: 90px; top: 402px; width: 336px; height: 336px; object-fit: contain; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.7)'}) [transparent]20代の若い会社員が自宅の小さな机で一人ノートPC に向かい、画面には誰も映っていないビデオ会議の格子、頬杖をついて少し寂しげな表情。マグカップ、窓、観葉植物。やさしく共感的な柔らかい光、明るいパステル調のまま。ひとまとまりの場面を中央に、枠いっぱいに大きく描く
   div#vd(left: "328;728"; top: 162px; width: 2px; height: 570px; background: $line) ×2
@@ -300,7 +300,7 @@ board#b6(no: "05"; t: "孤独を感じることがある"; m: "回答者 800人"
   div#sb(left: "370;484"; top: "359.7;333"; width: 120px; height: "74.7;101.3"; border-radius: 6px 6px 0px 0px; background: "$full;$hyb"; in: {scaleY:0, duration:0.6, ease:'power2.out', pivot:'bottom', stagger:{each:0.15}}) ×2
   div#sb_rem(left: 896px; top: 324px; width: 120px; height: 328px; border-radius: 6px 6px 0px 0px; background: $rem; in: {scaleY:0, duration:0.8, ease:'power2.out', pivot:'bottom'})
   p#sv(cx: "410.3;523.7"; cy: "337;310.4"; font-size: 44px; font-family: n; line-height: 1; in: {y:10, opacity:0, duration:0.55, ease:'power3.out', stagger:{each:0.15}}) ×2 14{u55}%{/};19{u55}%{/}
-  p#sv_rem(cx: 956px; cy: 290px; font-size: 44px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:41 start=0 ms=800]{u55}%{/}
+  p#sv_rem(cx: 956px; cy: 290px; font-size: 44px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:41 start=0 ms=800ms]{u55}%{/}
   div#sl(left: "350.3;463.7;577"; top: 663px; width: 180px; height: 60px; in: {y:10, opacity:0, duration:0.55, ease:'power3.out', stagger:{each:0.1}}) ×3
     p#b(cx: 50%; cy: 16px; font-size: 24px) フル出社;ハイブリッド;ほぼリモート
     p#n(cx: 50%; cy: 44px; font-size: 16px; font-family: m; color: $ink3) {nn}20{/}人;{nn}71{/}人;{nn}115{/}人
@@ -329,25 +329,25 @@ board#b7(no: "06"; t: "希望する出社日数"; m: "回答者 800人 ｜ 週�
   p#med(cx: 470px; cy: 368px; font-size: 18px; color: #FFFFFF; in: {y:-8, opacity:0, duration:0.55, ease:'power3.out'}) 中央
   shape#brk(path: "M174.3 186.3 L174.3 175.7 L451.7 175.7 L451.7 186.3"; background: none; border: 3px solid $ink; in: {y:12, opacity:0, duration:0.4, ease:'power3.out'})
   p#brl1(left: 342px; cy: 228px; font-size: 26px; in: {y:10, opacity:0, duration:0.55, ease:'power3.out'}) 週1〜3日で
-  p#brl2(left: 500px; cy: 220px; font-size: 46px; font-family: n; line-height: 1; in: {y:10, opacity:0, duration:0.55, ease:'power3.out'}) [count:68 start=0 ms=700]%
+  p#brl2(left: 500px; cy: 220px; font-size: 46px; font-family: n; line-height: 1; in: {y:10, opacity:0, duration:0.55, ease:'power3.out'}) [count:68 start=0 ms=700ms]%
   # 平均の板 (希望と実績の横棒が語で伸びて数える・差の黒札)
   div#pa(left: 1076px; top: 152px; width: 628px; height: 282px; border-radius: 22px; background: $tint; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
     p#t(left: 30px; cy: 40px; font-size: 26px; font-family: h) 平均の出社日数{s12}　週あたり{/}
     p#l1(left: 30px; cy: 105px; font-size: 26px) 希望
     div#b1(left: 124px; top: 84px; width: 194px; height: 40px; border-radius: 0px 6px 6px 0px; background: $brand; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
-    p#v1(left: 332px; cy: 104px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:1.7 start=0 ms=600]{uj}日{/}
+    p#v1(left: 332px; cy: 104px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:1.7 start=0 ms=600ms]{uj}日{/}
     p#l2(left: 30px; cy: 171px; font-size: 26px) 実績
     div#b2(left: 124px; top: 150px; width: 249px; height: 40px; border-radius: 0px 6px 6px 0px; background: $ink3; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
-    p#v2(left: 388px; cy: 170px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:2.2 start=0 ms=600]{uj}日{/}
+    p#v2(left: 388px; cy: 170px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:2.2 start=0 ms=600ms]{uj}日{/}
     p#dl(left: 30px; top: 214px; font-size: 21px; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 9px 20px; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(1.7)'}) 希望は実績より {n17}0.5{/}日 少ない
   div#pb(left: 1076px; top: 456px; width: 628px; height: 286px; border-radius: 22px; background: $tint; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
     p#t(left: 30px; cy: 40px; font-size: 26px; font-family: h) 週3日以上を望む人
     p#l1(left: 30px; cy: 110px; font-size: 26px) 全体
     div#b1(left: 124px; top: 88px; width: 212px; height: 40px; border-radius: 0px 6px 6px 0px; background: $brand; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
-    p#v1(left: 352px; cy: 108px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:25 start=0 ms=600]{u50}%{/}
+    p#v1(left: 352px; cy: 108px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:25 start=0 ms=600ms]{u50}%{/}
     p#l2(left: 30px; cy: 186px; font-size: 26px) 20代
     div#b2(left: 124px; top: 164px; width: 264px; height: 40px; border-radius: 0px 6px 6px 0px; background: $age_hi; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
-    p#v2(left: 404px; cy: 184px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:31 start=0 ms=600]{u50}%{/}{fs}　62 / 200人{/}
+    p#v2(left: 404px; cy: 184px; font-size: 42px; font-family: n; line-height: 1; in: {opacity:0, duration:0.3, ease:'power1.out'}) [count:31 start=0 ms=600ms]{u50}%{/}{fs}　62 / 200人{/}
 
 # s08 職種別: 目盛りと職種の札・灰の横棒 4 本が順に伸び値が入り、全体の平均の破線が降りる・語でエンジニアと営業を紺に塗り、右にかぎと「2倍の開き」
 section#s08(stagger: {each:0})
@@ -400,7 +400,7 @@ board#b10(no: "09"; t: "施策の提案"; m: "調査結果から導いた 3つ�
     img#pic [transparent]オフィスに置かれた現代的な防音の 1 人用の会議ブース 2 台、片方の中で人がノートPC とヘッドセットでビデオ通話をしている。きれいなガラスと明るい木。ひとまとまりの物を中央に、枠いっぱいに大きく描く
     # 個室の数 (12 室 → 語で 12 から 30 へ数える・数える語まで start の 12 で止まる)
     p#rm(left: 34px; cy: 440px; font-size: 38px; font-family: n; line-height: 1; delay: 350ms; in: {y:12, opacity:0, duration:0.55, ease:'power3.out'}) 12{uj}室{/} {ar}→{/}
-    p#n30(left: 150px; cy: 440px; font-size: 38px; font-family: n; line-height: 1; delay: 350ms; in: {y:12, opacity:0, duration:0.55, ease:'power3.out'}) [count:30 start=12 ms=600]{uj}室{/}
+    p#n30(left: 150px; cy: 440px; font-size: 38px; font-family: n; line-height: 1; delay: 350ms; in: {y:12, opacity:0, duration:0.55, ease:'power3.out'}) [count:30 start=12 ms=600ms]{uj}室{/}
     p#d3(left: 34px; cy: 480px; font-size: 21px; font-family: m; color: $ink2; delay: 350ms; in: {y:12, opacity:0, duration:0.55, ease:'power3.out'}) 評価基準を成果ベースで明文化
 
 # s11 結論: 3 行の淡い板が語ごとに入り (番号 → 題 → 補足)、右の 2 枚の数字の札が弾む

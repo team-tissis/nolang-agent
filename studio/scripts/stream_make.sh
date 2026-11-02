@@ -192,6 +192,16 @@ else:
     P = by("playable")[0]["since"] if by("playable") else None
     nostall = max((a["since"] - a["cut_start_s"] for a in asm), default=None)
     print(f"cut {len(cuts)}・再生開始 {P and round(P)} s・止まらない開始 {nostall and round(nostall)} s・完成 {F and round(F)} s・落ちた cut {dropped or 'なし'}")
+# 最後の手段 (`defect_lines_dropped`) が直しきれない DEFECT で落とした中身 — 最終版に無い。黙って落とさず利用者に伝える
+lost = [x for e in by("defect_lines_dropped") if e["cut"] not in dropped for x in e.get("lines", [])]
+if lost:
+    print("落とした行 (直しきれない DEFECT — 最終版に無い。利用者に伝える):")
+    kinds = {"speech": "台詞の行ごと", "marks": "台詞の印 (台詞は残した)", "design": "画面の要素", "timeline": "timeline の行"}
+    for x in lost:
+        what = " ".join(x["marks"]) if x["kind"] == "marks" else x["line"]
+        print(f"  {x['cut']}: {kinds[x['kind']]}: {what[:200]}")
+        if x.get("clip"):
+            print(f"    持ち込み音声の発話 {x['clip']} が動画に入らない — 「音声はそのまま」にならない")
 if video.exists():
     print(f"video: {video} ({video.stat().st_size // 1024} KB)")
 elif by("remote_started"):  # --remote: 描画と配信は server (手元に mp4 は無い)

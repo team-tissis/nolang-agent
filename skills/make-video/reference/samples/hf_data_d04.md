@@ -117,7 +117,7 @@ group#ttl(out: {y:-40, opacity:0, duration:0.3, ease:'power2.in'})
   div#ul(left: 278px; top: 711px; width: 525px; height: 30px; border-radius: 15px; background: $pink; in: {scaleX:0, duration:0.4, ease:'power3.out', pivot:'left'})
   p#t3(cx: 540px; cy: 654px; font-size: 168px; font-family: p; line-height: 1.12; color: $yellow; overlap: ttl.ul; in: {scale:0.2, y:20, rotation:-8, opacity:0, duration:0.6, ease:'back.out(2.6)'}) 変わる
   chip#ch1(cx: 362px; cy: 952px) 全国の高校1〜3年生
-  chip#ch2(cx: 723px; cy: 952px) 有効回答 {b}[count:1,236 start=0 roll ms=800,880,960,1040 delay=190]{/}人
+  chip#ch2(cx: 723px; cy: 952px) 有効回答 {b}[count:1,236 start=0 roll ms=800ms,880ms,960ms,1040ms delay=190ms]{/}人
   chip#ch3(cx: 540px; cy: 1040px) オンライン調査・自己申告
   p#fict(cx: 540px; top: 1110px; font-size: 26px; color: $ink2; font-family: m; in: {opacity:0, duration:0.4}) ※よふかしラボは架空の教育NPOです
 
@@ -134,9 +134,9 @@ board#b2(n: "01"; t: "平日の睡眠時間")
   # 板と一緒に 0 時間 00 分で出て、「平均」の語で回り始める
   div#hero(left: 44px; top: 140px; width: 900px; height: 146px; delay: 300ms; in: {scale:0.8, y:20, opacity:0, duration:0.45, ease:'back.out(2.2)'})
     p#lab(left: 0px; cy: 50%; font-size: 40px; color: $ink2; background: #FFFFFF1A; border-radius: 16px; padding: 6px 18px) 平均
-    p#h(left: 130px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:6 start=0 roll ms=1000]
+    p#h(left: 130px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:6 start=0 roll ms=1000ms]
     p#hu(left: 231px; top: 66px; font-size: 58px) 時間
-    p#m(left: 346px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:21 start=0 roll ms=1080,1160]
+    p#m(left: 346px; top: 0px; font-size: 132px; font-family: p; line-height: 1.1) [count:21 start=0 roll ms=1080ms,1160ms]
     p#mu(left: 542px; top: 66px; font-size: 58px) 分
   # 縦棒 5 本 (1% = 6.67 px・下端 600 から上へ伸びる)・値・軸の札 (時間帯 / 人数)
   div#base(left: 52px; top: 898px; width: 880px; height: 3px; background: #FFFFFF59; delay: 400ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'})

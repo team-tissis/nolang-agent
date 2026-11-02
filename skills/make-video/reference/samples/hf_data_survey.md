@@ -113,7 +113,7 @@ hsub#funnel_s アンケートに同意した人は、どこまで答えたか
 panel#fun(left: 80px; top: 219px; width: 1761px; height: 336px; delay: 200ms)
   ptitle#t 回答の状況{pn}　人数（同意した人に占める割合）{/}
   p#lab(left: 33px; top: 82px; font-size: 24px; color: $fg2; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) 同意
-  p#n(left: 94px; top: 69px; font-size: 40px; font-family: b; line-height: 1.2; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) [count:696 start=0 ms=950]
+  p#n(left: 94px; top: 69px; font-size: 40px; font-family: b; line-height: 1.2; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) [count:696 start=0 ms=950ms]
   p#u(left: 168px; top: 82px; font-size: 24px; color: $fg2; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) 人
   p#drop_lab(right: 33px; top: 70px; font-size: 22px; color: $fg2; white-space: nowrap; in: {y:-12, opacity:0, duration:.4, ease:'power3.out'}) 途中離脱　{v19}27人{/}　{v19}3.9%{/}
   # 帯: 地 (slate) → 完了 84.2% (琥珀のグラデ) → 全部スキップ 11.9%・途中離脱 3.9% (左の縁は板の色)
@@ -124,7 +124,7 @@ panel#fun(left: 80px; top: 219px; width: 1761px; height: 336px; delay: 200ms)
   div#drop(left: 1660px; top: 132px; width: 68px; height: 60px; border-radius: 0,5,5,0; background: $drop; border-left: 3px solid $edge; in: {opacity:0, duration:.45, ease:'power2.out'})
   div#lead_drop(left: 1694px; top: 116px; width: 2px; height: 16px; background: $fg3; in: {scaleY:0, duration:.3, ease:'power2.out', pivot:'bottom'})
   div#lead_skip(left: 1560px; top: 192px; width: 2px; height: 26px; background: $fg3; in: {scaleY:0, duration:.3, ease:'power2.out', pivot:'top'})
-  p#big(left: 33px; top: 202px; font-size: 96px; font-family: b; line-height: 1; letter-spacing: -.01em; color: $amber; in: {y:24, opacity:0, duration:.5, ease:'back.out(1.7)'}) [count:84 start=0 ms=800]{pc}%{/}
+  p#big(left: 33px; top: 202px; font-size: 96px; font-family: b; line-height: 1; letter-spacing: -.01em; color: $amber; in: {y:24, opacity:0, duration:.5, ease:'back.out(1.7)'}) [count:84 start=0 ms=800ms]{pc}%{/}
   p#cap(left: 220px; top: 258px; font-size: 26px; color: $fg2; white-space: nowrap; in: {x:-14, opacity:0, duration:.45, ease:'power3.out'}) 最後まで完了　{v21}586人{/}
   p#skip_lab(right: 99px; top: 232px; font-size: 22px; color: $fg2; white-space: nowrap; in: {y:12, opacity:0, duration:.4, ease:'power3.out'}) 全部スキップ　{v19}83人{/}　{v19}12%{/}
 #fun.skip.lit(background: $lit)
@@ -133,7 +133,7 @@ panel#time(left: 80px; top: 580px; width: 561px; height: 368px)
   ptitle#t 回答にかかった時間{pn}　中央値{/}
   svg#dial(left: 33px; top: 102px; width: 190px; height: 190px; part: dial)
   shape#arc(path: "M 86 86.3 C 111.2 86.3 131.7 106.8 131.7 132 C 131.7 141.7 128.6 151.1 123 158.9"; background: none; border: 14px solid $amber; in: draw {duration: 0.9, ease: 'power2.out'})
-  p#num(left: 254px; top: 138px; font-size: 104px; font-family: b; line-height: 1; in: {y:30, opacity:0, duration:.55, ease:'power3.out'}) [count:21 start=0 ms=900]{sec}秒{/}
+  p#num(left: 254px; top: 138px; font-size: 104px; font-family: b; line-height: 1; in: {y:30, opacity:0, duration:.55, ease:'power3.out'}) [count:21 start=0 ms=900ms]{sec}秒{/}
   p#sub(left: 254px; top: 246px; font-size: 21px; color: $fg3) 目盛りは 1 分
 # 登録方法別の全部スキップ (横軸 0〜40%)
 panel#meth(left: 664px; top: 580px; width: 1176px; height: 368px)
@@ -293,15 +293,15 @@ panel#rank(left: 80px; top: 459px; width: 1008px; height: 489px)
 # AI アシスタントで知った人: 3 段 (16% / 輪の弧 84% / 7.8%)・札は 0.35 で薄く先出し・「AI」で板の縁が琥珀に
 panel#ai(left: 1112px; top: 219px; width: 729px; height: 729px; in: {x:40, opacity:0, duration:.6, ease:'power3.out'})
   ptitle#t AIアシスタントで知った人
-  p#big(left: 33px; top: 96px; font-size: 92px; font-family: b; line-height: 1; color: $amber; in: {y:14, opacity:0, duration:.45, ease:'back.out(1.7)'}) [count:16 start=0 ms=600]{pc}%{/}
+  p#big(left: 33px; top: 96px; font-size: 92px; font-family: b; line-height: 1; color: $amber; in: {y:14, opacity:0, duration:.45, ease:'back.out(1.7)'}) [count:16 start=0 ms=600ms]{pc}%{/}
   p#share(left: 204px; top: 147px; font-size: 22px; line-height: 1.45; color: $fg2; opacity: .35) 自己申告の流入経路に[br]占める割合
   div#ln1(left: 33px; top: 240px; width: 664px; height: 2px; background: $line)
   svg#ring(left: 33px; top: 258px; width: 180px; height: 180px; part: ring)
   shape#arc(path: "M 82 185.5 C 107.7 185.5 128.5 206.3 128.5 232 C 128.5 257.7 107.7 278.5 82 278.5 C 56.3 278.5 35.5 257.7 35.5 232 C 35.5 223.2 38 214.5 42.7 207.1"; background: none; border: 18px solid $amber; in: draw {duration: 1, ease: 'power2.out'})
-  p#num(left: 240px; top: 296px; font-size: 72px; font-family: b; line-height: 1.15; in: {y:14, opacity:0, duration:.4, ease:'power3.out'}) [count:84 start=0 ms=1000]{pc}%{/}
+  p#num(left: 240px; top: 296px; font-size: 72px; font-family: b; line-height: 1.15; in: {y:14, opacity:0, duration:.4, ease:'power3.out'}) [count:84 start=0 ms=1000ms]{pc}%{/}
   p#lab1(left: 240px; top: 382px; font-size: 22px; color: $fg2; opacity: .35) 24時間以内の生成到達
   div#ln2(left: 33px; top: 465px; width: 664px; height: 2px; background: $line)
-  p#paid(left: 33px; top: 495px; font-size: 72px; font-family: b; line-height: 1.15; color: $amber; in: {y:14, opacity:0, duration:.4, ease:'back.out(1.7)'}) [count:7.8 start=0 ms=700]{pc}%{/}
+  p#paid(left: 33px; top: 495px; font-size: 72px; font-family: b; line-height: 1.15; color: $amber; in: {y:14, opacity:0, duration:.4, ease:'back.out(1.7)'}) [count:7.8 start=0 ms=700ms]{pc}%{/}
   p#lab2(left: 198px; top: 514px; font-size: 22px; color: $fg2; opacity: .35) 24時間以内の課金
   note#note(left: 33px; top: 674px; in: {y:8, opacity:0, duration:.4, ease:'power3.out'}) 生成到達・課金とも高い水準
 #ai.on(border: 2px solid #F5B5448C)

@@ -128,13 +128,13 @@ div#brand.sticky(left: 96px; top: 46px; width: 360px; height: 30px; display: fle
   p#b(font-size: 20px; white-space: nowrap) こもれび雑貨店
   div#i(width: 2px; height: 18px; background: #FFFFFF40)
   p#s(font-size: 20px; font-family: m; color: $ink3; white-space: nowrap) カゴ落ち分析
-kpi#k1(left: 96px; l: 商品ページ閲覧; v: "[count:48,000 start=0 ms=1200 delay=50]"; u: セッション; f: 4週合計; c: $slate; delay: 450ms)
-kpi#k2(left: 536px; l: カート投入; v: "[count:7,200 start=0 ms=1000 delay=50]"; u: 件; f: 閲覧の 15.0%; c: $teal)
-kpi#k3(left: 976px; l: 購入完了; v: "[count:2,376 start=0 ms=1000 delay=50]"; u: 件; f: カートから 33.0%; c: $teal)
-kpi#k4(left: 1416px; l: カゴ落ち（買わずに去った）; v: "[count:4,824 start=0 ms=1000 delay=50]"; u: 件; f: カート投入の 67%; c: $coral)
+kpi#k1(left: 96px; l: 商品ページ閲覧; v: "[count:48,000 start=0 ms=1200ms delay=50ms]"; u: セッション; f: 4週合計; c: $slate; delay: 450ms)
+kpi#k2(left: 536px; l: カート投入; v: "[count:7,200 start=0 ms=1000ms delay=50ms]"; u: 件; f: 閲覧の 15.0%; c: $teal)
+kpi#k3(left: 976px; l: 購入完了; v: "[count:2,376 start=0 ms=1000ms delay=50ms]"; u: 件; f: カートから 33.0%; c: $teal)
+kpi#k4(left: 1416px; l: カゴ落ち（買わずに去った）; v: "[count:4,824 start=0 ms=1000ms delay=50ms]"; u: 件; f: カート投入の 67%; c: $coral)
 panel#ov_stat(left: 96px; top: 414px; width: 1080px; height: 306px)
   p#l(left: 40px; top: 30px; font-size: 26px; font-family: m; color: $ink2) カートに入れた人のうち
-  p#big(left: 32px; top: 92px; font-size: 180px; line-height: 1; font-family: n; color: $coral) [count:67 start=0 ms=900 delay=100]{pc}%{/}
+  p#big(left: 32px; top: 92px; font-size: 180px; line-height: 1; font-family: n; color: $coral) [count:67 start=0 ms=900ms delay=100ms]{pc}%{/}
   p#side(left: 560px; top: 84px; font-size: 44px; line-height: 1.3; in: {y:16, opacity:0, duration:0.5, ease:'power3.out'}) {cn}4,824{/} 件が[br]買わずに去っている
   p#note(left: 560px; top: 214px; font-size: 20px; font-family: c; color: $ink3; in: {y:16, opacity:0, duration:0.5, ease:'power3.out'}) カート投入 7,200 件 = 100%
 # 100 マス (10 × 10 の格子・1 マス ≒ 72 件・先頭から 12 ms ずつ弾んで出る)
@@ -231,7 +231,7 @@ stitle#dv_t デバイス別：スマホと PC
 prog#dv_p(t: "04 / 09"; c: "#FFB54773;#FFB54773;#FFB54773;$amber;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29;#FFFFFF29")
 panel#dl(left: 96px; top: 230px; width: 520px; height: 690px; delay: 200ms)
   p#pt(left: 32px; top: 22px; font-size: 22px; font-family: m; color: $ink2) カート投入 7,200 件の内訳
-  p#big(left: 32px; top: 76px; font-size: 128px; line-height: 1; font-family: n; color: $orange; in: none) [count:70 start=0 ms=800]{pc}%{/}
+  p#big(left: 32px; top: 76px; font-size: 128px; line-height: 1; font-family: n; color: $orange; in: none) [count:70 start=0 ms=800ms]{pc}%{/}
   p#bt(left: 300px; top: 124px; font-size: 32px; in: {opacity:0, duration:0.4}) がスマホ
   div#sp(left: 32px; top: 214px; width: 318px; height: 40px; border-radius: 6px 0px 0px 6px; background: $orange; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
   div#pc(left: 351px; top: 214px; width: 136px; height: 40px; border-radius: 0px 6px 6px 0px; background: $blue; in: {scaleX:0, duration:0.5, ease:'power3.out', pivot:'left'})

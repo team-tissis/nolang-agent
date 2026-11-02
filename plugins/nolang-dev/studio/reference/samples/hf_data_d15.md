@@ -119,8 +119,8 @@ div#hdr.sticky(left: 56px; top: 50px; width: 840px; height: 110px; delay: 310ms;
 chap#c1(no: "01"; delay: 60ms)
 p#ftr.sticky(cx: 540px; top: 1506px; font-size: 22px; font-family: r; color: $muted; letter-spacing: .02em; delay: 410ms; in: {opacity:0, duration:.4}) 出典：ミナトリサーチ（架空の調査会社）「会社員の副業調査」2026年9月
 board#b2(k: "01"; t: "副業の状況"; n: "回答者 {nb}1,000{/}人")
-  stat#st1(left: 44px; top: 144px; l: "いま副業をしている"; v: "[count:23.4 start=0 ms=750 delay=200]{pc}%{/}{pp} 234{/}{ps}人{/}"; c: $amber)
-  stat#st2(left: 498px; top: 144px; l: "始めたいが、していない"; v: "[count:38.5 start=0 ms=750 delay=200]{pc}%{/}{pp} 385{/}{ps}人{/}"; c: $sky)
+  stat#st1(left: 44px; top: 144px; l: "いま副業をしている"; v: "[count:23.4 start=0 ms=750ms delay=200ms]{pc}%{/}{pp} 234{/}{ps}人{/}"; c: $amber)
+  stat#st2(left: 498px; top: 144px; l: "始めたいが、していない"; v: "[count:38.5 start=0 ms=750ms delay=200ms]{pc}%{/}{pp} 385{/}{ps}人{/}"; c: $sky)
   p#waf_unit(right: 42px; cy: 384px; font-size: 22px; font-family: r; color: $muted; delay: 860ms; in: {opacity:0, duration:.3}) {dt}●{/} 1つ＝1人
   svg#waf_base(left: 126px; top: 400px; width: 716px; height: 446px; part: waf_base; delay: 410ms; in: wipe {dir: 'right', duration: 0.9, ease: 'power2.inOut'})
   svg#waf_c1(left: 126px; top: 400px; width: 716px; height: 446px; part: waf_c1; in: wipe {dir: 'right', duration: 0.64})
@@ -197,7 +197,7 @@ board#b6(k: "05"; t: "副業にかける時間（週）"; n: "している {nb}2
   # 琥珀の枠: 題 → 数える 63 + % + 2 行の文 → メーター (63%) → 人数
   div#call(left: 44px; top: 518px; width: 880px; height: 366px; background: #FFB21A14; border: 2px solid #FFB21A99; border-radius: 24px; in: {y:50, opacity:0, duration:.4, ease:'power3.out'})
     p#l(left: 32px; top: 26px; font-size: 30px; color: $ink2) 週20時間以上の人（19人）のうち
-    p#big(left: 32px; top: 72px; font-size: 170px; font-family: n; color: $amber; line-height: 1) [count:63 start=0 ms=850]
+    p#big(left: 32px; top: 72px; font-size: 170px; font-family: n; color: $amber; line-height: 1) [count:63 start=0 ms=850ms]
     p#pc(left: 216px; top: 156px; font-size: 72px; font-family: n; color: $amber; line-height: 1) %
     p#t(left: 276px; top: 104px; font-size: 46px; line-height: 1.25) が月5万円以上[br]を得ている
     div#meter(left: 32px; top: 267px; width: 818px; height: 22px; border-radius: 10px; background: #FFFFFF14)
@@ -245,7 +245,7 @@ board#b8(k: "07"; t: "始めたいが、していない理由"; n: "{nb}385{/}�
   div#dn(left: 44px; top: 789px; width: 880px; height: 256px; background: #4FC3F714; border: 2px solid #4FC3F78C; border-radius: 22px; in: {y:50, opacity:0, duration:.4, ease:'power3.out'})
     shape#ring(left: 33px; top: 27px; width: 201px; height: 201px; border-radius: 50%; background: none; border: 30px solid #FFFFFF1A)
     shape#arc(path: "M 89 28.2 C 114.3 28.2 136.6 44.7 143.9 68.9 C 151.2 93.1 141.8 119.2 120.7 133.2 C 99.7 147.2 71.9 145.8 52.5 129.7"; background: none; border: 30px solid $sky; in: draw {duration: 0.9, ease: 'power2.out'})
-    p#num(cx: 134px; top: 87px; font-size: 66px; font-family: n; line-height: 1) [count:61 start=0 ms=900]%
+    p#num(cx: 134px; top: 87px; font-size: 66px; font-family: n; line-height: 1) [count:61 start=0 ms=900ms]%
     p#den(cx: 134px; top: 162px; font-size: 20px; font-family: r; color: $muted) 77／127人
     p#a(left: 268px; top: 24px; font-size: 27px; color: $ink2; white-space: nowrap) 「会社の規則」を理由に挙げた127人のうち
     p#b(left: 268px; top: 69px; font-size: 44px; line-height: 1.3) {h}61%{/}は就業規則を[br]読んだことがない

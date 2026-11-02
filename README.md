@@ -208,7 +208,7 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 
 ### 辞書の同期 (nolang-backend → reference/)
 
-正本は nolang-backend: 文書一式 (文法・見本・骨組み・`contract.json`) と `author_core.py` は `libs/ai/llm_prompts/draft_author/`、
+正本は nolang-backend: 文書一式 (文法・見本・骨組み・`contract.json`)・`author_core.py`・`cut_stages.py` は `libs/ai/llm_prompts/draft_author/`、
 配布 script は `agent_client/scripts/`、studio で作る手順は `.agents/skills/nolang-draft-studio/SKILL.md`。ここには写しだけを置き、
 元の commit と文書の版 (`contract`・内容の指紋 `reference_hash`・文書ごとの指紋 `docs`) を `skills/make-video/reference/SOURCE.json` に、
 版の行と `Docs:` の行を `reference/rules.md` の先頭に残す (MCP の手順が `nolang_draft_sync` と比べ、ずれた文書だけを

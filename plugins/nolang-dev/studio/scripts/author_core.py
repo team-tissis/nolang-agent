@@ -671,7 +671,8 @@ def without_marks(line: str) -> str:
     return "".join(out).strip()
 
 
-_SPEAKER = re.compile(r"^\s*@(?:\||[^:\s\[]*:)")  # 台詞の行の頭 `@n:` / `@:` / 折り目の `@|`
+# 台詞の行の頭 (話者) — `@n:` / `@n.style .tag:` / `@:` / 折り目の `@|` / 持ち込み音声の `@clip id [.tag]` (コロンなし・後ろは原文)
+SPEAKER = re.compile(r"^\s*@(?:\||clip\s+\S+(?:\s+\.[a-z][a-z0-9_]*(?!\S))?|[^:\s\[]*(?:\s+\.[a-z][a-z0-9_]*)?:)")
 _READING = re.compile(r"\{([^{}|]*)\|[^{}]*\}")  # 読みの指定 `{表記|読み}`
 PICTURE_LINE = re.compile(r"^\s*img#\S+\((?:[^()]|\([^()]*\))*\)\s*(.*)$")  # img の行 → 絵の説明文
 
@@ -679,7 +680,7 @@ PICTURE_LINE = re.compile(r"^\s*img#\S+\((?:[^()]|\([^()]*\))*\)\s*(.*)$")  # im
 def spoken(line: str) -> str:
     """台詞の行の声になる文字 — 話者・印 `[…]`・読点 `、。`・読みの指定 (`{表記|読み}` は表記に)・空白を除く。担当と直し役が台詞を
     変えたかの比較はこれで見る (読点の追加と読みの指定は変えた事にしない)。"""
-    body = _READING.sub(r"\1", without_marks(_SPEAKER.sub("", line, count=1)))
+    body = _READING.sub(r"\1", without_marks(SPEAKER.sub("", line, count=1)))
     return re.sub(r"[、。\s]", "", body)
 
 
@@ -1502,12 +1503,17 @@ class LocatedDefect(Protocol):
     def line(self) -> int: ...
 
 
-def drop_defect_lines(design: str, timeline: str, cut: str, defects: Sequence[LocatedDefect]) -> tuple[str, str, int]:
-    """doc の DEFECT のうち cut の block の行を指す物を doc から外す → (design, timeline, 直した行の数)。design の行はその行と字下げの
-    子を消す。timeline の台詞行は消さずに印 (効果音の `[♪…]` は残す) だけ落とす — 消した層を指す印の DEFECT で台詞 (TTS の元) まで
-    消えて「台詞行が無い」に連鎖した (o6_03)。block の頭 (section / *** の行) は落とさない。"""
+def drop_defect_lines(
+    design: str, timeline: str, cut: str, defects: Sequence[LocatedDefect]
+) -> tuple[str, str, list[dict[str, object]]]:
+    """doc の DEFECT のうち cut の block の行を指す物を doc から外す → (design, timeline, 落とした物の記録 — 空 = 何も落とさない)。
+    design の行はその行と字下げの子を消す (`kind: design`)。timeline の台詞行 (印を除くと `@` で始まる行 — 頭に印や無音のある行も)
+    は消さずに印 (効果音の `[♪…]` は残す) だけ落とす (`kind: marks`) — 消した層を指す印の DEFECT で台詞 (TTS の元) まで消えて
+    「台詞行が無い」に連鎖した (o6_03)。印の無い台詞行は行ごと消す (`kind: speech`・`@clip` なら `clip` = 持ち込み音声の発話の id)。
+    他の timeline の行 (印だけの行・切替・bgm) は行ごと (`kind: timeline`)。記録は落とした中身そのもの — 利用者への出力に出す
+    (黙って落とさない)。block の頭 (section / *** の行) は落とさない。"""
     texts = {"design": design, "timeline": timeline}
-    total = 0
+    dropped: list[dict[str, object]] = []
     for which in ("design", "timeline"):
         lines = texts[which].split("\n")
         span = block_span(lines, which, cut)
@@ -1523,20 +1529,24 @@ def drop_defect_lines(design: str, timeline: str, cut: str, defects: Sequence[Lo
             if not (start < n < end) or n in kill or n in stripped:
                 continue
             row = lines[n - 1]
-            if which == "timeline" and row.lstrip().startswith("@"):
-                bare = _MARK_NOT_SE.sub("", row)
+            record: dict[str, object] = {"cut": cut, "kind": which, "line": row.strip()}
+            bare = _MARK_NOT_SE.sub("", row)
+            if which == "timeline" and bare.lstrip().startswith("@"):
                 if bare != row:
                     stripped[n] = bare
+                    dropped.append({**record, "kind": "marks", "marks": _MARK_NOT_SE.findall(row)})
                     continue
+                clip = re.match(r"\s*@clip\s+(\S+)", bare)
+                record = {**record, "kind": "speech", **({"clip": clip.group(1)} if clip else {})}
             kill.add(n)
             j = n + 1
             while j < end and lines[j - 1].startswith((" ", "\t")):
                 kill.add(j)
                 j += 1
+            dropped.append({**record, **({"children": j - n - 1} if j - n - 1 else {})})
         if kill or stripped:
-            total += len(kill) + len(stripped)
             texts[which] = "\n".join(stripped.get(k, line) for k, line in enumerate(lines, start=1) if k not in kill)
-    return texts["design"], texts["timeline"], total
+    return texts["design"], texts["timeline"], dropped
 
 
 BoxKey = tuple[str, frozenset[str], str]
@@ -1618,16 +1628,25 @@ _SILENCE_AT = re.compile(r"\[silence:\+([\d.]+)s\]")
 
 
 def _add_silence(line: str, seconds: float, *, head: bool) -> str:
-    """台詞の行の頭 (話者の後) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。"""
+    """台詞の行の頭 (話者の後 — `@clip id [.tag]` の後も) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。書けない行は
+    そのまま返す (当てない — 指摘が残る): 話者の読めない行・原文を書かない `@clip` の行 (`@clip id` だけ・印だけ — `[silence:]` だけの
+    本文は原文の頭か尻か決まらず server が DEFECT にする)・頭に印のある `@clip` の行の頭 (印の位置で segment が割れ、無音だけの最初の
+    segment を server の組み立てが同じ DEFECT にする — 印の後ろに置くと印は無音の前に出て、頭の無音の意味が無い)。"""
+    speaker = SPEAKER.match(line)
+    clip = re.match(r"\s*@clip\s", line) is not None
+    if speaker is None or (clip and not spoken(line)):
+        return line
     if head:
-        speaker = _SPEAKER.match(line)
-        cut = speaker.end() if speaker else 0
+        cut = speaker.end()
         rest = line[cut:]
         lead = rest[: len(rest) - len(rest.lstrip())]
-        if (old := _SILENCE_AT.match(rest[len(lead) :])) is not None:
-            total = float(old.group(1)) + seconds
-            return line[:cut] + lead + f"[silence:+{total:.2f}s]" + rest[len(lead) + old.end() :]
-        return line[:cut] + lead + f"[silence:+{seconds:.2f}s]" + rest[len(lead) :]
+        body = rest[len(lead) :]
+        old = _SILENCE_AT.match(body)
+        after = body[old.end() :] if old else body
+        if clip and after.startswith("[") and not after.startswith("[trim:"):
+            return line
+        total = seconds + (float(old.group(1)) if old else 0.0)
+        return line[:cut] + lead + f"[silence:+{total:.2f}s]" + after
     if (old := _SILENCE_TAIL.search(line)) is not None:
         return line[: old.start()] + f"[silence:+{float(old.group(1)) + seconds:.2f}s]"
     return line.rstrip() + f"[silence:+{seconds:.2f}s]"

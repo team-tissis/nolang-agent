@@ -106,7 +106,7 @@ function untar(buffer) {
 
 // 束 (tar.gz の bytes) を dest (指紋の名の dir) に置く。tmp に展開して指紋を確かめてから rename するので、並行する run・途中の失敗で
 // 半端な dir は残らない。path は束の範囲の相対 path だけを受ける (絶対 path・`..` は弾く)。新しい物から keep 版だけ残す
-// (backend の agent_client/scripts/stream_run.py の fetch_reference_bundle と同じ置き場・同じ手順 — cache を共有する)
+// (backend の agent_client/scripts/stream_api.py の RemoteApi.fetch_reference_bundle と同じ置き場・同じ手順 — cache を共有する)
 export async function installBundle(tgz, expectedHash, dest, { keep = 2 } = {}) {
   const tmp = join(dirname(dest), `.${dest.split("/").pop()}.${process.pid}.tmp`);
   await rm(tmp, { recursive: true, force: true });

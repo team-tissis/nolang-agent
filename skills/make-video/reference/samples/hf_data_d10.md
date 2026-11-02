@@ -133,7 +133,7 @@ p#a_t2(left: 120px; top: 374px; font-size: 98px; line-height: 1.16; letter-spaci
 p#a_sub(left: 120px; top: 525px; font-size: 28px; color: $fg2; font-family: r; white-space: nowrap; delay: 800ms; in: {y:18, opacity:0, duration:0.6, ease:'power2.out'}) 勤怠・経費精算 SaaS{b}「ワークノート」{/}サポート窓口の 3 か月
 # 3 枚の札 (大きな数字 + 単位 + 補足)
 div#a_st(left: "80;288;590"; top: 690px; width: "193;287;193"; height: 150px; border-radius: 16px; background: #111925DB; border: 2px solid $line2; in: {y:30, opacity:0, duration:0.55, ease:'back.out(1.4)'}) ×3
-  p#v(left: 24px; top: 18px; font-size: 76px; line-height: 1; font-family: n; color: "$fg;$amber;$fg") 3;[count:4,128 start=0 ms=1000 delay=100];7
+  p#v(left: 24px; top: 18px; font-size: 76px; line-height: 1; font-family: n; color: "$fg;$amber;$fg") 3;[count:4,128 start=0 ms=1000ms delay=100ms];7
   p#u(left: .v.right+9; top: 54px; font-size: 26px; color: $fg2) か月;件;カテゴリ
   p#l(left: 24px; top: 105px; font-size: 20px; color: $muted; font-family: r; white-space: nowrap) 7 月・8 月・9 月;メール・チャット・フォームの合計;全件を読んで分類
 # 7 つのカテゴリの名札 (色の四角 + 名・2 行に折り返す)
@@ -183,7 +183,7 @@ board#b_bd(left: 96px; top: 292px; width: 1728px; height: 676px; t: "分析の�
 section#c(stagger: {each:0})
 head#c_h(n: "02"; k: "月別の件数"; t: "3 か月で {t}12% 増{/}。利用企業の増加とほぼ同じ伸び")
 p#c_lab(left: 96px; top: 330px; font-size: 24px; color: $muted; delay: 300ms; in: {x:-20, opacity:0, duration:0.45, ease:'power2.out'}) 7 月 → 9 月の増加
-p#c_pct(left: 96px; top: 420px; font-size: 230px; line-height: 0.86; font-family: n; color: $teal2; transform-origin: 0% 70%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.5)'}) +[count:12 start=0 ms=800]%
+p#c_pct(left: 96px; top: 420px; font-size: 230px; line-height: 0.86; font-family: n; color: $teal2; transform-origin: 0% 70%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.5)'}) +[count:12 start=0 ms=800ms]%
 p#c_ft(left: 96px; top: 666px; font-size: 26px; color: $fg2; white-space: nowrap; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) {nf}1,296{/} 件 {ar}→{/} {nf}1,448{/} 件
 p#c_call(left: 96px; top: 760px; font-size: 22px; background: #152030F5; border: 2px solid #7ADFD38C; border-radius: 10px; padding: 10px 18px 10px 56px; white-space: nowrap; in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}) 利用企業の増加とほぼ同じ伸び
   icon#i(left: 18px; cy: 50%; font-size: 26px; name: buildings; color: $teal2)
@@ -228,7 +228,7 @@ group#e_g(in: {scale:0.86, opacity:0, duration:0.6, ease:'power3.out'})
   shape#track(left: 126px; top: 346px; width: 410px; height: 410px; border-radius: 50%; background: none; border: 28px solid #1D2A3E)
   # 59% の弧 (12 時から時計回りに 212°・線の中心が地の輪の中心に乗る枠)
   shape#arc(left: 140px; top: 360px; width: 381px; height: 381px; path: arc,start=0,to=212.4; background: none; border: 28px solid $teal2; in: draw {duration: 1.2})
-  p#v(cx: 330px; cy: 528px; font-size: 150px; line-height: 0.95; font-family: n) [count:59 start=0 ms=1200]%
+  p#v(cx: 330px; cy: 528px; font-size: 150px; line-height: 0.95; font-family: n) [count:59 start=0 ms=1200ms]%
   p#l(cx: 330px; cy: 624px; font-size: 24px; color: $fg2; white-space: nowrap) 初回で解決（全体）
 p#e_cap(left: 96px; top: 798px; width: 470px; text-align: center; font-size: 22px; color: $muted; in: {y:10, opacity:0, duration:0.5, ease:'power2.out'}) {n21}2,442{/} 件 / {n21}4,128{/} 件
 board#e_bd(left: 640px; top: 292px; width: 1184px; height: 676px; t: "カテゴリ別の初回解決率"; u: "単位：%"; delay: 300ms; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})
@@ -275,7 +275,7 @@ board#f_sd(left: 1280px; top: 292px; width: 544px; height: 676px; t: "長い尾�
   div#st2(left: 32px; top: 300px; width: 482px; height: 165px; in: {y:18, opacity:0, duration:0.5, ease:'power3.out'})
     div#rule(left: 0px; top: 0px; width: 482px; height: 2px; background: $line)
     p#l(left: 0px; top: 22px; font-size: 21px; color: $fg2; white-space: nowrap) そのうち、データ連携・不具合の報告が
-    p#n(left: 0px; top: 57px; font-size: 104px; line-height: 1.02; font-family: n; color: $orange) [count:78 start=0 ms=800 delay=100]%
+    p#n(left: 0px; top: 57px; font-size: 104px; line-height: 1.02; font-family: n; color: $orange) [count:78 start=0 ms=800ms delay=100ms]%
     p#u(left: .n.right+12; top: 108px; font-size: 30px) 291 件
   div#split(left: 32px; top: 476px; width: 480px; height: 50px; border-radius: 8px; background: #2A3850; in: {opacity:0, duration:0.4})
     div#a(left: 0px; top: 0px; width: 375px; height: 50px; border-radius: 8px 0px 0px 8px; background: linear($orange,$coral,90); in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
@@ -342,14 +342,14 @@ board#h_bd(left: 900px; top: 292px; width: 924px; height: 676px; t: "ヘルプ�
   # 合わせての枠 (655 件 | 約 247 時間)
   div#tot(left: 32px; top: 418px; width: 860px; height: 190px; border-radius: 14px; background: #2EC4B614; border: 2px solid #7ADFD366; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'})
     p#l(left: 30px; top: 24px; font-size: 20px; color: $fg2) 合わせて
-    p#n(left: 30px; top: 75px; font-size: 104px; line-height: 0.86; font-family: n; color: $teal2) [count:655 start=0 ms=800 delay=100]
+    p#n(left: 30px; top: 75px; font-size: 104px; line-height: 0.86; font-family: n; color: $teal2) [count:655 start=0 ms=800ms delay=100ms]
     p#u(left: .n.right+8; top: 129px; font-size: 28px) 件
     p#s(left: .u.right+8; top: 134px; font-size: 22px; color: $fg2; font-family: r; white-space: nowrap) 全体の 16%
     div#sep(left: 380px; top: 34px; width: 2px; height: 120px; background: #7ADFD359)
     div#hrs(left: 414px; top: 0px; width: 420px; height: 190px; in: {opacity:0, duration:0.4})
       p#l(left: 0px; top: 24px; font-size: 20px; color: $fg2) 対応時間にして
       p#a(left: 0px; top: 123px; font-size: 26px) 約
-      p#n(left: 33px; top: 87px; font-size: 76px; line-height: 0.86; font-family: n) [count:247 start=0 ms=700 delay=50]
+      p#n(left: 33px; top: 87px; font-size: 76px; line-height: 0.86; font-family: n) [count:247 start=0 ms=700ms delay=50ms]
       p#u(left: .n.right+8; top: 126px; font-size: 28px) 時間
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $fg2; font-family: r; white-space: nowrap; in: {x:-12, opacity:0, duration:0.5, ease:'power2.out'}) {a}→{/} 浮いた時間を、時間を食っている上位 3 カテゴリに回す
 

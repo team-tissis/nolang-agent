@@ -148,7 +148,7 @@ div#hdr.sticky(left: 0px; top: 0px; width: 1920px; height: 90px; z-index: front;
 btitle#bt1(n: "01"; t: "調査の設計"; s: "誰に、どう聞いたか")
 note#m_a(left: 100px; top: 290px; width: 480px; height: 470px; c: $blu; transform: rotate(-2.5deg))
   p#lbl(left: 44px; top: 42px; font-size: 32px; color: $ink2) 声をかけた人
-  p#n(left: 44px; top: 94px; font-size: 178px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:214 start=0 ms=2100]
+  p#n(left: 44px; top: 94px; font-size: 178px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:214 start=0 ms=2100ms]
   p#u(left: .n.right+3; top: 183px; font-size: 78px; font-family: m; line-height: 1) 人
   p#d(left: 44px; top: 291px; font-size: 34px; line-height: 1.32) 記録が{dr}30日以上{/}[br]止まった人
 shape#m_arrow(path: "M400 353 Q454 355 488 313"; background: none; border: 6px solid $ink; in: draw {duration: 0.35})
@@ -203,7 +203,7 @@ p#w_brace_l(left: 150px; top: 206px; width: 560px; font-size: 50px; font-family:
 note#w_med(left: 1234px; top: 300px; width: 590px; height: 520px; c: $yel; transform: rotate(2deg))
   p#lbl(left: 52px; top: 40px; font-size: 32px; color: $ink2) やめるまでの期間
   p#mid(left: 52px; top: 87px; font-size: 30px; color: $ink2) 中央値
-  p#n(left: 52px; top: 124px; font-size: 250px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:26 start=0 ms=900]
+  p#n(left: 52px; top: 124px; font-size: 250px; font-family: m; line-height: 1; in: {opacity:0, duration:.12}) [count:26 start=0 ms=900ms]
   loop#ring(left: 9px; top: 153px; width: 363px; height: 220px; overlap: w_med.n)
   p#u(left: .n.right+3; top: 261px; font-size: 96px; font-family: m; line-height: 1) 日
 

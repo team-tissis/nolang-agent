@@ -109,7 +109,7 @@ group#hanko(left: 1692px; top: 615px; width: 178px; height: 178px; transform: ro
 section#gaps(stagger: {each:0}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
 div#bg_gaps(inset: 0; background: $paper; in: none; out: none; z-index: back)
 div#gaps_paper(inset: 0; background: $paper; pattern: dots,23,#1F3A5F12; in: none)
-group#chart(main: ramp {scale: 1.035, window: '700,20830', pivot: '50%,45%'})
+group#chart(main: ramp {scale: 1.035, window: '700ms,20830ms', pivot: '50%,45%'})
 shape#chart.head_bar(left: 130px; top: 136px; width: 12px; height: 60px; path: rect; background: $orange; delay: 350ms; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'})
 p#chart.head(left: 171px; top: 134px; font-size: 54px; color: $navy; line-height: 1.1; delay: 350ms; in: {y:20, opacity:0, duration:0.55, ease:'power3.out'}) 窓口で受付できる時間帯
 group#chart.grids(left: 264px; top: 330px; width: 1452px; height: 330px; display: grid; grid-template-columns: repeat(11, 1fr); gap: 0px)

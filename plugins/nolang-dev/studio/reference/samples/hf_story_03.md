@@ -187,7 +187,7 @@ card#c3(p: "[photo]真夏の野外フェス会場の芝生広場を低いアン�
   img#p(main: kb {scale: [1.2, 1.05], focus: ['50% 52%', '50% 50%'], ease:'sine.out'})
 panel#thermo(h: 340px; out: {x:-200, opacity:0, duration:.3, ease:'power2.in'})
   p#lab(left: 40px; top: 16px; font-size: 32px; font-family: dot; color: #FFD27A) TEMP
-  p#num(left: 34px; top: 62px; font-size: 128px; font-family: d; line-height: 1; color: linear(#FFE08A,#FF7A1C@55%,#FF2448,180); text-shadow: 0px 0px 18px #FF781ECC) [count:36.0 start=25.0 ms=605]
+  p#num(left: 34px; top: 62px; font-size: 128px; font-family: d; line-height: 1; color: linear(#FFE08A,#FF7A1C@55%,#FF2448,180); text-shadow: 0px 0px 18px #FF781ECC) [count:36.0 start=25.0 ms=605ms]
   p#unit(left: .num.right+3; top: 122px; font-size: 60px; font-family: d; line-height: 1; color: #FF4A2A) ℃
   div#track(left: 520px; top: 92px; width: 360px; height: 54px; border-radius: 27px; background: #FFFFFF24; border: 3px solid #FFFFFF80)
     div#fill(left: 0px; top: 0px; width: 224px; height: 48px; border-radius: 24px; background: linear(#FFD23A,#FF7A1C@50%,#FF2448,90))

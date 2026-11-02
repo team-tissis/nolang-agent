@@ -101,7 +101,7 @@ group#s1_title(left: 60px; top: 314px; width: 990px; height: 495px; in: none)
 # 時計は時:分:秒の桁送りで 0:00:00 → 4:24:15 (hf の秒の桁まで回る)
 div#s1_clock(left: 210px; top: 1110px; width: 660px; height: 200px; border-radius: 26px; background: #070B14C7; border: 3px solid #C6FF3D8C; box-shadow: 0px 0px 60px #C6FF3D2E; delay: 100ms; in: {scale:0.7, opacity:0, duration:0.3, ease:'back.out(2.4)'})
   p#lbl(cx: 50%; top: 20px; font-size: 30px; font-family: n; font-style: italic; letter-spacing: 0.12em; color: $lime; white-space: nowrap) FINISH TIME {lb}完走タイムの中央値{/}
-  p#clock(cx: 50%; top: 64px; font-size: 124px; line-height: 1; font-family: n; font-style: italic; white-space: nowrap) [count:4:24:15 start=0:00:00 ms=2200]
+  p#clock(cx: 50%; top: 64px; font-size: 124px; line-height: 1; font-family: n; font-style: italic; white-space: nowrap) [count:4:24:15 start=0:00:00 ms=2200ms]
 
 # s2 調べたデータ: 上端にコース型の進行が降り (以後常設)、板の上で大会名 → 完走者 8,214 人が数え上がり 95% の帯 → 5km ごとの点 9 個 × 目標の的と 4 つの札 → 「突き合わせ」の金の行
 section#s2(stagger: {each:0})
@@ -120,7 +120,7 @@ board#b2(k: "DATA"; t: "調べたデータ"; s: "申込時の目標タイム × 
   p#tag(left: .name.right+14; top: 237px; font-size: 24px; font-family: m; color: #C9D2E0; background: #2A3345; border-radius: 10px; padding: 4px 14px 6px 14px; delay: 180ms; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) 架空の大会
   p#meta(left: 48px; top: 303px; font-size: 28px; font-family: m; color: $sub; white-space: nowrap; delay: 280ms; in: {y:40, opacity:0, duration:0.4, ease:'power3.out'}) フル{nb}42.195{/}km ｜ 制限{nb}6{/}時間 ｜ 出走{nb}8,650{/}人
   chipj#lbl(left: 48px; top: 368px; in: {scale:0.5, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 完走者
-  p#big(left: 40px; top: 436px; font-size: 204px; line-height: 1; font-family: n; font-style: italic; color: $lime; white-space: nowrap; in: {opacity:0, duration:0.15}) [count:8,214 start=0 ms=900]
+  p#big(left: 40px; top: 436px; font-size: 204px; line-height: 1; font-family: n; font-style: italic; color: $lime; white-space: nowrap; in: {opacity:0, duration:0.15}) [count:8,214 start=0 ms=900ms]
   p#unit(left: .big.right+8; top: 546px; font-size: 76px; line-height: 1; in: {opacity:0, duration:0.15}) 人
   p#rate(left: 48px; top: 666px; font-size: 28px; font-family: m; color: $sub; white-space: nowrap; in: {y:20, opacity:0, duration:0.35, ease:'power3.out'}) 完走率 {nb}95.0{/}%（8,214人 ÷ 8,650人）
   div#bar(left: 48px; top: 722px; width: 864px; height: 16px; border-radius: 8px; background: #232C3D; in: {opacity:0, duration:0.2})
@@ -154,7 +154,7 @@ board#b3(k: "前半 vs 後半"; t: "後半の方が速かった人は？"; s: "�
   div#lga(left: 650px; top: 244px; width: 280px; height: 195px; in: {x:40, opacity:0, duration:0.3, ease:'power3.out'})
     div#sw(left: 0px; top: 8px; width: 22px; height: 22px; border-radius: 6px; background: $lime)
     p#h(left: 33px; top: 0px; font-size: 26px; white-space: nowrap) 後半の方が速い
-    p#v(left: 0px; top: 44px; font-size: 108px; line-height: 1; font-family: n; font-style: italic; color: $lime; white-space: nowrap) [count:7.3 start=0 ms=600]%
+    p#v(left: 0px; top: 44px; font-size: 108px; line-height: 1; font-family: n; font-style: italic; color: $lime; white-space: nowrap) [count:7.3 start=0 ms=600ms]%
     p#n(left: 0px; top: 158px; font-size: 22px; font-family: m; color: $sub; white-space: nowrap) 600人｜ネガティブスプリット
   div#lgb(left: 650px; top: 470px; width: 280px; height: 158px; in: {x:40, opacity:0, duration:0.3, ease:'power3.out'})
     div#sw(left: 0px; top: 8px; width: 22px; height: 22px; border-radius: 6px; background: #8A96AA)
@@ -164,7 +164,7 @@ board#b3(k: "前半 vs 後半"; t: "後半の方が速かった人は？"; s: "�
   div#lgc(left: 650px; top: 636px; width: 280px; height: 195px; in: {x:40, opacity:0, duration:0.3, ease:'power3.out'})
     div#sw(left: 0px; top: 8px; width: 22px; height: 22px; border-radius: 6px; background: $fast)
     p#h(left: 33px; top: 0px; font-size: 26px; white-space: nowrap; transform-origin: 0% 50%) 後半が{tf}2分以上{/}遅い
-    p#v(left: 0px; top: 44px; font-size: 108px; line-height: 1; font-family: n; font-style: italic; color: $fast; white-space: nowrap) [count:78.1 start=0 ms=700]%
+    p#v(left: 0px; top: 44px; font-size: 108px; line-height: 1; font-family: n; font-style: italic; color: $fast; white-space: nowrap) [count:78.1 start=0 ms=700ms]%
     p#n(left: 0px; top: 158px; font-size: 22px; font-family: m; color: $sub) 6,415人
   # 中央値の走り: 前半 (鋼色) と後半 (赤) の棒が左から伸び、差の札が傾いて弾む
   p#medh(left: 48px; top: 852px; font-size: 28px; white-space: nowrap; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 中央値の走り {lb}（完走者を記録順に並べた真ん中）{/}
@@ -259,12 +259,12 @@ board#b7(k: "RESULT"; t: "飛ばすと、後半に崩れる"; s: "入り方の3�
   p#h7a(left: 48px; top: 238px; font-size: 34px; white-space: nowrap; delay: 200ms; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 30km以降の大失速 {lb}キロ30秒以上のペースダウン{/}
   div#sc(left: "147;347;547"; top: 296px; width: 3px; height: 220px; background: #FFFFFF14; delay: 200ms; in: {opacity:0, duration:0.3}) ×3
   p#sl(cx: "148;348;548"; top: 520px; font-size: 20px; font-family: n; color: #6F7A8C; delay: 200ms; in: {opacity:0, duration:0.3}) ×3 0;50;100%
-  hrow#ra(top: "200;248;296"; k: "飛ばし;設定どおり;抑えめ"; bw: "280;172;160"; v: "[count:70 start=0 ms=600]%{s} 2,070人{/};43%{s} 1,484人{/};40%{s} 723人{/}"; c: "$fast;$even;$slow"; o: "1;0.85;0.85") ×3
+  hrow#ra(top: "200;248;296"; k: "飛ばし;設定どおり;抑えめ"; bw: "280;172;160"; v: "[count:70 start=0 ms=600ms]%{s} 2,070人{/};43%{s} 1,484人{/};40%{s} 723人{/}"; c: "$fast;$even;$slow"; o: "1;0.85;0.85") ×3
     p#v(transform-origin: 0% 60%)
   p#h7b(left: 48px; top: 598px; font-size: 34px; white-space: nowrap; in: {y:20, opacity:0, duration:0.3, ease:'power3.out'}) 目標達成率 {lb}申告した目標タイムを達成{/}
   shape#avg(left: 398px; top: 652px; width: 3px; height: 228px; path: line_v; border: 3px solid #FFC83DD9; dash: 5,4; in: {scaleY:0, opacity:0, duration:0.35, pivot:'top'})
   p#avgl(left: 408px; top: 884px; font-size: 21px; color: $gold; white-space: nowrap; in: {opacity:0, duration:0.25}) 全体 29.9%（2,456人）
-  hrow#rd(top: "440;488;536"; k: "飛ばし;設定どおり;抑えめ"; bw: "84;152;116"; v: "[count:21 start=0 ms=600]%{s} 621人{/};38%{s} 1,311人{/};29%{s} 524人{/}"; c: "$fast;$even;$slow"; o: "1;0.85;0.85") ×3
+  hrow#rd(top: "440;488;536"; k: "飛ばし;設定どおり;抑えめ"; bw: "84;152;116"; v: "[count:21 start=0 ms=600ms]%{s} 621人{/};38%{s} 1,311人{/};29%{s} 524人{/}"; c: "$fast;$even;$slow"; o: "1;0.85;0.85") ×3
     p#v(transform-origin: 0% 60%)
 
 # s8 おすすめ: 海沿いを落ち着いて走るランナーの写真に閃光 → 上に金の札「BEST PACE」と問い → 下の板に「キロ 4〜7秒 ゆっくり」が叩きつけられ → 達成率の輪が 47% まで描かれ、4 群の横棒が並び、注記
@@ -280,7 +280,7 @@ board#b8(k: "おすすめ"; t: "前半は、目標より少しだけ遅く"; c: 
   div#donut(left: 44px; top: 418px; width: 230px; height: 230px; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     shape#ring(left: 22px; top: 22px; width: 183px; height: 183px; border-radius: 50%; background: none; border: 28px solid #263047)
     shape#arc(path: "M76.5 15.5 L91.4 17.3 L105.3 22.7 L117.6 31.4 L127.3 42.7 L134 56.1 L137.2 70.8 L136.8 85.7 L132.7 100.1 L125.3 113.1 L114.9 123.9 L102.2 131.8 L87.9 136.4"; background: none; border: 28px solid $gold; in: draw {duration: 0.8, ease: 'power2.out'})
-    p#c(cx: 50%; top: 68px; font-size: 86px; line-height: 1; font-family: n; font-style: italic; color: $gold; white-space: nowrap) [count:47 start=0 ms=800]%
+    p#c(cx: 50%; top: 68px; font-size: 86px; line-height: 1; font-family: n; font-style: italic; color: $gold; white-space: nowrap) [count:47 start=0 ms=800ms]%
     p#cl(cx: 50%; top: 156px; font-size: 22px; white-space: nowrap) 目標達成率
   hrow#r(left: 300px; width: 620px; height: 46px; top: "285;321;357;393"; k: "少し遅め;設定どおり;抑えめ;飛ばし"; bw: "163;132;101;73"; v: "47%{s} 382人{/};38%;29%;21%"; c: "$gold;$even;$slow;$fast"; o: "1;0.8;0.8;0.8"; in: {opacity:0, duration:0.15, stagger:{each:0.12}}) ×4
     p#k(top: 4px; font-size: 26px)

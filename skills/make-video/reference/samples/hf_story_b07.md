@@ -84,7 +84,7 @@ div#bottomfade(left: 0px; top: 960px; width: 1080px; height: 960px; background: 
 section#hook
 scene#p0(in: {scale:1.14, duration:.38, ease:'power3.out'}; main: kb {scale: [1, 1.08], focus: ['33% 36%', '33% 36%']}) [ref:@tsukio]日曜の夜、薄暗いワンルームの部屋。グレーのパーカー姿の彼が床に体育座りし、壁に掛かったカレンダーの赤丸のついたマスを見つめ、真っ青な顔で絶望している。顔の上半分に縦線の影（ガーンという漫画表現）、大粒の冷や汗。窓の外は真っ暗な夜。部屋全体は青紫の暗いトーンで、カレンダーだけがスポットライトのように白く浮かび上がる。
 div#gloom0(left: 0px; top: 330px; width: 1080px; height: 900px; pattern: hatch,0,#283CBE8C,19,3; mask-image: linear-gradient(180deg, #000000 0%, #000000D9 55%, #00000000 100%); opacity: .9; border-radius: 24px; in: {scaleY:.2, opacity:0, duration:.35, ease:'power2.out', pivot:'top'}; out: {opacity:0, duration:.5, ease:'power1.in'})
-p#hook1(cx: 540px; top: 1000px; font-size: 100px; color: $ice; -webkit-text-stroke: 10px $ink; text-shadow: 0px 0px 26px #5078FFE6; in: {scale:1.25, duration:.3, ease:'back.out(2.2)'}; main: noise {x: 4, y: 4, period: 0.06, window: '320,2900'}) 明日が来るな…
+p#hook1(cx: 540px; top: 1000px; font-size: 100px; color: $ice; -webkit-text-stroke: 10px $ink; text-shadow: 0px 0px 26px #5078FFE6; in: {scale:1.25, duration:.3, ease:'back.out(2.2)'}; main: noise {x: 4, y: 4, period: 0.06, window: '320ms,2900ms'}) 明日が来るな…
 p#hook2(left: 0px; top: 1110px; width: 1080px; font-size: 142px; line-height: 1.12; color: $hy; text-align: center; -webkit-text-stroke: 12px $ink; text-shadow: 10px 10px 0px $red; hide_subtitle: true; overlap: subtitle; in: {scale:1.6, opacity:0, duration:.2, ease:'back.out(2.4)'}) 月曜の絶望[br]あるある{five}5選{/}
 veil#fl0(color: #FFFFFF; opacity: .55; z-index: curtain; in: none)
 
@@ -102,7 +102,7 @@ div#clock.sticky(left: 34px; top: 362px; width: 300px; height: 78px; border-radi
 # 休日終了までの札 (赤の縁と光・秒が 59 → 52 へ数え減る)
 div#cd(left: 640px; top: 366px; width: 400px; height: 162px; border-radius: 18px; background: #0A0814D1; border: 4px solid $pink; box-shadow: 0px 0px 30px #FF2D5580; in: {scale:.6, y:-20, opacity:0, duration:.18, ease:'back.out(2.5)'})
   p#l(cx: 50%; top: 14px; font-size: 38px; line-height: 1.2; color: $y) 休日終了まで
-  p#d(cx: 50%; top: 66px; font-size: 82px; line-height: 1; color: $pink; letter-spacing: .02em; text-shadow: 0px 0px 18px #FF2D55CC) 05:29:[count:52 start=59 ms=1660 delay=50]
+  p#d(cx: 50%; top: 66px; font-size: 82px; line-height: 1; color: $pink; letter-spacing: .02em; text-shadow: 0px 0px 18px #FF2D55CC) 05:29:[count:52 start=59 ms=1660ms delay=50ms]
 # 「……」の吹き出し (左下の尻尾・弾んで出てしぼむ)
 p#bub(left: 600px; top: 560px; width: 250px; font-size: 70px; line-height: 1; color: $ink; text-align: center; background: #FFFFFF; border: 6px solid $ink; padding: 34px 0px; shape: rounded-speech-bubble; in: {scale:.3, opacity:0, duration:.16, ease:'back.out(3)'}) ……
 
@@ -165,7 +165,7 @@ headline#hl5(c: "金曜までの残り時間を[br]{l2}計算して{/}{l2r}絶�
 div#cnt.bleed(left: 356px; top: 368px; width: 690px; height: 260px; border-radius: 22px; background: #080A1EF2; border: 4px solid $y; in: {scale:.6, y:-30, opacity:0, duration:.2, ease:'back.out(2.2)'})
   p#l(cx: 50%; top: 14px; font-size: 50px; line-height: 1.2) 金曜 18:00 まで
   p#ato(left: 58px; top: 170px; font-size: 58px; line-height: 1) あと
-  p#num(left: 172px; top: 74px; width: 330px; font-size: 168px; line-height: 1; text-align: center; color: $y) [count:105 start=0 ms=1380 delay=740]
+  p#num(left: 172px; top: 74px; width: 330px; font-size: 168px; line-height: 1; text-align: center; color: $y) [count:105 start=0 ms=1380ms delay=740ms]
   p#unit(left: 501px; top: 165px; font-size: 64px; line-height: 1) 時間
 ```
 

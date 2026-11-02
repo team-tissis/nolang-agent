@@ -123,14 +123,14 @@ card#b_photo(left: 90px; top: 150px; width: 800px; height: 500px; transform: rot
 fact#b_fact(top: "467;522;576"; i: "map-pin;bank;clock"; t: "みなと野市;市立図書館;平日の閉館"; e: "人口 18万人;本館 1・分館 3;19時"; c: "$teal;$teal;$amber"; bc: "$line;$line;$amber"; delay: 700ms) ×3
 board#b_board(left: 960px; top: 160px; width: 880px; height: 700px; delay: 550ms; in: {y:30, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 調査のあらまし
-  flow#send(left: 50px; i: envelope-simple; l: "調査票を送った人"; v: "[count:4,000 start=0 ms=1000]"; u: "人"; n: "16歳以上の市民")
+  flow#send(left: 50px; i: envelope-simple; l: "調査票を送った人"; v: "[count:4,000 start=0 ms=1000ms]"; u: "人"; n: "16歳以上の市民")
   p#arrow(left: 423px; top: 129px; font-size: 58px; color: $amber; in: {x:-30, opacity:0, duration:.5, ease:'power2.out'}) →
-  flow#back(left: 483px; i: users; l: "回答した人"; v: "[count:2,000 start=0 ms=900]"; u: "人"; n: "市と大学の研究室が集計")
+  flow#back(left: 483px; i: users; l: "回答した人"; v: "[count:2,000 start=0 ms=900ms]"; u: "人"; n: "市と大学の研究室が集計")
   # 回収率の輪: 地の輪 + 上から右回りに半周の弧 (語で描く)・中に数える 50%
   div#ring(left: 50px; top: 360px; width: 290px; height: 290px; in: {scale:.85, opacity:0, duration:.5, ease:'power2.out'})
     shape#bg(left: 9px; top: 9px; width: 272px; height: 272px; border-radius: 50%; background: none; border: 34px solid $ringbg)
     shape#arc(left: 0px; top: 0px; width: 290px; height: 290px; path: "M 96.5 17.5 C 140.1 17.5 175.5 52.9 175.5 96.5 C 175.5 140.1 140.1 175.5 96.5 175.5"; background: none; border: 34px solid $teal; main: sine {rotation: 6, period: 1.6}; in: draw {duration: 1, ease: 'power2.inOut'})
-    p#v(cx: 50%; top: 84px; font-size: 92px; font-family: s; line-height: 1; color: $teal) [count:50 start=0 ms=1000 delay=200]{pc}%{/}
+    p#v(cx: 50%; top: 84px; font-size: 92px; font-family: s; line-height: 1; color: $teal) [count:50 start=0 ms=1000ms delay=200ms]{pc}%{/}
     p#l(cx: 50%; top: 180px; font-size: 26px; color: $ink2) 回収率
   div#note(left: 380px; top: 420px; width: 450px; height: 150px; in: {x:30, opacity:0, duration:.6, ease:'power2.out'})
     # 語の下の帯 (hf の inline の地の下 42%): 字面の下 1/3 に掛かり字の下へ 8px 出る — 行の頭から +0.85 字・高さ 0.55 字。run の marker の帯は行の頭 +1.02 字が下端で、行高 1.5 では字の中央を横切る
@@ -154,11 +154,11 @@ div#c_wn(cx: "425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388
 #c_wu.on(background: $teal; transform: scale(1); move: 350ms,back.out)
 #c_wn.on(background: $terra; transform: scale(1); move: 300ms,back.out)
 card#c_use(left: 1010px; top: 170px; width: 830px; height: 320px; in: {x:60, opacity:0, duration:.6, ease:'power3.out'})
-  p#v(left: 40px; top: 24px; font-size: 168px; font-family: s; line-height: .95; letter-spacing: -.02em; color: $teal) [count:38 start=0 ms=900 delay=100]{pw}%{/}
+  p#v(left: 40px; top: 24px; font-size: 168px; font-family: s; line-height: .95; letter-spacing: -.02em; color: $teal) [count:38 start=0 ms=900ms delay=100ms]{pw}%{/}
   p#l(left: 334px; top: 136px; font-size: 36px; line-height: 1.35) この1年に[br]図書館を使った
   p#s(left: 334px; top: 246px; font-size: 30px; color: $ink2) 760人
 card#c_non(left: 1010px; top: 525px; width: 830px; height: 324px; border: 3px solid $terra; in: {x:60, opacity:0, duration:.6, ease:'power3.out'})
-  p#v(left: 40px; top: 27px; font-size: 168px; font-family: s; line-height: .95; letter-spacing: -.02em; color: $terra) [count:62 start=0 ms=900 delay=100]{pw}%{/}
+  p#v(left: 40px; top: 27px; font-size: 168px; font-family: s; line-height: .95; letter-spacing: -.02em; color: $terra) [count:62 start=0 ms=900ms delay=100ms]{pw}%{/}
   p#l(left: 334px; top: 140px; font-size: 36px; line-height: 1.35) 1年間[br]一度も使っていない
   p#s(left: 334px; top: 249px; font-size: 30px; color: $ink2) 1,240人
   # 判子: 板の右上の角に傾けて弾ませ、少し戻して揺らす
@@ -310,8 +310,8 @@ div#h_c1(left: 90px; top: 500px; width: 1130px; height: 180px)
   div#t(left: 0px; top: 0px; width: 600px; height: 42px; in: {x:-20, opacity:0, duration:.45, ease:'power2.out'})
     icon#i(left: 0px; cy: 50%; font-size: 33px; name: users; color: $lamp)
     p#t(left: 46px; cy: 50%; font-size: 28px; color: $cream) 19時以降の来館（月平均）
-  hrow#ra(top: 52px; l: "延長前"; w: 135; c: "#FFF4DF73"; v: "[count:1,240 start=0 ms=800 delay=100]"; u: "人"; vc: $cream)
-  hrow#rb(top: 117px; l: "延長後"; w: 313; c: $lamp; v: "[count:2,890 start=0 ms=1100 delay=100]"; u: "人"; vc: $lamp)
+  hrow#ra(top: 52px; l: "延長前"; w: 135; c: "#FFF4DF73"; v: "[count:1,240 start=0 ms=800ms delay=100ms]"; u: "人"; vc: $cream)
+  hrow#rb(top: 117px; l: "延長後"; w: 313; c: $lamp; v: "[count:2,890 start=0 ms=1100ms delay=100ms]"; u: "人"; vc: $lamp)
     div#b(box-shadow: 0px 0px 22px #F4C46A80; in: {scaleX:0, duration:1.1, ease:'power3.out', pivot:'left'})
   badge#badge(v: "2.3{bx}倍{/}"; s: "＋1,650人")
 div#h_c2(left: 90px; top: 700px; width: 1130px; height: 180px)
@@ -319,7 +319,7 @@ div#h_c2(left: 90px; top: 700px; width: 1130px; height: 180px)
     icon#i(left: 0px; cy: 50%; font-size: 33px; name: identification-card; color: $lamp)
     p#t(left: 46px; cy: 50%; font-size: 28px; color: $cream) 新しく作られた利用カード（月）
   hrow#ra(top: 52px; l: "延長前"; w: 107; c: "#FFF4DF73"; v: "38"; u: "枚"; vc: $cream)
-  hrow#rb(top: 117px; l: "延長後"; w: 313; c: $lamp; v: "[count:112 start=0 ms=1000 delay=100]"; u: "枚"; vc: $lamp)
+  hrow#rb(top: 117px; l: "延長後"; w: 313; c: $lamp; v: "[count:112 start=0 ms=1000ms delay=100ms]"; u: "枚"; vc: $lamp)
     div#b(box-shadow: 0px 0px 22px #F4C46A80; in: {scaleX:0, duration:1, ease:'power3.out', pivot:'left'})
   badge#badge(v: "{bx}約{/}2.9{bx}倍{/}"; s: "38枚 → 112枚"; in: {scale:.4, rotation:10, opacity:0, duration:.55, ease:'back.out(2.2)'})
 # 暗転 (後半): 頭は夜の色で覆い、最初の台詞の頭で引く

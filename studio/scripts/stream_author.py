@@ -67,6 +67,7 @@ author_core = _shipped("author_core")
 cut_stages = _shipped("cut_stages")
 from author_core import (
     AUTO_SECONDS,
+    SPEAKER,
     AuthorOutputSplitter,
     AuthorSection,
     apply_line_edits,
@@ -332,9 +333,6 @@ def reference_role_note(project: Path) -> str:
     return author_core.reference_role_note(None if ref is None else str(ref["title"]))
 
 
-_SPEAKER = re.compile(r"^\s*@[^:\s\[]*:")  # 台詞の行の頭 `@n:` / `@:` (素材の復元の比較用。spoken は author_core)
-
-
 def _split_marks(body: str) -> tuple[str, list[tuple[int, str]]]:
     """台詞の本文を (印を除いた文字, [(文字の中の位置, 印)]) に割る (`without_marks` と同じ入れ子の数え方)。"""
     bare: list[str] = []
@@ -357,7 +355,7 @@ def _author_words_staff_marks(staff_line: str, author_line: str) -> str:
     同じ文字の前に、書き換えた区間の印はその区間の頭に (読みの指定 `{…}` の中には置かない)。"""
     import difflib  # noqa: PLC0415
 
-    m_a, m_s = _SPEAKER.match(author_line), _SPEAKER.match(staff_line)
+    m_a, m_s = SPEAKER.match(author_line), SPEAKER.match(staff_line)
     head, body_a = (author_line[: m_a.end()], author_line[m_a.end() :]) if m_a else ("", author_line)
     bare_s, marks = _split_marks(staff_line[m_s.end() :] if m_s else staff_line)
     bare_a, _ = _split_marks(body_a)
@@ -424,21 +422,27 @@ def restore_speech(author: str, staff: str, *, exact: bool = False) -> tuple[str
 
 def _bare_speech(line: str) -> str:
     """台詞の行の声の元の文字 (印と空白だけを除く — 読点と読みの指定は残す)。担当が素材を変えない run の台詞の比較。"""
-    return re.sub(r"\s", "", without_marks(_SPEAKER.sub("", line, count=1)))
+    return re.sub(r"\s", "", without_marks(SPEAKER.sub("", line, count=1)))
 
 
 _PICTURE_LINE = re.compile(r"^(\s*)img#([^\s(]+)\((?:[^()]|\([^()]*\))*\)\s*(.*)$")
 
 
-def restore_pictures(author: str, staff: str) -> tuple[str, list[dict[str, str]]]:
+_ASSET_DECL = re.compile(r"^(?:image|svg)\s+([a-z][a-z0-9_]*)\s*=", re.M)  # 名のある素材の宣言 (`image room = …`)
+
+
+def restore_pictures(author: str, staff: str, *, root: str) -> tuple[str, list[dict[str, str]]]:
     """担当が素材を変えない run で、担当の block の絵 (`img#`) を著者の版の説明文に戻す → (戻した block, 記録)。著者の版にある名の
     絵は説明文を著者の物に書き戻し (`mode: text`)、著者の版に無い説明文の新しい絵は行 (と字下げの子) ごと消して timeline の
-    その名の印も落とす (`mode: dropped`)。同じ説明文の絵の置き直し (新しい名) はそのまま (同じ素材)。"""
+    その名の印も落とす (`mode: dropped`)。同じ説明文の絵の置き直し (新しい名) と、宣言済みの素材 (根 root か著者の block の
+    `image 名 =` / `svg 名 =`) を説明文なしで引くだけの絵 (`content: @名` か本文 `@名`) はそのまま (既にある素材)。"""
     by_name: dict[str, str] = {}
-    for line in author.split("---timeline---", 1)[0].splitlines():
+    author_design = author.split("---timeline---", 1)[0]
+    for line in author_design.splitlines():
         if m := _PICTURE_LINE.match(line):
             by_name[m.group(2)] = m.group(3).strip()
     known = set(by_name.values())
+    declared = set(_ASSET_DECL.findall(root)) | set(_ASSET_DECL.findall(author_design))
     design, sep, timeline = staff.partition("---timeline---")
     out: list[str] = []
     dropped: list[str] = []
@@ -455,10 +459,14 @@ def restore_pictures(author: str, staff: str) -> tuple[str, list[dict[str, str]]
             out.append(line)
             continue
         name, desc = m.group(2), m.group(3).strip()
+        # 説明文なしで素材を引く絵 (`content: @名` か本文の `@名` だけ) の名
+        ref = re.fullmatch(r"@([a-z][a-z0-9_]*)", desc) or (
+            None if desc else re.search(r"content:\s*@([a-z][a-z0-9_]*)", line[: m.start(3)])
+        )
         if name in by_name and desc != by_name[name]:
             out.append(line[: m.start(3)] + by_name[name])
             log.append({"mode": "text", "name": name, "staff": desc[:80]})
-        elif name not in by_name and desc not in known:
+        elif name not in by_name and desc not in known and (ref is None or ref.group(1) not in declared):
             dropped.append(name)
             skip_indent = indent
             log.append({"mode": "dropped", "name": name, "staff": desc[:80]})

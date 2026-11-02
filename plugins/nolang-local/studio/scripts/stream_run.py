@@ -110,7 +110,7 @@ class RemoteRun(Run):
         try:
             for _attempt in range(3):
                 _report, defects, _lint = self.check(dd, ended=not (dd / "OPEN_ENDED").exists(), focus=c)
-                if not any(d.level == "DEFECT" for d in defects) or self.drop_defect_lines(dd, c) == 0:
+                if not any(d.level == "DEFECT" for d in defects) or not self.drop_defect_lines(dd, c):
                     break
         except (Rejected, RuntimeError, OSError) as e:
             self.log(cut=c, event="shots", s=round(time.time() - t, 1), n=0, ok=False, error=str(e)[:300])

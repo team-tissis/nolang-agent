@@ -190,7 +190,7 @@ chap#ch2.sticky {cn}01{/} 雨の日の数
 hl#h2(a: "雨の日は年間"; b: "{r}112日{/}、"; c: "6〜7月に集中")
 p#chip(left: 110px; top: 264px; font-size: 26px; color: $card; background: $rain_d; border-radius: 148px; padding: 9px 20px 9px 46px; white-space: nowrap; delay: 450ms; in: {x:-36, opacity:0, duration:0.6, ease:'power3.out'}) 雨の日
   icon#i(left: 16px; cy: 50%; font-size: 22px; name: drop; weight: fill; color: $card)
-p#big(left: 110px; top: 368px; font-size: 214px; font-family: n; line-height: 0.9; color: $rain_d; white-space: nowrap; delay: 550ms; in: {y:34, opacity:0, duration:0.6, ease:'power2.out'}) [count:112 start=0 ms=1150]{u}日{/}
+p#big(left: 110px; top: 368px; font-size: 214px; font-family: n; line-height: 0.9; color: $rain_d; white-space: nowrap; delay: 550ms; in: {y:34, opacity:0, duration:0.6, ease:'power2.out'}) [count:112 start=0 ms=1150ms]{u}日{/}
 p#cmp(left: 110px; top: 594px; font-size: 30px; white-space: nowrap; delay: 1050ms; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'}) 晴れ・曇りの日 {n2}253{/} 日
 div#yb(left: 110px; top: 686px; width: 520px; height: 34px; border-radius: 16px; background: #E3D2B8; delay: 1150ms; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'})
   div#fill(left: 0px; top: 0px; width: 159px; height: 34px; border-radius: 16px 0px 0px 16px; background: $rain; delay: 100ms; in: {scaleX:0, duration:0.8, ease:'power2.out', pivot:'left'})
@@ -228,8 +228,8 @@ board#b3(left: 110px; top: 262px; width: 1700px; height: 400px; t: "図2　1日�
     p#t(left: 50px; cy: 50%; font-size: 30px; white-space: nowrap) 雨の日
   div#f1(left: 320px; top: 80px; width: 820px; height: 76px; border-radius: 6px 12px 12px 6px; background: $fair; delay: 300ms; in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
   div#f2(left: 320px; top: 206px; width: 771px; height: 76px; border-radius: 6px 12px 12px 6px; background: $rain; delay: 800ms; in: {scaleX:0, duration:0.9, ease:'power3.out', pivot:'left'})
-  p#v1(left: 1162px; top: 86px; font-size: 30px; white-space: nowrap; delay: 900ms; in: {x:-16, opacity:0, duration:0.6, ease:'power3.out'}) {hv}[count:614 start=0 ms=900]{/}万円
-  p#v2(left: 1112px; top: 212px; font-size: 30px; white-space: nowrap; delay: 1400ms; in: {x:-16, opacity:0, duration:0.6, ease:'power3.out'}) {hv}[count:577 start=0 ms=900]{/}万円
+  p#v1(left: 1162px; top: 86px; font-size: 30px; white-space: nowrap; delay: 900ms; in: {x:-16, opacity:0, duration:0.6, ease:'power3.out'}) {hv}[count:614 start=0 ms=900ms]{/}万円
+  p#v2(left: 1112px; top: 212px; font-size: 30px; white-space: nowrap; delay: 1400ms; in: {x:-16, opacity:0, duration:0.6, ease:'power3.out'}) {hv}[count:577 start=0 ms=900ms]{/}万円
   p#note(left: 40px; bottom: 26px; font-size: 21px; font-family: m; color: $ink2; white-space: nowrap; delay: 1800ms; in: {y:34, opacity:0, duration:0.6, ease:'power3.out'}) ※ 晴れ・曇りの日 253日／雨の日 112日の、1日あたりの全店売上
   div#badge(left: 1424px; top: 76px; width: 236px; height: 236px; border-radius: 148px; background: $rain_d; box-shadow: 0px 10px 24px #3A618040; in: {scale:1.6, opacity:0, rotation:-6, duration:0.45, ease:'back.out(2.2)'})
     p#l(cx: 50%; top: 56px; font-size: 24px; color: $card) 雨の日は

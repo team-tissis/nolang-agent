@@ -901,7 +901,7 @@ class CutStages(ABC):
         defects: Sequence[str] = (),
     ) -> bool:
         """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順): 著者の版 → editable の印と動きを機械で寄せる
-        (呼び手の DEFECT に editable の規則がある時) → doc の check で c の行を指す DEFECT の行を落とす (台詞は残して印だけ)。どれも
+        (呼び手の DEFECT に editable の規則がある時) → doc の check で c の行を指す DEFECT の行を落とす (台詞は残して印だけ・落とした中身は `defect_lines_dropped` の `lines`)。どれも
         通らなければ元の block に戻して False (捨てるのは呼び手)。"""
         self.demote_passthrough(c, "last_resort")
         current = self.blocks[c]
@@ -930,18 +930,19 @@ class CutStages(ABC):
                         )
                         return True
                 self.put(c, current)
-        dropped = 0
+        dropped: list[dict[str, object]] = []
         for _attempt in range(4):
             design, timeline = self.doc(cuts)
             checked = await self.check_doc(design, timeline, ended=cuts[-1] == self.order[-1])
-            design, timeline, n = author_core.drop_defect_lines(design, timeline, c, checked.defects)
+            design, timeline, now = author_core.drop_defect_lines(design, timeline, c, checked.defects)
             block = author_core.block_in_doc(design, timeline, c)
-            if n == 0 or block is None:
+            if not now or block is None:
                 break
-            dropped += n
+            dropped += now
             self.put(c, block)
             if await passes():
-                self.record("defect_lines_dropped", cut=c, round=rnd, n=dropped)
+                # 落とした中身 (台詞・印・素材) は記録に残す — client は stream_make.sh の最終出力が利用者向けに並べる
+                self.record("defect_lines_dropped", cut=c, round=rnd, n=len(dropped), lines=dropped)
                 return True
         self.put(c, current)
         return False

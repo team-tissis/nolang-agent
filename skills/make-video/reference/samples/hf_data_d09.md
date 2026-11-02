@@ -149,7 +149,7 @@ panel#s2pl(left: 96px; top: 206px; width: 1060px; height: 690px; t: "市場規�
 card#s2kpi(left: 1190px; top: 206px; width: 634px; height: 300px)
   div#edge(left: 0px; top: 0px; width: 8px; height: 300px; border-radius: 16px 0px 0px 16px; background: $ink)
   p#l(left: 34px; top: 22px; font-size: 24px; font-family: m; color: $mut; white-space: nowrap) 2026年の市場規模（保険料収入）
-  p#n(left: 28px; top: 69px; font-size: 140px; line-height: 1.1; letter-spacing: -0.02em; font-family: n) [count:1,014 start=0 ms=1000 delay=200]
+  p#n(left: 28px; top: 69px; font-size: 140px; line-height: 1.1; letter-spacing: -0.02em; font-family: n) [count:1,014 start=0 ms=1000ms delay=200ms]
   p#u(left: .n.right+10; top: 152px; font-size: 50px) 億円
   p#chip(left: 34px; top: 236px; font-size: 30px; color: #FFFFFF; background: $ink; border-radius: 12px; padding: 9px 22px; white-space: nowrap; in: pp) 5年前（2021年）の {cg}1.6{/} 倍
 panel#s2yoy(left: 1190px; top: 525px; width: 634px; height: 370px; t: "前年比の伸び率"; u: "（%）")
@@ -233,7 +233,7 @@ card#s4card(left: 1240px; top: 206px; width: 584px; height: 690px)
   p#b(left: 0px; top: 546px; width: 584px; text-align: center; font-size: 66px; line-height: 1.2; font-family: h; color: $catd) 3分の1
   div#fl(left: 40px; top: 638px; width: 504px; height: 2px; background: $hair)
   p#f(left: 40px; top: 651px; width: 504px; text-align: center; font-size: 21px; font-family: m; color: $mut) 犬も 北欧 {nn}52%{/} に対し 国内 {nn}19%{/}
-#s4card.n.cnt(content: "[count:10 start=0 ms=600]{pc}%{/}")
+#s4card.n.cnt(content: "[count:10 start=0 ms=600ms]{pc}%{/}")
 
 # s5 ためらう理由: 左の板に順位の丸と 5 本の横棒 (1 位だけ紺)・「41%」で 1 位が脈打つ・右に 3 枚の札を語ごとに (室内飼いの 2 本の棒と絵・47% と保険料の数直線の点・68% と子犬子猫の絵)
 section#s5(stagger: {each:0}; out: {x:-48, opacity:0, duration:0.3, ease:'power2.in'})
@@ -266,14 +266,14 @@ card#s5cb(left: 1030px; top: 442px; width: 794px; height: 214px)
   div#pd(left: 699px; top: 141px; width: 20px; height: 20px; border-radius: 148px; background: $dog; border: 3px solid #FFFFFF; box-shadow: 0px 0px 0px 2px #14213D40; in: pp)
   p#pdl(left: 628px; top: 168px; width: 160px; text-align: center; font-size: 18px; color: $dog; white-space: nowrap; in: {y:-6, opacity:0, duration:0.3, ease:'power3.out'}) 犬 月約{nn}4,300{/}円
 # hf の作り: 札の数字は先に最終値で出て、数字の語で 0 から数え直す (変種 .cnt の content が数える数字)
-#s5cb.n.cnt(content: "[count:47 start=0 ms=800]{pc2}%{/}")
+#s5cb.n.cnt(content: "[count:47 start=0 ms=800ms]{pc2}%{/}")
 card#s5cc(left: 1030px; top: 681px; width: 794px; height: 214px)
   p#t(left: 26px; top: 18px; font-size: 24px; white-space: nowrap) 加入のタイミング
   p#n(left: 22px; top: 64px; font-size: 100px; line-height: 1; letter-spacing: -0.02em; font-family: n) 68{pc2}%{/}
   p#c1(left: 236px; top: 78px; font-size: 26px; line-height: 1.4; font-family: m; color: $ink2; white-space: nowrap) の加入者は[br]{bk}1歳未満{/}で加入
   p#c2(left: 26px; top: 170px; font-size: 21px; font-family: m; color: $mut; white-space: nowrap; in: {y:8, opacity:0, duration:0.4, ease:'power3.out'}) 3歳を過ぎてからの新規加入は {b9}9%{/}
   img#yp(left: 578px; top: 22px; width: 213px; height: 178px; content: @young; object-fit: contain)
-#s5cc.n.cnt(content: "[count:68 start=0 ms=800]{pc2}%{/}")
+#s5cc.n.cnt(content: "[count:68 start=0 ms=800ms]{pc2}%{/}")
 
 # s6 3 つのシナリオ: 上の帯に共通の前提 (犬猫の icon + 頭数)・4 本の縦棒をシナリオの語で伸ばし金額を数え上げ倍率の札 (中位だけ橙)・下の 2 行の表・右の板で高位と北欧の加入率を横棒で並べ「まだ届かない」
 section#s6(stagger: {each:0}; out: {x:-48, opacity:0, duration:0.3, ease:'power2.in'})
@@ -287,7 +287,7 @@ div#s6asm(left: 96px; top: 200px; width: 1728px; height: 66px; border-radius: 14
   p#ct(left: .ci.right+10; cy: 50%; font-size: 22px; font-family: m; color: $ink2; white-space: nowrap) 猫 {hn}930{/}万頭{em}（微増）{/}
 panel#s6pl(left: 96px; top: 286px; width: 1160px; height: 610px; t: "保険料収入"; u: "（億円）")
   div#b(left: "150;310;470;630"; top: "226.4;214.4;175.3;112"; width: 150px; height: "58.9;70.9;110;173.3"; border-radius: 6px 6px 0px 0px; background: "$gray;$low;$dog;$high"; in: {scaleY:0, duration:0.75, ease:'power3.out', pivot:'bottom'}) ×4
-  p#v(left: "126.7;286.7;446.7;606.7"; top: "191.8;179.8;140.7;77.3"; width: 220px; text-align: center; font-size: 40px; font-family: n; white-space: nowrap; in: {y:8, opacity:0, duration:0.3, ease:'power3.out'}) ×4 1,014{sm}億円{/};[count:1,221 start=0 ms=900]{sm}億円{/};[count:1,894 start=0 ms=900]{sm}億円{/};[count:2,985 start=0 ms=900]{sm}億円{/}
+  p#v(left: "126.7;286.7;446.7;606.7"; top: "191.8;179.8;140.7;77.3"; width: 220px; text-align: center; font-size: 40px; font-family: n; white-space: nowrap; in: {y:8, opacity:0, duration:0.3, ease:'power3.out'}) ×4 1,014{sm}億円{/};[count:1,221 start=0 ms=900ms]{sm}億円{/};[count:1,894 start=0 ms=900ms]{sm}億円{/};[count:2,985 start=0 ms=900ms]{sm}億円{/}
   p#m(left: "320;480;640"; top: "150.5;111.3;48"; width: 120px; text-align: center; font-size: 24px; font-family: n; color: "$dog;#FFFFFF;$dog"; background: "#EAF1FA;$catd;#EAF1FA"; border-radius: 148px; padding: 3px 0px; in: pp) ×3 ×1.2;×1.9;×2.9
   p#sn(left: "126.7;286.7;446.7;606.7"; top: 438px; width: 220px; text-align: center; font-size: 27px; line-height: 1.1; font-family: h; color: "$ink;$ink;$catd;$ink"; in: {y:8, opacity:0, duration:0.35, ease:'power3.out'}) ×4 2026年;低位[br]{sm}2036年{/};中位[br]{sm}2036年{/};高位[br]{sm}2036年{/}
   p#r(left: "126.7;286.7;446.7;606.7"; top: 507px; width: 220px; text-align: center; font-size: 22px; font-family: n; color: $ink2; in: {y:6, opacity:0, duration:0.3, ease:'power3.out'}) ×4 19%／10%;24%／13%;32%／20%;45%／30%
