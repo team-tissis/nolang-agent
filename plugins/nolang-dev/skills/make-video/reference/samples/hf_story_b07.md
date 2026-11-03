@@ -183,7 +183,7 @@ bgm music
 *** one
 [!#pc[1] .on][!#pc[1] punch {scale: 1.3, duration: .32}]
 @n: [♪jan -6dB][>#st1 +20ms][>#clock +220ms][<#st1 +500ms][>#hl1 +500ms]1つ目！日曜18時半のアニメが[|]終わった瞬間、[|]休日の終わりを告げる[|][>#cd][♪tick -10dB to=1.7s fade=50ms,150ms]カウントダウンが始まって[|][>#bub +50ms][!#bub to,{scale:.82, duration:.3, ease:'power2.in'} +320ms][♪chiin_s -4dB +280ms to=1.2s fade=0ms,500ms]口数が減る。
-transition push {duration: .26, dir: 'up', overlap: .26, ease: 'power3.out'}
+transition push {duration: .26, dir: 'top', overlap: .26, ease: 'power3.out'}
 
 *** two
 [!#pc[2] .on][!#pc[2] punch {scale: 1.3, duration: .32}][!#pc[1] .done]

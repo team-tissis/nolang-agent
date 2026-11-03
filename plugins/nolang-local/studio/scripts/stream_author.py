@@ -4,7 +4,7 @@
   `=== plan ===` (cut 一覧) → `=== root_design ===` → `=== root_timeline ===` → `=== cut 名 ===` を構成の順に (design の block・`---timeline---`・
   timeline の block) → `=== end ===`。plan が閉じた時点で solo/order.txt を書く (orchestrator が cut を待ち始める)。
   low は書き始めるまで数秒で、書く速さ (約 180 字/s・1 cut 約 3.5 s) が再生より速いので、cut を分けて並行に書かせる理由が無い。質は cut ごとの
-  担当 (medium) が運ぶ (docs/draft_src_v2/stream-evidence-261013.md s9 / s10)。1 人が全 cut を書くので、cut を跨ぐ名の衝突・型のばらつきも出ない。
+  担当 (medium) が運ぶ。1 人が全 cut を書くので、cut を跨ぐ名の衝突・型のばらつきも出ない。
 直し (`--fix low` の時) は stream_run.py が cut ごとに頼む (`fix` subcommand: block + check の指摘 → 直した block)。
 担当・直し役の system prompt (見本込み) は著者の call と並んで 1 回だけ温める (`warmup`・author.jsonl の `warmup` event)。
 
@@ -806,7 +806,6 @@ def run(
                 st,
                 event="reference",
                 video_id=ref["template_video_id"],
-                source=ref.get("source"),
                 title=ref.get("title"),
             )
         if extra := os.environ.get(

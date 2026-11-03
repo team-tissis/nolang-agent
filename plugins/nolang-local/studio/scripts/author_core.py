@@ -401,9 +401,9 @@ AUTHOR_BRIEF_NOTE = (
     "- `wipe {duration: .62, dir: 'left', angle: 16, bars: '#1E1B4B,520;#FF4F9A,600;#FFE14D,440'}` (an angled sweep in the"
     " film's own hex colors; a glow is `bars: 'linear(#7ADFD300,#7ADFD3F2@45%,#7ADFD300),180'`);\n"
     "- `slide {duration: .6, dir: 'right', offset: '8%', opacity: 0} se=\"ページをめくる音\" -4dB` or with `drift: 240, dim: .38` (a page turn);\n"
-    "- `dissolve {duration: .32, overlap: .32, color: '#0A0F1A', zoom: 1.08}` (rising out of the dark) · `push {duration: .5, dir: 'up'}` · `none {duration: .3}` (hard"
+    "- `dissolve {duration: .32, overlap: .32, color: '#0A0F1A', zoom: 1.08}` (rising out of the dark) · `push {duration: .5, dir: 'top'}` · `none {duration: .3}` (hard"
     " documentary cuts).\n"
-    "Keep the window 0.3–0.85 s and pick `dir` to fit this film (not every film sweeps left). Every transition sounds its"
+    "Keep the window 0.3–0.85 s and pick `dir` (`'left'` `'right'` `'top'` `'bottom'`) to fit this film (not every film sweeps left). Every transition sounds its"
     " own `切替音` matched to its motion; to give the film its own transition voice write a family name alone"
     ' (`se="切替音 ポロロン"` for a cheerful film, `キラキラ` elegant, `シュワーン` TV energy, `拍子木` Japanese — sounds.md) and'
     " each transition gets the version of its direction and length, or `se=` with another sound the film needs (a page turn)."
@@ -644,7 +644,7 @@ the line's new content (it may span several lines; to delete the line, leave it 
 …
 === end ===
 {where}. To append after the block's last line, use `@ last-line-number+1`. Line numbers are the `N|` ones below (a finding's file:line counts design.txt / timeline.txt with the root first — a different numbering). `N|` is the number, not part of the line.
-So the fix does not create a new defect: a variant used by a mark (`[!#name .tag]`) must have its `#name.tag(…)` line in the design; `size=` is for text and icons only (boxes take w= / h=);
+So the fix does not create a new defect: a variant used by a mark (`[!#name .tag]`) must have its `#name.tag(…)` line in the design;
 keep one element per line (do not break an element's line in the middle; an indented child sits right under its parent).
 {look}check's findings (with file:line and the fix):
 {findings or "none"}
@@ -1082,29 +1082,6 @@ _DEF_CHILD = re.compile(r"^[ \t]+[A-Za-z_][\w-]*#([A-Za-z_][\w-]*)", re.M)
 # 台詞の効果音の説明 (warm の鍵) と、台詞行の印 (効果音の `[♪…]` を除く)
 _SE = re.compile(r'\[♪"([^"]+)"')
 _MARK_NOT_SE = re.compile(r"\[(?!♪)[^\[\]]*\]")
-# 投入検査の render 文から editable_motion の的 (層の dotted path) と slot を引く (機械 degrade の的)
-_EDITABLE_MOTION = re.compile(
-    r"DEFECT:editable_motion\b.*?#(?P<name>[\w.\[\]]+) の (?P<slot>motion_in|motion_out|motion_main|in|out|main)\b"
-)
-_MOTION_SLOT_GROUP = {
-    "in": "in",
-    "motion_in": "in",
-    "out": "out",
-    "motion_out": "out",
-    "main": "main",
-    "motion_main": "main",
-}
-# 投入検査の render 文から editable_state_marks の印の綴り (`印 [!#名 …] —`) を引く (機械 degrade の的)
-_EDITABLE_MARK = re.compile(r"DEFECT:editable_state_marks\b.*?印 (?P<mark>\[[!=][^\]]*\])")
-# 幕の cut 切替の行 (editable_transition の的) と、色帯の key
-_CURTAIN_LINE = re.compile(r"^[ \t]*transition[ \t]+(?:dip|flash|panel)\b.*\n?", re.M)
-_BARS_KEY = re.compile(r",bars=[^,\n]*(?:;[^,\n]*)*")
-# V104 の静的な見た目の宣言 (editable_style の的) — 行の `(宣言)` の中の `key: 値` を落とす
-_STYLE_DECL_KEYS = frozenset(
-    {"blend", "mask", "scale", "skew", "skewX", "skewY", "rotateX", "rotateY", "perspective", "origin"}
-)
-# 子を持つ要素に書くと群でしか子ごとに描けない宣言 (editable_scope の的) — 字下げの子を持つ行から落とす (`transform` は rotate の時)
-_SHEET_DECL_KEYS = frozenset({"rotation", "clip-path", "overflow", "overflow-x", "overflow-y"})
 # svg に焼く箱の行で、焼く絵を変えない宣言 (位置・動き・重なり) と、素材にならない行の tag
 _BOX_SKIP = frozenset(
     {"left", "top", "right", "bottom", "cx", "cy", "x", "y", "z-index", "in", "out", "main", "overlap"}
@@ -1306,161 +1283,6 @@ def edit_lines(now: str, fixed: str) -> str:
     """戻した直し役の edit の本文 (`+` = 直し役が書いた行・`-` = 今の行) — 次の直し役に「効かなかった」と見せる。"""
     diff = difflib.unified_diff(now.split("\n"), fixed.split("\n"), lineterm="", n=0)
     return "\n".join(line for line in diff if line[:1] in "+-" and not line.startswith(("---", "+++")))
-
-
-def _decl_span(line: str) -> tuple[int, int] | None:
-    """行の最初の `(宣言)` の開きと閉じの位置 (quote の中の括弧は数えない)。無い・閉じなければ None。"""
-    open_at = line.find("(")
-    if open_at < 0:
-        return None
-    depth = 0
-    for k, ch in unquoted_chars(line, open_at):
-        if ch == "(":
-            depth += 1
-        elif ch == ")":
-            depth -= 1
-            if depth == 0:
-                return open_at, k
-    return None
-
-
-def degrade_motion_decls(line: str, slots: set[str] | None) -> tuple[str, int]:
-    """行の `(宣言)` の中の動きの宣言を編集可能 profile の preset へ機械で寄せる (editable_motion の最後の網 — 層を落とさない)。
-    slots = 書き換える slot。None = blanket (的の行が引けなかった時): object 形の `in:`/`out:` を `fade` に・custom 形
-    (`{…}`/keys/波形) の `main:` を落とす (named の `main: kb {…}` は残す)。戻り = (行, 書き換えた数)。"""
-    span = _decl_span(line)
-    if span is None:
-        return line, 0
-    open_at, close_at = span
-    changed = 0
-    kept: list[str] = []
-    for part in split_top_level(line[open_at + 1 : close_at]):
-        head = re.match(r"\s*(in|out|main)\s*:", part)
-        if head is None:
-            kept.append(part)
-            continue
-        key = head.group(1)
-        value = part[head.end() :]
-        if slots is not None and key not in slots:
-            kept.append(part)
-            continue
-        if slots is None and key in ("in", "out") and "{" not in value:
-            kept.append(part)  # preset 語のまま
-            continue
-        if (
-            slots is None
-            and key == "main"
-            and not (value.lstrip().startswith("{") or "keys" in value or "waveform" in value)
-        ):
-            kept.append(part)  # named の main (kb 等) は残す
-            continue
-        changed += 1
-        if key in ("in", "out"):
-            kept.append(f"{part[: head.start(1)]}{key}: fade")
-        # main は decl ごと落とす (常時の custom は preset に写せない)
-    if not changed:
-        return line, 0
-    return line[: open_at + 1] + ";".join(kept).strip("; ") + line[close_at:], changed
-
-
-def degrade_editable_motion(block: str, defects: Sequence[str], *, drop_marks: bool = False) -> tuple[str, int]:
-    """editable_motion の機械 degrade (最後の網): 違反した層の `in:`/`out:` を `fade` に、custom の `main:` を落として層と台詞を残す
-    — motion 違反だけで cut が落ちない受け入れ条件の実装。的は投入検査の render 文 (`#名 の slot`) から引き、design の行 (def の行を
-    含む) を書き換える。的の行が引けなければ (def の実体名と定義名の揺れ等) design 全行を blanket で寄せる。drop_marks = その層を的に
-    した `[!#層 …]` / `[=#層 …]` の印も落とす (台詞と効果音は残す) — 動きが timeline の印から来た時 (engine が `!` の効果を層の
-    motion に畳む) の網。戻り = (block, 書き換えた宣言と落とした印の数)。"""
-    if not any("editable_motion" in d for d in defects):
-        return block, 0
-    rows = [m for d in defects if (m := _EDITABLE_MOTION.search(d)) is not None]
-    design, sep, rest = block.partition(TIMELINE_SEP)
-    lines = design.split("\n")
-    changed = 0
-    targets = [(m.group("name").split(".")[-1], _MOTION_SLOT_GROUP[m.group("slot")]) for m in rows]
-    for idx, line in enumerate(lines):
-        hits = {slot for leaf, slot in targets if re.search(rf"#{re.escape(leaf)}(?=[(.\s]|$)", line)}
-        if hits:
-            lines[idx], k = degrade_motion_decls(line, hits)
-            changed += k
-    if changed == 0:
-        for idx, line in enumerate(lines):
-            lines[idx], k = degrade_motion_decls(line, None)
-            changed += k
-    if drop_marks and targets:
-        leaves = {re.escape(leaf) for leaf, _slot in targets}
-        mark = re.compile(rf"\[[!=]#(?:{'|'.join(sorted(leaves))})(?=[\s\],.{{\[]|$)[^\]]*\]")
-        rest, n = mark.subn("", rest)
-        changed += n
-    return ("\n".join(lines) + sep + rest, changed) if changed else (block, 0)
-
-
-def _strip_style_decls(line: str, *, sheet: bool = False) -> tuple[str, int]:
-    """行の `(宣言)` の中から V104 の静的な見た目 (`_STYLE_DECL_KEYS`・`italic` の flag) と `dim` の stagger を落とし、破線の枠を実線に。
-    戻り = (行, 落とした数)。"""
-    span = _decl_span(line)
-    if span is None:
-        return line, 0
-    open_at, close_at = span
-    changed = 0
-    kept: list[str] = []
-    for part in split_top_level(line[open_at + 1 : close_at]):
-        head = re.match(r"\s*([A-Za-z-]+)\s*:", part)
-        if head is None:
-            kept.append(part)
-            continue
-        key = head.group(1)
-        if key in _STYLE_DECL_KEYS or (
-            sheet and (key in _SHEET_DECL_KEYS or (key == "transform" and "rotate" in part))
-        ):
-            changed += 1
-            continue
-        values = [t.strip() for t in part[head.end() :].split(",")]
-        if key == "stagger" and "dim" in values:
-            rest = [t for t in values if t != "dim"]
-            changed += 1
-            if rest:
-                kept.append(f"{part[: head.end()]} {','.join(rest)}")
-            continue
-        if key in ("style", "font") and re.search(r"\bitalic\b", part):
-            part, n = re.subn(r"\s*\bitalic\b", "", part)
-            changed += n
-        if key == "border" and re.search(r"\bdashed\b", part):
-            part, n = re.subn(r"\bdashed\b", "solid", part)
-            changed += n
-        kept.append(part)
-    if not changed:
-        return line, 0
-    return line[: open_at + 1] + ";".join(kept).strip("; ") + line[close_at:], changed
-
-
-def degrade_editable_marks(block: str, defects: Sequence[str]) -> tuple[str, int]:
-    """状態 key と編集画面に無い見た目の機械 degrade (editable_state_marks / editable_transition / editable_style の最後の網):
-    投入検査の render 文が名指す `!` / `=` の印を台詞から落とし (台詞と効果音は残す)、`stagger` の `dim` を外し、幕の cut 切替の行と
-    `bars=` を落とし、blend / mask / 斜体 / 静的な transform / 破線の宣言を落とす。戻り = (block, 落とした数)。"""
-    rules = ("editable_state_marks", "editable_transition", "editable_style", "editable_scope")
-    if not any(rule in d for rule in rules for d in defects):
-        return block, 0
-    design, sep, rest = block.partition(TIMELINE_SEP)
-    changed = 0
-    marks = {m.group("mark") for d in defects if (m := _EDITABLE_MARK.search(d)) is not None}
-    for mark in sorted(marks, key=len, reverse=True):
-        rest, n = re.subn(re.escape(mark), "", rest)
-        changed += n
-    if any("editable_transition" in d for d in defects):
-        rest, n = _CURTAIN_LINE.subn("", rest)
-        changed += n
-        rest, n = _BARS_KEY.subn("", rest)
-        changed += n
-    if any(rule in d for rule in ("editable_style", "editable_state_marks", "editable_scope") for d in defects):
-        sheet = any("editable_scope" in d for d in defects)
-        lines = design.split("\n")
-        for idx, line in enumerate(lines):
-            has_children = (
-                idx + 1 < len(lines) and lines[idx + 1][:1] in (" ", "\t") and line[:1] not in (" ", "\t", "")
-            )
-            lines[idx], n = _strip_style_decls(line, sheet=sheet and has_children)
-            changed += n
-        design = "\n".join(lines)
-    return (design + sep + rest, changed) if changed else (block, 0)
 
 
 def block_span(lines: Sequence[str], which: str, cut: str) -> tuple[int, int] | None:

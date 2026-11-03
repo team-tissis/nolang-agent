@@ -92,7 +92,9 @@ class RemoteRun(Run):
         # start の client_contract・全 request の X-NoLang-Client (server がずれた client の分布を測る)
         baked = author_core.resolve_reference_dir(HERE)
         contract = author_core.read_contract_json(baked).get("contract")
-        self.client_contract = contract if isinstance(contract, int) else 0
+        if not isinstance(contract, int):
+            raise ValueError(f"{baked}/contract.json: contract が整数でない")
+        self.client_contract = contract
         self.baked_hash = author_core.reference_hash_of(baked)
         self.api = RemoteApi(remote, token, contract=self.client_contract, reference_hash=self.baked_hash, log=self.log)
         self.watch_url = ""  # 視聴 URL (`WATCH` / `PLAYABLE` の行に出す)
@@ -200,7 +202,7 @@ class RemoteRun(Run):
             self.log(event="reference_failed", video_id=video_id, error=str(got.get("error") or got)[:300])
             return 1
         (self.project / "reference.json").write_text(json.dumps(got, ensure_ascii=False))
-        self.log(event="reference", video_id=video_id, source=got.get("source"), title=got.get("title"))
+        self.log(event="reference", video_id=video_id, title=got.get("title"))
         return 0
 
     def sync_reference(self) -> None:

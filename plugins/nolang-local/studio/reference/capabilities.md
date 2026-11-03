@@ -1,7 +1,7 @@
 # Runtime capability table — how VC types and render fields are written as v2 properties and marks
 
 When writing an HTML + GSAP expression and you think "this can't be written", first look up the runtime field here (`domain/entities/video_component*.py`).
-The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) / marks · **✕** = cannot be written (with the reason). Grammar shapes are in authoring.md; every key per type is in `docs/draft_src_v2/grammar-spec-types.md`. The final "Not in the runtime" section is pending decisions on adding runtime.
+The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) / marks · **✕** = cannot be written (with the reason). Grammar shapes and every key per type are in authoring.md. The final "Not in the runtime" section is pending decisions on adding runtime.
 
 ## Shared by all layers (VisualLayerBase)
 
@@ -66,7 +66,7 @@ The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) 
 | tracking | `in: {letterSpacing: '0.6em', opacity: 0, duration: .9}` (enters with the letter spacing tightening; px and bare numbers divide into em by the same line's `font-size:`; a mark's `to` takes em only) | text only; unit=grapheme attaches; moves glyph i right by i × value em (a left-aligned stretch) |
 | scramble | `in: {scramble: '01ABCDEF', duration: .6}` / `in: decode` | text only |
 | elevation | **✕** (not a v2 channel) | a shadow factor, only for layers that have a shadow (`box-shadow:` / `glow:`) |
-| reveal (+ reveal_shape) | `in: wipe {dir: 'right', angle: -20}` · `in: circle_wipe` / `iris_wipe` (the circle center takes the 9 names like `pivot: 'top'`; curves via `ease`) / `clock_wipe {dir: 'left', splits: 3}` | `out:` works the same; `in: wipe {dir: 'center'}` is a horizontal scale |
+| reveal (+ reveal_shape) | `in: wipe {dir: 'right', angle: -20}` (`dir`: `'left'` `'right'` `'top'` `'bottom'`) · `in: circle_wipe` / `iris_wipe` (the circle center takes the 9 names like `pivot: 'top'`; curves via `ease`) / `clock_wipe {dir: 'left', splits: 3}` | `out:` works the same; `in: wipe {dir: 'center'}` is a horizontal scale |
 | pixelate | `in: pixelate` | |
 | number | `[count:…]` | |
 | draw dash_offset | `in: draw {duration: .6}` · `main: sawtooth {dash_offset: 1}` | path shapes with a border |
@@ -91,7 +91,7 @@ The how-to-write column: CSS declarations on the element's line (`tag#id(…)`) 
 
 | field | How to write | Notes |
 |---|---|---|
-| transition kind duration overlap zoom bars sweep drift dim easing backdrop | timeline `transition none {duration: .37}` (no mixing — the exit overlaps the next cut's entrance) / `transition wipe {duration: .7, dir: 'left', overlap: .35, bars: '#色,18', drift: 140}` / `bars: 'linear(色,…),幅'` (gradient bars; `linear(色,…,180)` = a vertical gradient along the bar) / `dissolve {duration: .85, dir: 'right', bars: '…'}` (bars sweep over the dissolve) / `slide {duration: .85, dir: 'left', drift: 240, dim: .38}` (the old page slides off and dims) / `dissolve {duration: .6, overlap: .3}` (centered on the boundary) / `dissolve {duration: .32, overlap: .32}` (0 → 1 on top of the old scene) / `dissolve {duration: .32, color: '#色'}` (up from black) / `dip {duration: .4, color, level}` / `flash {duration: .3}` | dissolve's default easing is linear |
+| transition kind duration overlap zoom bars sweep drift dim easing backdrop | timeline `transition none {duration: .37}` (no mixing — the exit overlaps the next cut's entrance) / `transition wipe {duration: .7, dir: 'left', overlap: .35, bars: '#色,18', drift: 140}` (`dir`: `'left'` `'right'` `'top'` `'bottom'` — the same words as element motion; `zoom` takes `'in'` / `'out'`) / `bars: 'linear(色,…),幅'` (gradient bars; `linear(色,…,180)` = a vertical gradient along the bar) / `dissolve {duration: .85, dir: 'right', bars: '…'}` (bars sweep over the dissolve) / `slide {duration: .85, dir: 'left', drift: 240, dim: .38}` (the old page slides off and dims) / `dissolve {duration: .6, overlap: .3}` (centered on the boundary) / `dissolve {duration: .32, overlap: .32}` (0 → 1 on top of the old scene) / `dissolve {duration: .32, color: '#色'}` (up from black) / `dip {duration: .4, color, level}` / `flash {duration: .3}` | dissolve's default easing is linear |
 | transition_in / transition_out kind=fade (level) | `fade in,1800ms` (a cut's head — on the first cut the video opens from the ground colour; elsewhere the back half of the previous boundary's fade, folded into the previous cut's `fade out`) / `fade out,700ms` (the last cut's tail, or a boundary that ends in the colour) / `transition fade {duration: .6, overlap: .3, color: '#000000', level: .8}` / `dip {duration: .4}` / `flash {duration: .3}` (sugar of fade: dip = black, half before the boundary; flash = white, a third before) | A and B are never mixed — the colour covers the hard cut; the editor's cut-transition chip edits it |
 | head_pause tail_pause | speech `[silence:600ms]` / the root's `silence head= tail=` | |
 | speedup_percent | `cast 名 = … speed=110%` · speech `[speed:120%]` | |

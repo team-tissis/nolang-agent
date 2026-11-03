@@ -56,7 +56,7 @@ subtitle(font-size: 46px; bottom: 66px; width: 1600px; background: none; color: 
 def shade() = div(inset: 0; background: linear(#0000009E,#00000040@34%,#00000000@55%,right))
 # 場面の札 (区分 > 名称 > 補足): 朱の縦の罫が上から伸び、区分が左から・名称が左から拭われ・補足がせり上がり、切替の前に揃って消える
 def scene_label(when, what, where) = group(left: 112px; top: 92px)
-  shape#bar(left: 0px; top: 6px; width: 8px; height: 218px; background: $shu; in: wipe {dir: 'down', duration: 0.4, ease: 'power3.out'}; out: fade {duration: 0.35})
+  shape#bar(left: 0px; top: 6px; width: 8px; height: 218px; background: $shu; in: wipe {dir: 'bottom', duration: 0.4, ease: 'power3.out'}; out: fade {duration: 0.35})
   p#when(left: 34px; top: 0px; content: {when}; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.22em; text-shadow: 0px 2px 10px #000000B3; in: {x:-24, opacity:0, duration:0.45, ease:'power2.out', delay:0.08}; out: fade {duration: 0.35})
   p#what(left: 34px; top: 54px; content: {what}; font-size: 104px; font-family: s; letter-spacing: 0.06em; text-shadow: 0px 4px 24px #000000A6; in: wipe {dir: 'right', duration: 0.7, ease: 'power2.inOut', delay: 0.15}; out: fade {duration: 0.35})
   p#where(left: 34px; top: 186px; content: {where}; font-size: 32px; color: #F1ECE2; letter-spacing: 0.08em; text-shadow: 0px 2px 12px #000000CC; in: {y:12, opacity:0, duration:0.5, ease:'power2.out', delay:0.45}; out: fade {duration: 0.35})
@@ -99,15 +99,15 @@ p#region(cx: 960px; cy: 708px; font-size: 40px; font-family: sm; color: $cream; 
 # 起源: 墨絵に替わり、縦書きの 2 列が上から拭われ、朱の落款「伝承」が押される
 section#origin
 img#origin_ink(inset: 0; main: kb {scale: [1.12, 1.12], focus: ['15% 50%', '76% 50%']}) Traditional Japanese suiboku ink wash painting on aged washi paper: ancient warriors on horseback chasing herds of wild horses across a vast open plain as military training, dynamic sweeping brush strokes, rising dust rendered as ink mist, distant low hills, monochrome sumi ink with a subtle warm sepia paper tone, generous empty space on the right side. No text, no seals, no letters, no signature.
-p#origin_years(left: 1503px; top: 99px; font-size: 132px; font-family: s; color: $ink; letter-spacing: 0.08em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 1, ease: 'power2.inOut'}; out: fade {duration: 0.35}) 千年以上前
-p#origin_lead(left: 1706px; top: 105px; font-size: 54px; font-family: sm; color: $ink; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.7, ease: 'power2.inOut'}; out: fade {duration: 0.35}) その起源は
+p#origin_years(left: 1503px; top: 99px; font-size: 132px; font-family: s; color: $ink; letter-spacing: 0.08em; writing-mode: vertical-rl; in: wipe {dir: 'bottom', duration: 1, ease: 'power2.inOut'}; out: fade {duration: 0.35}) 千年以上前
+p#origin_lead(left: 1706px; top: 105px; font-size: 54px; font-family: sm; color: $ink; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'bottom', duration: 0.7, ease: 'power2.inOut'}; out: fade {duration: 0.35}) その起源は
 p#origin_seal(left: 1660px; top: 820px; width: 92px; font-size: 34px; font-family: s; color: $shu; line-height: 1.05; text-align: center; padding: 9px 0px; background: none; border: 4px solid $shu; border-radius: 10px; opacity: 0.92; overlap: origin_years,subtitle; transform: rotate(-4deg); in: {scale:1.7, rotation:-10, opacity:0, duration:0.22, ease:'power4.in'}; out: fade {duration: 0.35}) 伝[br]承
 
 # 祖: 平将門の墨絵・名が縦に拭われ、読みと「相馬氏の遠祖とされる」が続き、「軍事訓練」で絵が武者へ寄る
 section#masakado
 img#masakado_ink(inset: 0; main: kb {scale: [1, 1.1], focus: '86% 59%'}) Traditional Japanese suiboku ink wash painting on aged washi paper: a 10th-century Japanese warlord in classical armor on horseback atop a small hill, looking out over a wide plain where wild horses run free, dramatic clouds, expressive confident brush strokes, monochrome ink with a faint vermilion accent on the armor cords, empty space on the left side. No text, no letters, no seals, no signature.
-p#masakado_note(left: 150px; top: 240px; font-size: 44px; font-family: sm; color: $ink2; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 相馬氏の遠祖とされる
-p#masakado_name(left: 216px; top: 120px; font-size: 150px; font-family: s; color: $ink; letter-spacing: 0.12em; writing-mode: vertical-rl; in: wipe {dir: 'down', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 平将門
+p#masakado_note(left: 150px; top: 240px; font-size: 44px; font-family: sm; color: $ink2; letter-spacing: 0.2em; writing-mode: vertical-rl; in: wipe {dir: 'bottom', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 相馬氏の遠祖とされる
+p#masakado_name(left: 216px; top: 120px; font-size: 150px; font-family: s; color: $ink; letter-spacing: 0.12em; writing-mode: vertical-rl; in: wipe {dir: 'bottom', duration: 0.9, ease: 'power2.inOut'}; out: fade {duration: 0.4}) 平将門
 p#masakado_ruby(left: 393px; top: 136px; font-size: 30px; font-family: sm; color: $sepia; letter-spacing: 0.32em; writing-mode: vertical-rl; in: fade {duration: 0.6}; out: fade {duration: 0.4}) たいらのまさかど
 
 # 現在: 墨絵と同じ構図の丘の武者の実写に、国指定の判子が押印の勢いで落ちて揺れる

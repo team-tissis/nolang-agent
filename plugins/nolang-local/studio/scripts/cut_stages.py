@@ -33,8 +33,8 @@ if TYPE_CHECKING or __package__:
 else:
     import author_core
 
-# 行の無い DEFECT の持ち主が根 (unlocated_owner の値)
-ROOT = ""
+# 持ち主が根の DEFECT (blockers / unlocated_owner の値・cut の名にならない綴り)
+ROOT = "(root)"
 # 指摘の直し役の上限 (著者の版への差し戻しも 1 回と数える)
 FIX_CALLS = 2
 # 1 cut の check の round の上限 (直し 2 回・見直し 1 回・戻しの往復で普通は 6 以内)
@@ -54,6 +54,9 @@ class Defect:
     where: str | None
     level: str  # DEFECT (描けない) / severe / warn / info
     text: str
+    # check した cut の block (`join_block` の形) の中の行 (0 始まり)。check_cut が check した doc と同じ組み立てから付ける —
+    # doc の行番号は窓の doc の物なので、後から今の状態で範囲を作り直すと別の行を指す
+    at: int | None = None
 
     @classmethod
     def read(cls, d: Mapping[str, object]) -> Defect:
@@ -695,11 +698,12 @@ class CutStages(ABC):
         """doc (根 + cuts・c を含む) を check し、cut c (か根) の DEFECT と lint を返す。blockers = check を止めた前の cut の DEFECT の
         持ち主 (行の無い DEFECT で持ち主が分からなければ "?") — blockers があればその doc の lint は c の物も含めて出ていない。
         root_extra の行の DEFECT は根の物と数える。"""
+        # 行の範囲は check する doc と同じ時点で作る (check を待つ間に前の cut の書き戻しや根の put が行数を変える)
         design, timeline = self.doc(cuts, root_extra=root_extra)
-        checked = await self.check_doc(design, timeline, ended=cuts[-1] == self.order[-1], focus=c)
         ranges = self.cut_line_ranges(cuts, root_extra=root_extra)
         rd, rt = self.root()
         root_n = ((rd + root_extra).count("\n"), rt.count("\n"))
+        checked = await self.check_doc(design, timeline, ended=cuts[-1] == self.order[-1], focus=c)
         defects: list[Defect] = []
         unlocated: list[Defect] = []
         blockers: set[str] = set()
@@ -709,14 +713,21 @@ class CutStages(ABC):
                 unlocated.append(d)
                 continue
             if n <= root_n[which]:
-                # 根の行: 持ち主は最初の live な cut。他の cut はその staged を待つ
-                if c == self.first_live():
+                # 根の行: 持ち主は欠陥の場所 `*** 名` の cut (根の行を使って壊れた cut — 根の既定の切替は使った境界の cut が自分の
+                # 切替で上書きできる)。doc に無い場所は根の持ち主 = 最初の live な cut。他の cut はその staged を待つ。場所を見ないと
+                # 根を流した後の既定の切替の DEFECT が誰の物にもならず、後の cut が lint 無しで素通りした (11-03 R2 の dir: 'top')
+                scope = d.where.removeprefix("*** ") if d.where and d.where.startswith("*** ") else None
+                owner = scope if scope in ranges else ROOT
+                if owner == c or (owner == ROOT and c == self.first_live()):
                     defects.append(d)
                 else:
-                    blockers.add(ROOT)
+                    blockers.add(owner)
                 continue
             owner = next((k for k, r in ranges.items() if r[which][0] <= n <= r[which][1]), None)
-            if owner in (None, c):
+            if owner == c:
+                (a, _b), (da, db) = ranges[c][which], ranges[c][0]
+                defects.append(replace(d, at=(n - a) + (0 if which == 0 else db - da + 2)))
+            elif owner is None:
                 defects.append(d)
             else:
                 blockers.add(owner)
@@ -724,8 +735,11 @@ class CutStages(ABC):
             mine, foreign = await self.attribute_unlocated(c, cuts, unlocated, root_extra=root_extra)
             defects += mine
             if foreign:
+                # 持ち主は doc の中の c より前の cut だけ — sig の map は run 全体の物で後ろの cut を返し得る。後ろを待つと 2 つの
+                # cut が互いの staged を待って止まる (10-27 fit / r3)。前に居なければ "?" (= 最初の live な cut)
+                earlier = set(cuts[: list(cuts).index(c)])
                 owners = {self.unlocated_owner.get(d.sig, ROOT) for d in foreign}
-                blockers |= {o if o not in (ROOT, c) else "?" for o in owners}
+                blockers |= {o if o in earlier else "?" for o in owners}
                 self.record("defect_elsewhere", cut=c, round=rnd, n=len(foreign), first=foreign[0].text[:160])
         return Checked(
             defects=defects,
@@ -862,23 +876,12 @@ class CutStages(ABC):
         self.put(c, author_core.prune_orphan_elements(before_text, after_text, new_text))
         return True
 
-    def revert_fixer_damage(self, c: str, cuts: Sequence[str], before: str, defects: Sequence[Defect]) -> int:
+    def revert_fixer_damage(self, c: str, before: str, defects: Sequence[Defect]) -> int:
         """直し役の後の check の DEFECT が直し役の変えた行にあれば、その変更の塊だけ直し前に戻す (2 回以上の直しの 3/6 は直し役が自分で
-        作った DEFECT だった)。行の無い DEFECT は直し全体を戻す。戻した DEFECT の数 (0 = 直し役の変更の外 → 直し役へ)。"""
-        blk, ranges = self.cut_block(c), self.cut_line_ranges(cuts).get(c)
-        if blk is None or ranges is None:
-            return 0
-        nd = blk[0].count("\n")
-        bad: set[int] = set()
-        whole = False
-        for d in defects:
-            n, k = d.line, d.which
-            if n <= 1:
-                whole = True
-                continue
-            a, b = ranges[k]
-            if a <= n <= b:
-                bad.add((n - a) + (0 if k == 0 else nd + 1))
+        作った DEFECT だった)。行の無い DEFECT は直し全体を戻す。戻した DEFECT の数 (0 = 直し役の変更の外 → 直し役へ)。行は
+        check_cut が付けた block の中の行 (`Defect.at`)。"""
+        whole = any(d.line <= 1 for d in defects)
+        bad = {d.at for d in defects if d.at is not None}
         if not (whole or bad) or not self._revert_regions(c, before, set() if whole else bad):
             return 0
         return len(defects) if whole else len(bad)
@@ -898,11 +901,10 @@ class CutStages(ABC):
         cuts: Sequence[str],
         rnd: int | str,
         passes: Callable[[], Awaitable[bool]],
-        defects: Sequence[str] = (),
     ) -> bool:
-        """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順): 著者の版 → editable の印と動きを機械で寄せる
-        (呼び手の DEFECT に editable の規則がある時) → doc の check で c の行を指す DEFECT の行を落とす (台詞は残して印だけ・落とした中身は `defect_lines_dropped` の `lines`)。どれも
-        通らなければ元の block に戻して False (捨てるのは呼び手)。"""
+        """直しきれない DEFECT で cut c を捨てる前の最後の手段 (stage と投入検査で同じ順): 著者の版 → doc の check で c の行を指す
+        DEFECT の行を落とす (台詞は残して印だけ・落とした中身は `defect_lines_dropped` の `lines`)。どれも通らなければ元の block に
+        戻して False (捨てるのは呼び手)。"""
         self.demote_passthrough(c, "last_resort")
         current = self.blocks[c]
         if self.revert_to_author(c):
@@ -910,26 +912,6 @@ class CutStages(ABC):
                 self.record("revert_author", cut=c, round=rnd, last_resort=True)
                 return True
             self.put(c, current)
-        if defects:
-            # 状態 key と編集画面に無い見た目 (印・dim・幕・blend 等) は名指された物を機械で落とす — 層と台詞は残る
-            degraded, n = author_core.degrade_editable_marks(current, defects)
-            if n:
-                self.put(c, degraded)
-                if await passes():
-                    self.record("editable_marks_degraded", cut=c, round=rnd, n=n, last_resort=True)
-                    return True
-                current = degraded  # 印を落とした上で、動きの網も重ねる
-            # 1 段目 = 違反した層の宣言を preset へ・2 段目 = それでも通らなければその層の `!` / `=` の印も落とす
-            for drop_marks in (False, True):
-                degraded, n = author_core.degrade_editable_motion(current, defects, drop_marks=drop_marks)
-                if n:
-                    self.put(c, degraded)
-                    if await passes():
-                        self.record(
-                            "editable_motion_degraded", cut=c, round=rnd, n=n, marks=drop_marks, last_resort=True
-                        )
-                        return True
-                self.put(c, current)
         dropped: list[dict[str, object]] = []
         for _attempt in range(4):
             design, timeline = self.doc(cuts)
@@ -947,14 +929,14 @@ class CutStages(ABC):
         self.put(c, current)
         return False
 
-    async def rescue_stage(self, i: int, c: str, rnd: int | str, defects: Sequence[Defect]) -> bool:
+    async def rescue_stage(self, i: int, c: str, rnd: int | str) -> bool:
         """stage の最後の手段 — 通ったか = doc (根 + live な cut 0..i) の check で c の DEFECT も止める持ち主も無い。"""
 
         async def passes() -> bool:
             res = await self.check_settled(c, i, rnd)
             return not res.defects and not res.blockers
 
-        return await self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes, [d.text for d in defects])
+        return await self.last_resort(c, self.live_cuts(self.order[: i + 1]), rnd, passes)
 
     # ---- cut の段 ----
     async def stage(self, i: int, c: str) -> None:
@@ -1046,7 +1028,7 @@ class CutStages(ABC):
                 )  # lint の直しが残っていても素材は作り始める (直し役は台詞も絵の説明文も変えない約束)
             if defects and before_fix is not None:
                 fixed_text = self.blocks[c]
-                reverted = self.revert_fixer_damage(c, self.live_cuts(self.order[: i + 1]), before_fix, defects)
+                reverted = self.revert_fixer_damage(c, before_fix, defects)
                 if not reverted and before_clean:
                     # 直す前の版は DEFECT 0 だった — 警告を直しに行って DEFECT を作った (報告の行が変更の塊の外)。直しをまるごと戻す
                     self.put(c, before_fix)
@@ -1088,7 +1070,7 @@ class CutStages(ABC):
                     continue
             if not self.fixer_on:
                 # 直し役なし: DEFECT は最後の手段だけ・指摘は直さない
-                if defects and not await self.rescue_stage(i, c, rnd, defects):
+                if defects and not await self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "DEFECT (no fixer)")
                 break
             need = bool(defects) or (bool(fixes) and not settled) or reviews > 0
@@ -1096,7 +1078,7 @@ class CutStages(ABC):
                 break
             if fix_calls >= FIX_CALLS:
                 # 捨てるのは描けない cut (DEFECT) だけ — 2 回直しても残る severe は受け入れて描く。DEFECT も捨てる前に最後の手段
-                if defects and not await self.rescue_stage(i, c, rnd, defects):
+                if defects and not await self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "DEFECT after 2 fixes")
                 break
             findings = "\n".join(d.text for d in defects[:40])
@@ -1142,7 +1124,7 @@ class CutStages(ABC):
                 ok, tail = await self.run_fixer(c, findings, review=review, rnd=rnd)
             except FixerUnavailable as error:
                 self.record("fix_failed", cut=c, round=rnd, s=round(time.monotonic() - started, 1), tail=str(error))
-                if defects and not await self.rescue_stage(i, c, rnd, defects):
+                if defects and not await self.rescue_stage(i, c, rnd):
                     self.mark_broken(c, "fix call failed")
                 break
             if not review:
@@ -1331,7 +1313,7 @@ class CutStages(ABC):
                     return got == []
 
                 submitted = [x for x in self.order if x in self.submitted]
-                if not await self.last_resort(c, [*submitted, c], "intake", accepted, latest):
+                if not await self.last_resort(c, [*submitted, c], "intake", accepted):
                     self.mark_broken(c, "rejected: " + latest[0][:160])
                     self.record(
                         "intake_rejected", cut=c, s=round(time.monotonic() - started, 1), reason=latest[0][:300]

@@ -67,7 +67,7 @@ To give a film its own transition voice, write a family name alone — `se="切�
 
 | Family | Sound | Fits | Versions |
 |---|---|---|---|
-| `切替音 ポロロン` | a xylophone run | variety, kids, cheerful explainers | `上へ` / `下へ` (`dir=down`) × `短` / `長` |
+| `切替音 ポロロン` | a xylophone run | variety, kids, cheerful explainers | `上へ` / `下へ` (`dir: 'bottom'`) × `短` / `長` |
 | `切替音 テレレーン` | a bright synth-bell run with a ringing tail | TV variety, a new topic | `上へ` / `下へ` × `短` / `長` |
 | `切替音 ピロロ` | an electronic trill | games, apps, pop and playful | `上へ` / `下へ` |
 | `切替音 シュワーン` | a tonal whoosh traveling across | TV energy, news, sports, tech | `左へ` / `右へ` / `中央` |
