@@ -79,6 +79,10 @@ SPEECH_WAIT_S = 15 * 60
 SPEECH_POLL_S = 5
 # remote の静止画 (`drafts/{id}/stills/`) を待つ上限 — server は warm の絵を 90 s まで待ってから実現・描画する
 REMOTE_SHOTS_TIMEOUT_S = 240
+# 開始 (`POST drafts/`) が本人の同時生成の上限 (429 CONCURRENT_GENERATION_LIMIT) で断られた時に枠が空くのを待つ上限と送り直しの間隔
+# — CLI `nolang make` の締切 420 s から plan (20〜40 s) を引いた内側に収める
+START_WAIT_S = 300
+START_POLL_S = 15
 
 
 class RemoteRun(Run):
@@ -280,20 +284,37 @@ class RemoteRun(Run):
             body["speech_file_ids"] = speech_ids
         # server の受ける範囲の外なら課金の前に弾かれる (gate の正本は server)
         body["client_contract"] = self.client_contract
-        try:
-            r = self.api.open("/v1/unstable/drafts/", body)
-        except urllib.error.HTTPError as e:
-            # 断った理由 (本文の error_code・detail) を出して止まる (CLI は run.out のこの行を error に載せる)。送り直さない —
-            # 開始は課金を伴う 1 回きりの頼みで、クレジット不足は待っても直らない。待つかは呼び出し側が理由を見て決める
-            error = f"HTTP {e.code} {e.read().decode('utf-8', 'replace')[:600]}"
-            self.log(event="start_rejected", status=e.code, error=error)
-            print(f"開始できない: {error}", flush=True)
-            return
-        except (urllib.error.URLError, http.client.HTTPException, ConnectionError, TimeoutError) as e:
-            # 届かない・返事を失った: サーバーが受け付けたかは分からない (受け付けていれば視聴 URL の画面で続きが見える)
-            self.log(event="start_unreachable", error=repr(e)[:400])
-            print(f"開始できない (届かない・受け付けたかは不明): {e!r}"[:600], flush=True)
-            return
+        waits = 0
+        while True:
+            try:
+                r = self.api.open("/v1/unstable/drafts/", body)
+                break
+            except urllib.error.HTTPError as e:
+                # 本人の同時生成の上限 (429 CONCURRENT_GENERATION_LIMIT) は server が課金の前に判定する (api_draft_view: 同時上限 →
+                # 課金の順) ので、断られても課金は無く送り直して安全 — 前の動画の完成で枠が空くので START_WAIT_S まで待って送り直す
+                # (著者は書き続け、watch_author は src.done の後にも全 cut を拾う)。同じ 429 でもクレジット不足は待っても直らない
+                # ので、判定は status でなく本文の error_code で。断った理由はこの行を CLI が run.out から error に載せる
+                detail = e.read().decode("utf-8", "replace")[:600]
+                try:
+                    error_code = json.loads(detail).get("error_code")
+                except (ValueError, AttributeError):
+                    error_code = None
+                waited = round(time.time() - t)
+                if e.code == 429 and error_code == "CONCURRENT_GENERATION_LIMIT" and waited < START_WAIT_S:
+                    waits += 1
+                    self.log(event="start_waiting", n=waits, waited_s=waited)
+                    print(f"WAITING 本人の同時生成の上限 — 前の動画の完成で枠が空くのを待つ {waited}s", flush=True)
+                    time.sleep(START_POLL_S)
+                    continue
+                error = f"HTTP {e.code} {detail}"
+                self.log(event="start_rejected", status=e.code, error=error, waited_s=waited)
+                print(f"開始できない: {error}", flush=True)
+                return
+            except (urllib.error.URLError, http.client.HTTPException, ConnectionError, TimeoutError) as e:
+                # 届かない・返事を失った: サーバーが受け付けたかは分からない (受け付けていれば視聴 URL の画面で続きが見える)
+                self.log(event="start_unreachable", error=repr(e)[:400])
+                print(f"開始できない (届かない・受け付けたかは不明): {e!r}"[:600], flush=True)
+                return
         self.video_id = str(r["video_id"])
         self.watch_url = str(r["watch_url"])
         self.log(event="started", s=round(time.time() - t, 1), video_id=self.video_id, watch_url=self.watch_url)

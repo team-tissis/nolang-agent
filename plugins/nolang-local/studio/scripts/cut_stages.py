@@ -90,7 +90,6 @@ class Lint:
     layer: str
     message: str
     hint: str = ""
-    drop: str = ""  # compile が外して描いた著者の綴り (`dropped` — 確定で src から消す)
     autofix: str = ""  # 直し方が一つに決まる指摘の機械の直し (`操作:引数`)
 
     @classmethod
@@ -102,7 +101,6 @@ class Lint:
             layer=str(d.get("layer", "")),
             message=str(d.get("message", "")),
             hint=str(d.get("hint", "")),
-            drop=str(d.get("drop") or ""),
             autofix=str(d.get("autofix") or ""),
         )
 
@@ -1143,59 +1141,26 @@ class CutStages(ABC):
                 # 出力が使えなかった (読めない・cut を分けた) — 直しの回数が残っていれば呼び直す (尽きれば次の round で最後の手段)
                 self.record("fix_unusable", cut=c, round=rnd, s=round(time.monotonic() - started, 1), tail=tail)
                 before_fix = None
-        last = await self.final_autofix(c, i, last)
-        await self.drop_unshown(c, i, last)
+        await self.final_autofix(c, i, last)
 
-    async def final_autofix(self, c: str, i: int, last: tuple[str, list[Lint]] | None) -> tuple[str, list[Lint]] | None:
+    async def final_autofix(self, c: str, i: int, last: tuple[str, list[Lint]] | None) -> None:
         """直し役が回り終えた cut c に機械の直し (check の `autofix` — 直し方が一つに決まる指摘・`author_core.apply_autofix`) を 1 回
         当てる (LLM はもう見ない — 直し役の前に当てると、warn を見ない直し役の後で DEFECT を作った直しを戻せない)。台帳が author に残した
-        規則は当てない。指摘は最後の check の物 (text がその時のままの時だけ)・当てた後の check に DEFECT が出たら戻す。戻り値は今の
-        text に合う最後の check (`drop_unshown` が使う)。"""
+        規則は当てない。指摘は最後の check の物 (text がその時のままの時だけ)・当てた後の check に DEFECT が出たら戻す。"""
         if last is None or self.broken.get(c):
-            return last
+            return
         checked, findings = last
         if self.blocks[c] != checked:
-            return last
+            return
         fixable = [f for f in findings if f.autofix and self.who.get(f.rule, "author") != "author"]
         text, applied = author_core.apply_autofix(checked, [(f.rule, f.autofix) for f in fixable])
         if not applied:
-            return last
+            return
         self.put(c, text)
         self.record("autofix", cut=c, n=len(applied), fixes=[fixable[k].autofix for k in applied])
-        res = await self.check_settled(c, i, "final")
-        if res.defects:
+        if (await self.check_settled(c, i, "final")).defects:
             self.put(c, checked)
             self.record("autofix_reverted", cut=c)
-            return last
-        return text, [f for f in res.findings if f.cut == c]
-
-    async def drop_unshown(self, c: str, i: int, last: tuple[str, list[Lint]] | None) -> None:
-        """直しの後まで残った `dropped` (compile が外して描いた記述) を cut の src から消す — 描いている物と書いてある物を揃える (後の
-        編集・参照で死んだ記述が効き出さない)。消した後の check が DEFECT を出したら戻す。"""
-        if last is None or self.broken.get(c):
-            return
-        checked, findings = last
-        tokens = [f.drop for f in findings if f.rule == "dropped" and f.drop]
-        if not tokens or self.blocks[c] != checked:
-            return
-        text = checked
-        removed: list[str] = []
-        for token in dict.fromkeys(tokens):
-            lines = text.split("\n")
-            at = next((n for n, line in enumerate(lines) if token in line), None)
-            if at is None:
-                continue
-            lines[at] = author_core.drop_token(lines[at], token)
-            text = "\n".join(lines)
-            removed.append(token)
-        if not removed:
-            return
-        self.put(c, text)
-        if (await self.check_settled(c, i, "drop")).defects:
-            self.put(c, checked)
-            self.record("drop_reverted", cut=c, tokens=removed)
-            return
-        self.record("dropped_unshown", cut=c, n=len(removed), tokens=removed)
 
     # ---- warm ----
     def start_prewarm(self, c: str) -> None:

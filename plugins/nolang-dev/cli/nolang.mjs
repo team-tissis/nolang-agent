@@ -900,9 +900,14 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
   let serverPlayable = false;
   let serverFailed = null;
   let polledAt = 0;
+  let waiting = null;
   for (;;) {
     const runOut = await readFile(join(root, "stream", "run.out"), "utf8").catch(() => "");
     const engineFailure = engine === "codex" ? await readFile(join(root, "stream", "engine.failed"), "utf8").catch(() => "") : "";
+    // 開始が本人の同時生成の上限で断られ、studio が枠の空きを待っている (送り直すごとに 1 行・経過秒つき) — 行が変わった時だけ出す
+    const waitingLine = runOut.match(/^WAITING .+$/gm)?.at(-1) || null;
+    if (waitingLine && waitingLine !== waiting) log(waitingLine);
+    waiting = waitingLine;
     watch = runOut.match(/^WATCH (\S+)/m)?.[1] || watch;
     const playableLine = runOut.match(/^PLAYABLE (\S+)/m)?.[1];
     const videoId = (playableLine || watch || "").match(/[0-9a-f-]{36}/)?.[0] || null;

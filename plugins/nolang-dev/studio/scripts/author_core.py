@@ -1193,18 +1193,6 @@ def add_defs(block: str, text: str) -> str:
     return block[:at] + text + block[at:]
 
 
-def drop_token(line: str, token: str) -> str:
-    """行から著者の綴りを 1 つ消す (宣言なら隣の `;` も 1 つ) — `grammar.unshown._without` と同じ消し方。"""
-    at = line.find(token)
-    before, after = line[:at], line[at + len(token) :]
-    if not token.startswith("["):
-        if after.lstrip().startswith(";"):
-            after = after.lstrip()[1:].lstrip()
-        elif before.rstrip().endswith(";"):
-            before = before.rstrip()[:-1].rstrip()
-    return before + after
-
-
 def rows_naming_layers(text: str, layers: Sequence[str]) -> tuple[set[int], int]:
     """text (cut の block) の中で層の名を指す行 (section の `#名(`・印の `#名`) の 0 始まりの行番号と、見つかった層の数。板の子の層
     (`板._board`) は板の名でも (板の出現の印は `[>#板]`)、×N の実体 (`row[2]`) と子 (`板.k`) は書いた名 (`#row(…) ×2`・字下げの

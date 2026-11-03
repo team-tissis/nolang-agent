@@ -159,7 +159,7 @@ class RemoteApi:
             return {"status": 400, "error": detail}
 
     def open(self, path: str, body: dict[str, object]) -> dict[str, object]:
-        """1 回きりの POST (送り直さない・HTTP の失敗は urllib の例外のまま — run の開始は理由を見て止まる)。"""
+        """素の POST (ここでは送り直さない・HTTP の失敗は urllib の例外のまま — run の開始は理由を見て待つか止まるかを決める)。"""
         req = urllib.request.Request(
             f"{self.base}{path}",
             data=json.dumps(body, ensure_ascii=False).encode("utf-8"),

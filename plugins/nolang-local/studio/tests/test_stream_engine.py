@@ -14,6 +14,7 @@ import tempfile
 import threading
 import time
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -274,6 +275,35 @@ class SubmissionTest(unittest.TestCase):
                 self.assertEqual(run.wait(), 1)
                 abort.assert_called_once()
                 run.api.get.assert_not_called()
+
+    def test_start_resends_after_concurrent_limit_but_stops_on_insufficient_credit(self):
+        def rejected(error_code: str) -> urllib.error.HTTPError:
+            body = json.dumps({"error_code": error_code, "error": "x"}).encode()
+            return urllib.error.HTTPError("http://unused.invalid", 429, "Too Many Requests", None, io.BytesIO(body))
+
+        for error_code, started in (("CONCURRENT_GENERATION_LIMIT", True), ("INSUFFICIENT_CREDIT", False)):
+            with self.subTest(error_code=error_code), tempfile.TemporaryDirectory() as directory:
+                # Arrange: 1 回目の開始を 429 で断る server (同時上限なら 2 回目で受ける)
+                run = runner.RemoteRun.__new__(runner.RemoteRun)
+                run.project, run.st = Path(directory), Path(directory)
+                run.editable, run.client_contract, run.video_id = False, 1, None
+                (run.project / "params.txt").write_text("concept 16:9 auto")
+                (run.project / "request.txt").write_text("題")
+                run.api = Mock()
+                run.api.open.side_effect = [rejected(error_code), {"video_id": "v", "watch_url": "http://w"}]
+                with (
+                    patch.object(run, "speech_file_ids", return_value=[]),
+                    patch.object(run, "log") as log,
+                    patch.object(runner.time, "sleep"),
+                    patch("sys.stdout", new_callable=io.StringIO),
+                ):
+                    # Act
+                    run.start()
+                # Assert: 同時上限は start_waiting を記録して送り直し、クレジット不足は start_rejected で止まる
+                events = [call.kwargs["event"] for call in log.call_args_list]
+                self.assertEqual(run.video_id, "v" if started else None)
+                self.assertEqual(run.api.open.call_count, 2 if started else 1)
+                self.assertEqual(events, ["start_waiting", "started"] if started else ["start_rejected"])
 
     def test_end_waits_for_author_success_and_failure_prevents_submission(self):
         for failed in (False, True):

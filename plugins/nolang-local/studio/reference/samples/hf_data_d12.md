@@ -20,9 +20,9 @@ prompt_tail "文字・数字・ロゴ・看板の文字は入れない"
 # hf の作り: 板の題・見出し・図の骨組みは場面の頭に出し、台詞が後から数字を読む (spoiler・empty_board)・注記と凡例は 14〜17 px (small_text)
 # hf の作り: 黒い題の札は板の上辺に跨って外へ出る・判子は札の角から外へ・時刻の目盛りは帯の両端から外へ (child_overflow)
 # hf の作り: 切替は前の場面の最後の声の 40 ms 前から溶け始め、注記・数字・終わりの札は場面の終わり際まで出る (transition_over_speech・ghost_dissolve・entrance_in_fadeout・entrance_in_transition・flash_text)
-# hf の作り: 試行の場面は 20 秒同じ夜の写真・冒頭の出演者の札と字幕の帯に同じ顔・夜の場面へは夜の色の幕で暗転・まとめは章札・結論の札・番号の札が縦に並ぶ (same_picture・duplicate_media・dip_black_frame・stacked_labels)
+# hf の作り: 試行の場面は 20 秒同じ夜の写真・冒頭の出演者の札と字幕の帯に同じ顔・夜の場面へは夜の色の幕で暗転・まとめは章札・結論の札・番号の札が縦に並ぶ (same_picture・duplicate_media・stacked_labels)
 # hf の作り: 冒頭の出演者の札 2 枚は絵の右の図書館の上に重ねる (warn text_over_subject はそのまま)
-lint off=spoiler,empty_board,small_text,child_overflow,transition_over_speech,ghost_dissolve,entrance_in_fadeout,entrance_in_transition,flash_text,same_picture,duplicate_media,dip_black_frame,stacked_labels
+lint off=spoiler,empty_board,small_text,child_overflow,transition_over_speech,ghost_dissolve,entrance_in_fadeout,entrance_in_transition,flash_text,same_picture,duplicate_media,stacked_labels
 run b { color: $ink }
 run pc { font-size: 0.48em }
 run un { font-size: 0.43em; color: $ink2; font-family: b }

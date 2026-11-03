@@ -1,8 +1,8 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 0db998c75a6942a06b184304b92e595713530a30f9b54cc4a46388a4ba44401a · synced_at: 2026-11-03T03:24:32.564Z
+Version of these documents: contract: 1 · reference_hash: 2e96b9d57699c3f6c6100829f2a814a01bf156383655252345ee91201a5a4eca · synced_at: 2026-11-03T09:38:27.904Z
 
-Docs: contract.json 30e435347147 · spec.md 9ecb0f73d31f · authoring.md ae94ecc56807 · capabilities.md f4a08b465b9d · looks.md 574ec4c08974 · sounds.md 1d651d225077 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · rules.md 8964299f9575 · samples/ 2f36cf19994d · scaffolds/ a1f7418dedc0
+Docs: contract.json 30e435347147 · spec.md 9ecb0f73d31f · authoring.md ae94ecc56807 · capabilities.md f4a08b465b9d · looks.md 574ec4c08974 · sounds.md 1d651d225077 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · rules.md 7533522f29ae · samples/ be71235c9523 · scaffolds/ a1f7418dedc0
 
 The per-rule fixes for `findings[].rule` returned by check (`studio.py check` / `nolang check` / `nolang_draft_check`, and the render-time lint), generated from the two ledgers, check's `draft_check/rules.py` and the product's `quality_rules.py`. Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 
@@ -21,7 +21,6 @@ The per-rule fixes for `findings[].rule` returned by check (`studio.py check` / 
 - `no_closer` the last cut has no big closing line
 - `same_picture` the same picture for 15+ seconds → swap to another picture, diagram or card on a word inside the cut (do not split the cut)
 - `blank_band` a third of the screen is bare ground at the cut's head → lay a full-bleed picture, or put a card on the band
-- `dip_black_frame` dip means black frames → dissolve or wipe
 - `transition_label_flash` the panel curtain's label rides the band, so it is readable only while the band holds (the sweeps take 0.7 s; the rest of the ms is the hold — 100 ms at 800) → lengthen the panel to the ms check names, or cut the label to a glance (a number + one short word)
 - `double_exit` a cut that ends on a transition also has a whole-cut out, so the scene fades and then the transition runs (it dies twice) → to end on a fade, make the transition `transition cut`; if the transition carries the scene, drop the section's out (for a transition inherited from the root, the machine turns it into a cut)
 - `persistent_chrome` persistent layers (progress / chapter numbers / running totals) belong only in videos of 3+ minutes — in a short video the cost of occupying a screen edge outweighs them, so drop it

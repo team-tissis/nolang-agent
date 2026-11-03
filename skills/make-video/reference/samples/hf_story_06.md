@@ -17,7 +17,7 @@ fonts mb="最も太いブラックの太さの古風な明朝体、力強い見�
 sfx off
 # hf の作り: 場面の間に黒 55% の幕 (理由 → 1979) と暖色の幕 (記憶 → あの日の川) を挟む
 # hf の作り: 格子は同じ写真を別の切り出しで 2 度使う・塵は字幕帯の上も漂う・題の場面は 1.9 秒で学名と罫が出てすぐ去る・格子と字幕は切替の溶けの中で出始める
-lint off=dip_black_frame,duplicate_media,caption_collision,entrance_in_transition,entrance_in_fadeout,flash_text
+lint off=duplicate_media,caption_collision,entrance_in_transition,entrance_in_fadeout,flash_text
 run g { color: $hl; font-family: mb }
 p { color: $ink; out: none }
 div { border: none; out: none }
