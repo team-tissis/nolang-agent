@@ -766,7 +766,7 @@ class CutStages(ABC):
         )
         return await self.check_cut(c, [x for x in cuts if x not in skip], rnd, root_extra=extra)
 
-    _CROSSING_KINDS = frozenset({"bg", "avatar", "camera"})  # 既定で cut を跨ぐ族 (spans.py DEFAULT_SPANS)
+    _CROSSING_KINDS = frozenset({"bg", "avatar"})  # 既定で cut を跨ぐ族 (spans.py DEFAULT_SPANS)
     _DECL_RE = re.compile(r"(?m)^\s*([a-z_]+)#([A-Za-z_][\w-]*)([\w.\-]*)")
     _MARK_RE = re.compile(r"\[([<>!=])((?:#[A-Za-z_][\w.-]*(?:\[[^\]]*\])?(?:\.[\w-]+)*(?:\{[^}]*\})?,?)+)")
     _BGM_RE = re.compile(r"(?m)^bgm\s+([A-Za-z_][\w-]*)")
