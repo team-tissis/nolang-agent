@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import importlib
 import io
 import json
@@ -11,7 +12,6 @@ import signal
 import subprocess
 import sys
 import tempfile
-import threading
 import time
 import unittest
 import urllib.error
@@ -137,15 +137,16 @@ class EngineRoutingTest(unittest.TestCase):
         arguments = dict(system_prompt=Path("system"), effort="low", tag="fix", cache_ttl="5m", images=[])
         with (
             patch.dict(os.environ, {}, clear=True),
-            patch.object(author, "stream_claude", return_value={"ok": True}) as call,
+            patch.object(author, "stream_claude", return_value=({"ok": True}, 1)) as call,
         ):
             # Act
             result = author.stream_model(Path("stream"), "本文", callback, **arguments)
-        # Assert
+        # Assert: 返すのは call の exit (claude は本文があっても exit を返す)
         call.assert_called_once_with(Path("stream"), "本文", callback, **arguments, before_input=None)
-        self.assertEqual(result, {"ok": True})
+        self.assertEqual(result, 1)
 
-    def test_codex_failure_is_visible_to_the_orchestrator(self):
+    def test_codex_failure_is_an_exit_like_claude_not_an_abort(self):
+        # Arrange: engine の失敗は両 engine とも結果の exit (止めるか続けるかは段が決める — 中断だけが engine.failed)
         with tempfile.TemporaryDirectory() as directory:
             st = Path(directory)
             with (
@@ -153,11 +154,14 @@ class EngineRoutingTest(unittest.TestCase):
                 patch.object(codex, "stream_codex", side_effect=RuntimeError("quota")),
                 patch.object(author, "stream_claude") as claude,
             ):
-                with self.assertRaisesRegex(RuntimeError, "quota"):
-                    author.stream_model(
-                        st, "本文", lambda text: None, system_prompt=st / "system", effort="low", tag="staff_one"
-                    )
-            self.assertIn("staff_one", (st / "engine.failed").read_text())
+                # Act
+                result = author.stream_model(
+                    st, "本文", lambda text: None, system_prompt=st / "system", effort="low", tag="staff_one"
+                )
+            # Assert
+            self.assertEqual(result, 1)
+            self.assertFalse((st / "engine.failed").exists())
+            self.assertIn("quota", (st / "author.jsonl").read_text())
             claude.assert_not_called()
 
     def test_author_staff_and_fixer_use_codex_without_cache_warmup(self):
@@ -210,7 +214,7 @@ class EngineRoutingTest(unittest.TestCase):
             # Assert
             self.assertEqual(roles, ["author", "staff_one", "fix_one"])
             warmup.assert_not_called()
-            self.assertTrue((project / "stream/src.done").exists())
+            self.assertEqual(json.loads((project / "stream/src.done").read_text()), {"ended": True, "exit": 0})
 
 
 class ShellSelectionTest(unittest.TestCase):
@@ -220,9 +224,9 @@ class ShellSelectionTest(unittest.TestCase):
             scripts = root / "scripts"
             scripts.mkdir()
             shutil.copy(SCRIPTS / "stream_make.sh", scripts)
-            (scripts / "stream_pipeline.sh").write_text(
-                '#!/bin/bash\nmkdir -p "$1/stream"\nprintf "%s" "$NOLANG_STUDIO_ENGINE" > "$1/engine"\n'
-                ': > "$1/stream/run.jsonl"\n'
+            (scripts / "stream_pipeline.py").write_text(
+                "import os,pathlib,sys\np=pathlib.Path(sys.argv[1])\n(p/'stream').mkdir(exist_ok=True)\n"
+                "(p/'engine').write_text(os.environ['NOLANG_STUDIO_ENGINE'])\n(p/'stream/run.jsonl').write_text('')\n"
             )
             project = root / "project"
             (project / "studio").mkdir(parents=True)
@@ -249,16 +253,19 @@ class ShellSelectionTest(unittest.TestCase):
 
 
 class SubmissionTest(unittest.TestCase):
-    def test_killed_role_stops_codex_but_keeps_claude_failure_handling(self):
+    def test_killed_role_does_not_stop_either_engine(self):
+        # Arrange: 担当・直し役の失敗は両 engine とも前の版で続ける (止めると動画ごと落ちる)
         for engine in ("claude", "codex"):
             with self.subTest(engine=engine), tempfile.TemporaryDirectory() as directory:
                 run = runner.RemoteRun.__new__(runner.RemoteRun)
                 run.st = Path(directory)
                 run.env = os.environ.copy()
                 with patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": engine}):
+                    # Act
                     result = run.call_role([sys.executable, "-c", "import os; os._exit(7)"], timeout=5)
+                # Assert
                 self.assertEqual(result.returncode, 7)
-                self.assertEqual((run.st / "engine.failed").exists(), engine == "codex")
+                self.assertFalse(run.engine_failed())
 
     def test_cancel_during_render_wait_requests_remote_abort(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -268,7 +275,6 @@ class SubmissionTest(unittest.TestCase):
             run.api = Mock()
             (run.st / "engine.failed").write_text("中断")
             with (
-                patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": "codex"}),
                 patch.object(run, "abort") as abort,
                 patch.object(run, "log"),
             ):
@@ -305,75 +311,74 @@ class SubmissionTest(unittest.TestCase):
                 self.assertEqual(run.api.open.call_count, 2 if started else 1)
                 self.assertEqual(events, ["start_waiting", "started"] if started else ["start_rejected"])
 
-    def test_end_waits_for_author_success_and_failure_prevents_submission(self):
-        for failed in (False, True):
-            with self.subTest(failed=failed), tempfile.TemporaryDirectory() as directory:
+    def test_an_author_that_stopped_midway_is_logged_with_the_cuts_it_never_wrote(self):
+        for ending, logged in (({"ended": True, "exit": 0}, False), ({"ended": False, "exit": 1}, True)):
+            with self.subTest(ending=ending), tempfile.TemporaryDirectory() as directory:
+                # Arrange: 著者は cut one を書いて終わりの印を置いた (two は届かない)
                 run = runner.RemoteRun.__new__(runner.RemoteRun)
-                run.st = Path(directory)
-                run.video_id = "video"
-                result: list[object] = []
-                with (
-                    patch.dict(os.environ, {"NOLANG_STUDIO_ENGINE": "codex"}),
-                    patch.object(run, "call", return_value={"lines": 3}) as post,
-                ):
-                    thread = threading.Thread(target=lambda: result.append(run.submit("one", "原稿", end=True)))
-                    thread.start()
-                    try:
-                        time.sleep(0.15)
-                        self.assertTrue(thread.is_alive())
-                        post.assert_not_called()
-                        (run.st / ("engine.failed" if failed else "src.done")).touch()
-                    finally:
-                        (run.st / "src.done").touch()
-                        thread.join(timeout=3)
-                    self.assertFalse(thread.is_alive())
-                    self.assertEqual(post.call_count, 0 if failed else 1)
-                    self.assertEqual(result, [None] if failed else [{"sealed": True, "lines": 3}])
+                run.st = run.solo = Path(directory)
+                run.order, run.blocks = ["one", "two"], {"one": "本文"}
+                run.root_seen, run.author_done = asyncio.Event(), asyncio.Event()
+                run.root_seen.set()
+                (run.st / "src.done").write_text(json.dumps(ending))
+                with patch.object(run, "log") as log:
+                    # Act
+                    asyncio.run(run.watch_author())
+                # Assert: 受けは閉じ (段は two を書かれなかったで落として続ける)、途中で終わった著者だけ記録が残る
+                self.assertTrue(run.author_done.is_set())
+                incomplete = [c.kwargs for c in log.call_args_list if c.kwargs.get("event") == "author_incomplete"]
+                self.assertEqual(
+                    incomplete,
+                    [{"event": "author_incomplete", "ended": False, "exit": 1, "missing": ["two"]}] if logged else [],
+                )
 
 
 class PipelineTest(unittest.TestCase):
-    def test_abnormal_author_exit_aborts_runner_while_it_is_waiting(self):
-        # Arrange: 著者が強制終了しても、orchestrator 終了まで検知を遅らせない。
+    def test_author_death_without_the_end_mark_lets_the_runner_continue(self):
+        # Arrange: 著者が印を書かずに死んでも (両 engine で同じ)、監督が印を書き、orchestrator は書けた所までで続ける
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             scripts = root / "scripts"
             scripts.mkdir()
-            shutil.copy(SCRIPTS / "stream_codex_pipeline.py", scripts)
+            shutil.copy(SCRIPTS / "stream_pipeline.py", scripts)
             (scripts / "stream_author.py").write_text("import os; os._exit(7)")
             (scripts / "stream_run.py").write_text(
                 "import pathlib,sys,time\np=pathlib.Path(sys.argv[1])/'stream'\n"
-                "while not (p/'engine.failed').exists(): time.sleep(.01)\n"
-                "(p/'aborted').touch()\nsys.exit(1)\n"
+                "while not (p/'src.done').exists(): time.sleep(.01)\n"
+                "(p/'finished').write_text((p/'src.done').read_text())\nsys.exit(0)\n"
             )
             project = root / "project"
             (project / "stream").mkdir(parents=True)
             # Act
             result = subprocess.run(
-                [sys.executable, str(scripts / "stream_codex_pipeline.py"), str(project)],
+                [sys.executable, str(scripts / "stream_pipeline.py"), str(project)],
                 timeout=10,
+                capture_output=True,
+                text=True,
             )
             # Assert
-            self.assertEqual(result.returncode, 1)
-            self.assertTrue((project / "stream/aborted").exists())
-            self.assertIn("7", (project / "stream/engine.failed").read_text())
+            self.assertEqual(result.returncode, 0)
+            self.assertEqual(json.loads((project / "stream/finished").read_text()), {"ended": False, "exit": 7})
+            self.assertFalse((project / "stream/engine.failed").exists())
+            self.assertIn("author exit 7 / run exit 0", result.stdout)
 
     def test_runner_failure_does_not_wait_for_the_author_to_finish(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            shutil.copy(SCRIPTS / "stream_codex_pipeline.py", root)
+            shutil.copy(SCRIPTS / "stream_pipeline.py", root)
             (root / "stream_author.py").write_text("import time; time.sleep(60)")
             (root / "stream_run.py").write_text("import sys; sys.exit(1)")
             project = root / "project"
             (project / "stream").mkdir(parents=True)
             started = time.monotonic()
-            result = subprocess.run([sys.executable, str(root / "stream_codex_pipeline.py"), str(project)], timeout=10)
+            result = subprocess.run([sys.executable, str(root / "stream_pipeline.py"), str(project)], timeout=10)
             self.assertEqual(result.returncode, 1)
             self.assertLess(time.monotonic() - started, 10)
 
     def test_cancel_aborts_runner_and_reaps_author(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            shutil.copy(SCRIPTS / "stream_codex_pipeline.py", root)
+            shutil.copy(SCRIPTS / "stream_pipeline.py", root)
             (root / "stream_author.py").write_text(
                 "import pathlib,sys,signal,time\np=pathlib.Path(sys.argv[2])/'stream'\n"
                 "def stop(*args): (p/'author_stopped').touch(); sys.exit(0)\n"
@@ -387,7 +392,7 @@ class PipelineTest(unittest.TestCase):
             project = root / "project"
             stream = project / "stream"
             stream.mkdir(parents=True)
-            process = subprocess.Popen([sys.executable, str(root / "stream_codex_pipeline.py"), str(project)])
+            process = subprocess.Popen([sys.executable, str(root / "stream_pipeline.py"), str(project)])
             try:
                 deadline = time.monotonic() + 5
                 while not (stream / "author_ready").exists() and time.monotonic() < deadline:

@@ -1,7 +1,19 @@
-"""Codex の著者と投入側を監視し、異常終了と中断を取りこぼさない。"""
+"""1 題材の stream 生成の監督: 著者 (stream_author.py run) と orchestrator (stream_run.py) を別の process group で同時に走らせる
+(engine に依らない 1 本)。
+
+usage: stream_pipeline.py <project> [--effort low] [--samples a.md,b.md] [--author-brief]
+       (project = tmp/studio/<name>・params.txt と request.txt と studio/ が要る)。orchestrator の引数は env STREAM_RUN_ARGS
+       (例: --staff medium)。script は env STREAM_RUN / STREAM_AUTHOR で差し替える (既定は隣の stream_run.py / stream_author.py —
+       stream_make.sh が立てる)
+
+- 著者の終わりは著者が書く stream/src.done (`stream_author.mark_done`)。著者の process が印を書かずに死んだら (kill・起動の失敗)
+  監督が同じ形で書く — orchestrator は書けた所までで続ける (製品の DraftAuthorRun と同じ方針)
+- 中断 (SIGINT / SIGTERM) は stream/engine.failed で orchestrator に伝え (server の abort)、両方の process group を回収する
+"""
 
 from __future__ import annotations
 
+import json
 import os
 import shlex
 import signal
@@ -32,7 +44,8 @@ def main(arguments: list[str]) -> int:
     project = Path(arguments[0]).resolve()
     scripts = Path(__file__).resolve().parent
     stream = project / "stream"
-    failure = stream / "engine.failed"
+    stream.mkdir(parents=True, exist_ok=True)
+    done = stream / "src.done"
     processes: list[subprocess.Popen[bytes]] = []
 
     def interrupted(_signum: int, _frame: object) -> None:
@@ -54,6 +67,7 @@ def main(arguments: list[str]) -> int:
                 start_new_session=True,
             )
             processes.append(author)
+            # orchestrator は著者と同時に起こす — 起動直後の版の照合が著者の準備の影に入る (著者は call を起こす直前に結果を読む)
             runner = subprocess.Popen(
                 [
                     sys.executable,
@@ -68,17 +82,23 @@ def main(arguments: list[str]) -> int:
             processes.append(runner)
             while runner.poll() is None:
                 code = author.poll()
-                if code is not None and code != 0 and not failure.exists():
-                    failure.write_text(f"Codex 著者が異常終了しました (exit {code})\n")
+                if code is not None and not done.exists():
+                    temporary = stream / "src.done.tmp"
+                    temporary.write_text(json.dumps({"ended": False, "exit": code}) + "\n")
+                    temporary.replace(done)
                 time.sleep(0.1)
-            if runner.returncode == 0 and not failure.exists():
+            author_code = author.poll()
+            if (
+                runner.returncode == 0 and author_code is None
+            ):  # 印の後の著者の後始末 (予熱の記録) を少し待つ — 失敗した run は待たない
                 try:
-                    return 0 if author.wait(timeout=10) == 0 else 1
+                    author_code = author.wait(timeout=10)
                 except subprocess.TimeoutExpired:
-                    return 1
-            return 1
+                    pass
+            print(f"author exit {author_code} / run exit {runner.returncode}", flush=True)
+            return runner.returncode
     except KeyboardInterrupt:
-        failure.write_text("Codex の生成が中断されました\n")
+        (stream / "engine.failed").write_text("生成が中断されました\n")
         # 投入側に abort の時間を与える。上限後はグループごと回収する。
         if len(processes) > 1:
             try:

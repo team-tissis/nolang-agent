@@ -162,7 +162,8 @@ if [ -n "$EDIT" ]; then
 fi
 if [ -z "$RAN_EDIT" ]; then
   echo "stream: $P ($TYPE $ASPECT ${SECONDS_}$([ "$SECONDS_" = auto ] || echo s)・${MODE:+mode $MODE・}著者 $EFFORT${BRIEF:+ (brief = 台詞と絵コンテだけ)}・担当 ${STAFF:-なし}・直し $FIX${REVIEW:+・レビュー $REVIEW}${ASSETS:+・担当は素材も変える}${EDITABLE:+・編集可能モード}${REF:+・参照 $REF}${SPEECH:+・持ち込み音声 $SPEECH}・見本 ${SAMPLES:-type の既定})"
-  PYTHON=$PY bash "$S/stream_pipeline.sh" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"}
+  # 監督の exit (orchestrator の exit・中断は 130) では止めない — 失敗した run も集計 (落ちた cut・著者の途中終了) を出す
+  "$PY" "$S/stream_pipeline.py" "$P" --effort "$EFFORT" ${BRIEF:+--author-brief} ${SAMPLES:+--samples "$SAMPLES"} || true
 fi
 $PY - "$P" <<'PYEOF'
 import json, pathlib, sys
@@ -192,6 +193,9 @@ else:
     P = by("playable")[0]["since"] if by("playable") else None
     nostall = max((a["since"] - a["cut_start_s"] for a in asm), default=None)
     print(f"cut {len(cuts)}・再生開始 {P and round(P)} s・止まらない開始 {nostall and round(nostall)} s・完成 {F and round(F)} s・落ちた cut {dropped or 'なし'}")
+# 著者が途中で終わった (枠切れ・異常終了 — `=== end ===` が無いか call の exit が 0 でない): 書けた所までで続けた動画 (製品と同じ方針)
+for e in by("author_incomplete"):
+    print(f"INCOMPLETE {len(e['missing'])} cut not written — 著者が途中で終わった (exit {e['exit']}・end の印 {'あり' if e['ended'] else 'なし'}){': ' + ', '.join(e['missing']) if e['missing'] else ''}")
 # 最後の手段 (`defect_lines_dropped`) が直しきれない DEFECT で落とした中身 — 最終版に無い。黙って落とさず利用者に伝える
 lost = [x for e in by("defect_lines_dropped") if e["cut"] not in dropped for x in e.get("lines", [])]
 if lost:

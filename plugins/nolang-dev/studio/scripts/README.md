@@ -9,11 +9,15 @@ Codex は `stream_codex.py` が `codex app-server` の stdio を扱い、本文�
 モデルは CLI の既定を使用し、実際のモデル・effort を author.jsonl、本文と usage 通知を codex_<役割>.jsonl に記録する。
 API key 環境変数のみ・keyring のみの認証は現在対象外。画像つき見直しは localImage で渡す。
 
-共通のプロンプト生成は両エンジンで行い、Claude 専用の cache 予熱は Codex では実行しない。
-Codex の著者と投入側は stream_codex_pipeline.py が別プロセスグループで監視する。
-役割の例外と著者の異常終了は stream/engine.failed で投入側に伝え、既存の abort に進む。
-end は著者の src.done を確認してから送る。確定済み cut の再送や別エンジンへの切替は行わない。
-終了時は役割の子プロセスと app-server を回収する。
+共通のプロンプト生成は両エンジンで行い、Claude 専用の cache 予熱は Codex では実行しない (engine の分岐は呼び出しの口 `stream_model`・
+予熱・claude の shim のやり直しだけ)。
+著者と投入側は `stream_pipeline.py` (両エンジンで 1 本) が別プロセスグループで監視する。
+- 著者の終わりは stream/src.done (`{"ended": `=== end ===` を読んだか, "exit": 著者の call の exit}`)。著者が途中で終わっても
+  (枠切れ・engine の失敗・process の死 — 印が無ければ監督が書く) 書けた所までで続け、届かなかった cut は書かれなかったで落とす
+  (製品の DraftAuthorRun と同じ方針)。途中で終わった事は run.jsonl の `author_incomplete` と stream_make の集計の `INCOMPLETE` に出る
+- 担当・直し役の失敗は両エンジンとも前の版で続ける (`staff_failed` / 直す前の版)
+- 中断 (SIGINT / SIGTERM) だけが stream/engine.failed で投入側を止め、server の abort に進む。確定済み cut の再送や別エンジンへの
+  切替は行わない。終了時は役割の子プロセスと app-server を回収する
 
 外部 LLM を呼ばない契約テスト:
 
@@ -42,5 +46,5 @@ python3 -m unittest discover -s agent_client/tests
 
 cut の text の操作は全部 `author_core`、段の進め方は全部 `cut_stages` (製品の `application/video_draft/draft_author/orchestrator.py` と同じ物)。repo の手元の run は
 `.agents/skills/nolang-draft-studio/scripts/stream_local.py` (`LocalRun` を `stream_run.main` に渡す) で、入口 `studio_make.sh` が
-env `STREAM_RUN` (orchestrator)・`STREAM_AUTHOR` (著者) で `stream_make.sh` / `stream_pipeline.sh` / `stream_codex_pipeline.py` に渡す。
+env `STREAM_RUN` (orchestrator)・`STREAM_AUTHOR` (著者) で `stream_make.sh` / `stream_pipeline.py` に渡す。
 Claude のプロンプトを保つ変更では、文法・見本などの無関係な同期を混ぜない。

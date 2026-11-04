@@ -44,11 +44,10 @@ const STUDIO_FILES = [
   // studio_rules.py は backend 1874c9ecd5 で server 側 (`GET drafts/rules/`) へ移った — stream_run は台帳を API から受ける
   ...[
     "stream_make.sh",
-    "stream_pipeline.sh",
     "stream_api.py",
     "stream_author.py",
     "stream_codex.py",
-    "stream_codex_pipeline.py",
+    "stream_pipeline.py",
     "stream_run.py",
     "stream_stages.py",
     "studio_new.py",

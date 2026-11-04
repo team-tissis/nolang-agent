@@ -176,7 +176,7 @@ class Run(cut_stages.CutStages, ABC):
         return not self.engine_failed()
 
     def close(self) -> None:
-        """Codex の失敗で止まる時に、運ぶ先が持つ process を畳む。"""
+        """中断で止まる時に、運ぶ先が持つ process を畳む。"""
 
     # ---- 著者の file (memory の block を file にも写す) ----
     def put(self, c: str, text: str) -> None:
@@ -189,8 +189,9 @@ class Run(cut_stages.CutStages, ABC):
         (self.solo / "root_timeline.txt").write_text(timeline)
 
     async def watch_author(self) -> None:
-        """著者 (別 process) が solo/ に置く根と cut を受ける (0.3 s ごと・file は置き換えで書かれる)。src.done で終わる。著者の版は
-        solo/author_cut_<名>.txt にも残す。"""
+        """著者 (別 process) が solo/ に置く根と cut を受ける (0.3 s ごと・file は置き換えで書かれる)。著者の終わりの印 src.done
+        (`stream_author.mark_done`) で終わる — 途中で終わった著者 (`=== end ===` が無い・call の exit が 0 でない) は届かなかった
+        cut を `author_incomplete` に記録する (段は書かれなかったで落として続ける)。著者の版は solo/author_cut_<名>.txt にも残す。"""
         while True:
             done = (self.st / "src.done").exists()  # 先に見る — done の前に置かれた file は下で必ず受ける
             rd, rt = self.solo / "root_design.txt", self.solo / "root_timeline.txt"
@@ -206,6 +207,10 @@ class Run(cut_stages.CutStages, ABC):
                         if not keep.exists():
                             keep.write_text(self.blocks[c])
             if done:
+                ending = json.loads((self.st / "src.done").read_text())
+                if not ending["ended"] or ending["exit"] != 0:
+                    missing = [c for c in self.order if c not in self.blocks]
+                    self.log(event="author_incomplete", ended=ending["ended"], exit=ending["exit"], missing=missing)
                 self.author_done.set()
                 return
             await asyncio.sleep(0.3)
@@ -355,26 +360,9 @@ class Run(cut_stages.CutStages, ABC):
         return str(self.call("rename", {"text": text, "renames": dict(renames)})["text"])
 
     # ---- 役の子 process ----
-    def call_role(self, args: list[str], *, timeout: int, fatal: bool = True) -> subprocess.CompletedProcess[str]:
-        """役割の異常終了・タイムアウトも Codex の投入停止へ伝える。fatal=False (直し役・レビュー) は伝えない — 直しは cut を良くする
-        だけの段で、失敗しても直す前の版で続けられる (止めると動画ごと落ちる)。"""
-        try:
-            result = subprocess.run(
-                args, cwd=HERE.parent, env=self.env, capture_output=True, text=True, timeout=timeout
-            )
-        except Exception as exc:
-            if fatal:
-                self.fail_engine(f"{args[2]}: {exc}")
-            raise
-        if result.returncode != 0 and fatal:
-            self.fail_engine(f"{args[2]}: exit {result.returncode} — {result.stderr[-400:]}")
-        return result
-
-    def fail_engine(self, reason: str) -> None:
-        if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
-            temporary = self.st / f"engine.failed.{time.time_ns()}"
-            temporary.write_text(reason + "\n")
-            temporary.replace(self.st / "engine.failed")
+    def call_role(self, args: list[str], *, timeout: int) -> subprocess.CompletedProcess[str]:
+        """役 (担当・直し役) の子 process。失敗は呼び手の段が前の版で続ける (止めると動画ごと落ちる — engine に依らない)。"""
+        return subprocess.run(args, cwd=HERE.parent, env=self.env, capture_output=True, text=True, timeout=timeout)
 
     def _fix_process(self, c: str, ff: Path, *, own_root: bool, review: bool, shots: list[Path] | None) -> str:
         """直し役 (claude -p) を 1 回 → stdout (直した block)。根の持ち主の cut なら根の 2 file も直す (`--root`)。返らない・process が
@@ -396,7 +384,6 @@ class Run(cut_stages.CutStages, ABC):
                         *(["--shots", ",".join(str(x) for x in shots)] if shots else []),
                     ],
                     timeout=FIX_TIMEOUT_S,
-                    fatal=False,
                 )
             except subprocess.TimeoutExpired:
                 # 直し役が返らない (codex の turn が止まる等) — 待ち続けると後の cut の投入が止まり、server の待ちの上限 (180 秒) で
@@ -661,12 +648,6 @@ class Run(cut_stages.CutStages, ABC):
     def submit(self, c: str | None, text: str, *, end: bool) -> dict[str, object] | None:
         """cut の text を流す (`drafts/{id}/cuts/` — 投入検査を通れば run に流れる) → {"sealed": True} か {"rejected": 理由,
         "defects": [DEFECT の行]}。None = 流す先が死んだ。"""
-        if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
-            # 著者が末尾まで成功したと確認してから end を送る。
-            while end and not (self.st / "src.done").exists() and not self.engine_failed():
-                time.sleep(0.1)
-            if self.engine_failed():
-                return None
         if not self.stream_alive():
             return None
         error: Exception | None = None
@@ -776,16 +757,17 @@ class Run(cut_stages.CutStages, ABC):
         self.log(event="written_back", cuts=cuts)
 
     def engine_failed(self) -> bool:
-        return os.environ.get("NOLANG_STUDIO_ENGINE") == "codex" and (self.st / "engine.failed").exists()
+        """監督 (stream_pipeline.py) の中断の印 stream/engine.failed (engine に依らない「止める」信号)。"""
+        return (self.st / "engine.failed").exists()
 
     def abort_engine(self) -> int:
         self.log(event="engine_failed", reason=(self.st / "engine.failed").read_text()[:400])
-        self.abort("Codex の生成に失敗")
+        self.abort("生成が中断された")
         self.close()
         return 1
 
     async def _stream(self) -> int:
-        """著者の file の受けと cut の段・投入を回す。Codex の失敗は即座に止める。0 = 投入を終えた。"""
+        """著者の file の受けと cut の段・投入を回す。中断 (engine.failed) は即座に止める。0 = 投入を終えた。"""
         # 待ちの旗はこの loop で作り直す (python 3.9 の asyncio.Event は作った時の loop に縛られる — 配布 client は macOS 標準の 3.9)
         self.root_seen, self.author_done, self.root_clear = asyncio.Event(), asyncio.Event(), asyncio.Event()
         watcher = asyncio.create_task(self.watch_author())

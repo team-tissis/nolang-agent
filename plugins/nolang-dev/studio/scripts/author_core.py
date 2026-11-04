@@ -1435,12 +1435,25 @@ def length_finding(estimate: float, budget: float, timeline: str) -> str:
 # 間を積極的にした腕が 60-52・消極的まで担当の前に当てた腕は 40-74 で負け)。積極 / 消極は規則で決める (同じ `transition` の操作でも
 # double_exit の `cut` は積極・ghost_dissolve の短い dissolve は消極)
 AUTOFIX_SURE_SILENCE_S = 0.5
-_SILENCE_TAIL = re.compile(r"\[silence:\+([\d.]+)s\]\s*$")
-_SILENCE_AT = re.compile(r"\[silence:\+([\d.]+)s\]")
+# 無音の token — grammar の `[silence:…]` (`timeline._SILENCE_RE`・単位つき) と同じ綴り (`+` = 既定への足し・ms / s)。標準
+# library だけの file なので grammar を import せず、ずれは test (`test_draft_author_prompts`) が縛る
+SILENCE_TOKEN = re.compile(r"\[silence:(?P<add>\+)?(?P<value>\d+(?:\.\d+)?|\.\d+)(?P<unit>ms|s)\]")
+_SILENCE_TAIL = re.compile(SILENCE_TOKEN.pattern + r"\s*$")
+
+
+def _silence_plus(old: re.Match[str] | None, seconds: float) -> str:
+    """書いてある無音 old に seconds を足した token (無ければ `[silence:+Ns]`)。`+` の有無と単位は書いたまま — 行末の絶対値は
+    端の無音の実効値・`+` は既定への足しなので、どちらも値に足せば意図の長さになる (後ろに `+` を足すと既定をもう一度数える)。"""
+    if old is None:
+        return f"[silence:+{seconds:.2f}s]"
+    add, value = old.group("add") or "", float(old.group("value"))
+    if old.group("unit") == "ms":
+        return f"[silence:{add}{round(value + seconds * 1000)}ms]"
+    return f"[silence:{add}{value + seconds:.2f}s]"
 
 
 def _add_silence(line: str, seconds: float, *, head: bool) -> str:
-    """台詞の行の頭 (話者の後 — `@clip id [.tag]` の後も) か末尾の `[silence:+Ns]` に seconds を足す (無ければ書く)。書けない行は
+    """台詞の行の頭 (話者の後 — `@clip id [.tag]` の後も) か末尾の `[silence:…]` に seconds を足す (無ければ書く)。書けない行は
     そのまま返す (当てない — 指摘が残る): 話者の読めない行・原文を書かない `@clip` の行 (`@clip id` だけ・印だけ — `[silence:]` だけの
     本文は原文の頭か尻か決まらず server が DEFECT にする)・頭に印のある `@clip` の行の頭 (印の位置で segment が割れ、無音だけの最初の
     segment を server の組み立てが同じ DEFECT にする — 印の後ろに置くと印は無音の前に出て、頭の無音の意味が無い)。"""
@@ -1453,15 +1466,13 @@ def _add_silence(line: str, seconds: float, *, head: bool) -> str:
         rest = line[cut:]
         lead = rest[: len(rest) - len(rest.lstrip())]
         body = rest[len(lead) :]
-        old = _SILENCE_AT.match(body)
+        old = SILENCE_TOKEN.match(body)
         after = body[old.end() :] if old else body
         if clip and after.startswith("[") and not after.startswith("[trim:"):
             return line
-        total = seconds + (float(old.group(1)) if old else 0.0)
-        return line[:cut] + lead + f"[silence:+{total:.2f}s]" + after
-    if (old := _SILENCE_TAIL.search(line)) is not None:
-        return line[: old.start()] + f"[silence:+{float(old.group(1)) + seconds:.2f}s]"
-    return line.rstrip() + f"[silence:+{seconds:.2f}s]"
+        return line[:cut] + lead + _silence_plus(old, seconds) + after
+    old = _SILENCE_TAIL.search(line)
+    return (line[: old.start()] if old else line.rstrip()) + _silence_plus(old, seconds)
 
 
 def _element_spans(lines: Sequence[str]) -> dict[str, tuple[int, int, str]]:

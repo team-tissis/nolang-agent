@@ -473,10 +473,35 @@ def restore_pictures(author: str, staff: str, *, root: str) -> tuple[str, list[d
         else:
             out.append(line)
     if dropped and sep:
-        names = "|".join(re.escape(n) for n in dropped)
-        mark = re.compile(r"\[[^\[\]]*#(?:" + names + r")(?![\w.-])[^\[\]]*\]")
-        timeline = "\n".join(mark.sub("", l) if l.lstrip().startswith("@") else l for l in timeline.split("\n"))
+        timeline = _drop_marks(timeline, frozenset(dropped))
     return "\n".join(out) + sep + timeline, log
+
+
+# 印 `[>#a,#b[*]{tok} 引数…]` — 的は `#名` に ×N の添字 `[N]` / `[*]` と文字の一部 `{tok}` (引数の object は 1 段の `[…]` を含み得る)
+_MARK_TARGET = r"#[\w.-]+(?:\[(?:\d+|\*)\])?(?:\{[^{}]*\})?"
+_MARK = re.compile(
+    rf"\[(?P<verb>[><!=])(?P<targets>{_MARK_TARGET}(?:,{_MARK_TARGET})*)(?P<rest>(?:[^\[\]]|\[[^\[\]]*\])*)\]"
+)
+
+
+def _drop_marks(timeline: str, names: frozenset[str]) -> str:
+    """timeline の印から落とした絵 names (と子 `名.子`) の的を外す。的が残らない印は消し、印を消して空になった行 (印だけの行) は
+    行ごと落とす。的の配列 `[>#a,#b]` は落とした的だけ外す (残りの的は同じ語で出る)。"""
+
+    def dropped(target: str) -> bool:
+        base = re.split(r"[\[{]", target[1:], maxsplit=1)[0]
+        return any(base == name or base.startswith(name + ".") for name in names)
+
+    def keep(mark: re.Match[str]) -> str:
+        kept = [t for t in re.findall(_MARK_TARGET, mark.group("targets")) if not dropped(t)]
+        return f"[{mark.group('verb')}{','.join(kept)}{mark.group('rest')}]" if kept else ""
+
+    out: list[str] = []
+    for line in timeline.split("\n"):
+        stripped = _MARK.sub(keep, line)
+        if stripped.strip() or not line.strip():
+            out.append(stripped)
+    return "\n".join(out)
 
 
 class Splitter:
@@ -570,8 +595,9 @@ def stream_claude(
     cache_ttl: str | None = None,
     images: list[Path] | None = None,
     before_input: Callable[[], bool] | None = None,
-) -> dict[str, object]:
-    """claude -p を stream-json で回し、text delta を on_text に流す。最初の thinking / text の時刻と費用を記録する。
+) -> tuple[dict[str, object], int]:
+    """claude -p を stream-json で回し、text delta を on_text に流す → (stream-json の result, exit)。最初の thinking / text の
+    時刻と費用を記録する。
     images = prompt の前に見せる画像 (レビュー役の cut の静止画)。before_input = claude を起こした後・prompt を渡す前の合流
     (claude の起動の間に済ませたい待ち)。False なら prompt を渡さずに claude を止めて `InputCancelled` (token は使っていない)。
     text delta が 1 つも来ずに終わった応答 (長い思考の後、本文が最後の assistant message にだけ乗る — now7_10 の担当 hook・246 s で
@@ -665,7 +691,7 @@ def stream_claude(
         session=result.get("session_id"),
         write_s=round(time.time() - first["text"], 1) if "text" in first else None,
     )
-    return result
+    return result, p.returncode
 
 
 def stream_model(
@@ -679,8 +705,10 @@ def stream_model(
     cache_ttl: str | None = None,
     images: list[Path] | None = None,
     before_input: Callable[[], bool] | None = None,
-) -> dict[str, object]:
-    """制御と原稿形式は共通にし、明示された実行エンジンだけを切り替える。before_input は claude なら起動の後・prompt の前、
+) -> int:
+    """制御と原稿形式は共通にし、明示された実行エンジンだけを切り替える → exit (0 = 応答を終えた・他 = 途中で終わった — 流れた
+    本文はそこまで on_text に渡っている)。engine の失敗は両 engine とも結果の exit で返し、例外にしない (止めるか続けるかは
+    呼び手の段: 著者は書けた所までで続ける・担当と直し役は前の版で続ける)。before_input は claude なら起動の後・prompt の前、
     他の engine は呼ぶ前に済ませる (False なら呼ばずに `InputCancelled`)。"""
     engine = os.environ.get("NOLANG_STUDIO_ENGINE", "claude")
     if engine == "claude":
@@ -694,7 +722,7 @@ def stream_model(
             cache_ttl=cache_ttl,
             images=images,
             before_input=before_input,
-        )
+        )[1]
     if before_input is not None and not before_input():
         raise InputCancelled(tag)
     if engine != "codex":
@@ -703,12 +731,10 @@ def stream_model(
 
     try:
         stream_codex(st, prompt, on_text, system_prompt=system_prompt, effort=effort, tag=tag, images=images)
-    except BaseException as exc:
-        failure = st / f"engine.failed.{tag}.tmp"
-        failure.write_text(f"{tag}: {type(exc).__name__}: {exc}\n")
-        failure.replace(st / "engine.failed")
-        raise
-    return {}
+    except Exception as exc:
+        log(st, event="codex_failed", tag=tag, error=f"{type(exc).__name__}: {exc}"[:400])
+        return 1
+    return 0
 
 
 def warmup(st: Path, system_prompt: Path) -> None:
@@ -717,7 +743,7 @@ def warmup(st: Path, system_prompt: Path) -> None:
     prefill が終わるので、最初の担当から読める。失敗しても run は止めない (担当が自分で書くだけ)。"""
     t0 = time.time()
     try:
-        result = stream_claude(
+        result, _exit = stream_claude(
             st,
             "準備の呼び出しです。「ok」とだけ返してください。",
             lambda _t: None,
@@ -843,6 +869,7 @@ def run(
         return gate is None and not switched
 
     sp0 = Splitter(proj, st, "author")
+    exit_code = 0
     if author_stream is not None:  # 注入された著者 (比べ用 — repo の dev script が渡す・担当と直し役は engine のまま)
         merged = merge()
         if gate is None:
@@ -851,29 +878,38 @@ def run(
             author_stream(st, prompt, sp0.feed, sp, effort)
     else:
         try:
-            stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", before_input=merge)
+            exit_code = stream_model(
+                st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author", before_input=merge
+            )
         except InputCancelled:
             if gate is None:  # 照合が server の束に替えた — 組み直して起こし直す (前の claude は prompt を受けていない)
                 shared_prompt, prompt = prepare()
                 if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
                     warm = threading.Thread(target=warmup, args=(st, shared_prompt), daemon=True)
                     warm.start()
-                stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
+                exit_code = stream_model(st, prompt, sp0.feed, system_prompt=sp, effort=effort, tag="author")
     if gate is not None:
         log(st, event="reference_gate", message=gate)
         return 1
     sp0.finish()
-    if os.environ.get("NOLANG_STUDIO_ENGINE", "claude") == "claude":
-        (st / "src.done").touch()
+    mark_done(st, ended=sp0.inner.ended, exit_code=exit_code)
+    log(st, event="src_done", cuts=sp0.order, ended=sp0.inner.ended, exit=exit_code)
     if warm is not None:
         warm.join(timeout=30)  # warmup の記録を残してから終わる (著者の call の方が長いので普通は終わっている)
     if not all((proj / f).exists() for f in ("order.txt", "root_design.txt", "root_timeline.txt")):
         log(st, event="root_failed", have=sorted(p.name for p in proj.iterdir()))
         return 1
-    if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
-        (st / "src.done").touch()
-    log(st, event="src_done", cuts=sp0.order)
     return 0
+
+
+def mark_done(st: Path, *, ended: bool, exit_code: int) -> None:
+    """著者の終わりの印 stream/src.done = `{"ended": `=== end ===` を読んだか, "exit": 著者の call の exit}` (置き換えで書く)。
+    orchestrator は印で受けを閉じ、届かなかった cut を書かれなかったで落として書けた所までで続ける (製品の DraftAuthorRun と
+    同じ方針・engine に依らない)。途中で終わった印は run.jsonl の `author_incomplete` と集計の `INCOMPLETE` に出る。著者の
+    process が印を書かずに死んだ時は監督 (stream_pipeline.py) が同じ形で書く。"""
+    temporary = st / "src.done.tmp"
+    temporary.write_text(json.dumps({"ended": ended, "exit": exit_code}) + "\n")
+    temporary.replace(st / "src.done")
 
 
 def _emit_block(st: Path, name: str, text: str, *, event: str) -> int:
@@ -1086,7 +1122,7 @@ def edit(project: Path, *, effort: str) -> int:
         "root_changed": applied.root_changed,
     }
     (ed / "cuts.json").write_text(json.dumps(cuts_meta, ensure_ascii=False, indent=1))
-    (st / "src.done").touch()
+    mark_done(st, ended=True, exit_code=0)
     log(
         st,
         event="editor_applied",
@@ -1101,12 +1137,11 @@ def edit(project: Path, *, effort: str) -> int:
 
 def main(argv: list[str], *, author_stream: AuthorStream | None = None) -> int:
     """author_stream = 著者の call の差し替え (`run` だけ・既定は engine の claude / codex)。"""
-    if os.environ.get("NOLANG_STUDIO_ENGINE") == "codex":
 
-        def interrupted(_signum: int, _frame: object) -> None:
-            raise SystemExit(143)
+    def interrupted(_signum: int, _frame: object) -> None:
+        raise SystemExit(143)  # 監督の中断 — 後始末 (codex の app-server・一時領域) を走らせて終わる
 
-        signal.signal(signal.SIGTERM, interrupted)
+    signal.signal(signal.SIGTERM, interrupted)
     if len(argv) < 2:
         print(__doc__)
         return 2
