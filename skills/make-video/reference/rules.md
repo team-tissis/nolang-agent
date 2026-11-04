@@ -1,8 +1,8 @@
 # Rule names and fixes for check findings
 
-Version of these documents: contract: 1 · reference_hash: 2e96b9d57699c3f6c6100829f2a814a01bf156383655252345ee91201a5a4eca · synced_at: 2026-11-04T05:10:14.777Z
+Version of these documents: contract: 1 · reference_hash: 1f24336cacd68b9e122cc27d014cc505180de104673236c38653ce5428cf78d3 · synced_at: 2026-11-04T08:18:05.457Z
 
-Docs: contract.json 30e435347147 · spec.md 9ecb0f73d31f · authoring.md ae94ecc56807 · capabilities.md f4a08b465b9d · looks.md 574ec4c08974 · sounds.md 1d651d225077 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · rules.md 7533522f29ae · samples/ be71235c9523 · scaffolds/ a1f7418dedc0
+Docs: contract.json 30e435347147 · spec.md 9ecb0f73d31f · authoring.md bc460ca1ab38 · capabilities.md a85d2e2500a9 · looks.md 574ec4c08974 · sounds.md e9299a0003c6 · craft.md a84cbcce63ec · craft.NOTICE.md b5f807351e39 · rules.md 7533522f29ae · samples/ 925f1d60afc2 · scaffolds/ a1f7418dedc0
 
 The per-rule fixes for `findings[].rule` returned by check (`studio.py check` / `nolang check` / `nolang_draft_check`, and the render-time lint), generated from the two ledgers, check's `draft_check/rules.py` and the product's `quality_rules.py`. Silence a rule that does not fit the piece with `lint off=<rule>,…` in the root.
 

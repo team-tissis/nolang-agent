@@ -380,13 +380,6 @@ div#endcard(inset: 0; background: $ink; z-index: front; overlap: rc,rc_close,rc_
 #v2
 cast n = "落ち着いた30代の女性のナレーター、研修の講師のように明るく丁寧に、はっきりと説明する"
 silence head=0ms tail=250ms
-read PdM = ピーディーエム
-read PM = ピーエム
-read PO = ピーオー
-read BO = ビーオー
-read IT = アイティー
-read UI = ユーアイ
-read UX = ユーエックス
 
 *** title
 bgm music

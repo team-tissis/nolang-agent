@@ -51,9 +51,10 @@ bgm#music(fade: 800,2400) 落ち着いて明るく安心感のある企業研修
 # 字幕: 白い札 (95%・角丸 12・薄い縁と影)・墨色の太字・1 行の台詞を 1 枚 (2 文の行は [||] で繋ぎ [br] で 2 行)・語の強調は青
 subtitle.hug(bottom: 38px; font-size: 38px; line-height: 1.5; letter-spacing: .03em; text-align: center; color: $ink; background: #FFFFFFF2; border-radius: 18px; padding: 12px 40px 14px 40px; border: 2px solid #1E2B3C12; box-shadow: 0px 8px 26px #1E2B3C1F; unit: sentence; lead: 50ms; tail: 200ms; hold: off; in: {y:8, opacity:0, duration:0.18, ease:'power2.out'}; out: {opacity:0, duration:0.1})
 
-# 帯の STEP 札の状態: 今の段 (青の地・白字・白い番号) → 済み (淡い青の地・青字・番号の上に ✓)
+# 帯の STEP 札の状態: 今の段 (青の地・白字・白い番号) → 済み (淡い青の地・青字・番号の上に ✓ — ✓ は帯と一緒に透明で出しておき、
+# 後の cut の語で to で灯す。後の cut で初めて出すと確定済みの前の cut を書き換える)
 cue step_on(x) = [!#x .on][!#x.t recolor,#FFFFFF][!#x.n fill,#FFFFFF][!#x.n.v recolor,$blue]
-cue step_done(x) = [!#x .done][!#x.t recolor,$blue][>#x.ck]
+cue step_done(x) = [!#x .done][!#x.t recolor,$blue][!#x.ck to,{opacity:1, duration:0.3}]
 
 # 白い札 (角丸 16・薄い縁・柔らかい影)
 def card = div(background: #FFFFFF; border-radius: 24px; border: 2px solid #1E2B3C0F; box-shadow: 0px 14px 34px #1E2B3C17; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
@@ -158,7 +159,7 @@ div#hdr.sticky(left: 80px; top: 36px; width: 1761px; height: 60px; z-index: fron
     div#n(left: 8px; cy: 50%; width: 34px; height: 34px; border-radius: 148px; background: $gray)
       p#v(cx: 50%; cy: 50%; font-size: 20px; color: $sub) 1;2;3;4
     p#t(left: 52px; cy: 50%; font-size: 22px; color: $sub) 漏えい;リスト型攻撃;被害;対策
-    icon#ck(left: 8px; cy: 50%; font-size: 20px; name: check; weight: bold; color: #FFFFFF; background: $blue; padding: 8px; overlap: .n; in: {opacity:0, duration:0.3})
+    icon#ck(left: 8px; cy: 50%; font-size: 20px; name: check; weight: bold; color: #FFFFFF; background: $blue; padding: 8px; overlap: .n; opacity: 0)
 #hdr.st.on(background: $blue; border: 2px solid $blue)
 #hdr.st.done(background: $blue_l; border: 2px solid $blue_m)
 board#lk_head(s: "STEP 1"; t: "IDとパスワードの漏えい")
@@ -330,7 +331,6 @@ div#ot_banner(left: 740px; top: 690px; width: 1040px; height: 130px; border-radi
 #v2
 cast n = "明瞭で落ち着いた30〜40代の女性のナレーター、企業研修らしく信頼感のある一定のテンポで丁寧に話す"
 silence head=0ms tail=300ms
-read 12文字 = じゅうにもじ
 
 *** hook
 [>#subtitle]

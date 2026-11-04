@@ -135,9 +135,9 @@ transition dissolve {duration: .6, overlap: .6}
 
 *** drip
 @n: [silence:1.95s][♪drip -4dB -1300ms][♪drip -6dB -450ms][>#copy4 -50ms]一滴[♪drip -5dB +90ms]に、[>#drop_photo +150ms][<#shizuku_photo +250ms][♪drop +500ms][>#ripple1 +520ms][!#ripple1 to,{opacity:0, duration:1.8, ease:'sine.in'} +870ms][>#ripple2 +850ms][!#ripple2 to,{opacity:0, duration:1.8, ease:'sine.in'} +1200ms][>#ripple3 +1250ms][!#ripple3 to,{opacity:0, duration:1.8, ease:'sine.in'} +1600ms]季節をとじこめ[<#copy4 +610ms]て。[silence:1.86s][>#blackout][silence:0.5s]
+transition fade {duration: 1.1, overlap: 1.1}
 
 *** bottle
-fade in,1100ms
 @n: [♪glass -6dB +20ms][>#sweep +320ms][>#label_photo +3000ms][<#bottle_photo +3100ms][silence:5.99s]
 
 *** pour

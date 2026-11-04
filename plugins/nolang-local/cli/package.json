@@ -1,6 +1,6 @@
 {
   "name": "@no-lang/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "NoLang の動画を AI エージェント (Claude Code / Codex) から作る CLI",
   "keywords": [
     "nolang",

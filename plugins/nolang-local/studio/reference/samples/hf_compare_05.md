@@ -323,10 +323,6 @@ p#sm3(cx: 960px; top: 735px; font-size: 44px; color: $sub; in: {y:20, opacity:0,
 cast n = "落ち着いたトーンで非常にクリアで聞き取りやすい20〜30代の大人の女性のナレーター、親しみやすく丁寧で安定したテンポ" speed=108%
 silence head=0ms tail=250ms
 transition = dissolve {duration: .4, overlap: .2}
-read CAD = キャド
-read 3D = スリーディー
-read 点群 = てんぐん
-read 真円 = しんえん
 
 *** s1
 [>#subtitle]

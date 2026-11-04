@@ -147,7 +147,7 @@ board#st(n: "01"; t: "調査の舞台")
     img#scale(left: 26px; top: 146px; width: 390px; height: 390px; object-fit: contain; main: none; in: {y:30, scale:.9, opacity:0, duration:.6, ease:'back.out(1.6)'}) [transparent]A white digital platform scale with a clear plastic crate on it, the crate filled with unsold food: wrapped deli bento packs, bread rolls, a cabbage and tomatoes. The scale display is blank. Isolated object, centered, filling the frame.
     p#lbl(left: 440px; top: 168px; font-size: 30px; font-family: e; color: $ink2) 廃棄の合計（28日間）
     # 合計は 0 で出て、語で 1,840 まで数える
-    p#total(left: 432px; top: 219px; font-size: 132px; line-height: 1; letter-spacing: -.02em; white-space: nowrap) [count:1,840 start=0 ms=1000ms ease=cubic_out]{ku}kg{/}
+    p#total(left: 432px; top: 219px; font-size: 132px; line-height: 1; letter-spacing: -.02em; white-space: nowrap) [count:1,840 start=0 ms=1000ms ease=power2.out]{ku}kg{/}
     div#yen(left: 440px; top: 392px; width: 510px; height: 120px; in: {y:30, opacity:0, duration:.4, ease:'back.out(1.6)'})
       p#l(left: 0px; top: 0px; font-size: 28px; font-family: e; color: $ink2) 売値で
       p#v(left: 0px; top: 39px; font-size: 74px; line-height: 1.12; color: $a; white-space: nowrap) 151万8,500{yu}円分{/}
@@ -197,7 +197,7 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
   # 重さの合計の段: 3 つで 50.5% (数える)・930kg・3 色の積み上げの帯と半分の印
   div#sumw(left: 40px; top: 868px; width: 904px; height: 204px; in: {y:40, opacity:0, duration:.4, ease:'power3.out'}; out: {y:-20, opacity:0, duration:.25})
     p#t1(left: 0px; top: 4px; font-size: 32px; font-family: e) 惣菜・青果・パンの3つで
-    p#pct(left: 0px; top: 46px; font-size: 116px; line-height: 1; color: $a; white-space: nowrap) [count:50.5 start=0 ms=800ms ease=cubic_out]{pu}%{/}
+    p#pct(left: 0px; top: 46px; font-size: 116px; line-height: 1; color: $a; white-space: nowrap) [count:50.5 start=0 ms=800ms ease=power2.out]{pu}%{/}
     p#kg(left: 470px; top: 70px; font-size: 56px; line-height: 1; white-space: nowrap) 930{k3}kg ／ 全体 1,840kg{/}
     div#stk(left: 0px; top: 168px; width: 904px; height: 22px; border-radius: 10px; background: #ECE4D8)
     # 3 色の積み上げ (左から 1 本の帯として開く = 3 枚を続けて wipe)
@@ -319,7 +319,7 @@ board#hm(n: "05"; t: "家庭でできる1つの工夫")
     div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118;118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×40
     p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 140人（58%）
     div#doff(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×60
-    p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $ai; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:40 start=0 ms=600ms ease=cubic_out]{pu}%{/}
+    p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $ai; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:40 start=0 ms=600ms ease=power2.out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 140人中 56人
   div#gb(left: 528px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #EEF8F1; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
@@ -327,7 +327,7 @@ board#hm(n: "05"; t: "家庭でできる1つの工夫")
     div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×17
     div#doff(left: "189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162;184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×83
     p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 100人
-    p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $good; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:17 start=0 ms=500ms ease=cubic_out]{pu}%{/}
+    p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $good; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:17 start=0 ms=500ms ease=power2.out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 100人中 17人
   div#vs(left: 466px; top: 440px; width: 52px; height: 52px; border-radius: 148px; background: $ink; in: {scale:0, duration:.3, ease:'back.out(2)'})
     p#t(cx: 50%; cy: 50%; font-size: 22px; color: #FFFFFF) VS

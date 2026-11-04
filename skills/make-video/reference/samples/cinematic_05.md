@@ -1,6 +1,6 @@
 # cinematic · 奥多摩の渓流の朝 (横・実写調・台詞 5 文の観光 PR) — canvas 1920x1080・33.0s
 
-見せる文法: 常設の質感 (根の veil の周辺減光と grain)・絵の置き場 (subject / room)・同じ cut で絵を重ねて替える (2 枚目を fade で)・count・recolor・filter・hide_subtitle・read・場の音 (se to= fade=)・bgm
+見せる文法: 常設の質感 (根の veil の周辺減光と grain)・絵の置き場 (subject / room)・同じ cut で絵を重ねて替える (2 枚目を fade で)・count・recolor・filter・hide_subtitle・場の音 (se to= fade=)・bgm
 
 ```design.txt
 #v2
@@ -71,7 +71,6 @@ shape#close_r(left: 780px; top: 729px; width: 360px; height: 3px; path: line_h; 
 #v2
 cast n = "低く落ち着いた40代男性のナレーター、深く柔らかい声" speed=90% manner="ゆっくり、間を大きく取って静かに語る"
 transition = dissolve {duration: .3, overlap: .3, ease: 'power2.inOut'}
-read 奥多摩 = おくたま
 
 *** dawn
 [>#subtitle]

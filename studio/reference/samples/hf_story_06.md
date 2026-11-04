@@ -111,7 +111,7 @@ section#year
 div#y_bg(inset: 0; background: $night; border-radius: 24px; in: none)
 img#y_photo(inset: 0; content: @kochi_empty; opacity: 0.2; filter: sepia(1) brightness(0.7); main: kb {scale: [1.18, 1.08]})
 p#soshite(cx: 540px; top: 640px; font-size: 58px; letter-spacing: 0.3em; color: $bone; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) そして
-p#year(left: 99px; top: 760px; font-size: 300px; font-family: mb; line-height: 1; text-shadow: 0px 10px 50px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0ms,0ms,1380ms,1460ms laps=0,0,0,4 delay=320ms ease=ease_in_out]
+p#year(left: 99px; top: 760px; font-size: 300px; font-family: mb; line-height: 1; text-shadow: 0px 10px 50px #00000099; in: {scale:0.96, opacity:0, duration:0.4, ease:'power2.out'}) [count:1979 start=1920 roll ms=0ms,0ms,1380ms,1460ms laps=0,0,0,4 delay=320ms ease=power1.inOut]
 p#nen(left: year.right+18; top: 904px; font-size: 120px; line-height: 1.3; color: $gold; in: {x:-16, opacity:0, duration:0.35, ease:'power2.out'}) 年
 p#era(cx: 540px; top: 1110px; font-size: 40px; font-family: gb; letter-spacing: 0.5em; color: $stone; in: {opacity:0, duration:0.4}) 昭和54年
 

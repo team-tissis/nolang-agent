@@ -768,7 +768,9 @@ def emitted_block(name: str, text: str) -> str | None:
     return body
 
 
-_CUT_HEAD = re.compile(r"^(?:section#[A-Za-z0-9_\-]+|\*\*\*\s+\S+)")
+# cut の名 (`section#名(宣言)` の名は `(` の前まで・`*** 名` の名と同じ文字)
+_CUT_NAME = r"[A-Za-z0-9_\-]+"
+_CUT_HEAD = re.compile(rf"^(?:section#{_CUT_NAME}|\*\*\*\s+\S+)")
 
 
 def cut_heads(block: str) -> list[str]:
@@ -779,9 +781,9 @@ def cut_heads(block: str) -> list[str]:
 
 # ===== 著者の出力の section 割り =====
 
-_MARK = re.compile(r"^\s*===\s*(plan|root_design|root_timeline|end|cut\s+([A-Za-z0-9_\-]+))\s*===\s*$")
+_MARK = re.compile(rf"^\s*===\s*(plan|root_design|root_timeline|end|cut\s+({_CUT_NAME}))\s*===\s*$")
 _FENCE = re.compile(r"^\s*```")
-_CUTHEAD = re.compile(r"^section#([A-Za-z0-9_\-]+)")
+_CUTHEAD = re.compile(rf"^section#({_CUT_NAME})")
 _TLHEAD = re.compile(r"^\*\*\*\s+\S+")
 TIMELINE_SEP = "---timeline---"
 
@@ -990,7 +992,7 @@ class AppliedEdit:
 
 def _split_src_doc(text: str, head: str) -> tuple[str, dict[str, str], list[str]]:
     """先頭部 (根) と、名 → block (head 行から次の head の前まで)・構成の順を返す。"""
-    pat = re.compile(rf"^{head}(\S+)", re.M)
+    pat = re.compile(rf"^{head}({_CUT_NAME})", re.M)
     names = [m.group(1) for m in pat.finditer(text)]
     starts = [m.start() for m in pat.finditer(text)] + [len(text)]
     blocks = {names[i]: text[starts[i] : starts[i + 1]].strip("\n") + "\n" for i in range(len(names))}

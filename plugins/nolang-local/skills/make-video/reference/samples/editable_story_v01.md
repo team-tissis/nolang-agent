@@ -1,11 +1,11 @@
 # story · 食品の「賞味期限」と「消費期限」 (縦・札と写真の解説) — canvas 1080x1920・editable profile 準拠 (縦の見本)
 
-見せる文法: 編集可能モードの縦の作り — 上に見出し・中段に札 1〜2 枚・下に字幕の帯を空ける 3 段の画面 / 対比の札は def を per-instance の値で 2 枚並べる (×2) / preset と単純 object の入退場・`!` は 1 cut 2 個まで / count / run / group / sticky なし
+見せる文法: 編集可能モードの縦の作り — 上に見出し・中段に札 1〜2 枚・下に字幕の帯を空ける 3 段の画面 / 対比の札は def を per-instance の値で 2 枚並べる (×2) / preset と単純 object の入退場・`!` / `=` の印は書かない / count / run / group / sticky なし
 
 ```design.txt
 #v2
 # 計画: 明るい台所の地 (cream) に、賞味 = 緑 (a)・消費 = 赤 (b)。縦なので文字は上 1/3 に寄せ、下 1/4 は字幕の帯のために空ける
-# editable: 動きは preset と単純 object・書体 3 種
+# editable: 動きは preset と単純 object
 # 書体 太い丸ゴシック (見出し) + 太い等幅 (数字) + 細い角ゴシック (注記)
 canvas 1080x1920 bg=#FBF7EF
 lint profile=editable

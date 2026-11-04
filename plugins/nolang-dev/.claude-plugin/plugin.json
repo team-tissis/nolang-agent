@@ -1,6 +1,6 @@
 {
   "name": "nolang-dev",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "社内 dev の NoLang (dev.no-lang.com) に MCP / CLI でつなぎ、Claude Code から動画を作る。",
   "author": {
     "name": "mvrx"

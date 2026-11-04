@@ -93,9 +93,9 @@ section#one
 scene#p1(main: kb {scale: [1, 1.08], focus: ['42% 24%', '42% 24%']}) [ref:@tsukio]日曜の夕方6時半、リビングのソファ。グレーのパーカー姿の彼がソファに座り、片手で胃のあたりを押さえ、口を真一文字に結んで青ざめた顔でテレビを見つめている。テレビ画面には夕焼けの街並みと家族のシルエットが歩く穏やかなアニメのエンディング風の映像（特定の作品やキャラクターは描かない）。窓から差し込む濃いオレンジの夕日と長い紫の影、哀愁とコミカルさ。
 stamp#st1(n: 1)
 headline#hl1(c: "サザエさんのエンディングで[br]{l2r}胃が痛む{/}"; n: 1)
-# 時計の札 (sticky・最後まで): 時計の icon + 曜日の色札 (日 = 赤 / 月 = 青) + 時刻。深夜 2 時で丸い札ごと赤 (赤い地の子 al を出して 3 つ目の頭で消す)
+# 時計の札 (sticky・最後まで): 時計の icon + 曜日の色札 (日 = 赤 / 月 = 青) + 時刻。深夜 2 時で丸い札ごと赤 (赤い地の子 al は透明で札と一緒に出し、2 つ目の語で to で灯して 3 つ目の頭で消す — 後の cut で初めて出すと確定済みの前の cut を書き換える)
 div#clock.sticky(left: 34px; top: 362px; width: 300px; height: 78px; border-radius: 39px; background: #080A1EB8; border: 3px solid #FFFFFF59; in: {x:-40, opacity:0, duration:.22, ease:'back.out(2)'})
-  div#al(left: 0px; top: 0px; width: 300px; height: 78px; border-radius: 39px; background: #E60033EB; border: 3px solid #FFFFFF59; in: {opacity:0, duration:.1}; out: {opacity:0, duration:.2})
+  div#al(left: 0px; top: 0px; width: 300px; height: 78px; border-radius: 39px; background: #E60033EB; border: 3px solid #FFFFFF59; opacity: 0; out: {opacity:0, duration:.2})
   svg#ico(left: 18px; top: 20px; width: 40px; height: 40px; part: clock)
   p#day(left: 70px; cy: 50%; width: 52px; font-size: 36px; line-height: 1; padding: 8px 0px; text-align: center; background: $red; border-radius: 10px) 日
   p#hm(left: 135px; cy: 50%; font-size: 50px; line-height: 1; letter-spacing: .02em) 18:30
@@ -187,7 +187,7 @@ transition push {duration: .26, dir: 'top', overlap: .26, ease: 'power3.out'}
 
 *** two
 [!#pc[2] .on][!#pc[2] punch {scale: 1.3, duration: .32}][!#pc[1] .done]
-@n: [♪jan -6dB][>#st2 +20ms][<#st2 +520ms][>#hl2 +520ms][!#clock.hm text,"23:00" +300ms]2つ目！早く寝なきゃいけないのに、[|][♪tick -12dB to=2.4s fade=50ms,120ms][!#clock.hm text,"23:30" +300ms]「寝たら[!#clock.day text,"月"][!#clock.day fill,$blue][!#clock.hm text,"0:00"]明日に[!#clock.hm text,"0:30"]なっちゃう」[|][!#clock.hm text,"1:00"]と思[!#clock.hm text,"1:30"]って[|][!#clock.hm text,"2:00" +50ms][>#clock.al +50ms][!#clock punch {scale: 1.12, duration: .3} +50ms][♪tsukkomi -8dB +20ms]深夜2時まで[|][>#sw1 +50ms][<#sw1 +270ms][>#sw2 +420ms][<#sw2 +640ms][♪swipe -1dB +50ms to=0.45s][♪swipe -2dB +420ms to=0.45s]無駄にスマホを見る。
+@n: [♪jan -6dB][>#st2 +20ms][<#st2 +520ms][>#hl2 +520ms][!#clock.hm text,"23:00" +300ms]2つ目！早く寝なきゃいけないのに、[|][♪tick -12dB to=2.4s fade=50ms,120ms][!#clock.hm text,"23:30" +300ms]「寝たら[!#clock.day text,"月"][!#clock.day fill,$blue][!#clock.hm text,"0:00"]明日に[!#clock.hm text,"0:30"]なっちゃう」[|][!#clock.hm text,"1:00"]と思[!#clock.hm text,"1:30"]って[|][!#clock.hm text,"2:00" +50ms][!#clock.al to,{opacity:1, duration:.1} +50ms][!#clock punch {scale: 1.12, duration: .3} +50ms][♪tsukkomi -8dB +20ms]深夜2時まで[|][>#sw1 +50ms][<#sw1 +270ms][>#sw2 +420ms][<#sw2 +640ms][♪swipe -1dB +50ms to=0.45s][♪swipe -2dB +420ms to=0.45s]無駄にスマホを見る。
 transition dissolve {duration: .26, overlap: .26, zoom: 1.45, ease: 'power3.out'}
 
 *** three

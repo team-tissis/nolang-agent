@@ -116,7 +116,7 @@ chap#ch1.sticky(n: "01"; t: "調査のあらまし")
 # 右上の進行 (sticky・8 段の小さな棒を章ごとに左から満たす)
 div#hdr_r.sticky(left: 1260px; top: 36px; width: 590px; height: 56px; background: #FFFBF3F0; border-radius: 18px; box-shadow: 0px 8px 22px #3C28141F; z-index: front; in: {y:-24, opacity:0, duration:.6, ease:'power3.out'}; out: {y:-20, opacity:0, duration:.4, ease:'power2.in'})
   div#seg(left: "210;231;252;273;294;315;336;357"; cy: 50%; width: 26px; height: 8px; border-radius: 4px; background: $segbg) ×8
-    div#fill(left: 0px; top: 0px; width: 26px; height: 8px; border-radius: 4px; background: $amber; in: {scaleX:0, duration:.5, ease:'power2.out', pivot:'left'})
+    div#fill(left: 0px; top: 0px; width: 26px; height: 8px; border-radius: 4px; background: $amber; transform: scaleX(0); transform-origin: left)
   p#brand(left: 24px; cy: 50%; font-size: 21px; letter-spacing: .06em; color: $ink2) みなと野市 図書館利用調査
 card#b_photo(left: 90px; top: 150px; width: 800px; height: 500px; transform: rotate(-1.6deg); delay: 450ms; in: {y:40, rotation:-3.4, opacity:0, duration:.8, ease:'power3.out'})
   img#img(left: 16px; top: 16px; width: 766px; height: 466px; border-radius: 16px; main: kb {scale: [1.12, 1], ease:'sine.out'}) 大学の研究室の木の机を真上から見た構図。返送された紙の調査票と封筒がきちんと積まれ、鉛筆でチェックが入った調査票が数枚、簡単な棒グラフを映すノートパソコン、紅茶のマグ、鉛筆、温かい光のデスクランプ。机の上の物を画面いっぱいに配して余白を作らない。読める文字や数字は描かない
@@ -387,44 +387,44 @@ transition wipe {duration: .75, dir: 'left', overlap: .6, ease: 'power2.inOut', 
 
 # survey — 頭で常設の上端と写真・事実の行・板・「4,000」「2,000」で数え、「50%」の手前で輪の弧
 *** survey
-@mori: [silence:0.21s][>#ch1 +140ms][>#hdr_r +140ms][>#hdr_r.seg[1].fill +240ms][spk #subbar.av_mori #subbar.av_takagi -50ms]市民[>#b_board.send -200ms][♪pop -6dB -150ms]4,000人に、調査票を送りました。[silence:0.26s]
+@mori: [silence:0.21s][>#ch1 +140ms][>#hdr_r +140ms][!#hdr_r.seg[1].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][spk #subbar.av_mori #subbar.av_takagi -50ms]市民[>#b_board.send -200ms][♪pop -6dB -150ms]4,000人に、調査票を送りました。[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50ms]回答は[>#b_board.arrow -600ms][>#b_board.back -200ms][♪pop -6dB -150ms]2,000人、回収率は[>#b_board.ring -1100ms][>#b_board.ring.arc -900ms][>#b_board.note +200ms][♪bell -5dB +50ms]50%です。[silence:0.21s][<#ch1 cut-0ms]
 transition dissolve {duration: .5, overlap: .25}
 
 # used — 最初の語で waffle の 38 マスを塗り、「38%」の手前で札・2 行目の頭で残り 62 マス・「62%」で札と判子
 *** used
-@mori: [silence:0.21s][>#ch2 +140ms][>#hdr_r.seg[2].fill +240ms][spk #subbar.av_mori #subbar.av_takagi -50ms][>#c_wu -210ms][>#c_wn -210ms][!#c_wu .on {stagger: {each: .026}} +240ms][♪riffle -10dB +240ms]この1年に図書館を使った方は、[>#c_use -500ms][♪pop2 -7dB -100ms]38%。[silence:0.26s]
+@mori: [silence:0.21s][>#ch2 +140ms][!#hdr_r.seg[2].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][spk #subbar.av_mori #subbar.av_takagi -50ms][>#c_wu -210ms][>#c_wn -210ms][!#c_wu .on {stagger: {each: .026}} +240ms][♪riffle -10dB +240ms]この1年に図書館を使った方は、[>#c_use -500ms][♪pop2 -7dB -100ms]38%。[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50ms][!#c_wn .on {stagger: {each: .018}} +50ms][♪riffle -10dB +50ms]残る[>#c_non -400ms][>#c_non.stamp +500ms][♪pop -6dB +450ms][!#c_non.stamp to,{rotation:1, duration:.9, ease:'sine.inOut', repeat:1, yoyo:true} +1000ms][>#c_note +900ms]62%は、一度も来ていません。[silence:0.21s][<#ch2 cut-0ms]
 transition push {duration: .7, dir: 'left', overlap: .5, ease: 'power3.inOut'}
 
 # age — 頭で縦棒が立ち上がり (棒ごとの小さな音 3 つ)・「26%」で 20 代を縁取り脈打たせる・2 行目で括弧と 4 割の破線・「40代」で親子の札・「4割」で 3 本が跳ねる
 *** age
-@takagi: [silence:0.21s][>#ch3 +140ms][>#hdr_r.seg[3].fill +240ms][♪pop2 -7dB +240ms][♪pop2 -7dB +540ms][♪pop2 -7dB +840ms]いちばん低いのは20代、[>#d_low -100ms][♪pop -6dB -50ms][!#d_board.col[2].bar .halo][!#d_board.col[2].bar to,{opacity:.82, duration:.8, ease:'sine.inOut', repeat:3, yoyo:true} +600ms][>#d_hi +700ms]26%です。[silence:0.26s]
+@takagi: [silence:0.21s][>#ch3 +140ms][!#hdr_r.seg[3].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][♪pop2 -7dB +240ms][♪pop2 -7dB +540ms][♪pop2 -7dB +840ms]いちばん低いのは20代、[>#d_low -100ms][♪pop -6dB -50ms][!#d_board.col[2].bar .halo][!#d_board.col[2].bar to,{opacity:.82, duration:.8, ease:'sine.inOut', repeat:3, yoyo:true} +600ms][>#d_hi +700ms]26%です。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50ms][>#d_board.bracket +100ms][>#d_board.blabel +100ms][>#d_board.d40 +250ms][♪pencil -5dB +250ms][>#d_board.d40l +900ms]働く世代は、[>#d_40 +100ms][♪pop -6dB +100ms]40代をのぞいて[!#d_board.col[2] to,{y:-6, duration:.25, ease:'power1.out', repeat:1, yoyo:true}][!#d_board.col[3] to,{y:-6, duration:.25, ease:'power1.out', repeat:1, yoyo:true} +100ms][!#d_board.col[5] to,{y:-6, duration:.25, ease:'power1.out', repeat:1, yoyo:true} +200ms]4割に届きません。[silence:0.21s][<#ch3 cut-0ms]
 transition wipe {duration: .75, dir: 'left', overlap: .6, ease: 'power2.inOut', bars: 'linear(#3C281400,#3C281438@55%,#FFFCF5E6@70%,#3C28141F),93'} se=page -4dB
 
 # reasons — 問いの行で 2〜5 位を先に伸ばし「1位は…？」・答えの行で 1 位の行が伸びて「41%」で値と地・「本」で本の 2 行を薄めて結論・「時間」で時計を回す
 *** reasons
-@mori: [silence:0.21s][>#ch4 +140ms][>#hdr_r.seg[4].fill +240ms][>#e_board.r[*] {stagger:{each:0.16}} +200ms][>#e_board.btag[1] +200ms][>#e_board.btag[2] +360ms][>#e_board.q +200ms][♪pop2 -7dB +250ms][♪pop2 -7dB +650ms]来ない理由のトップは？[silence:0.26s]
+@mori: [silence:0.21s][>#ch4 +140ms][!#hdr_r.seg[4].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][>#e_board.r[*] {stagger:{each:0.16}} +200ms][>#e_board.btag[1] +200ms][>#e_board.btag[2] +360ms][>#e_board.q +200ms][♪pop2 -7dB +250ms][♪pop2 -7dB +650ms]来ない理由のトップは？[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50ms][<#e_board.q -50ms][>#e_board.top.lab +50ms][>#e_board.top.b +250ms][♪tick -4dB +100ms]「開いている時間に行けない」。[||][>#e_board.top.v -100ms][>#e_board.hl][♪pop -6dB]41%です。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50ms][!#e_board.r[1] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.r[2] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.btag[1] to,{opacity:.45, duration:.4, ease:'none'}][!#e_board.btag[2] to,{opacity:.45, duration:.4, ease:'none'}][>#e_board.sum -50ms][♪pencil -5dB +50ms]本ではなく、[!#e_board.top.lab.i to,{rotation:360, duration:.8, ease:'back.out'} -200ms]時間なんですね。[silence:0.21s][<#ch4 cut-0ms]
 transition dissolve {duration: .5, overlap: .25}
 
 # wants — 頭で写真の札と板と 4 行・「夜9時」「電子書籍」で行を灯し、「46%」「38%」で値を弾ませる
 *** wants
-@takagi: [silence:0.21s][>#ch5 +140ms][>#hdr_r.seg[5].fill +240ms][spk #subbar.av_takagi #subbar.av_mori -50ms]欲しいのは、[!#f_board.s[1] .hl -50ms][♪pop -6dB -50ms]夜9時までの開館が[!#f_board.s[1].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]46%、[|][!#f_board.s[2] .hl -50ms][♪pop -6dB -50ms]電子書籍が[!#f_board.s[2].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]38%。[silence:0.21s][<#ch5 cut-0ms]
+@takagi: [silence:0.21s][>#ch5 +140ms][!#hdr_r.seg[5].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][spk #subbar.av_takagi #subbar.av_mori -50ms]欲しいのは、[!#f_board.s[1] .hl -50ms][♪pop -6dB -50ms]夜9時までの開館が[!#f_board.s[1].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]46%、[|][!#f_board.s[2] .hl -50ms][♪pop -6dB -50ms]電子書籍が[!#f_board.s[2].p to,{scale:1.18, duration:.25, ease:'power2.out', repeat:1, yoyo:true}]38%。[silence:0.21s][<#ch5 cut-0ms]
 transition push {duration: .7, dir: 'left', overlap: .5, ease: 'power3.inOut'}
 
 # gap — 「新刊」で 1 行目を灯して利用者の点・「52%」で値と人数・「18%」で線と来ない人の点 → 残り 4 行を 160 ms ずつ・森の行で注記・「時間」「行き方」で札と地・台詞の後の間で夜の色へ暗転
 *** gap
-@takagi: [silence:0.21s][>#ch6 +140ms][>#hdr_r.seg[6].fill +240ms]ところが、今の利用者の一番は[|]「[>#g_board.hl[1] -200ms][>#g_board.r0_u -50ms][♪pop -6dB -50ms]新刊を増やす」で、[>#g_board.r0_uv -100ms][>#g_board.r0_cnt +100ms]52%。[silence:0.14s]
+@takagi: [silence:0.21s][>#ch6 +140ms][!#hdr_r.seg[6].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms]ところが、今の利用者の一番は[|]「[>#g_board.hl[1] -200ms][>#g_board.r0_u -50ms][♪pop -6dB -50ms]新刊を増やす」で、[>#g_board.r0_uv -100ms][>#g_board.r0_cnt +100ms]52%。[silence:0.14s]
 @: 来ない人では、[>#g_board.r0_line -300ms][>#g_board.r0_n -50ms][♪pop -6dB -50ms][>#g_board.r0_nv][>#g_board.r[*] {stagger:{each:0.16}} +550ms][♪pop2 -7dB +600ms]18%です。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50ms][>#g_n1 +100ms][<#g_board.hl[1] +1600ms]今の利用者の声だけでは、[|]来ない人の「[>#g_board.tag_t -50ms][>#g_board.hl[2] -50ms][♪pencil -5dB -50ms][>#g_n2 +200ms]時間」と「[>#g_board.tag_i -50ms][>#g_board.hl[3] -50ms][♪pencil -5dB -50ms]行き方」が見えないんですね。[silence:0.01s][>#g_dip][♪page -4dB][silence:0.2s][<#ch6 cut-0ms]
 transition cut
 
 # trial — 頭で夜の色を引き、「駅前」で題と時刻の帯・「夜9時」で延長の 2 時間が伸びる → 来館の 2 本を数え「2.3倍」で札 → カードの 2 本と「約2.9倍」
 *** trial
-@mori: [silence:0.21s][!#h_dip to,{opacity:0, duration:.7, ease:'power1.out'} -90ms][>#ch7 +140ms][>#hdr_r.seg[7].fill +240ms]そこで[>#h_title -300ms][>#h_ruler.track +600ms][>#h_ruler.open +630ms][>#h_ruler.tk[*] +660ms][>#h_ruler.old +1000ms][>#h_sub +1200ms]駅前分館で、7月から3か月、[|]平日を[>#h_ruler.ext -100ms][♪tick -4dB +100ms][>#h_ruler.new +600ms]夜9時まで開けました。[silence:0.26s]
+@mori: [silence:0.21s][!#h_dip to,{opacity:0, duration:.7, ease:'power1.out'} -90ms][>#ch7 +140ms][!#hdr_r.seg[7].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms]そこで[>#h_title -300ms][>#h_ruler.track +600ms][>#h_ruler.open +630ms][>#h_ruler.tk[*] +660ms][>#h_ruler.old +1000ms][>#h_sub +1200ms]駅前分館で、7月から3か月、[|]平日を[>#h_ruler.ext -100ms][♪tick -4dB +100ms][>#h_ruler.new +600ms]夜9時まで開けました。[silence:0.26s]
 @takagi: [spk #subbar.av_takagi #subbar.av_mori -50ms][>#h_c1.t -100ms]19時以降の来館は、[|]月平均[>#h_c1.ra -400ms][♪pop2 -7dB -50ms]1,240人から[>#h_c1.rb -400ms][♪pop -6dB -50ms]2,890人へ。[silence:0.14s]
 @: [>#h_c1.badge -100ms][♪sparkle -3dB -80ms]2.3倍です。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50ms][>#h_c2.t -50ms]新しい利用カードも、月[>#h_c2.ra -400ms][♪pop2 -7dB -50ms]38枚から[>#h_c2.rb -400ms][♪pop -6dB -50ms][>#h_c2.badge +350ms]112枚に。[silence:0.21s][<#ch7 cut-0ms]
@@ -432,7 +432,7 @@ transition dissolve {duration: .7, overlap: .45, zoom: 1.04, ease: 'power2.out'}
 
 # summary — 頭で結論の帯と光・1 行目で前置きと札 1・2・「行ける」で主文と下の帯 → 2 行目で札 3 と次の一手 1 (チェック)・3 行目で次の一手 2・最後に常設の層を閉じる
 *** summary
-@takagi: [silence:0.21s][>#ch8 +140ms][>#hdr_r.seg[8].fill +240ms][spk #subbar.av_takagi #subbar.av_mori -50ms][♪pop -6dB +100ms][!#i_banner.glow to,{scale:1.29, opacity:1, duration:3, ease:'sine.inOut', repeat:3, yoyo:true} -210ms][>#i_b1 +100ms][>#pt1 +500ms][>#pt2 +750ms]本を増やすより先に、[>#i_b2 -250ms][!#i_b2 underline,$lamp +300ms][♪pencil -5dB -50ms]行ける時間と手段を増やす。[silence:0.26s]
+@takagi: [silence:0.21s][>#ch8 +140ms][!#hdr_r.seg[8].fill to,{scaleX:1, duration:.5, ease:'power2.out'} +240ms][spk #subbar.av_takagi #subbar.av_mori -50ms][♪pop -6dB +100ms][!#i_banner.glow to,{scale:1.29, opacity:1, duration:3, ease:'sine.inOut', repeat:3, yoyo:true} -210ms][>#i_b1 +100ms][>#pt1 +500ms][>#pt2 +750ms]本を増やすより先に、[>#i_b2 -250ms][!#i_b2 underline,$lamp +300ms][♪pencil -5dB -50ms]行ける時間と手段を増やす。[silence:0.26s]
 @mori: [spk #subbar.av_mori #subbar.av_takagi -50ms][>#pt3 -100ms][!#pt1 to,{opacity:.72, duration:.5, ease:'none'} +200ms][!#pt2 to,{opacity:.72, duration:.5, ease:'none'} +200ms]次の一手は、[>#pt3.a[1] -300ms][>#pt3.a[1].ck +400ms][♪pencil -5dB -50ms]駅前分館の夜間開館を続けて、[|]ほかの分館へ広げること。[silence:0.14s]
 @: そして、[>#pt3.a[2] -300ms][>#pt3.a[2].ck +400ms][♪pencil -5dB -50ms]電子書籍の貸出を始めることです。[silence:0.04s]
 [<#subtitle]

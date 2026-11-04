@@ -102,14 +102,6 @@ p#title_card.sub(left: 112px; top: 548px; font-size: 50px; letter-spacing: 0.12e
 div#title_card.agenda(left: "75;197;363"; top: 651px; width: "111;153;130"; height: 70px; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 6px 18px #23446B24; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)', stagger: {each: 0.14}}) ×3
   p#n(left: 10px; cy: 50%; width: 50px; font-size: 28px; text-align: center; color: #FFFFFF; background: "$mint;$mint;$orange"; border-radius: 148px; padding: 10px 0px) 1;2;✓
   p#t(left: 74px; cy: 50%; font-size: 32px; color: $navy) 準備;位置調整;まとめ
-# 左上の章札と右上の進行 (sticky・後の cut の語で出す・区切りの板より先に書く = 板の下)
-chapter_chip#chapter1.sticky(n: "STEP 1"; t: "準備"; w: 188; wn: 110)
-chapter_chip#chapter2.sticky(n: "STEP 2"; t: "位置調整"; w: 233; wn: 113)
-chapter_chip#chapter3.sticky(n: "POINT"; t: "まとめ"; w: 201; wn: 104; c: $orange; out: {opacity:0, duration:0.4})
-div#progress.sticky(left: 1408px; top: 50px; width: 456px; height: 66px; border-radius: 20px; background: #FFFFFFEB; box-shadow: 0px 6px 18px #192D4624; z-index: front; in: none; out: {opacity:0, duration:0.4})
-  div#track(left: "15;109;204"; top: 14px; width: 128px; height: 10px; border-radius: 6px; background: $track) ×3
-    div#bar(left: 0px; top: 0px; width: 128px; height: 10px; border-radius: 6px; background: $mint; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
-  p#step(left: "15;109;204"; top: 32px; width: 128px; font-size: 27px; text-align: center; color: $mute) ×3 準備;位置調整;まとめ
 bumper_back#bumper1_back.sticky(c: $mint_l)
 bumper#bumper1.sticky(s: "STEP 1"; t: "準備"; u: "ブレーキの確認")
 
@@ -124,6 +116,15 @@ img#brake_inset(left: 1360px; top: 196px; width: 400px; height: 400px; border-ra
 p#brake_cap(left: 1300px; top: 616px; width: 520px; font-size: 38px; line-height: 1.35; text-align: center; color: $navy; background: #FFFFFFF5; border-radius: 18px; padding: 16px 20px 18px 20px; box-shadow: 0px 8px 22px #192D462E; in: {y:20, opacity:0, duration:0.45, ease:'power3.out'}) {o}ブレーキレバー{/}を押して[br]確実にロック
 p#brake_check(left: 1318px; top: 760px; font-size: 32px; color: #FFFFFF; background: $mint; border-radius: 148px; padding: 16px 26px 18px 68px; box-shadow: 0px 8px 20px #2E9C7A59; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)'}) 左右両方のブレーキを確認
   p#ok(left: 12px; cy: 50%; width: 44px; font-size: 28px; text-align: center; color: $mint; background: #FFFFFF; border-radius: 148px; padding: 8px 0px) ✓
+# 左上の章札と右上の進行 (sticky・締めまで)・進行の棒は 3 本とも幅 0 で出し、章の cut の語で to で伸ばす (後の cut で初めて出すと
+# 確定済みの前の cut を書き換える)・区切りの板の再掲より先に書く = 板の下
+chapter_chip#chapter1.sticky(n: "STEP 1"; t: "準備"; w: 188; wn: 110)
+div#progress.sticky(left: 1408px; top: 50px; width: 456px; height: 66px; border-radius: 20px; background: #FFFFFFEB; box-shadow: 0px 6px 18px #192D4624; z-index: front; in: none; out: {opacity:0, duration:0.4})
+  div#track(left: "15;109;204"; top: 14px; width: 128px; height: 10px; border-radius: 6px; background: $track) ×3
+    div#bar(left: 0px; top: 0px; width: 128px; height: 10px; border-radius: 6px; background: $mint; transform: scaleX(0); transform-origin: left)
+  p#step(left: "15;109;204"; top: 32px; width: 128px; font-size: 27px; text-align: center; color: $mute) ×3 準備;位置調整;まとめ
+@#bumper1_back
+@#bumper1
 
 # ng — 学生の気づき: 学生の顔に寄る → 写真を左へずらし右から NG 図 → 「動いちゃって」で車椅子が走り「危険」で警告 → 「その通り」で写真を戻して丸
 section#ng(stagger: {each:0})
@@ -169,6 +170,10 @@ div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius
   svg#chair(left: 226px; top: 354px; width: 350px; height: 170px; part: top_chair; delay: 300ms; in: {x:260, opacity:0, duration:0.65, ease:'power3.out'})
   top_part#chair_label(pt: top_chair_label; delay: 750ms; in: fade {duration: 0.4})
   top_part#callout(pt: top_callout; in: pop {scale: 0.6, duration: 0.5, ease: 'back(2)', pivot: '13.4%,68.5%'})
+# STEP 2 の章札 (この cut の語で出す・区切りの板の下)
+chapter_chip#chapter2.sticky(n: "STEP 2"; t: "位置調整"; w: 233; wn: 113)
+@#bumper2_back
+@#bumper2
 bumper_back#bumper3_back.sticky(c: $mint_l)
 bumper#bumper3.sticky(s: "POINT"; t: "まとめ"; u: "移乗介助のポイント")
 
@@ -185,6 +190,10 @@ div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius:
     icon#mark(left: 10px; cy: 50%; font-size: 39px; name: check; weight: bold; color: #FFFFFF; in: draw {duration: 0.3})
     p#t(left: 82px; cy: 50%; font-size: 38px; line-height: 1.3; color: $ink) 車椅子の{p}ブレーキ{/}を確認;ベッドとの角度は{p}15°〜30°{/};{p}声かけ{/}を忘れずに;{p}利用者のペース{/}に合わせる
     shape#sep(left: 0px; bottom: 0px; width: 588px; height: 3px; path: line_h; border: 2px solid $sep; dash: 5,5; opacity: "1;1;1;0")
+# POINT の章札 (この cut の語で出す・区切りの板の下)
+chapter_chip#chapter3.sticky(n: "POINT"; t: "まとめ"; w: 201; wn: 104; c: $orange; out: {opacity:0, duration:0.4})
+@#bumper3_back
+@#bumper3
 
 # end — 締め: 開幕の題札を cream の地の中央に組み直す
 section#end(stagger: {each:0})
@@ -209,7 +218,7 @@ se title +300ms
 @narr: [silence:1.5s]今回は、車椅子への安全な移乗介助の[br][>#title_card.agenda[*]][♪pop -3dB +50ms]基本手順について学んでいきましょう。[silence:0.32s][<#title_card][silence:0.22s][>#bumper1_back][♪trans][>#bumper1 +70ms][bumper_in #bumper1 +300ms][silence:0.53s]
 
 *** brake
-@staff: [silence:0.9s][bumper_out #bumper1 -570ms][<#bumper1 -510ms][<#bumper1_back -450ms][>#progress -600ms][>#chapter1 -400ms][>#progress.track[1].bar -300ms][!#progress.step[1] recolor,$mint {duration: .05} -300ms][>#brake_head -100ms]まず一番大切なのは、[br]車椅子の[>#brake_zoom.ring][!#brake_zoom.ring ping,#FFB36B {count: 2, interval: .73, duration: .7, scale: [.9, 1.6]} +50ms][>#click_word +40ms][<#click_word +1300ms][♪click +40ms]{k}ブレーキ{/}が[>#brake_inset -50ms][♪whoosh -5dB -50ms][>#brake_cap +300ms]しっかりかかっているかの[>#brake_check -350ms][♪check -1dB -300ms]確認です。[silence:0.35s]
+@staff: [silence:0.9s][bumper_out #bumper1 -570ms][<#bumper1 -510ms][<#bumper1_back -450ms][>#progress -600ms][>#chapter1 -400ms][!#progress.track[1].bar to,{scaleX:1, duration:0.6, ease:'power2.out'} -300ms][!#progress.step[1] recolor,$mint {duration: .05} -300ms][>#brake_head -100ms]まず一番大切なのは、[br]車椅子の[>#brake_zoom.ring][!#brake_zoom.ring ping,#FFB36B {count: 2, interval: .73, duration: .7, scale: [.9, 1.6]} +50ms][>#click_word +40ms][<#click_word +1300ms][♪click +40ms]{k}ブレーキ{/}が[>#brake_inset -50ms][♪whoosh -5dB -50ms][>#brake_cap +300ms]しっかりかかっているかの[>#brake_check -350ms][♪check -1dB -300ms]確認です。[silence:0.35s]
 transition dissolve {duration: .33, overlap: .33}
 
 *** ng
@@ -219,10 +228,10 @@ subtitle "その通りです。[br]次に、ベッドと車椅子の{k}角度{/}
 
 *** angle
 subtitle "その通りです。[br]次に、ベッドと車椅子の{k}角度{/}を{k}15度から30度{/}に配置します。"
-@staff: [silence:0.15s][<#chapter2 cut-0ms][bumper_out #bumper2 +180ms][<#bumper2 +240ms][<#bumper2_back +300ms][>#chapter2 +200ms][>#progress.track[2].bar +200ms][!#progress.step[2] recolor,$mint {duration: .05} +200ms][♪whoosh -6dB +450ms]次に、ベッドと車椅子の[>#top_view.edge][>#top_view.axis]角度を[turn_chair -15 .55][>#top_view.range +200ms][>#top_view.sector +200ms]15度から[turn_chair -30 .6 power2.inOut -50ms][>#top_view.arc -50ms][turn_chair -22 .55 power2.out +750ms][>#top_view.callout +550ms][♪pop -1dB +550ms][>#top_view.sector2 +1200ms][<#top_view.sector2 +1700ms]30度に配置します。[silence:0.47s][>#bumper3_back][♪trans][>#bumper3 +70ms][bumper_in #bumper3 +300ms][silence:0.53s]
+@staff: [silence:0.15s][<#chapter2 cut-0ms][bumper_out #bumper2 +180ms][<#bumper2 +240ms][<#bumper2_back +300ms][>#chapter2 +200ms][!#progress.track[2].bar to,{scaleX:1, duration:0.6, ease:'power2.out'} +200ms][!#progress.step[2] recolor,$mint {duration: .05} +200ms][♪whoosh -6dB +450ms]次に、ベッドと車椅子の[>#top_view.edge][>#top_view.axis]角度を[turn_chair -15 .55][>#top_view.range +200ms][>#top_view.sector +200ms]15度から[turn_chair -30 .6 power2.inOut -50ms][>#top_view.arc -50ms][turn_chair -22 .55 power2.out +750ms][>#top_view.callout +550ms][♪pop -1dB +550ms][>#top_view.sector2 +1200ms][<#top_view.sector2 +1700ms]30度に配置します。[silence:0.47s][>#bumper3_back][♪trans][>#bumper3 +70ms][bumper_in #bumper3 +300ms][silence:0.53s]
 
 *** summary
-@narr: [silence:1.0s][<#chapter3 cut-0ms][<#progress cut-0ms][bumper_out #bumper3 -670ms][<#bumper3 -610ms][<#bumper3_back -550ms][>#chapter3 -650ms][>#progress.track[3].bar -650ms][!#progress.step[3] recolor,$orange {duration: .05} -650ms][>#points.item[1] -700ms][tick #points.item[1] -600ms][♪check -4dB -630ms][>#points.item[2] -550ms][tick #points.item[2] -450ms][>#points.item[3] -100ms][tick #points.item[3] +250ms][♪check -2dB +250ms]{k}声かけ{/}を忘れず、[br][>#points.item[4] -100ms][tick #points.item[4] +250ms][♪check -2dB +250ms]{k}利用者のペース{/}に合わせて[!#points glow,#9FE0C9E6 {blur: 0, spread: 7}]安全に移乗を行いましょう。[silence:0.4s][♪kira -2dB][silence:0.85s]
+@narr: [silence:1.0s][<#chapter3 cut-0ms][<#progress cut-0ms][bumper_out #bumper3 -670ms][<#bumper3 -610ms][<#bumper3_back -550ms][>#chapter3 -650ms][!#progress.track[3].bar to,{scaleX:1, duration:0.6, ease:'power2.out'} -650ms][!#progress.step[3] recolor,$orange {duration: .05} -650ms][>#points.item[1] -700ms][tick #points.item[1] -600ms][♪check -4dB -630ms][>#points.item[2] -550ms][tick #points.item[2] -450ms][>#points.item[3] -100ms][tick #points.item[3] +250ms][♪check -2dB +250ms]{k}声かけ{/}を忘れず、[br][>#points.item[4] -100ms][tick #points.item[4] +250ms][♪check -2dB +250ms]{k}利用者のペース{/}に合わせて[!#points glow,#9FE0C9E6 {blur: 0, spread: 7}]安全に移乗を行いましょう。[silence:0.4s][♪kira -2dB][silence:0.85s]
 transition dissolve {duration: .3, overlap: .3, ease: 'power2.inOut'}
 
 *** end

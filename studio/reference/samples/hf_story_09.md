@@ -200,24 +200,6 @@ p#end_url(cx: 960px; cy: 843px; font-size: 32px; color: $pale; letter-spacing: 0
 cast narrator = "落ち着いた低音の男性ナレーター、響きが豊かで滑らか、ドキュメンタリーの語り"
 silence head=0ms tail=0ms
 transition = dissolve {duration: .3, overlap: .3}
-read 法螺貝 = ほらがい
-read 甲冑 = かっちゅう
-read 約400騎 = やくよんひゃっき
-read 相馬野馬追 = そうまのまおい
-read 遠祖 = えんそ
-read 平将門 = たいらのまさかど
-read 宵乗り = よいのり
-read 野馬懸 = のまかけ
-read 本祭り = ほんまつり
-read 旗指物 = はたさしもの
-read 雲雀ヶ原祭場地 = ひばりがはらさいじょうち
-read 正午 = しょうご
-read 御神旗 = ごしんき
-read 神旗 = しんき
-read 小高 = おだか
-read 白装束 = しろしょうぞく
-read 御小人 = おこびと
-read お行列 = おぎょうれつ
 
 *** open
 [>#subtitle]

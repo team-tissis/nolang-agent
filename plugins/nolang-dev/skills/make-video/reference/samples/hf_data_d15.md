@@ -278,8 +278,6 @@ div#s8(left: 56px; top: 186px; width: 968px; height: 1110px; in: {x:1100, durati
 #v2
 cast n = "明瞭で端正な30〜40代の男性のナレーター、やや高めのピッチと歯切れの良い発音で、淀みのない一定のテンポで調査の数字を伝える" speed=117%
 silence head=0ms tail=0ms
-read 23.4% = にじゅうさんてんよんパーセント
-read 38.5% = さんじゅうはってんごパーセント
 # 切替: 旧い板が左へ抜け新しい板が右から入る (板ごとの in / out・0.5 秒)。縁が 2 枚の板の隙間を同じ速さで走る wipe で継ぐので、地と常設の枠は動かない
 # 窓は境界の前の 0.5 秒 (overlap なし = 旧い板の out と新しい板の in が同じ 0.5 秒に重なる)・前の声の末尾の 0.2 秒 + 次の頭の 0.06 秒 (字幕は声の 60 ms 前に出る) が声と声の間
 transition = wipe {duration: .5, dir: 'left', ease: 'power3.inOut'}

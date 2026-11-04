@@ -1,6 +1,6 @@
 # data · 家計の固定費 (横・前後の数字 + 棒グラフ) — canvas 1920x1080・editable profile 準拠 (data_18 の変換)
 
-見せる文法: 編集可能モードの作り — 横棒の段の def (hbar・per-instance の値で絶対配置)・年間差の札の def・preset と単純 object の入退場・`!` は 1 cut 2 個まで・count / run / group / sticky なし
+見せる文法: 編集可能モードの作り — 横棒の段の def (hbar・per-instance の値で絶対配置)・年間差の札の def・preset と単純 object の入退場・`!` / `=` の印は書かない・count / run / group / sticky なし
 
 ```design.txt
 #v2
