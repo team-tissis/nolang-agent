@@ -16,7 +16,7 @@ on:
       ref:
         description: backend の branch
         required: true
-        default: claude-draft-src
+        default: v6
       sha:
         description: backend の commit (空なら ref の先頭)
         required: false
