@@ -302,8 +302,8 @@ board#g_cmp(left: 96px; top: 292px; width: 820px; height: 676px; t: "件数と�
     p#s(cx: 50%; top: 33px; font-size: 18px; color: $muted; font-family: r; white-space: nowrap) 4,128 件;4,175 時間
   p#g43(left: 30px; top: 418px; font-size: 76px; line-height: 1; font-family: n; color: $amber; in: {x:-20, opacity:0, duration:0.5, ease:'power3.out'}) 43%
     p#s(left: 0px; top: 82px; font-size: 18px; color: $fg2; font-family: g; white-space: nowrap) 1,775 件
-  p#g75(left: 662px; top: 338px; font-size: 86px; line-height: 1; font-family: n; color: $amber; transform-origin: 0% 50%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'}) 75%
-    p#s(left: 0px; top: 92px; font-size: 18px; color: $fg2; font-family: g; white-space: nowrap) 3,147 時間
+  p#g75(left: 662px; top: 338px; font-size: 72px; line-height: 1; font-family: n; color: $amber; transform-origin: 0% 50%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'}) 75%
+    p#s(left: 0px; top: 78px; font-size: 18px; color: $fg2; font-family: g; white-space: nowrap) 3,147 時間
 board#g_top(left: 950px; top: 292px; width: 874px; height: 676px; t: "時間を食っている上位 3 カテゴリ"; u: "対応時間の合計（3 か月）"; pc: $amber; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})
   div#r(left: 32px; top: "108;204;300;431"; width: 810px; height: 96px; opacity: "1;1;1;0.92"; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) ×4
     div#sw(left: 0px; top: 9px; width: 16px; height: 16px; border-radius: 4px; background: "$orange;$coral;$amber;$teal")
