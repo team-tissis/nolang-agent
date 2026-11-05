@@ -309,12 +309,13 @@ async function waitStatus(api, videoId, until, timeoutS) {
     // patch の直した区間 (range_render) は全尺より先に描かれる — 見られるようになった時と出来上がった時を知らせる
     const range = st.range_render ?? null;
     if (range && (range.status !== last?.range_render?.status || Boolean(range.manifest_url) !== Boolean(last?.range_render?.manifest_url))) {
-      log(`range: ${range.status}${range.manifest_url ? " (直した区間を再生できる)" : ""}${range.mp4_url ? ` mp4 ${range.mp4_url}` : ""}`);
+      log(`range: ${range.status}${range.manifest_url ? ` (直した区間を再生できる: ${range.watch_url})` : ""}${range.mp4_url ? ` mp4 ${range.mp4_url}` : ""}`);
     }
     last = st;
     if (st.status === "failed" || st.status === "expired") return st;
     if (st.status === "completed" || (until === "playable" && st.playable)) return st;
-    if (until === "range" && (range?.status === "ready" || range?.status === "failed" || (!range && st.playable))) return st;
+    // range = 直した区間を再生できる所 (manifest が出た時) まで。区間が無い動画は全尺が再生できる所まで
+    if (until === "range" && (range?.manifest_url || range?.status === "ready" || range?.status === "failed" || (!range && st.playable))) return st;
     if (Date.now() > deadline) return { ...st, timed_out: true };
     await new Promise((r) => setTimeout(r, 5000));
   }
@@ -1048,11 +1049,13 @@ async function cmdPatch(positionals, flags) {
   log(`patch を頼んだ (対象 ${videoId}) — 決定論の編集が当たる依頼だけ成立する (判定に数秒〜30 秒)`);
   const res = await callApi(api, "POST", `/v1/unstable/videos/${videoId}/patch/`, body);
   if (res.stage === "applied") {
-    // 直した区間 (range_render) は全尺より先に描かれる: 既定は区間が出来た所 (無ければ全尺が再生できる所) まで待つ。
+    // 直した区間 (range_render) は全尺より先に描かれる: 既定は区間を再生できる所 (無ければ全尺が再生できる所) まで待ち、
+    // 区間の視聴ページ (range_render.watch_url) を tell_user で知らせる (plugin の hook が通知にする)。
     // --until playable で従来どおり全尺が再生できるまで
     const st = await waitStatus(api, res.video_id, flags.until === "playable" ? "playable" : "range", Number(flags.timeout || 300));
     const ok = st.status !== "failed" && st.status !== "expired" && !st.timed_out;
     const range = st.range_render ?? null;
+    const rangeWatchUrl = range?.manifest_url && range.watch_url ? range.watch_url : null;
     out({
       ok,
       stage: "applied",
@@ -1063,11 +1066,12 @@ async function cmdPatch(positionals, flags) {
       range_render: range,
       ...(ok
         ? {
-            tell_user: `直しを当てた動画ができました (元の動画はそのまま):\n${res.watch_url}`,
-            next:
-              range?.status === "ready"
-                ? `${TELL_FIRST}。直した区間だけの mp4 (range_render.mp4_url) で変更箇所を確かめられる (全尺は nolang status <video_id> --wait --until playable)`
-                : TELL_FIRST,
+            tell_user: rangeWatchUrl
+              ? `直した区間を今すぐ再生できます (全体の描画は続いています):\n${rangeWatchUrl}\n直しを当てた動画全体 (元の動画はそのまま・生成中から追いかけ再生):\n${res.watch_url}`
+              : `直しを当てた動画ができました (元の動画はそのまま):\n${res.watch_url}`,
+            next: rangeWatchUrl
+              ? `${TELL_FIRST}。全体が再生できる所までは nolang status ${res.video_id} --wait --until playable (区間の mp4 は出来たら range_render.mp4_url)`
+              : TELL_FIRST,
           }
         : { error: st.timed_out ? "再生できるまでの待ち時間を超えた" : `描画が ${st.status} になった` }),
     });

@@ -50,7 +50,7 @@ description: 社内 dev の NoLang (dev.no-lang.com) で動画を 1 本作る。
 
 元の動画はどちらの手でもそのまま残り、直った動画が新しい URL でできる。対象は `video_id` (視聴 URL の UUID)。
 
-1. まず `nolang patch <video_id> --request-text "<直す点>"` — server の決定論の直し。台詞の言い換え・見た目 (色・大きさ・BGM 音量)・素材の差し替えなどが数十秒で当たり、声と触らない cut は再利用される。`stage: "applied"` なら出力の `tell_user` を伝えて終わり (直した区間は全尺より先に描かれ、出力の `range_render.mp4_url` / `manifest_url` で変更箇所だけを確かめられる。全尺は `nolang status <video_id> --wait --until playable`)。`clarify` は質問に答えて (分からなければユーザーに聞いて) `--answered` で出し直す。
+1. まず `nolang patch <video_id> --request-text "<直す点>"` — server の決定論の直し。台詞の言い換え・見た目 (色・大きさ・BGM 音量)・素材の差し替えなどが数十秒で当たり、声と触らない cut は再利用される。`stage: "applied"` なら出力の `tell_user` を伝えて終わり (直した区間は全尺より先に描かれ、再生できた時点で返る。`tell_user` の 1 本目の URL = 区間の視聴ページ `range_render.watch_url`、2 本目 = 動画全体。区間の mp4 は出来たら `range_render.mp4_url`。全尺は `nolang status <video_id> --wait --until playable`)。`clarify` は質問に答えて (分からなければユーザーに聞いて) `--answered` で出し直す。
 2. `applied` にならなかった時 (`stage: rebuild / clarify_suppressed / unsupported / …`) は `nolang edit <dir> <video_id> --request-text "<直す点>"` — 保存された原稿を種に編集役が依頼のぶんだけ書き換え、触らない cut はそのまま通る (1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。
 3. どちらも新しい動画を作らずに終わった時だけ、依頼文に `[video:<video_id>]` を書いて `nolang make` (参照つきの作り直し)。
 
