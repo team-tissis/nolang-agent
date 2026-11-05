@@ -506,12 +506,13 @@ class Run(cut_stages.CutStages, ABC):
         outside = self.outside_window(c, cuts)
         res = await (self.check_without(c, cuts, outside, "author") if outside else self.check_cut(c, cuts, "author"))
         clean = not res.defects and not res.blockers  # 止まった check では c の実行の DEFECT が見えない
-        lint, report = res.findings, res.report
+        defects, lint, report = res.defects, res.findings, res.report
         if skip := frozenset(res.blockers - {"?", cut_stages.ROOT}):
-            # 前の cut (著者の版) の DEFECT で check が止まり lint が出ない — その cut も除いた doc で c の lint を取る
+            # 前の cut (著者の版) の DEFECT で check が止まり lint も c の DEFECT も出ない — その cut も除いた doc で c の DEFECT と
+            # lint を取る (取った DEFECT を担当に渡さず、同じ書き損じの cut ごとに直し役が 1 巡ずつ直していた — 11-05 FPN2 G2-4)
             other = await self.check_without(c, cuts, skip | outside, "author")
             clean = not res.defects and not other.defects and not other.blockers
-            lint, report = other.findings, other.report
+            defects, lint, report = [*res.defects, *other.defects], other.findings, other.report
         if clean:
             self.author_clean.add(c)
         mine = [f for f in lint if f.cut == c]
@@ -537,7 +538,7 @@ class Run(cut_stages.CutStages, ABC):
         # 担当には既定で DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・10-26 の 2 bench)
         levels = ("severe", "warn") if self.staff_warn else ("severe",)
         staffed = [f for f in mine if f not in fixed and f.severity in levels]
-        findings = "\n".join(d.text for d in res.defects[:20]) + "".join("\n" + f.render() for f in staffed[:30])
+        findings = "\n".join(d.text for d in defects[:20]) + "".join("\n" + f.render() for f in staffed[:30])
         if c in self.cut_estimate:
             self.log(
                 cut=c,
@@ -554,9 +555,7 @@ class Run(cut_stages.CutStages, ABC):
         ff = dd / "findings_author.txt"
         ff.write_text(findings)
         (dd / "timing_author.txt").write_text(cut_timing(report, c))  # 担当が読む (stream_author の staff・指摘の隣)
-        self.log(
-            cut=c, event="check", round="author", s=round(time.time() - t, 1), defect=len(res.defects), warn=len(mine)
-        )
+        self.log(cut=c, event="check", round="author", s=round(time.time() - t, 1), defect=len(defects), warn=len(mine))
         return ff
 
     # 止まらない開始の予測の定数 (10-27〜28 の local 実測 30 run: 担当 low 7〜27 s (中央 15) / medium 21〜73 s (中央 37・
