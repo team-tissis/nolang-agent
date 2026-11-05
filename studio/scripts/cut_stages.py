@@ -212,6 +212,8 @@ class CutStages(ABC):
         self.author_clean: set[str] = set()  # 著者の版が check で DEFECT 0 だった cut (差し戻せる)
         self.unlocated_owner: dict[tuple[str, str | None, str], str] = {}  # 行の無い DEFECT の sig → 持ち主の cut
         self.warms: dict[str, Warm] = {}
+        self.warm_queued: set[str] = set()  # 頼みの task を作ったがまだ送っていない cut
+        self.warm_turn = asyncio.Lock()  # 頼みは 1 回に 1 つ (`_request_warm`)
         self.cut_estimate: dict[str, float] = {}  # cut → check が測った見込み秒 (check の受け口が書く)
         # cut → その cut の最後の check がまだ解けていない絵 (warm の pin の無い絵) で測った絵の名 (check の受け口が書く)。合成の
         # 寸法と宣言の主体で測るので、主体に乗る文字・読めない文字は解けた後の check でしか出ない
@@ -1316,16 +1318,28 @@ class CutStages(ABC):
             return
         if w.ok and w.key == author_core.asset_key(self.blocks[c]):
             return
+        self.warm_queued.add(c)
         w.task = asyncio.create_task(self._request_warm(c), name=f"draft-warm-{c}")
 
     async def _request_warm(self, c: str) -> None:
-        """text = 根 (まだ流れていなければ) + 構成の順で c までの未投入の live な cut。投入と同じ検査で弾かれた頼み (前の cut が直しの
-        途中) は記録だけして、次の契機に頼み直す。"""
-        w = self.warms[c]
-        w.key = author_core.asset_key(self.blocks[c])
-        w.asked = time.monotonic()
+        """頼みは 1 回に 1 つ (`warm_turn`)。text = 根 (まだ流れていなければ) + 構成の順で「頼みを待っている cut の最後」までの未投入の
+        live な cut — 待っている頼みは全部その 1 回に乗り、乗った cut は自分では送らない。頼みは受け口でも run でも「その cut までの
+        全文」の compile になるので、cut ごとに並べて送ると長い動画で受け口を塞いだ (41 cut で 80 回が重なり check が timeout)。
+        投入と同じ検査で弾かれた頼み (どれかの cut が直しの途中) は記録だけして次の契機に頼み直す — まとめた頼みが弾かれたら
+        c までで 1 回だけ頼み直す。"""
+        async with self.warm_turn:
+            if c not in self.warm_queued:  # 待つ間に前の頼みが c も運んだ
+                return
+            at = self.order.index
+            riders = sorted(self.warm_queued, key=at)
+            self.warm_queued.difference_update(riders)
+            if not await self._warm_through(riders) and riders[-1] != c:
+                await self._warm_through([x for x in riders if at(x) <= at(c)])
+
+    async def _warm_through(self, riders: list[str]) -> bool:
+        """riders (構成の順) の最後の cut までの未投入の live な cut を 1 回で頼む → 通ったか。riders の頼みの状態を書く。"""
         parts: list[str] = []
-        for x in self.order[: self.order.index(c) + 1]:
+        for x in self.order[: self.order.index(riders[-1]) + 1]:
             if x in self.submitted or self.broken.get(x):
                 continue
             blk = self.cut_block(x)
@@ -1333,15 +1347,20 @@ class CutStages(ABC):
                 parts.append(blk[0].rstrip("\n") + "\n" + blk[1].rstrip("\n") + "\n")
         text = ("" if self.root_submitted else self.root_text()) + "".join(parts)
         started = time.monotonic()
+        for x in riders:
+            w = self.warms[x]
+            w.key, w.asked, w.ok = author_core.asset_key(self.blocks[x]), started, False
         error = await self.warm_text(text)
-        w.ok = error is None
+        for x in riders:
+            self.warms[x].ok = error is None
         self.record(
             "warm",
-            cut=c,
-            ok=w.ok,
+            cut=riders[-1],
+            ok=error is None,
             s=round(time.monotonic() - started, 1),
             **({"cuts": len(parts)} if error is None else {"error": error[:300]}),
         )
+        return error is None
 
     # ---- 投入 ----
     async def submit_root(self) -> None:
