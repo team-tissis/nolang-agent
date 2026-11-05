@@ -8,7 +8,8 @@ HTTP と claude の子 process で運ぶ。意図して違う所はこの class 
 
 cut の段 (cut ごとに並列の task):
   受け (前の cut が使う定義はそちらへ移す) → (担当) → check + 直し (見直し + 指摘の直し 2 回まで・最初の DEFECT 0 で warm) → 機械の
-  直し (直し役の後に 1 回) → staged → 投入 (構成の順・投入検査で弾かれた cut は直し役を 1 回・別枠)。直しきれない DEFECT は捨てる前に
+  直し (直し役の後に 1 回) → (解けた絵での掛け直し — 最後の check が warm の未だ解けない絵で測った cut だけ・投入がその cut を待つ前まで)
+  → staged → 投入 (構成の順・投入検査で弾かれた cut は直し役を 1 回・別枠)。直しきれない DEFECT は捨てる前に
   最後の手段 (著者の版 → editable の印と動きを機械で寄せる → DEFECT の印を落として台詞を残す) を掛ける。
 根の規則: 名のある定義は初めて使う cut の block に書き、その cut だけが直す。根の持ち主は最初の live な cut — 根はその cut の check が
 DEFECT 0 で通った時点で先に投入して凍る (弾かれたら最初の cut と一緒に流し、それまでその cut の直し役が根も直せる)。壊れた cut の
@@ -39,6 +40,10 @@ ROOT = "(root)"
 FIX_CALLS = 2
 # 1 cut の check の round の上限 (直し 2 回・見直し 1 回・戻しの往復で普通は 6 以内)
 MAX_ROUNDS = 12
+# 解けた絵での掛け直し: 絵が解けたかを check で見る間隔と、warm の頼みから待つ上限の秒 (絵の生成は 10〜40 秒・負荷で延びる —
+# 上限は静止画の頼みが warm の pin を待つ上限 `draft_stills.WARM_WAIT_S` と同じ)
+WARM_POLL_S = 12.0
+WARM_WAIT_S = 90.0
 _SEP = author_core.TIMELINE_SEP
 
 
@@ -91,6 +96,7 @@ class Lint:
     message: str
     hint: str = ""
     autofix: str = ""  # 直し方が一つに決まる指摘の機械の直し (`操作:引数`)
+    by: str = ""  # 隠した側の層の名 (occluded / covered_text / hidden_layer — layer は隠れた側)
 
     @classmethod
     def read(cls, d: Mapping[str, object]) -> Lint:
@@ -102,6 +108,7 @@ class Lint:
             message=str(d.get("message", "")),
             hint=str(d.get("hint", "")),
             autofix=str(d.get("autofix") or ""),
+            by=str(d.get("by") or ""),
         )
 
     def render(self) -> str:
@@ -136,6 +143,7 @@ class Warm:
     task: asyncio.Task[None] | None = None
     key: author_core.AssetKey | None = None
     ok: bool = False
+    asked: float | None = None  # 最後に頼んだ時刻 (monotonic)
 
 
 class FixerUnavailable(Exception):
@@ -205,6 +213,9 @@ class CutStages(ABC):
         self.unlocated_owner: dict[tuple[str, str | None, str], str] = {}  # 行の無い DEFECT の sig → 持ち主の cut
         self.warms: dict[str, Warm] = {}
         self.cut_estimate: dict[str, float] = {}  # cut → check が測った見込み秒 (check の受け口が書く)
+        # cut → その cut の最後の check がまだ解けていない絵 (warm の pin の無い絵) で測った絵の名 (check の受け口が書く)。合成の
+        # 寸法と宣言の主体で測るので、主体に乗る文字・読めない文字は解けた後の check でしか出ない
+        self.unwarmed: dict[str, list[str]] = {}
         # 改名
         self.root_renames: dict[str, str] = {}
         self.root_checked = False
@@ -212,6 +223,7 @@ class CutStages(ABC):
         # 投入
         self.root_submitted = False
         self.submitted: list[str] = []
+        self.wanted: dict[str, asyncio.Event] = {}  # cut → 投入がその cut の staged を待ち始めた (それ以降は待たせない)
 
     # ---- 受け口 (subclass) ----
     @abstractmethod
@@ -621,6 +633,16 @@ class CutStages(ABC):
             return ""
         return author_core.length_finding(estimate, budget, blk[1])
 
+    def staff_length_finding(self, c: str) -> str:
+        """担当に添える尺の指摘の 1 行 — 台詞を直せる担当 (著者 brief でない) にだけ、著者版の見込みが予算を許容の外まで超えた cut
+        で (`length_finding`)。足りない側は渡さない (文を足すと絵の変化の無い静止が伸びる — 10-24・ずれは締めの弾性が吸う)。著者は
+        自分の注記で予算超えを書いても直さない (11-04 検証 p04: 60 s 指定で 77.6 s・各位の見込みが plan の 1.3 倍) ので、台詞を
+        書き直せる最後の役に渡す。"""
+        budget, estimate = self.cut_budget(c), self.cut_estimate.get(c)
+        if self.brief or budget is None or estimate is None or estimate <= budget:
+            return ""
+        return self.length_finding(c)
+
     def cut_length(self, c: str) -> dict[str, float | None]:
         """staged の時点の cut c の尺の記録: plan の目標秒・予算・著者の宣言 (`# 台詞 ~N s`)・check の見積り。"""
         author = self.author_blocks.get(c)
@@ -664,12 +686,20 @@ class CutStages(ABC):
 
     def root_layer(self, c: str, f: Lint) -> bool:
         """指摘の層が根の物 (字幕・根に書いた要素) で、cut c がその持ち主でない = c の直し役には直せない (根は凍っている)。渡すと
-        直し役が cut の block に根の行を書き直して DEFECT:ROOT_AFTER_CUT になり、丸ごと戻しを繰り返した (10-28: 字幕の offscreen)。"""
+        直し役が cut の block に根の行を書き直して DEFECT:ROOT_AFTER_CUT になり、丸ごと戻しを繰り返した (10-28: 字幕の offscreen)。
+        隠れた層が根の物でも、隠した側 (`by`) が cut の層なら cut の行 (隠す絵の z / 置き場) で直せる — 渡す (11-04 検証 p04: 根の
+        順位の帯を cut の全面の絵が隠した occluded が root_layer_skipped で直し役 0 回のまま最終に 5 件残った)。"""
         if self.owns_root(c):
             return False
-        base = f.layer.split(".")[0].split("[")[0]
         layers = {m.group(1) for m in re.finditer(r"^\s*[a-z_]+#([A-Za-z_]\w*)", self.root_design or "", re.M)}
-        return base == "subtitle" or base in layers
+
+        def rooted(name: str) -> bool:
+            base = name.split(".")[0].split("[")[0]
+            return base == "subtitle" or base in layers
+
+        if f.by and not rooted(f.by):
+            return False
+        return rooted(f.layer)
 
     # ---- check ----
     async def attribute_unlocated(
@@ -981,9 +1011,13 @@ class CutStages(ABC):
         partial_base: str | None = None
         reverted_fixes: list[str] = []  # 戻した直し役の出力 — 同じ edit が返ったら当てずに戻す
         failed_edits = ""  # 戻した edit の本文 — 次の直し役に「効かなかった」と添える
+        # 新しい指摘を作って戻した直し (規則, edit の本文) — 次の直し役に添える。その直しは 1 回だけ直しの上限に数えない
+        regressed: tuple[list[str], str] | None = None
+        regress_refunded = False
         last: tuple[str, list[Lint]] | None = None  # 最後の check の (cut の text, その cut の指摘)
         # 静止画を見た見直しが絵の説明文を変えた (作り直しが warm で裏に走る) — 次の見直しの前に、直す指摘があれば画像を見ない直しを挟む
         pictures_pending = False
+        rnd = 0
         for rnd in itertools.count():
             if rnd >= MAX_ROUNDS:
                 self.record("round_cap", cut=c)
@@ -1043,28 +1077,38 @@ class CutStages(ABC):
                 # 変更の塊にあれば、その塊だけ直す前に戻す。lane が直さない warn (fix_scope=severe の who=fixer の warn) は退行に数えない —
                 # 数えると severe を消した直しが戻されて severe が復活する。ただし直しが DEFECT を消した版は戻さない (DEFECT は severe
                 # より重い — 戻すと DEFECT が復活して空回りした: 11-02 LOCAL A/B t1 onestop)。新しい指摘は次の round の直し役が見る
-                regressed = [
+                created = [
                     f
                     for f in mine
                     if f.severity in ("severe", "warn")
                     and (self.fix_finding(f) or f.severity == "severe")
                     and (f.rule, f.layer) not in prev_keys
                 ]
-                if regressed and not before_clean:
+                if created and not before_clean:
                     self.record(
                         "fix_regression_kept",
                         cut=c,
                         round=rnd,
-                        n=len(regressed),
-                        rules=sorted({f.rule for f in regressed}),
+                        n=len(created),
+                        rules=sorted({f.rule for f in created}),
                     )
-                    regressed = []
-                undone = self.revert_new_findings(c, before_fix, regressed) if regressed else 0
+                    created = []
+                fixed_text = self.blocks[c]
+                undone = self.revert_new_findings(c, before_fix, created) if created else 0
                 partial_base = before_fix if undone else None
                 before_fix = None
                 if undone:
-                    self.record("fix_regressed", cut=c, round=rnd, n=undone, rules=sorted({f.rule for f in regressed}))
-                    settled = True
+                    rules = sorted({f.rule for f in created})
+                    self.record("fix_regressed", cut=c, round=rnd, n=undone, rules=rules)
+                    reverted_fixes.append(fixed_text)
+                    if regress_refunded:
+                        settled = True
+                    else:
+                        # 戻した直しは上限に数えず、作った指摘と戻した edit を添えてもう 1 回呼ぶ (1 回だけ)。数えて打ち切ると、直しが消した
+                        # はずの severe が戻しで残ったまま staged になった (11-04 検証 p06 rebirth_wall: hidden_layer ×2 が最終に残る)
+                        regress_refunded = True
+                        fix_calls -= 1
+                        regressed = (rules, author_core.edit_lines(self.blocks[c], fixed_text))
                     continue
             if not self.fixer_on:
                 # 直し役なし: DEFECT は最後の手段だけ・指摘は直さない
@@ -1097,6 +1141,13 @@ class CutStages(ABC):
                     "\n\nThe previous fix's edits did not clear the DEFECT and were reverted (`+` = the line the previous"
                     f" fixer wrote, `-` = the current line). Do not return the same edits — fix it another way:\n{failed_edits}"
                 )
+            elif regressed is not None and not defects:
+                findings += (
+                    f"\n\nThe previous fix's edits created new findings ({', '.join(regressed[0])}) and were reverted (`+` ="
+                    " the line the previous fixer wrote, `-` = the current line). Fix the findings above without creating"
+                    f" those:\n{regressed[1]}"
+                )
+            regressed = None
             if findings == prev_findings and not defects and not reviews:
                 # 直しても指摘が 1 つも変わらない — もう 1 回頼んでも同じ答え。DEFECT が残る時は打ち切らない (cur7_03 climax)
                 self.record("fix_stalled", cut=c, round=rnd, fix=len(fixes))
@@ -1142,6 +1193,7 @@ class CutStages(ABC):
                 self.record("fix_unusable", cut=c, round=rnd, s=round(time.monotonic() - started, 1), tail=tail)
                 before_fix = None
         await self.final_autofix(c, i, last)
+        await self.warm_recheck(i, c, last, rnd)
 
     async def final_autofix(self, c: str, i: int, last: tuple[str, list[Lint]] | None) -> None:
         """直し役が回り終えた cut c に機械の直し (check の `autofix` — 直し方が一つに決まる指摘・`author_core.apply_autofix`) を 1 回
@@ -1162,6 +1214,99 @@ class CutStages(ABC):
             self.put(c, checked)
             self.record("autofix_reverted", cut=c)
 
+    async def warm_recheck(self, i: int, c: str, last: tuple[str, list[Lint]] | None, rnd: int) -> None:
+        """直し終えた cut c の最後の check が warm の未だ解けない絵で測っていたら (`unwarmed`)、WARM_POLL_S ごとに check を掛け直して
+        絵が解けるのを待つ (warm の頼みから WARM_WAIT_S まで)。投入が c を待ち始めたら待たずに抜ける (再生を待たせない・投入済みの cut には掛けない)。解けた絵で初めて出た
+        直し役の severe (主体に乗る文字・読めない文字) があれば直し役を 1 回呼び、直した版の check で DEFECT が出たか severe が
+        減らなければ戻す (11-04 検証 p06 found_crown: warm の絵でだけ出る text_over_subject が run 内の check に出ないまま最終に残った)。
+        直しの round は MAX_ROUNDS の内 (直し 1 回 + 直した版の check 1 回・絵の解けを待つ check は round に数えない)。"""
+        w = self.warms.get(c)
+        if (
+            not self.fixer_on
+            or last is None
+            or self.broken.get(c)
+            or not self.unwarmed.get(c)
+            or rnd + 4 > MAX_ROUNDS
+            or w is None
+        ):
+            return
+        if w.task is not None and not w.task.done():
+            await asyncio.wait([w.task])
+        if not w.ok or w.asked is None:  # 頼みが弾かれた — 待っても解けない
+            return
+        before_keys = {(f.rule, f.layer) for f in last[1]}
+        started = time.monotonic()
+        res: Checked | None = None
+        polls = 0
+        while True:
+            deadline = w.asked + WARM_WAIT_S
+            if not await self._until_wanted(c, min(time.monotonic() + WARM_POLL_S, deadline)):
+                self.record("warm_recheck_skipped", cut=c, waited_s=round(time.monotonic() - started, 1), n=polls)
+                if res is None:
+                    return
+                break
+            res = await self.check_settled(c, i, "warm")
+            polls += 1
+            if res.defects or res.blockers or not self.unwarmed.get(c) or time.monotonic() >= deadline:
+                break
+        if res is None or res.defects or res.blockers:
+            return  # DEFECT は投入検査が拾う (直す版の基準が無い)
+        mine = [f for f in res.findings if f.cut == c]
+        new = [
+            f
+            for f in mine
+            if f.severity == "severe"
+            and self.fix_finding(f)
+            and not self.root_layer(c, f)
+            and (f.rule, f.layer) not in before_keys
+        ]
+        self.record(
+            "warm_recheck",
+            cut=c,
+            waited_s=round(time.monotonic() - started, 1),
+            polls=polls,
+            unwarmed=len(self.unwarmed.get(c) or []),
+            severe=sum(1 for f in mine if f.severity == "severe"),
+            new=sorted({f.rule for f in new}),
+        )
+        if not new or self._wanted(c).is_set():
+            return
+        before = self.blocks[c]
+        severe = sum(1 for f in mine if f.severity == "severe")
+        started = time.monotonic()
+        try:
+            ok, tail = await self.run_fixer(c, "\n".join(f.render() for f in new[:24]), rnd="warm")
+        except FixerUnavailable as error:
+            self.record("fix_failed", cut=c, round="warm", s=round(time.monotonic() - started, 1), tail=str(error))
+            return
+        if not ok:
+            self.record("fix_unusable", cut=c, round="warm", s=round(time.monotonic() - started, 1), tail=tail)
+            return
+        after = await self.check_settled(c, i, "warm_fix")
+        left = sum(1 for f in after.findings if f.cut == c and f.severity == "severe")
+        if after.defects or after.blockers or left >= severe:
+            self.put(c, before)
+            self.record("fix_reverted", cut=c, round="warm", defect=len(after.defects), severe=left)
+            return
+        self.record("fix", cut=c, round="warm", s=round(time.monotonic() - started, 1), severe=left)
+
+    def _wanted(self, c: str) -> asyncio.Event:
+        return self.wanted.setdefault(c, asyncio.Event())
+
+    async def _until_wanted(self, c: str, at: float) -> bool:
+        """monotonic の at まで待つ → 待ち切ったか (False = 投入が c を待ち始めた)。"""
+        wanted = self._wanted(c)
+        if wanted.is_set():
+            return False
+        delay = at - time.monotonic()
+        if delay <= 0:
+            return True
+        try:
+            await asyncio.wait_for(wanted.wait(), delay)
+        except asyncio.TimeoutError:
+            return True
+        return False
+
     # ---- warm ----
     def start_prewarm(self, c: str) -> None:
         """cut c の素材 (絵・声) を run に先に作らせる (staged を待たずに・直しと並ぶ)。走っている頼み・同じ素材の鍵で通った頼みがあれば
@@ -1178,6 +1323,7 @@ class CutStages(ABC):
         途中) は記録だけして、次の契機に頼み直す。"""
         w = self.warms[c]
         w.key = author_core.asset_key(self.blocks[c])
+        w.asked = time.monotonic()
         parts: list[str] = []
         for x in self.order[: self.order.index(c) + 1]:
             if x in self.submitted or self.broken.get(x):
@@ -1230,6 +1376,7 @@ class CutStages(ABC):
         通らなければ落とす。最後の cut は end と一緒に。"""
         await self.submit_root()
         for i, c in enumerate(self.order):
+            self._wanted(c).set()
             await self.staged[c].wait()
             last = i == len(self.order) - 1
             ready = None if self.broken.get(c) else self.feed_text(c)

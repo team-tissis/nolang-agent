@@ -107,6 +107,9 @@ class Run(cut_stages.CutStages, ABC):
         request = project / "request.txt"
         self.request = request.read_text() if request.exists() else ""
         self.env = dict(os.environ)  # 役 (著者・担当・直し役) の子 process の env (運ぶ先の subclass が足す)
+        self.staff_trim: set[str] = (
+            set()
+        )  # 尺の指摘 (`cut_length`) を渡した担当の cut — 台詞の行を丸ごと消したのは戻さない
         self.shot_unwarmed: dict[str, list[str]] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (レビュー)
         self.t0 = time.time()
         # 止まらない開始の予測 (`staff_effort_for` の balanced) が読む進行の実測 — 値は全部 since 秒 (t0 からの経過)
@@ -311,7 +314,7 @@ class Run(cut_stages.CutStages, ABC):
     ) -> tuple[str, list[Defect], list[dict[str, object]]]:
         """製品の check (`drafts/check/` — compile・composer と layout の乾いた実行・lint の全規則・cut の時刻。書体は本番と同じ・run の
         warm で解けた絵は実画像で判定) を 1 回 → (check の表, DEFECT, 指摘)。ended = 動画の終わりまで書いた doc・focus = 指摘を要る cut
-        (server が lint をその cut に絞る)。測った cut の時刻を見込み秒に写す。"""
+        (server が lint をその cut に絞る)。測った cut の時刻を見込み秒に、focus の cut のまだ解けていない絵を `unwarmed` に写す。"""
         body = self.call(
             "check",
             {
@@ -334,6 +337,8 @@ class Run(cut_stages.CutStages, ABC):
                 self.cut_estimate[row["cut"]] = (
                     max(float(row.get("end_ms", 0)) - float(row.get("start_ms", 0)), 0.0) / 1000
                 )
+        if focus:
+            self.unwarmed[focus] = [str(name) for name in body.get("unwarmed") or []]
         lint = [f for f in body.get("findings", []) if isinstance(f, dict)]
         return str(body.get("report") or "\n".join(d.text for d in defects)), defects, lint
 
@@ -474,7 +479,7 @@ class Run(cut_stages.CutStages, ABC):
             return True
         author = self.author_blocks[c]
         text, restored = (
-            restore_speech(author, r.stdout, exact=self.keep_assets or self.brief)
+            restore_speech(author, r.stdout, exact=self.keep_assets or self.brief, drop=c in self.staff_trim)
             if self.verbatim or self.keep_assets or self.brief
             else (r.stdout, [])
         )
@@ -529,6 +534,17 @@ class Run(cut_stages.CutStages, ABC):
         levels = ("severe", "warn") if self.staff_warn else ("severe",)
         staffed = [f for f in mine if f not in fixed and f.severity in levels]
         findings = "\n".join(d.text for d in res.defects[:20]) + "".join("\n" + f.render() for f in staffed[:30])
+        # 著者版の見込みが予算を超えた cut は尺の指摘も渡す (担当は台詞の行を丸ごと消してよい — `staff` が戻さない)
+        if length := self.staff_length_finding(c):
+            self.staff_trim.add(c)
+            findings += "\n" + length
+            self.log(
+                cut=c,
+                event="length_lint",
+                round="author",
+                budget_s=self.cut_budget(c),
+                estimate_s=self.cut_estimate.get(c),
+            )
         dd = self.weave / c / "out"
         dd.mkdir(parents=True, exist_ok=True)
         ff = dd / "findings_author.txt"

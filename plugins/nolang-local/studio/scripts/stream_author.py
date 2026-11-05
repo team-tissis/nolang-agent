@@ -247,7 +247,7 @@ def staff_prompt(
         else ""
     )
     if keep_assets:
-        speech_rule = "Do not change the speech (`@` lines) — neither the characters nor how the lines split (the voice is already being made from the author's version; adding marks is fine). "
+        speech_rule = "Do not change the speech (`@` lines) — neither the characters nor how the lines split (the voice is already being made from the author's version; adding marks is fine) — unless the findings include `cut_length`: then delete whole supporting speech lines as it says (not what the request asks to be said) and keep the others exactly (never fast talk or packed pauses). "
         picture_rule = (
             "Pictures (`img#` descriptions and `subject:` / `room:`) stay as the author wrote them — do not change a description or add a picture with a new description (the pictures are"
             " already being made from the author's version; re-placing the same description, and changing position and size, are fine). Put text in the opening the picture's `room:` leaves."
@@ -259,7 +259,7 @@ def staff_prompt(
             # 著者 brief: 台詞は著者の版のまま固定 (声は著者の時点から担当と並列に作っている)。絵の設計は担当
             speech_rule = "Do not change the speech (`@` lines) — neither the characters nor how the lines split (the voice is already being made from the author's version; adding marks is fine). "
         else:
-            speech_rule = "You may also fix the speech (`@` lines' characters) (the voice and subtitles are made from this version; the fixer after you cannot change them). Keep this cut's planned content and sentence count. "
+            speech_rule = "You may also fix the speech (`@` lines' characters) (the voice and subtitles are made from this version; the fixer after you cannot change them). Keep this cut's planned content and sentence count — unless the findings include `cut_length`: then delete whole supporting sentences as it says (not what the request asks to be said; never fast talk or packed pauses). "
         picture_rule = (
             "This is the only stage that may rewrite a picture's description (the fixer after you cannot). The generated pictures cannot be looked at, so clear the spot where"
             " text goes with `subject:` / `room:`."
@@ -273,6 +273,7 @@ What to keep (facts of the machine):
 - Do not change the root (palette, font, cast) or earlier cuts' definitions (def, motion, run) (using them is fine). This block's definitions are used by later cuts under the same
   names — do not change a name, an argument shape or a look. If you need another shape or look, define it under a new name and use it in this block. Keep the element-name prefix (`{name}`).
 - Do not settle a sentence's picture for "a title + a photo" — make a conclusion card or a state change the hero (no title-and-photo idle beat at a chapter's start).
+- An element brought in on the last words of the cut's last sentence (or a slow entrance still running there) lands inside the outgoing transition and is never read — bring new elements in earlier (a short stamp on the last word that rides the transition is fine).
 - {picture_rule}
 - Keys are only those in authoring's "Types" table (an unknown key is a DEFECT and the cut falls). `hug` is subtitles-only. Marks (`[>#name]` `[!#name …]`) go on this cut's layers and the root's elements (cards and subtitles that span cuts — keep a `[>#name]` whose word the author chose). Never mark an earlier cut's layer, and never create a copy of a root element.
 - DEFECT regulars: a `"a;b"` list is per-instance values of ×N — the element (or the def call) needs `×N` at the end of its line / the same key appears once per element /
@@ -374,12 +375,15 @@ def _author_words_staff_marks(staff_line: str, author_line: str) -> str:
     return head + "".join(out) + bare_a[last:]
 
 
-def restore_speech(author: str, staff: str, *, exact: bool = False) -> tuple[str, list[dict[str, str]]]:
+def restore_speech(
+    author: str, staff: str, *, exact: bool = False, drop: bool = False
+) -> tuple[str, list[dict[str, str]]]:
     """逐語の台本の動画で、担当の block の台詞 (`@` の行) を著者の版の文字に戻す → (戻した block, 戻した行の記録)。比べるのは `spoken` (読点の追加と読みの
     指定は許す)。台詞の行の数が同じ区間は行ごとに著者の文字へ担当の印を載せ (`marks`)、行を足した / 消した区間は著者の行ごと
     戻す (`author_line`・印も著者の物)。台詞の行の割り方だけ変えた (文字の並びは同じ) なら戻さない。声は担当の版から作るので、ここで
     戻さないと後段では戻せない。exact = 読点・読みの指定・行の割り方も著者の版に揃える (担当が素材を変えない run — 声は著者の版から
-    先に作っていて、文字が 1 つでも違うと合成し直しになる)。"""
+    先に作っていて、文字が 1 つでも違うと合成し直しになる)。drop = 担当が台詞の行を丸ごと消しただけの区間は戻さない (尺の指摘
+    `cut_length` を渡した担当 — 消した行の声は使わないだけで作り直さない)。"""
     import difflib  # noqa: PLC0415
 
     def speech_rows(text: str) -> list[str]:  # timeline の台詞の行 (design の `@#名` は定義の見出し)
@@ -395,6 +399,9 @@ def restore_speech(author: str, staff: str, *, exact: bool = False) -> tuple[str
     log: list[dict[str, str]] = []
     for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, norm_a, norm_s, autojunk=False).get_opcodes():
         if tag == "equal":
+            continue
+        if drop and tag == "delete":
+            log.append({"mode": "dropped", "author": "".join(norm_a[i1:i2])[:80]})
             continue
         if i2 - i1 == j2 - j1:
             for i, j in zip(range(i1, i2), range(j1, j2)):

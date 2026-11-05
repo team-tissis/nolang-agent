@@ -386,7 +386,7 @@ AUTHOR_BRIEF_NOTE = (
     " visuals from scratch. For each cut, write only the brief:\n"
     "- the design block is just the `section#name(…)` line — no layers, no named definitions (def / motion / run / svg / sound / image / cue), no `img#`;\n"
     "- the timeline block opens with 1–3 `#` comment lines stating what the cut shows and how it moves (the hero, the support, the"
-    " state changes, what picture if any), then the speech lines (`@speaker: …`), then the `# speech N sentences ~M s` note, then"
+    " state changes, what picture if any), then the speech lines (`@speaker: …`), then the `# speech N sentences ~C characters ~M s` note, then"
     " the transition line only where this cut's handoff departs from the root default (only you see the whole lineup);\n"
     "- write no marks and no `se` in the cuts.\n"
     "The speech you write is final — the voice is made from your lines as they stand, so keep each sentence 25–30 characters (a"
@@ -411,8 +411,8 @@ AUTHOR_BRIEF_NOTE = (
     " `transition=` and let the ambience and the picture carry the cut; sound at most the one turn that deserves it. A whoosh on"
     " every cut of a snowbound cabin is noise, not craft. One kind per film — but play that kind: vary its duration per cut like tempo (a 0.12 s melt on a quick beat, 0.8 on a"
     " slow reveal), drop to `transition cut` on a hard turn, and in a chaptered film punctuate the chapter heads with"
-    " `transition panel {duration: .8, color: '$色', label: \"01 原因\", skew: -12}` (a curtain — never the root default or on"
-    " the last cut).\n"
+    " `transition panel {duration: .8, color: '$色', label: \"01 原因\", skew: -12}` (a curtain whose label is the chapter card — the chapter's first cut then opens on its content, not on the same heading again;"
+    " never the root default or on the last cut).\n"
 )
 
 
@@ -450,12 +450,12 @@ def author_prompt(
         )
         closing = "The closing cut is elastic, 10–30 seconds (it absorbs the other cuts' stretch). "
     length_rule = f"""- Length is set by the amount of speech; there is no write-measure-revise loop. {allot},
-  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ {SENTENCE_SECONDS_AT_100:.0f} seconds (25–30 characters) at the cast's speed=100%, so a cut's sentences = target seconds ÷ {SENTENCE_SECONDS_AT_100:.0f} (write `(target seconds · N sentences)` on the plan line).
+  then turn target seconds into sentence counts: one speech sentence (one `@` line) ≈ {SENTENCE_SECONDS_AT_100:.0f} seconds (25–30 characters) at the cast's speed=100%, so a cut's sentences = target seconds ÷ {SENTENCE_SECONDS_AT_100:.0f} (write `(target seconds · N sentences · ~C characters)` on the plan line, C = target seconds × the characters per second below).
   The budget underneath is characters: ≈ {CHARS_PER_SECOND_AT_100} characters of speech per second at speed=100%, times the cast's `speed=` (speed=150% → {CHARS_PER_SECOND_AT_100 * 1.5:.0f} a second,
-  so a 25–30 character sentence takes ≈ {SENTENCE_SECONDS_AT_100 / 1.5:.1f} s). Count sentences with the speed of the cast you write, and write more of them when they run shorter than 25 characters.
+  so a 25–30 character sentence takes ≈ {SENTENCE_SECONDS_AT_100 / 1.5:.1f} s). Count a number by its reading (`96票` is きゅうじゅうろっぴょう = 11 characters, `8%` is はちぱーせんと = 7; other text counts as written). Count sentences with the speed of the cast you write, and write more of them when they run shorter than 25 characters.
   Write that many sentences in the cut — long videos tend to run short on sentences (eyeballed seconds read longer than they are). Tie at least one screen change (an element entering, a
   state change, a picture swap) to every sentence. {closing}Right after the last speech line of each cut's timeline (before the transition), note the sentence count and the
-  estimated seconds: `# speech N sentences ~M s`.
+  estimated seconds: `# speech N sentences ~C characters ~M s`.
 - Pauses the piece needs are not length fitting — plan and write them like speech: a voiceless cut (a chapter card or a title held with no
   narration, 1.5–3 s) is `(2 s · 0 sentences)` on the plan line and `@名: [silence:2s]` in the timeline; a held beat after a question, before a
   reveal or after a number that should sink in is `[silence:0.8s]` inside the cut (its seconds count toward the target). What is banned is bending
@@ -481,7 +481,7 @@ The mechanics of draft src (facts of the machine):
 {length_rule}
 {editable_note(editable)}{editable_author_note(editable is not None, referenced=referenced)}Output shape (write nothing but this shape — no preamble, no explanations, no code fences, no headings; every `=== … ===` line starts at column 0):
 === plan ===
-name: what this cut shows and how it moves (target seconds · N sentences — 0 for a voiceless cut)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
+name: what this cut shows and how it moves (target seconds · N sentences · ~C characters — 0 for a voiceless cut)      ← one line per cut; names are lowercase ASCII; the cuts run in this order
 === root_design ===
 everything in design.txt before `section#` (from `#v2`)
 === root_timeline ===
@@ -492,7 +492,7 @@ section#name(…)            ← this cut's design lines (indent 0; two-space in
 ---timeline---
 *** name                    ← this cut's timeline block (speech, marks, se, the transition on the last line)
 …
-# speech N sentences ~M s          ← right after the last speech line
+# speech N sentences ~C characters ~M s          ← right after the last speech line
 transition …
 === cut next-name ===
 …
