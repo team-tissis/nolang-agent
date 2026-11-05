@@ -507,12 +507,16 @@ class Run(cut_stages.CutStages, ABC):
         res = await (self.check_without(c, cuts, outside, "author") if outside else self.check_cut(c, cuts, "author"))
         clean = not res.defects and not res.blockers  # 止まった check では c の実行の DEFECT が見えない
         defects, lint, report = res.defects, res.findings, res.report
+        last = res
         if skip := frozenset(res.blockers - {"?", cut_stages.ROOT}):
             # 前の cut (著者の版) の DEFECT で check が止まり lint も c の DEFECT も出ない — その cut も除いた doc で c の DEFECT と
             # lint を取る (取った DEFECT を担当に渡さず、同じ書き損じの cut ごとに直し役が 1 巡ずつ直していた — 11-05 FPN2 G2-4)
-            other = await self.check_without(c, cuts, skip | outside, "author")
-            clean = not res.defects and not other.defects and not other.blockers
-            defects, lint, report = [*res.defects, *other.defects], other.findings, other.report
+            last = await self.check_without(c, cuts, skip | outside, "author")
+            clean = not res.defects and not last.defects and not last.blockers
+            defects, lint, report = [*res.defects, *last.defects], last.findings, last.report
+        # 根の行か持ち主の分からない DEFECT で止まった check は除いて取り直せない — c の行が起こしているかは分からないが、担当に見せる
+        # (見せないと担当は直せず、根の def の書き損じを使う cut ごとに直し役が 1 巡ずつ直した — 11-05 FPN G2-4 の `pointer: below`)
+        defects = [*defects, *last.unowned]
         if clean:
             self.author_clean.add(c)
         mine = [f for f in lint if f.cut == c]
@@ -538,7 +542,13 @@ class Run(cut_stages.CutStages, ABC):
         # 担当には既定で DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・10-26 の 2 bench)
         levels = ("severe", "warn") if self.staff_warn else ("severe",)
         staffed = [f for f in mine if f not in fixed and f.severity in levels]
-        findings = "\n".join(d.text for d in defects[:20]) + "".join("\n" + f.render() for f in staffed[:30])
+        findings = "\n".join(d.text for d in defects[:20])
+        if last.unowned:
+            findings += (
+                "\n(The check stopped at the DEFECT above, outside this block (the root or an earlier cut), so it shows no other"
+                " findings for this cut. If this cut's lines trigger it, avoid it in this block.)"
+            )
+        findings += "".join("\n" + f.render() for f in staffed[:30])
         if c in self.cut_estimate:
             self.log(
                 cut=c,

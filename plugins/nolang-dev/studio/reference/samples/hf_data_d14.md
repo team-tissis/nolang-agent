@@ -398,7 +398,7 @@ shape#sd(left: "449;318;659;281;380;519"; top: "534;444;641;351;734;624"; width:
 group#sl(in: {opacity:0, duration:0.4})
   p#l(left: "476;345;686;308;407;546"; top: "533;443;639;348;732;623"; font-size: 18px; color: $ink2) ×6 A;B;C;D;E;F
 p#db_d(left: 326px; top: 348px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 48 人・g 0.92
-p#db_b(left: 363px; top: 442px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 64 人・g 0.68
+p#db_b(left: 200px; top: 470px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 64 人・g 0.68
 shape#trend(path: "M330 405 L690 615"; background: none; border: 3px solid $ochre; dash: 5,4; in: draw {duration: 0.9})
 p#trend_l(left: 548px; top: 438px; font-size: 20px; line-height: 1.35; color: $ochre; in: {opacity:0, duration:0.4}) 小さい研究ほど[br]効果が大きい
 shape#gh(left: "258;300;338"; top: "695;762;675"; width: 22px; height: 22px; path: rect,r=0.5; background: none; border: 2px solid $brick; dash: 1,5; in: {scale:0.4, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.15}}) ×3

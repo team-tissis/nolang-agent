@@ -117,12 +117,14 @@ class Lint:
 
 @dataclass
 class Checked:
-    """doc の check の結果。blockers = check を止めた前の cut の DEFECT の持ち主 (`check_cut`)・report = check の表 (client の担当が
-    時刻の行を読む)。"""
+    """doc の check の結果。blockers = check を止めた前の cut の DEFECT の持ち主 (`check_cut`)・unowned = 止めた DEFECT のうち持ち主の
+    cut を除いて取り直せず、根の持ち主も直さない物 (凍った根の行・持ち主の分からない行の無い DEFECT — 使う cut の行が起こしている)・
+    report = check の表 (client の担当が時刻の行を読む)。"""
 
     defects: list[Defect]
     findings: list[Lint]
     blockers: set[str] = field(default_factory=set[str])
+    unowned: list[Defect] = field(default_factory=list[Defect])
     report: str = ""
 
 
@@ -768,6 +770,7 @@ class CutStages(ABC):
         checked = await self.check_doc(design, timeline, ended=cuts[-1] == self.order[-1], focus=c)
         defects: list[Defect] = []
         unlocated: list[Defect] = []
+        unowned: list[Defect] = []
         blockers: set[str] = set()
         for d in checked.defects:
             n, which = d.line, d.which
@@ -784,6 +787,9 @@ class CutStages(ABC):
                     defects.append(d)
                 else:
                     blockers.add(owner)
+                    if owner == ROOT and self.root_submitted:
+                        # 凍った根は根だけでは通った — 使う cut の行が起こしている。流す前の根は持ち主 (最初の cut) が直す
+                        unowned.append(d)
                 continue
             owner = next((k for k, r in ranges.items() if r[which][0] <= n <= r[which][1]), None)
             if owner == c:
@@ -800,13 +806,17 @@ class CutStages(ABC):
                 # 持ち主は doc の中の c より前の cut だけ — sig の map は run 全体の物で後ろの cut を返し得る。後ろを待つと 2 つの
                 # cut が互いの staged を待って止まる (10-27 fit / r3)。前に居なければ "?" (= 最初の live な cut)
                 earlier = set(cuts[: list(cuts).index(c)])
-                owners = {self.unlocated_owner.get(d.sig, ROOT) for d in foreign}
-                blockers |= {o if o in earlier else "?" for o in owners}
+                for d in foreign:
+                    owner = self.unlocated_owner.get(d.sig)
+                    blockers.add(owner if owner in earlier else "?")
+                    if owner not in earlier and owner != ROOT:  # 根だけの doc にも出た物は根の持ち主が直す
+                        unowned.append(d)
                 self.record("defect_elsewhere", cut=c, round=rnd, n=len(foreign), first=foreign[0].text[:160])
         return Checked(
             defects=defects,
             findings=self.attribute_lint(checked.findings, c),
             blockers=blockers,
+            unowned=unowned,
             report=checked.report,
         )
 
