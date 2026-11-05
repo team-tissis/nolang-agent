@@ -82,7 +82,7 @@ def panel(t, i, ic, bg) = div(width: 740px; height: 158px; background: #FFFFFF; 
   div#ring(inset: 0; border-radius: 24px; border: 4px solid $red; in: {opacity:0, duration:0.25})
   p#ok(left: 26px; top: 141px; font-size: 18px; color: #FFFFFF; background: $red_d; border-radius: 148px; padding: 4px 12px 4px 33px; in: {scale:0.7, opacity:0, duration:0.35, ease:'power3.out'}) ログイン成功
     icon#k(left: 8px; cy: 50%; font-size: 20px; name: lock-open; color: #FFFFFF)
-  p#x(left: 552px; top: 38px; font-size: 36px; letter-spacing: .06em; color: $red_t; background: #FFFFFFEB; border: 4px solid $red; border-radius: 14px; padding: 8px 18px; transform: rotate(-8deg); overlap: .fi; in: {scale:1.7, rotation:-6, opacity:0, duration:0.28, ease:'power4.out'}) 乗っ取り
+  p#x(left: 528px; top: 74px; font-size: 34px; white-space: nowrap; letter-spacing: .06em; color: $red_t; background: #FFFFFFEB; border: 4px solid $red; border-radius: 14px; padding: 8px 18px; transform: rotate(-8deg); overlap: .fp; in: {scale:1.7, rotation:-6, opacity:0, duration:0.28, ease:'power4.out'}) 乗っ取り
 # 被害の場面の札 (icon + 名 + 右の赤い札) と中の灰の段
 def dcard(t, i, ic, bg, tag) = div(top: 272px; width: 540px; height: 480px; background: #FFFFFF; border-radius: 24px; border: 2px solid #1E2B3C0F; box-shadow: 0px 14px 34px #1E2B3C17; in: {y:36, opacity:0, duration:0.6, ease:'power3.out'})
   icon#i(left: 28px; top: 26px; font-size: 36px; name: {i}; color: {ic}; background: {bg}; padding: 15px)
@@ -159,7 +159,7 @@ div#hdr.sticky(left: 80px; top: 36px; width: 1761px; height: 60px; z-index: fron
     div#n(left: 8px; cy: 50%; width: 34px; height: 34px; border-radius: 148px; background: $gray)
       p#v(cx: 50%; cy: 50%; font-size: 20px; color: $sub) 1;2;3;4
     p#t(left: 52px; cy: 50%; font-size: 22px; color: $sub) 漏えい;リスト型攻撃;被害;対策
-    icon#ck(left: 8px; cy: 50%; font-size: 20px; name: check; weight: bold; color: #FFFFFF; background: $blue; padding: 8px; overlap: .n; opacity: 0)
+    icon#ck(left: 8px; cy: 50%; font-size: 20px; name: check; weight: bold; color: #FFFFFF; background: $blue; padding: 8px; overlap: .n,.n.v; opacity: 0)
 #hdr.st.on(background: $blue; border: 2px solid $blue)
 #hdr.st.done(background: $blue_l; border: 2px solid $blue_m)
 board#lk_head(s: "STEP 1"; t: "IDとパスワードの漏えい")

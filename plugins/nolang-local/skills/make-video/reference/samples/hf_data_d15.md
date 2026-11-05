@@ -146,7 +146,7 @@ board#b3(k: "02"; t: "副業をしている割合の推移"; n: "各年 {nb}1,00
   p#reflbl(left: 144px; top: 456px; font-size: 24px; color: $sky; background: $board; padding: 0px 12px 0px 0px; delay: 410ms; in: {x:-30, opacity:0, duration:.4}) 4人に1人（25%）
   p#gy(left: 44px; top: "930;750;570;390"; width: 76px; font-size: 26px; font-family: n; color: $muted; text-align: right; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 0%;10%;20%;30%
   div#pt(left: "189;359;528;699"; top: "678;611;561;510"; width: 30px; height: 30px; border-radius: 148px; background: $amber; border: 6px solid $board; box-shadow: 0px 0px 0px 2px $amber; delay: "590ms;913ms;1237ms;1560ms"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
-  p#pv(cx: "204;374;543;714"; top: "617;551;500;428"; font-size: "44;44;44;60"; font-family: n; delay: "640ms;963ms;1287ms;1610ms"; in: {y:16, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
+  p#pv(cx: "204;374;543;714"; top: "617;539;500;428"; font-size: "44;44;44;60"; font-family: n; delay: "640ms;963ms;1287ms;1610ms"; in: {y:16, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
   shape#g141(left: 204px; top: 693px; width: 570px; height: 3px; path: line_h; border: 3px solid #C3CCDD73; dash: 5,4; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'})
   svg#brk(left: 765px; top: 525px; width: 30px; height: 168px; part: brk; in: {scaleY:0, duration:.35, ease:'power3.out', pivot:'bottom'})
   p#brkl(left: 807px; top: 586px; font-size: 26px; color: $bg; background: $amber; border-radius: 8px; padding: 6px 12px 4px 12px; white-space: nowrap; in: {x:-20, opacity:0, duration:.3}) +9.3pt

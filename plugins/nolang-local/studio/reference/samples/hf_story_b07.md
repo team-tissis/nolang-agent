@@ -63,7 +63,7 @@ def headline(c, n) = group(left: 0px; top: 1090px; width: 1080px; height: 255px;
   p#card(cx: 50%; top: 0px; font-size: 64px; line-height: 1.18; color: $ink; text-align: center; background: #FFFFFF; border: 8px solid $ink; border-radius: 20px; padding: 22px 46px 26px 104px; box-shadow: 12px 12px 0px $ink; content: {c})
   p#num(left: .card.left-24; top: -38px; width: 98px; font-size: 70px; line-height: 1; padding: 14px 0px; text-align: center; color: #FFFFFF; background: $red; border: 8px solid $ink; border-radius: 148px; overlap: .card; content: {n})
 # 黒の縁取りの擬音 (スッ・ペタ・ズシッ)
-def ono(t, w, s=53, c=#FFFFFF) = p(width: {w}; font-size: {s}; line-height: 1.25; color: {c}; -webkit-text-stroke: 9px $ink; content: {t})
+def ono(t, w, s=80, c=#FFFFFF) = p(width: {w}; font-size: {s}; line-height: 1.25; color: {c}; -webkit-text-stroke: 9px $ink; content: {t})
 # 場面の絵 (題の帯の裏 180 から下端までの枠・絵ごとに寄る kb — 語で下へ沈めても帯との間に隙が出ないよう帯の裏まで敷く)
 def scene() = img(left: 0px; top: 270px; width: 1080px; height: 1650px; z-index: back)
 
@@ -111,8 +111,8 @@ section#two
 scene#p2(main: kb {scale: [1, 1.08], focus: ['48% 27%', '48% 27%']}) [ref:@tsukio]深夜2時の真っ暗な寝室。ベッドで布団にくるまったグレーのパーカー姿の彼が、スマホの青白い光に顔だけを照らされ、充血した目を大きく見開いて画面を凝視している。目の下に濃いクマ。枕元には文字盤を簡略化した目覚まし時計とお菓子の空き袋。部屋は濃紺の闇で、スマホの光だけが強く輝く。
 stamp#st2(n: 2)
 headline#hl2(c: "謎の[br]{l2r}「寝たら負け」{/}{l2}精神{/}"; n: 2)
-ono#sw1(left: 640px; top: 780px; w: 130; t: スッ; c: $sky; transform: rotate(-12deg); in: {scale:.5, x:30, opacity:0, duration:.1, ease:'power2.out'}; out: {x:-50, opacity:0, duration:.22, ease:'power1.in'})
-ono#sw2(left: 680px; top: 880px; w: 130; t: スッ; c: $sky; transform: rotate(-6deg); in: {scale:.5, x:30, opacity:0, duration:.1, ease:'power2.out'}; out: {x:-50, opacity:0, duration:.22, ease:'power1.in'})
+ono#sw1(left: 640px; top: 780px; w: 195; t: スッ; c: $sky; transform: rotate(-12deg); in: {scale:.5, x:30, opacity:0, duration:.1, ease:'power2.out'}; out: {x:-50, opacity:0, duration:.22, ease:'power1.in'})
+ono#sw2(left: 680px; top: 880px; w: 195; t: スッ; c: $sky; transform: rotate(-6deg); in: {scale:.5, x:30, opacity:0, duration:.1, ease:'power2.out'}; out: {x:-50, opacity:0, duration:.22, ease:'power1.in'})
 
 # 3 つ目: 朝の寝起きにおでこを触る。白の閃光で寄って入り、体温計が上がって下がり、「ペタ」2 つ → 「36.5℃ 平熱…」
 section#three
@@ -128,8 +128,8 @@ div#th(left: 900px; top: 470px; width: 120px; height: 520px; in: {x:220, opacity
   p#s(left: -52px; top: "41;173;306"; font-size: 34px; line-height: 1; text-shadow: 0px 2px 6px #000000) ×3 38;37;36
 #th.fill.hi(top: 50px; height: 369px; move: 900ms,power2.out)
 #th.fill.mid(top: 219px; height: 200px; move: 600ms,power2.inOut)
-ono#pt1(left: 500px; top: 500px; w: 170; overlap: th; t: ペタ; s: 69; c: $peta; -webkit-text-stroke: 10px $ink; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
-ono#pt2(left: 660px; top: 590px; w: 170; overlap: th; t: ペタ; s: 69; c: $peta; -webkit-text-stroke: 10px $ink; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
+ono#pt1(left: 500px; top: 500px; w: 255; overlap: th; t: ペタ; s: 104; c: $peta; -webkit-text-stroke: 10px $ink; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
+ono#pt2(left: 630px; top: 590px; w: 255; overlap: th; t: ペタ; s: 104; c: $peta; -webkit-text-stroke: 10px $ink; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})
 # 判定: 「36.5℃」+ 青の札「平熱…」が 1.6 倍から弾む
 div#read(left: 40px; top: 560px; width: 420px; height: 188px; in: {scale:1.6, opacity:0, duration:.14, ease:'back.out(2.5)'})
   p#t(left: 0px; top: -6px; width: 420px; font-size: 86px; line-height: 1.25; text-align: center; color: #FFFFFF; -webkit-text-stroke: 9px $ink) 36.5℃
@@ -146,8 +146,8 @@ div#gv(left: 0px; top: 420px; width: 1080px; height: 315px; in: {y:-420, scale:1
 # 足元の寄りの丸窓 (同じ絵を 3.2 倍に寄せて鉄球の足元だけ・黄の縁 + 黒の外縁・3° 傾けて弾む)。絵は縁の内側に置く (inset: 0 だと縁を覆う)
 div#ins.bleed(left: 640px; top: 512px; width: 400px; height: 380px; border-radius: 24px; background: #222222; border: 8px solid $y; box-shadow: 0px 0px 0px 6px $ink; transform: rotate(3deg); in: {scale:.3, rotation:-11, opacity:0, duration:.2, ease:'back.out(2.2)'})
   img#p(left: 8px; top: 8px; width: 386px; height: 364px; border-radius: 16px; content: @walk; object-fit: cover; object-position: 65% 76%; zoom: 324%; main: none)
-ono#zu1(left: 560px; top: 880px; w: 250; t: ズシッ; s: 75; -webkit-text-stroke: 11px $ink; transform: rotate(-8deg); in: {y:-60, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
-ono#zu2(left: 90px; top: 930px; w: 250; overlap: hl4; t: ズシッ; s: 75; -webkit-text-stroke: 11px $ink; transform: rotate(7deg); in: {y:-60, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
+ono#zu1(left: 560px; top: 880px; w: 375; t: ズシッ; s: 113; -webkit-text-stroke: 11px $ink; transform: rotate(-8deg); in: {y:-60, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
+ono#zu2(left: 90px; top: 930px; w: 375; overlap: hl4; t: ズシッ; s: 113; -webkit-text-stroke: 11px $ink; transform: rotate(7deg); in: {y:-60, scale:1.3, opacity:0, duration:.09, ease:'power4.in'}; out: {opacity:0, duration:.15})
 
 # 5 つ目: 会社のデスクで魂が抜ける。白の閃光で寄って入り、「あと 105 時間」が数え上がって赤に跳ね、白黒 + 紺の陰 + 縦縞で沈めて暗転
 section#five

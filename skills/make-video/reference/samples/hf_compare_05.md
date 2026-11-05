@@ -66,7 +66,7 @@ def chead(n, t, s, c, w) = div(left: 130px; top: 64px; width: {w}; height: 69px;
   p#t(left: 105px; bottom: 0px; font-size: 50px; line-height: 1.05; content: {t})
   p#s(left: .t.right+22; bottom: 6px; font-family: m; font-size: 24px; color: $sub; white-space: nowrap; content: {s})
 # 右の工程の板 (番号の丸 + 題 + 小さな説明・灰で置いて語ごとに点灯)
-def step(n, t, s, tt=15, st=43) = div(width: 550px; height: 112px; border-radius: 20px; background: #FFFFFF8C; in: {y:20, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.08}})
+def step(n, t, s, tt=23, st=65) = div(width: 550px; height: 112px; border-radius: 20px; background: #FFFFFF8C; in: {y:20, opacity:0, duration:.55, ease:'power3.out', stagger:{each:.08}})
   p#n(left: 26px; cy: 50%; width: 62px; font-family: e; font-size: 28px; line-height: 1; text-align: center; color: #FFFFFF; background: $step; border-radius: 148px; padding: 16px 0px; content: {n})
   p#t(left: 110px; top: {tt}; font-size: 32px; color: $st_t; content: {t})
   p#s(left: 110px; top: {st}; font-family: m; font-size: 21px; color: $st_s; content: {s})
@@ -132,7 +132,7 @@ node#s2_n6(left: 651px; top: 645px; t: "設計データ"; c: $orange)
 
 # s3 通常の CAD: 章の見出し → 方眼の図の板と右の工程 4 段。要望の板 → スケッチの輪郭を描く (draw) と寸法 → 輪郭が等角の正面へ変形し 4 面が押し出しで伸びる → カーソルが寸法を 120 → 160 に替えると形ごと伸びる
 section#s3
-chead#s3_head(n: "01"; t: "通常のCADモデリング"; s: "アイデア → 形"; c: $blue; w: 540)
+chead#s3_head(n: "01"; t: "通常のCADモデリング"; s: "アイデア → 形"; c: $blue; w: 810)
 card#s3_vp(left: 130px; top: 196px; width: 1060px; height: 690px; pattern: grid,23,$vgrid; in: {y:30, opacity:0, duration:.7, ease:'power3.out'})
 p#s3_ptitle(left: 1245px; top: 195px; font-family: e; font-size: 20px; letter-spacing: .2em; color: $sub; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}) PROCESS
 step#s3_st(left: 1240px; top: "236;366;497;626"; n: "1;2;3;4"; t: "アイデア・仕様;スケッチ＋寸法;押し出し・回転;寸法を変えれば"; s: "つくりたい形と寸法を決める;平面に輪郭を描く;立体に起こす;形もそれに合わせて更新") ×4
@@ -203,10 +203,10 @@ flowcard#fc3(top: 686px; t: "製造"; s: "同じ形をつくる")
 
 # s4 リバース: 章の見出し → 図の板と右の工程 5 段。古い部品の写真 (判子「図面なし」) → スキャナーの写真を光の帯が走る → 点群が左から湧き → 同じ点を辺でつないだメッシュ → 寄って「寸法 = ？」→ 面と穴を当てはめた CAD モデル → 測った形と本来の形の 2 枚の板
 section#s4
-chead#s4_head(n: "02"; t: "リバースモデリング"; s: "モノ → データ"; c: $orange; w: 493)
+chead#s4_head(n: "02"; t: "リバースモデリング"; s: "モノ → データ"; c: $orange; w: 740)
 card#s4_vp(left: 130px; top: 196px; width: 1060px; height: 690px; pattern: grid,23,$vgrid; in: {y:30, opacity:0, duration:.7, ease:'power3.out'})
 p#s4_ptitle(left: 1245px; top: 195px; font-family: e; font-size: 20px; letter-spacing: .2em; color: $sub; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}) PROCESS
-step#s4_st(left: 1240px; top: "236;356;476;596;716"; height: 104px; tt: 12; st: 39; n: "1;2;3;4;5"; t: "実物;3Dスキャン;点群データ;メッシュ;CADモデル"; s: "図面のない部品など;表面の形を測る;無数の点の集まり;三角形の面でつなぐ;平面・円筒を当てはめる") ×5
+step#s4_st(left: 1240px; top: "236;356;476;596;716"; height: 104px; tt: 18; st: 59; n: "1;2;3;4;5"; t: "実物;3Dスキャン;点群データ;メッシュ;CADモデル"; s: "図面のない部品など;表面の形を測る;無数の点の集まり;三角形の面でつなぐ;平面・円筒を当てはめる") ×5
 #s4_st.on(background: $orange_tt; border: 3px solid $orange)
 img#ph_old(left: 130px; top: 196px; width: 1060px; height: 690px; border-radius: 26px; content: @old; in: fade {duration: 0.6}; out: fade {duration: 0.6}; main: kb {scale: [1.14, 1], ease:'power1.out'})
 p#stamp(left: 770px; top: 286px; font-size: 44px; color: $orange; background: #FFFFFFDB; border: 4px solid $orange; border-radius: 14px; padding: 10px 26px; transform: rotate(-7deg); in: {scale:1.7, opacity:0, duration:.5, ease:'back.out(1.7)'}; out: {opacity:0, duration:.25, ease:'power2.in'}) 図面なし

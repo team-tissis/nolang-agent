@@ -47,7 +47,7 @@ def kicker(t) = div(left: 72px; top: 200px; width: 936px; height: 72px; in: {x:-
   p#text(left: 28px; cy: 50%; font-size: 50px; color: $y; letter-spacing: 0.04em; text-shadow: 0px 4px 16px #00000099; content: {t})
 # 大見出し (下から mask で出る) と黄の札
 def headline(t) = p(left: 72px; font-size: 118px; line-height: 1.16; letter-spacing: -0.01em; text-shadow: 0px 8px 28px #00000099; in: mask_up; content: {t})
-def yellow_tag(t, s=79) = p(font-size: {s}; line-height: 1.16; color: $k; background: $y; border-radius: 14px; padding: 0px 20px; content: {t})
+def yellow_tag(t, s=119) = p(font-size: {s}; line-height: 1.16; color: $k; background: $y; border-radius: 14px; padding: 0px 20px; content: {t})
 # 効果の行 (暗い板 + 黄の丸の icon + 文)
 def effect_row(t) = div(left: 60px; width: 960px; height: 152px; background: #0A0A0CC7; border: 2px solid #FFD21F8C; border-radius: 26px; box-shadow: 0px 12px 30px #00000059; in: {x:-80, opacity:0, duration:0.32, ease:'back.out(1.6)'})
   shape#dot(left: 32px; cy: 50%; width: 104px; height: 104px; border-radius: 50%; background: $y)
@@ -71,7 +71,7 @@ img#tire_photo(inset: 0; in: keys(at=0 scale=1.07 | at=0.4 scale=1.07 | at=1 eas
 group#quiz(left: 0px; top: 230px; width: 1080px; height: 519px; out: {y:-40, opacity:0, duration:0.22, ease:'power2.in'})
   p#q(cx: 540px; cy: 46px; font-size: 64px; color: $y; letter-spacing: 0.06em; in: {x:-30, opacity:0, duration:0.3, ease:'power2.out'}) Q.
   p#line(cx: 540px; cy: 176px; font-size: 132px; line-height: 1.15; letter-spacing: -0.02em; text-shadow: 0px 8px 30px #00000099; in: mask_up) なぜタイヤは
-  yellow_tag#black(cx: 420px; cy: 394px; s: 147; line-height: 1.12; padding: 0px 27px 4px 27px; border-radius: 22px; box-shadow: 0px 16px 40px #00000073; overlap: quiz.line; transform: rotate(-3deg); in: {scale:2.2, opacity:0, rotation:-5, duration:0.26, ease:'back.out(1.6)'}) 黒い
+  yellow_tag#black(cx: 420px; cy: 394px; s: 221; line-height: 1.12; padding: 0px 27px 4px 27px; border-radius: 22px; box-shadow: 0px 16px 40px #00000073; overlap: quiz.line; transform: rotate(-3deg); in: {scale:2.2, opacity:0, rotation:-5, duration:0.26, ease:'back.out(1.6)'}) 黒い
   p#mark(cx: 792px; cy: 394px; font-size: 230px; line-height: 1; text-shadow: 0px 10px 34px #00000099; transform: rotate(8deg); in: {scale:0, rotation:-98, opacity:0, duration:0.42, ease:'back.out(2.4)'}) ？
 
 # 前提を崩す: 白い樹液の写真に「ゴムは本来 / 黒くない」と根拠の札
@@ -140,9 +140,9 @@ yellow_tag#design_not(left: 72px; cy: 657px; in: mask_rise {duration: 0.32, ease
 section#drive
 img#coast_photo(inset: 0; main: kb {scale: [1, 1.12], focus: ['50% 63%', '50% 63%']}) [photo]Vertical 9:16 photograph. A compact family car driving calmly along a scenic coastal road at golden hour, seen from a slightly elevated angle, warm sunlight, calm sea, a feeling of safety and long journeys. Automotive commercial style, license plate blank.
 kicker#kick_reason 黒い理由は
-reason_chip#chip_long(left: 362px; top: 330px; w: 237) 長く
-reason_chip#chip_tough(left: 312px; top: 498px; w: 304) 丈夫に
-reason_chip#chip_safe(left: 312px; top: 666px; w: 304) 安全に
+reason_chip#chip_long(left: 362px; top: 330px; w: 356) 長く
+reason_chip#chip_tough(left: 312px; top: 498px; w: 456) 丈夫に
+reason_chip#chip_safe(left: 312px; top: 666px; w: 456) 安全に
 p#craft_line(cx: 540px; cy: 908px; font-size: 76px; background: #00000094; border-radius: 20px; padding: 6px 30px 10px 30px; text-shadow: 0px 6px 24px #000000B3; in: {y:24, opacity:0, duration:0.3, ease:'power2.out'}) 使うための{y}工夫{/}
 
 # 締めの 1 枚: 身近な街のタイヤの写真に「タイヤの 秘密」と効果の 3 つの札を並べ、最後の frame まで残す
@@ -151,7 +151,7 @@ img#street_photo(inset: 0; main: kb {scale: [1.14, 1.02], focus: ['50% 57%', '50
 p#end_lead(cx: 540px; cy: 340px; font-size: 56px; text-shadow: 0px 4px 18px #000000B3; in: {y:20, opacity:0, duration:0.3, ease:'power1.out'}) 身近だけど意外と知らない
 group#end_main(in: {scale:1.3, opacity:0, duration:0.4, ease:'back.out(1.5)'})
   p#text(left: 63px; cy: 490px; font-size: 150px; line-height: 1.15; text-shadow: 0px 8px 30px #00000099) タイヤの
-  yellow_tag#secret(left: 675px; cy: 490px; s: 100; line-height: 1.15; padding: 0px 21px 3px 21px) 秘密
+  yellow_tag#secret(left: 675px; cy: 490px; s: 150; line-height: 1.15; padding: 0px 21px 3px 21px) 秘密
 p#end_tags(cx: "230;461;770"; cy: 660px; font-size: 40px; color: $y; background: #00000099; border: 3px solid $y; border-radius: 148px; padding: 10px 24px; in: {y:16, opacity:0, duration:0.25, ease:'power1.out', stagger: {each: 0.12}}) ×3 丈夫;摩耗しにくい;紫外線に強い
 ```
 

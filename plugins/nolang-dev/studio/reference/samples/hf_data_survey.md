@@ -64,17 +64,17 @@ svg ring = """<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="62" fill="no
 
 # 場面の骨組み: 右上の章の番号 (場面ごとに入れ替え)・左上の番号 (琥珀 + 下線)・見出し・副題・題つきの板
 def idx(t) = p(right: 80px; top: 32px; font-size: 20px; color: $fg2; letter-spacing: .06em; delay: 250ms; in: {y:12, opacity:0, duration:.45, ease:'power3.out'}; out: {y:-12, opacity:0, duration:.3, ease:'power2.in'}; content: {t})
-def snum(t, w=26) = div(left: 80px; top: 132px; width: {w}; height: 48px; delay: 150ms; in: {x:-20, opacity:0, duration:.55, ease:'power3.out'})
+def snum(t, w=39) = div(left: 80px; top: 132px; width: {w}; height: 48px; delay: 150ms; in: {x:-20, opacity:0, duration:.55, ease:'power3.out'})
   p#t(left: 0px; top: 0px; font-size: 30px; font-family: b; color: $amber; letter-spacing: .08em; line-height: 1.3; white-space: nowrap; content: {t})
   div#u(left: 0px; top: 45px; width: {w}; height: 3px; background: $amber)
-def h2(t, x=97) = p(left: {x}; top: 88px; font-size: 54px; font-family: b; line-height: 1.18; letter-spacing: .01em; delay: 220ms; in: {y:28, opacity:0, duration:.7, ease:'expo.out'}; content: {t})
-def hsub(t, x=97) = p(left: {x}; top: 158px; font-size: 26px; color: $fg2; delay: 340ms; in: {y:14, opacity:0, duration:.55, ease:'power3.out'}; content: {t})
+def h2(t, x=146) = p(left: {x}; top: 88px; font-size: 54px; font-family: b; line-height: 1.18; letter-spacing: .01em; delay: 220ms; in: {y:28, opacity:0, duration:.7, ease:'expo.out'}; content: {t})
+def hsub(t, x=146) = p(left: {x}; top: 158px; font-size: 26px; color: $fg2; delay: 340ms; in: {y:14, opacity:0, duration:.55, ease:'power3.out'}; content: {t})
 def panel = div(background: $panel; border: 2px solid $line; border-radius: 18px; box-shadow: 0px 24px 60px #00000059; in: {y:36, opacity:0, duration:.6, ease:'power3.out'})
 def ptitle(t) = p(left: 32px; top: 22px; font-size: 26px; font-family: b; content: {t})
 def legend(t) = p(font-size: 20px; color: $fg2; in: {y:8, opacity:0, duration:.4, ease:'power3.out'}; content: {t})
 def note(t) = p(font-size: 21px; color: $fg3; content: {t})
 # 横棒の行: 札 (右揃え) + 縦の軸線 + 棒 (左から伸びる・CSS の scaleX 0 → 1) + 棒の右端に値。lw = 札の幅・x = 棒の始まり・w = 棒の長さ (値 ÷ 軸の最大 × 棒に使える幅を著者が計算)
-def hbar(l, bw, v, lw=167, x=180, bh=25, ah=33, c=$slate2, vc=$fg, lc=$fg2, lo=1, ls=16, vs=19) = div(height: 58px)
+def hbar(l, bw, v, lw=251, x=270, bh=38, ah=50, c=$slate2, vc=$fg, lc=$fg2, lo=1, ls=24, vs=29) = div(height: 58px)
   p#l(left: 0px; cy: 50%; width: {lw}; font-size: {ls}; color: {lc}; opacity: {lo}; text-align: right; white-space: nowrap; content: {l})
   div#ax(left: {x}; cy: 50%; width: 2px; height: {ah}; background: #A0B6DE59)
   div#b(left: {x}; cy: 50%; width: {bw}; height: {bh}; border-radius: 0,4,4,0; background: {c}; in: {scaleX:0, duration:.75, ease:'power3.out', pivot:'left'})
@@ -138,8 +138,8 @@ panel#time(left: 80px; top: 580px; width: 561px; height: 368px)
 # 登録方法別の全部スキップ (横軸 0〜40%)
 panel#meth(left: 664px; top: 580px; width: 1176px; height: 368px)
   ptitle#t 登録方法別「全部スキップ」の割合{pn}　各登録方法の人のうち{/}
-  hbar#mail(left: 32px; top: 118px; width: 1113px; l: "メール＋パスワード"; bw: 407; v: "29%"; c: "linear($am1,#F5B544,90)"; vc: $amber)
-  hbar#google(left: 32px; top: 189px; width: 1113px; l: "Google 等のログイン"; bw: 112; v: "8%")
+  hbar#mail(left: 32px; top: 118px; width: 1113px; l: "メール＋パスワード"; bw: 611; v: "29%"; c: "linear($am1,#F5B544,90)"; vc: $amber)
+  hbar#google(left: 32px; top: 189px; width: 1113px; l: "Google 等のログイン"; bw: 168; v: "8%")
   note#note(left: 32px; top: 308px; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) スキップは、メールとパスワードで登録した人に多い
 
 # paid — 02 課金率は動いていない: 縦棒の組 2 つ (前 → 後) と「有意差なし」の札 → 100 マスの waffle が 77 → 65 に減る (減った分は枠だけ) → 作った人の縦棒 2 本が同じ高さ → 結論の帯
@@ -208,23 +208,23 @@ legend#pr_lg(right: 112px; top: 249px; delay: 600ms) {a}■{/} 課金を予告�
 div#g_org(left: 114px; top: 302px; width: 1694px; height: 129px; delay: 450ms; in: {y:16, opacity:0, duration:.45, ease:'power3.out'})
   div#ln(left: 0px; top: 0px; width: 1694px; height: 2px; background: $line)
   p#cat(left: 0px; cy: 50%; font-size: 22px; font-family: b; color: $fg3; letter-spacing: .04em; opacity: .38) 利用形態
-  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "組織で使う"; bw: 416; v: "13.3%"; lw: 200; x: 213; bh: 23; ah: 31; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
-  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "個人"; bw: 119; v: "3.8%"; lw: 200; x: 213; bh: 23; ah: 31; lo: .38)
+  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "組織で使う"; bw: 624; v: "13.3%"; lw: 300; x: 320; bh: 35; ah: 47; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
+  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "個人"; bw: 179; v: "3.8%"; lw: 300; x: 320; bh: 35; ah: 47; lo: .38)
 div#g_num(left: 114px; top: 460px; width: 1694px; height: 129px; delay: 530ms; in: {y:16, opacity:0, duration:.45, ease:'power3.out'})
   div#ln(left: 0px; top: 0px; width: 1694px; height: 2px; background: $line)
   p#cat(left: 0px; cy: 50%; font-size: 22px; font-family: b; color: $fg3; letter-spacing: .04em; opacity: .38) 作りたい本数
-  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "月4本以上"; bw: 253; v: "8.1%"; lw: 200; x: 213; bh: 23; ah: 31; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
-  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "未定"; bw: 2; v: "0%"; lw: 200; x: 213; bh: 23; ah: 31; lo: .38)
+  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "月4本以上"; bw: 380; v: "8.1%"; lw: 300; x: 320; bh: 35; ah: 47; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
+  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "未定"; bw: 3; v: "0%"; lw: 300; x: 320; bh: 35; ah: 47; lo: .38)
 div#g_use(left: 114px; top: 618px; width: 1694px; height: 129px; delay: 610ms; in: {y:16, opacity:0, duration:.45, ease:'power3.out'})
   div#ln(left: 0px; top: 0px; width: 1694px; height: 2px; background: $line)
   p#cat(left: 0px; cy: 50%; font-size: 22px; font-family: b; color: $fg3; letter-spacing: .04em; opacity: .38) 用途
-  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "ビジネス用途を含む"; bw: 400; v: "12.8%"; lw: 200; x: 213; bh: 23; ah: 31; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
-  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "エンタメ系のみ"; bw: 113; v: "3.6%"; lw: 200; x: 213; bh: 23; ah: 31; lo: .38)
+  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 50px; l: "ビジネス用途を含む"; bw: 600; v: "12.8%"; lw: 300; x: 320; bh: 35; ah: 47; c: "linear($am1,#F5B544,90)"; vc: $amber; lo: .38)
+  hbar#cmp(left: 200px; top: 68px; width: 1494px; height: 50px; l: "エンタメ系のみ"; bw: 170; v: "3.6%"; lw: 300; x: 320; bh: 35; ah: 47; lo: .38)
 # 主役の段: 札は太字の白・棒は太く琥珀の光・値は大きな淡い琥珀 (「21.7%」の語で弾む)
 div#g_prod(left: 114px; top: 776px; width: 1694px; height: 87px; delay: 690ms; in: {y:16, opacity:0, duration:.45, ease:'power3.out'})
   div#ln(left: 0px; top: 0px; width: 1694px; height: 2px; background: $line)
   p#cat(left: 0px; cy: 50%; font-size: 22px; font-family: b; color: $fg3; letter-spacing: .04em; opacity: .38) 単独で選んだ
-  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 66px; l: "商品・サービス紹介"; bw: 679; v: "21.7%"; lw: 200; x: 213; bh: 33; ah: 41; c: "linear($am1,#F5B544,90)"; vc: $amber_hi; lc: $fg; lo: .38; ls: 17; vs: 33)
+  hbar#sig(left: 200px; top: 12px; width: 1494px; height: 66px; l: "商品・サービス紹介"; bw: 1019; v: "21.7%"; lw: 300; x: 320; bh: 50; ah: 62; c: "linear($am1,#F5B544,90)"; vc: $amber_hi; lc: $fg; lo: .38; ls: 26; vs: 50)
     p#l(font-family: b)
     div#b(box-shadow: 0px 0px 34px #F5B54473; in: {scaleX:0, duration:1.1, ease:'power3.inOut', pivot:'left'})
     p#v(delay: 0ms; in: {scale:.6, opacity:0, duration:.5, ease:'back.out(1.7)', pivot:'left'})
@@ -239,7 +239,7 @@ h2#major_h(font-weight: 700) 多数派は課金しない
 hsub#major_s よく選ばれる用途と、その課金人数
 panel#top(left: 80px; top: 219px; width: 712px; height: 729px; delay: 300ms)
   ptitle#t 用途の上位{pn}　回答者に占める割合{/}
-  hbar#u(left: 34px; top: "173;279;384;491"; width: 644px; height: 92px; l: "エンタメ;アニメクリップ;ストーリー;解説"; bw: "345;272;272;272"; v: "19%;15%;15%;15%"; lw: 113; x: 127; bh: 31; ah: 39; vs: 21) ×4
+  hbar#u(left: 34px; top: "173;279;384;491"; width: 644px; height: 92px; l: "エンタメ;アニメクリップ;ストーリー;解説"; bw: "345;272;272;272"; v: "19%;15%;15%;15%"; lw: 170; x: 191; bh: 47; ah: 59; vs: 32) ×4
   note#note(left: 34px; top: 674px; in: {y:8, opacity:0, duration:.4, ease:'power3.out'}) 横軸は 0〜25%
 panel#dots(left: 816px; top: 219px; width: 1024px; height: 729px; delay: 420ms)
   ptitle#t 選んだ人と、課金した人{pn}　1点＝1人{/}
@@ -273,21 +273,21 @@ h2#route_h(font-weight: 700) 流入経路は、自己申告と計測がずれる
 hsub#route_s 「どこで知ったか」の自己申告と、GA の計測
 panel#gap(left: 80px; top: 219px; width: 1008px; height: 216px; delay: 300ms)
   ptitle#t 「検索」経由の割合{pn}　計測と自己申告{/}
-  hbar#ga(left: 34px; top: 74px; width: 940px; height: 54px; l: "計測（GA）自然検索"; bw: 300; v: "67%"; lw: 167; x: 180; bh: 24; ah: 32; c: "linear($st0,#6FA8DC,90)"; vc: $steel)
+  hbar#ga(left: 34px; top: 74px; width: 940px; height: 54px; l: "計測（GA）自然検索"; bw: 450; v: "67%"; lw: 251; x: 270; bh: 36; ah: 48; c: "linear($st0,#6FA8DC,90)"; vc: $steel)
     p#l(in: {x:-10, opacity:0, duration:.35, ease:'power3.out'})
     div#b(in: {scaleX:0, duration:.9, ease:'power3.out', pivot:'left'})
     p#v(delay: 540ms)
   # 差の枠: 斜線の地 + 破線の縁 (左から伸びる)・右に「← ずれ」
   div#zone(left: 459px; top: 142px; width: 296px; height: 44px; border-radius: 6px; background: #F5B5440A; pattern: hatch,45,#F5B5441F,11,5; overlap: gap.self; in: {scaleX:0, opacity:0, duration:.6, ease:'power2.out', pivot:'left'})
   shape#dash(left: 459px; top: 142px; width: 296px; height: 44px; path: rect,r=0.14; background: none; border: 2px solid #F5B544BF; dash: 5,4; overlap: gap.zone; in: {scaleX:0, opacity:0, duration:.6, ease:'power2.out', pivot:'left'})
-  hbar#self(left: 34px; top: 136px; width: 940px; height: 54px; l: "自己申告「検索」"; bw: 103; v: "23%"; lw: 167; x: 180; bh: 24; ah: 32; c: "linear($am1,#F5B544,90)"; vc: $amber)
+  hbar#self(left: 34px; top: 136px; width: 940px; height: 54px; l: "自己申告「検索」"; bw: 155; v: "23%"; lw: 251; x: 270; bh: 36; ah: 48; c: "linear($am1,#F5B544,90)"; vc: $amber)
     p#l(in: {x:-10, opacity:0, duration:.35, ease:'power3.out'})
     div#b(in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
     p#v(delay: 360ms)
   p#lab(left: 771px; top: 147px; font-size: 24px; font-family: b; color: $amber_hi; white-space: nowrap; in: {scale:.6, opacity:0, duration:.4, ease:'back.out(1.7)'}) ← ずれ
 panel#rank(left: 80px; top: 459px; width: 1008px; height: 489px)
   ptitle#t 自己申告の流入経路{pn}　上位5つ{/}
-  hbar#r(left: 34px; top: "117;177;237;297;357"; width: 960px; height: 56px; l: "検索;AIアシスタント;Web記事;X;YouTube"; bw: "665;462;375;347;318"; v: "23%;16%;13%;12%;11%"; c: "$slate2;linear($am1,#F5B544,90);$slate2;$slate2;$slate2"; vc: "$fg;$amber;$fg;$fg;$fg"; lw: 133; x: 147; bh: 23; ah: 31; vs: 17) ×5
+  hbar#r(left: 34px; top: "117;177;237;297;357"; width: 960px; height: 56px; l: "検索;AIアシスタント;Web記事;X;YouTube"; bw: "665;462;375;347;318"; v: "23%;16%;13%;12%;11%"; c: "$slate2;linear($am1,#F5B544,90);$slate2;$slate2;$slate2"; vc: "$fg;$amber;$fg;$fg;$fg"; lw: 200; x: 221; bh: 35; ah: 47; vs: 26) ×5
     div#b(in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
     p#v(delay: 360ms)
 # AI アシスタントで知った人: 3 段 (16% / 輪の弧 84% / 7.8%)・札は 0.35 で薄く先出し・「AI」で板の縁が琥珀に
@@ -310,9 +310,9 @@ panel#ai(left: 1112px; top: 219px; width: 729px; height: 729px; in: {x:40, opaci
 section#sum(stagger: {each:0})
 div#glow_s.bleed(left: 519px; top: 300px; width: 900px; height: 900px; border-radius: 450px; background: radial(#F5B54419,#F5B54407@40%,#F5B54400@70%,#F5B54400,50%,50%); z-index: back; in: {x:681, y:150, duration:2.4, ease:'sine.inOut'}; out: none)
 idx#sum_idx(out: {opacity:0, duration:.8}) {ab}まとめ{/}　1週間でわかったこと
-snum#sum_n(w: 59) まとめ
-h2#sum_h(x: 130; font-weight: 700) 1週間でわかったこと
-hsub#sum_s(x: 130) 登録時アンケートの結果から
+snum#sum_n(w: 89) まとめ
+h2#sum_h(x: 195; font-weight: 700) 1週間でわかったこと
+hsub#sum_s(x: 195) 登録時アンケートの結果から
 panel#c1(left: 80px; top: 284px; width: 572px; height: 600px; in: {y:50, opacity:0, duration:.65, ease:'expo.out'})
   div#n(left: 36px; top: 32px; width: 54px; height: 54px; border-radius: 27px; border: 2px solid $amber; delay: 200ms; in: {y:14, opacity:0, duration:.4, ease:'power2.out'})
     p#t(cx: 50%; cy: 50%; font-size: 28px; font-family: b; color: $amber) 1

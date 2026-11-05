@@ -237,7 +237,7 @@ bgm music
 transition cut
 
 *** suspense
-@n: [silence:410ms][!#sub_band to,{opacity:0, duration:0.25} -410ms][♪drum +2dB start=1.35s to=6s -340ms][<#music -210ms][>#hero_sus.word -160ms][>#hero_sus.dot[*] +890ms][!#hero_sus to,{scale:1.06, duration:0.6, ease:'sine.inOut', repeat:1, yoyo:true} +990ms]そうすると...[silence:1050ms]
+@n: [silence:410ms][!#sub_band to,{opacity:0, duration:0.25} -410ms][♪drum +2dB start=1.35s to=6s -340ms][<#music -210ms][>#hero_sus.word -160ms][>#hero_sus.dot[*] +600ms][!#hero_sus to,{scale:1.06, duration:0.6, ease:'sine.inOut', repeat:1, yoyo:true} +990ms]そうすると...[silence:1050ms]
 transition cut
 
 *** reveal

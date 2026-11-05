@@ -135,7 +135,7 @@ img#cl_p(inset: 0; main: kb {scale: [1, 1.06], focus: ['60% 50%', '65% 50%']}) [
 veil#cl_v(color: #F4F1EA; opacity: 0.7; to: left; start: 0.5)
 kick#cl_k(left: 108px; top: 180px) THIS WEEK
 h1#cl_h(left: 108px; top: 225px; font-size: 114px; font-weight: 700) まず 1 つだけ、[br]{u}今週やる。{/}
-group#cl_row(left: 108px; top: 570px; width: 900px; height: 105px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px)
+group#cl_row(left: 108px; top: 570px; width: 900px; height: 105px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px)
   div#cl_c(in: div) ×3
     icon#i(left: 24px; cy: 50%; font-size: 39px; name: "device-mobile;lightning;television-simple"; color: $a)
     p#t(left: 75px; cy: 50%; font-size: 36px; color: $ink) スマホ;電気;サブスク

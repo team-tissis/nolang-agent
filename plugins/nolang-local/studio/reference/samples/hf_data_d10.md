@@ -92,7 +92,7 @@ def goal(ix, t, g, u, f, c, gw, tw, gv, tv, d) = div(top: 300px; width: 544px; h
   div#top(left: 0px; top: 0px; width: 544px; height: 8px; border-radius: 18px 18px 0px 0px; background: {c})
   p#ix(left: 34px; top: 38px; font-size: 18px; font-family: m; color: $muted; border: 2px solid $line2; border-radius: 4px; padding: 0px 8px; content: {ix})
   p#t(left: 84px; top: 34px; font-size: 26px; white-space: nowrap; content: {t})
-  p#g(left: 34px; top: 99px; font-size: 150px; line-height: 0.9; font-family: n; color: {c}; content: {g})
+  p#g(left: 34px; top: 99px; font-size: 138px; line-height: 0.9; font-family: n; color: {c}; content: {g})
   p#u(left: .g.right+10; top: 186px; font-size: 30px; content: {u})
   p#f(left: 34px; top: 270px; font-size: 22px; color: $fg2; font-family: r; white-space: nowrap; content: {f})
   p#k1(left: 34px; top: 344px; font-size: 16px; color: $muted) 実績
@@ -103,13 +103,13 @@ def goal(ix, t, g, u, f, c, gw, tw, gv, tv, d) = div(top: 300px; width: 544px; h
   p#v2(left: 424px; top: 396px; width: 86px; text-align: right; font-size: 30px; font-family: n; content: {tv})
   div#rule(left: 34px; top: 520px; width: 476px; height: 2px; background: $line)
   p#d(left: 34px; top: 538px; width: 476px; font-size: 21px; line-height: 1.55; color: $fg2; font-family: r; content: {d})
-# まとめの行 (左の色の縁 + 番号 + 大きな数字 + 太字の 1 行 + 補足)・文の列は hf の 389 px より 11 px 右 (数字の書体が hf より幅広く「43% → 75%」が文に掛かるため)
+# まとめの行 (左の色の縁 + 番号 + 大きな数字 + 太字の 1 行 + 補足)・文の列は hf より右 (数字の書体が hf より幅広く「43% → 75%」が文に掛かるため)
 def item(ix, c, f, b, s) = div(left: 96px; width: 1728px; height: 192px; border-radius: 18px; background: #111925E0; border: 2px solid $line2; in: {x:-40, opacity:0, duration:0.6, ease:'power3.out'}; out: {y:-24, opacity:0, duration:0.6, ease:'power2.in'})
   div#edge(left: 0px; top: 0px; width: 6px; height: 192px; border-radius: 18px 0px 0px 18px; background: {c})
   p#ix(left: 40px; cy: 50%; font-size: 60px; font-family: n; color: $slate2; content: {ix})
   p#f(left: 117px; cy: 50%; font-size: 108px; line-height: 1; font-family: n; color: {c}; white-space: nowrap; content: {f})
-  p#b(left: 600px; top: 51px; font-size: 34px; line-height: 1.35; white-space: nowrap; content: {b})
-  p#s(left: 600px; top: 108px; font-size: 24px; color: $fg2; font-family: r; white-space: nowrap; content: {s})
+  p#b(left: 700px; top: 51px; font-size: 34px; line-height: 1.35; white-space: nowrap; content: {b})
+  p#s(left: 700px; top: 108px; font-size: 24px; color: $fg2; font-family: r; white-space: nowrap; content: {s})
 
 # 全編の地 (根・z back): 紺の放射の地・全編で斜めに流れる方眼 (縁へ薄れる)・左上の青緑と右下の琥珀の光 (ゆっくり揺れる)・grain
 div#bg_base(inset: 0; background: radial(#0F1724,#0A0F17@60%,#080C13,30%,20%); z-index: back; in: none)
@@ -183,7 +183,7 @@ board#b_bd(left: 96px; top: 292px; width: 1728px; height: 676px; t: "分析の�
 section#c(stagger: {each:0})
 head#c_h(n: "02"; k: "月別の件数"; t: "3 か月で {t}12% 増{/}。利用企業の増加とほぼ同じ伸び")
 p#c_lab(left: 96px; top: 330px; font-size: 24px; color: $muted; delay: 300ms; in: {x:-20, opacity:0, duration:0.45, ease:'power2.out'}) 7 月 → 9 月の増加
-p#c_pct(left: 96px; top: 420px; font-size: 230px; line-height: 0.86; font-family: n; color: $teal2; transform-origin: 0% 70%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.5)'}) +[count:12 start=0 ms=800ms]%
+p#c_pct(left: 96px; top: 420px; font-size: 210px; line-height: 0.86; font-family: n; color: $teal2; transform-origin: 0% 70%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.5)'}) +[count:12 start=0 ms=800ms]%
 p#c_ft(left: 96px; top: 666px; font-size: 26px; color: $fg2; white-space: nowrap; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) {nf}1,296{/} 件 {ar}→{/} {nf}1,448{/} 件
 p#c_call(left: 96px; top: 760px; font-size: 22px; background: #152030F5; border: 2px solid #7ADFD38C; border-radius: 10px; padding: 10px 18px 10px 56px; white-space: nowrap; in: {x:-30, opacity:0, duration:0.5, ease:'power3.out'}) 利用企業の増加とほぼ同じ伸び
   icon#i(left: 18px; cy: 50%; font-size: 26px; name: buildings; color: $teal2)

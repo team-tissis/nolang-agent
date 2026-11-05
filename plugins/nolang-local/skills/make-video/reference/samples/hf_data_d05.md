@@ -104,7 +104,7 @@ def vcard(ch, tl, sb, n, c=$va, ink=$ink, gc=$va, gs=#94A3B840) = div(top: 208px
   p#fl(left: 28px; bottom: 26px; font-size: 20px; color: $tx3) 訪問
   p#fn(right: 28px; bottom: 22px; font-size: 30px; font-family: m; white-space: nowrap; content: {n})
 # 折れ線の点 (縁取りの丸 + 値)・ポンと出る
-def pt(v, c, lc, ly, lx=8) = div(width: 24px; height: 24px; in: {scale:0.3, opacity:0, duration:0.5, ease:'back.out(2)'})
+def pt(v, c, lc, ly, lx=12) = div(width: 24px; height: 24px; in: {scale:0.3, opacity:0, duration:0.5, ease:'back.out(2)'})
   shape#d(left: 0px; top: 0px; width: 24px; height: 24px; border-radius: 50%; background: {c}; border: 4px solid #0B121D)
   p#v(cx: {lx}; cy: {ly}; font-size: 22px; font-family: b; color: {lc}; white-space: nowrap; content: {v})
 # 結論の札 (上端の色の線 + 番号 + 色の札 + 2 行の題 + 罫)
@@ -259,14 +259,14 @@ board#wk(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}03{/} ／
   shape#g2(path: "M494 435 L494 488"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
   shape#g3(path: "M714 479 L714 513"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
   shape#g4(path: "M933 468 L933 477"; background: none; border: 2px solid $cyan; in: {opacity:0, duration:0.5})
-  pt#pb1(left: 261px; top: 226px; v: 3.87%; c: $cyan; lc: $cyan; ly: -14)
-  pt#pa1(left: 261px; top: 549px; v: 2.99%; c: $va; lc: "#C3CDD9"; ly: 26)
-  pt#pb2(left: 482px; top: 410px; v: 3.37%; c: $cyan; lc: $cyan; ly: -6; lx: 43)
-  pt#pa2(left: 482px; top: 490px; v: 3.15%; c: $va; lc: "#C3CDD9"; ly: 26)
-  pt#pb3(left: 702px; top: 453px; v: 3.25%; c: $cyan; lc: $cyan; ly: -13)
-  pt#pa3(left: 702px; top: 516px; v: 3.08%; c: $va; lc: "#C3CDD9"; ly: 26)
-  pt#pb4(left: 921px; top: 442px; v: 3.28%; c: $cyan; lc: $cyan; ly: -13)
-  pt#pa4(left: 921px; top: 478px; v: 3.18%; c: $va; lc: "#C3CDD9"; ly: 26)
+  pt#pb1(left: 261px; top: 226px; v: 3.87%; c: $cyan; lc: $cyan; ly: -21)
+  pt#pa1(left: 261px; top: 549px; v: 2.99%; c: $va; lc: "#C3CDD9"; ly: 39)
+  pt#pb2(left: 482px; top: 410px; v: 3.37%; c: $cyan; lc: $cyan; ly: -9; lx: 65)
+  pt#pa2(left: 482px; top: 490px; v: 3.15%; c: $va; lc: "#C3CDD9"; ly: 39)
+  pt#pb3(left: 702px; top: 453px; v: 3.25%; c: $cyan; lc: $cyan; ly: -19)
+  pt#pa3(left: 702px; top: 516px; v: 3.08%; c: $va; lc: "#C3CDD9"; ly: 39)
+  pt#pb4(left: 921px; top: 442px; v: 3.28%; c: $cyan; lc: $cyan; ly: -19)
+  pt#pa4(left: 921px; top: 478px; v: 3.18%; c: $va; lc: "#C3CDD9"; ly: 39)
   p#gl3(cx: 772px; cy: 496px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.17
   p#gl4(cx: 992px; cy: 472px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.10
   shape#rb(path: "M470 690 L470 704 L990 704 L990 690"; background: none; border: 2px solid #3DD9EBB3; in: {scaleX:0.2, opacity:0, duration:0.5, ease:'power2.out'})

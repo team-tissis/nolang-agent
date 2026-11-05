@@ -345,8 +345,8 @@ ocard#oc3(left: 1288px; c: $pnk; transform: rotate(-.7deg); no: "3"; tt: "責め
     p#t1(left: 42px; top: 166px; font-size: 26px; white-space: nowrap) 来月の調整案
     p#t2(left: 42px; top: 206px; font-size: 21px; color: $ink2; white-space: nowrap) ここを少し見直してみませんか？
   li#li1(left: 44px; top: 420px; t: "予算超過を赤字で示すより、[br]来月の調整案として見せる")
-shape#o_x1(path: "M1619 467 L1748 426"; background: none; border: 8px solid $red; overlap: oc3; in: draw {duration: 0.3})
-shape#o_x2(path: "M1620 426 L1746 467"; background: none; border: 8px solid $red; overlap: oc3; in: draw {duration: 0.3})
+shape#o_x1(path: "M1619 467 L1748 426"; background: none; border: 8px solid $red; overlap: oc3,oc3.sk.t1; in: draw {duration: 0.3})
+shape#o_x2(path: "M1620 426 L1746 467"; background: none; border: 8px solid $red; overlap: oc3,oc3.sk.t1; in: draw {duration: 0.3})
 
 # concl — 3 枚の帯の付箋を文の頭で 1 枚ずつ (題を拭き出し・要の語に赤い下線)・要の語で右端に赤いチェック・右にチームの絵・最後に桃の付箋の署名
 section#concl(stagger: {each:0})

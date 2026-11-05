@@ -33,7 +33,7 @@ bgm#music(fade: 600,60; keys: "0:0") ファゴットとマリンバとアコー�
 subtitle(left: 60px; width: 960px; top: 1440px; font-size: 58px; line-height: 1.3; color: #FFFFFF; -webkit-text-stroke: 4px #0D1222; background: none; unit: sentence; wrap: comma,16; label: above; label_in: pop; lead: 0ms; tail: 250ms; in: {y:18, opacity:0, duration:.16, ease:'power2.out'})
 
 # 2 段テロップ (Dela・前置き 白 52 / 落ち 黄 75 (9 字以上は 65)・-2° 傾き・拡大から back で着地・落ちは着地後に横に揺れる)
-def telop(setup, punchline, punch_size=75) = group(left: 0px; top: 1030px; width: 1080px; height: 255px)
+def telop(setup, punchline, punch_size=113) = group(left: 0px; top: 1030px; width: 1080px; height: 255px)
   p#setup(cx: 50%; top: 0px; overlap: self.punch; font-size: 78px; font-family: d; line-height: 1.12; color: #FFFFFF; -webkit-text-stroke: 5px $ink; text-shadow: 0px 8px 0px #0000008C; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.6, opacity:0, rotation:-4, duration:.28, ease:'back.out(2.2)'}; content: {setup})
   p#punch(cx: 50%; top: 93px; font-size: {punch_size}; font-family: d; line-height: 1.12; color: $punch; -webkit-text-stroke: 5px $ink; text-shadow: 0px 10px 0px #00000099; transform: rotate(-2deg); transform-origin: 50% 60%; in: {scale:1.7, opacity:0, rotation:3, duration:.3, ease:'back.out(2.6)'}; content: {punchline})
 
@@ -72,7 +72,7 @@ group#org(in: {stagger: {each: .06}}; left: 90px; top: 380px; width: 900px; heig
     slam_x#cross(left: 126px; top: 14px; width: 72px; height: 72px)
   org_node#staff(left: "41;341;641"; top: 468px; width: 220px; height: 104px; plate: plate_staff) ×3
     svg#cert(left: 120px; top: 22px; width: 60px; height: 50px; part: badge)
-telop#nobody(setup: "上の人たち、"; punchline: "誰も持ってなかった。"; punch_size: 65)
+telop#nobody(setup: "上の人たち、"; punchline: "誰も持ってなかった。"; punch_size: 98)
 
 # 上司の自慢 → 部下の褒め殺し (落ち「役職取得。」) → 照れる上司の打ち込み
 section#promoted

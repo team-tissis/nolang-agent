@@ -110,7 +110,7 @@ section#brake(stagger: {each:0})
 group#brake_zoom(main: keys(at=0 scale=1 | at=1 scale=1.2 ease=sine.inOut),window=100,7500,forwards; transform-origin: 48.7% 96.3%)
   img#photo(inset: 0; main: none) [ref:@hero]介護実習室。介護ベッドの横に置かれた自走式車椅子の横に介護スタッフがしゃがみ、後輪のすぐ前のブレーキレバーを右手でしっかり押してロックしている。スタッフは手元のブレーキを確認しながら、顔を少し上げて学生たちに語りかけている。背景で学生3人が身を乗り出して手元をのぞき込んでいる。
   shape#ring(left: 855px; top: 705px; width: 160px; height: 160px; border-radius: 50%; background: none; border: 9px solid $orange; in: draw {duration: 0.45})
-heading#brake_head(s: "いちばん大切なこと"; t: "ブレーキの確認"; w: 288)
+heading#brake_head(s: "いちばん大切なこと"; t: "ブレーキの確認"; w: 432)
 p#click_word(left: 1006px; top: 556px; font-size: 76px; letter-spacing: 0.04em; color: $orange; -webkit-text-stroke: 7px #FFFFFF; transform: rotate(-8deg); in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(3)'}; out: {y:-16, opacity:0, duration:0.3, ease:'power2.in'}) カチッ
 img#brake_inset(left: 1360px; top: 196px; width: 400px; height: 400px; border-radius: 1498px; border: 10px solid #FFFFFF; box-shadow: 0px 14px 36px #192D464D; content: @closeup; main: kb {scale: [1.18, 1], ease:'power2.out'}; in: {scale:0.4, opacity:0, duration:0.55, ease:'back.out(2.2)'})
 p#brake_cap(left: 1300px; top: 616px; width: 520px; font-size: 38px; line-height: 1.35; text-align: center; color: $navy; background: #FFFFFFF5; border-radius: 18px; padding: 16px 20px 18px 20px; box-shadow: 0px 8px 22px #192D462E; in: {y:20, opacity:0, duration:0.45, ease:'power3.out'}) {o}ブレーキレバー{/}を押して[br]確実にロック
@@ -118,7 +118,7 @@ p#brake_check(left: 1318px; top: 760px; font-size: 32px; color: #FFFFFF; backgro
   p#ok(left: 12px; cy: 50%; width: 44px; font-size: 28px; text-align: center; color: $mint; background: #FFFFFF; border-radius: 148px; padding: 8px 0px) ✓
 # 左上の章札と右上の進行 (sticky・締めまで)・進行の棒は 3 本とも幅 0 で出し、章の cut の語で to で伸ばす (後の cut で初めて出すと
 # 確定済みの前の cut を書き換える)・区切りの板の再掲より先に書く = 板の下
-chapter_chip#chapter1.sticky(n: "STEP 1"; t: "準備"; w: 188; wn: 110)
+chapter_chip#chapter1.sticky(n: "STEP 1"; t: "準備"; w: 282; wn: 165)
 div#progress.sticky(left: 1408px; top: 50px; width: 456px; height: 66px; border-radius: 20px; background: #FFFFFFEB; box-shadow: 0px 6px 18px #192D4624; z-index: front; in: none; out: {opacity:0, duration:0.4})
   div#track(left: "23;164;306"; top: 14px; width: 128px; height: 10px; border-radius: 6px; background: $track) ×3
     div#bar(left: 0px; top: 0px; width: 128px; height: 10px; border-radius: 6px; background: $mint; transform: scaleX(0); transform-origin: left)
@@ -154,7 +154,7 @@ bumper#bumper2.sticky(s: "STEP 2"; t: "位置調整"; u: "ベッドと車椅子�
 # angle — STEP 2: 格子の地に写真と上から見た図を並べ、「角度」で軸・「15度」「30度」で車椅子を回し、角度の札と扇の明滅
 section#angle(stagger: {each:0})
 div#angle_bg(inset: 0; background: $cream; pattern: grid,40,#23446B0F; border-radius: 24px)
-heading#angle_head(s: "ステップ2"; t: "ベッドと車椅子の角度"; w: 389; delay: 350ms)
+heading#angle_head(s: "ステップ2"; t: "ベッドと車椅子の角度"; w: 584; delay: 350ms)
 img#angle_photo(left: 56px; top: 262px; width: 852px; height: 484px; border-radius: 26px; border: 8px solid #FFFFFF; box-shadow: 0px 14px 34px #192D4638; main: kb {scale: [1, 1.08], focus: ['40% 60%', '40% 60%']}; delay: 300ms; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'}) [ref:@hero]介護実習室を斜め上から見下ろした構図。介護ベッドの長い辺の中央に、利用者役の学生B（短い黒髪の男性）が端座位で座っている（足は床につけ、ベッドの外側を向いている）。介護スタッフが、学生Bのすぐ横に車椅子を置き、ベッドの側面に対して浅い斜め（約20〜30度）の角度に向きを整えている。車椅子の座面は学生Bの方を向いている。学生Aと学生Cが横で見学している。
 p#angle_cap(left: 56px; top: 762px; width: 852px; font-size: 36px; text-align: center; color: $navy; delay: 750ms; in: {y:18, opacity:0, duration:0.45, ease:'power3.out'}) ベッドのすぐ横に、斜めに置く
 div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius: 28px; background: #FFFFFF; box-shadow: 0px 14px 34px #192D462E; delay: 400ms; in: {y:40, opacity:0, duration:0.55, ease:'power3.out'})
@@ -171,7 +171,7 @@ div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius
   top_part#chair_label(pt: top_chair_label; delay: 750ms; in: fade {duration: 0.4})
   top_part#callout(pt: top_callout; in: pop {scale: 0.6, duration: 0.5, ease: 'back(2)', pivot: '13.4%,68.5%'})
 # STEP 2 の章札 (この cut の語で出す・区切りの板の下)
-chapter_chip#chapter2.sticky(n: "STEP 2"; t: "位置調整"; w: 233; wn: 113)
+chapter_chip#chapter2.sticky(n: "STEP 2"; t: "位置調整"; w: 350; wn: 170)
 @#bumper2_back
 @#bumper2
 bumper_back#bumper3_back.sticky(c: $mint_l)
@@ -191,7 +191,7 @@ div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius:
     p#t(left: 82px; cy: 50%; font-size: 38px; line-height: 1.3; color: $ink) 車椅子の{p}ブレーキ{/}を確認;ベッドとの角度は{p}15°〜30°{/};{p}声かけ{/}を忘れずに;{p}利用者のペース{/}に合わせる
     shape#sep(left: 0px; bottom: 0px; width: 588px; height: 3px; path: line_h; border: 2px solid $sep; dash: 5,5; opacity: "1;1;1;0")
 # POINT の章札 (この cut の語で出す・区切りの板の下)
-chapter_chip#chapter3.sticky(n: "POINT"; t: "まとめ"; w: 201; wn: 104; c: $orange; out: {opacity:0, duration:0.4})
+chapter_chip#chapter3.sticky(n: "POINT"; t: "まとめ"; w: 302; wn: 156; c: $orange; out: {opacity:0, duration:0.4})
 @#bumper3_back
 @#bumper3
 

@@ -636,14 +636,46 @@ class CutStages(ABC):
         return author_core.length_finding(estimate, budget, blk[1])
 
     def staff_length_finding(self, c: str) -> str:
-        """担当に添える尺の指摘の 1 行 — 台詞を直せる担当 (著者 brief でない) にだけ、著者版の見込みが予算を許容の外まで超えた cut
-        で (`length_finding`)。足りない側は渡さない (文を足すと絵の変化の無い静止が伸びる — 10-24・ずれは締めの弾性が吸う)。著者は
-        自分の注記で予算超えを書いても直さない (11-04 検証 p04: 60 s 指定で 77.6 s・各位の見込みが plan の 1.3 倍) ので、台詞を
-        書き直せる最後の役に渡す。"""
-        budget, estimate = self.cut_budget(c), self.cut_estimate.get(c)
-        if self.brief or budget is None or estimate is None or estimate <= budget:
+        """担当に添える尺の指摘の 1 行 — 台詞を直せる担当 (著者 brief でない) にだけ、著者版の見込みが予算を超えた cut で、しかも
+        先頭からの見込みの超過の累計 (live な cut の見込みの和 − plan の和・締めの cut は依頼の秒) が依頼の秒 (おまかせは plan の和)
+        の STAFF_LENGTH_TOLERANCE を超えた時だけ。全体が予定どおりなら cut が予算を超えても渡さない。足りない側は渡さない (文を足すと絵の
+        変化の無い静止が伸びる — 10-24・ずれは締めの弾性が吸う)。著者は自分の注記で予算超えを書いても直さない (11-04 検証 p04: 60 s
+        指定で 77.6 s・各位の見込みが plan の 1.3 倍) ので、台詞を書き直せる最後の役に渡す。渡した cut の見込みは消させた本数の分を
+        引いて置く (次の check が測り直すまで — 同じ超過を後の cut に重ねて消させない・締めの弾性の予算もこの値で読む)。"""
+        budget, estimate, blk = self.cut_budget(c), self.cut_estimate.get(c), self.cut_block(c)
+        if (
+            self.brief
+            or self.verbatim
+            or c == self.order[0]
+            or budget is None
+            or estimate is None
+            or blk is None
+            or estimate <= budget
+        ):
             return ""
-        return self.length_finding(c)
+        plan = self.plan_seconds()
+        head = self.order[: self.order.index(c) + 1]
+        planned = sum(plan.get(x, 10.0) for x in head)
+        target = self.seconds if self.seconds is not None else sum(plan.get(x, 10.0) for x in self.order)
+        over = sum(self.cut_estimate.get(x, plan.get(x, 10.0)) for x in head if not self.broken.get(x)) - (
+            target if c == self.order[-1] else planned
+        )
+        if over <= target * author_core.STAFF_LENGTH_TOLERANCE:
+            return ""
+        line, trim_s = author_core.length_line(
+            estimate, budget, blk[1], f"; the video so far runs {over:+.0f} s over its plan"
+        )
+        if line:
+            self.cut_estimate[c] = estimate - trim_s
+            self.record(
+                "length_lint",
+                cut=c,
+                round="author",
+                budget_s=round(budget, 1),
+                estimate_s=round(estimate, 1),
+                over_s=round(over, 1),
+            )
+        return line
 
     def cut_length(self, c: str) -> dict[str, float | None]:
         """staged の時点の cut c の尺の記録: plan の目標秒・予算・著者の宣言 (`# 台詞 ~N s`)・check の見積り。"""

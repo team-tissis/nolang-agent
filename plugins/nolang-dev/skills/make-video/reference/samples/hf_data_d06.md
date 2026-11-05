@@ -137,7 +137,7 @@ board#tr_bd(left: 96px; width: 1000px)
   div#base(left: 102px; top: 548px; width: 850px; height: 3px; background: $ink2)
   div#bar(left: "144;312;480;648"; top: "470.8;404.8;309.5;216.6"; width: 104px; height: "78.2;144.1;239.5;332.4"; background: $ai; border-radius: 2px; in: {scaleY:0, duration:.65, ease:'power3.out', pivot:'bottom'}) ×4
   div#hot(left: 816px; top: 148px; width: 104px; height: 401px; background: $shu; border-radius: 2px; in: {scaleY:0, duration:.9, ease:'expo.out', pivot:'bottom'})
-  p#val(left: "111.8;279.8;447.8;615.8;783.8"; top: "420.8;353.2;258.8;167.2;98.2"; width: 168px; font-size: 32px; line-height: 1.2; font-family: m; text-align: center; color: "$ink;$ink;$ink;$ink;$shu"; in: {y:12, opacity:0, duration:.4, ease:'power2.out'}) ×5 [count:3,200 start=0 ms=600ms];[count:5,900 start=0 ms=600ms];[count:9,800 start=0 ms=600ms];[count:13,600 start=0 ms=600ms];[count:16,400 start=0 ms=900ms]
+  p#val(left: "111.8;279.8;447.8;615.8;783.8"; top: "420.8;353.2;258.8;142;98.2"; width: 168px; font-size: 32px; line-height: 1.2; font-family: m; text-align: center; color: "$ink;$ink;$ink;$ink;$shu"; in: {y:12, opacity:0, duration:.4, ease:'power2.out'}) ×5 [count:3,200 start=0 ms=600ms];[count:5,900 start=0 ms=600ms];[count:9,800 start=0 ms=600ms];[count:13,600 start=0 ms=600ms];[count:16,400 start=0 ms=900ms]
   p#yr(left: "111.8;279.8;447.8;615.8;783.8"; top: 564px; width: 168px; font-size: 22px; text-align: center; color: "$ink2;$ink2;$ink2;$ink2;$shu"; font-family: "r;r;r;r;b") ×5 2021年;2022年;2023年;2024年;2025年
 card#tr_x5(left: 1136px; top: 252px; width: 688px; height: 268px; in: {y:34, opacity:0, duration:.6, ease:'power3.out'})
   ctitle#t 5年間の伸び

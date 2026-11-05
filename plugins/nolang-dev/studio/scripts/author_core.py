@@ -1397,6 +1397,9 @@ REVIEW_ROUNDS = 1
 LENGTH_TOLERANCE = 0.2
 LENGTH_SLACK_S = 2.5
 CLOSING_BUDGET_S = (10.0, 30.0)
+# 担当への尺の指摘: 先頭からの見込みの超過の累計が依頼の秒のこの比を超えた時だけ (cut ごとの ±20% は全体が予定どおりでも
+# 渡し、6 s の順位の cut は 2.5 s の床で渡らなかった — 11-05 replay 21 本 + live 9 本・10% は見込みが実尺より短い分だけ遅れる)
+STAFF_LENGTH_TOLERANCE = 0.05
 
 
 def closing_budget(requested: float, before: float) -> float:
@@ -1407,23 +1410,32 @@ def closing_budget(requested: float, before: float) -> float:
 
 def length_finding(estimate: float, budget: float, timeline: str) -> str:
     """check の見積り (字数 × 話速 + 間) が cut の予算から LENGTH_TOLERANCE (か LENGTH_SLACK_S の大きい方) を超えて外れたら、直し役
-    への指摘の 1 行 (文を丸ごと消す / 足す本数つき)。外れていない・声のある台詞行が無ければ空。逐語の動画と最初の cut に掛けないのは
-    呼び手 (逐語は依頼の台本の改変になる・最初の cut は再生開始の臨界路で、ずれは締めの cut の弾性が吸う)。"""
-    gap = estimate - budget
-    if abs(gap) <= max(budget * LENGTH_TOLERANCE, LENGTH_SLACK_S):
+    への指摘の 1 行 (`length_line`)。外れていなければ空。逐語の動画と最初の cut に掛けないのは呼び手 (逐語は依頼の台本の改変に
+    なる・最初の cut は再生開始の臨界路で、ずれは締めの cut の弾性が吸う)。"""
+    if abs(estimate - budget) <= max(budget * LENGTH_TOLERANCE, LENGTH_SLACK_S):
         return ""
+    return length_line(estimate, budget, timeline)[0]
+
+
+def length_line(estimate: float, budget: float, timeline: str, note: str = "") -> tuple[str, float]:
+    """尺の指摘の 1 行 (文を丸ごと消す / 足す本数つき・note は秒の後ろに添える) と、その本数の見込みの秒。声のある台詞行が無ければ
+    ("", 0)。外れの幅で渡すかは呼び手が決める (直し役 = `length_finding`・担当 = `CutStages.staff_length_finding`)。"""
     # 声の無い行 (`@名: [silence:2s]`) は演出の間 — 数えず、声の無い cut (章の札・題の間) は文の足し引きで寄せない (足すと間が台詞に化ける)
     lines = sum(1 for line in timeline.splitlines() if line.lstrip().startswith("@") and spoken(line))
     if not lines:
-        return ""
+        return "", 0.0
+    gap = estimate - budget
     per = estimate / lines
-    n = min(max(round(abs(gap) / per), 1), 2)
+    # 消すのは最後の 1 行の手前まで (全部消すと声の無い cut になる — 11-05 1a の live で 1 行の溜めの cut に「1 行消せ」が出た)
+    n = min(max(round(abs(gap) / per), 1), 2 if gap < 0 else lines - 1)
+    if n < 1:
+        return "", 0.0
     verb = "delete" if gap > 0 else "add"
     return (
         f"warn {LENGTH_RULE} (cut): estimated speech {estimate:.0f} s / this cut's target {budget:.0f} s ({gap:+.0f} s;"
-        f" one speech line ≈ {per:.0f} s) — {verb} {n} whole speech line(s) (whole sentences; do not meet it with fast"
+        f" one speech line ≈ {per:.0f} s){note} — {verb} {n} whole speech line(s) (whole sentences; do not meet it with fast"
         " talking or packed pauses)"
-    )
+    ), n * per
 
 
 # ===== check の autofix (lint の `Finding.autofix` = `操作:引数` の解釈) =====

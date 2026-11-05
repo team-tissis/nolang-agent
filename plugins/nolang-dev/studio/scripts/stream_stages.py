@@ -107,9 +107,7 @@ class Run(cut_stages.CutStages, ABC):
         request = project / "request.txt"
         self.request = request.read_text() if request.exists() else ""
         self.env = dict(os.environ)  # 役 (著者・担当・直し役) の子 process の env (運ぶ先の subclass が足す)
-        self.staff_trim: set[str] = (
-            set()
-        )  # 尺の指摘 (`cut_length`) を渡した担当の cut — 台詞の行を丸ごと消したのは戻さない
+        self.staff_trim: set[str] = set()  # 尺の指摘 (`cut_length`) を渡した担当の cut — 文を丸ごと消したのは戻さない
         self.shot_unwarmed: dict[str, list[str]] = {}  # cut → 静止画で warm が間に合わず仮の絵で描いた参照 (レビュー)
         self.t0 = time.time()
         # 止まらない開始の予測 (`staff_effort_for` の balanced) が読む進行の実測 — 値は全部 since 秒 (t0 からの経過)
@@ -522,29 +520,35 @@ class Run(cut_stages.CutStages, ABC):
         text, applied = author_core.apply_autofix(
             self.blocks[c], [(f.rule, f.autofix) for f in fixable], sure_only=True, sure_rules=self.sure
         )
+        fixed = [fixable[k] for k in applied]
         if applied:
             self.put(c, text)
-            self.log(
-                cut=c, event="autofix", round="author", n=len(applied), fixes=[fixable[k].autofix for k in applied]
-            )
+            self.log(cut=c, event="autofix", round="author", n=len(applied), fixes=[f.autofix for f in fixed])
+            # 著者の版 = 機械で直した版 — 見込みにも足した無音の秒を足す (尺の指摘はこの版の見込みで決める・足さないと cut ごとに
+            # 平均 0.25 s 短く読む — 11-05 1a)
+            if c in self.cut_estimate:
+                self.cut_estimate[c] += sum(
+                    float(arg)
+                    for op, _, arg in (f.autofix.partition(":") for f in fixed)
+                    if op in ("silence_head", "silence_tail")
+                )
         self.author_blocks[c] = self.blocks[c]
         (self.solo / f"author_cut_{c}.txt").write_text(self.blocks[c])
-        fixed = [fixable[k] for k in applied]
         # 担当には既定で DEFECT と severe だけ (warn は渡さない — 思考の裾が減り担当 max 241 → 124 s・10-26 の 2 bench)
         levels = ("severe", "warn") if self.staff_warn else ("severe",)
         staffed = [f for f in mine if f not in fixed and f.severity in levels]
         findings = "\n".join(d.text for d in res.defects[:20]) + "".join("\n" + f.render() for f in staffed[:30])
-        # 著者版の見込みが予算を超えた cut は尺の指摘も渡す (担当は台詞の行を丸ごと消してよい — `staff` が戻さない)
+        if c in self.cut_estimate:
+            self.log(
+                cut=c,
+                event="plan_estimate",
+                plan_s=self.plan_seconds().get(c),
+                estimate_s=round(self.cut_estimate[c], 1),
+            )
+        # 著者版の見込みが予算と全体の許容を超えた cut は尺の指摘も渡す (担当は文を丸ごと消してよい — `staff` が戻さない)
         if length := self.staff_length_finding(c):
             self.staff_trim.add(c)
             findings += "\n" + length
-            self.log(
-                cut=c,
-                event="length_lint",
-                round="author",
-                budget_s=self.cut_budget(c),
-                estimate_s=self.cut_estimate.get(c),
-            )
         dd = self.weave / c / "out"
         dd.mkdir(parents=True, exist_ok=True)
         ff = dd / "findings_author.txt"
@@ -553,13 +557,6 @@ class Run(cut_stages.CutStages, ABC):
         self.log(
             cut=c, event="check", round="author", s=round(time.time() - t, 1), defect=len(res.defects), warn=len(mine)
         )
-        if c in self.cut_estimate:
-            self.log(
-                cut=c,
-                event="plan_estimate",
-                plan_s=self.plan_seconds().get(c),
-                estimate_s=round(self.cut_estimate[c], 1),
-            )
         return ff
 
     # 止まらない開始の予測の定数 (10-27〜28 の local 実測 30 run: 担当 low 7〜27 s (中央 15) / medium 21〜73 s (中央 37・

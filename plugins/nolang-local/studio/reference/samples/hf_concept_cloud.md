@@ -95,7 +95,7 @@ bgm#music(fade: 1200,2800) 明るく軽やかなエレクトロニカ、きら�
 subtitle.hug(bottom: 20px; font-family: m; font-size: 44px; line-height: 1.42; letter-spacing: .01em; color: $ink; text-align: center; background: #FFFFFFF7; border: 3px solid #E3E9F2; border-radius: 26px; padding: 16px 44px 18px 44px; box-shadow: 0px 12px 30px #17223A24; unit: sentence; lead: 80ms; tail: 550ms; hold: next,800ms; in: {y:10, opacity:0, duration:.18, ease:'power2.out'}; out: {opacity:0, duration:.14, ease:'power2.in'})
 
 # 部品: 左上の章の見出し (番号の青い札が回って弾み → 題が左から → 下線が伸びる)・前の章の見出しは上へ抜ける
-def hdr(n, t, w, nw=56, tl=72, ns=25) = div(left: 76px; top: 50px; width: 1050px; height: 90px; z-index: front; out: {y:-26, opacity:0, duration:.35, ease:'power2.in'})
+def hdr(n, t, w, nw=84, tl=108, ns=38) = div(left: 76px; top: 50px; width: 1050px; height: 90px; z-index: front; out: {y:-26, opacity:0, duration:.35, ease:'power2.in'})
   div#nb(left: 0px; top: 0px; width: {nw}; height: 84px; border-radius: 22px; background: $blue; box-shadow: 0px 10px 22px #2159E047; in: {scale:.4, rotation:-12, duration:.55, ease:'back.out(2.2)'})
     p#n(cx: 50%; cy: 50%; font-family: e; font-size: {ns}; line-height: 1; letter-spacing: -.02em; color: #FFFFFF; content: {n})
   p#t(left: {tl}; top: 9px; font-size: 54px; line-height: 1.1; letter-spacing: -.02em; delay: 80ms; in: {x:-34, opacity:0, duration:.55, ease:'power3.out'}; content: {t})
@@ -120,13 +120,13 @@ def world = div(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none)
   p#chip_dev(left: 126px; top: 168px; font-family: m; font-size: 30px; line-height: 1; color: #FFFFFF; background: $orange; border-radius: 148px; padding: 14px 24px; in: none) 手元の端末
   p#chip_svc(left: 1346px; top: 168px; font-family: m; font-size: 30px; line-height: 1; color: #FFFFFF; background: $blue; border-radius: 148px; padding: 14px 24px; in: none) サービス側
   # 配線: 太い淡色の下地 + 流れ続ける破線 (dash_offset の鋸波 = hf の strokeDashoffset)
-  shape#wb_pc(path: "M341 273 C467 273 480 355 593 355"; background: none; border: 22px solid $wire; in: none)
-  shape#wb_sp(path: "M280 470 C453 470 480 355 593 355"; background: none; border: 22px solid $wire; in: none)
-  shape#wb_sv(path: "M687 355 C833 355 847 245 985 245"; background: none; border: 22px solid $wire; in: none)
-  shape#wf_pc(path: "M341 273 C467 273 480 355 593 355"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
-  shape#wf_sp(path: "M280 470 C453 470 480 355 593 355"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
-  shape#wf_sv(path: "M687 355 C833 355 847 245 985 245"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
-  shape#w_db(path: "M1047 324 L1047 396"; background: none; border: 8px solid $blue; in: none)
+  shape#wb_pc(path: "M512 410 C701 410 720 533 890 533"; background: none; border: 22px solid $wire; in: none)
+  shape#wb_sp(path: "M420 705 C680 705 720 533 890 533"; background: none; border: 22px solid $wire; in: none)
+  shape#wb_sv(path: "M1031 533 C1250 533 1271 368 1478 368"; background: none; border: 22px solid $wire; in: none)
+  shape#wf_pc(path: "M512 410 C701 410 720 533 890 533"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
+  shape#wf_sp(path: "M420 705 C680 705 720 533 890 533"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
+  shape#wf_sv(path: "M1031 533 C1250 533 1271 368 1478 368"; background: none; border: 6px solid $teal; dash: 2,11; in: none; main: sawtooth {dash_offset: 1, period: 0.36})
+  shape#w_db(path: "M1571 486 L1571 594"; background: none; border: 8px solid $blue; in: none)
   svg#pc(left: 200px; top: 304px; width: 300px; height: 210px; part: laptop; in: none)
   svg#sp(left: 294px; top: 610px; width: 112px; height: 190px; part: phone; in: none)
   p#lb_pc(cx: 350px; top: 526px; font-family: m; font-size: 32px; line-height: 1.4; color: $orange_d; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; in: none) パソコン
@@ -136,7 +136,7 @@ def world = div(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none)
   p#lb_net(cx: 960px; top: 614px; font-family: m; font-size: 32px; line-height: 1.4; color: $teal; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; in: none) ネットワーク
   # サーバーのランプはゆっくり点滅し続ける (opacity の正弦波)
   svg#srv(left: 1485px; top: 262px; width: 170px; height: 213px; part: server; in: none)
-    div#led(left: 114px; top: "27;66;105"; width: 14px; height: 14px; border-radius: 148px; background: #8BF5B5; box-shadow: 0px 0px 10px 3px #22C55EBF; opacity: .575; main: sine {opacity: 0.425, period: 1.1}) ×3
+    div#led(left: 114px; top: "41;99;158"; width: 14px; height: 14px; border-radius: 148px; background: #8BF5B5; box-shadow: 0px 0px 10px 3px #22C55EBF; opacity: .575; main: sine {opacity: 0.425, period: 1.1}) ×3
   p#lb_srv(cx: 1570px; top: 484px; font-family: m; font-size: 32px; line-height: 1.4; color: $blue_d; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; overlap: .w_db; in: none) サーバー
   svg#db(left: 1485px; top: 602px; width: 170px; height: 182px; part: storage; in: none)
   p#lb_db(cx: 1570px; top: 800px; font-family: m; font-size: 32px; line-height: 1.4; color: $blue_d; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; in: none) 保存先
@@ -157,8 +157,8 @@ group#ti(left: 0px; top: 0px; width: 1920px; height: 1080px; out: {opacity:0, sc
     div#disc(left: 10px; top: 10px; width: 400px; height: 400px; border-radius: 1498px; background: $blue_l; in: none)
     svg#cloud(left: 40px; top: 60px; width: 340px; height: 216px; part: cloud_w; delay: 450ms; in: {scale:.7, opacity:0, duration:.7, ease:'back.out(1.9)'})
     svg#db(left: 160px; top: 128px; width: 100px; height: 106px; part: storage; delay: 800ms; in: pin4)
-    shape#l1(path: "M80 215 C87 193 107 187 120 180"; background: none; border: 6px solid $teal; dash: 2,9; in: none)
-    shape#l2(path: "M212 212 C200 195 180 188 164 180"; background: none; border: 6px solid $teal; dash: 2,9; in: none)
+    shape#l1(path: "M120 323 C131 290 161 281 180 270"; background: none; border: 6px solid $teal; dash: 2,9; in: none)
+    shape#l2(path: "M318 318 C300 293 270 282 246 270"; background: none; border: 6px solid $teal; dash: 2,9; in: none)
     svg#pc(left: 24px; top: 300px; width: 170px; height: 118px; part: laptop; delay: 1050ms; in: pin4)
     svg#sp(left: 296px; top: 290px; width: 74px; height: 126px; part: phone; delay: 1200ms; in: pin4)
   div#kicker(left: 330px; top: 318px; width: 330px; height: 56px; delay: 350ms; in: {x:-30, opacity:0, duration:.55, ease:'power3.out'})
@@ -170,12 +170,12 @@ group#ti(left: 0px; top: 0px; width: 1920px; height: 1080px; out: {opacity:0, sc
 
 # ch1 — 01 クラウドストレージとは: サービス側に寄った図 (群の変種 .tight) にサーバー → 飛んでくるファイル → 保存先 → POINT の注記、「どこから」で引いて手元の「？」を見せる
 section#ch1(stagger: {each: 0})
-hdr#h1(n: "01"; t: "クラウドストレージとは"; w: 388)
+hdr#h1(n: "01"; t: "クラウドストレージとは"; w: 582)
 # 右上のシリーズ表記と章の進行 7 本 (sticky・章ごとに 1 本ずつ左から埋まる)
 div#brand.sticky(left: 1444px; top: 58px; width: 396px; height: 54px; z-index: front; in: {y:-16, opacity:0, duration:.5, ease:'power3.out'}; out: {opacity:0, duration:.6})
   svg#ic(left: -9px; top: 0px; width: 46px; height: 30px; part: cloud)
   p#t(left: 48px; top: -2px; width: 348px; font-family: m; font-size: 26px; letter-spacing: .02em; color: $ink2; text-align: right; white-space: nowrap) クラウドストレージの仕組み
-  div#pg(left: "45;77;109;141;173;205;237"; top: 45px; width: 40px; height: 9px; border-radius: 4px; background: $track) ×7
+  div#pg(left: "68;116;164;212;260;308;356"; top: 45px; width: 40px; height: 9px; border-radius: 4px; background: $track) ×7
     div#b(left: 0px; top: 0px; width: 100%; height: 9px; border-radius: 4px; background: $blue; transform: scaleX(0); transform-origin: left)
 # 図の右半分 (サービス側): サービス側へ寄せた変種 .tight で出し、語で to,{x:428} を 1.4 秒かけて引きの姿へ (hf の #world の scale / x)。
 # 左半分 (端末側) は ch2 で出す — 後の cut で初めて出す要素はその cut に書く (stream は cut ごとに確定する) ので、ch2 は図を
@@ -183,9 +183,9 @@ div#brand.sticky(left: 1444px; top: 58px; width: 396px; height: 54px; z-index: f
 div#w1(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none; out: none)
   div#zone_svc(left: 1310px; top: 196px; width: 520px; height: 672px; border-radius: 30px; background: #FFFFFFEB; border: 4px solid $blue_m; box-shadow: 0px 18px 40px #17223A14; in: none)
   p#chip_svc(left: 1346px; top: 168px; font-family: m; font-size: 30px; line-height: 1; color: #FFFFFF; background: $blue; border-radius: 148px; padding: 14px 24px; in: none) サービス側
-  shape#w_db(path: "M1047 324 L1047 396"; background: none; border: 8px solid $blue; in: none)
+  shape#w_db(path: "M1571 486 L1571 594"; background: none; border: 8px solid $blue; in: none)
   svg#srv(left: 1485px; top: 262px; width: 170px; height: 213px; part: server; in: none)
-    div#led(left: 114px; top: "27;66;105"; width: 14px; height: 14px; border-radius: 148px; background: #8BF5B5; box-shadow: 0px 0px 10px 3px #22C55EBF; opacity: .575; main: sine {opacity: 0.425, period: 1.1}) ×3
+    div#led(left: 114px; top: "41;99;158"; width: 14px; height: 14px; border-radius: 148px; background: #8BF5B5; box-shadow: 0px 0px 10px 3px #22C55EBF; opacity: .575; main: sine {opacity: 0.425, period: 1.1}) ×3
   p#lb_srv(cx: 1570px; top: 484px; font-family: m; font-size: 32px; line-height: 1.4; color: $blue_d; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; overlap: .w_db; in: none) サーバー
   svg#db(left: 1485px; top: 602px; width: 170px; height: 182px; part: storage; in: none)
   p#lb_db(cx: 1570px; top: 800px; font-family: m; font-size: 32px; line-height: 1.4; color: $blue_d; background: #FFFFFF; border-radius: 14px; padding: 6px 18px; box-shadow: 0px 6px 16px #17223A1A; in: none) 保存先
@@ -194,15 +194,15 @@ div#w1(left: 0px; top: 0px; width: 1920px; height: 1080px; in: none; out: none)
   svg#sil_sp(left: 294px; top: 610px; width: 112px; height: 190px; part: sil_sp; in: {y:18, opacity:0, duration:.5, ease:'power3.out'})
   svg#mv_in(left: 564px; top: 256px; width: 70px; height: 87px; part: file; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone)
   svg#mv_drop1(left: 1550px; top: 340px; width: 44px; height: 54px; part: file; in: {scale:.86, duration:.25, ease:'power2.out'}; out: gone)
-  note#nt_1(left: 640px; top: 748px) ファイルの保存先 ＝ {bd}サービス側のサーバー{/}
-  shape#ld_1(path: "M841 527 L920 527 L980 480"; background: none; border: 4px solid $ink2; in: draw {duration: 0.45, ease: 'power2.inOut'})
+  note#nt_1(left: 512px; top: 748px) ファイルの保存先 ＝ {bd}サービス側のサーバー{/}
+  shape#ld_1(path: "M1262 791 L1380 791 L1470 720"; background: none; border: 4px solid $ink2; in: draw {duration: 0.45, ease: 'power2.inOut'})
   div#ld_dot(left: 1461px; top: 711px; width: 18px; height: 18px; border-radius: 148px; background: $ink2; in: fade {duration: 0.2})
   p#q_bubble(left: 620px; top: 292px; width: 680px; font-size: 70px; text-align: center; background: #FFFFFF; border: 4px solid $ink; border-radius: 148px; padding: 30px 0px; box-shadow: 0px 18px 40px #17223A24; in: pin7; out: {scale:.9, opacity:0, duration:.35, ease:'power2.in'}) どこから開ける？
 #w1.tight(left: -428px; top: 0px)
 
 # ch2 — 02 端末から保存先へアクセス: 手元の区画に端末 → 括弧と説明 → ネットワークの配線 → アクセスのパケット → 同じ保存先へ保存して別の端末で開く
 section#ch2(stagger: {each: 0})
-hdr#h2(n: "02"; t: "端末から保存先へアクセス"; w: 423)
+hdr#h2(n: "02"; t: "端末から保存先へアクセス"; w: 635)
 # ch1 の図を引いた姿のまま置き直し (in: none)、端末側・配線・札をこの cut の語で出す
 world#w2(in: none; out: {opacity:0, scale:.97, duration:.45, ease:'power2.in'})
   svg#sil_pc(left: 200px; top: 304px; width: 300px; height: 210px; part: sil_pc; in: none)
@@ -211,7 +211,7 @@ world#w2(in: none; out: {opacity:0, scale:.97, duration:.45, ease:'power2.in'})
   div#nt_dev3(left: 690px; top: 500px; width: 450px; height: 120px; in: {x:-24, opacity:0, duration:.55, ease:'power3.out'})
     p#s(left: 0px; top: 6px; font-family: m; font-size: 26px; color: $mute) パソコンやスマートフォンなど
     p#t(left: 0px; top: 46px; font-size: 44px; color: $orange_d) ファイルを使う端末
-  pill#pl_acc(left: "404;373;767"; top: "253;416;251"; t: "アクセス"; c: $teal) ×3
+  pill#pl_acc(left: "606;560;1151"; top: "380;624;377"; t: "アクセス"; c: $teal) ×3
   pill#pl_save(left: 626px; top: 374px; t: "保存"; c: $blue)
   pill#pl_open(left: 598px; top: 628px; t: "開く"; c: $orange)
   div#ring_a(left: 1455px; top: 588px; width: 230px; height: 206px; border-radius: 40px; border: 4px solid $blue; in: {scale:.85, opacity:0, duration:.45, ease:'back.out(2)'}; out: {opacity:0, duration:.5})
@@ -224,12 +224,12 @@ world#w2(in: none; out: {opacity:0, scale:.97, duration:.45, ease:'power2.in'})
   svg#mv_save(left: 435px; top: 357px; width: 70px; height: 87px; part: file; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone)
   svg#mv_drop2(left: 1550px; top: 340px; width: 44px; height: 54px; part: file; in: {scale:.86, duration:.25, ease:'power2.out'}; out: gone)
   svg#mv_open(left: 1545px; top: 660px; width: 50px; height: 62px; part: file; in: {scale:.75, duration:.25, ease:'power2.out'}; out: {scale:.5, opacity:0, duration:.2})
-  div#pk(left: "334;273;334;273"; top: "266;463;266;463"; width: 22px; height: 22px; border-radius: 148px; background: $teal; box-shadow: 0px 0px 0px 6px #0B8F802E; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone) ×4
+  div#pk(left: "501;410;501;410"; top: "399;695;399;695"; width: 22px; height: 22px; border-radius: 148px; background: $teal; box-shadow: 0px 0px 0px 6px #0B8F802E; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone) ×4
   note#nt_5(left: 668px; top: 742px) 保存先が同じなら{bd}別の端末からも開ける{/}
 
 # ch3 — 03 使い方の例: 左に「パソコンで用意」の板 (挿絵 + 端末 + 研修資料)・中央の雲へ弧の矢印・右に「移動先で確認」の板
 section#ch3(stagger: {each: 0})
-hdr#h3(n: "03"; t: "使い方の例"; w: 176)
+hdr#h3(n: "03"; t: "使い方の例"; w: 264)
 group#ex_l(left: 90px; top: 196px; width: 640px; height: 672px; in: {x:-60, opacity:0, duration:.6, ease:'power3.out'})
   zone#zone(left: 0px; top: 0px; width: 640px; height: 672px; c: $orange_m; in: none)
   chip#chip(left: 36px; top: -28px; t: "パソコンで用意"; c: $orange; padding: 14px 24px 14px 75px; in: none)
@@ -248,10 +248,10 @@ group#ex_r(left: 1190px; top: 196px; width: 640px; height: 672px; in: {x:60, opa
   svg#ok(left: 228px; top: 392px; width: 62px; height: 62px; part: check; in: pin3)
   p#rlb(left: 280px; top: 452px; font-size: 32px; line-height: 1.42; in: {y:16, opacity:0, duration:.5, ease:'power3.out'}) 同じ研修資料を[br]{b}スマートフォンで確認{/}
 # 雲 (保存先) と弧の矢印 (線を描いてから矢じり)
-shape#ex_a1(path: "M360 313 C427 220 480 220 539 276"; background: none; border: 8px solid $blue; in: draw {duration: 0.6, ease: 'power2.inOut'})
-shape#ex_a1h(points: "524,275 545,281 537,261"; background: $blue; in: fade {duration: 0.08})
-shape#ex_a2(path: "M741 276 C800 220 847 220 908 301"; background: none; border: 8px solid $blue; in: draw {duration: 0.6, ease: 'power2.inOut'})
-shape#ex_a2h(points: "893,298 913,307 909,286"; background: $blue; in: fade {duration: 0.08})
+shape#ex_a1(path: "M540 470 C641 330 720 330 809 414"; background: none; border: 8px solid $blue; in: draw {duration: 0.6, ease: 'power2.inOut'})
+shape#ex_a1h(points: "786,413 818,422 806,392"; background: $blue; in: fade {duration: 0.08})
+shape#ex_a2(path: "M1112 414 C1200 330 1271 330 1362 452"; background: none; border: 8px solid $blue; in: draw {duration: 0.6, ease: 'power2.inOut'})
+shape#ex_a2h(points: "1340,447 1370,461 1364,429"; background: $blue; in: fade {duration: 0.08})
 group#ex_cloud(left: 790px; top: 380px; width: 340px; height: 300px; in: {scale:.6, opacity:0, duration:.5, ease:'back.out(1.9)'})
   svg#c(left: 10px; top: 0px; width: 320px; height: 204px; part: cloud)
   svg#s(left: 124px; top: 66px; width: 90px; height: 96px; part: storage_w)
@@ -261,17 +261,17 @@ svg#ex_mv2(left: 1084px; top: 380px; width: 56px; height: 70px; part: deck; in: 
 
 # ch4 — 04 使う端末と保存場所: 図が戻り、区画が語で光って「端末」と「場所」の札 →「≠ 同じとは限らない」→ 保管・要求・渡すの矢印 → 用語の札「サーバー」
 section#ch4(stagger: {each: 0})
-hdr#h4(n: "04"; t: "使う端末と保存場所"; w: 318)
+hdr#h4(n: "04"; t: "使う端末と保存場所"; w: 477)
 world#w4(in: {opacity:0, duration:.45, ease:'power2.out'}; out: {opacity:0, duration:.4, ease:'power2.in'})
   pill#nt_dev(left: 640px; top: 704px; t: "◀ ファイルを使う端末"; c: $orange; font-size: 32px; padding: 12px 26px; in: {x:30, opacity:0, duration:.55, ease:'power3.out'})
   pill#nt_svc(left: 736px; top: 784px; t: "ファイルが保存されている場所 ▶"; c: $blue; font-size: 32px; padding: 12px 26px; in: {x:-30, opacity:0, duration:.55, ease:'power3.out'})
   p#neq(left: 660px; top: 268px; width: 600px; font-size: 50px; text-align: center; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 21px 0px; box-shadow: 0px 18px 40px #17223A38; in: pin6) {ne}≠{/} 同じとは限らない
   pill#pl_keep(left: 1336px; top: 640px; t: "保管"; c: $blue)
   svg#f3(left: 1596px; top: 676px; width: 44px; height: 56px; part: file; in: pin3)
-  shape#ar_req(path: "M287 440 C427 440 460 316 593 316 L687 316 C813 316 827 212 980 212"; background: none; border: 8px solid $orange; in: draw {duration: 0.9, ease: 'power2.inOut'})
-  shape#ar_req_h(points: "968,202 988,212 968,222"; background: $orange; in: fade {duration: 0.08})
-  shape#ar_res(path: "M980 279 C853 279 840 393 687 393 L593 393 C480 393 460 500 287 500"; background: none; border: 8px solid $blue; in: draw {duration: 0.9, ease: 'power2.inOut'})
-  shape#ar_res_h(points: "299,490 279,500 299,510"; background: $blue; in: fade {duration: 0.08})
+  shape#ar_req(path: "M431 660 C641 660 690 474 890 474 L1031 474 C1220 474 1241 318 1470 318"; background: none; border: 8px solid $orange; in: draw {duration: 0.9, ease: 'power2.inOut'})
+  shape#ar_req_h(points: "1452,303 1482,318 1452,333"; background: $orange; in: fade {duration: 0.08})
+  shape#ar_res(path: "M1470 419 C1280 419 1260 590 1031 590 L890 590 C720 590 690 750 431 750"; background: none; border: 8px solid $blue; in: draw {duration: 0.9, ease: 'power2.inOut'})
+  shape#ar_res_h(points: "449,735 419,750 449,765"; background: $blue; in: fade {duration: 0.08})
   pill#lb_req(left: 1060px; top: 392px; t: "① 要求"; c: $orange)
   pill#lb_res(left: 1090px; top: 606px; t: "② 渡す"; c: $blue)
   pill#mv_req(left: 382px; top: 636px; t: "要求"; c: $orange; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone)
@@ -299,13 +299,13 @@ div#tm(left: 230px; top: 200px; width: 1460px; height: 640px; border-radius: 40p
 
 # ch5 — 05 端末だけに保存した場合: 中央の板に端末とファイル → 別の端末へ USB で移す → 準備が必要、板が左へ寄って薄まり、右にクラウドストレージの板
 section#ch5(stagger: {each: 0})
-hdr#h5(n: "05"; t: "端末だけに保存した場合"; w: 388)
+hdr#h5(n: "05"; t: "端末だけに保存した場合"; w: 582)
 # 左の板は最初は画面の中央 (変種 .mid で 446px 右に出し、語で .home へ寄せて薄める)
 div#cl(left: 90px; top: 168px; width: 850px; height: 700px; in: none)
   zone#card(left: 0px; top: 28px; width: 850px; height: 672px; c: $orange_m; in: {scale:.94, opacity:0, duration:.6, ease:'power3.out'})
   chip#chip(left: 36px; top: 0px; t: "端末の中だけに保存"; c: $orange)
-  shape#mv(path: "M220 201 C287 108 367 108 421 164"; background: none; border: 8px solid $gray; in: draw {duration: 0.7, ease: 'power2.inOut'})
-  shape#mvh(points: "408,163 426,169 420,151"; background: $gray; in: fade {duration: 0.08})
+  shape#mv(path: "M330 302 C431 162 551 162 632 246"; background: none; border: 8px solid $gray; in: draw {duration: 0.7, ease: 'power2.inOut'})
+  shape#mvh(points: "612,245 639,254 630,227"; background: $gray; in: fade {duration: 0.08})
   # 端末の組 (hf の #grp-clpc = 左の板の中の層: 板の中のさらに右に出し、語で板の中の左 .l へ寄る。板が .home へ寄れば一緒に寄って薄まる)
   div#clpc(left: 250px; top: 302px; width: 330px; height: 322px; in: none)
     svg#pc(left: 0px; top: 0px; width: 330px; height: 231px; part: laptop; in: pin6)
@@ -323,25 +323,25 @@ div#cl(left: 90px; top: 168px; width: 850px; height: 700px; in: none)
 #cl.clpc.l(left: 60px; top: 302px; move: 700ms,power3.inOut)
 zone#cr_card(left: 980px; top: 196px; width: 850px; height: 672px; c: $blue_m; in: {scale:.94, opacity:0, duration:.6, ease:'power3.out'})
 chip#cr_chip(left: 1016px; top: 168px; t: "クラウドストレージ"; c: $blue)
-shape#cr_wb1(path: "M937 303 C937 360 800 347 800 407"; background: none; border: 20px solid $wire; in: draw {duration: 0.7, ease: 'power2.inOut'})
-shape#cr_wb2(path: "M937 303 C937 360 1093 347 1093 397"; background: none; border: 20px solid $wire; in: draw {duration: 0.7, ease: 'power2.inOut'})
-shape#cr_w1(path: "M937 303 C937 360 800 347 800 407"; background: none; border: 6px solid $teal; dash: 2,11; in: fade {duration: 0.4}; main: sawtooth {dash_offset: 1, period: 0.36})
-shape#cr_w2(path: "M937 303 C937 360 1093 347 1093 397"; background: none; border: 6px solid $teal; dash: 2,11; in: fade {duration: 0.4}; main: sawtooth {dash_offset: 1, period: 0.36})
+shape#cr_wb1(path: "M1406 455 C1406 540 1200 521 1200 611"; background: none; border: 20px solid $wire; in: draw {duration: 0.7, ease: 'power2.inOut'})
+shape#cr_wb2(path: "M1406 455 C1406 540 1640 521 1640 596"; background: none; border: 20px solid $wire; in: draw {duration: 0.7, ease: 'power2.inOut'})
+shape#cr_w1(path: "M1406 455 C1406 540 1200 521 1200 611"; background: none; border: 6px solid $teal; dash: 2,11; in: fade {duration: 0.4}; main: sawtooth {dash_offset: 1, period: 0.36})
+shape#cr_w2(path: "M1406 455 C1406 540 1640 521 1640 596"; background: none; border: 6px solid $teal; dash: 2,11; in: fade {duration: 0.4}; main: sawtooth {dash_offset: 1, period: 0.36})
 svg#cr_cloud(left: 1245px; top: 250px; width: 320px; height: 204px; part: cloud; in: pin6)
 svg#cr_db(left: 1360px; top: 320px; width: 90px; height: 96px; part: storage_w; in: pin4)
 pill#cr_same(left: 1560px; top: 292px; t: "同じ保存先"; c: $blue; in: pin6)
 pill#cr_net(left: 1330px; top: 520px; t: "ネットワーク"; c: $teal; in: pin6)
 svg#cr_pc(left: 1060px; top: 618px; width: 280px; height: 196px; part: laptop; in: pin6)
 svg#cr_sp(left: 1586px; top: 604px; width: 108px; height: 184px; part: phone; in: pin6)
-div#cr_pk(left: "793;1086"; top: "400;390"; width: 22px; height: 22px; border-radius: 148px; background: $teal; box-shadow: 0px 0px 0px 6px #0B8F802E; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone) ×2
+div#cr_pk(left: "1190;1629"; top: "600;585"; width: 22px; height: 22px; border-radius: 148px; background: $teal; box-shadow: 0px 0px 0px 6px #0B8F802E; in: {scale:.7, duration:.25, ease:'power2.out'}; out: gone) ×2
 
 # ch6 — 06 開ける範囲を決めるもの: 右に保存先のファイル 3 行 → 点線の「開ける範囲」→ 左にアカウント → 矢印で鍵 (アクセス権限) → 範囲の 2 行に ✓・外の 1 行に錠
 section#ch6(stagger: {each: 0})
-hdr#h6(n: "06"; t: "開ける範囲を決めるもの"; w: 388)
-shape#ac_l1(path: "M349 347 L419 347"; background: none; border: 8px solid $violet; in: draw {duration: 0.4, ease: 'power2.inOut'})
-shape#ac_l1h(points: "409,339 426,347 409,355"; background: $violet; in: fade {duration: 0.08})
-shape#ac_l2(path: "M623 347 L699 347"; background: none; border: 8px solid $violet; in: draw {duration: 0.4, ease: 'power2.inOut'})
-shape#ac_l2h(points: "689,339 706,347 689,355"; background: $violet; in: fade {duration: 0.08})
+hdr#h6(n: "06"; t: "開ける範囲を決めるもの"; w: 582)
+shape#ac_l1(path: "M524 521 L629 521"; background: none; border: 8px solid $violet; in: draw {duration: 0.4, ease: 'power2.inOut'})
+shape#ac_l1h(points: "614,509 639,521 614,533"; background: $violet; in: fade {duration: 0.08})
+shape#ac_l2(path: "M935 521 L1049 521"; background: none; border: 8px solid $violet; in: draw {duration: 0.4, ease: 'power2.inOut'})
+shape#ac_l2h(points: "1034,509 1059,521 1034,533"; background: $violet; in: fade {duration: 0.08})
 zone#ac_card(left: 100px; top: 260px; width: 420px; height: 520px; c: $violet_m; in: {scale:.9, opacity:0, duration:.5, ease:'power3.out'})
 svg#ac_user(left: 214px; top: 320px; width: 190px; height: 190px; part: user; in: pin5)
 chip#ac_lb(cx: 310px; top: 540px; t: "アカウント"; c: $violet)
@@ -355,16 +355,16 @@ zone#ac_st(left: 1060px; top: 196px; width: 770px; height: 672px; c: $blue_m; in
 chip#ac_stc(left: 1096px; top: 168px; t: "保存先のファイル"; c: $blue)
 shape#ac_range(left: 1100px; top: 248px; width: 690px; height: 356px; path: rect,r=0.08; background: #6D3FD00D; border: 6px solid $violet; dash: 9,6; in: {scale:.9, opacity:0, duration:.5, ease:'power3.out'})
 pill#ac_rlb(left: 1560px; top: 224px; t: "開ける範囲"; c: $violet)
-frow#ac_r(top: "188;292;440"; t: "自分のファイル;共有された資料;他の人のファイル"; ic: "folder;folder;folder_g"; c: "$ink;$ink;$mute"; bg: "#FFFFFF;#FFFFFF;$off") ×3
+frow#ac_r(top: "282;438;660"; t: "自分のファイル;共有された資料;他の人のファイル"; ic: "folder;folder;folder_g"; c: "$ink;$ink;$mute"; bg: "#FFFFFF;#FFFFFF;$off") ×3
 svg#ac_ok1(left: 1668px; top: 314px; width: 68px; height: 68px; part: check; in: pin3)
 svg#ac_ok2(left: 1668px; top: 470px; width: 68px; height: 68px; part: check; in: pin3)
 svg#ac_lock(left: 1672px; top: 686px; width: 60px; height: 72px; part: lock; in: pin3)
 
 # sum — まとめ: 図に戻り、配線を薄めて 2 つの区画を語で光らせ札を言い換える → 点線で分けて区画を左右へ → 戻して 2 つの端末へファイルが届き「端末が変わっても 保存先は同じ」
 section#sum(stagger: {each: 0})
-hdr#h7(n: "まとめ"; t: "保存先と端末を分けて考える"; w: 459; nw: 94; tl: 110; ns: 21; out: {opacity:0, duration:.6})
+hdr#h7(n: "まとめ"; t: "保存先と端末を分けて考える"; w: 689; nw: 141; tl: 165; ns: 32; out: {opacity:0, duration:.6})
 world#w8(in: {opacity:0, duration:.5, ease:'power2.out'}; out: {opacity:0, duration:1, ease:'power2.in'})
-  shape#divider(path: "M640 143 L640 573"; background: none; border: 6px solid $ink2; in: draw {duration: 0.8, ease: 'power2.inOut'})
+  shape#divider(path: "M960 215 L960 860"; background: none; border: 6px solid $ink2; in: draw {duration: 0.8, ease: 'power2.inOut'})
   chip#sm_dev(left: 126px; top: 168px; t: "アクセスする端末"; c: $orange)
   chip#sm_svc(left: 1346px; top: 168px; t: "ファイルの保存先"; c: $blue)
   p#sep(left: 760px; top: 240px; width: 400px; font-size: 44px; text-align: center; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 24px 0px; in: pin6) 分けて考える

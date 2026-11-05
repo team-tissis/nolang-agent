@@ -93,7 +93,7 @@ div#s1_chip(left: "120;321;561"; top: 700px; width: "183;222;279"; height: 70px;
 # s2 分析の概要: 上端の帯が降りる・左の板にメーターの絵と 3 行・「分析」で 3 枚の数字の札が数え上がり、「1171」で緑の主役の札が数えて光る
 section#s2(stagger: {each:0}; out: {y:-21, opacity:0, duration:0.3, ease:'power2.in'})
 # 上端の帯 (sticky・最後まで): 左の社名の札・右の 7 章の札 (緑の指示子が場面の頭で滑り、文字が白に替わる)
-div#brand.sticky(left: 120px; top: 34px; width: 390px; height: 50px; border-radius: 26px; background: #FFFFFFF0; border: 2px solid #DFE7E4; z-index: front; delay: 50ms; in: {y:-20, opacity:0, duration:0.6, ease:'power3.out'})
+div#brand.sticky(left: 120px; top: 34px; width: 420px; height: 50px; border-radius: 26px; background: #FFFFFFF0; border: 2px solid #DFE7E4; z-index: front; delay: 50ms; in: {y:-20, opacity:0, duration:0.6, ease:'power3.out'})
   div#logo(left: 9px; cy: 50%; width: 34px; height: 34px; border-radius: 148px; background: $green)
     svg#leaf(cx: 50%; cy: 50%; width: 20px; height: 20px; part: leaf)
   p#b(left: 56px; cy: 50%; font-size: 20px) ミドリノ設計
@@ -311,7 +311,7 @@ card#s9_card(left: 120px; top: 262px; width: 1090px; height: 640px)
   div#b2(left: 518px; top: 153px; width: 132px; height: 51px; border-radius: 6px; background: $green; delay: 1500ms; in: {scaleY:0, duration:0.45, ease:'power3.out', pivot:'top'})
   div#b3(left: 702px; top: 204px; width: 132px; height: 53px; border-radius: 6px; background: $green; delay: 1900ms; in: {scaleY:0, duration:0.45, ease:'power3.out', pivot:'top'})
   div#b4(left: 886px; top: 258px; width: 132px; height: 298px; border-radius: 6px; background: $ink; delay: 2300ms; in: {scaleY:0, duration:0.7, ease:'power3.out', pivot:'bottom'})
-  p#l(left: "115.9;300;484.0;668.0;852"; cy: "108.6;108.6;127.2;179;231.9"; width: 200px; text-align: center; font-size: 30px; font-family: n; color: "$ink;$green_d;$green_d;$green_d;$ink"; delay: "850ms;1400ms;1800ms;2200ms;2600ms"; in: {scale:0.7, opacity:0, duration:0.4, ease:'back.out(2.2)'}) ×5 1,171;−51.5;−142.8;−148.2;829
+  p#l(left: "115.9;300;484.0;668.0;852"; cy: "108.6;108.6;108.6;179;231.9"; width: 200px; text-align: center; font-size: 30px; font-family: n; color: "$ink;$green_d;$green_d;$green_d;$ink"; delay: "850ms;1400ms;1800ms;2200ms;2600ms"; in: {scale:0.7, opacity:0, duration:0.4, ease:'back.out(2.2)'}) ×5 1,171;−51.5;−142.8;−148.2;829
   p#cat(left: "115.9;300;484.0;668.0;852"; top: 568px; width: 200px; text-align: center; font-size: 21px; line-height: 1.3; color: $ink2; font-family: m) ×5 現在;設定温度[br]1℃見直し;待機・[br]消し忘れ対策;照明の[br]LED化;対策後
   shape#c0(path: "M282 134 L334.0 134"; background: none; border: 2px solid #9FB0B5; dash: 4,3; delay: 950ms; in: draw {duration: 0.3})
   shape#c1(path: "M466.0 151.9 L518.0 151.9"; background: none; border: 2px solid #9FB0B5; dash: 4,3; delay: 1500ms; in: draw {duration: 0.3})

@@ -52,7 +52,7 @@ def lead(t) = p(cx: 540px; font-family: sr; color: $sub; letter-spacing: .03em; 
 def tel(t) = p(cx: 540px; font-family: s; line-height: 1.3; letter-spacing: .03em; in: {y:20, opacity:0, duration:.65, ease:'power2.out'}; content: {t})
 def cap(t) = p(cx: 540px; font-size: 28px; letter-spacing: .12em; color: $sub; font-family: r; in: {y:12, opacity:0, duration:.6, ease:'power2.out'}; content: {t})
 # 図の札 (墨の縁の角丸の箱 + 太い明朝の語)・語で下から
-def box(t, w=173) = div(width: {w}; height: 110px; background: $card; border: 3px solid $ink; border-radius: 20px; in: {y:16, opacity:0, duration:.55, ease:'power2.out'})
+def box(t, w=260) = div(width: {w}; height: 110px; background: $card; border: 3px solid $ink; border-radius: 20px; in: {y:16, opacity:0, duration:.55, ease:'power2.out'})
   p#t(cx: 50%; cy: 50%; font-family: s; font-size: 58px; content: {t})
 # 矢印 (線の矢じり・線で描く)・矢印の上の小さな札
 def arrow(c=$accent) = shape(height: 44px; path: arrow_r,head=line; background: {c}; border: 4px solid {c}; in: draw {duration: 0.6})
@@ -150,11 +150,11 @@ tel#t7b(top: 1130px; font-size: 120px; in: {y:20, opacity:0, duration:.6, ease:'
 # reverse — 言い換え: 水やりで芽が出る線画に「意識が向く → 関わる」と × → 2 つの札が弧を描いて入れ替わり、煉瓦色の矢印が引き直される
 section#reverse
 illus#im6(left: 304px; top: 300px; width: 470px; height: 580px; aspect: 4:5; main: kb {scale: [1, 1.04]}) [transparent]小さなじょうろを持つ手が、土の小山から出た双葉の小さな芽に水をやっている
-box#r8a(left: 90px; top: 960px; w: 240) 意識が向く
+box#r8a(left: 90px; top: 960px; w: 360) 意識が向く
 #r8a.hot(border: 3px solid $accent)
 arrow#arr8(left: 456px; top: 993px; width: 168px; c: $ink; in: draw {duration: 0.45}; out: {opacity:0, duration:.2})
 cross#x8(left: 514px; top: 990px; in: draw {duration: 0.4}; out: {opacity:0, duration:.25})
-box#r8b(left: 630px; top: 960px; w: 240) 関わる
+box#r8b(left: 630px; top: 960px; w: 360) 関わる
 #r8b.hot(border: 3px solid $accent)
 arrow#arr8b(left: 456px; top: 993px; width: 168px; in: draw {duration: 0.4})
 tel#t8(top: 1170px; font-size: 64px; in: {y:16, opacity:0, duration:.6, ease:'power2.out'}) {m}関わるから{/}意識が向く。

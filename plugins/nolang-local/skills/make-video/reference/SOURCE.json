@@ -1,11 +1,11 @@
 {
   "from": "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
   "ref": "v6",
-  "commit": "ec4ab4dee0d71a4789bc0c921873cd4f378fef5b",
+  "commit": "dbdc2435ef5dfe3d6ad5219a65b2f50d1d64a8b9",
   "dirty": false,
-  "synced_at": "2026-11-05T06:38:32.291Z",
+  "synced_at": "2026-11-05T07:27:54.777Z",
   "contract": 1,
-  "reference_hash": "f353c140fe98216f1c2b9af6e42f97bcfbb9e1d8038c2ebf131bed9e2031f3ca",
+  "reference_hash": "8429e2c81ae1de8691a668af9317ad7eae7feb0dbe7d4f856a141f55cafe896a",
   "docs": {
     "contract.json": "30e435347147",
     "spec.md": "92747d8bf0f5",
@@ -16,7 +16,7 @@
     "craft.md": "a84cbcce63ec",
     "craft.NOTICE.md": "b5f807351e39",
     "rules.md": "7533522f29ae",
-    "samples/": "97e1bbd3aba5",
+    "samples/": "1989791d4efc",
     "scaffolds/": "a1f7418dedc0"
   },
   "files": [

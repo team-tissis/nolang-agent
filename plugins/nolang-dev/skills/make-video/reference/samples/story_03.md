@@ -81,7 +81,7 @@ p#cx_w(left: 60px; top: 390px; font-size: 192px; color: $a; text-shadow: 0px 0px
 group#cx_row(left: 60px; top: 1185px; width: 960px; height: 300px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px)
   div#cx_r(in: {scale:0.85, y:45, opacity:0, duration:0.45, ease:'back.out(1.8)', stagger: {each: 0.12}}; out: fade {duration:0.2}) ×3
     p#l(cx: 50%; top: 36px; font-size: 45px; color: $mute) 体力;声;足
-    p#v(cx: 50%; bottom: 45px; font-size: 78px; color: $ink) ゼロ;ガラガラ;棒
+    p#v(cx: 50%; bottom: 45px; font-size: 70px; color: $ink) ゼロ;ガラガラ;棒
 confetti#cx_cf
 veil#cx_fl(color: #FFFFFF; opacity: 0.6; z-index: curtain; in: none)
 
@@ -117,7 +117,7 @@ bgm music
 *** clash
 @n: [silence:+0.2s][>#cs_row.cs_c[*] {stagger:{each:0.15}}]推しAと推しB、まさかの[!#cs_row.cs_c[*] punch]同時刻。
 @: [>#cs_l]メインからサブまで、[>#cs_s]徒歩20分。[♪"クイズ　ブザー02-2(短)"][!#cs_s shake]物理的に無理。
-@: [!#cs_row.cs_c[2] dim]分身の術を習得していない自分を呪った。[silence:0.4s]
+@: [!#cs_row.cs_c[2] dim]分身の術を習得していない[|]自分を呪った。[silence:0.4s]
 
 *** heat
 se "真夏の野外の蝉の声と熱気、遠くのサウンドチェックの音" -8dB to=9s fade=300ms,1500ms

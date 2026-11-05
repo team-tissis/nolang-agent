@@ -374,7 +374,7 @@ shape#arr10(path: "M177 560 L177 605"; background: none; border: 3px solid #8B96
 shape#arr10h(points: "177,614 168,602 185,602"; background: #8B96A8; in: {scale:0.3, opacity:0, duration:.45, ease:'back.out(2.2)'})
 card#c2(left: 680px; top: 262px; no: "2"; t: "月額")
   p#fr(left: 34px; cy: 176px; font-size: 60px; font-family: i; color: $c31; in: {y:12, opacity:0, duration:.55, ease:'power3.out'}) $923
-  div#fs(left: 30px; top: 174px; width: 162px; height: 4px; background: $c31; in: {scaleX:0, pivot:'left', duration:.4, ease:'power2.out'})
+  div#fs(left: 30px; top: 174px; width: 162px; height: 4px; background: $c31; overlap: fr; in: {scaleX:0, pivot:'left', duration:.4, ease:'power2.out'})
   p#ar(left: 40px; cy: 242px; font-size: 34px; color: $t3; in: {opacity:0, duration:.3}) ↓
   div#to(left: 34px; top: 270px; width: 495px; height: 135px; in: {y:18, scale:0.94, opacity:0, pivot:'0% 100%', duration:.6, ease:'power3.out'})
     p#ya(left: 0px; cy: 98px; font-size: 44px; color: $lite) 約

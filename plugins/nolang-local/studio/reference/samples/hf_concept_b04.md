@@ -80,7 +80,7 @@ def role_char(img, t) = group(left: 70px; top: 150px; width: 560px; height: 740p
   shape#floor(left: 130px; top: 699px; width: 300px; height: 34px; border-radius: 50%; background: #1E2A4A1A; delay: 550ms; in: {scale:.4, opacity:0, duration:.5, ease:'power3.out'})
   img#char(left: 46px; top: 26px; width: 466px; height: 700px; content: @{img}; object-fit: contain; delay: 470ms; in: {y:70, opacity:0, duration:.6, ease:'power3.out'}; main: sine {y: -8, period: 2.2})
 # 3. 右上の見出し (ROLE 0N・略称の大字・英語の正式名と和名は略称の語で下から — 正式名の文字は実体の子 en に書く)
-def role_head(n, a, ja, c, s=100, et=54, jt=96) = group(left: 680px; top: 110px; width: 1170px; height: 202px)
+def role_head(n, a, ja, c, s=150, et=81, jt=144) = group(left: 680px; top: 110px; width: 1170px; height: 202px)
   p#chap(left: 4px; top: 0px; font-size: 26px; font-family: h; letter-spacing: .12em; color: {c}; delay: 500ms; in: {x:-30, opacity:0, duration:.4, ease:'power3.out'}; content: {n})
   p#acr(left: 0px; top: 46px; font-size: {s}; font-family: h; line-height: 1; letter-spacing: -.01em; color: {c}; delay: 530ms; in: {x:-40, opacity:0, duration:.5, ease:'power3.out'}; content: {a})
   p#en(left: .acr.right+34; top: {et}; font-size: 46px; line-height: 1.15; in: {y:24, opacity:0, duration:.45, ease:'power3.out'})
@@ -255,7 +255,7 @@ sum#bo_sum(t: 事業の成果に責任を持つ人; c: $bo)
 section#eng
 deco#eng_deco(c: #6A5AE024)
 role_char#eng_char(img: eng; t: $eng_t)
-role_head#eng_head(n: "ROLE 05"; a: エンジニア; ja: 開発者; c: $eng; s: 75; et: 29; jt: 69)
+role_head#eng_head(n: "ROLE 05"; a: エンジニア; ja: 開発者; c: $eng; s: 113; et: 44; jt: 104)
   p#en Engineer
 group#eng_steps(in: {y:20, opacity:0, duration:.4, ease:'power3.out'})
   icon#ar(left: "816;1161"; top: 342px; font-size: 34px; name: arrow-right; color: #C8C2B6) ×2
@@ -292,7 +292,7 @@ sum#eng_sum(t: 技術でプロダクトを形にする人; c: $eng)
 section#des
 deco#des_deco(c: #E2558E24)
 role_char#des_char(img: des; t: $des_t)
-role_head#des_head(n: "ROLE 06"; a: デザイナー; ja: UI / UX デザイン; c: $des; s: 75; et: 29; jt: 69)
+role_head#des_head(n: "ROLE 06"; a: デザイナー; ja: UI / UX デザイン; c: $des; s: 113; et: 44; jt: 104)
   p#en Designer
 p#des_l1(cx: 844px; top: 292px; font-size: 26px; font-family: h; color: $des; in: {y:10, opacity:0, duration:.35, ease:'power3.out'}; out: {opacity:0, duration:.2, ease:'power1.in'}) 見た目
 p#des_l2(cx: 844px; top: 292px; font-size: 26px; font-family: h; color: $des; in: {y:10, opacity:0, duration:.35, ease:'power3.out'}) 使いやすさ

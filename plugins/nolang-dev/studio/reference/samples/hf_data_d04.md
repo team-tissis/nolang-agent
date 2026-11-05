@@ -85,7 +85,7 @@ div#star(left: "582;161;501;149;375;476;782;870;87;264;1026;258;1019;59;561;509;
 div#bgshade(inset: 0; background: linear(#0B0D2A59,#0B0D2A00@35%,#0B0D2A00@70%,#0B0D2A40,180); z-index: back)
 
 # 題つきの板 (番号の黄の丸札 + 題)・下から弾んで入り、上へ抜けて消える
-def board(n, t="", nw=56) = div(left: 48px; top: 236px; width: 984px; height: 1150px; border-radius: 48px; background: linear(#212462F0,#17194AF0,180); border: 2px solid #FFFFFF21; box-shadow: 0px 30px 80px #05061E8C; in: {y:90, scale:0.93, opacity:0, duration:0.55, ease:'back.out(1.5)'}; out: {y:-50, scale:0.96, opacity:0, duration:0.3, ease:'power2.in'})
+def board(n, t="", nw=84) = div(left: 48px; top: 236px; width: 984px; height: 1150px; border-radius: 48px; background: linear(#212462F0,#17194AF0,180); border: 2px solid #FFFFFF21; box-shadow: 0px 30px 80px #05061E8C; in: {y:90, scale:0.93, opacity:0, duration:0.55, ease:'back.out(1.5)'}; out: {y:-50, scale:0.96, opacity:0, duration:0.3, ease:'power2.in'})
   p#no(left: 40px; cy: 68px; width: {nw}; font-size: 34px; font-family: p; text-align: center; color: $navy; background: $yellow; border-radius: 148px; padding: 10px 0px; content: {n})
   p#tt(left: .no.right+18; cy: 68px; font-size: 52px; content: {t})
 # 冒頭の札 (濃紺の半透明の丸札・弾んで出る)
@@ -270,7 +270,7 @@ svg#fx6(left: -27px; top: 759px; width: 640px; height: 640px; part: burst6; over
 
 # まとめ: 結論の 3 枚 (番号 + 大きな数字 + 色の下線 + 文) が順に弾み、注記の板は「数字は」で出て「原因が」で縁が黄に 2 度光る
 section#summary(stagger: {each:0})
-board#b7(n: "まとめ"; nw: 93)
+board#b7(n: "まとめ"; nw: 140)
   div#sm(left: 40px; top: "132;378;624"; width: 904px; height: 214px; border-radius: 32px; background: #FFFFFF0F; border: 2px solid #FFFFFF1F; delay: 350ms; in: {scale:0.85, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.2}}) ×3
     p#n(left: 24px; top: 24px; width: 54px; font-size: 30px; font-family: p; text-align: center; color: $navy; background: $yellow; border-radius: 148px; padding: 12px 0px) 1;2;3
     p#st(left: 24px; top: 84px; font-size: 76px; font-family: p; line-height: 1.2) 35{u}%{/};95{u}分差{/};+37{u}分{/}

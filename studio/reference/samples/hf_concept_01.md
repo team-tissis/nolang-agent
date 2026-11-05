@@ -64,7 +64,7 @@ cue step_on(x) = [>#x.cur][>#x.st][!#x.nm recolor,$ink {duration: .3}]
 cue step_done(x) = [<#x.cur][<#x.st][>#x.ck +50ms][>#x.ci +50ms]
 
 # テロップ (左下の白い札・青の縁) と章の札 (左上の白い丸札)
-def telop(t, y=582) = p(left: 96px; top: {y}; font-size: 46px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 10px; padding: 24px 44px 26px 46px; border-left: 4px solid $a; box-shadow: 0px 16px 44px #0E2A472E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'}; out: {y:-6, opacity:0, duration:0.35})
+def telop(t, y=873) = p(left: 96px; top: {y}; font-size: 46px; line-height: 1.42; letter-spacing: 0.05em; content: {t}; background: #FFFFFFF5; border-radius: 10px; padding: 24px 44px 26px 46px; border-left: 4px solid $a; box-shadow: 0px 16px 44px #0E2A472E; in: wipe {dir: 'right', duration: 0.55, ease: 'power3.out'}; out: {y:-6, opacity:0, duration:0.35})
 def chap(n, t) = p(left: 92px; top: 76px; font-size: 27px; letter-spacing: 0.06em; background: #FFFFFFF2; border-radius: 148px; padding: 16px 30px 16px 26px; box-shadow: 0px 10px 30px #0E2A471F; in: {x:-24, opacity:0, duration:0.55, ease:'power3.out'}; out: {x:-12, opacity:0, duration:0.3}) {k}STEP {n}{/}　{l}｜{/}　{t}
 # 写真の左下の札 (icon の丸 + 2 行)
 def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; border-radius: 12px; box-shadow: 0px 14px 40px #0E2A4724; in: rise {y: 16.5, duration: 0.55})
@@ -73,7 +73,7 @@ def photo_tag(ic, t) = div(width: 480px; height: 156px; background: #FFFFFFF2; b
   p#t(left: 104px; cy: 50%; font-size: 40px; line-height: 1.35; content: {t})
 # 白地の場面の地 (淡い光 + 画面の外へはみ出す薄い輪 2 つ) とロゴ (1 字ずつせり上がる)
 def soft_bg() = div(inset: 0; background: radial(#F2F7FE,#FFFFFF@70%,50%,45%); z-index: back; border-radius: 24px)
-def rings(x1, x2, y=-140, d=1000) = div.bleed(inset: 0)
+def rings(x1, x2, y=-210, d=1500) = div.bleed(inset: 0)
   shape#r1(left: {x1}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
   shape#r2(left: {x2}; top: {y}; width: {d}; height: {d}; border-radius: 50%; background: none; border: 2px solid #1F6FE01F; main: ramp {scale: 1.08})
 def wordmark = p(cx: 960px; font-size: 150px; font-family: e; in: {y:40, opacity:0, duration:0.8, ease:'power3.out', stagger:.045}) Live {a}Assist{/}
@@ -131,10 +131,10 @@ def dropdown() = div(width: 672px; height: 216px; border-radius: 12px; backgroun
   p#o2(left: 22px; top: 68px; font-size: 21px) スタンダードプラス
   p#o3(left: 22px; top: 122px; font-size: 21px) プレミアムプラン
   p#o4(left: 22px; top: 176px; font-size: 21px) プレミアムライト
-def staff_msg() = div(width: 328px; height: 177px; border-radius: 14px; background: #FFFFFF; box-shadow: 0px 8px 22px #0E2A471A; in: {y:14, opacity:0, duration:0.5, ease:'power2.out'})
+def staff_msg() = div(width: 328px; height: 203px; border-radius: 14px; background: #FFFFFF; box-shadow: 0px 8px 22px #0E2A471A; in: {y:14, opacity:0, duration:0.5, ease:'power2.out'})
   p#w(left: 18px; top: 18px; font-size: 14px; color: $gray) スタッフ 高橋
   p#t(left: 18px; top: 42px; width: 292px; font-size: 20px; line-height: 1.5) こちらのページで、現在のプランをご確認いただけます。
-  div#lk(left: 18px; top: 114px; width: 292px; height: 46px; border-radius: 10px; background: $sky)
+  div#lk(left: 18px; top: 140px; width: 292px; height: 46px; border-radius: 10px; background: $sky)
     p#t(left: 16px; cy: 50%; font-size: 18px; font-family: b; color: $a) ご契約内容の確認
     icon#i(left: 258px; cy: 50%; font-size: 15px; name: caret-right; color: $a)
 # 画面の上に重ねる物: 共有中の札・青い強調枠・スタッフの吹き出し・カーソル + 名札 (吹き出しとカーソルは page の文字より前 = z-index: front)
@@ -171,7 +171,7 @@ section#tap_connect
 img#tp_p(inset: 0; main: kb {scale: [1.02, 1.12], focus: ['', '76% 65%']}; out: fade {duration: 0.6}) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
 shape#rp(left: "1280;1232"; top: "450;402"; width: "216;312"; height: "216;312"; border-radius: 50%; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
 soft_bg#cn_bg(delay: 2300ms; in: fade {duration: 0.6})
-rings#cn_r(x1: 173; x2: 507; top: -60px; d: 600; delay: 2300ms; in: fade {duration: 0.6})
+rings#cn_r(x1: 260; x2: 761; top: -60px; d: 900; delay: 2300ms; in: fade {duration: 0.6})
 shape#cn_l1(path: "M761 450 C900 350 1020 350 1160 450"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600ms; in: fade {duration: 0.4})
 shape#cn_l2(path: "M761 450 C900 350 1020 350 1160 450"; background: none; border: 4px solid $a; delay: 2750ms; in: draw {duration: 0.8})
 img#av1(left: 310px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @cust; object-fit: cover; object-position: 55% 28%; zoom: 190%; delay: 2450ms; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
@@ -184,7 +184,7 @@ p#cbig(cx: 960px; top: 792px; font-size: 56px; letter-spacing: 0.08em; in: {y:16
 # 題: 1 字ずつ上がるロゴ + 罫 + 一言
 section#title
 soft_bg#ti_bg
-rings#ti_r(x1: 220; x2: 60)
+rings#ti_r(x1: 330; x2: 90)
 wordmark#ti_w(top: 356px; delay: 250ms)
 shape#ti_rl(left: 890px; top: 566px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 900ms; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
 p#ti_t(cx: 960px; top: 606px; font-size: 42px; letter-spacing: 0.1em; color: $ink2; delay: 1350ms; in: {y:14, opacity:0, duration:0.8, ease:'power2.out'}) オンラインなのに、まるで隣にいるようなサポート。
@@ -277,7 +277,7 @@ div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22p
     shape#ck(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: $a; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     icon#ci(left: 12px; cy: 50%; font-size: 28px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.6, opacity:0, duration:0.35, ease:'back.out(2)'})
     p#n(left: 20px; cy: 50%; font-size: 21px; font-family: e; color: $mute) 1;2;3;4
-  div#done(left: 0px; top: 0px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; in: fade {duration: 0.5}; overlap: fl.s)
+  div#done(left: 0px; top: 0px; width: 780px; height: 840px; border-radius: 22px; background: #FFFFFF; in: fade {duration: 0.5}; overlap: fl.h,fl.sub,fl.sup,fl.s)
     shape#c(cx: 50%; top: 225px; width: 190px; height: 190px; border-radius: 50%; background: $a; box-shadow: 0px 0px 0px 18px #1F6FE01F; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     icon#i(cx: 50%; top: 270px; font-size: 99px; name: check; weight: bold; color: #FFFFFF; in: {scale:0.5, opacity:0, duration:0.6, ease:'back.out(1.8)'})
     p#t1(cx: 50%; top: 471px; font-size: 42px; font-family: b; letter-spacing: 0.08em) お手続きが完了しました
@@ -326,7 +326,7 @@ p#tg_t(cx: 960px; top: 873px; font-size: 46px; letter-spacing: 0.06em; backgroun
 # 締め: ロゴ + 罫 + by Kumolis
 section#end
 soft_bg#en_bg
-rings#en_r(x1: 220; x2: 60)
+rings#en_r(x1: 330; x2: 90)
 wordmark#en_w(top: 380px; delay: 450ms)
 shape#en_rl(left: 890px; top: 588px; width: 140px; height: 3px; path: rect,r=0.5; background: $a; delay: 1100ms; in: wipe {dir: 'center', duration: 0.6, ease: 'power2.inOut'})
 p#en_by(cx: 960px; top: 630px; font-size: 40px; font-family: e; letter-spacing: 0.08em; color: $ink2; in: {y:12, opacity:0, duration:0.8, ease:'power2.out'}) by {nv}Kumolis{/}
