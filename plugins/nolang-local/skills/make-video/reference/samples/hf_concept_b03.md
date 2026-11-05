@@ -96,7 +96,7 @@ def chip(n, t) = p(font-size: 34px; color: $navy; background: $cream; border: 4p
 # 題: 桜並木の町の 2 人に寄りから引き、ゲーム名の桃の札が上から弾み、題が 1 字ずつ弾んで出て、「裏ワザ」の判子が叩きつけられる
 section#title
 img#title_bg(inset: 0; main: keys(at=0 scale=1.14 | at=0.25 scale=1 ease=power3.out | at=1 scale=1.04 ease=none),duration=6320,pivot=50%,40%) [ref:@sheet]春の晴れた日本の町の大通りの広い引きの構図。満開の桜並木、遠くに時計塔のある近代的な高校の校舎、青空にやわらかな雲。右下の手前にセーラー服の黒髪ボブの女子高生が腰に手を当てて自信たっぷりに笑って立ち、左下の手前に黒スーツの敵の男が腕を組んで彼女をにらんで立つ。二人とも全身が見え、小さめに描いて画面の中央と上半分を空ける。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
-svg#title_star(left: "406;644;498;507;643;526;882;473;525;412"; top: "424;359;376;331;336;374;341;330;375;417"; width: "19;39;32;40;41;29;27;44;23;41"; height: "19;39;32;40;41;29;27;44;23;41"; part: star; delay: 600ms; in: {scale:0.2, opacity:0, rotation:-90, duration:0.45, ease:'power2.out', stagger:{each:0.37}}) ×10
+svg#title_star(left: "609;966;747;761;965;789;1323;710;788;618"; top: "636;539;564;497;504;561;512;495;563;626"; width: "29;59;48;60;62;44;41;66;35;62"; height: "29;59;48;60;62;44;41;66;35;62"; part: star; delay: 600ms; in: {scale:0.2, opacity:0, rotation:-90, duration:0.45, ease:'power2.out', stagger:{each:0.37}}) ×10
 p#game_pill(cx: 960px; top: 118px; font-size: 50px; letter-spacing: 0.04em; background: $pink; border: 6px solid $navy; border-radius: 148px; padding: 10px 44px 14px 44px; box-shadow: 0px 8px 0px $navy; delay: 120ms; in: {y:-160, opacity:0, duration:0.55, ease:'back.out(1.8)'}) サクラスクールシミュレーター
 p#title_main(cx: 960px; top: 240px; width: 1110px; text-align: center; font-size: 164px; line-height: 1.15; letter-spacing: 0.05em; color: $yellow; -webkit-text-stroke: 16px $navy; text-shadow: 0px 12px 0px $pink_deep; delay: 250ms; in: {scale:0, y:60, rotation:-14, opacity:0, duration:0.42, ease:'back.out(2.6)', stagger:{each:0.07}}) 敵と遊ぶ方法
 div#title_stamp(left: 1418px; top: 26px; width: 190px; height: 190px; border-radius: 148px; background: $red; border: 8px solid #FFFFFF; box-shadow: 0px 10px 0px 6px $navy; transform: rotate(-12deg); in: {scale:3, rotation:-40, opacity:0, duration:0.2, ease:'power3.in'})
@@ -105,7 +105,7 @@ div#title_stamp(left: 1418px; top: 26px; width: 190px; height: 190px; border-rad
 # STEP 1 ダウン: のびた敵の絵・右上の STEP 札・「敵キャラ」の桃の札・「ダウン」で点線の輪が回り出し「ドサッ！」が叩きつけられて弾む
 section#down
 img#down_bg(inset: 0; main: kb {scale: [1, 1.08], focus: ['56% 40%', '56% 40%']}) [ref:@sheet]桜並木のある晴れた町の歩道で、黒スーツの敵の男が仰向けに大の字でのびている。目はマンガのぐるぐるの渦、頭の上を小さな黄色い星が回る (コミカルで無害、けがはない)。そばでセーラー服の黒髪ボブの女子高生が元気にピースサイン。少し高い位置から見下ろす構図。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
-step_tag#tag_down(left: 1340px; top: 44px; n: 1; t: 敵キャラをダウン; w: 525px; ta: right; pl: 270px; dl: "227;266;289;312;335"; dw: "31;15;15;15;15"; dc: "$pink;$dot;$dot;$dot;$dot")
+step_tag#tag_down(left: 1340px; top: 44px; n: 1; t: 敵キャラをダウン; w: 525px; ta: right; pl: 270px; dl: "341;399;434;468;503"; dw: "47;23;23;23;23"; dc: "$pink;$dot;$dot;$dot;$dot")
 svg#down_ring(left: 844px; top: 150px; width: 420px; height: 420px; part: ring; in: {scale:0.3, opacity:0, rotation:-90, duration:0.45, ease:'back.out(1.6)'})
 p#down_label(left: 752px; top: 104px; width: 306px; text-align: center; font-family: d; font-size: 58px; background: $pink; border: 6px solid $navy; border-radius: 20px; padding: 4px 26px 10px 26px; box-shadow: 0px 8px 0px $navy; transform-origin: 0% 100%; in: {scale:0, opacity:0, duration:0.3, ease:'back.out(2.4)'}) 敵キャラ
 sfx#down_sfx(left: 1260px; top: 520px; font-size: 132px; transform: rotate(-10deg); in: {scale:2.4, opacity:0, duration:0.2, ease:'power3.in'}) ドサッ！
@@ -113,9 +113,9 @@ sfx#down_sfx(left: 1260px; top: 520px; font-size: 132px; transform: rotate(-10de
 # STEP 2 復活: 病院の前で光に包まれて立ち上がる敵・左上の STEP 札・下から昇って消える星 14 個 (7 個ずつ 2 列)・「復活」で緑の「復活！」が弾んで脈打つ
 section#revive
 img#revive_bg(inset: 0; main: kb {scale: [1, 1.08], focus: ['45% 30%', '45% 30%']}) [ref:@sheet]画面には一人だけ。明るい町の白い病院の入口の前で、黒スーツにサングラスの敵の男が再び立ち上がり復活している。金色の回復の光の柱とキラキラの粒に包まれ、少しぼうっとした様子。ファンタジーゲームの復活の演出、明るい雰囲気。設定画の人物のうち、この男だけを新しい自然なポーズで描き、設定画の並びは写さない。
-step_tag#tag_revive(left: 56px; top: 44px; n: 2; t: キャラを復活させる; w: 690px; ta: left; pl: 0px; dl: "4;27;66;89;112"; dw: "15;31;15;15;15"; dc: "$yellow;$pink;$dot;$dot;$dot")
-svg#rv_a(left: "635;793;635;610;704;461;559"; top: "391;349;391;532;435;192;376"; width: "34;36;21;32;31;23;30"; height: "34;36;21;32;31;23;30"; part: star; delay: 560ms; in: {y:120, scale:0.3, opacity:0, duration:0.6, ease:'power1.out', stagger:{each:0.28}}) ×7
-svg#rv_b(left: "668;790;530;401;520;545;790"; top: "372;510;400;471;114;358;112"; width: "22;31;41;26;47;40;36"; height: "22;31;41;26;47;40;36"; part: star; delay: 560ms; in: {y:120, scale:0.3, opacity:0, duration:0.6, ease:'power1.out', stagger:{each:0.28}}) ×7
+step_tag#tag_revive(left: 56px; top: 44px; n: 2; t: キャラを復活させる; w: 690px; ta: left; pl: 0px; dl: "6;41;99;134;168"; dw: "23;47;23;23;23"; dc: "$yellow;$pink;$dot;$dot;$dot")
+svg#rv_a(left: "953;1190;953;915;1056;692;839"; top: "587;524;587;798;653;288;564"; width: "51;54;32;48;47;35;45"; height: "51;54;32;48;47;35;45"; part: star; delay: 560ms; in: {y:120, scale:0.3, opacity:0, duration:0.6, ease:'power1.out', stagger:{each:0.28}}) ×7
+svg#rv_b(left: "1002;1185;795;602;780;818;1185"; top: "558;765;600;707;171;537;168"; width: "33;47;62;39;71;60;54"; height: "33;47;62;39;71;60;54"; part: star; delay: 560ms; in: {y:120, scale:0.3, opacity:0, duration:0.6, ease:'power1.out', stagger:{each:0.28}}) ×7
 sfx#revive_sfx(left: 1330px; top: 330px; font-size: 150px; font-family: r; color: $mint; transform: rotate(6deg); in: {scale:0, opacity:0, rotation:-30, duration:0.42, ease:'back.out(2.5)'}) 復活！
 
 # 病院 or 神社: 斜めの縞が流れる桃の地 (縞は svg の pattern を全面に敷き、kb の動かない点を右端から左端へ移して右へ流す)・上の紺の問いの札・語ごとに左右から写真の板と名札が滑り込み、間の「or」が回って出て、「どちらでも」で消えて赤の判子「どっちでもOK！」が叩きつけられ板が揺れる
@@ -133,7 +133,7 @@ p#ok_stamp(cx: 960px; top: 360px; font-family: d; font-size: 128px; line-height:
 section#prep
 img#dress_bg(inset: 0; main: kb {scale: [1, 1.06], focus: ['45% 30%', '45% 30%']}) [ref:@sheet]画面には一人だけ。色とりどりの衣装が掛かったかわいく明るい洋服店の中で、神父の服を着た黒髪ボブの女子高生が中央で新しい服を誇らしげに見せる。片手を胸に当てて満面の笑み、まわりに小さなキラキラ、後ろに試着室のカーテン。設定画の人物のうち、この女子高生だけを新しい自然なポーズで描き、設定画の並びは写さない。
 img#props_bg(inset: 0; main: kb {scale: [1.08, 1], focus: ['40% 50%', '40% 50%']}; in: {opacity:0, duration:0.35, ease:'power1.inOut'}) [ref:@sheet]桜並木の晴れた町の通りで、銀色の車椅子がキラキラとパステルの煙の中から魔法のように現れ、神父の服の黒髪ボブの女子高生がうれしそうにそれを指さす。画面にあるのは神父の服の女子高生と車椅子だけ。ゲームのアイテム出現の演出。設定画の人物のうち、この女子高生だけを描き、設定画の並びは写さない。
-svg#prep_star(left: "609;742;1069;942;1086;959;914;1013;981;766"; top: "515;342;595;340;600;276;661;348;318;464"; width: "23;31;37;21;23;36;35;28;26;44"; height: "23;31;37;21;23;36;35;28;26;44"; part: star; in: {scale:0.2, opacity:0, rotation:-60, duration:0.35, ease:'power2.out', stagger:{each:0.09}}) ×10
+svg#prep_star(left: "914;1113;1604;1413;1629;1439;1371;1520;1472;1149"; top: "773;513;893;510;900;414;992;522;477;696"; width: "35;47;56;32;35;54;53;42;39;66"; height: "35;47;56;32;35;54;53;42;39;66"; part: star; in: {scale:0.2, opacity:0, rotation:-60, duration:0.35, ease:'power2.out', stagger:{each:0.09}}) ×10
 sfx#get_sfx(left: 1040px; top: 520px; font-size: 104px; transform: rotate(-8deg); in: {scale:0, opacity:0, duration:0.35, ease:'back.out(2.6)'}) ゲット！
 div#prep_card(left: 1167px; top: 40px; width: 700px; height: 399px; background: $cream; border: 8px solid $navy; border-radius: 30px; box-shadow: 0px 12px 0px $navy; delay: 460ms; in: {x:820, rotation:6, duration:0.5, ease:'power3.out'})
   div#head(left: 0px; top: 0px; width: 686px; height: 92px; background: $pink; border-radius: 22px 22px 0px 0px)
@@ -149,18 +149,18 @@ section#attack
 img#attack_bg(inset: 0; main: kb {scale: [1.02, 1.1], focus: ['62% 25%', '62% 25%']}) [ref:@sheet]晴れた町の通りで、神父の服の黒髪ボブの女子高生が黒スーツの敵の男にマンガのようなドタバタのパンチを当てる。当たった所に白いマンガの衝撃の星が弾け、男は驚いた顔でのけぞりサングラスが傾く。スピード線、楽しいゲームのアクション、無害で血もけがもない。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
 svg#speedlines(left: 0px; top: 0px; width: 1920px; height: 1080px; part: speed; in: {opacity:0, duration:0.06}; out: {opacity:0, duration:0.5, ease:'power1.in'})
 sfx#attack_sfx(left: 1290px; top: 330px; font-size: 120px; color: $punch; transform: rotate(8deg); in: {scale:3, rotation:30, opacity:0, duration:0.2, ease:'power3.in'}) ドカッ！！
-step_tag#tag_attack(left: 56px; top: 44px; n: 3; t: 復活したら攻撃; w: 690px; ta: left; pl: 0px; dl: "4;27;50;89;112"; dw: "15;15;31;15;15"; dc: "$yellow;$yellow;$pink;$dot;$dot")
+step_tag#tag_attack(left: 56px; top: 44px; n: 3; t: 復活したら攻撃; w: 690px; ta: left; pl: 0px; dl: "6;41;75;134;168"; dw: "23;23;47;23;23"; dc: "$yellow;$yellow;$pink;$dot;$dot")
 
 # STEP 4 持ち上げ: 頭上に持ち上げる絵・左下の STEP 札・「持ち上げ」で絵が少し上へ動き、上向きの山形が 2 回ずつ昇り、「ヒョイッ！」が下から弾む
 section#lift
 img#lift_bg(inset: 0; main: kb {scale: [1, 1.08], focus: ['50% 15%', '50% 15%']}) [ref:@sheet]画面には二人だけ。晴れた町の通りで、神父の服の黒髪ボブの女子高生が気絶した黒スーツの男を両腕で頭の上に高々と持ち上げる (ゲームの物理のありえないコミカルさ)。男は水平にぐったりのび、目はぐるぐる、汗のしずく、ドタバタ喜劇。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
 # 山形: 1 回目 (a と b は 120 ms ずらし) と 2 回目 (c・d)
-svg#lift_a(left: "373;887"; top: "240;200"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}; out: {y:-50, opacity:0, duration:0.45, ease:'power1.in'}) ×2
-svg#lift_b(left: "400;920"; top: "347;313"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}; out: {y:-50, opacity:0, duration:0.45, ease:'power1.in'}) ×2
-svg#lift_c(left: "373;887"; top: "240;200"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}) ×2
-svg#lift_d(left: "400;920"; top: "347;313"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}) ×2
+svg#lift_a(left: "560;1331"; top: "360;300"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}; out: {y:-50, opacity:0, duration:0.45, ease:'power1.in'}) ×2
+svg#lift_b(left: "600;1380"; top: "521;470"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}; out: {y:-50, opacity:0, duration:0.45, ease:'power1.in'}) ×2
+svg#lift_c(left: "560;1331"; top: "360;300"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}) ×2
+svg#lift_d(left: "600;1380"; top: "521;470"; width: 90px; height: 90px; part: chevron; in: {y:80, opacity:0, duration:0.3, ease:'power2.out'}) ×2
 sfx#lift_sfx(left: 1240px; top: 470px; font-size: 112px; transform: rotate(-6deg); in: {y:90, opacity:0, duration:0.36, ease:'back.out(2.4)'}) ヒョイッ！
-step_tag#tag_lift(left: 56px; top: 600px; n: 4; t: 倒れたら持ち上げる; w: 690px; ta: left; pl: 0px; dl: "4;27;50;73;112"; dw: "15;15;15;31;15"; dc: "$yellow;$yellow;$yellow;$pink;$dot")
+step_tag#tag_lift(left: 56px; top: 600px; n: 4; t: 倒れたら持ち上げる; w: 690px; ta: left; pl: 0px; dl: "6;41;75;110;168"; dw: "23;23;23;47;23"; dc: "$yellow;$yellow;$yellow;$pink;$dot")
 
 # STEP 5 反撃 → 車椅子: 暴れる敵の絵で赤い縁が点滅し「反撃に注意！」の札が揺れる → 「すぐに」で白く光って車椅子の絵に切り替わり「すぐに！」→「座らせ」で「ストン」が弾んで絵が沈む
 section#counter
@@ -172,7 +172,7 @@ div#warn_sign(left: 1300px; top: 560px; width: 564px; height: 129px; background:
   p#t(left: 132px; cy: 50%; font-size: 64px) 反撃に注意！
 sfx#quick_sfx(left: 1310px; top: 330px; font-size: 120px; color: #FFFFFF; transform: rotate(-7deg); in: {scale:2.6, opacity:0, duration:0.2, ease:'power3.in'}; out: {scale:0.8, opacity:0, duration:0.2}) すぐに！
 sfx#seat_sfx(left: 1360px; top: 640px; width: 368px; font-size: 104px; transform: rotate(5deg); in: {y:-120, opacity:0, duration:0.3, ease:'bounce.out'}) ストン
-step_tag#tag_counter(left: 56px; top: 44px; n: 5; t: すぐ車椅子に座らせる; w: 690px; ta: left; pl: 0px; dl: "4;27;50;73;96"; dw: "15;15;15;15;31"; dc: "$yellow;$yellow;$yellow;$yellow;$pink")
+step_tag#tag_counter(left: 56px; top: 44px; n: 5; t: すぐ車椅子に座らせる; w: 690px; ta: left; pl: 0px; dl: "6;41;75;110;144"; dw: "23;23;23;23;47"; dc: "$yellow;$yellow;$yellow;$yellow;$pink")
 
 # 溜め: 切替なしで同じ車椅子の絵に寄り続け、周りを暗く沈め、「そうすると」が 1 字ずつ上がり、点が 1 つずつ落ちて弾む (字幕は消す)
 section#suspense
@@ -186,7 +186,7 @@ group#hero_sus(left: 0px; top: 0px; width: 1920px; height: 1080px; transform-ori
 section#reveal
 img#call_bg(inset: 0; main: keys(at=0 scale=1.22 | at=0.22 scale=1 ease=power3.out | at=1 scale=1.05 ease=none),duration=3220) [ref:@sheet]桜の咲く晴れた町の通りで、神父の服の黒髪ボブの女子高生が片手を挙げて手を振って誰かを呼び、黒スーツにサングラスの男が満面の笑みで忠実な友だちのように彼女の方へ駆け寄ってくる。男のまわりに小さなピンクのハートが浮かぶ、楽しく仲良しの雰囲気。設定画の人物のうち、この 2 人だけを新しい自然なポーズで描き、設定画の並びは写さない。
 svg#burst(left: 20px; top: 392px; width: 1880px; height: 500px; part: burst; in: {scale:0, rotation:-8, duration:0.42, ease:'back.out(1.8)'})
-svg#hearts(left: "753;1040;807;1107;733;1160;1000;820;1200"; top: "80;27;200;133;260;247;180;20;53"; width: 86px; height: 78px; part: heart; in: {y:70, scale:0.2, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.16}}) ×9
+svg#hearts(left: "1130;1560;1211;1661;1100;1740;1500;1230;1800"; top: "120;41;300;200;390;371;270;30;80"; width: 86px; height: 78px; part: heart; in: {y:70, scale:0.2, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.16}}) ×9
 confetti#confetti(left: 180px; top: 90px; width: 1560px; height: 900px; n: 46; dot: 12-20; colors: $pink,$yellow,$sky,$mint,#FFFFFF; drift: down; in: {opacity:0, duration:0.1}; out: {opacity:0, duration:1, ease:'power1.in'})
 p#hero_call(cx: 960px; top: 566px; font-family: d; font-size: 120px; letter-spacing: 0.09em; color: $yellow; -webkit-text-stroke: 18px $navy; text-shadow: 0px 12px 0px $pink_deep; in: {y:-260, scale:1.6, opacity:0, duration:0.32, ease:'back.out(2.2)', stagger:{each:0.1}}) 呼ぶことができます！！
 

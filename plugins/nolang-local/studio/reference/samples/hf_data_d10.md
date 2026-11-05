@@ -113,7 +113,7 @@ def item(ix, c, f, b, s) = div(left: 96px; width: 1728px; height: 192px; border-
 
 # 全編の地 (根・z back): 紺の放射の地・全編で斜めに流れる方眼 (縁へ薄れる)・左上の青緑と右下の琥珀の光 (ゆっくり揺れる)・grain
 div#bg_base(inset: 0; background: radial(#0F1724,#0A0F17@60%,#080C13,30%,20%); z-index: back; in: none)
-div#bg_grid.bleed(left: -80px; top: -80px; width: 2079px; height: 1239px; pattern: grid,32,#94A3B814; z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-32 y=-16 ease=none),duration=106000)
+div#bg_grid.bleed(left: -80px; top: -80px; width: 2079px; height: 1239px; pattern: grid,32,#94A3B814; z-index: back; in: none; main: keys(at=0 x=0 y=0 | at=1 x=-48 y=-24 ease=none),duration=106000)
 div#bg_vig(inset: 0; background: radial(#0A0F1700@40%,#0A0F17D9,50%,50%); z-index: back; in: none)
 div#bg_glow1.bleed(left: -380px; top: -520px; width: 1100px; height: 1100px; background: radial(#2EC4B621,#2EC4B600@65%,50%,50%); z-index: back; in: none; main: sine {x: 34, period: 18})
 div#bg_glow2.bleed(left: 1180px; top: 520px; width: 1200px; height: 1200px; background: radial(#F6C35B17,#F6C35B00@65%,50%,50%); z-index: back; in: none; main: sine {y: -30, period: 22})
@@ -132,12 +132,12 @@ p#a_t1(left: 120px; top: 234px; font-size: 98px; line-height: 1.16; letter-spaci
 p#a_t2(left: 120px; top: 374px; font-size: 98px; line-height: 1.16; letter-spacing: -0.02em; white-space: nowrap; delay: 420ms; in: {y:123, duration:0.85, ease:'expo.out', clip:true}) 分類してわかったこと
 p#a_sub(left: 120px; top: 525px; font-size: 28px; color: $fg2; font-family: r; white-space: nowrap; delay: 800ms; in: {y:18, opacity:0, duration:0.6, ease:'power2.out'}) 勤怠・経費精算 SaaS{b}「ワークノート」{/}サポート窓口の 3 か月
 # 3 枚の札 (大きな数字 + 単位 + 補足)
-div#a_st(left: "80;288;590"; top: 690px; width: "193;287;193"; height: 150px; border-radius: 16px; background: #111925DB; border: 2px solid $line2; in: {y:30, opacity:0, duration:0.55, ease:'back.out(1.4)'}) ×3
+div#a_st(left: "120;432;885"; top: 690px; width: "290;431;290"; height: 150px; border-radius: 16px; background: #111925DB; border: 2px solid $line2; in: {y:30, opacity:0, duration:0.55, ease:'back.out(1.4)'}) ×3
   p#v(left: 24px; top: 18px; font-size: 76px; line-height: 1; font-family: n; color: "$fg;$amber;$fg") 3;[count:4,128 start=0 ms=1000ms delay=100ms];7
   p#u(left: .v.right+9; top: 54px; font-size: 26px; color: $fg2) か月;件;カテゴリ
   p#l(left: 24px; top: 105px; font-size: 20px; color: $muted; font-family: r; white-space: nowrap) 7 月・8 月・9 月;メール・チャット・フォームの合計;全件を読んで分類
 # 7 つのカテゴリの名札 (色の四角 + 名・2 行に折り返す)
-p#a_cat(left: "80;245;332;445;636;80;180"; top: "580;580;580;580;580;608;608"; font-size: 20px; color: $fg2; padding: 0px 0px 0px 27px; white-space: nowrap; in: {y:16, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.07}}) ×7 ログイン・アカウント;操作方法;請求・プラン;データ連携（CSV・API）;不具合の報告;権限・設定;その他
+p#a_cat(left: "120;368;498;668;954;120;270"; top: "870;870;870;870;870;912;912"; font-size: 20px; color: $fg2; padding: 0px 0px 0px 27px; white-space: nowrap; in: {y:16, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.07}}) ×7 ログイン・アカウント;操作方法;請求・プラン;データ連携（CSV・API）;不具合の報告;権限・設定;その他
   div#sw(left: 0px; cy: 50%; width: 16px; height: 16px; border-radius: 4px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2")
 
 # b 方法: 上端の帯と下端の出典の帯が溶けて出る (sticky・最後まで)・板の 4 列 (チャネル → 全件 → 7 分類 → 3 つの指標) を頭に組み、指標の札を語で右から
@@ -146,7 +146,7 @@ section#b(stagger: {each:0})
 div#hdr.sticky(left: 96px; top: 34px; width: 1728px; height: 40px; z-index: front; delay: 100ms; in: {opacity:0, duration:0.6, ease:'power2.out'})
   svg#mk(left: 0px; cy: 50%; width: 30px; height: 30px; part: mark)
   p#br(left: 44px; cy: 50%; font-size: 21px; color: $fg2; font-family: r; white-space: nowrap) ワークノート サポート窓口{sp}　｜　{/}{sc}問い合わせ分析 7〜9 月{/}
-  shape#d(left: "961;975;989;1003;1017;1031;1045;1059;1073"; cy: 50%; width: 10px; height: 10px; border-radius: 50%; background: #2A3850) ×9
+  shape#d(left: "1442;1463;1484;1505;1526;1547;1568;1589;1610"; cy: 50%; width: 10px; height: 10px; border-radius: 50%; background: #2A3850) ×9
   p#lbl(right: 0px; cy: 50%; width: 96px; text-align: right; font-size: 18px; font-family: m; color: $muted; letter-spacing: 0.06em) 01 / 09
 div#hdr_line.sticky(left: 96px; top: 92px; width: 1728px; height: 2px; background: #1C2840; z-index: front; delay: 100ms; in: {opacity:0, duration:0.6, ease:'power2.out'})
 progress#prog.sticky(left: 96px; top: 92px; width: 1728px; height: 2px; background: linear($teal,$teal2,90); until: end; z-index: front; overlap: hdr_line)
@@ -158,22 +158,22 @@ div#ftr.sticky(left: 96px; top: 1020px; width: 1728px; height: 30px; z-index: fr
 head#b_h(n: "01"; k: "分析の方法"; t: "4,128 件を 7 カテゴリに分け、{t}3 つの指標{/}で比べた")
 board#b_bd(left: 96px; top: 292px; width: 1728px; height: 676px; t: "分析の流れ"; u: "対象：7〜9 月の問い合わせ 全件"; delay: 150ms)
   # 列の頭 (番号の枠 + 題)
-  div#ch(left: "32;287;567;849"; top: 100px; width: 405px; height: 32px; delay: 400ms; in: {y:10, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.18}}) ×4
+  div#ch(left: "48;431;851;1274"; top: 100px; width: 405px; height: 32px; delay: 400ms; in: {y:10, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.18}}) ×4
     p#n(left: 0px; cy: 50%; font-size: 16px; font-family: m; color: $teal2; border: 2px solid #7ADFD380; border-radius: 4px; padding: 0px 8px) 1;2;3;4
     p#t(left: 32px; cy: 50%; font-size: 21px; color: $muted; letter-spacing: 0.04em; white-space: nowrap) 受付チャネル;全件を読む;7 カテゴリに分類;3 つの指標で突き合わせ
-  div#chan(left: 48px; top: "103;185;267"; width: 300px; height: 104px; border-radius: 12px; background: $panel2; border: 2px solid $line2; delay: 500ms; in: {x:-26, opacity:0, duration:0.45, ease:'power2.out', stagger:{each:0.1}}) ×3
+  div#chan(left: 48px; top: "155;278;401"; width: 300px; height: 104px; border-radius: 12px; background: $panel2; border: 2px solid $line2; delay: 500ms; in: {x:-26, opacity:0, duration:0.45, ease:'power2.out', stagger:{each:0.1}}) ×3
     icon#i(left: 22px; cy: 50%; font-size: 38px; name: "envelope-simple;chat-centered-text;article"; color: $teal2)
     p#t(left: 78px; cy: 50%; font-size: 27px) メール;チャット;フォーム
-  svg#ar(left: "235;515;797"; top: 322px; width: 64px; height: 24px; part: arrow; delay: 850ms; in: {scaleX:0, opacity:0, duration:0.4, ease:'power2.out', pivot:'left', stagger:{each:0.3}}) ×3
+  svg#ar(left: "353;773;1196"; top: 322px; width: 64px; height: 24px; part: arrow; delay: 850ms; in: {scaleX:0, opacity:0, duration:0.4, ease:'power2.out', pivot:'left', stagger:{each:0.3}}) ×3
   div#ra(left: 430px; top: 154px; width: 320px; height: 352px; border-radius: 14px; background: $panel2; border: 2px solid $line2; delay: 950ms; in: {scale:0.9, opacity:0, duration:0.5, ease:'back.out(1.5)'})
     p#v(cx: 50%; top: 72px; font-size: 116px; line-height: 1; font-family: n; color: $amber) 4,128
     p#u(cx: 50%; top: 194px; font-size: 28px; color: $fg2) 件
     p#s(cx: 50%; top: 249px; font-size: 20px; color: $muted; font-family: r; white-space: nowrap) 3 か月分をすべて
-  div#cat(left: 850px; top: "103;137;171;205;239;273;307"; width: 330px; height: 42px; border-radius: 8px; background: #152030B3; border: 2px solid $line; delay: 1250ms; in: {x:-18, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.06}}) ×7
+  div#cat(left: 850px; top: "155;206;257;308;359;410;461"; width: 330px; height: 42px; border-radius: 8px; background: #152030B3; border: 2px solid $line; delay: 1250ms; in: {x:-18, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.06}}) ×7
     div#sw(left: 14px; cy: 50%; width: 16px; height: 16px; border-radius: 4px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2")
     p#t(left: 40px; cy: 50%; font-size: 20px; color: $fg2; white-space: nowrap) ログイン・アカウント;操作方法;請求・プラン;データ連携（CSV・API）;不具合の報告;権限・設定;その他
   # 3 つの指標 (語で右から弾んで入る)
-  div#m(left: 1274px; top: "103;184;265"; width: 410px; height: 108px; border-radius: 12px; background: $panel2; border: 2px solid $line2; in: {x:30, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×3
+  div#m(left: 1274px; top: "155;276;398"; width: 410px; height: 108px; border-radius: 12px; background: $panel2; border: 2px solid $line2; in: {x:30, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×3
     p#ix(left: 20px; cy: 50%; width: 30px; text-align: center; font-size: 44px; font-family: n; color: $teal2) A;B;C
     p#b(left: 66px; top: 24px; font-size: 26px; white-space: nowrap) 初回で解決したか;解決までの時間;担当者の対応時間
     p#s(left: 66px; top: 62px; font-size: 18px; color: $muted; font-family: r; white-space: nowrap) 初回解決率;受付から解決まで;3 か月の合計・1 件あたり平均
@@ -189,27 +189,27 @@ p#c_call(left: 96px; top: 760px; font-size: 22px; background: #152030F5; border:
   icon#i(left: 18px; cy: 50%; font-size: 26px; name: buildings; color: $teal2)
 board#c_bd(left: 700px; top: 292px; width: 1124px; height: 676px; t: "月別の問い合わせ件数"; u: "単位：件"; delay: 120ms)
   # 目盛り (0 起点・400 刻み)
-  div#gl(left: 120px; top: "80;153;227;300"; width: 940px; height: 2px; background: #94A3B81F) ×4
+  div#gl(left: 120px; top: "120;230;341;450"; width: 940px; height: 2px; background: #94A3B81F) ×4
   div#zero(left: 120px; top: 558px; width: 940px; height: 3px; background: #3A4B66)
-  p#gll(left: 0px; top: "73;146;220;293;365"; width: 106px; text-align: right; font-size: 16px; font-family: m; color: $muted) ×5 1,600;1,200;800;400;0
-  div#bar(left: "127;337;545"; top: "135;119;108"; width: 170px; height: "238;254;265"; border-radius: 8px 8px 0px 0px; background: "linear(#4F6684,#3B4E68,180);linear(#5D7899,#455C7A,180);linear(#7ADFD3,#2A9D92,180)"; delay: 550ms; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger:{each:0.15}}) ×3
-  p#bv(left: "127;337;545"; top: "145;129;117"; width: 170px; text-align: center; font-size: 46px; font-family: n; color: "$fg;$fg;#0A0F17"; delay: 950ms; in: {y:12, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.15}}) ×3 1,296;1,384;1,448
-  p#bx(left: "127;337;545"; top: 576px; width: 170px; text-align: center; font-size: 24px; color: $fg2) ×3 7 月;8 月;9 月
-  shape#trend(path: "M184 121 L393 105 L602 93"; background: none; border: 3px solid $teal2; dash: 5,5; delay: 1400ms; in: {opacity:0, duration:0.5})
-  shape#dot(left: "179;388;597"; top: "116;100;88"; width: 15px; height: 15px; border-radius: 50%; background: $teal2; delay: 1350ms; in: {scale:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×3
+  p#gll(left: 0px; top: "110;219;330;440;548"; width: 106px; text-align: right; font-size: 16px; font-family: m; color: $muted) ×5 1,600;1,200;800;400;0
+  div#bar(left: "191;506;818"; top: "203;179;162"; width: 170px; height: "357;381;398"; border-radius: 8px 8px 0px 0px; background: "linear(#4F6684,#3B4E68,180);linear(#5D7899,#455C7A,180);linear(#7ADFD3,#2A9D92,180)"; delay: 550ms; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger:{each:0.15}}) ×3
+  p#bv(left: "191;506;818"; top: "218;194;176"; width: 170px; text-align: center; font-size: 46px; font-family: n; color: "$fg;$fg;#0A0F17"; delay: 950ms; in: {y:12, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.15}}) ×3 1,296;1,384;1,448
+  p#bx(left: "191;506;818"; top: 576px; width: 170px; text-align: center; font-size: 24px; color: $fg2) ×3 7 月;8 月;9 月
+  shape#trend(path: "M276 182 L590 158 L903 140"; background: none; border: 3px solid $teal2; dash: 5,5; delay: 1400ms; in: {opacity:0, duration:0.5})
+  shape#dot(left: "269;582;896"; top: "174;150;132"; width: 15px; height: 15px; border-radius: 50%; background: $teal2; delay: 1350ms; in: {scale:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×3
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $muted; font-family: r; in: {opacity:0, duration:0.5}) ※ 3 か月の合計は 4,128 件。縦軸は 0 から。
 
 # d 構成: 構成比の帯 (7 色) が左から 1 枚ずつ開き、7 行の横棒が伸びて件数と % が出る・「ログイン」「操作方法」で行に枠が点き、他の 5 行を沈め、凡例
 section#d(stagger: {each:0})
 head#d_h(n: "03"; k: "カテゴリ別の件数"; t: "件数が多いのは {t}ログイン・アカウント{/} と {t}操作方法{/}")
 board#d_bd(left: 96px; top: 292px; width: 1728px; height: 676px; t: "カテゴリ別の件数と構成比"; u: "N = 4,128 件"; delay: 120ms)
-  div#seg(left: "21;265;498;687;853;975;1075"; top: 96px; width: "242;231;187;164;120;98;56"; height: 58px; border-radius: "5,0,0,5;0;0;0;0;0;0,5,5,0"; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: 450ms; in: {scaleX:0, opacity:0, duration:0.45, ease:'power2.out', pivot:'left', stagger:{each:0.07}}) ×7
+  div#seg(left: "32;398;747;1031;1280;1463;1613"; top: 96px; width: "363;347;281;246;180;147;84"; height: 58px; border-radius: "8,0,0,8;0;0;0;0;0;0,8,8,0"; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: 450ms; in: {scaleX:0, opacity:0, duration:0.45, ease:'power2.out', pivot:'left', stagger:{each:0.07}}) ×7
     p#t(cx: 50%; cy: 50%; font-size: 28px; font-family: n; color: "#0A0F17;#0A0F17;#0A0F17;#0A0F17;#0A0F17;#0A0F17;$fg") 22%;21%;17%;15%;11%;9%;5%
-  div#r(left: 18px; top: "124;160;196;232;268;304;340"; width: 1690px; height: 54px; in: none) ×7
+  div#r(left: 18px; top: "186;240;294;348;402;456;510"; width: 1690px; height: 54px; in: none) ×7
     # 行の枠 (語で点く 2 行だけ・他の行の枠は透明)
     div#hl(left: 0px; top: 4px; width: 1690px; height: 45px; border-radius: 10px; background: #2EC4B614; border: 3px solid #7ADFD3B3; opacity: "1;1;0;0;0;0;0"; in: {opacity:0, duration:0.35, ease:'power2.out'})
     cat#nm(left: 14px; cy: 50%; t: "ログイン・アカウント;操作方法;請求・プラン;データ連携（CSV・API）;不具合の報告;権限・設定;その他"; c: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: "600ms;660ms;720ms;780ms;840ms;900ms;960ms"; in: {x:-20, opacity:0, duration:0.4, ease:'power2.out'})
-    div#bar(left: 393px; cy: 50%; width: "600;573;464;409;300;245;137"; height: 30px; border-radius: 0px 6px 6px 0px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: "750ms;820ms;890ms;960ms;1030ms;1100ms;1170ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
+    div#bar(left: 393px; cy: 50%; width: "900;860;696;614;450;368;206"; height: 30px; border-radius: 0px 6px 6px 0px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2"; delay: "750ms;820ms;890ms;960ms;1030ms;1100ms;1170ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
     div#val(left: 1394px; cy: 50%; width: 210px; height: 45px; delay: "1050ms;1120ms;1190ms;1260ms;1330ms;1400ms;1470ms"; in: {x:-12, opacity:0, duration:0.4, ease:'power2.out'})
       p#n(left: 0px; cy: 50%; width: 90px; text-align: right; font-size: 36px; font-family: n) 908;867;702;619;454;371;207
       p#u(left: 104px; cy: 50%; font-size: 20px; color: $muted) 件
@@ -217,8 +217,8 @@ board#d_bd(left: 96px; top: 292px; width: 1728px; height: 676px; t: "カテゴ�
   # 色の見方 (凡例)
   div#leg(left: 32px; top: 624px; width: 1500px; height: 30px; in: {y:10, opacity:0, duration:0.5, ease:'power2.out'})
     p#t0(left: 0px; cy: 50%; font-size: 20px; color: $muted) 色の見方
-    div#s(left: "75;86;251;262;273;571;582"; cy: 50%; width: 14px; height: 14px; border-radius: 3px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2") ×7
-    p#t(left: "102;289;598"; cy: 50%; font-size: 20px; color: $muted; white-space: nowrap) ×3 件数が多い 2 カテゴリ;対応に時間がかかる 3 カテゴリ（後半で詳しく）;その他の 2 カテゴリ
+    div#s(left: "113;129;377;393;410;857;873"; cy: 50%; width: 14px; height: 14px; border-radius: 3px; background: "$teal;$teal2;$amber;$orange;$coral;$slate;$slate2") ×7
+    p#t(left: "153;434;897"; cy: 50%; font-size: 20px; color: $muted; white-space: nowrap) ×3 件数が多い 2 カテゴリ;対応に時間がかかる 3 カテゴリ（後半で詳しく）;その他の 2 カテゴリ
 
 # e 初回解決率: 右の板の 7 行が頭に伸び、「59%」で左の輪が弧を描いて数え、板に全体の破線・81 / 34 / 22 の語で行に枠 (青緑 / 珊瑚)・中の 4 行を沈める
 section#e(stagger: {each:0})
@@ -233,11 +233,11 @@ group#e_g(in: {scale:0.86, opacity:0, duration:0.6, ease:'power3.out'})
 p#e_cap(left: 96px; top: 798px; width: 470px; text-align: center; font-size: 22px; color: $muted; in: {y:10, opacity:0, duration:0.5, ease:'power2.out'}) {n21}2,442{/} 件 / {n21}4,128{/} 件
 board#e_bd(left: 640px; top: 292px; width: 1184px; height: 676px; t: "カテゴリ別の初回解決率"; u: "単位：%"; delay: 300ms; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})
   # 行の枠は語で点く 3 行 (81 の青緑・34 / 22 の珊瑚) だけ・他の行の枠は透明
-  div#r(left: 18px; top: "93;134;175;216;257;298;339"; width: 1148px; height: 62px; in: none) ×7
+  div#r(left: 18px; top: "140;201;263;324;386;447;509"; width: 1148px; height: 62px; in: none) ×7
     div#hl(left: 0px; top: 6px; width: 1148px; height: 50px; border-radius: 10px; background: "#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#2EC4B614;#E8615A14;#E8615A14"; border: "3px solid #7ADFD3BF;3px solid #7ADFD3BF;3px solid #7ADFD3BF;3px solid #7ADFD3BF;3px solid #7ADFD3BF;3px solid #E8615ABF;3px solid #E8615ABF"; opacity: "1;0;0;0;0;1;1"; in: {opacity:0, duration:0.3})
     cat#nm(left: 14px; cy: 50%; width: 330px; t: "ログイン・アカウント;操作方法;権限・設定;請求・プラン;その他;データ連携（CSV・API）;不具合の報告"; c: "$teal;$teal2;$slate;$amber;$slate2;$orange;$coral"; delay: "600ms;660ms;720ms;780ms;840ms;900ms;960ms"; in: {x:-16, opacity:0, duration:0.4, ease:'power2.out'})
     div#tr(left: 344px; cy: 50%; width: 600px; height: 32px; border-radius: 0px 6px 6px 0px; background: #FFFFFF0A)
-    div#bar(left: 344px; cy: 50%; width: "324;296;252;232;220;136;88"; height: 32px; border-radius: 0px 6px 6px 0px; background: "$teal;$teal2;$slate;$amber;$slate2;$orange;$coral"; delay: "700ms;770ms;840ms;910ms;980ms;1050ms;1120ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
+    div#bar(left: 344px; cy: 50%; width: "486;444;378;348;330;204;132"; height: 32px; border-radius: 0px 6px 6px 0px; background: "$teal;$teal2;$slate;$amber;$slate2;$orange;$coral"; delay: "700ms;770ms;840ms;910ms;980ms;1050ms;1120ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
     p#v(left: 963px; cy: 50%; width: 110px; text-align: right; font-size: 40px; font-family: n; color: "$fg;$fg;$fg;$fg;$fg;$coral;$coral"; delay: "1000ms;1070ms;1140ms;1210ms;1280ms;1350ms;1420ms"; in: {opacity:0, duration:0.4}) 81%;74%;63%;58%;55%;34%;22%
   # 全体 59% の破線 (上から下りる) と札
   shape#avg(left: 716px; top: 128px; width: 3px; height: 450px; path: line_v; border: 3px solid #E9EEF58C; dash: 5,5; in: {scaleY:0, opacity:0, duration:0.5, ease:'power2.out', pivot:'top'})
@@ -249,20 +249,20 @@ section#f(stagger: {each:0})
 head#f_h(n: "05"; k: "解決までの時間"; t: "中央値は {t}1 時間 50 分{/}。ただし 3 日超の“長い尾”が {c}372 件{/}")
 board#f_bd(left: 96px; top: 292px; width: 1150px; height: 676px; t: "受付から解決までの時間"; u: "単位：件（構成比）"; delay: 120ms)
   div#base(left: 70px; top: 548px; width: 1010px; height: 3px; background: #3A4B66)
-  div#bar(left: "61;173;285;397;509;622"; top: "174;245;281;306;336;352"; width: 128px; height: "193;122;86;61;31;15"; border-radius: 8px 8px 0px 0px; background: "linear(#7ADFD3,#2A9D92,180);linear(#7ADFD3,#2A9D92,180);linear(#5D7899,#455C7A,180);linear(#5D7899,#455C7A,180);linear(#F07A6F,#C84B45,180);linear(#F07A6F,#C84B45,180)"; delay: 550ms; in: {scaleY:0, duration:0.7, ease:'power3.out', pivot:'bottom', stagger:{each:0.1}}) ×6
+  div#bar(left: "92;260;428;596;764;933"; top: "261;368;422;459;504;528"; width: 128px; height: "290;183;129;92;47;23"; border-radius: 8px 8px 0px 0px; background: "linear(#7ADFD3,#2A9D92,180);linear(#7ADFD3,#2A9D92,180);linear(#5D7899,#455C7A,180);linear(#5D7899,#455C7A,180);linear(#F07A6F,#C84B45,180);linear(#F07A6F,#C84B45,180)"; delay: 550ms; in: {scaleY:0, duration:0.7, ease:'power3.out', pivot:'bottom', stagger:{each:0.1}}) ×6
   # 尾の 2 本を明るくする薄い白の板 (372 の語で 1 往復だけ点く = hf の brightness(1.35) の yoyo)
-  div#hi(left: "509;622"; top: "336;352"; width: 128px; height: "31;15"; border-radius: 8px 8px 0px 0px; background: #FFFFFF; opacity: 0; in: none) ×2
-  div#hv(left: "47;159;272;384;496;608"; top: "127;198;234;259;289;305"; width: 168px; height: 69px; delay: 900ms; in: {y:10, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.1}}) ×6
+  div#hi(left: "764;933"; top: "504;528"; width: 128px; height: "47;23"; border-radius: 8px 8px 0px 0px; background: #FFFFFF; opacity: 0; in: none) ×2
+  div#hv(left: "71;239;408;576;744;912"; top: "191;297;351;389;434;458"; width: 168px; height: 69px; delay: 900ms; in: {y:10, opacity:0, duration:0.4, ease:'power2.out', stagger:{each:0.1}}) ×6
     p#n(cx: 50%; top: 0px; font-size: 40px; line-height: 1; font-family: n; color: "$fg;$fg;$fg;$fg;$coral;$coral") 1,568;991;702;495;248;124
     p#p(cx: 50%; top: 44px; font-size: 20px; color: $muted) 38%;24%;17%;12%;6%;3%
-  p#hx(left: "47;159;272;384;496;608"; top: 564px; width: 168px; text-align: center; font-size: 22px; color: $fg2; white-space: nowrap; delay: 700ms; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×6 1 時間以内;1〜4 時間;4〜24 時間;1〜3 日;3〜7 日;7 日超
+  p#hx(left: "71;239;408;576;744;912"; top: 564px; width: 168px; text-align: center; font-size: 22px; color: $fg2; white-space: nowrap; delay: 700ms; in: {opacity:0, duration:0.4, stagger:{each:0.06}}) ×6 1 時間以内;1〜4 時間;4〜24 時間;1〜3 日;3〜7 日;7 日超
   # かぎ (4 時間以内 / 3 日超) と札
-  shape#brf(path: "M60.5 121.3 V112 H258 V121.3"; background: none; border: 3px solid $teal2; delay: 1700ms; in: {opacity:0, duration:0.4})
+  shape#brf(path: "M90.8 181.9 V168 H387 V181.9"; background: none; border: 3px solid $teal2; delay: 1700ms; in: {opacity:0, duration:0.4})
   p#labf(left: 92px; top: 130px; width: 296px; text-align: center; font-size: 21px; color: $teal2; white-space: nowrap; delay: 1750ms; in: {y:8, opacity:0, duration:0.4, ease:'power2.out'}) 4 時間以内に約 6 割
-  shape#brt(path: "M509.3 284.1 V274.7 H706.9 V284.1"; background: none; border: 3px solid $coral; in: {opacity:0, duration:0.4})
+  shape#brt(path: "M764.0 426.2 V412.0 H1060.3 V426.2"; background: none; border: 3px solid $coral; in: {opacity:0, duration:0.4})
   p#labt(left: 704px; top: 374px; width: 417px; text-align: center; font-size: 21px; color: $coral; white-space: nowrap; in: {y:8, opacity:0, duration:0.4, ease:'power2.out'}) 3 日超：372 件（9%）
   # 中央値の札と、1〜4 時間の棒へ下りる破線の引き出し
-  shape#lead(path: "M420.3 155.1 L235.3 191.1"; background: none; border: 2px solid $teal2; dash: 3,4; in: {opacity:0, duration:0.4})
+  shape#lead(path: "M630.5 232.6 L353.0 286.6"; background: none; border: 2px solid $teal2; dash: 3,4; in: {opacity:0, duration:0.4})
   shape#ldot(left: 346px; top: 280px; width: 12px; height: 12px; border-radius: 50%; background: $teal2; in: {opacity:0, duration:0.4})
   p#pin(left: 630px; top: 207px; font-size: 21px; background: $panel2; border: 2px solid $teal2; border-radius: 8px; padding: 6px 12px; white-space: nowrap; in: {y:-12, opacity:0, duration:0.45, ease:'back.out(1.8)'}) 中央値　1 時間 50 分
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $muted; font-family: r; in: {opacity:0, duration:0.5}) ※ 受付から解決までの経過時間で 6 区分。中央値は 1 時間 50 分。
@@ -281,8 +281,8 @@ board#f_sd(left: 1280px; top: 292px; width: 544px; height: 676px; t: "長い尾�
     div#a(left: 0px; top: 0px; width: 375px; height: 50px; border-radius: 8px 0px 0px 8px; background: linear($orange,$coral,90); in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
       # hf の作り: 橙の帯の上の暗い字 (check は全編の grain の幕と比べて low_contrast を出す)
       p#t(left: 16px; cy: 50%; font-size: 30px; font-family: n; color: #0A0F17) 291 件
-  div#lsw(left: "21;32;21"; top: "367;367;391"; width: 14px; height: 14px; border-radius: 3px; background: "$orange;$coral;#2A3850"; in: {opacity:0, duration:0.4}) ×3
-  p#lt(left: "48;37"; top: "361;385"; font-size: 20px; color: $fg2; font-family: r; white-space: nowrap; in: {opacity:0, duration:0.4}) ×2 データ連携・不具合の報告;そのほかのカテゴリ
+  div#lsw(left: "32;48;32"; top: "551;551;587"; width: 14px; height: 14px; border-radius: 3px; background: "$orange;$coral;#2A3850"; in: {opacity:0, duration:0.4}) ×3
+  p#lt(left: "72;56"; top: "542;578"; font-size: 20px; color: $fg2; font-family: r; white-space: nowrap; in: {opacity:0, duration:0.4}) ×2 データ連携・不具合の報告;そのほかのカテゴリ
   p#note(left: 32px; bottom: 20px; font-size: 18px; color: $muted; font-family: r; white-space: nowrap) ※ 3 日を超えた 372 件（全体の 9%）が対象。
 
 # g 対応時間: 左の板に件数の積み上げ棒が頭に積み上がり、「対応時間」で右の棒が積み上がる・「データ連携」で 2 本をつなぐ帯と上位 3 以外を沈め、右の板の 3 行 + 参考の行・43% と 75% の大きな札
@@ -290,14 +290,14 @@ section#g(stagger: {each:0})
 head#g_h(n: "06"; k: "担当者の対応時間"; t: "件数の {a}43%{/} が、対応時間の {a}75%{/} を占める")
 board#g_cmp(left: 96px; top: 292px; width: 820px; height: 676px; t: "件数と対応時間の構成比"; u: "3 か月"; pc: $amber; delay: 120ms)
   # 2 本をつなぐ帯 (上位 3 の境を結ぶ琥珀の面 + 破線・その上の灰の面)
-  shape#rib(points: "213,380;213,245;333,144;333,380"; background: #F6C35B29; border: none; in: {opacity:0, duration:0.6, ease:'power1.out'})
-  shape#rib2(points: "213,245;213,67;333,67;333,144"; background: #8A97AD12; border: none; in: {opacity:0, duration:0.6, ease:'power1.out'})
-  shape#ribl(path: "M213.3 245.3 L333.3 143.8"; background: none; border: 3px solid $amber; dash: 4,4; in: {opacity:0, duration:0.6, ease:'power1.out'})
+  shape#rib(points: "320,570;320,368;500,216;500,570"; background: #F6C35B29; border: none; in: {opacity:0, duration:0.6, ease:'power1.out'})
+  shape#rib2(points: "320,368;320,101;500,101;500,216"; background: #8A97AD12; border: none; in: {opacity:0, duration:0.6, ease:'power1.out'})
+  shape#ribl(path: "M320.0 368.0 L500.0 215.7"; background: none; border: 3px solid $amber; dash: 4,4; in: {opacity:0, duration:0.6, ease:'power1.out'})
   # 件数の積み上げ (下から データ連携・不具合・請求・ログイン・操作方法・権限・その他)
-  div#sc(left: 170px; top: "335;300;247;178;112;84;67"; width: 150px; height: "45;33;51;67;64;26;15"; background: "$orange;$coral;$amber;$teal;$teal2;$slate;$slate2"; delay: 550ms; in: {scaleY:0, duration:0.4, ease:'power2.out', pivot:'bottom', stagger:{each:0.06}}) ×7
+  div#sc(left: 170px; top: "503;450;371;267;168;126;101"; width: 150px; height: "68;50;77;101;96;39;23"; background: "$orange;$coral;$amber;$teal;$teal2;$slate;$slate2"; delay: 550ms; in: {scaleY:0, duration:0.4, ease:'power2.out', pivot:'bottom', stagger:{each:0.06}}) ×7
   # 対応時間の積み上げ (下から データ連携・不具合・請求・ログイン・残り)
-  div#st(left: 500px; top: "284;196;146;122;67"; width: 150px; height: "96;86;48;22;53"; background: "$orange;$coral;$amber;$teal;#3B4A62"; in: {scaleY:0, duration:0.45, ease:'power2.out', pivot:'bottom', stagger:{each:0.08}}) ×5
-  div#slab(left: "87;307"; top: 574px; width: 230px; height: 60px) ×2
+  div#st(left: 500px; top: "426;294;219;183;101"; width: 150px; height: "144;129;72;33;80"; background: "$orange;$coral;$amber;$teal;#3B4A62"; in: {scaleY:0, duration:0.45, ease:'power2.out', pivot:'bottom', stagger:{each:0.08}}) ×5
+  div#slab(left: "131;461"; top: 574px; width: 230px; height: 60px) ×2
     p#t(cx: 50%; top: 0px; font-size: 22px) 件数;対応時間
     p#s(cx: 50%; top: 33px; font-size: 18px; color: $muted; font-family: r; white-space: nowrap) 4,128 件;4,175 時間
   p#g43(left: 30px; top: 418px; font-size: 76px; line-height: 1; font-family: n; color: $amber; in: {x:-20, opacity:0, duration:0.5, ease:'power3.out'}) 43%
@@ -305,10 +305,10 @@ board#g_cmp(left: 96px; top: 292px; width: 820px; height: 676px; t: "件数と�
   p#g75(left: 662px; top: 338px; font-size: 86px; line-height: 1; font-family: n; color: $amber; transform-origin: 0% 50%; in: {scale:0.7, opacity:0, duration:0.6, ease:'back.out(1.6)'}) 75%
     p#s(left: 0px; top: 92px; font-size: 18px; color: $fg2; font-family: g; white-space: nowrap) 3,147 時間
 board#g_top(left: 950px; top: 292px; width: 874px; height: 676px; t: "時間を食っている上位 3 カテゴリ"; u: "対応時間の合計（3 か月）"; pc: $amber; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})
-  div#r(left: 32px; top: "72;136;200;287"; width: 810px; height: 96px; opacity: "1;1;1;0.92"; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) ×4
+  div#r(left: 32px; top: "108;204;300;431"; width: 810px; height: 96px; opacity: "1;1;1;0.92"; in: {y:14, opacity:0, duration:0.45, ease:'power2.out'}) ×4
     div#sw(left: 0px; top: 9px; width: 16px; height: 16px; border-radius: 4px; background: "$orange;$coral;$amber;$teal")
     p#nm(left: 28px; top: 2px; font-size: 22px; white-space: nowrap) データ連携（CSV・API）;不具合の報告;請求・プラン;ログイン・アカウント{mu}（908 件）{/}
-    div#bar(left: 0px; top: 42px; width: "313;284;161;77"; height: 30px; border-radius: 0px 6px 6px 0px; background: "$orange;$coral;$amber;$teal"; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
+    div#bar(left: 0px; top: 42px; width: "470;426;242;116"; height: 30px; border-radius: 0px 6px 6px 0px; background: "$orange;$coral;$amber;$teal"; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
     p#n(left: 490px; top: 30px; width: 130px; text-align: right; font-size: 46px; font-family: n) 1,300;1,180;667;318
     p#u(left: 627px; top: 51px; font-size: 20px; color: $fg2) 時間
     p#avg(right: 0px; top: 30px; text-align: right; font-size: 18px; line-height: 1.2; color: $muted; font-family: r) 1 件平均[br]{an}2.1{/} 時間;1 件平均[br]{an}2.6{/} 時間;1 件平均[br]{an}0.95{/} 時間;1 件平均[br]{an}0.35{/} 時間
@@ -330,12 +330,12 @@ div#h_cap(left: 96px; top: 796px; width: 760px; height: 75px; delay: 600ms; in: 
   p#q(left: 0px; top: 3px; font-size: 18px; font-family: m; color: $teal2; border: 2px solid #7ADFD380; border-radius: 4px; padding: 0px 8px) 条件
   p#t(left: 68px; top: 0px; width: 693px; font-size: 21px; line-height: 1.55; color: $fg2; font-family: r) 既存のヘルプページに答えがある、または 1 ページ足せば答えられる問い合わせを数えた
 board#h_bd(left: 900px; top: 292px; width: 924px; height: 676px; t: "ヘルプページで減らせる見込み"; u: "単位：件"; delay: 300ms; in: {x:40, opacity:0, duration:0.65, ease:'power3.out'})
-  div#rh(left: 32px; top: "75;170"; width: 860px; height: 135px; in: {y:12, opacity:0, duration:0.45, ease:'power2.out'}) ×2
+  div#rh(left: 32px; top: "113;255"; width: 860px; height: 135px; in: {y:12, opacity:0, duration:0.45, ease:'power2.out'}) ×2
     div#sw(left: 0px; top: 9px; width: 16px; height: 16px; border-radius: 4px; background: "$teal2;$teal")
     p#t(left: 28px; top: 0px; font-size: 24px; white-space: nowrap) 操作方法;ログイン・アカウント
     div#tr(left: 0px; top: 46px; width: 800px; height: 40px; border-radius: 6px; background: #8A97AD2E; border: 2px solid #8A97AD59)
     # 斜線の帯 (減らせる分・左から伸びる)
-    div#rd(left: 0px; top: 46px; width: "218;176"; height: 40px; border-radius: 6px 0px 0px 6px; background: #7ADFD3F2; pattern: hatch,45,#2EC4B6F2,13,7; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
+    div#rd(left: 0px; top: 46px; width: "327;264"; height: 40px; border-radius: 6px 0px 0px 6px; background: #7ADFD3F2; pattern: hatch,45,#2EC4B6F2,13,7; in: {scaleX:0, duration:0.7, ease:'power3.out', pivot:'left'})
     p#l(left: 0px; top: 94px; font-size: 20px; color: $fg2; white-space: nowrap) うち {n19}355{/} 件（41%）;うち {n19}300{/} 件（33%）
     p#r(right: 60px; top: 96px; font-size: 20px; color: $muted; white-space: nowrap) 全 {n16}867{/} 件;全 {n16}908{/} 件
   p#tag(left: 308px; top: 258px; font-size: 18px; color: $bg; background: $teal2; border-radius: 4px; padding: 2px 9px; white-space: nowrap; in: {y:12, opacity:0, duration:0.45, ease:'power2.out'}) ほぼパスワード再設定

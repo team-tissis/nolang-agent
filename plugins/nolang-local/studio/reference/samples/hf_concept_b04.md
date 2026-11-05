@@ -102,7 +102,7 @@ p#t_pill(left: 140px; top: 286px; font-size: 52px; font-family: h; background: $
 p#t_l1(left: 136px; top: 400px; font-size: 100px; font-family: h; letter-spacing: .01em; color: #FFFFFF; white-space: nowrap; delay: 450ms; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) PdM・PM・POなど
 p#t_l2(left: 136px; top: 536px; font-size: 114px; font-family: h; letter-spacing: .02em; color: #FFFFFF; white-space: nowrap; delay: 600ms; in: {y:50, opacity:0, duration:.55, ease:'power3.out'}) 開発チームの役割
 div#t_bar(left: 140px; top: 704px; width: 900px; height: 14px; border-radius: 8px; background: linear($pdm,$pm,$po,$bo,$eng,$des,90); delay: 900ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
-p#t_chip(left: "93;171;239;306;373;512"; top: 780px; font-size: 30px; font-family: h; color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border-radius: 148px; padding: 8px 22px; delay: 1050ms; in: {scale:.5, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.08}}) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
+p#t_chip(left: "140;257;359;459;560;768"; top: 780px; font-size: 30px; font-family: h; color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border-radius: 148px; padding: 8px 22px; delay: 1050ms; in: {scale:.5, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.08}}) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
 
 # intro — チームの絵と 5 つの職種の札 → 3 つの略称の札が落ちて揺れ、すれ違い、？ と困った新人 → 6 役の札が並び、今回のゴールの帯
 section#intro
@@ -110,14 +110,14 @@ section#intro
 div#hdr.sticky(left: 0px; top: 0px; width: 1920px; height: 110px; z-index: front; in: {y:-30, opacity:0, duration:.5, ease:'power3.out'}; out: {opacity:0, duration:.3, ease:'power1.in'})
   p#badge(left: 64px; top: 34px; font-size: 22px; font-family: h; letter-spacing: .04em; color: #FFFFFF; background: $ink; border-radius: 10px; padding: 6px 16px) 新入社員研修 ②
   p#ttl(left: .badge.right+16; cy: .badge.cy; font-size: 24px; font-family: h; letter-spacing: .02em) プロダクト開発に関わる役割を知る
-  p#c(left: "835;891;939;987;1035;1137"; top: 32px; font-size: 21px; font-family: h; color: #85817A; background: #FFFFFF; border: 3px solid #CFCABF; border-radius: 148px; padding: 6px 16px) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
+  p#c(left: "1253;1337;1409;1481;1553;1706"; top: 32px; font-size: 21px; font-family: h; color: #85817A; background: #FFFFFF; border: 3px solid #CFCABF; border-radius: 148px; padding: 6px 16px) ×6 PdM;PM;PO;BO;エンジニア;デザイナー
 #hdr.c.on(color: #FFFFFF; background: "$pdm;$pm;$po;$bo;$eng;$des"; border: "3px solid $pdm;3px solid $pm;3px solid $po;3px solid $bo;3px solid $eng;3px solid $des"; transform: scale(1.08))
 #hdr.c.done(color: "$pdm;$pm;$po;$bo;$eng;$des"; background: #FFFFFF; border: "3px solid $pdm;3px solid $pm;3px solid $po;3px solid $bo;3px solid $eng;3px solid $des")
 div#in_d1(left: -260px; top: 520px; width: 900px; height: 900px; background: radial(#12A4A029,#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
 div#in_d2(left: 1300px; top: -300px; width: 900px; height: 900px; background: radial(#FF7A5924,#F6F4EF00@68%); delay: 400ms; in: {scale:.7, opacity:0, duration:1.2, ease:'power2.out'}; main: ramp {x: 70, y: -40})
 img#in_team(left: 480px; top: 176px; width: 960px; height: 640px; content: @team; object-fit: contain; delay: 500ms; in: {y:40, scale:.94, opacity:0, duration:.7, ease:'power3.out'}; out: {scale:.92, opacity:0, duration:.35, ease:'power1.in'}; main: keys(at=0 scale=1 | at=0.13 scale=1 | at=1 scale=1.05 ease=none),duration=6200)
 # 5 つの職種の札 (白い丸の icon + 職種の語)
-div#in_b(left: "167;127;1013;1053;967"; top: "167;373;147;333;480"; width: 170px; height: 158px; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(1.7)', stagger:{each:.22}}; out: {opacity:0, duration:.3, ease:'power1.in'}) ×5
+div#in_b(left: "251;191;1520;1580;1451"; top: "251;560;221;500;720"; width: 170px; height: 158px; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(1.7)', stagger:{each:.22}}; out: {opacity:0, duration:.3, ease:'power1.in'}) ×5
   icon#i(cx: 50%; top: 0px; font-size: 52px; name: "compass;calendar-blank;chart-bar;code;pen-nib"; color: "$pdm;$pm;$bo;$eng;$des"; background: #FFFFFF; padding: 26px; box-shadow: 0px 10px 26px #1E2A4A24)
   p#t(cx: 50%; top: 111px; font-size: 30px; font-family: h; color: "$pdm;$pm;$bo;$eng;$des") 企画;管理;ビジネス;開発;デザイン
 # 3 つの略称の札 (上から傾いて落ちる・揺れる・1 と 2 が上下に逃げてすれ違う)
@@ -126,13 +126,13 @@ def tile(t) = div(top: 330px; width: 330px; height: 230px; background: #FFFFFF; 
 tile#in_t1(left: 240px; t: PdM; in: {y:-120, rotation:-6, opacity:0, duration:.55, ease:'back.out(1.6)'})
 tile#in_t2(left: 620px; t: PM; in: {y:-120, rotation:5, opacity:0, duration:.55, ease:'back.out(1.6)'})
 tile#in_t3(left: 1000px; t: PO; in: {y:-120, rotation:-4, opacity:0, duration:.55, ease:'back.out(1.6)'})
-p#in_qm(left: "347;620;833"; top: "133;380;140"; font-size: 110px; font-family: h; color: $po; in: {scale:.2, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.15}}; out: {y:-40, opacity:0, duration:.3, ease:'power1.in'}) ×3 ?;?;?
+p#in_qm(left: "521;930;1250"; top: "200;570;210"; font-size: 110px; font-family: h; color: $po; in: {scale:.2, opacity:0, duration:.45, ease:'back.out(1.7)', stagger:{each:.15}}; out: {y:-40, opacity:0, duration:.3, ease:'power1.in'}) ×3 ?;?;?
 img#in_conf(left: 1360px; top: 300px; width: 520px; height: 520px; content: @newbie_confused; object-fit: contain; in: {x:160, opacity:0, duration:.55, ease:'power3.out'}; out: {x:120, opacity:0, duration:.3, ease:'power1.in'})
 # 6 役の札 (丸い顔 = 人物の絵の上 1/3・略称・正式名)
-div#in_rc(left: "73;260;447;633;820;1007"; top: 250px; width: 250px; height: 380px; in: {y:60, opacity:0, duration:.5, ease:'back.out(1.5)', stagger:{each:.12}}) ×6
+div#in_rc(left: "110;390;671;950;1230;1511"; top: 250px; width: 250px; height: 380px; in: {y:60, opacity:0, duration:.5, ease:'back.out(1.5)', stagger:{each:.12}}) ×6
   div#bg(inset: 0; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A)
   img#ph(cx: 50%; top: 26px; width: 196px; height: 196px; border-radius: 1498px; background: #FFFFFF; border: "8px solid $pdm;8px solid $pm;8px solid $po;8px solid $bo;8px solid $eng;8px solid $des"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover; object-position: top; zoom: 200%)
-  p#ac(cx: 50%; top: "160;160;160;160;165;165"; font-size: "35;35;35;35;27;27"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
+  p#ac(cx: 50%; top: "240;240;240;240;248;248"; font-size: "53;53;53;53;41;41"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
   p#jn(cx: 50%; top: 306px; font-size: 20px; color: $sub; white-space: nowrap) プロダクトマネージャー;プロジェクトマネージャー;プロダクトオーナー;ビジネスオーナー;Engineer;Designer
 div#in_goal(left: 340px; top: 700px; width: 1238px; height: 94px; border-radius: 18px; background: $ink; in: {y:30, opacity:0, duration:.5, ease:'power3.out'})
   p#l(left: 40px; cy: 50%; font-size: 26px; font-family: h; letter-spacing: .1em; color: $yellow) 今回のゴール
@@ -152,7 +152,7 @@ def qcard(i, t, g) = div(width: 1140px; height: 114px; background: #FFFFFF; bord
   icon#i(left: 30px; cy: 50%; font-size: 40px; name: {i}; color: $pdm; background: $pdm_t; border-radius: 20px; padding: 16px)
   p#t(left: 132px; cy: 50%; font-size: 44px; font-family: h; letter-spacing: .01em; white-space: nowrap; content: {t})
   p#g(right: 30px; cy: 50%; font-size: 22px; font-family: h; letter-spacing: .12em; color: $pdm; background: $pdm_t; border-radius: 10px; padding: 6px 14px; content: {g})
-qcard#pdm_q(left: 680px; top: "237;324;411"; i: "cube;user;trend-up"; t: "「どんなプロダクトをつくるのか」;「誰のどんな課題を解決するのか」;「どうすれば事業として成長するのか」"; g: "WHAT;WHO;GROWTH") ×3
+qcard#pdm_q(left: 680px; top: "356;486;617"; i: "cube;user;trend-up"; t: "「どんなプロダクトをつくるのか」;「誰のどんな課題を解決するのか」;「どうすれば事業として成長するのか」"; g: "WHAT;WHO;GROWTH") ×3
 sum#pdm_sum(t: プロダクトの価値と方向性を考える人; c: $pdm)
 
 # pm — 役 02: 管理の 4 項目が語ごとに弾み、ガントの棒が順に伸びて「計画通り」→ 前半を左へ払い、PdM と PM の VS 札 2 枚・下線の帯・補足の付箋
@@ -164,13 +164,13 @@ group#pm_a(out: {x:-60, opacity:0, duration:.35, ease:'power1.in'})
   role_head#head(n: "ROLE 02"; a: PM; ja: プロジェクトマネージャー; c: $pm)
     p#en {kpm}P{/}roject {kpm}M{/}anager
     p#often(left: .en.right+16; cy: 102px; font-size: 22px; font-family: h; color: $pm; background: $pm_t; border: 3px solid $pm; border-radius: 148px; padding: 2px 12px; in: {y:24, opacity:0, duration:.45, ease:'power3.out'}) 多くの場合
-  div#m(left: "453;648;843;1037"; top: 340px; width: 266px; height: 196px; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(1.7)'}) ×4
+  div#m(left: "680;972;1265;1556"; top: 340px; width: 266px; height: 196px; in: {scale:.6, opacity:0, duration:.45, ease:'back.out(1.7)'}) ×4
     div#bg(inset: 0; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A)
     icon#i(cx: 50%; top: 26px; font-size: 44px; name: "calendar-blank;currency-jpy;users;gauge"; color: $pm; background: $pm_t; padding: 20px)
     p#t(cx: 50%; top: 124px; font-size: 36px; font-family: h) スケジュール;予算;人員;進捗
   div#gantt(left: 680px; top: 556px; width: 1140px; height: 186px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; in: {y:30, opacity:0, duration:.45, ease:'power3.out'})
-    p#gl(left: 30px; cy: "24;50;76;102"; font-size: 22px; color: $sub) ×4 要件定義;設計;開発;テスト
-    div#bar(left: "120;244;380;566"; cy: "24;50;76;102"; width: "149;161;211;136"; height: 22px; border-radius: 10px; background: $pm; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.35}}) ×4
+    p#gl(left: 30px; cy: "36;75;114;153"; font-size: 22px; color: $sub) ×4 要件定義;設計;開発;テスト
+    div#bar(left: "180;366;570;849"; cy: "36;75;114;153"; width: "224;242;317;204"; height: 22px; border-radius: 10px; background: $pm; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.35}}) ×4
     p#ok(right: 24px; top: 16px; font-size: 24px; font-family: h; color: #FFFFFF; background: $pm; border-radius: 10px; padding: 4px 14px 4px 44px; in: {scale:.5, opacity:0, duration:.4, ease:'back.out(1.7)'}) 計画通り
       icon#i(left: 12px; cy: 50%; font-size: 26px; name: check; weight: bold; color: #FFFFFF)
   sum#sum(t: 計画通りにプロジェクトを進める人; c: $pm)
@@ -208,7 +208,7 @@ div#po_blog(left: 680px; top: 330px; width: 600px; height: 420px; background: #F
   p#bh(left: 26px; top: 20px; font-size: 32px; font-family: h) プロダクトバックログ{sm}（やることの一覧）{/}
 shape#po_arrow(left: 702px; top: 412px; width: 34px; height: 300px; path: arrow_u; background: $po; border: 4px solid $po; in: {scaleY:0, duration:.5, ease:'power2.out', pivot:'bottom'})
 # バックログの行 (行ごとに語で縦に移って並び替わる・番号と最優先の札は後から弾む)
-div#po_it(left: 752px; top: "267;310;353;396;439"; width: 500px; height: 56px; border-radius: 14px; background: $bg; in: {y:20, opacity:0, duration:.35, ease:'power3.out', stagger:{each:.08}}) ×5
+div#po_it(left: 752px; top: "401;465;530;594;659"; width: 500px; height: 56px; border-radius: 14px; background: $bg; in: {y:20, opacity:0, duration:.35, ease:'power3.out', stagger:{each:.08}}) ×5
   p#no(left: 18px; cy: 50%; width: 38px; font-size: 22px; font-family: h; line-height: 1; text-align: center; color: #FFFFFF; background: $po; border-radius: 148px; padding: 8px 0px; in: {scale:.3, opacity:0, duration:.35, ease:'back.out(2)', stagger:{each:.06}}) 3;1;5;2;4
   p#t(left: 69px; cy: 50%; font-size: 28px) お気に入り登録;会員登録・ログイン;ダークモード;商品の検索;レビュー投稿
 #po_it.first(background: $po_t; border: 4px solid $po)
@@ -236,7 +236,7 @@ bcard#bo_c1(left: 680px; i: buildings; t: 事業の責任者)
 bcard#bo_c2(left: 1066px; i: chart-bar; t: 売上・利益の目標)
   shape#tgt(left: 34px; top: 124px; width: 300px; height: 4px; path: line_h; border: 4px solid #D6CFC0; dash: 6,5)
   p#tl(right: 32px; top: 96px; font-size: 18px; color: $sub) 目標
-  div#bar(left: "30;78;126;174"; bottom: 24px; width: 46px; height: "27;41;59;77"; border-radius: 5,5,0,0; background: "#F3D48E;#EFC163;#E2A42C;$bo"; in: {scaleY:0, duration:.5, ease:'power2.out', pivot:'bottom', stagger:{each:.12}}) ×4
+  div#bar(left: "45;117;189;261"; bottom: 24px; width: 46px; height: "41;62;89;116"; border-radius: 5,5,0,0; background: "#F3D48E;#EFC163;#E2A42C;$bo"; in: {scaleY:0, duration:.5, ease:'power2.out', pivot:'bottom', stagger:{each:.12}}) ×4
 bcard#bo_c3(left: 1454px; i: briefcase; t: 予算・投資の判断)
   div#coin(left: 40px; top: 108px; width: 116px; height: 116px; border-radius: 1498px; background: $yellow; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(1.7)'})
     p#t(cx: 50%; cy: 50%; font-size: 64px; font-family: h; color: #8A5A00) ¥
@@ -244,7 +244,7 @@ bcard#bo_c3(left: 1454px; i: briefcase; t: 予算・投資の判断)
     p#t(cx: 50%; cy: 50%; font-size: 46px; font-family: h; color: #E0443A) 承認
 # PdM・BO・PO を線で結ぶ (中央の BO が先に弾み、線が伸びて両脇が出る)
 group#bo_rel(left: 680px; top: 616px; width: 1140px; height: 126px)
-  div#ln(left: "220;427"; top: 62px; width: "133;127"; height: 6px; border-radius: 3px; background: #D9D3C6; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'}) ×2
+  div#ln(left: "330;641"; top: 62px; width: "200;191"; height: 6px; border-radius: 3px; background: #D9D3C6; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'}) ×2
   p#lab(cx: 570px; top: 0px; font-size: 24px; font-family: h; letter-spacing: .1em; color: $sub; in: {y:10, opacity:0, duration:.4, ease:'power3.out'}) 連携しながら進める
   p#n1(left: 180px; top: 34px; font-size: 36px; font-family: h; color: #FFFFFF; background: $pdm; border-radius: 148px; padding: 8px 28px; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'}) PdM
   p#n2(left: 525px; top: 28px; font-size: 42px; font-family: h; color: #FFFFFF; background: $bo; border-radius: 148px; padding: 8px 34px; in: {scale:.4, opacity:0, duration:.45, ease:'back.out(1.7)'}) BO
@@ -258,13 +258,13 @@ role_char#eng_char(img: eng; t: $eng_t)
 role_head#eng_head(n: "ROLE 05"; a: エンジニア; ja: 開発者; c: $eng; s: 75; et: 29; jt: 69)
   p#en Engineer
 group#eng_steps(in: {y:20, opacity:0, duration:.4, ease:'power3.out'})
-  icon#ar(left: "544;774"; top: 342px; font-size: 34px; name: arrow-right; color: #C8C2B6) ×2
-  p#st(left: "453;578;808"; top: 326px; font-size: 32px; font-family: h; color: #A29E94; background: #FFFFFF; border: 3px solid #D6D0C4; border-radius: 148px; padding: 8px 26px) ×3 設計;プログラミング;テスト
+  icon#ar(left: "816;1161"; top: 342px; font-size: 34px; name: arrow-right; color: #C8C2B6) ×2
+  p#st(left: "680;867;1212"; top: 326px; font-size: 32px; font-family: h; color: #A29E94; background: #FFFFFF; border: 3px solid #D6D0C4; border-radius: 148px; padding: 8px 26px) ×3 設計;プログラミング;テスト
 #eng_steps.st.on(color: #FFFFFF; background: $eng; border: 3px solid $eng)
 # エディタ (紺の窓・上の帯に 3 つの点と file 名・コードは行ごとに左から拭いて出る)
 div#eng_ed(left: 680px; top: 404px; width: 590px; height: 344px; border-radius: 20px; background: $ink; box-shadow: 0px 14px 34px #1E2A4A40; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})
   div#eb(left: 0px; top: 0px; width: 590px; height: 44px; border-radius: 13,13,0,0; background: #16203A)
-  div#dot(left: "12;27;41"; top: 15px; width: 14px; height: 14px; border-radius: 148px; background: "#FF6B6B;#FFC24B;#4CD4A0") ×3
+  div#dot(left: "18;41;62"; top: 15px; width: 14px; height: 14px; border-radius: 148px; background: "#FF6B6B;#FFC24B;#4CD4A0") ×3
   p#fn(left: 94px; top: 10px; font-size: 18px; font-family: m; color: #8F9BB8) app.js
   p#l1(left: 24px; top: 60px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 350ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cc}// 商品を検索する{/}
   p#l2(left: 24px; top: 102px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 680ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {ck}function{/} {cf}search{/}(keyword) {
@@ -274,13 +274,13 @@ div#eng_ed(left: 680px; top: 404px; width: 590px; height: 344px; border-radius: 
   p#l6(left: 24px; top: 267px; font-size: 26px; font-family: m; color: #E8ECF5; white-space: nowrap; delay: 2000ms; in: wipe {dir: 'right', duration: 0.35, ease: 'none'}) {cf}test{/}({cs}"検索できる"{/}, ...) {cc}// ✓ OK{/}
 # 画面 (スマホの枠に色の棒が上から落ちて組み上がる)
 div#eng_ph(left: 1330px; top: 404px; width: 190px; height: 280px; border-radius: 30px; background: #FFFFFF; border: 8px solid $ink; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})
-  div#pb(left: "14;14;14;14;32"; top: "14;44;110;132;154"; width: "99;99;99;99;63"; height: "23;60;16;16;20"; border-radius: 10px; background: "$eng;#D9D3FF;#E8E4DA;#E8E4DA;$po"; in: {y:-30, opacity:0, duration:.35, ease:'back.out(1.6)', stagger:{each:.1}}) ×5
+  div#pb(left: "21;21;21;21;48"; top: "21;66;165;198;231"; width: "149;149;149;149;95"; height: "35;90;24;24;30"; border-radius: 10px; background: "$eng;#D9D3FF;#E8E4DA;#E8E4DA;$po"; in: {y:-30, opacity:0, duration:.35, ease:'back.out(1.6)', stagger:{each:.1}}) ×5
 div#eng_flow(left: 1530px; top: 540px; width: 100px; height: 8px; border-radius: 4px; background: #DDD7CA; in: {scaleX:0, duration:.35, ease:'power2.out', pivot:'left'})
 shape#eng_d1(left: 1530px; top: 534px; width: 20px; height: 20px; border-radius: 50%; background: $eng; in: fade {duration: 0.2})
 shape#eng_d2(left: 1610px; top: 534px; width: 20px; height: 20px; border-radius: 50%; background: $eng; in: fade {duration: 0.2})
 # サーバー (紺の箱 3 段・青緑の灯と線)
 div#eng_sv(left: 1640px; top: 440px; width: 150px; height: 208px; in: {x:60, opacity:0, duration:.45, ease:'power3.out'})
-  div#sv(left: 0px; top: "0;49;98"; width: 150px; height: 62px) ×3
+  div#sv(left: 0px; top: "0;74;147"; width: 150px; height: 62px) ×3
     div#bx(inset: 0; border-radius: 14px; background: $ink)
     div#i(left: 20px; top: 24px; width: 14px; height: 14px; border-radius: 148px; background: #7FD6CF)
     div#b(left: 50px; top: 27px; width: 70px; height: 8px; border-radius: 4px; background: #3C4A70)
@@ -297,8 +297,8 @@ role_head#des_head(n: "ROLE 06"; a: デザイナー; ja: UI / UX デザイン; c
 p#des_l1(cx: 844px; top: 292px; font-size: 26px; font-family: h; color: $des; in: {y:10, opacity:0, duration:.35, ease:'power3.out'}; out: {opacity:0, duration:.2, ease:'power1.in'}) 見た目
 p#des_l2(cx: 844px; top: 292px; font-size: 26px; font-family: h; color: $des; in: {y:10, opacity:0, duration:.35, ease:'power3.out'}) 使いやすさ
 div#des_ph(left: 720px; top: 330px; width: 250px; height: 420px; border-radius: 36px; background: #FFFFFF; border: 9px solid $ink; in: {y:40, opacity:0, duration:.5, ease:'power3.out'})
-  div#wb(left: "18;18;18;18;37"; top: "18;57;153;178;218"; width: "131;131;90;116;93"; height: "29;87;17;17;31"; border-radius: 10px; background: #E3E0D8) ×5
-  div#ub(left: "18;18;18;18;37"; top: "18;57;153;178;218"; width: "131;131;90;116;93"; height: "29;87;17;17;31"; border-radius: 12px; background: "$des;#FFDED3;#F1D6E2;#F6E3EB;$ink"; in: {opacity:0, duration:.5, ease:'power1.inOut'}) ×5
+  div#wb(left: "27;27;27;27;56"; top: "27;86;230;267;327"; width: "197;197;135;174;140"; height: "44;131;26;26;47"; border-radius: 10px; background: #E3E0D8) ×5
+  div#ub(left: "27;27;27;27;56"; top: "27;86;230;267;327"; width: "197;197;135;174;140"; height: "44;131;26;26;47"; border-radius: 12px; background: "$des;#FFDED3;#F1D6E2;#F6E3EB;$ink"; in: {opacity:0, duration:.5, ease:'power1.inOut'}) ×5
 # カーソル (白い矢印に紺の縁)・押した所に広がる輪・「迷わず使える」の札
 shape#des_ring(left: 796px; top: 632px; width: 96px; height: 96px; border-radius: 50%; background: none; border: 4px solid $des; opacity: 0; in: keys(at=0 scale=0.19 opacity=0.9 | at=1 ease=power2.out),duration=600)
 shape#des_cur(left: 836px; top: 676px; width: 56px; height: 56px; path: cursor; background: #FFFFFF; border: 2px solid $ink; in: {x:120, y:60, opacity:0, duration:.5, ease:'power2.out'})
@@ -351,7 +351,7 @@ img#diff_ask(left: 110px; top: 300px; width: 820px; height: 548px; content: @new
 div#diff_chk(left: 960px; top: 300px; width: 860px; height: 450px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; in: {y:40, opacity:0, duration:.5, ease:'power3.out'})
   icon#i(left: 44px; top: 38px; font-size: 54px; name: flag; color: $pdm)
   p#t(left: 114px; top: 36px; font-size: 46px; font-family: h) 配属されたら確認しよう
-  div#ci(left: 44px; top: "100;160;220"; width: 780px; height: 50px; in: {y:16, opacity:0, duration:.35, ease:'power3.out', stagger:{each:.12}}) ×3
+  div#ci(left: 44px; top: "150;240;330"; width: 780px; height: 50px; in: {y:16, opacity:0, duration:.35, ease:'power3.out', stagger:{each:.12}}) ×3
     div#bx(left: 0px; top: 0px; width: 50px; height: 50px; border-radius: 12px; border: 4px solid #CFC9BC; background: #FFFFFF)
     icon#ck(left: -2px; top: -6px; font-size: 54px; name: check; weight: bold; color: $pdm; in: {scale:.2, opacity:0, duration:.35, ease:'back.out(1.7)'})
     p#t(left: 72px; cy: 50%; font-size: 36px; white-space: nowrap) 自分のチームの PdM・PO は誰？;PM はどちらの意味で使っている？;1人で兼ねている役割はある？
@@ -361,9 +361,9 @@ section#recap
 group#rc_head(delay: 550ms; in: {y:-30, opacity:0, duration:.5, ease:'power3.out'})
   p#s(cx: 960px; top: 128px; font-size: 26px; font-family: h; letter-spacing: .3em; color: $sub) REVIEW
   p#t(cx: 960px; top: 158px; font-size: 64px; font-family: h) おさらい
-div#rc(left: "100;467;833;100;467;833"; top: "187;187;187;381;381;381"; width: 520px; height: 262px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; opacity: .35; in: {y:40, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6
+div#rc(left: "150;701;1250;150;701;1250"; top: "281;281;281;572;572;572"; width: 520px; height: 262px; background: #FFFFFF; border-radius: 24px; border: 2px solid $line; box-shadow: 0px 12px 34px #1E2A4A1A; opacity: .35; in: {y:40, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6
   img#rp(left: 26px; cy: 50%; width: 166px; height: 166px; border-radius: 1498px; background: #FFFFFF; border: "8px solid $pdm;8px solid $pm;8px solid $po;8px solid $bo;8px solid $eng;8px solid $des"; content: "@pdm;@pm;@po;@bo;@eng;@des"; object-fit: cover; object-position: top; zoom: 200%)
-  p#ra(left: 214px; top: "31;31;31;31;35;35"; font-size: "31;31;31;31;25;25"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
+  p#ra(left: 214px; top: "47;47;47;47;53;53"; font-size: "47;47;47;47;38;38"; font-family: h; line-height: 1.1; color: "$pdm;$pm;$po;$bo;$eng;$des") PdM;PM;PO;BO;エンジニア;デザイナー
   p#rk(left: 214px; top: 99px; font-size: 44px; font-family: h; line-height: 1.2; white-space: nowrap) 方向性;計画;優先順位;事業の成果;技術;使いやすさ
   p#rs(left: 214px; top: 159px; font-size: 20px; line-height: 1.4; color: $sub) プロダクトの価値と[br]方向性を考える人;計画通りにプロジェクトを[br]進める人;何から先につくるかを[br]決める人;事業の成果に[br]責任を持つ人;技術でプロダクトを[br]形にする人;使いやすさと体験を[br]設計する人
 div#rc_close(left: 326px; top: 438px; width: 1269px; height: 192px; overlap: rc; border-radius: 26px; background: $ink; box-shadow: 0px 20px 50px #1E2A4A59; in: {scale:.7, opacity:0, duration:.55, ease:'back.out(1.7)'})

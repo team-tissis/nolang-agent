@@ -115,12 +115,12 @@ section#survey(stagger: {each:0})
 chap#ch1.sticky(n: "01"; t: "調査のあらまし")
 # 右上の進行 (sticky・8 段の小さな棒を章ごとに左から満たす)
 div#hdr_r.sticky(left: 1260px; top: 36px; width: 590px; height: 56px; background: #FFFBF3F0; border-radius: 18px; box-shadow: 0px 8px 22px #3C28141F; z-index: front; in: {y:-24, opacity:0, duration:.6, ease:'power3.out'}; out: {y:-20, opacity:0, duration:.4, ease:'power2.in'})
-  div#seg(left: "210;231;252;273;294;315;336;357"; cy: 50%; width: 26px; height: 8px; border-radius: 4px; background: $segbg) ×8
+  div#seg(left: "315;347;378;410;441;473;504;536"; cy: 50%; width: 26px; height: 8px; border-radius: 4px; background: $segbg) ×8
     div#fill(left: 0px; top: 0px; width: 26px; height: 8px; border-radius: 4px; background: $amber; transform: scaleX(0); transform-origin: left)
   p#brand(left: 24px; cy: 50%; font-size: 21px; letter-spacing: .06em; color: $ink2) みなと野市 図書館利用調査
 card#b_photo(left: 90px; top: 150px; width: 800px; height: 500px; transform: rotate(-1.6deg); delay: 450ms; in: {y:40, rotation:-3.4, opacity:0, duration:.8, ease:'power3.out'})
   img#img(left: 16px; top: 16px; width: 766px; height: 466px; border-radius: 16px; main: kb {scale: [1.12, 1], ease:'sine.out'}) 大学の研究室の木の机を真上から見た構図。返送された紙の調査票と封筒がきちんと積まれ、鉛筆でチェックが入った調査票が数枚、簡単な棒グラフを映すノートパソコン、紅茶のマグ、鉛筆、温かい光のデスクランプ。机の上の物を画面いっぱいに配して余白を作らない。読める文字や数字は描かない
-fact#b_fact(top: "467;522;576"; i: "map-pin;bank;clock"; t: "みなと野市;市立図書館;平日の閉館"; e: "人口 18万人;本館 1・分館 3;19時"; c: "$teal;$teal;$amber"; bc: "$line;$line;$amber"; delay: 700ms) ×3
+fact#b_fact(top: "701;783;864"; i: "map-pin;bank;clock"; t: "みなと野市;市立図書館;平日の閉館"; e: "人口 18万人;本館 1・分館 3;19時"; c: "$teal;$teal;$amber"; bc: "$line;$line;$amber"; delay: 700ms) ×3
 board#b_board(left: 960px; top: 160px; width: 880px; height: 700px; delay: 550ms; in: {y:30, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 調査のあらまし
   flow#send(left: 50px; i: envelope-simple; l: "調査票を送った人"; v: "[count:4,000 start=0 ms=1000ms]"; u: "人"; n: "16歳以上の市民")
@@ -129,7 +129,7 @@ board#b_board(left: 960px; top: 160px; width: 880px; height: 700px; delay: 550ms
   # 回収率の輪: 地の輪 + 上から右回りに半周の弧 (語で描く)・中に数える 50%
   div#ring(left: 50px; top: 360px; width: 290px; height: 290px; in: {scale:.85, opacity:0, duration:.5, ease:'power2.out'})
     shape#bg(left: 9px; top: 9px; width: 272px; height: 272px; border-radius: 50%; background: none; border: 34px solid $ringbg)
-    shape#arc(left: 0px; top: 0px; width: 290px; height: 290px; path: "M 96.5 17.5 C 140.1 17.5 175.5 52.9 175.5 96.5 C 175.5 140.1 140.1 175.5 96.5 175.5"; background: none; border: 34px solid $teal; main: sine {rotation: 6, period: 1.6}; in: draw {duration: 1, ease: 'power2.inOut'})
+    shape#arc(left: 0px; top: 0px; width: 290px; height: 290px; path: "M144.8 26.2 C210.1 26.2 263.2 79.3 263.2 144.8 C263.2 210.1 210.1 263.2 144.8 263.2"; background: none; border: 34px solid $teal; main: sine {rotation: 6, period: 1.6}; in: draw {duration: 1, ease: 'power2.inOut'})
     p#v(cx: 50%; top: 84px; font-size: 92px; font-family: s; line-height: 1; color: $teal) [count:50 start=0 ms=1000ms delay=200ms]{pc}%{/}
     p#l(cx: 50%; top: 180px; font-size: 26px; color: $ink2) 回収率
   div#note(left: 380px; top: 420px; width: 450px; height: 150px; in: {x:30, opacity:0, duration:.6, ease:'power2.out'})
@@ -144,13 +144,13 @@ section#used(stagger: {each:0})
 chap#ch2.sticky(n: "02"; t: "この1年の利用")
 board#c_board(left: 90px; top: 160px; width: 860px; height: 700px; delay: 250ms; in: {scale:.96, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 回答者 2,000人のうち
-  div#lg(left: 666px; top: "60;92"; width: 180px; height: 30px; delay: 400ms; in: {x:-16, opacity:0, duration:.4, ease:'power1.out', stagger: {each: .12}}) ×2
+  div#lg(left: 666px; top: "90;138"; width: 180px; height: 30px; delay: 400ms; in: {x:-16, opacity:0, duration:.4, ease:'power1.out', stagger: {each: .12}}) ×2
     div#sq(left: 0px; cy: 50%; width: 24px; height: 24px; border-radius: 6px; background: "$teal;$terra")
     p#t(left: 36px; cy: 50%; font-size: 22px) 使った;使っていない
   p#wnote(left: 666px; top: 540px; width: 170px; font-size: 21px; line-height: 1.45; color: $ink2; delay: 700ms; in: {opacity:0, duration:.4, ease:'none'}) 1マス ＝ 1%[br]（20人）
 # マスは薄い地の色で置き、語で色を塗る (変種 .on・左上から 26 ms / 18 ms ずつ)
-div#c_wu(cx: "123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05"; cy: "174.25;174.25;174.25;174.25;174.25;174.25;174.25;174.25;174.25;174.25;212.05;212.05;212.05;212.05;212.05;212.05;212.05;212.05;212.05;212.05;249.95;249.95;249.95;249.95;249.95;249.95;249.95;249.95;249.95;249.95;287.75;287.75;287.75;287.75;287.75;287.75;287.75;287.75"; width: 49px; height: 49px; border-radius: 9px; transform: scale(0.6); background: $cell) ×38
-div#c_wn(cx: "425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75;123.25;161.05;198.95;236.75;274.55;312.45;350.25;388.05;425.95;463.75"; cy: "287.75;287.75;325.55;325.55;325.55;325.55;325.55;325.55;325.55;325.55;325.55;325.55;363.45;363.45;363.45;363.45;363.45;363.45;363.45;363.45;363.45;363.45;401.25;401.25;401.25;401.25;401.25;401.25;401.25;401.25;401.25;401.25;439.05;439.05;439.05;439.05;439.05;439.05;439.05;439.05;439.05;439.05;476.95;476.95;476.95;476.95;476.95;476.95;476.95;476.95;476.95;476.95;514.75;514.75;514.75;514.75;514.75;514.75;514.75;514.75;514.75;514.75"; width: 49px; height: 49px; border-radius: 9px; transform: scale(0.6); background: $cell) ×62
+div#c_wu(cx: "184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1"; cy: "261.4;261.4;261.4;261.4;261.4;261.4;261.4;261.4;261.4;261.4;318.1;318.1;318.1;318.1;318.1;318.1;318.1;318.1;318.1;318.1;374.9;374.9;374.9;374.9;374.9;374.9;374.9;374.9;374.9;374.9;431.6;431.6;431.6;431.6;431.6;431.6;431.6;431.6"; width: 49px; height: 49px; border-radius: 9px; transform: scale(0.6); background: $cell) ×38
+div#c_wn(cx: "638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6;184.9;241.6;298.4;355.1;411.8;468.7;525.4;582.1;638.9;695.6"; cy: "431.6;431.6;488.3;488.3;488.3;488.3;488.3;488.3;488.3;488.3;488.3;488.3;545.2;545.2;545.2;545.2;545.2;545.2;545.2;545.2;545.2;545.2;601.9;601.9;601.9;601.9;601.9;601.9;601.9;601.9;601.9;601.9;658.6;658.6;658.6;658.6;658.6;658.6;658.6;658.6;658.6;658.6;715.4;715.4;715.4;715.4;715.4;715.4;715.4;715.4;715.4;715.4;772.1;772.1;772.1;772.1;772.1;772.1;772.1;772.1;772.1;772.1"; width: 49px; height: 49px; border-radius: 9px; transform: scale(0.6); background: $cell) ×62
 #c_wu.on(background: $teal; transform: scale(1); move: 350ms,back.out)
 #c_wn.on(background: $terra; transform: scale(1); move: 300ms,back.out)
 card#c_use(left: 1010px; top: 170px; width: 830px; height: 320px; in: {x:60, opacity:0, duration:.6, ease:'power3.out'})
@@ -174,12 +174,12 @@ board#d_board(left: 80px; top: 150px; width: 1250px; height: 730px)
   # 4 割の破線 (左から伸びる) と札・働く世代 (20〜50 代) の括弧
   shape#d40(left: 70px; top: 220px; width: 1120px; height: 3px; path: line_h; border: 3px solid $terra; dash: 6,5; in: {scaleX:0, duration:.8, ease:'power2.inOut', pivot:'left'})
   p#d40l(left: 6px; top: 202px; font-size: 26px; color: $terra; background: $paper2; padding: 0px 8px; in: {opacity:0, duration:.3, ease:'none'}) 4割
-  shape#bracket(path: "M 163 100 L 163 85 Q 163 77 171 77 L 562 77 Q 570 77 570 85 L 570 100"; background: none; border: 3px solid $ink2; in: {y:-14, opacity:0, duration:.5, ease:'power2.out'})
+  shape#bracket(path: "M245 150 L245 128 Q245 116 257 116 L843 116 Q855 116 855 128 L855 150"; background: none; border: 3px solid $ink2; in: {y:-14, opacity:0, duration:.5, ease:'power2.out'})
   p#blabel(cx: 549px; top: 76px; font-size: 26px; background: $paper2; padding: 0px 12px; in: {y:-14, opacity:0, duration:.5, ease:'power2.out'}) 働く世代（20〜50代）
   # 縦棒の段: 高さ = 値 × 6.13 px (hf の 9.2 px / 1% の 2/3)・基線は段の上端から 353 px
-  div#col(left: "67;172.3;277.7;383;488.3;593.7;699"; top: 60px; width: 108px; height: 630px) ×7
-    div#bar(left: 0px; top: "34.1;193.5;144.5;101.5;150.6;126.1;52.5"; width: 108px; height: "318.9;159.5;208.5;251.5;202.4;226.9;300.5"; border-radius: 14px 14px 4px 4px; background: "$teal;$terra;$sage;$amber;$sage;$sage;$teal"; delay: "650ms;750ms;850ms;950ms;1050ms;1150ms;1250ms"; in: {scaleY:0, duration:.7, ease:'power3.out', pivot:'bottom'})
-    p#v(cx: 50%; top: "-5;154.5;105.5;62.5;111.6;87.1;13.5"; font-size: 46px; font-family: s; line-height: 1; color: "$teal;$terra;$ink;$ink;$ink;$ink;$teal"; background: $paper2; border-radius: 10px; padding: 0px 8px; delay: "1050ms;1150ms;1250ms;1350ms;1450ms;1550ms;1650ms"; in: {y:16, opacity:0, duration:.4, ease:'power2.out'}) 52{pc}%{/};26{pc}%{/};34{pc}%{/};41{pc}%{/};33{pc}%{/};37{pc}%{/};49{pc}%{/}
+  div#col(left: "101;258.5;416.5;575;732.5;890.6;1049"; top: 60px; width: 108px; height: 630px) ×7
+    div#bar(left: 0px; top: "51.2;290.2;216.8;152.2;225.9;189.1;78.8"; width: 108px; height: "478.3;239.2;312.8;377.2;303.6;340.4;450.8"; border-radius: 14px 14px 4px 4px; background: "$teal;$terra;$sage;$amber;$sage;$sage;$teal"; delay: "650ms;750ms;850ms;950ms;1050ms;1150ms;1250ms"; in: {scaleY:0, duration:.7, ease:'power3.out', pivot:'bottom'})
+    p#v(cx: 50%; top: "-7;231.8;158.2;93.8;167.4;130.6;20.2"; font-size: 46px; font-family: s; line-height: 1; color: "$teal;$terra;$ink;$ink;$ink;$ink;$teal"; background: $paper2; border-radius: 10px; padding: 0px 8px; delay: "1050ms;1150ms;1250ms;1350ms;1450ms;1550ms;1650ms"; in: {y:16, opacity:0, duration:.4, ease:'power2.out'}) 52{pc}%{/};26{pc}%{/};34{pc}%{/};41{pc}%{/};33{pc}%{/};37{pc}%{/};49{pc}%{/}
     p#a(cx: 50%; top: 542px; width: 165px; font-size: 30px; text-align: center; white-space: nowrap; delay: "500ms;560ms;620ms;680ms;740ms;800ms;860ms"; in: {opacity:0, duration:.4, ease:'none'}) 10代;20代;30代;40代;50代;60代;70歳以上
     p#c(cx: 50%; top: 584px; width: 165px; font-size: 21px; text-align: center; white-space: nowrap; color: $ink2; delay: "500ms;560ms;620ms;680ms;740ms;800ms;860ms"; in: {opacity:0, duration:.4, ease:'none'}) 78 / 150人;65 / 250人;112 / 330人;148 / 360人;109 / 330人;111 / 300人;137 / 280人
 #d_board.col.bar.halo(box-shadow: 0px 0px 0px 10px #BF4F3438)
@@ -213,11 +213,11 @@ board#e_board(left: 80px; top: 160px; width: 960px; height: 700px; delay: 450ms;
     div#b(left: 0px; top: 46px; width: 640px; height: 36px; border-radius: 0px 12px 12px 0px; background: $terra; in: {scaleX:0, duration:.9, ease:'power3.out', pivot:'left'})
     p#v(left: 660px; top: 40px; font-size: 48px; font-family: s; line-height: 1; color: $terra; in: {x:-20, opacity:0, duration:.4, ease:'power2.out'}) 41{pc}%{/}　{pn}508人{/}
   # 2〜5 位の行 (語の頭から 160 ms ずつ: 題 → 棒 → 値)・棒の長さ = 値 × 10.4 px
-  div#r(left: 44px; top: "105;170;235;300"; width: 876px; height: 84px) ×4
+  div#r(left: 44px; top: "158;255;353;450"; width: 876px; height: 84px) ×4
     p#l(left: 0px; top: 0px; font-size: 30px; in: {x:-20, opacity:0, duration:.4, ease:'power2.out'}) 本は買うかネットで足りる;読みたい本がない;遠い・駐車場がない;長くいられる席がない
-    div#b(left: 0px; top: 46px; width: "343;229;198;145"; height: 36px; border-radius: 0px 12px 12px 0px; background: $sage; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
-    p#v(left: "356;242;211;158"; top: 40px; font-size: 48px; font-family: s; line-height: 1; delay: 500ms; in: {opacity:0, duration:.3, ease:'none'}) 33{pc}%{/};22{pc}%{/};19{pc}%{/};14{pc}%{/}
-  p#btag(left: "277;197"; top: "105;170"; font-size: 20px; color: $ink2; border: 2px solid $line; border-radius: 148px; padding: 2px 12px; in: {x:-20, opacity:0, duration:.4, ease:'power2.out'}) ×2 本;本
+    div#b(left: 0px; top: 46px; width: "515;344;297;218"; height: 36px; border-radius: 0px 12px 12px 0px; background: $sage; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
+    p#v(left: "534;363;317;237"; top: 40px; font-size: 48px; font-family: s; line-height: 1; delay: 500ms; in: {opacity:0, duration:.3, ease:'none'}) 33{pc}%{/};22{pc}%{/};19{pc}%{/};14{pc}%{/}
+  p#btag(left: "416;296"; top: "158;255"; font-size: 20px; color: $ink2; border: 2px solid $line; border-radius: 148px; padding: 2px 12px; in: {x:-20, opacity:0, duration:.4, ease:'power2.out'}) ×2 本;本
   div#sum(left: 44px; top: 614px; width: 840px; height: 52px; in: {y:20, opacity:0, duration:.5, ease:'power3.out'})
     icon#i(left: 6px; cy: 50%; font-size: 44px; name: clock; color: $amber)
     div#mk(left: e_board.sum.t.chars(10,14).left-6; top: e_board.sum.t.chars(10,14).top+24; width: 142px; height: 21px; background: $mark)
@@ -230,14 +230,14 @@ card#f_photo(left: 80px; top: 160px; width: 760px; height: 700px; transform: rot
   img#img(left: 16px; top: 16px; width: 728px; height: 668px; border-radius: 16px; object-fit: cover; object-position: 30% 50%; main: kb {scale: [1.12, 1], ease:'sine.out'}) 夕方の明るく居心地のよい日本の公立図書館の館内。卓上ランプの並ぶ長い学習机で大人がノートパソコンやノートに向かい、隅には小さなカフェのカウンターとコーヒーマシンと丸いテーブル、やわらかい肘掛け椅子でタブレットの電子書籍を読む人、背の高い木の本棚。温かいランプの光でくつろいだ雰囲気。机と人を画面いっぱいに置いて余白を作らない
 board#f_board(left: 900px; top: 160px; width: 940px; height: 700px; delay: 400ms; in: {x:40, opacity:0, duration:.6, ease:'power2.out'})
   tab#tab 来ない人が欲しいサービス（非利用者・複数回答）
-  div#s(left: 40px; top: "47;147;247;347"; width: 860px; height: 134px; border-radius: 22px; border: 3px solid #FFFBF300; delay: 200ms; in: {y:24, opacity:0, duration:.45, ease:'power2.out', stagger: {each: .13}}) ×4
+  div#s(left: 40px; top: "71;221;371;521"; width: 860px; height: 134px; border-radius: 22px; border: 3px solid #FFFBF300; delay: 200ms; in: {y:24, opacity:0, duration:.45, ease:'power2.out', stagger: {each: .13}}) ×4
     div#ib(left: 22px; cy: 50%; width: 84px; height: 84px; border-radius: 22px; background: $ibg)
       icon#i(cx: 50%; cy: 50%; font-size: 50px; name: "moon;device-tablet;desk;coffee"; color: $terra)
     p#n(left: 129px; top: 27px; font-size: 32px; line-height: 1.25) 夜間の開館{sm}（21時まで）{/};電子書籍の貸出;学習席・作業席;カフェ
     p#c(left: 129px; top: 72px; font-size: 22px; color: $ink2) 570人;471人;360人;298人
     # 棒の長さ = 値 ÷ 50 × 帯の幅 (hf の width 92% / 76% / 58% / 48%)
     div#tr(left: 482px; cy: 50%; width: 183px; height: 26px; border-radius: 14px; background: $track)
-      div#b(left: 0px; top: 0px; width: "112;93;71;59"; height: 26px; border-radius: 14px; background: $terra; delay: 150ms; in: {scaleX:0, duration:.8, ease:'power3.out', pivot:'left'})
+      div#b(left: 0px; top: 0px; width: "168;140;107;89"; height: 26px; border-radius: 14px; background: $terra; delay: 150ms; in: {scaleX:0, duration:.8, ease:'power3.out', pivot:'left'})
     p#p(right: 22px; cy: 50%; font-size: 62px; font-family: s; line-height: 1; color: $terra) 46{pc}%{/};38{pc}%{/};29{pc}%{/};24{pc}%{/}
 #f_board.s.hl(border: 3px solid $terra; background: $hlbg; move: 350ms,none)
 
@@ -246,11 +246,11 @@ section#gap(stagger: {each:0})
 chap#ch6.sticky(n: "06"; t: "利用者とのずれ")
 board#g_board(left: 80px; top: 160px; width: 1330px; height: 700px; delay: 400ms; in: {y:24, opacity:0, duration:.55, ease:'power2.out'})
   tab#tab 利用者と来ない人、望むものは同じ？（複数回答）
-  div#hl(left: 40px; top: "55;130;205"; width: 1240px; height: 112px; background: #F4C46A38; in: {opacity:0, duration:.4, ease:'none'}; out: {opacity:0, duration:.4, ease:'none'}) ×3
+  div#hl(left: 40px; top: "83;195;308"; width: 1240px; height: 112px; background: #F4C46A38; in: {opacity:0, duration:.4, ease:'none'}; out: {opacity:0, duration:.4, ease:'none'}) ×3
   # 軸: 15% ごとの破線と上の目盛り (x = 313.7 + 値 × 8.89 px)
-  shape#tk(left: "313;446;580;713;846"; top: 64px; width: 3px; height: 590px; path: line_v; border: 3px solid $tick; dash: 5,5; delay: 200ms; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .05}}) ×5
-  p#tl(cx: "313;446;580;713;846"; top: 26px; font-size: 22px; color: $ink2; delay: 200ms; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .05}}) ×5 0%;15%;30%;45%;60%
-  p#lb(left: 40px; top: "77;152;227;302;377"; font-size: 32px; delay: 300ms; in: {x:-20, opacity:0, duration:.4, ease:'power2.out', stagger: {each: .1}}) ×5 新刊を増やす;夜間の開館;電子書籍の貸出;学習席・作業席;カフェ
+  shape#tk(left: "470;669;870;1070;1269"; top: 64px; width: 3px; height: 590px; path: line_v; border: 3px solid $tick; dash: 5,5; delay: 200ms; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .05}}) ×5
+  p#tl(cx: "470;669;870;1070;1269"; top: 26px; font-size: 22px; color: $ink2; delay: 200ms; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .05}}) ×5 0%;15%;30%;45%;60%
+  p#lb(left: 40px; top: "116;228;341;453;566"; font-size: 32px; delay: 300ms; in: {x:-20, opacity:0, duration:.4, ease:'power2.out', stagger: {each: .1}}) ×5 新刊を増やす;夜間の開館;電子書籍の貸出;学習席・作業席;カフェ
   p#tag_t(left: 210px; top: 231px; font-size: 22px; color: #FFFFFF; background: $amber; border-radius: 148px; padding: 4px 14px; in: {scale:.4, opacity:0, duration:.4, ease:'back.out(2.4)'}) 時間
   p#tag_i(left: 273px; top: 344px; font-size: 22px; color: #FFFFFF; background: $amber; border-radius: 148px; padding: 4px 14px; in: {scale:.4, opacity:0, duration:.4, ease:'back.out(2.4)'}) 行き方
   # 1 行目 (新刊を増やす): 語ごとに 利用者の点 → 52% → 395人 → 右から伸びる線 → 来ない人の点 → 18%
@@ -261,20 +261,20 @@ board#g_board(left: 80px; top: 160px; width: 1330px; height: 700px; delay: 400ms
   p#r0_nv(cx: 711px; top: 74px; font-size: 34px; font-family: s; line-height: 1; color: $terra; in: {y:10, opacity:0, duration:.35, ease:'power2.out'}) 18%
   p#r0_cnt(cx: 1164px; top: 162px; font-size: 21px; color: $teal; in: {y:-6, opacity:0, duration:.35, ease:'power2.out'}) 395人
   # 2〜5 行目 (語の 550 ms 後から 160 ms ずつ: 点 2 つ → 線 → 値)
-  div#r(left: 450px; top: "130;205;280;355"; width: 880px; height: 112px) ×4
-    div#ln(left: "289.3;209.3;271.5;120.4"; top: 52px; width: "133.3;142.2;53.3;106.6"; height: 6px; border-radius: 3px; background: $dline; delay: 50ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left'})
-    div#du(left: "275.8;195.8;311.3;106.9"; top: 35px; width: 40px; height: 40px; border-radius: 148px; background: $teal; border: 4px solid $paper2; box-shadow: 0px 4px 10px #3C281433; in: {scale:0, duration:.4, ease:'back.out(2.2)'})
-    div#dn(left: "409.1;338;258;213.5"; top: 35px; width: 40px; height: 40px; border-radius: 148px; background: $terra; border: 4px solid $paper2; box-shadow: 0px 4px 10px #3C281433; delay: 60ms; in: {scale:0, duration:.4, ease:'back.out(2.2)'})
-    p#vu(cx: "289.3;209.3;324.8;120.4"; top: -9px; font-size: 34px; font-family: s; line-height: 1; color: $teal; delay: 150ms; in: {opacity:0, duration:.3, ease:'none'}) 31%;22%;35%;12%
-    p#vn(cx: "422.6;351.5;271.5;227"; top: -9px; font-size: 34px; font-family: s; line-height: 1; color: $terra; delay: 150ms; in: {opacity:0, duration:.3, ease:'none'}) 46%;38%;29%;24%
+  div#r(left: 450px; top: "195;308;420;533"; width: 880px; height: 112px) ×4
+    div#ln(left: "434.0;314.0;407.2;180.6"; top: 52px; width: "200.0;213.3;79.9;159.9"; height: 6px; border-radius: 3px; background: $dline; delay: 50ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left'})
+    div#du(left: "413.7;293.7;467.0;160.4"; top: 35px; width: 40px; height: 40px; border-radius: 148px; background: $teal; border: 4px solid $paper2; box-shadow: 0px 4px 10px #3C281433; in: {scale:0, duration:.4, ease:'back.out(2.2)'})
+    div#dn(left: "613.7;507;387;320.2"; top: 35px; width: 40px; height: 40px; border-radius: 148px; background: $terra; border: 4px solid $paper2; box-shadow: 0px 4px 10px #3C281433; delay: 60ms; in: {scale:0, duration:.4, ease:'back.out(2.2)'})
+    p#vu(cx: "434.0;314.0;487.2;180.6"; top: -9px; font-size: 34px; font-family: s; line-height: 1; color: $teal; delay: 150ms; in: {opacity:0, duration:.3, ease:'none'}) 31%;22%;35%;12%
+    p#vn(cx: "633.9;527.2;407.2;341"; top: -9px; font-size: 34px; font-family: s; line-height: 1; color: $terra; delay: 150ms; in: {opacity:0, duration:.3, ease:'none'}) 46%;38%;29%;24%
 card#g_leg(left: 1450px; top: 160px; width: 390px; height: 130px; delay: 800ms; in: {x:30, opacity:0, duration:.5, ease:'power2.out'})
-  div#c(left: 26px; top: "21;55"; width: 24px; height: 24px; border-radius: 148px; background: "$teal;$terra") ×2
-  p#t(left: 62px; top: "16;50"; font-size: 26px) ×2 利用者（760人）;来ない人（1,240人）
+  div#c(left: 26px; top: "32;83"; width: 24px; height: 24px; border-radius: 148px; background: "$teal;$terra") ×2
+  p#t(left: 62px; top: "24;75"; font-size: 26px) ×2 利用者（760人）;来ない人（1,240人）
 board#g_n1(left: 1450px; top: 315px; width: 390px; height: 172px; border: 3px solid $line; border-radius: 22px; in: {x:30, opacity:0, duration:.5, ease:'power2.out'})
   div#mk(left: g_n1.t.chars(17,24).left; top: g_n1.t.chars(17,24).top+24; width: 196px; height: 16px; background: $mark)
   p#t(left: 26px; top: 22px; width: 339px; font-size: 28px; line-height: 1.5) 今来ている人の[br]声だけを聞くと、[br]「本を増やす」方へ寄る
 board#g_n2(left: 1450px; top: 510px; width: 390px; height: 172px; border: 3px solid $amber; border-radius: 22px; in: {x:30, opacity:0, duration:.5, ease:'power2.out'})
-  div#mk(left: "g_n2.t.chars(5,9).left;g_n2.t.chars(11,16).left"; top: "g_n2.t.chars(5,9).top+26;g_n2.t.chars(11,16).top+24"; width: "73;92"; height: 16px; background: $mark) ×2
+  div#mk(left: "g_n2.t.chars(5,9).left;g_n2.t.chars(11,16).left"; top: "g_n2.t.chars(5,9).top+26;g_n2.t.chars(11,16).top+24"; width: "110;138"; height: 16px; background: $mark) ×2
   p#t(left: 26px; top: 22px; width: 339px; font-size: 28px; line-height: 1.5) 来ない人の「時間」と[br]「行き方」が[br]見えなくなる
 # 夜の場面への暗転 (前半): 夜の色の幕を台詞の後の間で濃くする (後半は trial の頭で引く)
 veil#g_dip(color: $night; opacity: 1; z-index: curtain; in: {opacity:0, duration:.2, ease:'power1.in'})
@@ -285,7 +285,7 @@ chap#ch7.sticky(n: "07"; t: "試しにやってみた")
 img#h_img(inset: 0; content: @station; main: kb {scale: [1.14, 1.02], focus: ['64% 50%', '70% 50%'], ease:'sine.inOut'})
 div#h_shade(inset: 0; background: linear(#141B32F2,#141B32E6@44%,#141B3273@62%,#141B320D@80%,90))
 # 灯りのぼけ 16 個 (hf の種つき乱数の位置・場面の尺で昇りながら灯る)
-div#h_bk.bleed(left: "971.3;971.6;1055.5;879.5;1159.9;687.1;861.7;1145.5;969;680.4;865.1;986.2;1027.5;1031.3;962;701.2"; top: "342.8;351;412.6;355.2;450.4;399.2;310.8;242.6;145.5;242;2;171.5;66.5;204.7;2;427.7"; width: "57.5;25.9;50.8;49;50.7;38.5;74.5;82.3;56.5;67.2;54.2;42;66.2;82.5;42.6;29.1"; height: "57.5;25.9;50.8;49;50.7;38.5;74.5;82.3;56.5;67.2;54.2;42;66.2;82.5;42.6;29.1"; border-radius: 148px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.78;0.59;0.44;0.65;0.51;0.50;0.77;0.39;0.72;0.84;0.56;0.43;0.54;0.64;0.50;0.61"; delay: "807ms;1265ms;414ms;864ms;934ms;219ms;214ms;1261ms;133ms;642ms;1139ms;177ms;1405ms;652ms;612ms;155ms"; in: {y:60, opacity:0, duration:19, ease:'sine.inOut'}) ×16
+div#h_bk.bleed(left: "1456.9;1457.4;1583.2;1319.2;1739.9;1030.7;1292.6;1718.2;1454;1020.6;1297.7;1479.3;1541.2;1546.9;1443;1051.8"; top: "514.2;527;618.9;532.8;675.6;598.8;466.2;363.9;218.2;363;3;257.2;99.8;307.0;3;641.5"; width: "86.2;38.8;76.2;74;76.1;57.8;111.8;123.4;84.8;100.8;81.3;63;99.3;123.8;63.9;43.7"; height: "86.2;38.8;76.2;74;76.1;57.8;111.8;123.4;84.8;100.8;81.3;63;99.3;123.8;63.9;43.7"; border-radius: 148px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.78;0.59;0.44;0.65;0.51;0.50;0.77;0.39;0.72;0.84;0.56;0.43;0.54;0.64;0.50;0.61"; delay: "807ms;1265ms;414ms;864ms;934ms;219ms;214ms;1261ms;133ms;642ms;1139ms;177ms;1405ms;652ms;612ms;155ms"; in: {y:60, opacity:0, duration:19, ease:'sine.inOut'}) ×16
 p#h_chip(left: 90px; top: 144px; font-size: 24px; color: $night; background: $lamp; border-radius: 148px; padding: 8px 20px; delay: 400ms; in: {y:16, opacity:0, duration:.45, ease:'power2.out'}) 試行
 p#h_title(left: 90px; top: 210px; font-size: 60px; font-family: s; line-height: 1.25; color: $cream; in: {x:-40, opacity:0, duration:.7, ease:'expo.out'}) 駅前分館で、平日を{lp}21時{/}まで
 p#h_sub(left: 90px; top: 291px; font-size: 28px; color: $sand; in: {opacity:0, duration:.5, ease:'none'}) 7〜9月の3か月間（分館 1か所）
@@ -295,7 +295,7 @@ div#h_ruler(left: 90px; top: 360px; width: 960px; height: 110px)
   div#open(left: 0px; top: 40px; width: 480px; height: 30px; background: #FFF4DF4D; pattern: hatch,45,#FFF4DF80,13,7; in: {opacity:0, duration:.5, ease:'none'})
   # engine: hf は延長の帯の光 (影) を 0.9 秒周期で 8 回強める — 繰り返しの tween に影の強さは書けないので静止の光
   div#ext(left: 480px; top: 40px; width: 320px; height: 30px; border-radius: 0px 15px 15px 0px; background: $lamp; box-shadow: 0px 0px 26px #F4C46ABF; in: {scaleX:0, duration:1, ease:'power2.inOut', pivot:'left'})
-  p#tk(cx: "0;107;213;320;427;533;640"; top: 82px; font-size: "15;15;15;17;15;17;15"; color: "$sand;$sand;$sand;$lamp;$sand;$lamp;$sand"; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .03}}) ×7 16時;17時;18時;19時;20時;21時;22時
+  p#tk(cx: "0;161;320;480;641;800;960"; top: 82px; font-size: "23;23;23;26;23;26;23"; color: "$sand;$sand;$sand;$lamp;$sand;$lamp;$sand"; in: {opacity:0, duration:.5, ease:'none', stagger: {each: .03}}) ×7 16時;17時;18時;19時;20時;21時;22時
   p#old(left: 250px; top: 0px; font-size: 22px; color: $sand; in: {y:10, opacity:0, duration:.4, ease:'power2.out'}) これまで
   p#new(left: 560px; top: 0px; font-size: 24px; color: $lamp; in: {x:-14, opacity:0, duration:.45, ease:'power2.out'}) 延長した 2時間
 # 前後の横棒の組 (題 → 延長前 → 延長後 → 倍率の札)・棒の長さ = 延長後を 313 px とした比
@@ -348,7 +348,7 @@ div#pt3(left: 80px; top: 651px; width: 1760px; height: 168px; background: $paper
     p#t(cx: 50%; cy: 50%; font-size: 34px; font-family: s; line-height: 1; color: $paper2) 3
   p#h(left: 122px; top: 20px; font-size: 34px; line-height: 1.35) 市の次の一手
   # 次の一手の札 (チェックの枠 + 語で描くチェック + 文)
-  div#a(left: "81;576"; top: 81px; width: "480;271"; height: 64px; border-radius: 16px; background: $actbg; in: {x:-20, opacity:0, duration:.45, ease:'power2.out'}) ×2
+  div#a(left: "122;864"; top: 81px; width: "720;407"; height: 64px; border-radius: 16px; background: $actbg; in: {x:-20, opacity:0, duration:.45, ease:'power2.out'}) ×2
     div#bx(left: 14px; cy: 50%; width: 44px; height: 44px; border-radius: 12px; border: 3px solid $amber; background: $paper2)
     icon#ck(left: 20px; cy: 50%; font-size: 32px; name: check; weight: bold; color: $amber; in: draw {duration: 0.5})
     p#t(left: 70px; cy: 50%; font-size: 28px) 駅前分館の夜間開館を続け、ほかの分館へ広げる;電子書籍の貸出を始める
@@ -357,7 +357,7 @@ div#pt3(left: 80px; top: 651px; width: 1760px; height: 168px; background: $paper
 section#end(stagger: {each:0})
 img#end_img(inset: 0; content: @station; main: kb {scale: [1.16, 1.04], focus: ['55% 50%', '55% 50%'], ease:'sine.out'})
 div#end_shade(inset: 0; background: radial(#141B32E0,#141B3299@55%,#141B3226,26%,52%))
-div#end_bk.bleed(left: "644.6;1220;1243.8;1028.1;1111.6;1099.9;741.9;1021.6;705.3;946.4;732;719.7;1142.6;1032.9"; top: "374.3;508.4;488.7;591.9;64.7;495.5;168.8;149.8;367.6;442.3;396.9;73.2;402.3;378.6"; width: "26.8;57.6;26.3;53.2;34;89.4;72;79.4;78.8;62.7;20.8;70.9;25.1;32.2"; height: "26.8;57.6;26.3;53.2;34;89.4;72;79.4;78.8;62.7;20.8;70.9;25.1;32.2"; border-radius: 148px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.51;0.70;0.72;0.77;0.54;0.67;0.80;0.45;0.74;0.50;0.64;0.63;0.70;0.56"; delay: "321ms;313ms;82ms;345ms;763ms;1217ms;1427ms;591ms;7ms;78ms;1406ms;460ms;34ms;360ms"; in: {y:60, opacity:0, duration:5.5, ease:'sine.inOut'}) ×14
+div#end_bk.bleed(left: "966.9;1830;1865.7;1542.1;1667.4;1649.9;1112.8;1532.4;1057.9;1419.6;1098;1079.6;1713.9;1549.4"; top: "561.5;762.6;733.0;887.8;97.1;743.2;253.2;224.7;551.4;663.5;595.3;109.8;603.5;567.9"; width: "40.2;86.4;39.5;79.8;51;134.1;108;119.1;118.2;94.1;31.2;106.4;37.7;48.3"; height: "40.2;86.4;39.5;79.8;51;134.1;108;119.1;118.2;94.1;31.2;106.4;37.7;48.3"; border-radius: 148px; background: radial(#FFD68C8C,#FFD68C2E@45%,#FFD68C00@70%,50%,50%); opacity: "0.51;0.70;0.72;0.77;0.54;0.67;0.80;0.45;0.74;0.50;0.64;0.63;0.70;0.56"; delay: "321ms;313ms;82ms;345ms;763ms;1217ms;1427ms;591ms;7ms;78ms;1406ms;460ms;34ms;360ms"; in: {y:60, opacity:0, duration:5.5, ease:'sine.inOut'}) ×14
 p#end_l1(left: 140px; top: 270px; font-size: 96px; font-family: s; line-height: 1.3; color: $cream; delay: 300ms; in: {y:30, opacity:0, duration:.7, ease:'power3.out'}) 夜の図書館でも、
 p#end_l2(left: 140px; top: 394px; font-size: 96px; font-family: s; line-height: 1.3; color: $lamp; delay: 1450ms; in: {y:30, opacity:0, duration:.8, ease:'power3.out'}) お待ちしています。
 div#end_rule(left: 140px; top: 549px; width: 420px; height: 4px; border-radius: 3px; background: $lamp; delay: 2200ms; in: {scaleX:0, duration:.8, ease:'power2.inOut', pivot:'left'})

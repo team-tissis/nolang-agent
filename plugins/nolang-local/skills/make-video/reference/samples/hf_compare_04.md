@@ -99,7 +99,7 @@ p#title_card.line1(left: 112px; top: 297px; font-size: 82px; line-height: 1.15; 
 shape#title_card.bar(left: 106px; top: 486px; width: 783px; height: 30px; path: rect,r=0.25; background: $bar; delay: 1450ms; in: {scaleX:0, duration:0.6, ease:'power2.inOut', pivot:'left'})
 p#title_card.line2(left: 112px; top: 398px; font-size: 108px; line-height: 1.15; letter-spacing: 0.02em; color: $navy; delay: 900ms; in: {y:60, opacity:0, duration:0.55, ease:'power3.out', stagger:.05}) 安全な移乗介助
 p#title_card.sub(left: 112px; top: 548px; font-size: 50px; letter-spacing: 0.12em; color: $mint; delay: 1650ms; in: {y:20, opacity:0, duration:0.5, ease:'power3.out'}) ― 基本手順 ―
-div#title_card.agenda(left: "75;197;363"; top: 651px; width: "111;153;130"; height: 70px; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 6px 18px #23446B24; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)', stagger: {each: 0.14}}) ×3
+div#title_card.agenda(left: "113;296;545"; top: 651px; width: "167;230;195"; height: 70px; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 6px 18px #23446B24; in: {scale:0.7, opacity:0, duration:0.45, ease:'back.out(2.2)', stagger: {each: 0.14}}) ×3
   p#n(left: 10px; cy: 50%; width: 50px; font-size: 28px; text-align: center; color: #FFFFFF; background: "$mint;$mint;$orange"; border-radius: 148px; padding: 10px 0px) 1;2;✓
   p#t(left: 74px; cy: 50%; font-size: 32px; color: $navy) 準備;位置調整;まとめ
 bumper_back#bumper1_back.sticky(c: $mint_l)
@@ -120,9 +120,9 @@ p#brake_check(left: 1318px; top: 760px; font-size: 32px; color: #FFFFFF; backgro
 # 確定済みの前の cut を書き換える)・区切りの板の再掲より先に書く = 板の下
 chapter_chip#chapter1.sticky(n: "STEP 1"; t: "準備"; w: 188; wn: 110)
 div#progress.sticky(left: 1408px; top: 50px; width: 456px; height: 66px; border-radius: 20px; background: #FFFFFFEB; box-shadow: 0px 6px 18px #192D4624; z-index: front; in: none; out: {opacity:0, duration:0.4})
-  div#track(left: "15;109;204"; top: 14px; width: 128px; height: 10px; border-radius: 6px; background: $track) ×3
+  div#track(left: "23;164;306"; top: 14px; width: 128px; height: 10px; border-radius: 6px; background: $track) ×3
     div#bar(left: 0px; top: 0px; width: 128px; height: 10px; border-radius: 6px; background: $mint; transform: scaleX(0); transform-origin: left)
-  p#step(left: "15;109;204"; top: 32px; width: 128px; font-size: 27px; text-align: center; color: $mute) ×3 準備;位置調整;まとめ
+  p#step(left: "23;164;306"; top: 32px; width: 128px; font-size: 27px; text-align: center; color: $mute) ×3 準備;位置調整;まとめ
 @#bumper1_back
 @#bumper1
 
@@ -165,7 +165,7 @@ div#top_view(left: 950px; top: 136px; width: 914px; height: 676px; border-radius
   top_part#sector(pt: top_sector; in: fade {duration: 0.35})
   top_part#sector2(pt: top_sector2; in: {opacity:0, duration:0.5, ease:'sine.inOut'}; out: {opacity:0, duration:0.5, ease:'sine.inOut'})
   top_part#range(pt: top_range; in: fade {duration: 0.35})
-  shape#arc(path: "M 191 293 Q 198 318 210 340"; background: none; border: 9px solid $orange; in: draw {duration: 0.6})
+  shape#arc(path: "M287 440 Q297 477 315 510"; background: none; border: 9px solid $orange; in: draw {duration: 0.6})
   svg#axis(left: 226px; top: 354px; width: 350px; height: 170px; part: top_axis; in: fade {duration: 0.35})
   svg#chair(left: 226px; top: 354px; width: 350px; height: 170px; part: top_chair; delay: 300ms; in: {x:260, opacity:0, duration:0.65, ease:'power3.out'})
   top_part#chair_label(pt: top_chair_label; delay: 750ms; in: fade {duration: 0.4})
@@ -184,7 +184,7 @@ div#sum_veil(inset: 0; background: linear(#FBF7EF00,#FBF7EF00@56%,#FBF7EF66@70%,
 div#points(left: 1196px; top: 150px; width: 668px; height: 604px; border-radius: 28px; background: #FFFFFFF7; box-shadow: 0px 16px 40px #192D463D; delay: 200ms; in: {x:80, opacity:0, duration:0.55, ease:'power3.out'})
   p#head(left: 40px; top: 34px; font-size: 46px; color: $navy) 移乗介助のポイント
   shape#rule(left: 40px; top: 98px; width: 588px; height: 4px; path: rect; background: $bar)
-  div#item(left: 40px; top: "82;161;239;318"; width: 588px; height: 118px; background: $panel; border-radius: 24px; in: {y:24, opacity:0, duration:0.4, ease:'power3.out'}) ×4
+  div#item(left: 40px; top: "123;242;359;477"; width: 588px; height: 118px; background: $panel; border-radius: 24px; in: {y:24, opacity:0, duration:0.4, ease:'power3.out'}) ×4
     div#box(left: 0px; cy: 50%; width: 60px; height: 60px; border-radius: 14px; background: #FFFFFF; border: 4px solid $mint)
     div#box_fill(left: 0px; cy: 50%; width: 60px; height: 60px; border-radius: 14px; background: $mint; in: {scale:0, duration:0.25, ease:'back.out(2)'})
     icon#mark(left: 10px; cy: 50%; font-size: 39px; name: check; weight: bold; color: #FFFFFF; in: draw {duration: 0.3})

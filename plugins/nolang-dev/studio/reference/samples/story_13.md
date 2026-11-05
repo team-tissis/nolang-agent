@@ -83,7 +83,7 @@ section#walk
 img#wk_p(inset: 0; main: kb {scale: [1, 1.07], focus: '50% 45%'}) [ref:@car]止まりそうな客車から次々に降りてあきれ顔で歩き出す乗客たち、着物と荷物、のんびり立ち止まる馬、峠道
 veil#wk_v(color: #2A1E17; opacity: 0.55; to: top; start: 0.45)
 tel#wk_t(left: 72px; top: 180px) 歩いた方が{a}早い{/}!
-icon#wk_i(left: "48;160;272"; top: 1260px; font-size: 144px; name: person-simple-walk; color: $ink; in: {x:-60, opacity:0, duration:0.4, ease:'power2.out', stagger: {each: 0.18}}) ×3
+icon#wk_i(left: "72;240;408"; top: 1260px; font-size: 144px; name: person-simple-walk; color: $ink; in: {x:-60, opacity:0, duration:0.4, ease:'power2.out', stagger: {each: 0.18}}) ×3
 tag#wk_s(left: 600px; top: 1320px) 途中下車 続出
 
 section#down

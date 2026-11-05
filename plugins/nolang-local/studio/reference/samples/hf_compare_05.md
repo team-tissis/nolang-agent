@@ -61,7 +61,7 @@ def khead(k, t) = div(left: 130px; top: 64px; width: 1350px; height: 90px; delay
   p#k(left: 0px; top: 0px; font-family: e; font-size: 20px; letter-spacing: .22em; color: $sub; content: {k})
   p#t(left: 0px; top: 24px; font-size: 50px; line-height: 1.05; content: {t})
 # 章の見出し: 画面の中央に 1.75 倍で出て 1 秒待ち、左上へ縮んで収まる (hf の chapterHead = keys の入場 1 本)
-def chead(n, t, s, c, w) = div(left: 130px; top: 64px; width: {w}; height: 69px; delay: 250ms; in: keys(at=0 x=267 y=273 scale=1.75 opacity=0 | at=0.28 x=267 y=273 scale=1.75 opacity=1 ease=power3.out | at=0.67 x=267 y=273 scale=1.75 | at=1 ease=power3.inOut),duration=1800)
+def chead(n, t, s, c, w) = div(left: 130px; top: 64px; width: {w}; height: 69px; delay: 250ms; in: keys(at=0 x=401 y=410 scale=1.75 opacity=0 | at=0.28 x=401 y=410 scale=1.75 opacity=1 ease=power3.out | at=0.67 x=401 y=410 scale=1.75 | at=1 ease=power3.inOut),duration=1800)
   p#n(left: 0px; bottom: 0px; font-family: e; font-size: 64px; line-height: .9; color: {c}; content: {n})
   p#t(left: 105px; bottom: 0px; font-size: 50px; line-height: 1.05; content: {t})
   p#s(left: .t.right+22; bottom: 6px; font-family: m; font-size: 24px; color: $sub; white-space: nowrap; content: {s})
@@ -108,7 +108,7 @@ shape#s1_ar_o(left: 582px; top: 870px; width: 394px; height: 40px; path: arrow_l
 # s2 ひとことで: 点線の丸の置き場 6 つを先に敷き、上の段は左から右へ (アイデア → 形 → 製品)、下の段は右から左へ (実物 → 測る → 設計データ) 語ごとに弾んで埋まる
 section#s2
 khead#s2_head(k: "IN A WORD"; t: "ひとことで言うと、{m}進む「向き」が逆{/}")
-shape#s2_ph(left: "463;730;997;997;730;463"; top: "217;217;217;430;430;430"; width: 150px; height: 150px; path: rect,r=0.5; background: #FFFFFF80; border: 3px solid $ph; dash: 6,6; delay: 350ms; in: {opacity:0, duration:.4, ease:'power3.out', stagger:{each:.05}}) ×6
+shape#s2_ph(left: "695;1095;1496;1496;1095;695"; top: "326;326;326;645;645;645"; width: 150px; height: 150px; path: rect,r=0.5; background: #FFFFFF80; border: 3px solid $ph; dash: 6,6; delay: 350ms; in: {opacity:0, duration:.4, ease:'power3.out', stagger:{each:.05}}) ×6
 pill#s2_l1(left: 130px; top: 370px; t: "CADモデリング"; c: $blue; in: {x:-40, opacity:0, duration:.55, ease:'power3.out'})
 pill#s2_l2(left: 130px; top: 690px; t: "リバースモデリング"; c: $orange; in: {x:-40, opacity:0, duration:.55, ease:'power3.out'})
 p#s2_fwd(left: 130px; top: 470px; font-size: 30px; color: $blue_d; in: {x:-20, opacity:0, duration:.55, ease:'power3.out'}) 向き →
@@ -135,33 +135,33 @@ section#s3
 chead#s3_head(n: "01"; t: "通常のCADモデリング"; s: "アイデア → 形"; c: $blue; w: 540)
 card#s3_vp(left: 130px; top: 196px; width: 1060px; height: 690px; pattern: grid,23,$vgrid; in: {y:30, opacity:0, duration:.7, ease:'power3.out'})
 p#s3_ptitle(left: 1245px; top: 195px; font-family: e; font-size: 20px; letter-spacing: .2em; color: $sub; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}) PROCESS
-step#s3_st(left: 1240px; top: "157;244;331;417"; n: "1;2;3;4"; t: "アイデア・仕様;スケッチ＋寸法;押し出し・回転;寸法を変えれば"; s: "つくりたい形と寸法を決める;平面に輪郭を描く;立体に起こす;形もそれに合わせて更新") ×4
+step#s3_st(left: 1240px; top: "236;366;497;626"; n: "1;2;3;4"; t: "アイデア・仕様;スケッチ＋寸法;押し出し・回転;寸法を変えれば"; s: "つくりたい形と寸法を決める;平面に輪郭を描く;立体に起こす;形もそれに合わせて更新") ×4
 #s3_st.on(background: $blue_tt; border: 3px solid $blue)
 # 要望の板 (電球 + 題 + 例 + 3 行の仕様・数字は欧文の青)
 card#req(left: 430px; top: 346px; width: 460px; height: 310px; in: up; out: {x:40, opacity:0, duration:.35, ease:'power2.in'})
   icon#i(left: 38px; top: 32px; font-size: 50px; name: lightbulb; weight: fill; color: $bulb)
   p#h(left: 96px; top: 38px; font-size: 34px) こんな部品がほしい
   p#ex(left: 38px; top: 88px; font-family: m; font-size: 20px; color: $sub) （例）L字の取り付け金具
-  p#l(left: 38px; top: "87;120;153"; font-family: m; font-size: 28px; in: {y:12, opacity:0, duration:.55, ease:'power3.out'}) ×3 ・長さ {bn}120{/} / 高さ {bn}90{/} mm;・板の厚さ {bn}14{/} mm;・ネジ穴を {bn}2{/} か所
+  p#l(left: 38px; top: "131;180;230"; font-family: m; font-size: 28px; in: {y:12, opacity:0, duration:.55, ease:'power3.out'}) ×3 ・長さ {bn}120{/} / 高さ {bn}90{/} mm;・板の厚さ {bn}14{/} mm;・ネジ穴を {bn}2{/} か所
 # 等角の L 字 (群 iso: 正面 = スケッチの輪郭の変種・残り 4 面は潰れた形で出て押し出しで伸びる・穴 2 つ・群ごと上下に浮く)
 group#iso
-shape#iso.front(path: "M251.3,211.7 M644.5,538.0 M253.3,477.3 L541.3,477.3 L541.3,443.7 L286.9,443.7 L286.9,261.3 L253.3,261.3 Z"; background: #2563EB0F; border: 4px solid $blue; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: draw {duration: 1.7})
-#iso.front.iso(path: "M251.3,211.7 M644.5,538.0 M306.7,444.0 L530.6,505.3 L530.6,477.6 L332.8,423.5 L332.8,273.2 L306.7,266.0 Z"; background: $f1; border: 3px solid $blue_d; move: 700ms,power2.inOut)
-#iso.front.long(path: "M251.3,211.7 M644.5,538.0 M269.4,454.2 L567.9,536.0 L567.9,508.3 L295.5,433.7 L295.5,283.4 L269.4,276.3 Z"; move: 1100ms,power2.inOut)
-shape#iso.top_h(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L530.6,477.6 L332.8,423.5 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.top_h.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L530.6,477.6 L605.2,425.3 L407.4,371.1 Z"; move: 1300ms,power2.inOut)
-#iso.top_h.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L567.9,508.3 L642.5,456.0 L370.1,381.3 Z"; move: 1100ms,power2.inOut)
-shape#iso.end_h(path: "M251.3,211.7 M644.5,538.0 M530.6,505.3 L530.6,505.3 L530.6,477.6 L530.6,477.6 Z"; background: $f2; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.end_h.ext(path: "M251.3,211.7 M644.5,538.0 M530.6,505.3 L605.2,453.0 L605.2,425.3 L530.6,477.6 Z"; move: 1300ms,power2.inOut)
-#iso.end_h.long(path: "M251.3,211.7 M644.5,538.0 M567.9,536.0 L642.5,483.6 L642.5,456.0 L567.9,508.3 Z"; move: 1100ms,power2.inOut)
-shape#iso.inner_v(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L332.8,423.5 L332.8,273.2 L332.8,273.2 Z"; background: $f3; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.inner_v.ext(path: "M251.3,211.7 M644.5,538.0 M332.8,423.5 L407.4,371.1 L407.4,220.8 L332.8,273.2 Z"; move: 1300ms,power2.inOut)
-#iso.inner_v.long(path: "M251.3,211.7 M644.5,538.0 M295.5,433.7 L370.1,381.3 L370.1,231.1 L295.5,283.4 Z"; move: 1100ms,power2.inOut)
-shape#iso.top_v(path: "M251.3,211.7 M644.5,538.0 M306.7,266.0 L332.8,273.2 L332.8,273.2 L306.7,266.0 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
-#iso.top_v.ext(path: "M251.3,211.7 M644.5,538.0 M306.7,266.0 L332.8,273.2 L407.4,220.8 L381.3,213.7 Z"; move: 1300ms,power2.inOut)
-#iso.top_v.long(path: "M251.3,211.7 M644.5,538.0 M269.4,276.3 L295.5,283.4 L370.1,231.1 L344.0,223.9 Z"; move: 1100ms,power2.inOut)
-shape#iso.ha(points: "543.6,465.3 544.8,464.3 545.7,463.2 546.3,462.1 546.6,461.0 546.5,459.8 546.1,458.7 545.4,457.6 544.3,456.6 542.9,455.6 541.3,454.8 539.4,454.0 537.3,453.3 535.0,452.8 532.6,452.4 530.1,452.1 527.5,452.0 524.9,452.0 522.4,452.2 519.9,452.5 517.5,453.0 515.3,453.6 513.3,454.3 511.5,455.2 510.0,456.1 508.8,457.1 507.9,458.1 507.3,459.2 507.0,460.4 507.1,461.5 507.5,462.6 508.3,463.7 509.3,464.7 510.7,465.7 512.3,466.6 514.2,467.4 516.3,468.0 518.6,468.6 521.0,469.0 523.5,469.2 526.1,469.3 528.7,469.3 531.3,469.1 533.7,468.8 536.1,468.3 538.3,467.7 540.3,467.0 542.1,466.2"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
-shape#iso.hb(points: "343.3,317.1 343.2,314.9 342.9,312.8 342.5,310.9 341.9,309.2 341.1,307.8 340.2,306.7 339.2,305.9 338.0,305.4 336.8,305.2 335.5,305.4 334.1,305.9 332.8,306.7 331.4,307.8 330.1,309.2 328.8,310.8 327.5,312.7 326.4,314.8 325.4,317.1 324.5,319.5 323.7,321.9 323.1,324.5 322.6,327.0 322.4,329.4 322.3,331.8 322.4,334.1 322.6,336.2 323.1,338.1 323.7,339.7 324.5,341.1 325.4,342.3 326.4,343.1 327.5,343.6 328.8,343.7 330.1,343.6 331.4,343.1 332.8,342.3 334.1,341.2 335.5,339.8 336.8,338.1 338.0,336.2 339.2,334.1 340.2,331.9 341.1,329.5 341.9,327.0 342.5,324.5 342.9,322.0 343.2,319.5"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
+shape#iso.front(path: "M377.0 317.5 M966.8 807.0 M380.0 716.0 L811.9 716.0 L811.9 665.5 L430.3 665.5 L430.3 392.0 L380.0 392.0 Z"; background: #2563EB0F; border: 4px solid $blue; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: draw {duration: 1.7})
+#iso.front.iso(path: "M377.0 317.5 M966.8 807.0 M460.0 666.0 L795.9 758.0 L795.9 716.4 L499.2 635.2 L499.2 409.8 L460.0 399.0 Z"; background: $f1; border: 3px solid $blue_d; move: 700ms,power2.inOut)
+#iso.front.long(path: "M377.0 317.5 M966.8 807.0 M404.1 681.3 L851.8 804.0 L851.8 762.5 L443.2 650.5 L443.2 425.1 L404.1 414.5 Z"; move: 1100ms,power2.inOut)
+shape#iso.top_h(path: "M377.0 317.5 M966.8 807.0 M499.2 635.2 L795.9 716.4 L795.9 716.4 L499.2 635.2 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
+#iso.top_h.ext(path: "M377.0 317.5 M966.8 807.0 M499.2 635.2 L795.9 716.4 L907.8 638.0 L611.1 556.7 Z"; move: 1300ms,power2.inOut)
+#iso.top_h.long(path: "M377.0 317.5 M966.8 807.0 M443.2 650.5 L851.8 762.5 L963.8 684.0 L555.2 572.0 Z"; move: 1100ms,power2.inOut)
+shape#iso.end_h(path: "M377.0 317.5 M966.8 807.0 M795.9 758.0 L795.9 758.0 L795.9 716.4 L795.9 716.4 Z"; background: $f2; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
+#iso.end_h.ext(path: "M377.0 317.5 M966.8 807.0 M795.9 758.0 L907.8 679.5 L907.8 638.0 L795.9 716.4 Z"; move: 1300ms,power2.inOut)
+#iso.end_h.long(path: "M377.0 317.5 M966.8 807.0 M851.8 804.0 L963.8 725.4 L963.8 684.0 L851.8 762.5 Z"; move: 1100ms,power2.inOut)
+shape#iso.inner_v(path: "M377.0 317.5 M966.8 807.0 M499.2 635.2 L499.2 635.2 L499.2 409.8 L499.2 409.8 Z"; background: $f3; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
+#iso.inner_v.ext(path: "M377.0 317.5 M966.8 807.0 M499.2 635.2 L611.1 556.7 L611.1 331.2 L499.2 409.8 Z"; move: 1300ms,power2.inOut)
+#iso.inner_v.long(path: "M377.0 317.5 M966.8 807.0 M443.2 650.5 L555.2 572.0 L555.2 346.6 L443.2 425.1 Z"; move: 1100ms,power2.inOut)
+shape#iso.top_v(path: "M377.0 317.5 M966.8 807.0 M460.0 399.0 L499.2 409.8 L499.2 409.8 L460.0 399.0 Z"; background: $blue_t; border: 3px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: none)
+#iso.top_v.ext(path: "M377.0 317.5 M966.8 807.0 M460.0 399.0 L499.2 409.8 L611.1 331.2 L572.0 320.5 Z"; move: 1300ms,power2.inOut)
+#iso.top_v.long(path: "M377.0 317.5 M966.8 807.0 M404.1 414.5 L443.2 425.1 L555.2 346.6 L516.0 335.9 Z"; move: 1100ms,power2.inOut)
+shape#iso.ha(points: "815.4,698.0 817.2,696.5 818.6,694.8 819.4,693.2 819.9,691.5 819.8,689.7 819.2,688.0 818.1,686.4 816.4,684.9 814.3,683.4 811.9,682.2 809.1,681.0 805.9,680.0 802.5,679.2 798.9,678.6 795.2,678.2 791.2,678.0 787.3,678.0 783.6,678.3 779.8,678.8 776.2,679.5 772.9,680.4 769.9,681.5 767.2,682.8 765.0,684.2 763.2,685.7 761.8,687.2 761.0,688.8 760.5,690.6 760.7,692.2 761.2,693.9 762.5,695.5 764.0,697.0 766.0,698.5 768.4,699.9 771.3,701.1 774.4,702.0 777.9,702.9 781.5,703.5 785.2,703.8 789.2,704.0 793.1,704.0 796.9,703.7 800.6,703.2 804.2,702.5 807.4,701.5 810.4,700.5 813.2,699.3"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
+shape#iso.hb(points: "515.0,475.7 514.8,472.3 514.3,469.2 513.8,466.3 512.8,463.8 511.7,461.7 510.3,460.0 508.8,458.8 507.0,458.1 505.2,457.8 503.2,458.1 501.2,458.8 499.2,460.0 497.1,461.7 495.2,463.8 493.2,466.2 491.2,469.0 489.6,472.2 488.1,475.7 486.8,479.2 485.5,482.8 484.7,486.8 483.9,490.5 483.6,494.1 483.5,497.7 483.6,501.2 483.9,504.3 484.7,507.2 485.5,509.5 486.8,511.7 488.1,513.5 489.6,514.7 491.2,515.4 493.2,515.5 495.2,515.4 497.1,514.7 499.2,513.5 501.2,511.8 503.2,509.7 505.2,507.2 507.0,504.3 508.8,501.2 510.3,497.8 511.7,494.2 512.8,490.5 513.8,486.8 514.3,483.0 514.8,479.2"; background: $hole; border: 2px solid $blue_d; overlap: iso.front,iso.top_h,iso.end_h,iso.inner_v,iso.top_v,iso.ha,iso.hb,req,sk_dims,isodim,s3_chip; in: popin)
 # スケッチの寸法 (細い線と端の目盛り + 欧文の数字)
 group#sk_dims(in: {opacity:0, duration:.4}; out: {opacity:0, duration:.25, ease:'power2.in'})
   div#h(left: 380px; top: 760px; width: 432px; height: 3px; background: $blue_d)
@@ -179,17 +179,17 @@ group#sk_dims(in: {opacity:0, duration:.4}; out: {opacity:0, duration:.25, ease:
 chip#s3_chip(t: "3Dモデル"; c: $blue_d; bc: $blue)
 # 等角の寸法線 (線 + 両端の点 + 数値の札) とカーソル: 数値を替える語で線・点・札が形と一緒に伸びる (群の member の to は transform・カーソルの下がりは語からの main ramp)
 group#isodim(in: {opacity:0, duration:.4}; out: {opacity:0, duration:.3, ease:'power2.in'})
-  shape#l(path: "M257.1,479.3 M559.7,575.3 M296.5,481.3 L520.3,542.6"; background: none; border: 3px solid $blue_d)
+  shape#l(path: "M385.7 719.0 M839.6 862.9 M444.8 722.0 L780.4 813.9"; background: none; border: 3px solid $blue_d)
   shape#a(left: 438px; top: 716px; width: 12px; height: 12px; border-radius: 50%; background: $blue_d)
   shape#b(left: 774px; top: 808px; width: 12px; height: 12px; border-radius: 50%; background: $blue_d)
   p#tag(left: 540px; top: 780px; width: 124px; font-family: e; font-size: 30px; text-align: center; color: $blue_d; background: #FFFFFF; border: 3px solid $blue; border-radius: 14px; padding: 12px 0px) 120
   shape#cur(left: 628px; top: 814px; width: 34px; height: 48px; path: cursor; background: $ink; border: 3px solid #FFFFFF; in: {x:90, y:-60, opacity:0, duration:.6, ease:'power3.out'}; out: {opacity:0, duration:.3, ease:'power2.in'})
-#isodim.l.long(path: "M257.1,479.3 M559.7,575.3 M259.1,491.5 L557.7,573.3"; move: 1100ms,power2.inOut)
+#isodim.l.long(path: "M385.7 719.0 M839.6 862.9 M388.7 737.2 L836.6 859.9"; move: 1100ms,power2.inOut)
 # 作業の履歴の板 (右の工程と入れ替わる)・項目 4 つ + 意図の帯
 card#tree(left: 1240px; top: 196px; width: 550px; height: 690px; in: up; out: {x:40, opacity:0, duration:.35, ease:'power2.in'})
   p#h(left: 36px; top: 34px; font-size: 34px) 作業の手順が残る
   p#ex(left: 36px; top: 81px; font-family: m; font-size: 21px; color: $sub) （例）履歴・フィーチャーの一覧
-  div#it(left: 36px; top: "78;137;196;255"; width: 478px; height: 78px; border-radius: 16px; background: $blue_tt; in: {y:12, opacity:0, duration:.55, ease:'power3.out'}) ×4
+  div#it(left: 36px; top: "117;206;294;383"; width: 478px; height: 78px; border-radius: 16px; background: $blue_tt; in: {y:12, opacity:0, duration:.55, ease:'power3.out'}) ×4
     icon#i(left: 20px; cy: 50%; font-size: 40px; name: "pencil-simple;stack;record;record"; color: $blue)
     p#t(left: 78px; cy: 50%; font-size: 30px; color: $blue_d) スケッチ;押し出し;穴;穴
     p#v(right: 20px; cy: 50%; font-family: e; font-size: 24px; color: $sub) 120×90;64;φ18;φ18
@@ -206,7 +206,7 @@ section#s4
 chead#s4_head(n: "02"; t: "リバースモデリング"; s: "モノ → データ"; c: $orange; w: 493)
 card#s4_vp(left: 130px; top: 196px; width: 1060px; height: 690px; pattern: grid,23,$vgrid; in: {y:30, opacity:0, duration:.7, ease:'power3.out'})
 p#s4_ptitle(left: 1245px; top: 195px; font-family: e; font-size: 20px; letter-spacing: .2em; color: $sub; in: {y:10, opacity:0, duration:.55, ease:'power3.out'}) PROCESS
-step#s4_st(left: 1240px; top: "157;237;317;397;477"; height: 104px; tt: 12; st: 39; n: "1;2;3;4;5"; t: "実物;3Dスキャン;点群データ;メッシュ;CADモデル"; s: "図面のない部品など;表面の形を測る;無数の点の集まり;三角形の面でつなぐ;平面・円筒を当てはめる") ×5
+step#s4_st(left: 1240px; top: "236;356;476;596;716"; height: 104px; tt: 12; st: 39; n: "1;2;3;4;5"; t: "実物;3Dスキャン;点群データ;メッシュ;CADモデル"; s: "図面のない部品など;表面の形を測る;無数の点の集まり;三角形の面でつなぐ;平面・円筒を当てはめる") ×5
 #s4_st.on(background: $orange_tt; border: 3px solid $orange)
 img#ph_old(left: 130px; top: 196px; width: 1060px; height: 690px; border-radius: 26px; content: @old; in: fade {duration: 0.6}; out: fade {duration: 0.6}; main: kb {scale: [1.14, 1], ease:'power1.out'})
 p#stamp(left: 770px; top: 286px; font-size: 44px; color: $orange; background: #FFFFFFDB; border: 4px solid $orange; border-radius: 14px; padding: 10px 26px; transform: rotate(-7deg); in: {scale:1.7, opacity:0, duration:.5, ease:'back.out(1.7)'}; out: {opacity:0, duration:.25, ease:'power2.in'}) 図面なし
@@ -214,25 +214,25 @@ img#ph_scan(left: 130px; top: 196px; width: 1060px; height: 690px; border-radius
 # スキャンの光の帯 (板の窓で切る群・帯は main の keys で出てから 2.8 秒かけて左から右へ走る)
 group#scan(clip: 17,scan.win)
   div#win(left: 130px; top: 196px; width: 1060px; height: 690px)
-  div#bar(left: -30px; top: 196px; width: 140px; height: 690px; background: linear(#3B82F600,#60A5FA8C@70%,#DBEAFEF2@92%,#3B82F600,90); mix-blend-mode: screen; bleed; border-radius: 24px; in: fade {duration: 0.15}; out: fade {duration: 0.2}; main: keys(at=0 x=0 | at=1 x=827 ease=power1.inOut),freq_ms=2800,window=0,2800,forwards)
+  div#bar(left: -30px; top: 196px; width: 140px; height: 690px; background: linear(#3B82F600,#60A5FA8C@70%,#DBEAFEF2@92%,#3B82F600,90); mix-blend-mode: screen; bleed; border-radius: 24px; in: fade {duration: 0.15}; out: fade {duration: 0.2}; main: keys(at=0 x=0 | at=1 x=1241 ease=power1.inOut),freq_ms=2800,window=0,2800,forwards)
 # 点群 → メッシュ → CAD モデルの群 (外の群 rv が図の板の窓で切り、中の群 rv.rev を寄る / 戻す / 薄める)・L 字の輪郭と穴 2 つの path が scatter の clip
 group#rv(clip: 17,rv.win)
 div#rv.win(left: 130px; top: 196px; width: 1060px; height: 690px)
 group#rv.rev
-shape#rv.rev.sil(path: "M277.3,454.7 L521.6,521.6 L603.0,464.5 L603.0,434.3 L387.2,375.2 L387.2,211.2 L358.7,203.4 L277.3,260.5 Z M495.1,444.4 L497.4,442.2 L498.4,439.7 L497.8,437.3 L495.9,435.0 L492.6,432.9 L488.2,431.4 L483.1,430.3 L477.5,429.9 L471.9,430.2 L466.6,431.0 L462.1,432.5 L458.5,434.4 L456.1,436.6 L455.2,439.1 L455.7,441.5 L457.7,443.8 L461.0,445.9 L465.3,447.4 L470.5,448.5 L476.0,448.9 L481.6,448.6 L486.9,447.8 L491.5,446.3 Z M358.0,305.1 L357.6,300.3 L356.4,296.5 L354.6,293.7 L352.2,292.3 L349.5,292.3 L346.5,293.7 L343.6,296.4 L340.8,300.3 L338.4,305.1 L336.6,310.4 L335.5,315.9 L335.1,321.2 L335.5,325.9 L336.6,329.8 L338.4,332.5 L340.8,334.0 L343.6,334.0 L346.5,332.5 L349.5,329.8 L352.2,325.9 L354.6,321.2 L356.4,315.9 L357.6,310.4 Z"; background: none; border: none; opacity: 0; in: none)
-shape#rv.rev.top_h(points: "305.8,432.3 521.6,491.4 603.0,434.3 387.2,375.2"; background: $orange_t; in: {opacity:0, duration:.45, ease:'power1.out'})
-shape#rv.rev.inner_v(points: "305.8,432.3 387.2,375.2 387.2,211.2 305.8,268.3"; background: $r3; in: {opacity:0, duration:.45, ease:'power1.out'})
-shape#rv.rev.front(points: "277.3,454.7 521.6,521.6 521.6,491.4 305.8,432.3 305.8,268.3 277.3,260.5"; background: $r1; in: {opacity:0, duration:.45, ease:'power1.out'})
-shape#rv.rev.end_h(points: "521.6,521.6 603.0,464.5 603.0,434.3 521.6,491.4"; background: $r2; in: {opacity:0, duration:.45, ease:'power1.out'})
-shape#rv.rev.top_v(points: "277.3,260.5 305.8,268.3 387.2,211.2 358.7,203.4"; background: $orange_t; in: {opacity:0, duration:.45, ease:'power1.out'})
+shape#rv.rev.sil(path: "M416.0 682.0 L782.4 782.4 L904.5 696.8 L904.5 651.5 L580.8 562.8 L580.8 316.8 L538.0 305.1 L416.0 390.8 ZM742.7 666.6 L746.1 663.3 L747.6 659.5 L746.7 656.0 L743.8 652.5 L738.9 649.3 L732.3 647.1 L724.7 645.5 L716.2 644.8 L707.8 645.3 L699.9 646.5 L693.2 648.8 L687.8 651.6 L684.2 654.9 L682.8 658.7 L683.5 662.2 L686.5 665.7 L691.5 668.8 L698.0 671.1 L705.8 672.8 L714.0 673.3 L722.4 672.9 L730.3 671.7 L737.2 669.5 ZM537.0 457.7 L536.4 450.5 L534.6 444.8 L531.9 440.5 L528.3 438.5 L524.2 438.5 L519.8 440.5 L515.4 444.6 L511.2 450.5 L507.6 457.7 L504.9 465.6 L503.2 473.8 L502.7 481.8 L503.2 488.8 L504.9 494.7 L507.6 498.8 L511.2 501.0 L515.4 501.0 L519.8 498.8 L524.2 494.7 L528.3 488.8 L531.9 481.8 L534.6 473.8 L536.4 465.6 Z"; background: none; border: none; opacity: 0; in: none)
+shape#rv.rev.top_h(points: "458.7,648.5 782.4,737.1 904.5,651.5 580.8,562.8"; background: $orange_t; in: {opacity:0, duration:.45, ease:'power1.out'})
+shape#rv.rev.inner_v(points: "458.7,648.5 580.8,562.8 580.8,316.8 458.7,402.5"; background: $r3; in: {opacity:0, duration:.45, ease:'power1.out'})
+shape#rv.rev.front(points: "416.0,682.0 782.4,782.4 782.4,737.1 458.7,648.5 458.7,402.5 416.0,390.8"; background: $r1; in: {opacity:0, duration:.45, ease:'power1.out'})
+shape#rv.rev.end_h(points: "782.4,782.4 904.5,696.8 904.5,651.5 782.4,737.1"; background: $r2; in: {opacity:0, duration:.45, ease:'power1.out'})
+shape#rv.rev.top_v(points: "416.0,390.8 458.7,402.5 580.8,316.8 538.0,305.1"; background: $orange_t; in: {opacity:0, duration:.45, ease:'power1.out'})
 shape#rv.rev.mesh(left: 410px; top: 298px; width: 501px; height: 489px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil,mesh=3; background: $orange; border: 2px solid $meshc; in: wipe {dir: 'right', duration: 1.4}; out: fade {duration: 0.6})
 shape#rv.rev.cloud(left: 410px; top: 298px; width: 501px; height: 489px; path: scatter,n=1200,seed=5,dot=3,clip=rv.rev.sil; background: $orange; in: wipe {dir: 'right', duration: 1.5}; out: fade {duration: 0.7})
-shape#rv.rev.ha(points: "495.1,444.4 496.4,443.3 497.4,442.2 498.1,441.0 498.4,439.7 498.3,438.5 497.8,437.3 497.0,436.1 495.9,435.0 494.4,433.9 492.6,432.9 490.5,432.1 488.2,431.4 485.7,430.8 483.1,430.3 480.4,430.1 477.5,429.9 474.7,430.0 471.9,430.2 469.2,430.5 466.6,431.0 464.2,431.7 462.1,432.5 460.1,433.4 458.5,434.4 457.1,435.5 456.1,436.6 455.5,437.8 455.2,439.1 455.3,440.3 455.7,441.5 456.6,442.7 457.7,443.8 459.2,444.9 461.0,445.9 463.0,446.7 465.3,447.4 467.8,448.0 470.5,448.5 473.2,448.7 476.0,448.9 478.9,448.8 481.6,448.6 484.4,448.3 486.9,447.8 489.3,447.1 491.5,446.3 493.5,445.4"; background: $rhole; border: 3px solid $orange_d; in: popin)
-shape#rv.rev.hb(points: "358.0,305.1 357.9,302.6 357.6,300.3 357.1,298.3 356.4,296.5 355.6,294.9 354.6,293.7 353.5,292.8 352.2,292.3 350.9,292.1 349.5,292.3 348.0,292.8 346.5,293.7 345.0,294.9 343.6,296.4 342.1,298.3 340.8,300.3 339.6,302.6 338.4,305.1 337.4,307.7 336.6,310.4 336.0,313.1 335.5,315.9 335.2,318.6 335.1,321.2 335.2,323.6 335.5,325.9 336.0,328.0 336.6,329.8 337.4,331.3 338.4,332.5 339.6,333.4 340.8,334.0 342.1,334.1 343.6,334.0 345.0,333.4 346.5,332.5 348.0,331.3 349.5,329.8 350.9,328.0 352.2,325.9 353.5,323.6 354.6,321.2 355.6,318.6 356.4,315.9 357.1,313.1 357.6,310.4 357.9,307.7"; background: $rhole; border: 3px solid $orange_d; in: popin)
-shape#rv.rev.edges(path: "M277.3,454.7 L521.6,521.6 L521.6,491.4 L305.8,432.3 L305.8,268.3 L277.3,260.5 Z M305.8,432.3 L521.6,491.4 L603.0,434.3 L387.2,375.2 Z M521.6,521.6 L603.0,464.5 L603.0,434.3 L521.6,491.4 Z M305.8,432.3 L387.2,375.2 L387.2,211.2 L305.8,268.3 Z M277.3,260.5 L305.8,268.3 L387.2,211.2 L358.7,203.4 Z"; background: none; border: 3px solid $orange_d; in: {opacity:0, duration:.4})
+shape#rv.rev.ha(points: "742.7,666.6 744.6,665.0 746.1,663.3 747.2,661.5 747.6,659.5 747.5,657.8 746.7,656.0 745.5,654.2 743.8,652.5 741.6,650.8 738.9,649.3 735.8,648.2 732.3,647.1 728.5,646.2 724.7,645.5 720.6,645.2 716.2,644.8 712.0,645.0 707.8,645.3 703.8,645.8 699.9,646.5 696.3,647.5 693.2,648.8 690.2,650.1 687.8,651.6 685.7,653.2 684.2,654.9 683.2,656.7 682.8,658.7 683.0,660.5 683.5,662.2 684.9,664.0 686.5,665.7 688.8,667.3 691.5,668.8 694.5,670.0 698.0,671.1 701.7,672.0 705.8,672.8 709.8,673.0 714.0,673.3 718.3,673.2 722.4,672.9 726.6,672.5 730.3,671.7 734.0,670.7 737.2,669.5 740.2,668.1"; background: $rhole; border: 3px solid $orange_d; in: popin)
+shape#rv.rev.hb(points: "537.0,457.7 536.8,453.9 536.4,450.5 535.7,447.5 534.6,444.8 533.4,442.3 531.9,440.5 530.2,439.2 528.3,438.5 526.3,438.2 524.2,438.5 522.0,439.2 519.8,440.5 517.5,442.3 515.4,444.6 513.2,447.5 511.2,450.5 509.4,453.9 507.6,457.7 506.1,461.5 504.9,465.6 504.0,469.7 503.2,473.8 502.8,477.9 502.7,481.8 502.8,485.4 503.2,488.8 504.0,492.0 504.9,494.7 506.1,497.0 507.6,498.8 509.4,500.1 511.2,501.0 513.2,501.2 515.4,501.0 517.5,500.1 519.8,498.8 522.0,497.0 524.2,494.7 526.3,492.0 528.3,488.8 530.2,485.4 531.9,481.8 533.4,477.9 534.6,473.8 535.7,469.7 536.4,465.6 536.8,461.5"; background: $rhole; border: 3px solid $orange_d; in: popin)
+shape#rv.rev.edges(path: "M416.0 682.0 L782.4 782.4 L782.4 737.1 L458.7 648.5 L458.7 402.5 L416.0 390.8 ZM458.7 648.5 L782.4 737.1 L904.5 651.5 L580.8 562.8 ZM782.4 782.4 L904.5 696.8 L904.5 651.5 L782.4 737.1 ZM458.7 648.5 L580.8 562.8 L580.8 316.8 L458.7 402.5 ZM416.0 390.8 L458.7 402.5 L580.8 316.8 L538.0 305.1 Z"; background: none; border: 3px solid $orange_d; in: {opacity:0, duration:.4})
 # 「寸法 = ？」の引き出し (点線 + 点 + 札)
 group#qtag(in: {opacity:0, duration:.35, ease:'power3.out'}; out: {opacity:0, duration:.25, ease:'power2.in'})
-  shape#l(points: "576.7,242.7 513.3,444"; background: none; border: 3px solid $orange_d; dash: 5,5)
+  shape#l(points: "865.1,364.0 769.9,666"; background: none; border: 3px solid $orange_d; dash: 5,5)
   shape#d(left: 762px; top: 658px; width: 16px; height: 16px; border-radius: 50%; background: $orange_d)
   p#t(left: 770px; top: 300px; width: 220px; font-family: e; font-size: 30px; text-align: center; color: $orange_d; background: #FFFFFF; border: 3px solid $orange; border-radius: 14px; padding: 14px 0px) 寸法 = ？
 chip#c_pc(t: "点群データ {sm}表面の位置を示す無数の点{/}"; c: $orange_d; bc: $orange)
@@ -243,20 +243,20 @@ chip#c_pt(t: "ポイント：測ったまま ≠ 本来の形"; c: $orange_d; bc
 # 測った形と本来の形の 2 枚の板: 波打つ面 → まっすぐ・ゆがんだ穴 → 真円 (points の変形 + 点線の理想形 + 札の文言の差し替え)
 group#worn(in: {y:24, opacity:0, duration:.6, ease:'power3.out'})
   div#lb(left: 190px; top: 316px; width: 440px; height: 430px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule)
-  shape#wavy(path: "M151.3,335.7 M395.3,419.3 M153.3,340.1 L159.3,339.0 L165.3,342.3 L171.3,347.7 L177.3,349.9 L183.3,348.0 L189.3,345.9 L195.3,346.7 L201.3,348.0 L207.3,345.6 L213.3,340.4 L219.3,337.7 L225.3,339.8 L231.3,343.5 L237.3,344.8 L243.3,345.1 L249.3,348.6 L255.3,355.9 L261.3,362.3 L267.3,363.9 L273.3,362.7 L279.3,363.2 L285.3,365.1 L291.3,364.2 L297.3,358.7 L303.3,352.5 L309.3,350.5 L315.3,351.8 L321.3,351.8 L327.3,348.9 L333.3,346.9 L339.3,348.7 L345.3,351.6 L351.3,350.8 L357.3,346.0 L363.3,342.1 L369.3,342.1 L375.3,343.1 L381.3,341.3 L387.3,337.9 L393.3,337.8 L393.3,417.3 L153.3,417.3 Z"; background: #EF6A1A24; border: 4px solid $orange)
+  shape#wavy(path: "M227.0 503.5 M593.0 629.0 M230.0 510.2 L239.0 508.5 L248.0 513.5 L257.0 521.5 L266.0 524.8 L275.0 522.0 L284.0 518.8 L293.0 520.0 L302.0 522.0 L311.0 518.4 L320.0 510.6 L329.0 506.5 L338.0 509.7 L347.0 515.2 L356.0 517.2 L365.0 517.7 L374.0 522.9 L383.0 533.8 L392.0 543.5 L401.0 545.8 L410.0 544.0 L419.0 544.8 L428.0 547.7 L437.0 546.3 L446.0 538.0 L455.0 528.8 L464.0 525.8 L473.0 527.7 L482.0 527.7 L491.0 523.3 L500.0 520.3 L509.0 523.0 L518.0 527.4 L527.0 526.2 L536.0 519.0 L545.0 513.2 L554.0 513.2 L563.0 514.7 L572.0 512.0 L581.0 506.8 L590.0 506.7 L590.0 626.0 L230.0 626.0 Z"; background: #EF6A1A24; border: 4px solid $orange)
   p#ls(left: 262px; top: 352px; font-family: m; font-size: 24px; color: $sub) 測った形
   p#lh(left: 220px; top: 348px; font-size: 30px) 面
-  shape#wideal(points: "144,344 402.7,344"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
+  shape#wideal(points: "216,516 604.0,516"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
   p#lk(cx: 410px; top: 650px; font-size: 30px; color: $orange_d) すり減り
   div#rb(left: 690px; top: 316px; width: 440px; height: 430px; border-radius: 22px; background: #FFFFFF; border: 2px solid $rule)
   p#rh(left: 720px; top: 348px; font-size: 30px) 穴
   p#rs(left: 762px; top: 352px; font-family: m; font-size: 24px; color: $sub) 測った形
   div#rplate(left: 746px; top: 411px; width: 330px; height: 260px; border-radius: 10px; background: #EF6A1A24; border: 3px solid $orange)
-  shape#blob(path: "M539.5,297.3 M680.9,424.0 M678.9,360.7 L675.4,374.3 L666.9,385.6 L656.4,393.9 L646.2,400.2 L636.5,405.4 L626.9,409.6 L617.0,412.4 L606.7,413.9 L595.9,414.8 L584.0,415.5 L570.8,414.4 L557.8,409.6 L547.6,400.1 L542.3,387.3 L541.5,373.6 L543.3,360.7 L546.0,348.6 L549.8,337.1 L555.8,326.7 L564.4,318.4 L574.7,312.9 L585.4,309.3 L595.9,306.4 L606.7,304.1 L618.0,303.6 L629.3,306.0 L639.8,311.1 L649.5,317.8 L659.2,325.6 L668.7,335.0 L676.2,346.8 Z"; background: #FFFFFF; border: 4px solid $orange)
-  shape#cideal(points: "668.0,360.7 666.8,372.6 663.3,384.1 657.7,394.7 650.0,404.0 640.7,411.7 630.1,417.3 618.6,420.8 606.7,422.0 594.7,420.8 583.2,417.3 572.6,411.7 563.3,404.0 555.7,394.7 550.0,384.1 546.5,372.6 545.3,360.7 546.5,348.7 550.0,337.2 555.7,326.6 563.3,317.3 572.6,309.7 583.2,304.0 594.7,300.5 606.7,299.3 618.6,300.5 630.1,304.0 640.7,309.7 650.0,317.3 657.7,326.6 663.3,337.2 666.8,348.7"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
+  shape#blob(path: "M809.2 446.0 M1021.3 636.0 M1018.3 541.0 L1013.1 561.5 L1000.3 578.4 L984.6 590.8 L969.3 600.3 L954.8 608.1 L940.3 614.4 L925.5 618.6 L910.1 620.8 L893.8 622.2 L876.0 623.2 L856.2 621.6 L836.7 614.4 L821.4 600.2 L813.4 581.0 L812.2 560.4 L814.9 541.0 L819.0 522.9 L824.7 505.7 L833.7 490.0 L846.6 477.6 L862.1 469.3 L878.1 464.0 L893.8 459.6 L910.1 456.2 L927.0 455.4 L943.9 459.0 L959.7 466.7 L974.2 476.7 L988.8 488.4 L1003.1 502.5 L1014.3 520.2 Z"; background: #FFFFFF; border: 4px solid $orange)
+  shape#cideal(points: "1002.0,541.0 1000.2,558.9 994.9,576.2 986.6,592.0 975.0,606.0 961.1,617.5 945.2,626.0 927.9,631.2 910.1,633.0 892.1,631.2 874.8,626.0 858.9,617.5 844.9,606.0 833.6,592.0 825.0,576.2 819.8,558.9 817.9,541.0 819.8,523.0 825.0,505.8 833.6,489.9 844.9,476.0 858.9,464.5 874.8,456.0 892.1,450.8 910.1,449.0 927.9,450.8 945.2,456.0 961.1,464.5 975.0,476.0 986.6,489.9 994.9,505.8 1000.2,523.0"; background: none; border: 3px solid $blue; dash: 7,7; opacity: 0)
   p#rk(cx: 910px; top: 690px; font-size: 30px; color: $orange_d) ゆがみ
-#worn.wavy.ok(path: "M151.3,335.7 M395.3,419.3 M153.3,344.0 L159.3,344.0 L165.3,344.0 L171.3,344.0 L177.3,344.0 L183.3,344.0 L189.3,344.0 L195.3,344.0 L201.3,344.0 L207.3,344.0 L213.3,344.0 L219.3,344.0 L225.3,344.0 L231.3,344.0 L237.3,344.0 L243.3,344.0 L249.3,344.0 L255.3,344.0 L261.3,344.0 L267.3,344.0 L273.3,344.0 L279.3,344.0 L285.3,344.0 L291.3,344.0 L297.3,344.0 L303.3,344.0 L309.3,344.0 L315.3,344.0 L321.3,344.0 L327.3,344.0 L333.3,344.0 L339.3,344.0 L345.3,344.0 L351.3,344.0 L357.3,344.0 L363.3,344.0 L369.3,344.0 L375.3,344.0 L381.3,344.0 L387.3,344.0 L393.3,344.0 L393.3,417.3 L153.3,417.3 Z"; background: #2563EB1F; border: 4px solid $blue; move: 900ms,power2.inOut)
-#worn.blob.ok(path: "M539.5,297.3 M680.9,424.0 M668.0,360.7 L666.8,372.6 L663.3,384.1 L657.7,394.7 L650.0,404.0 L640.7,411.7 L630.1,417.3 L618.6,420.8 L606.7,422.0 L594.7,420.8 L583.2,417.3 L572.6,411.7 L563.3,404.0 L555.7,394.7 L550.0,384.1 L546.5,372.6 L545.3,360.7 L546.5,348.7 L550.0,337.2 L555.7,326.6 L563.3,317.3 L572.6,309.7 L583.2,304.0 L594.7,300.5 L606.7,299.3 L618.6,300.5 L630.1,304.0 L640.7,309.7 L650.0,317.3 L657.7,326.6 L663.3,337.2 L666.8,348.7 Z"; border: 4px solid $blue; move: 900ms,power2.inOut)
+#worn.wavy.ok(path: "M227.0 503.5 M593.0 629.0 M230.0 516.0 L239.0 516.0 L248.0 516.0 L257.0 516.0 L266.0 516.0 L275.0 516.0 L284.0 516.0 L293.0 516.0 L302.0 516.0 L311.0 516.0 L320.0 516.0 L329.0 516.0 L338.0 516.0 L347.0 516.0 L356.0 516.0 L365.0 516.0 L374.0 516.0 L383.0 516.0 L392.0 516.0 L401.0 516.0 L410.0 516.0 L419.0 516.0 L428.0 516.0 L437.0 516.0 L446.0 516.0 L455.0 516.0 L464.0 516.0 L473.0 516.0 L482.0 516.0 L491.0 516.0 L500.0 516.0 L509.0 516.0 L518.0 516.0 L527.0 516.0 L536.0 516.0 L545.0 516.0 L554.0 516.0 L563.0 516.0 L572.0 516.0 L581.0 516.0 L590.0 516.0 L590.0 626.0 L230.0 626.0 Z"; background: #2563EB1F; border: 4px solid $blue; move: 900ms,power2.inOut)
+#worn.blob.ok(path: "M809.2 446.0 M1021.3 636.0 M1002.0 541.0 L1000.2 558.9 L994.9 576.2 L986.6 592.0 L975.0 606.0 L961.1 617.5 L945.2 626.0 L927.9 631.2 L910.1 633.0 L892.1 631.2 L874.8 626.0 L858.9 617.5 L844.9 606.0 L833.6 592.0 L825.0 576.2 L819.8 558.9 L817.9 541.0 L819.8 523.0 L825.0 505.8 L833.6 489.9 L844.9 476.0 L858.9 464.5 L874.8 456.0 L892.1 450.8 L910.1 449.0 L927.9 450.8 L945.2 456.0 L961.1 464.5 L975.0 476.0 L986.6 489.9 L994.9 505.8 L1000.2 523.0 Z"; border: 4px solid $blue; move: 900ms,power2.inOut)
 p#c_intent(left: 380px; top: 788px; font-size: 32px; color: $blue_d; background: #FFFFFF; border: 3px solid $blue; border-radius: 14px; padding: 10px 22px; box-shadow: 0 8px 24px #14213D1F; in: {y:16, opacity:0, duration:.55, ease:'power3.out'}) 設計の意図を読み取って、形を整える
 
 # s5 比べる: 2 列の色の見出し → 4 行 (項目名 → 青の欄 → 橙の欄 を語ごと)
@@ -264,10 +264,10 @@ section#s5
 khead#s5_head(k: "COMPARE"; t: "違いを並べると")
 p#th_b(left: 460px; top: 200px; width: 650px; font-size: 38px; line-height: 1; text-align: center; color: #FFFFFF; background: $blue; border-radius: 13,13,0,0; padding: 28px 0px; in: up) 通常のCADモデリング
 p#th_o(left: 1140px; top: 200px; width: 650px; font-size: 38px; line-height: 1; text-align: center; color: #FFFFFF; background: $orange; border-radius: 13,13,0,0; padding: 28px 0px; in: up) リバースモデリング
-div#r(left: 130px; top: "208;304;400;496"; width: 1660px; height: 136px) ×4
+div#r(left: 130px; top: "312;456;600;744"; width: 1660px; height: 136px) ×4
   p#rl(left: 30px; cy: 50%; font-size: 34px; color: $sub; out: none; in: {x:-20, opacity:0, duration:.55, ease:'power3.out'}) 出発点;流れ;主に扱うもの;難しさ
   p#cb(left: 330px; top: 12px; width: 650px; font-size: 40px; line-height: 1.25; text-align: center; color: $blue_d; background: #FFFFFF; border-radius: 18px; padding: 32px 0px; box-shadow: 0 8px 22px #14213D14; out: none; in: up) アイデア・仕様;データ → モノ;寸法つきの形状;ゼロから考える
-  p#co(left: 1010px; top: 12px; width: 650px; font-size: "27;27;27;24"; line-height: 1.25; text-align: center; color: $orange_d; background: #FFFFFF; border-radius: 18px; padding: "21,0;21,0;21,0;8,0"; box-shadow: 0 8px 22px #14213D14; out: none; in: up) 実物;モノ → データ;点群・メッシュ;測った形から[br]意図を読み取る
+  p#co(left: 1010px; top: 12px; width: 650px; font-size: "41;41;41;36"; line-height: 1.25; text-align: center; color: $orange_d; background: #FFFFFF; border-radius: 18px; padding: "32,0;32,0;32,0;12,0"; box-shadow: 0 8px 22px #14213D14; out: none; in: up) 実物;モノ → データ;点群・メッシュ;測った形から[br]意図を読み取る
   div#ln(left: 0px; bottom: 0px; width: 1660px; height: 2px; background: $rule; opacity: "1;1;1;0"; out: none; in: {opacity:0, duration:.55})
 
 # s6 使い分け: 写真つきの 2 枚の板 (こんなとき → 手法の丸札) → 両方を薄め、組み合わせの流れ図 (実物 → スキャンデータ → 改良した形) を上に重ねる

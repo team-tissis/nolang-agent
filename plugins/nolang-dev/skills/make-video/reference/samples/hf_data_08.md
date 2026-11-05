@@ -88,8 +88,8 @@ div#before(left: 580px; top: 236px; width: 760px; height: 500px; border-radius: 
   shape#rule(left: 50px; bottom: 120px; width: 662px; height: 3px; path: line_h; border: 3px solid $line; dash: 6,6)
   p#foot(left: 50px; bottom: 40px; font-size: 36px; color: $gray) 1日の受付{num}9{/}時間
 # 矢印: 軸を描いてから頭が左から来る
-shape#arrow_line(path: "M 579 325 L 657 325"; background: none; border: 14px solid $orange; in: draw {duration: 0.4, ease: 'power2.out'}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
-shape#arrow_head(path: "M 639 301 L 667 325 L 639 348"; background: none; border: 14px solid $orange; in: {x:-20, opacity:0, duration:0.3, ease:'power3.out'}; out: {x:-140, duration:0.7, ease:'power3.inOut'}; overlap: arrow_line)
+shape#arrow_line(path: "M869 488 L986 488"; background: none; border: 14px solid $orange; in: draw {duration: 0.4, ease: 'power2.out'}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
+shape#arrow_head(path: "M959 452 L1001 488 L959 522"; background: none; border: 14px solid $orange; in: {x:-20, opacity:0, duration:0.3, ease:'power3.out'}; out: {x:-140, duration:0.7, ease:'power3.inOut'}; overlap: arrow_line)
 div#after(left: 1060px; top: 236px; width: 760px; height: 500px; border-radius: 34px; border: 4px solid $orange; overlap: before; box-shadow: 0px 24px 60px #142A4729; in: {x:80, opacity:0, duration:0.7, ease:'power3.out'}; out: {x:-140, duration:0.7, ease:'power3.inOut'})
   chip#pill(left: 54px; top: 51px; fill_color: $orange) 変更後
   dial#dial(right: 51px; top: 39px; c: $orange)
@@ -175,7 +175,7 @@ p#tips_note(left: 1161px; top: 506px; font-size: 38px; color: $gray; line-height
 shape#mini_bar(left: 1161px; top: 774px; width: 660px; height: 64px; path: rect,r=0.19; background: $orange; in: {scaleX:0, duration:0.7, ease:'power3.inOut', pivot:'left'})
 div#mini_end(left: 1737px; top: 774px; width: 84px; height: 64px; border-radius: 0,8,8,0; background: #FFFFFFB8; pattern: hatch,45,#D2463A8C,11,5; border: 3px solid $red; in: fade {duration: 0.3})
 p#mini_label(right: 99px; top: 690px; font-size: 32px; color: $red; pointer: below; in: {y:12, scale:0.85, opacity:0, duration:0.45, ease:'back.out(1.7)'}) 終了間際は避けて
-p#mini_tick(left: "774;994"; top: 848px; width: 330px; font-size: 30px; color: $navy; text-align: "left;right"; in: fade {duration: 0.3, stagger: 0.1}) ×2 9:00;16:00 受付終了
+p#mini_tick(left: "1161;1491"; top: 848px; width: 330px; font-size: 30px; color: $navy; text-align: "left;right"; in: fade {duration: 0.3, stagger: 0.1}) ×2 9:00;16:00 受付終了
 
 # closing — 締めの 1 枚: 夕方の市役所 + 左から cream の幕・白い板 (札・新しい時刻・罫・お願い・足)・帯を閉じる
 section#closing(stagger: {each:0})

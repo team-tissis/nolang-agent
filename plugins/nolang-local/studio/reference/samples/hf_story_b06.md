@@ -123,7 +123,7 @@ telop#loco_t(top: 560px; s: 88; c: $sky; sh: #14285AF2; in: {scale:0.5, opacity:
 section#think
 washi#think_washi
 ol#qmark(left: 0px; width: 1080px; top: 520px; s: 347; line-height: 1; color: $shu; -webkit-text-stroke: 9px $sumi; in: {scale:0.4, opacity:0, duration:0.42, ease:'back.out(2.4)'}) ？
-ol#poku(left: "66;520"; top: "287;373"; width: 210px; s: 64; color: $sumi; -webkit-text-stroke: 5px $washi; in: {scale:0.5, opacity:0, duration:0.25, ease:'back.out(2.4)'}) ×2 ポク;ポク
+ol#poku(left: "99;780"; top: "431;560"; width: 210px; s: 64; color: $sumi; -webkit-text-stroke: 5px $washi; in: {scale:0.5, opacity:0, duration:0.25, ease:'back.out(2.4)'}) ×2 ポク;ポク
 ol#chiin(left: 0px; width: 1080px; top: 1130px; s: 127; f: b; color: $shu; -webkit-text-stroke: 7px $white; text-shadow: 6px 6px 0px #00000059; in: {scale:0.6, opacity:0, duration:0.3, ease:'back.out(2.4)'}) チーン
 
 # 答え: 回る金と橙の放射の地に、ウインクする馬の顔が回りながら弾み、白のテロップ「馬に引かせる！」
@@ -172,14 +172,14 @@ section#scroll
 washi#scroll_washi(c: #C7BDAA)
 div#paper(left: 150px; top: 330px; width: 780px; height: 1040px; background: $paper; border: 3px solid #B9A37A; box-shadow: 18px 18px 0px #00000059; pattern: hatch,0,#C83C288C,64,2; in: {scaleY:0.02, opacity:0, duration:0.45, ease:'power3.out', pivot:'top'})
   p#ttl(right: 30px; top: 40px; font-family: z; font-size: 72px; letter-spacing: 0.14em; color: $sumi; vertical: true) 紀行文
-  div#col(left: "383;319;255;191;127;63"; top: 70px; width: 18px; height: "427;547;347;507;587;287"; border-radius: 9px; background: #1B1511C7) ×6
+  div#col(left: "575;479;383;287;191;95"; top: 70px; width: 18px; height: "641;821;521;761;881;431"; border-radius: 9px; background: #1B1511C7) ×6
 p#youyaku(left: 230px; top: 820px; width: 330px; height: 330px; font-family: z; font-size: 128px; line-height: 1; text-align: center; color: $shu; background: #F7EEDB40; border: 14px solid $shu; border-radius: 30px; transform: rotate(-10deg); in: {scale:2.2, rotation:-20, opacity:0, duration:0.2, ease:'power4.in'}) 要約
 
 # 激怒: 揺れる車内で鼻をつまむ文豪の絵に寄り続け、ハエが飛び回る・「臭いと揺れが」→ 筆の朱「最悪！」で画面ごと揺れ → 判子「文豪、大激怒」
 section#rage
 img#rage_bg(inset: 0; main: kb {scale: [1.06, 1.2]}) [ref:@ogai]狭くて激しく揺れる馬車鉄道の木造客車の車内、縦長の構図。口ひげをたくわえた明治時代の洋装の若い紳士（文豪）が、片手で鼻をつまみ、もう片方の手で帽子を押さえながら、顔を真っ赤にして激怒している。周りの乗客と肩がぶつかり合い、皆よろけている。窓の外には客車を引く馬の後ろ姿。頭から湯気が出ている。
 shade#rage_shade
-svg#fly(left: "467;220;520"; top: "347;313;507"; width: 56px; height: 44px; part: fly; in: none; main: noise {x: 80, y: 60, rotation: 27, period: 0.44}) ×3
+svg#fly(left: "701;330;780"; top: "521;470;761"; width: 56px; height: 44px; part: fly; in: none; main: noise {x: 80, y: 60, rotation: 27, period: 0.44}) ×3
 ol#brush1(left: 0px; width: 1080px; top: 880px; s: 69; -webkit-text-stroke: 7px $sumi; in: {scale:0.6, opacity:0, duration:0.42, ease:'back.out(2.4)'}; out: {opacity:0, duration:0.15, ease:'none'}) 臭いと揺れが
 ol#brush2(left: 24px; width: 1032px; top: 1020px; s: 200; f: b; line-height: 1.25; color: $shu; -webkit-text-stroke: 7px $white; text-shadow: 12px 12px 0px #000000CC; transform: rotate(-4deg); in: {scale:2.4, rotation:-8, opacity:0, duration:0.2, ease:'power4.in'}; out: {opacity:0, duration:0.15, ease:'none'}) 最悪！
 div#gekido(left: 250px; top: 880px; width: 580px; height: 320px; background: #FFFAF0E0; border: 16px solid $shu; box-shadow: 10px 10px 0px #00000059; transform: rotate(-9deg); in: {scale:2.6, rotation:-18, opacity:0, duration:0.2, ease:'power4.in'})
@@ -224,7 +224,7 @@ chapter#ch4.sticky(no: "其の四"; t: "暴走")
 ol#omen1(left: 0px; width: 1080px; top: 560px; s: 64; f: z; in: {scale:0.8, opacity:0, duration:0.35, ease:'power2.out'}) 本当の地獄は
 telop#omen2(top: 720px; s: 153; c: $shu; sc: $white; sh: #000000D9; transform: rotate(-3deg); in: {scale:2.4, rotation:-6, opacity:0, duration:0.2, ease:'power4.in'}) 下り坂
 # hf の作り: 紫の「ゴ」は 2 つずつ斜めに重ねて積む (overlap)
-ol#go(left: "40;120;547;612"; top: "707;767;720;802"; width: 144px; s: 80; color: $purple; -webkit-text-stroke: 5px $white; in: {scale:0.5, opacity:0, duration:0.3, ease:'back.out(2.4)', stagger: {each: 0.25}}) ×4 ゴ;ゴ;ゴ;ゴ
+ol#go(left: "60;180;821;918"; top: "1061;1151;1080;1203"; width: 144px; s: 80; color: $purple; -webkit-text-stroke: 5px $white; in: {scale:0.5, opacity:0, duration:0.3, ease:'back.out(2.4)', stagger: {each: 0.25}}) ×4 ゴ;ゴ;ゴ;ゴ
 
 # 暴走: 同じ絵を明るく戻して寄り続け、全編揺れる・白の集中線・金の「ブレーキ 効かず!!」→ 1 字ずつ弾む悲鳴 → 「明治の ジェットコースター」と判子「命がけ」
 section#rush

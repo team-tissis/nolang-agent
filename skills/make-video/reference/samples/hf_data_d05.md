@@ -87,7 +87,7 @@ def ci(c) = div(height: 8px; border-radius: 4px; background: {c}; in: {scaleX:0,
 # 3 案の画面の模型 (料金の切り替えタブ + 価格 + 行 2 本 + ボタン)
 def mockp(on, off, pr, c, ink) = div(width: 296px; height: 262px; border-radius: 14px; background: #0B121D; border: 2px solid #94A3B82E)
   div#bar(left: 2px; top: 2px; width: 292px; height: 26px; border-radius: 8,8,0,0; background: #94A3B814)
-  shape#dot(left: "8;17;26"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
+  shape#dot(left: "12;26;39"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
   div#seg(left: 48px; top: 44px; width: 200px; height: 40px; border-radius: 148px; background: #94A3B81F)
     p#on(left: 4px; cy: 50%; width: 94px; font-size: 18px; font-family: m; line-height: 1.75; text-align: center; color: {ink}; background: {c}; border-radius: 148px; content: {on})
     p#off(left: 100px; cy: 50%; width: 94px; font-size: 18px; line-height: 1.75; text-align: center; color: $tx3; content: {off})
@@ -138,10 +138,10 @@ p#l1(left: 120px; top: 276px; font-size: 138px; font-family: b; line-height: 1.1
 p#l2(left: 120px; top: 435px; font-size: 138px; font-family: b; line-height: 1.1; white-space: nowrap; delay: 610ms; in: {y:166, duration:0.9, ease:'power4.out', clip:true}) 先に見せたら
 p#sub(left: 120px; top: 633px; font-size: 32px; color: $tx2; white-space: nowrap; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'}) 架空のタスク管理 SaaS「ノートレイル」
 # 3 つの数字 (2・3 つ目は左に細い縦線)
-div#st(left: "80;313;497"; top: 718px; width: "233;184;220"; height: 117px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.18}}) ×3
+div#st(left: "120;470;746"; top: 718px; width: "350;276;330"; height: 117px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.18}}) ×3
   div#sep(left: 0px; top: 0px; width: 2px; height: 117px; background: $line2; opacity: "0;1;1")
-  p#k(left: "0;29;29"; top: 12px; font-size: 20px; letter-spacing: 0.12em; color: $tx3) 期間;比較;訪問者
-  p#v(left: "0;29;29"; cy: 80px; font-size: 46px; font-family: m; white-space: nowrap) 9/1〜9/28{s15} 4 週間{/};3 案{s15} A・B・C{/};[count:38,440 start=0 ms=1100ms]{s15} 人{/}
+  p#k(left: "0;44;44"; top: 12px; font-size: 20px; letter-spacing: 0.12em; color: $tx3) 期間;比較;訪問者
+  p#v(left: "0;44;44"; cy: 80px; font-size: 46px; font-family: m; white-space: nowrap) 9/1〜9/28{s15} 4 週間{/};3 案{s15} A・B・C{/};[count:38,440 start=0 ms=1100ms]{s15} 人{/}
 
 # setup 前提: 上端の帯が明ける・左の板に月額と年額 (12 マスのうち 2 マスが点線 = 2 か月分お得)・右に 3 案の画面の模型が並び、案の名の語で縁が順に光る
 section#setup(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.32, ease:'power2.in'})
@@ -166,10 +166,10 @@ board#price(left: 96px; top: 140px; width: 610px; height: 760px; k: "{cy}01{/} �
   # 12 マス (払う 10 マスは琥珀・お得の 2 マスは点線) と下のかぎ
   div#mo(left: 44px; top: 572px; width: 524px; height: 150px)
     p#lab(left: 0px; top: 0px; font-size: 21px; color: $tx2; white-space: nowrap; in: {opacity:0, duration:0.5}) 12 か月使えて、払うのは 10 か月分
-    div#pay(left: "0;29;58;87;116;145;174;203;232;261"; top: 42px; width: 34px; height: 34px; border-radius: 8px; background: $amber; in: {scale:0.3, opacity:0, duration:0.35, ease:'back.out(2)', stagger: {each: 0.05}}) ×10
-    shape#free(left: "290;319"; top: 42px; width: 34px; height: 34px; path: rect,r=0.22; background: #F5B54714; border: 2px solid $amber; dash: 3,3; in: {scale:0.3, opacity:0, duration:0.45, ease:'back.out(2)', stagger: {each: 0.08}}) ×2
+    div#pay(left: "0;44;87;131;174;218;261;305;348;392"; top: 42px; width: 34px; height: 34px; border-radius: 8px; background: $amber; in: {scale:0.3, opacity:0, duration:0.35, ease:'back.out(2)', stagger: {each: 0.05}}) ×10
+    shape#free(left: "435;479"; top: 42px; width: 34px; height: 34px; path: rect,r=0.22; background: #F5B54714; border: 2px solid $amber; dash: 3,3; in: {scale:0.3, opacity:0, duration:0.45, ease:'back.out(2)', stagger: {each: 0.08}}) ×2
     div#fl(left: 430px; top: 92px; width: 76px; height: 45px; in: {y:-8, opacity:0, duration:0.45, ease:'back.out(2)'})
-      shape#brk(path: "M0 0 L0 9 L51 9 L51 0"; background: none; border: 2px solid $amber)
+      shape#brk(path: "M0 0 L0 14 L77 14 L77 0"; background: none; border: 2px solid $amber)
       p#t(cx: 50%; top: 20px; font-size: 22px; font-family: b; color: $amber; white-space: nowrap) 2 か月分お得
 p#vh(left: 740px; top: 146px; font-size: 34px; font-family: m; white-space: nowrap; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'}) 3 つの案　{s15}訪問者をランダムに振り分け{/}
 vcard#ca(left: 740px; ch: A; tl: 月額を先に表示; sb: 現行の料金ページ; n: "[count:12,840 start=0 ms=900ms delay=1470ms]{s13} 人{/}")
@@ -181,8 +181,8 @@ vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チ�
   # C の模型: 3 段の比較表 (月額・年額・チームの列)・「C は」の語で列が順に弾む
   div#mock(left: 24px; top: 176px; width: 296px; height: 262px; border-radius: 14px; background: #0B121D; border: 2px solid #94A3B82E)
     div#bar(left: 2px; top: 2px; width: 292px; height: 26px; border-radius: 8,8,0,0; background: #94A3B814)
-    shape#dot(left: "8;17;26"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
-    div#col(left: "8;70;132"; top: 44px; width: 86px; height: 150px; border-radius: 10px; border: 2px solid #94A3B833; in: {scale:0.8, opacity:0, duration:0.5, ease:'back.out(2)', stagger: {each: 0.08}}) ×3
+    shape#dot(left: "12;26;39"; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #94A3B859) ×3
+    div#col(left: "12;105;198"; top: 44px; width: 86px; height: 150px; border-radius: 10px; border: 2px solid #94A3B833; in: {scale:0.8, opacity:0, duration:0.5, ease:'back.out(2)', stagger: {each: 0.08}}) ×3
       p#h(cx: 50%; top: 10px; font-size: 16px; font-family: m; color: $tx2) 月額;年額;チーム
       div#p(left: 6px; top: 42px; width: 74px; height: 22px; border-radius: 4px; background: "#5B8DEF8C;#F5B54799;#94A3B838")
       div#l1(left: 4px; top: 75px; width: 76px; height: 8px; border-radius: 4px; background: #94A3B81F)
@@ -190,9 +190,9 @@ vcard#cc(left: 1480px; ch: C; tl: 3 段の比較表; sb: 月額・年額・チ�
       div#b(left: 6px; top: 117px; width: 74px; height: 20px; border-radius: 6px; background: #94A3B84D)
 # 期間・振り分け・合計の帯 (合計は数え上げ)
 div#info(left: 740px; top: 760px; width: 1084px; height: 120px; border-radius: 18px; border: 2px solid $line; background: #0D141FCC; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
-  p#k(left: "24;279;507"; top: 24px; font-size: 20px; letter-spacing: 0.1em; color: $tx3; white-space: nowrap) ×3 期間;振り分け;訪問者 合計
-  p#v(left: "24;279;507"; top: 52px; font-size: 36px; font-family: m; white-space: nowrap) ×3 9/1〜9/28{s14} 4 週間{/};ランダム{s14} 3 案に振り分け{/};[count:38,440 start=0 ms=1000ms delay=200ms]{s14} 人{/}
-  div#vl(left: "253;481"; top: 26px; width: 2px; height: 68px; background: $line2) ×2
+  p#k(left: "36;419;761"; top: 24px; font-size: 20px; letter-spacing: 0.1em; color: $tx3; white-space: nowrap) ×3 期間;振り分け;訪問者 合計
+  p#v(left: "36;419;761"; top: 52px; font-size: 36px; font-family: m; white-space: nowrap) ×3 9/1〜9/28{s14} 4 週間{/};ランダム{s14} 3 案に振り分け{/};[count:38,440 start=0 ms=1000ms delay=200ms]{s14} 人{/}
+  div#vl(left: "380;722"; top: 26px; width: 2px; height: 68px; background: $line2) ×2
 
 # conv 転換率: 6 本の目盛りの上に A・B・C の推定値 (点) と 95% 信頼区間 (横線) を語で伸ばす → 右の小板で差 +0.34 を数え、差の区間が 0 をまたぐ所で赤い判定の札
 section#conv(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.32, ease:'power2.in'})
@@ -203,8 +203,8 @@ board#cv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}02{/} ／
   p#lg1(left: 904px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 推定値
   div#lg_ln(left: 996px; cy: 87px; width: 30px; height: 4px; border-radius: 3px; background: $tx2)
   p#lg2(left: 1036px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) 95% 信頼区間
-  div#gv(left: "378;443;507;573;637;702"; top: 168px; width: 2px; height: 446px; background: #94A3B81F; delay: 250ms; in: {opacity:0, duration:0.6}) ×6
-  p#ax(cx: "378;443;507;573;637;702"; top: 628px; font-size: 18px; font-family: c; color: $tx3; delay: 250ms; in: {opacity:0, duration:0.6}) ×6 2.8%;3.0%;3.2%;3.4%;3.6%;3.8%
+  div#gv(left: "567;665;761;860;956;1053"; top: 168px; width: 2px; height: 446px; background: #94A3B81F; delay: 250ms; in: {opacity:0, duration:0.6}) ×6
+  p#ax(cx: "567;665;761;860;956;1053"; top: 628px; font-size: 18px; font-family: c; color: $tx3; delay: 250ms; in: {opacity:0, duration:0.6}) ×6 2.8%;3.0%;3.2%;3.4%;3.6%;3.8%
   rowlab#la(top: 255px; ch: A; nm: 現行（月額が先）; sb: "398 / 12,840 人")
   rowlab#lb(top: 394px; ch: B; nm: 年額が先; sb: "441 / 12,810 人"; c: $cyan)
   rowlab#lc(top: 536px; ch: C; nm: 3 段の比較表; sb: "390 / 12,790 人"; c: "#526076"; ink: "#F4F7FA")
@@ -248,17 +248,17 @@ board#wk(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}03{/} ／
   p#lt1(left: 854px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) B 年額が先
   div#lg2(left: 986px; cy: 87px; width: 30px; height: 4px; border-radius: 3px; background: $va)
   p#lt2(left: 1026px; cy: 87px; font-size: 21px; color: $tx2; white-space: nowrap) A 現行
-  div#gh(left: 153px; top: "127;175;225;273;322;371;420"; width: 890px; height: 2px; background: "#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B84D"; delay: 250ms; in: {opacity:0, duration:0.6}) ×7
-  p#yl(left: 64px; cy: "127;175;225;273;322;371;420"; width: 75px; text-align: right; font-size: 18px; font-family: c; color: #7A889A; delay: 250ms; in: {opacity:0, duration:0.6}) ×7 4.0%;3.8%;3.6%;3.4%;3.2%;3.0%;2.8%
-  p#xl(cx: "182;329;476;622"; cy: 668px; font-size: 22px; color: $tx2; white-space: nowrap; delay: 250ms; in: {opacity:0, duration:0.6}) ×4 1 週目;2 週目;3 週目;4 週目
+  div#gh(left: 153px; top: "191;263;338;410;483;557;630"; width: 890px; height: 2px; background: "#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B81F;#94A3B84D"; delay: 250ms; in: {opacity:0, duration:0.6}) ×7
+  p#yl(left: 64px; cy: "191;263;338;410;483;557;630"; width: 75px; text-align: right; font-size: 18px; font-family: c; color: #7A889A; delay: 250ms; in: {opacity:0, duration:0.6}) ×7 4.0%;3.8%;3.6%;3.4%;3.2%;3.0%;2.8%
+  p#xl(cx: "273;494;714;933"; cy: 668px; font-size: 22px; color: $tx2; white-space: nowrap; delay: 250ms; in: {opacity:0, duration:0.6}) ×4 1 週目;2 週目;3 週目;4 週目
   # hf の作り: B と A の間の面は 9% の青緑 (check はこの面の上の数字を low_contrast に数えるが、面はほぼ透明で読める)
-  shape#area(path: "M182 159 L329 281 L476 310 L622 303 L622 327 L476 352 L329 335 L182 374 Z"; background: #3DD9EB17; in: {opacity:0, duration:0.8})
-  shape#lb(path: "M182 159 L329 281 L476 310 L622 303"; background: none; border: 4px solid $cyan; in: draw {duration: 1.2})
-  shape#la(path: "M182 374 L329 335 L476 352 L622 327"; background: none; border: 4px solid $va; in: draw {duration: 1.2})
-  shape#g1(path: "M182 168 L182 364"; background: none; border: 2px solid $cyan; dash: 3,4; in: {opacity:0, duration:0.4})
-  shape#g2(path: "M329 290 L329 325"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
-  shape#g3(path: "M476 319 L476 342"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
-  shape#g4(path: "M622 312 L622 318"; background: none; border: 2px solid $cyan; in: {opacity:0, duration:0.5})
+  shape#area(path: "M273 239 L494 422 L714 465 L933 455 L933 491 L714 528 L494 503 L273 561 Z"; background: #3DD9EB17; in: {opacity:0, duration:0.8})
+  shape#lb(path: "M273 239 L494 422 L714 465 L933 455"; background: none; border: 4px solid $cyan; in: draw {duration: 1.2})
+  shape#la(path: "M273 561 L494 503 L714 528 L933 491"; background: none; border: 4px solid $va; in: draw {duration: 1.2})
+  shape#g1(path: "M273 252 L273 546"; background: none; border: 2px solid $cyan; dash: 3,4; in: {opacity:0, duration:0.4})
+  shape#g2(path: "M494 435 L494 488"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
+  shape#g3(path: "M714 479 L714 513"; background: none; border: 2px solid $cyan; dash: 3,3; in: {opacity:0, duration:0.5})
+  shape#g4(path: "M933 468 L933 477"; background: none; border: 2px solid $cyan; in: {opacity:0, duration:0.5})
   pt#pb1(left: 261px; top: 226px; v: 3.87%; c: $cyan; lc: $cyan; ly: -14)
   pt#pa1(left: 261px; top: 549px; v: 2.99%; c: $va; lc: "#C3CDD9"; ly: 26)
   pt#pb2(left: 482px; top: 410px; v: 3.37%; c: $cyan; lc: $cyan; ly: -6; lx: 43)
@@ -269,7 +269,7 @@ board#wk(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}03{/} ／
   pt#pa4(left: 921px; top: 478px; v: 3.18%; c: $va; lc: "#C3CDD9"; ly: 26)
   p#gl3(cx: 772px; cy: 496px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.17
   p#gl4(cx: 992px; cy: 472px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.10
-  shape#rb(path: "M313 460 L313 469 L660 469 L660 460"; background: none; border: 2px solid #3DD9EBB3; in: {scaleX:0.2, opacity:0, duration:0.5, ease:'power2.out'})
+  shape#rb(path: "M470 690 L470 704 L990 704 L990 690"; background: none; border: 2px solid #3DD9EBB3; in: {scaleX:0.2, opacity:0, duration:0.5, ease:'power2.out'})
   p#gl2(cx: 552px; cy: 460px; font-size: 22px; font-family: b; color: #9FE9F3; white-space: nowrap; in: {opacity:0, duration:0.5}) +0.22
   p#gl1(cx: 384px; cy: 462px; font-size: 46px; font-family: b; color: $cyan; white-space: nowrap; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'}) +0.88{pt16}pt{/}
   p#rl(cx: 730px; top: 712px; font-size: 21px; color: $cyan; white-space: nowrap; in: {opacity:0, duration:0.5}) 2 週目以降の差は 0.1〜0.2pt
@@ -295,9 +295,9 @@ board#sh(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}04{/} ／
   rowlab#la(top: 202px; ch: A; nm: 現行; sb: "課金 398 人"; delay: 250ms)
   rowlab#lb(top: 352px; ch: B; nm: 年額が先; sb: "課金 441 人"; c: $cyan; delay: 350ms)
   rowlab#lc(top: 502px; ch: C; nm: 3 段比較表; sb: "課金 390 人"; c: "#526076"; ink: "#F4F7FA"; delay: 450ms)
-  div#tr(left: 330px; top: "124;224;324"; width: 800px; height: 84px; border-radius: 12px; background: #94A3B80F) ×3
+  div#tr(left: 330px; top: "186;336;486"; width: 800px; height: 84px; border-radius: 12px; background: #94A3B80F) ×3
     div#m(left: 0px; top: 0px; width: 800px; height: 84px; border-radius: 12px; background: linear(#5B8DEFBF,#5B8DEF8C,90); in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
-    div#y(left: 0px; top: 0px; width: "117;219;160"; height: 84px; border-radius: 8,0,0,8; background: $amber; box-shadow: 4px 0px 18px #00000059; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
+    div#y(left: 0px; top: 0px; width: "176;329;240"; height: 84px; border-radius: 8,0,0,8; background: $amber; box-shadow: 4px 0px 18px #00000059; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
     p#yl(left: 18px; cy: 50%; font-size: 38px; font-family: b; line-height: 1.05; color: #1C1306; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(2)'}) 22%[br]{yn}88 人{/};41%[br]{yn}181 人{/};30%[br]{yn}117 人{/}
     p#ml(right: 22px; cy: 50%; font-size: 22px; color: #E9F0FF; white-space: nowrap; in: {opacity:0, duration:0.5}) 月額 {mb}310{/} 人;月額 {mb}260{/} 人;月額
   p#a0(left: 330px; top: 600px; font-size: 18px; font-family: c; color: $tx3) 0%
@@ -326,18 +326,18 @@ board#rv(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}05{/} ／
     p#pl(left: 10px; cy: 50%; font-size: 20px; font-family: m; color: $ink; background: $amber; border-radius: 148px; padding: 4px 14px) 年額
     p#t(left: .pl.right+14; cy: 50%; font-size: 22px; white-space: nowrap) {b17}49,800{/} 円
   div#lbase(left: 44px; top: 600px; width: 760px; height: 2px; background: $line2; in: {opacity:0, duration:0.5})
-  div#lb(left: "73;227;380"; top: "253;244;249"; width: 132px; height: "147;156;151"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
+  div#lb(left: "110;341;570"; top: "380;366;374"; width: 132px; height: "221;234;227"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
   p#lt(left: 44px; top: 236px; font-size: 26px; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) 課金者 1 人あたり{s13} 円{/}
-  p#lv(cx: "117;271;424"; top: "221;212;217"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.5, stagger: {each: 0.12}}) ×3 40,103;42,460;41,085
+  p#lv(cx: "176;407;636"; top: "332;318;326"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.5, stagger: {each: 0.12}}) ×3 40,103;42,460;41,085
   p#lbd(left: 486px; top: 282px; font-size: 22px; font-family: m; color: $cyan; border: 2px solid $cyan; border-radius: 148px; padding: 4px 14px; white-space: nowrap; in: {scale:0.6, opacity:0, duration:0.5, ease:'back.out(2)'}) +5.9%
-  p#lx(cx: "117;271;424"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
+  p#lx(cx: "176;407;636"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
   div#dv(left: 864px; top: 236px; width: 2px; height: 420px; background: $line)
   p#rt(left: 924px; top: 236px; font-size: 26px; font-family: m; white-space: nowrap; in: {opacity:0, duration:0.5}) 訪問者 1 人あたり{s13} 円{/}
   div#rbase(left: 924px; top: 600px; width: 760px; height: 2px; background: $line2; in: {opacity:0, duration:0.5})
-  div#rb(left: "660;813;967"; top: "259;234;258"; width: 132px; height: "141;166;142"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
-  p#rv(cx: "704;857;1011"; top: "227;202;226"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.3}) ×3 [count:1,243 start=0 ms=800ms delay=100ms];[count:1,462 start=0 ms=800ms delay=220ms];[count:1,253 start=0 ms=800ms delay=340ms]
+  div#rb(left: "990;1220;1451"; top: "389;351;387"; width: 132px; height: "212;249;213"; border-radius: 8,8,3,3; background: "linear(#A6B3C4,#6F7E93,180);linear(#62E6F3,#1AA9BD,180);linear(#71819A,#4A5870,180)"; in: {scaleY:0, duration:0.8, ease:'power3.out', pivot:'bottom', stagger: {each: 0.12}}) ×3
+  p#rv(cx: "1056;1286;1517"; top: "341;303;339"; font-size: 30px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; in: {opacity:0, duration:0.3}) ×3 [count:1,243 start=0 ms=800ms delay=100ms];[count:1,462 start=0 ms=800ms delay=220ms];[count:1,253 start=0 ms=800ms delay=340ms]
   p#rbd(left: 1372px; top: 244px; font-size: 40px; font-family: b; color: #061317; background: $cyan; border-radius: 148px; padding: 8px 22px; white-space: nowrap; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) +17.6%
-  p#rx(cx: "704;857;1011"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
+  p#rx(cx: "1056;1286;1517"; top: 612px; width: 40px; font-size: 22px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 10px; padding: 9px 0px; in: {opacity:0, duration:0.5}) ×3 A;B;C
   div#bn(left: 44px; top: 682px; width: 1641px; height: 64px; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
     p#a(left: 0px; cy: 50%; font-size: 32px; font-family: m; white-space: nowrap) 差を生んでいるのは、
     p#b(left: .a.right+18; cy: 50%; font-size: 26px; color: $tx3; white-space: nowrap) 転換率より
@@ -349,23 +349,23 @@ section#side(stagger: {each:0}; out: {y:-14, opacity:0, duration:0.32, ease:'pow
 sec#sec7 {ro}06{/} 副作用
 board#sl(left: 96px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 副作用"; t: "料金の問い合わせ"; s: "訪問 1,000 人あたり")
   img#ic(left: 660px; top: 8px; width: 150px; height: 150px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]2 つの重なった吹き出しの艶のある 3D の icon。手前の吹き出しに大きな疑問符が 1 つ。柔らかな珊瑚のピンクと冷たい青みの灰色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。疑問符の他に文字なし
-  p#c(left: 44px; top: "124;191;257"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
-  div#b(left: 120px; top: "124;191;257"; width: "147;249;191"; height: 46px; border-radius: 8px; background: "linear(#6F7E93,#A6B3C4,90);linear(#D94A62,#FF8597,90);linear(#4A5870,#71819A,90)"; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
+  p#c(left: 44px; top: "186;287;386"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
+  div#b(left: 120px; top: "186;287;386"; width: "221;374;287"; height: 46px; border-radius: 8px; background: "linear(#6F7E93,#A6B3C4,90);linear(#D94A62,#FF8597,90);linear(#4A5870,#71819A,90)"; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
   p#la(left: 362px; cy: 210px; font-size: 36px; font-family: b; white-space: nowrap; in: {opacity:0, duration:0.5}) 4.0{s13} 件（計 52 件）{/}
   p#lb(left: 516px; cy: 310px; font-size: 36px; font-family: b; color: #FFB3C0; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(2)'}) 6.8{s13} 件（計 87 件）{/}
   p#lc(left: 428px; cy: 410px; font-size: 36px; font-family: b; white-space: nowrap; in: {opacity:0, duration:0.5}) 5.2{s13} 件（計 66 件）{/}
   # B で増えた問い合わせの中身 (珊瑚の縁の吹き出し・上辺の尻尾は三角の shape)
   div#bub(left: 44px; top: 520px; width: 764px; height: 114px; border-radius: 18px; background: #FF6B811A; border: 2px solid #FF6B8180; in: {y:26, opacity:0, duration:0.6, ease:'power3.out'})
     # hf の作り: 吹き出しの尻尾は板の上辺から外へ出る三角 (child_overflow)
-    shape#tip(points: "58,1 69,-10 80,1"; background: #2A1A24; border: 2px solid #FF6B8180)
+    shape#tip(points: "87,2 104,-15 120,2"; background: #2A1A24; border: 2px solid #FF6B8180)
     p#b1(left: 28px; top: 22px; font-size: 21px; color: $tx2; white-space: nowrap) B で増えた問い合わせの多くは
     p#b2(left: 28px; top: 56px; font-size: 32px; font-family: b; color: #FFD5DC; white-space: nowrap) 「年額の途中解約・返金はできるか」
 board#sr(left: 972px; top: 140px; width: 852px; height: 740px; k: "{ro}06{/} ／ 副作用"; t: "年額の返金申請"; s: "14 日以内"; delay: 320ms)
   img#ic(left: 660px; top: 8px; width: 150px; height: 150px; object-fit: contain; main: none; in: {scale:0.4, opacity:0, duration:0.5, ease:'back.out(2)'}) [transparent]紙のレシートと、1 枚の金色の硬貨を回り込む曲がった戻りの矢印の、艶のある 3D の icon。柔らかな珊瑚のピンクと琥珀の色、柔らかなスタジオの光、クリーンでモダンな 3D の質感、中央に 1 つだけ置く。文字・数字なし
-  div#pa(left: "80;102;124"; top: 204px; width: 26px; height: 26px; border-radius: 6px; background: #8B99AD; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×3
-  p#c(left: 44px; top: "131;211;291"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
-  div#pb(left: "80;102;124;146;168;190;212;234;256;278;300"; top: 324px; width: 26px; height: 26px; border-radius: 6px; background: $rose; box-shadow: 0px 0px 12px #FF6B8159; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×11
-  div#pc(left: "80;102;124;146"; top: 444px; width: 26px; height: 26px; border-radius: 6px; background: $vc; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×4
+  div#pa(left: "120;153;186"; top: 204px; width: 26px; height: 26px; border-radius: 6px; background: #8B99AD; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×3
+  p#c(left: 44px; top: "197;317;437"; width: 46px; font-size: 26px; font-family: c; line-height: 1; text-align: center; color: "$ink;$ink;#F4F7FA"; background: "$va;$cyan;#526076"; border-radius: 12px; padding: 10px 0px) ×3 A;B;C
+  div#pb(left: "120;153;186;219;252;285;318;351;384;417;450"; top: 324px; width: 26px; height: 26px; border-radius: 6px; background: $rose; box-shadow: 0px 0px 12px #FF6B8159; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×11
+  div#pc(left: "120;153;186;219"; top: 444px; width: 26px; height: 26px; border-radius: 6px; background: $vc; in: {scale:0.2, opacity:0, duration:0.3, ease:'back.out(2)', stagger: {each: 0.05}}) ×4
   p#ra(left: 520px; top: 188px; font-size: 42px; font-family: b; line-height: 1.25; white-space: nowrap; in: {opacity:0, duration:0.5}) 3.4%[br]{s13}3 件 ／ 年額 88 人{/}
   p#rb(left: 520px; top: 308px; font-size: 42px; font-family: b; line-height: 1.25; color: #FFB3C0; white-space: nowrap; in: {scale:0.7, opacity:0, duration:0.5, ease:'back.out(2)'}) 6.1%[br]{s13}11 件 ／ 年額 181 人{/}
   p#rc(left: 520px; top: 428px; font-size: 42px; font-family: b; line-height: 1.25; white-space: nowrap; in: {opacity:0, duration:0.5}) 3.4%[br]{s13}4 件 ／ 年額 117 人{/}
@@ -383,11 +383,11 @@ board#nt(left: 96px; top: 140px; width: 1728px; height: 770px; k: "{cy}07{/} ／
   rowlab2#la(top: 206px; ch: A; nm: 現行; delay: 200ms)
   rowlab2#lb(top: 346px; ch: B; nm: 年額が先; c: $cyan; delay: 300ms)
   rowlab2#lc(top: 486px; ch: C; nm: 3 段比較表; c: "#526076"; ink: "#F4F7FA"; delay: 400ms)
-  shape#g(left: 300px; top: "133;227;320"; width: "348;409;351"; height: 58px; path: rect,r=0.18; background: none; border: 2px solid #94A3B873; dash: 4,4; in: {opacity:0, duration:0.4}) ×3
-  div#b(left: 300px; top: "133;227;320"; width: "348;409;351"; height: 58px; border-radius: 10px; background: "linear(#6F7E93,#A6B3C4,90);linear(#1AA9BD,#62E6F3,90);linear(#4A5870,#71819A,90)"; delay: 350ms; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
+  shape#g(left: 300px; top: "200;341;480"; width: "522;614;527"; height: 58px; path: rect,r=0.18; background: none; border: 2px solid #94A3B873; dash: 4,4; in: {opacity:0, duration:0.4}) ×3
+  div#b(left: 300px; top: "200;341;480"; width: "522;614;527"; height: 58px; border-radius: 10px; background: "linear(#6F7E93,#A6B3C4,90);linear(#1AA9BD,#62E6F3,90);linear(#4A5870,#71819A,90)"; delay: 350ms; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left', stagger: {each: 0.12}}) ×3
   # hf は「返金」の語で 1,243 → 1,231 と 0.8 秒で数え下げる — 語で [count:] の文字に差し替える (出ている値から数える)
-  p#v(left: "564;625;567"; top: "129;223;316"; font-size: 38px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 1,243{s15} 円{/};1,462{s15} 円{/};1,253{s15} 円{/}
-  p#sw(left: "564;625;567"; top: "161;255;348"; font-size: 20px; color: $tx3; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 返金前;返金前;返金前
+  p#v(left: "846;938;851"; top: "194;335;474"; font-size: 38px; font-family: b; color: "$tx;$cyan;$tx"; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 1,243{s15} 円{/};1,462{s15} 円{/};1,253{s15} 円{/}
+  p#sw(left: "846;938;851"; top: "242;383;522"; font-size: 20px; color: $tx3; white-space: nowrap; delay: 800ms; in: {opacity:0, duration:0.5, stagger: {each: 0.1}}) ×3 返金前;返金前;返金前
   p#nn(left: 300px; top: 610px; font-size: 21px; color: $tx3; white-space: nowrap; in: {opacity:0, duration:0.5}) ※ 年額の返金申請（14 日以内）の分を差し引いた推計
   callout#co(left: 1190px; top: 34px; width: 500px; height: 700px)
     kick#k(left: 36px; top: 36px) B − A（返金後）
@@ -409,11 +409,11 @@ div#ttl(left: 96px; top: 140px; width: 1350px; height: 105px; in: {y:26, opacity
   kick#k(left: 0px; top: 0px) {cy}08{/} ／ 結論
   p#t(left: 0px; top: 30px; font-size: 52px; font-family: b; white-space: nowrap) B を採用し、条件を明記して次の検証へ
 ccard#c1(left: 96px; n: "01"; l: 採用; h: "B「年額を先に表示」[br]を採用する"; c: $cyan)
-  li#li(top: "195;228;261"; height: "24;24;48"; t: "転換率の差は統計的には言い切れない;年額の割合 {w}22% → 41%{/};訪問者 1 人あたり初年度売上は[br]返金後でも {w}+15%{/}"; c: $cyan; in: {y:12, opacity:0, duration:0.45, ease:'power3.out', stagger: {each: 0.15}}) ×3
+  li#li(top: "293;342;392"; height: "36;36;72"; t: "転換率の差は統計的には言い切れない;年額の割合 {w}22% → 41%{/};訪問者 1 人あたり初年度売上は[br]返金後でも {w}+15%{/}"; c: $cyan; in: {y:12, opacity:0, duration:0.45, ease:'power3.out', stagger: {each: 0.15}}) ×3
 ccard#c2(left: 682px; n: "02"; l: 対策; h: "途中解約・返金の条件を[br]料金ページに明記する"; c: $amber)
-  li#li(top: "195;252"; height: "48;24"; t: "料金の問い合わせ {w}4.0 → 6.8 件{/}[br]（訪問 1,000 人あたり）;年額の返金申請 {w}3.4% → 6.1%{/}"; c: $amber; in: {y:12, opacity:0, duration:0.45, ease:'power3.out', stagger: {each: 0.15}}) ×2
+  li#li(top: "293;378"; height: "72;36"; t: "料金の問い合わせ {w}4.0 → 6.8 件{/}[br]（訪問 1,000 人あたり）;年額の返金申請 {w}3.4% → 6.1%{/}"; c: $amber; in: {y:12, opacity:0, duration:0.45, ease:'power3.out', stagger: {each: 0.15}}) ×2
 ccard#c3(left: 1268px; n: "03"; l: 次の検証; h: "返金条件を明記した B と[br]現行の B を比べる"; c: "#C8D3DF")
-  li#li(top: "195;228;261"; t: "期間は {w}4 週間{/};{w}1 週目を除いた{/}転換率で判定;{w}90 日後{/}の返金・継続で判定"; c: "#C8D3DF") ×3
+  li#li(top: "293;342;392"; t: "期間は {w}4 週間{/};{w}1 週目を除いた{/}転換率で判定;{w}90 日後{/}の返金・継続で判定"; c: "#C8D3DF") ×3
 ```
 
 ```timeline.txt

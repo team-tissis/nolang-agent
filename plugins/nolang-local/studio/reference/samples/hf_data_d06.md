@@ -72,12 +72,12 @@ svg rib_far = """<svg viewBox="0 0 870 110"><polygon points="756.9,0 817.8,0 713
 def paper(g, o) = div(inset: 0; background: $paper; pattern: paper; z-index: back; in: none)
   div#hi(inset: 0; background: radial(#FFFDF8A6,#FFFDF800@70%,28%,18%))
   div#lo(inset: 0; background: radial(#9673461A,#96734600@70%,85%,95%))
-  p#ghost.bleed(right: 40px; top: 420px; font-size: 700px; line-height: 1; font-family: m; color: #26211C06; main: keys(at=0 y=27 | at=1 y=-27),window=0,16000,forwards; overlap: {o}; content: {g})
+  p#ghost.bleed(right: 40px; top: 420px; font-size: 700px; line-height: 1; font-family: m; color: #26211C06; main: keys(at=0 y=41 | at=1 y=-40),window=0,16000,forwards; overlap: {o}; content: {g})
 # 上端の帯: 朱の角札「湯」+ 報告名 + 右寄せの章の目次 6 つ (今の章は朱の太字) + 下の細い罫
 def hdr(c, f) = div(left: 96px; top: 38px; width: 1728px; height: 54px; in: none)
   p#mark(left: 0px; cy: 50%; width: 34px; font-size: 22px; line-height: 1.5; font-family: m; text-align: center; color: $lt11; background: $shu; border-radius: 3px) 湯
   p#lab(left: 51px; cy: 50%; font-size: 20px; letter-spacing: .08em; color: $ink2) 湯ノ瀬町 観光課｜外国人観光客の5年 調査報告
-  p#nav(left: "741;803;865;969;1031;1107"; cy: 50%; font-size: 20px; letter-spacing: .06em; color: {c}; font-family: {f}) ×6 {nv}一{/} 推移;{nv}二{/} 構成;{nv}三{/} 滞在と消費;{nv}四{/} 季節;{nv}五{/} 宿泊税;{nv}六{/} 課題
+  p#nav(left: "1112;1205;1298;1454;1547;1661"; cy: 50%; font-size: 20px; letter-spacing: .06em; color: {c}; font-family: {f}) ×6 {nv}一{/} 推移;{nv}二{/} 構成;{nv}三{/} 滞在と消費;{nv}四{/} 季節;{nv}五{/} 宿泊税;{nv}六{/} 課題
   div#rule(left: 0px; top: 52px; width: 1728px; height: 2px; background: $rule)
 # 章の頭: 朱の明朝の章番号 + 細い縦の罫 → 小見出し (字間広め) → 明朝の題 (頁の窓の中で 0.5 / 0.62 / 0.7 秒に順に)
 def chap(n, k, t) = div(left: 96px; top: 118px; width: 1200px; height: 104px; in: none)
@@ -107,7 +107,7 @@ img#t_photo(inset: 0; subject: "60%,10%,40%,55%"; room: left 45%; main: kb {scal
 div#t_shade(inset: 0; background: linear(#100C09D6,#100C09A8@34%,#100C092E@62%,#100C0900@78%,90); in: {opacity:0, duration:1, ease:'power1.out'})
 div#t_shade_b(left: 0px; top: 660px; width: 1920px; height: 420px; background: linear(#100C09B8,#100C0900,0); in: none)
 # 湯気 8 つ (右端の 2 つは hf より 13 px 内へ寄せた・放射の白い斑が 5.6 秒の周期で上下しながら濃くなり薄れる・位相は粒ごと)
-shape#t_steam(left: "787;947;867;1027;720;973;827;1080"; top: "347;400;280;313;407;253;427;373"; width: "280;240;200;253;227;187;267;200"; height: "280;240;200;253;227;187;267;200"; border-radius: 50%; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: sine {y: -75, opacity: .45, period: 5.6, phase_offset: '0;.245;.489;.734;.979;.241;.486;.73'}) ×8
+shape#t_steam(left: "1181;1421;1301;1541;1080;1460;1241;1620"; top: "521;600;420;470;611;380;641;560"; width: "420;360;300;380;341;281;401;300"; height: "420;360;300;380;341;281;401;300"; border-radius: 50%; background: radial(#FFFAF28C,#FFFAF22E@40%,#FFFAF200@70%,50%,50%); opacity: .45; in: none; main: sine {y: -75, opacity: .45, period: 5.6, phase_offset: '0;.245;.489;.734;.979;.241;.486;.73'}) ×8
 div#t_grain(inset: 0; grain: 0.06; in: none)
 div#t_kick(left: 120px; top: 200px; height: 38px; display: flex; gap: 18px; align-items: center; delay: 250ms; in: {y:16, opacity:0, duration:.7, ease:'power2.out'})
   p#a(font-size: 26px; letter-spacing: .22em; color: $lt1) 湯ノ瀬町 観光課
@@ -117,10 +117,10 @@ p#t_l1(left: 120px; top: 262px; font-size: 94px; line-height: 1.2; letter-spacin
 p#t_l2(left: 120px; top: 376px; font-size: 94px; line-height: 1.2; letter-spacing: .01em; font-family: m; color: $lt3; text-shadow: 0px 2px 24px #00000059; delay: 620ms; in: {y:46, opacity:0, duration:1, ease:'expo.out'}) {em}5年{/}でどう変わった
 # 朱の判子 (内側に生成りの細い縁・2×2 の明朝の字・-4° に傾く)
 div#t_seal(left: 1010px; top: 384px; width: 118px; height: 118px; background: $shu; border: 3px solid #F8F3EAE6; border-radius: 6px; box-shadow: 0px 6px 15px #00000066; transform: rotate(-4deg); delay: 900ms; in: {scale:1.7, rotation:-18, opacity:0, duration:.45, ease:'back.out(2.2)'})
-  p#c(cx: "24;55;24;55"; cy: "24;24;55;55"; font-size: 36px; line-height: 1; font-family: m; color: $lt4) ×4 調;査;報;告
+  p#c(cx: "36;83;36;83"; cy: "36;36;83;83"; font-size: 36px; line-height: 1; font-family: m; color: $lt4) ×4 調;査;報;告
 div#t_rule(left: 120px; top: 520px; width: 120px; height: 4px; background: $shu; delay: 1200ms; in: {scaleX:0, duration:.7, ease:'power3.inOut', pivot:'left'})
 p#t_sub(left: 120px; top: 549px; font-size: 28px; letter-spacing: .06em; color: $lt1; delay: 1400ms; in: {y:14, opacity:0, duration:.7, ease:'power2.out'}) 宿泊統計と旅行者アンケートで読む、この5年の変化
-chip#t_chips(left: "80;356;632;908"; k: "宿泊統計;アンケート;町の宿泊者;町議会の議題"; v: "町内34軒の宿;外国人旅行者612人;18万2,000人;宿泊税の導入"; s: "2021〜2025年;2025年に実施・回答者数;2025年;試算は「五」で") ×4
+chip#t_chips(left: "120;534;948;1362"; k: "宿泊統計;アンケート;町の宿泊者;町議会の議題"; v: "町内34軒の宿;外国人旅行者612人;18万2,000人;宿泊税の導入"; s: "2021〜2025年;2025年に実施・回答者数;2025年;試算は「五」で") ×4
 p#t_fic(right: 96px; top: 900px; font-size: 20px; letter-spacing: .06em; color: $lt5; delay: 1800ms; in: {opacity:0, duration:.8, ease:'power1.out'}) ※湯ノ瀬町は架空の町です
 
 # trend — 一 推移: 縦棒 5 本が語で下から伸びて数え上げ (2025 年は朱)・「約5倍」で右上の札・「割合」で 100 マスの札、「2.2%」「9.0%」でマスを埋める
@@ -132,13 +132,13 @@ board#tr_bd(left: 96px; width: 1000px)
   btitle#t {fg}図1{/}  {tt}外国人宿泊者数の推移{/}  （実人数・人）
   brule#r(width: 938px)
   # 目盛りの線 3 本 (左に値の札)・底の線
-  div#g(left: 102px; top: "121.5;203;284.5"; width: 850px; height: 2px; background: $paper3; delay: 1100ms; in: {opacity:0, duration:.5, stagger:{each:.08}}) ×3
-  p#gl(right: 910px; cy: "121.5;203;284.5"; font-size: 18px; color: $ink2; white-space: nowrap; delay: 1100ms; in: {opacity:0, duration:.5, stagger:{each:.08}}) ×3 1万5,000;1万;5,000
+  div#g(left: 102px; top: "182.2;305;426.8"; width: 850px; height: 2px; background: $paper3; delay: 1100ms; in: {opacity:0, duration:.5, stagger:{each:.08}}) ×3
+  p#gl(right: 910px; cy: "182.2;305;426.8"; font-size: 18px; color: $ink2; white-space: nowrap; delay: 1100ms; in: {opacity:0, duration:.5, stagger:{each:.08}}) ×3 1万5,000;1万;5,000
   div#base(left: 102px; top: 548px; width: 850px; height: 3px; background: $ink2)
-  div#bar(left: "96;208;320;432"; top: "313.9;269.9;206.3;144.4"; width: 104px; height: "52.1;96.1;159.7;221.6"; background: $ai; border-radius: 2px; in: {scaleY:0, duration:.65, ease:'power3.out', pivot:'bottom'}) ×4
+  div#bar(left: "144;312;480;648"; top: "470.8;404.8;309.5;216.6"; width: 104px; height: "78.2;144.1;239.5;332.4"; background: $ai; border-radius: 2px; in: {scaleY:0, duration:.65, ease:'power3.out', pivot:'bottom'}) ×4
   div#hot(left: 816px; top: 148px; width: 104px; height: 401px; background: $shu; border-radius: 2px; in: {scaleY:0, duration:.9, ease:'expo.out', pivot:'bottom'})
-  p#val(left: "74.5;186.5;298.5;410.5;522.5"; top: "280.5;235.5;172.5;111.5;65.5"; width: 168px; font-size: 32px; line-height: 1.2; font-family: m; text-align: center; color: "$ink;$ink;$ink;$ink;$shu"; in: {y:12, opacity:0, duration:.4, ease:'power2.out'}) ×5 [count:3,200 start=0 ms=600ms];[count:5,900 start=0 ms=600ms];[count:9,800 start=0 ms=600ms];[count:13,600 start=0 ms=600ms];[count:16,400 start=0 ms=900ms]
-  p#yr(left: "74.5;186.5;298.5;410.5;522.5"; top: 564px; width: 168px; font-size: 22px; text-align: center; color: "$ink2;$ink2;$ink2;$ink2;$shu"; font-family: "r;r;r;r;b") ×5 2021年;2022年;2023年;2024年;2025年
+  p#val(left: "111.8;279.8;447.8;615.8;783.8"; top: "420.8;353.2;258.8;167.2;98.2"; width: 168px; font-size: 32px; line-height: 1.2; font-family: m; text-align: center; color: "$ink;$ink;$ink;$ink;$shu"; in: {y:12, opacity:0, duration:.4, ease:'power2.out'}) ×5 [count:3,200 start=0 ms=600ms];[count:5,900 start=0 ms=600ms];[count:9,800 start=0 ms=600ms];[count:13,600 start=0 ms=600ms];[count:16,400 start=0 ms=900ms]
+  p#yr(left: "111.8;279.8;447.8;615.8;783.8"; top: 564px; width: 168px; font-size: 22px; text-align: center; color: "$ink2;$ink2;$ink2;$ink2;$shu"; font-family: "r;r;r;r;b") ×5 2021年;2022年;2023年;2024年;2025年
 card#tr_x5(left: 1136px; top: 252px; width: 688px; height: 268px; in: {y:34, opacity:0, duration:.6, ease:'power3.out'})
   ctitle#t 5年間の伸び
   p#big(left: 36px; top: 93px; font-size: 144px; line-height: 1; font-family: m; color: $shu; in: {scale:.6, opacity:0, duration:.7, ease:'back.out(1.8)', pivot:'20%,70%'}) {s40}約{/}5{s51}倍{/}
@@ -148,9 +148,9 @@ card#tr_sh(left: 1136px; top: 540px; width: 688px; height: 348px; in: {y:34, opa
   svg#w0(left: 32px; top: 74px; width: 158px; height: 158px; part: waf)
   svg#w1(left: 362px; top: 74px; width: 158px; height: 158px; part: waf)
   # 埋まるマス (2021 年は 2 マス + 2 割のマス・2025 年は 9 マス)・最下段の左から 1 マスずつ
-  div#f0(left: "21;31.7"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $ai; in: {opacity:0, duration:.03, stagger:{each:.08}}) ×2
+  div#f0(left: "32;47.5"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $ai; in: {opacity:0, duration:.03, stagger:{each:.08}}) ×2
   div#f0p(left: 63px; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: linear($ai,$ai@20%,$paper3@20%,$paper3,90); in: {opacity:0, duration:.03})
-  div#f1(left: "241;251.7;262.3;273;283.7;294.3;305;315.7;326.3"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $shu; in: {opacity:0, duration:.03, stagger:{each:.07}}) ×9
+  div#f1(left: "362;377.5;393.5;410;425.5;441.5;458;473.5;489.5"; top: 218px; width: 14px; height: 14px; border-radius: 2px; background: $shu; in: {opacity:0, duration:.03, stagger:{each:.07}}) ×9
   p#y0(left: 207px; top: 126px; font-size: 22px; font-family: b; color: $ink2) 2021年
   p#p0(left: 207px; top: 156px; font-size: 46px; line-height: 1.1; font-family: m; in: {opacity:0, duration:.25}) [count:2.2 start=0 ms=600ms]%
   p#d0(left: 207px; top: 210px; font-size: 18px; color: $ink2) 14万8,000人中
@@ -170,26 +170,26 @@ board#mx_bd(left: 96px; width: 1064px)
   brule#r(width: 1000px)
   p#y0(left: 32px; top: 108px; font-size: 24px; font-family: b; color: $ink2) 2021年
   p#y1(left: 32px; top: 285px; font-size: 24px; font-family: b; color: $ink2) 2025年
-  div#b0(left: "100;320.4;448;552.4;604.6;645.2"; top: 92px; width: "219.4;126.6;103.4;51.2;39.6;34.8"; height: 66px; background: "$tw;$hk;$kr;$cn;$sea;$wa"; delay: 1000ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.07}}) ×6
+  div#b0(left: "150;480.6;672;828.6;906.9;967.8"; top: 92px; width: "329.1;189.9;155.1;76.8;59.4;52.2"; height: 66px; background: "$tw;$hk;$kr;$cn;$sea;$wa"; delay: 1000ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.07}}) ×6
     p#t(cx: 50%; cy: 50%; font-size: 22px; font-family: b; color: "$cream;$cream;$cream;$ink;$ink;$cream") 38%;22%;18%;9%;7%;6%
   svg#rn(left: 150px; top: 158px; width: 870px; height: 110px; part: rib_near; delay: 1500ms; in: {opacity:0, duration:.6, ease:'power1.out'})
   svg#rf(left: 150px; top: 158px; width: 870px; height: 110px; part: rib_far; delay: 1740ms; in: {opacity:0, duration:.6, ease:'power1.out'})
-  div#b1(left: "100;256.6;320.4;442.2;488.6;575.6"; top: 268px; width: "155.6;62.8;120.8;45.4;86;104.4"; height: 66px; background: "$tw;$hk;$kr;$cn;$sea;$wa"; delay: 1550ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.07}}) ×6
+  div#b1(left: "150;384.9;480.6;663.3;732.9;863.4"; top: 268px; width: "233.4;94.2;181.2;68.1;129;156.6"; height: 66px; background: "$tw;$hk;$kr;$cn;$sea;$wa"; delay: 1550ms; in: {scaleX:0, duration:.45, ease:'power2.out', pivot:'left', stagger:{each:.07}}) ×6
     p#t(cx: 50%; cy: 50%; font-size: 22px; font-family: b; color: "$cream;$cream;$cream;$ink;$ink;$cream") 27%;11%;21%;8%;15%;18%
   # 凡例 2 組 (近場 4 つ・遠方 2 つ) を細い罫の枠で
   div#ln(left: 34px; top: 374px; width: 423px; height: 52px; border: 2px solid $paper3; border-radius: 6px; delay: 2000ms; in: {y:14, opacity:0, duration:.6, ease:'power2.out'})
     p#k(left: 15px; cy: 50%; font-size: 20px; letter-spacing: .12em; font-family: b; color: $ink2) 近場
-    div#c(left: "54;111;168;225"; cy: 50%; width: 15px; height: 15px; border-radius: 3px; background: "$tw;$hk;$kr;$cn") ×4
-    p#t(left: "69;126;183;240"; cy: 50%; font-size: 22px) ×4 台湾;香港;韓国;中国
+    div#c(left: "81;167;252;338"; cy: 50%; width: 15px; height: 15px; border-radius: 3px; background: "$tw;$hk;$kr;$cn") ×4
+    p#t(left: "104;189;275;360"; cy: 50%; font-size: 22px) ×4 台湾;香港;韓国;中国
   div#lf(left: 504px; top: 374px; width: 340px; height: 52px; border: 2px solid $paper3; border-radius: 6px; delay: 2000ms; in: {y:14, opacity:0, duration:.6, ease:'power2.out'})
     p#k(left: 15px; cy: 50%; font-size: 20px; letter-spacing: .12em; font-family: b; color: $ink2) 遠方
-    div#c(left: "54;156"; cy: 50%; width: 15px; height: 15px; border-radius: 3px; background: "$sea;$wa") ×2
-    p#t(left: "69;171"; cy: 50%; font-size: 22px) ×2 東南アジア;欧米豪
+    div#c(left: "81;234"; cy: 50%; width: 15px; height: 15px; border-radius: 3px; background: "$sea;$wa") ×2
+    p#t(left: "104;257"; cy: 50%; font-size: 22px) ×2 東南アジア;欧米豪
   div#sr(left: 32px; top: 470px; width: 1000px; height: 2px; background: $paper3)
   p#from(left: 33px; cy: 540px; font-size: 38px; font-family: m; color: $ink2; in: {x:-16, opacity:0, duration:.6, ease:'power2.out'}) 近場の常連が中心
   p#to(left: 478px; cy: 540px; font-size: 42px; font-family: m; in: {x:-14, opacity:0, duration:.6, ease:'power3.out'}) {mk}遠方の客が混ざる構成へ{/}
 #mx_bd.lf.hot(border: 2px solid $shu)
-shape#mx_arrow(path: "M306.3 528 H358.3 M349 520.7 L359.7 528 L349 535.3"; background: none; border: 3px solid $shu; in: draw {duration: 0.6})
+shape#mx_arrow(path: "M459.5 792 H537.5 M524 781.1 L539.5 792 L524 802.9"; background: none; border: 3px solid $shu; in: draw {duration: 0.6})
 card#mx_cd(left: 1196px; top: 252px; width: 628px; height: 636px; delay: 1300ms; in: {x:40, opacity:0, duration:.7, ease:'power3.out'})
   img#ph(left: 0px; top: 0px; width: 628px; height: 195px; border-radius: 6px 6px 0px 0px; subject: center 60%; room: bottom 25%; main: kb {scale: [1.1, 1], focus: ['50% 60%', '50% 60%']}) [photo]Travelers from several different countries walking up a gentle stone-paved slope in a Japanese hot-spring town in soft daylight, pulling small suitcases and carrying backpacks, seen from behind at a moderate distance, the group in the middle of the frame, wooden inns on both sides and drifting steam around them, a mountain in the distance. Wide panoramic composition; the bottom fifth is plain stone pavement for a caption band.
   div#cap(left: 0px; top: 142px; width: 628px; height: 52px; background: linear(#14100CCC,#14100C00,0); delay: 2000ms; in: {y:12, opacity:0, duration:.5, ease:'power2.out'})
@@ -222,14 +222,14 @@ chap#sp_ch(n: 三; k: "滞在と消費｜2025年"; t: "長く泊まり、よく�
 board#sp_bd(left: 96px; width: 1036px)
   btitle#t {fg}図3{/}  {tt}平均滞在日数と1人あたり消費額{/}  （2025年・国・地域別）
   brule#r(width: 974px)
-  p#th(left: "193;413"; top: 80px; font-size: 21px; letter-spacing: .06em; font-family: b; color: $ink2; delay: 1000ms; in: {opacity:0, duration:.5, stagger:{each:.1}}) ×2 平均滞在日数;1人あたり消費額
+  p#th(left: "290;620"; top: 80px; font-size: 21px; letter-spacing: .06em; font-family: b; color: $ink2; delay: 1000ms; in: {opacity:0, duration:.5, stagger:{each:.1}}) ×2 平均滞在日数;1人あたり消費額
   div#hl(left: 20px; top: 118px; width: 998px; height: 64px; background: #B23C2717; border-radius: 4px; in: {scaleX:.96, opacity:0, duration:.5, ease:'power2.out'})
-  p#nm(left: 39px; top: "89.5;135.5;182.5;229.5;275.5;322.5"; font-size: 26px; font-family: b; padding: 0px 0px 0px 26px; delay: 1050ms; in: {x:-14, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6 欧米豪;東南アジア;中国;香港;台湾;韓国
+  p#nm(left: 39px; top: "134.2;203.2;273.8;344.2;413.2;483.8"; font-size: 26px; font-family: b; padding: 0px 0px 0px 26px; delay: 1050ms; in: {x:-14, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.07}}) ×6 欧米豪;東南アジア;中国;香港;台湾;韓国
     div#c(left: 0px; cy: 50%; width: 15px; height: 15px; border-radius: 3px; background: "$wa;$sea;$cn;$hk;$tw;$kr")
-  div#nb(left: 290px; top: "90;136;183;230;276;323"; width: "130.7;93.3;84;79.3;74.7;65.3"; height: 30px; background: $mute; border-radius: 2px; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left', stagger:{each:.08}}) ×6
-  p#nv(left: "331.7;294.3;285;280.3;275.7;266.3"; cy: "100.5;146.5;193.5;240.5;286.5;333.5"; font-size: 28px; font-family: m; white-space: nowrap; in: {opacity:0, duration:.4, stagger:{each:.08}}) ×6 2.8泊;2.0泊;1.8泊;1.7泊;1.6泊;1.4泊
-  div#sb(left: 620px; top: "90;136;183;230;276;323"; width: "143.3;94.8;87.9;83.2;78.6;67.1"; height: 30px; background: $mute; border-radius: 2px; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left', stagger:{each:.08}}) ×6
-  p#sv(left: "564.3;515.7;509;504.3;499.7;488.3"; cy: "100.5;146.5;193.5;240.5;286.5;333.5"; font-size: 28px; font-family: m; white-space: nowrap; in: {opacity:0, duration:.4, stagger:{each:.08}}) ×6 6万2,000円;4万1,000円;3万8,000円;3万6,000円;3万4,000円;2万9,000円
+  div#nb(left: 290px; top: "135;204;275;345;414;485"; width: "196.0;139.9;126;118.9;112.1;97.9"; height: 30px; background: $mute; border-radius: 2px; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left', stagger:{each:.08}}) ×6
+  p#nv(left: "497.5;441.5;428;420.5;413.5;399.5"; cy: "150.8;219.8;290.2;360.8;429.8;500.2"; font-size: 28px; font-family: m; white-space: nowrap; in: {opacity:0, duration:.4, stagger:{each:.08}}) ×6 2.8泊;2.0泊;1.8泊;1.7泊;1.6泊;1.4泊
+  div#sb(left: 620px; top: "135;204;275;345;414;485"; width: "215.0;142.2;131.9;124.8;117.9;100.6"; height: 30px; background: $mute; border-radius: 2px; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left', stagger:{each:.08}}) ×6
+  p#sv(left: "846.4;773.6;764;756.5;749.5;732.5"; cy: "150.8;219.8;290.2;360.8;429.8;500.2"; font-size: 28px; font-family: m; white-space: nowrap; in: {opacity:0, duration:.4, stagger:{each:.08}}) ×6 6万2,000円;4万1,000円;3万8,000円;3万6,000円;3万4,000円;2万9,000円
   # 全体の平均の行 (上の罫 + 題 + 2021 年 → 2025 年)
   div#avg(left: 32px; top: 548px; width: 974px; height: 66px; in: {y:16, opacity:0, duration:.6, ease:'power2.out'})
     div#rl(left: 0px; top: 0px; width: 974px; height: 2px; background: $paper3)
@@ -257,7 +257,7 @@ card#sp_share(left: 1166px; top: 590px; width: 658px; height: 298px; in: {x:40, 
   p#v0(left: 536px; cy: 105px; font-size: 46px; line-height: 1; font-family: m; in: {opacity:0, duration:.25}) [count:18 start=0 ms=600ms]%
   p#v1(left: 536px; cy: 194px; font-size: 46px; line-height: 1; font-family: m; color: $shu; in: {opacity:0, duration:.25}) [count:28 start=0 ms=700ms]%
 # 28% を囲む手書きの丸 (svg の path を canvas の px に写して線で描く)
-shape#sp_circ(overlap: sp_share; path: "M1109 527.3 C1105 506 1178.3 499.3 1185 520.7 C1190.3 540.7 1133 555.3 1110.3 540.7 C1101 534 1105 518 1119.7 512.7"; background: none; border: 3px solid $shu; in: draw {duration: 0.7})
+shape#sp_circ(overlap: sp_share; path: "M1664 790.9 C1658 759 1767.4 749.0 1778 781.1 C1785.4 811.1 1700 832.9 1665.4 811.1 C1652 801 1658 777 1679.6 769.1"; background: none; border: 3px solid $shu; in: draw {duration: 0.7})
 note#sp_nt 注：平均滞在日数・1人あたり消費額は2025年。外国人全体の平均のみ2021年と比較。
 
 # season — 四 季節: 月別の縦棒 12 本が頭に順に伸び、「雪」「紅葉」で写真の小窓と朱の棒と括弧・「37%」を数える・「3.4倍」の札と最少の月への破線・「6月から9月」で藍の棒と閑散期の括弧と「18%」
@@ -268,11 +268,11 @@ chap#se_ch(n: 四; k: "季節｜2025年の月別"; t: "季節の偏りは、大�
 board#se_bd(left: 96px; width: 1728px)
   btitle#t {fg}図4{/}  {tt}月別の外国人宿泊者数{/}  （2025年・人）
   brule#r(width: 1665px)
-  div#bar(left: "58;147.3;236.7;326;415.3;504.6;594;683.3;772.6;862;951.3;1040.6"; top: "175.3;188.7;250.9;219.8;268.7;306.9;292.7;282;305.1;210.9;179.8;205.6"; width: 80px; height: "186.7;173.3;111.1;142.2;93.3;55.1;69.3;80;56.9;151.1;182.2;156.4"; background: $mute; border-radius: 2px; delay: 1000ms; in: {scaleY:0, duration:.55, ease:'power3.out', pivot:'bottom', stagger:{each:.07}}) ×12
-  p#mon(left: "40;129.3;218.7;308;397.3;486.6;576;665.3;754.6;844;933.3;1022.6"; top: 550px; width: 134px; font-size: 22px; text-align: center; color: $ink2; delay: 1000ms; in: {opacity:0, duration:.4, stagger:{each:.04}}) ×12 1月;2月;3月;4月;5月;6月;7月;8月;9月;10月;11月;12月
+  div#bar(left: "87;221.0;355.0;489;623.0;756.9;891;1024.9;1158.9;1293;1426.9;1560.9"; top: "263.0;283.0;376.4;329.7;403.0;460.3;439.0;423;457.7;316.4;269.7;308.4"; width: 80px; height: "280.0;260.0;166.6;213.3;139.9;82.7;103.9;120;85.3;226.6;273.3;234.6"; background: $mute; border-radius: 2px; delay: 1000ms; in: {scaleY:0, duration:.55, ease:'power3.out', pivot:'bottom', stagger:{each:.07}}) ×12
+  p#mon(left: "60;194.0;328.0;462;596.0;729.9;864;997.9;1131.9;1266;1399.9;1533.9"; top: 550px; width: 134px; font-size: 22px; text-align: center; color: $ink2; delay: 1000ms; in: {opacity:0, duration:.4, stagger:{each:.04}}) ×12 1月;2月;3月;4月;5月;6月;7月;8月;9月;10月;11月;12月
   thumb#ts(left: 36px; top: 100px) [photo]A steaming outdoor rock hot-spring bath at a Japanese mountain inn in deep winter, thick snow on the rocks and pine branches, snowflakes falling, cool blue morning light with warm steam, no people, the bath in the center of the frame.
   thumb#ta(left: 194px; top: 100px; in: {scale:.85, opacity:0, rotation:3, duration:.55, ease:'back.out(1.6)'}) [photo]A Japanese hot-spring town at the peak of autumn foliage, a small vermilion arched wooden bridge over a clear mountain river in the center of the frame, maple trees in crimson and orange covering the slopes, light steam over the water, soft overcast light, no people.
-  p#val(left: "40;129.3;218.7;308;397.3;486.6;576;665.3;754.6;844;933.3;1022.6"; top: "153;166.3;228.6;197.4;246.3;284.6;270.3;259.7;282.8;188.6;157.4;183.2"; width: 134px; font-size: 21px; line-height: 1.2; font-family: b; text-align: center; delay: 1250ms; in: {y:10, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.07}}) ×12 2,100;1,950;1,250;1,600;1,050;620;780;900;640;1,700;2,050;1,760
+  p#val(left: "60;194.0;328.0;462;596.0;729.9;864;997.9;1131.9;1266;1399.9;1533.9"; top: "230;249.5;342.9;296.1;369.5;426.9;405.5;389.5;424.2;282.9;236.1;274.8"; width: 134px; font-size: 21px; line-height: 1.2; font-family: b; text-align: center; delay: 1250ms; in: {y:10, opacity:0, duration:.35, ease:'power2.out', stagger:{each:.07}}) ×12 2,100;1,950;1,250;1,600;1,050;620;780;900;640;1,700;2,050;1,760
   p#c1(left: 351px; top: 99px; font-size: 72px; line-height: 1; font-family: m; color: $shu; in: {x:-12, opacity:0, duration:.5, ease:'power2.out'}) [count:37 start=0 ms=800ms]%
   p#l1(left: 351px; top: 174px; font-size: 21px; color: $ink2; white-space: nowrap; in: {x:-12, opacity:0, duration:.5, ease:'power2.out'}) 雪の{bk}1〜2月{/}＋紅葉の{bk}11月{/}（3か月）
   div#co2(left: 740px; top: 92px; width: 495px; height: 112px; in: {y:20, opacity:0, duration:.5, ease:'power2.out'})
@@ -282,12 +282,12 @@ board#se_bd(left: 96px; width: 1728px)
   p#c3(left: 1398px; top: 99px; font-size: 72px; line-height: 1; font-family: m; color: $ai; in: {opacity:0, duration:.25}) [count:18 start=0 ms=700ms]%
   p#l3(left: 1398px; top: 174px; font-size: 21px; color: $ink2; white-space: nowrap; in: {y:20, opacity:0, duration:.5, ease:'power2.out'}) {bk}6〜9月{/}の4か月の合計
 # 最多の 1 月の高さから最少の 6 月へ引く破線 (3.4 倍)・3 つの括弧と名札
-shape#se_dash(path: "M148.7 474.5 H595.3"; background: none; border: 2px solid $ink; dash: 5,5; in: {opacity:0, duration:.5})
-shape#se_bw(path: "M117.3 558 V566 H269.3 V558"; background: none; border: 3px solid $shu; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
+shape#se_dash(path: "M223.0 711.8 H892.9"; background: none; border: 2px solid $ink; dash: 5,5; in: {opacity:0, duration:.5})
+shape#se_bw(path: "M175.9 837 V849 H404.0 V837"; background: none; border: 3px solid $shu; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
 p#se_lw(cx: 290px; top: 852px; font-size: 18px; font-family: b; color: $shu; in: {opacity:0, duration:.4}) 雪
-shape#se_ba(path: "M1010.7 558 V566 H1073.3 V558"; background: none; border: 3px solid $shu; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
+shape#se_ba(path: "M1516.1 837 V849 H1609.9 V837"; background: none; border: 3px solid $shu; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
 p#se_la(cx: 1563px; top: 852px; font-size: 18px; font-family: b; color: $shu; in: {opacity:0, duration:.4}) 紅葉
-shape#se_bs(path: "M564 558 V566 H894.7 V558"; background: none; border: 3px solid $ai; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
+shape#se_bs(path: "M846 837 V849 H1342.1 V837"; background: none; border: 3px solid $ai; in: {scaleY:0, opacity:0, duration:.4, pivot:'top'})
 p#se_ls(cx: 1094px; top: 852px; font-size: 18px; font-family: b; color: $ai; in: {opacity:0, duration:.4}) 閑散期（6〜9月）
 note#se_nt 注：2025年の外国人宿泊者（実人数）の月別。合計1万6,400人。
 
@@ -327,11 +327,11 @@ chap#is_ch(n: 六; k: "課題｜2025年アンケート"; t: "受け入れの課�
 board#is_bd(left: 96px; width: 1044px)
   btitle#t {fg}図6{/}  {tt}外国人旅行者が困ったこと{/}  （複数回答・回答612人）
   brule#r(width: 981px)
-  p#lb(left: 32px; top: "59;139;219;299"; font-size: 26px; font-family: b; white-space: nowrap; delay: 1100ms; in: {x:-12, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.1}}) ×4 {qn}1{/} 駅から宿・湯めぐりへの移動手段;{qn}2{/} 案内表示が日本語だけ;{qn}3{/} 現金しか使えない店;{qn}4{/} 入浴の作法が分からない
-  div#trk(left: 32px; top: "88;168;248;328"; width: 760px; height: 44px; background: $paper2; border-radius: 3px; delay: 1150ms; in: {opacity:0, duration:.45, stagger:{each:.1}}) ×4
-  div#bar(left: 32px; top: "88;168;248;328"; width: "439.1;346.2;320.9;160.5"; height: 44px; background: "$shu;$ai;$ai;$ai"; border-radius: 3px 0px 0px 3px; in: {scaleX:0, duration:.7, ease:'power3.out', pivot:'left'}) ×4
-  p#v(left: 822px; cy: "103;183;263;343"; font-size: 54px; line-height: 1; font-family: m; color: "$shu;$ink;$ink;$ink"; in: {opacity:0, duration:.3}) ×4 [count:52 start=0 ms=700ms]%;[count:41 start=0 ms=700ms]%;[count:38 start=0 ms=700ms]%;[count:19 start=0 ms=700ms]%
-  p#sc(cx: "29;190;354;518"; top: 562px; font-size: 16px; color: $ink2; delay: 1500ms; in: {opacity:0, duration:.5}) ×4 0%;20%;40%;60%
+  p#lb(left: 32px; top: "89;209;329;449"; font-size: 26px; font-family: b; white-space: nowrap; delay: 1100ms; in: {x:-12, opacity:0, duration:.45, ease:'power2.out', stagger:{each:.1}}) ×4 {qn}1{/} 駅から宿・湯めぐりへの移動手段;{qn}2{/} 案内表示が日本語だけ;{qn}3{/} 現金しか使えない店;{qn}4{/} 入浴の作法が分からない
+  div#trk(left: 32px; top: "132;252;372;492"; width: 760px; height: 44px; background: $paper2; border-radius: 3px; delay: 1150ms; in: {opacity:0, duration:.45, stagger:{each:.1}}) ×4
+  div#bar(left: 32px; top: "132;252;372;492"; width: "658.7;519.3;481.3;240.8"; height: 44px; background: "$shu;$ai;$ai;$ai"; border-radius: 3px 0px 0px 3px; in: {scaleX:0, duration:.7, ease:'power3.out', pivot:'left'}) ×4
+  p#v(left: 822px; cy: "155;275;395;515"; font-size: 54px; line-height: 1; font-family: m; color: "$shu;$ink;$ink;$ink"; in: {opacity:0, duration:.3}) ×4 [count:52 start=0 ms=700ms]%;[count:41 start=0 ms=700ms]%;[count:38 start=0 ms=700ms]%;[count:19 start=0 ms=700ms]%
+  p#sc(cx: "44;285;531;777"; top: 562px; font-size: 16px; color: $ink2; delay: 1500ms; in: {opacity:0, duration:.5}) ×4 0%;20%;40%;60%
 # 写真の額 (生成りの 5 px の縁 + 影) の中で写真が 1.12 → 1.0 に引く (縁つきの絵に kb を掛けると絵が額の中で小さく縮んだので、額の箱 + 子の絵に分けた)
 div#is_ph(left: 1180px; top: 252px; width: 644px; height: 280px; background: $lt7; box-shadow: 0px 9px 18px #00000059; delay: 1000ms; in: {scale:.94, opacity:0, duration:.8, ease:'power2.out'})
   img#p(left: 8px; top: 8px; width: 628px; height: 266px; subject: center 45%; room: bottom 20%; main: kb {scale: [1.12, 1], focus: ['50% 45%', '50% 45%']}) [photo]A full-bleed wide photograph that fills the entire canvas edge to edge, with no white border, no mat, no margins and no frame around it. A small rural railway station in a Japanese mountain valley: one platform with a modest wooden shelter on the left, the rails leading into the frame toward a distant hot-spring town where faint steam rises in the center, a lone bus-stop pole and a bench by the narrow road on the right, overcast soft light, nobody waiting. Wide panoramic composition with the scene running to all four edges: the shelter touches the left edge, the road and bench reach the right edge, the sky touches the top; the bottom fifth is the quiet platform edge and gravel for a caption band.
@@ -343,11 +343,11 @@ card#is_un(left: 1180px; top: 552px; width: 644px; height: 336px; in: {x:30, opa
   div#u0(left: 30px; top: 78px; width: 584px; height: 118px)
     p#lb(left: 0px; top: 3px; font-size: 22px; font-family: b; in: {opacity:0, duration:.4}) 多言語で予約を受けられる
     p#v(right: 0px; top: -4px; font-size: 34px; font-family: m; color: $ai; in: {opacity:0, duration:.4}) 12軒{sm} 35%{/}
-    div#c(left: "0;22.6;45.1;67.7;90.2;112.8;135.4;157.9;180.5;203;225.6;248.2;270.7;293.3;315.8;338.4;361;0;22.6;45.1;67.7;90.2;112.8;135.4;157.9;180.5;203;225.6;248.2;270.7;293.3;315.8;338.4;361"; top: "29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51"; width: 28px; height: 28px; border-radius: 4px; background: "$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none"; border: "2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3"; in: {scale:.4, opacity:0, duration:.25, ease:'back.out(2)', stagger:{each:.02}}) ×34
+    div#c(left: "0;33.9;67.7;101.6;135.3;169.2;203.1;236.9;270.8;305;338.4;372.3;406.0;440.0;473.7;507.6;542;0;33.9;67.7;101.6;135.3;169.2;203.1;236.9;270.8;305;338.4;372.3;406.0;440.0;473.7;507.6;542"; top: "44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77"; width: 28px; height: 28px; border-radius: 4px; background: "$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none;none"; border: "2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3"; in: {scale:.4, opacity:0, duration:.25, ease:'back.out(2)', stagger:{each:.02}}) ×34
   div#u1(left: 30px; top: 204px; width: 584px; height: 118px)
     p#lb(left: 0px; top: 3px; font-size: 22px; font-family: b; in: {opacity:0, duration:.4}) キャッシュレス決済に対応
     p#v(right: 0px; top: -4px; font-size: 34px; font-family: m; color: $ai; in: {opacity:0, duration:.4}) 21軒{sm} 62%{/}
-    div#c(left: "0;22.6;45.1;67.7;90.2;112.8;135.4;157.9;180.5;203;225.6;248.2;270.7;293.3;315.8;338.4;361;0;22.6;45.1;67.7;90.2;112.8;135.4;157.9;180.5;203;225.6;248.2;270.7;293.3;315.8;338.4;361"; top: "29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;29;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51;51"; width: 28px; height: 28px; border-radius: 4px; background: "$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;none;none;none;none;none;none;none;none;none;none;none;none;none"; border: "2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3"; in: {scale:.4, opacity:0, duration:.25, ease:'back.out(2)', stagger:{each:.02}}) ×34
+    div#c(left: "0;33.9;67.7;101.6;135.3;169.2;203.1;236.9;270.8;305;338.4;372.3;406.0;440.0;473.7;507.6;542;0;33.9;67.7;101.6;135.3;169.2;203.1;236.9;270.8;305;338.4;372.3;406.0;440.0;473.7;507.6;542"; top: "44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;44;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77;77"; width: 28px; height: 28px; border-radius: 4px; background: "$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;$ai;none;none;none;none;none;none;none;none;none;none;none;none;none"; border: "2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $ai;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3;2px solid $paper3"; in: {scale:.4, opacity:0, duration:.25, ease:'back.out(2)', stagger:{each:.02}}) ×34
 note#is_nt 注：アンケートの「困ったこと」は複数回答。宿の対応は町内34軒のうちの軒数。
 
 # wrap — まとめ: 夜の温泉街の写真 (1.0 → 1.07)・右に暗幕と生成りの板 (題 + 朱の丸い判子「提言」)・語で 3 つの要点・締めの一文に下線のマーカー・声の後に左下の出典

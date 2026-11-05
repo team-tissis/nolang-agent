@@ -127,7 +127,7 @@ shape#s_orbit(left: 140px; top: 870px; width: 800px; height: 280px; border-radiu
 # 尾の点 7 つ: 地球と同じ楕円を位相を少しずつ遅らせて回る (x の群 → y の群 → 点)
 group#s_tr(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350ms; main: sine {x: 400, period: 4.804, phase_offset: '0.260;0.233;0.206;0.179;0.152;0.125;0.098'}; in: {opacity:0, duration:.3}) ×7
   group#ty(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: '0.010;0.983;0.956;0.929;0.902;0.875;0.848'})
-    shape#d(left: "352;352;353;353;354;355;355"; top: "665;665;666;666;667;668;668"; width: "17;16;14;13;12;11;10"; height: "17;16;14;13;12;11;10"; border-radius: 50%; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
+    shape#d(left: "528;528;530;530;531;533;533"; top: "998;998;999;999;1001;1002;1002"; width: "26;24;21;20;18;17;15"; height: "26;24;21;20;18;17;15"; border-radius: 50%; background: radial(#8CDCFFF2,#8CDCFF00@70%,50%,50%); opacity: "0.85;0.73;0.61;0.49;0.36;0.24;0.12")
 # 地球の公転 (楕円 rx 267 / ry 93・周期 4.8 s・手前で大きく奥で小さく)
 group#s_orb(left: 0px; top: 0px; width: 1080px; height: 1920px; delay: 350ms; main: sine {x: 400, period: 4.804, phase_offset: 0.274}; in: {opacity:0, duration:.3})
   group#oy(left: 0px; top: 0px; width: 1080px; height: 1920px; main: sine {y: 140, period: 4.804, phase_offset: 0.024})
@@ -155,7 +155,7 @@ group#w_diag(left: 0px; top: 0px; width: 1080px; height: 1920px; in: none)
   img#sun(left: 70px; top: 880px; width: 360px; height: 360px; content: @sun; object-fit: contain; delay: 450ms; in: {scale:0, duration:.45, ease:'back.out(1.8)'})
   div#bh(left: 195px; top: 1005px; width: 112px; height: 112px; border-radius: 50%; background: #000000; border: 4px solid #FFECC8F2; box-shadow: 0px 0px 26px 8px #FFC882BF; in: {scale:.2, opacity:0, duration:.35, ease:'back.out(2)'})
   p#radius(left: 10px; top: 1208px; width: 520px; font-size: 48px; text-align: center; color: $mass; white-space: nowrap; in: {opacity:0, duration:.3, ease:'power2.out'}) 半径 {nb}[count:0,003 start=696,000 ms=2180ms delay=450ms]{/} km
-  shape#dline(points: "227,673 527,673"; background: none; border: 4px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
+  shape#dline(points: "341,1010 791,1010"; background: none; border: 4px solid #5FE0FFD9; dash: 12,11; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.3})
   lab#dlab(left: 340px; top: 920px; width: 450px; color: $cyan; in: {opacity:0, duration:.25}; out: {opacity:0, duration:.15}) 距離
   div#line(left: 340px; top: 1006px; width: 450px; height: 8px; background: linear(#5FE0FF,#A9F0FF,90); box-shadow: 0px 0px 14px #5FE0FFCC; border-radius: 24px; in: {scaleX:0, duration:1.2, ease:'power2.inOut', pivot:'left'})
   p#dist(left: 300px; top: 910px; width: 540px; font-size: 62px; text-align: center; color: $cyan; white-space: nowrap; in: {opacity:0, duration:.25}) 1億[count:5000 start=0 ms=1250ms]万 km
@@ -270,7 +270,7 @@ group#r_b(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity:0, du
 group#r_c(left: 0px; top: 0px; width: 1080px; height: 1920px; in: {opacity:0, duration:.5, ease:'power1.inOut'})
   img#sleep(inset: 0; content: @sleep; main: kb {scale: [1.06, 1], focus: ['50% 45%', '50% 45%']})
   topshade#shade
-  p#z(left: "507;547;593"; top: "373;313;240"; width: 150px; font-family: d; font-size: "43;56;69"; color: #FFF3C9; text-shadow: 0px 0px 18px #FFDC96E6; in: {y:30, opacity:0, duration:.35, ease:'power2.out'}) ×3 Z;Z;Z
+  p#z(left: "761;821;890"; top: "560;470;360"; width: 150px; font-family: d; font-size: "65;84;104"; color: #FFF3C9; text-shadow: 0px 0px 18px #FFDC96E6; in: {y:30, opacity:0, duration:.35, ease:'power2.out'}) ×3 Z;Z;Z
 telop#t_relief_a
   tl#a(top: 0px; s: 70px; w: 11) でも…
   tl#b(top: 90px; s: 104px; w: 15; color: $warm) 安心してください

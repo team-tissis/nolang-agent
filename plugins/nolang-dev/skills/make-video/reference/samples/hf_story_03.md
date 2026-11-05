@@ -116,7 +116,7 @@ div#blob1(left: -380px; top: -260px; width: 900px; height: 900px; background: ra
 div#blob2(left: 620px; top: 520px; width: 820px; height: 820px; background: radial(#FF2BD6,#FF2BD600@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -120, y: -80, period: 36}; bleed)
 div#blob3(left: -300px; top: 1250px; width: 1100px; height: 1100px; background: radial(#FF2A3A,#FF2A3A00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: 100, period: 24}; bleed)
 div#blob4(left: 640px; top: -200px; width: 760px; height: 760px; background: radial(#2A4BFF,#2A4BFF00@70%); opacity: .7; mix-blend-mode: screen; z-index: back; in: none; main: sine {x: -90, y: 110, period: 36}; bleed)
-div#beam(left: "53;220;427;587"; top: -180px; width: 130px; height: 2300px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: sine {rotation: '21;-17;19;-23', period: '4.8;5.8;6.8;7.8', pivot: 'bottom'}; z-index: back; in: none; bleed) ×4
+div#beam(left: "80;330;641;881"; top: -180px; width: 130px; height: 2300px; background: "linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0);linear(#FFFFFF00,#78F0FFE6@18%,#78F0FF00,0);linear(#FFFFFF00,#FF50BEE6@18%,#FF50BE00,0)"; opacity: .32; mix-blend-mode: screen; transform-origin: 50% 100%; rotation: "-3;3;3;3"; main: sine {rotation: '21;-17;19;-23', period: '4.8;5.8;6.8;7.8', pivot: 'bottom'}; z-index: back; in: none; bleed) ×4
 div#floor_h(left: -540px; top: 1380px; width: 2160px; height: 760px; pattern: hatch,0,#00F0FFBF,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_v(left: -540px; top: 1380px; width: 2160px; height: 760px; pattern: hatch,90,#FF46D2A6,80,3; main: constant {rotationX: 70, depth: 0.85, pivot: 'top'}; z-index: back; in: none; bleed)
 div#floor_fade(left: 0px; top: 1380px; width: 1080px; height: 200px; background: linear(#5A14AAE6,#5A14AA00,180); z-index: back; in: none)
@@ -153,7 +153,7 @@ group#digits(left: 80px; top: 1332px; width: 920px; height: 230px)
 p#hayakuchi(overlap: c1; left: 70px; top: 904px; font-size: 40px; color: $navy; background: $y; border-radius: 148px; padding: 8px 22px; box-shadow: 0px 0px 0px 4px #120A3A; transform: rotate(-8deg); in: {scale:.5, rotation:-12, opacity:0, duration:.2, ease:'back.out(1.7)'}) （早口）
 veil#desat1(filter: saturate(0); z-index: front; in: {opacity:0, duration:.05}; out: {opacity:0, duration:.05})
 # 「待て」3 つ (字幕と同じ見た目・左上 / 中下 / 右上に傾けて積む)
-capword#wait(overlap: hayakuchi,c1,notif,ampm,digits; cx: "167;360;553"; cy: "663;745;683"; s: "93;107;122"; rotation: "-10;6;-6"; t: 待て; in: {scale:2.4, rotation:-15, opacity:0, duration:.16, ease:'power4.out'}) ×3
+capword#wait(overlap: hayakuchi,c1,notif,ampm,digits; cx: "251;540;830"; cy: "995;1118;1025"; s: "140;161;183"; rotation: "-10;6;-6"; t: 待て; in: {scale:2.4, rotation:-15, opacity:0, duration:.16, ease:'power4.out'}) ×3
 flash#fl_w(o: .28) ×3
 
 # 絶望: 会場の写真に東西のピンと点線 (徒歩25分)・下のタイムテーブルで推し 2 つが同じ段に光り、黄の枠 SAME TIME → 判子「被り確定」・分身の色ずれのカード
@@ -169,8 +169,8 @@ card#c2(p: "@grounds")
 panel#tt(h: 372px)
   p#hw(left: 120px; top: 12px; width: 380px; font-size: 27px; font-family: d; letter-spacing: .06em; text-align: center; background: #1D5DFF; border-radius: 12px; padding: 6px 0px) WEST STAGE
   p#he(left: 514px; top: 12px; width: 380px; font-size: 27px; font-family: d; letter-spacing: .06em; text-align: center; background: $red; border-radius: 12px; padding: 6px 0px) EAST STAGE
-  div#row(left: 0px; top: "44;94;144;194"; width: 914px; height: 2px; background: #FFFFFF29) ×4
-  p#time(left: 18px; top: "48;98;148;198"; font-size: 28px; font-family: dot; color: #C9C4FF) ×4 17:00;18:00;19:00;20:00
+  div#row(left: 0px; top: "66;141;216;291"; width: 914px; height: 2px; background: #FFFFFF29) ×4
+  p#time(left: 18px; top: "72;147;222;297"; font-size: 28px; font-family: dot; color: #C9C4FF) ×4 17:00;18:00;19:00;20:00
   blk#g1(left: 120px; top: 70px; height: 52px; t: DJ NEON; bg: #FFFFFF1F)
   blk#g2(left: 514px; top: 88px; height: 46px; t: SHOUT!; bg: #FFFFFF1F)
   blk#g3(left: 120px; top: 256px; height: 60px; t: BAND Z; bg: #FFFFFF1F)
@@ -191,7 +191,7 @@ panel#thermo(h: 340px; out: {x:-200, opacity:0, duration:.3, ease:'power2.in'})
   p#unit(left: .num.right+3; top: 122px; font-size: 60px; font-family: d; line-height: 1; color: #FF4A2A) ℃
   div#track(left: 520px; top: 92px; width: 360px; height: 54px; border-radius: 27px; background: #FFFFFF24; border: 3px solid #FFFFFF80)
     div#fill(left: 0px; top: 0px; width: 224px; height: 48px; border-radius: 24px; background: linear(#FFD23A,#FF7A1C@50%,#FF2448,90))
-  p#tick(left: "347;392;445;499;551"; top: 154px; font-size: 27px; font-family: dot; color: #D8D2FF) ×5 0;10;20;30;40℃
+  p#tick(left: "521;588;668;749;827"; top: 154px; font-size: 27px; font-family: dot; color: #D8D2FF) ×5 0;10;20;30;40℃
   p#danger(left: 700px; top: 26px; font-size: 30px; background: $red; border-radius: 148px; padding: 4px 20px; in: {scale:.3, opacity:0, duration:.2, ease:'back.out(1.7)'}) 危険
   p#shade0(left: 40px; top: 246px; font-size: 40px; color: $navy; background: #FFFFFFF2; border-radius: 148px; padding: 10px 26px; in: {scale:.4, rotation:-10, opacity:0, duration:.22, ease:'back.out(1.7)'}) 日陰 0%
 img#bottle(left: 650px; top: 380px; width: 340px; height: 502px; transform-origin: 50% 80%; transform: rotate(-8deg); in: {x:420, scale:.7, rotation:48, opacity:0, duration:.35, ease:'back.out(1.6)'}; out: {x:-200, opacity:0, duration:.3, ease:'power2.in'}) [transparent]飲みかけでぬるくなったスポーツドリンクのペットボトル1本。ラベルは無地の水色で文字・ロゴは一切無し。結露は無く、少しへこんでいる。正面からのプロダクト写真、斜めに少し傾いている。
@@ -207,7 +207,7 @@ card#c4(p: "@stage")
 panel#hud(h: 352px; border: 3px solid $c)
   p#song(left: 30px; top: 22px; font-size: 38px; font-family: dot; color: $y) SONG
   p#cnt(left: 170px; top: 16px; font-size: 50px; font-family: dot) 03 / 12
-  hudrow#r(top: "40;93;147"; n: "声 VOICE;膝 LEGS;HP"; d: "-92;-95;-88") ×3
+  hudrow#r(top: "60;140;221"; n: "声 VOICE;膝 LEGS;HP"; d: "-92;-95;-88") ×3
   div#warn(left: -3px; top: -3px; width: 926px; height: 358px; border-radius: 30px; border: 8px solid $red; box-shadow: 0px 0px 40px #FF2448E6; in: {opacity:0, duration:.05})
 # 膝のポラロイド (白い台紙 + 泥のスニーカー + 手書き風の一言・群ごと 8° 傾ける)
 group#shoe(left: 560px; top: 330px; width: 400px; height: 470px; rotation: 8; in: {x:200, scale:.4, rotation:22, opacity:0, duration:.28, ease:'back.out(1.7)'}; out: {opacity:0, duration:.15})
@@ -258,7 +258,7 @@ flash#fl_neq(o: .5)
 section#next
 card#c6(p: "[photo]夜のベランダの物干しに干された、洗いたてで少し濡れたフェス用のマフラータオル（無地で青から赤へのグラデーション）。背景は青と赤のネオンに染まった都会の夜景のボケ。シネマティックな写真、縦構図。")
   img#p(main: kb {scale: [1, 1.18], ease:'none'})
-  svg#sp(left: "200;407;280"; top: "173;280;400"; width: 60px; height: 60px; part: spark; in: {scale:.2, rotation:-90, opacity:0, duration:.25, ease:'power2.out'}; out: {scale:.2, rotation:90, opacity:0, duration:.25, ease:'power2.in'}) ×3
+  svg#sp(left: "300;611;420"; top: "260;420;600"; width: 60px; height: 60px; part: spark; in: {scale:.2, rotation:-90, opacity:0, duration:.25, ease:'power2.out'}; out: {scale:.2, rotation:90, opacity:0, duration:.25, ease:'power2.in'}) ×3
 panel#next_box(h: 300px)
   div#cal(left: 34px; top: 34px; width: 210px; height: 230px; border-radius: 22px; background: #FFFFFF)
     div#top(left: 0px; top: 0px; width: 210px; height: 64px; border-radius: 22px,22px,0px,0px; background: linear(#FF2BD6,#FF3B3B,90))

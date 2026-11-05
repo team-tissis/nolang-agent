@@ -59,7 +59,7 @@ img#eri_walk(inset: 0; content: @eri; main: kb {scale: [1.02, 1.1], focus: ['40%
 
 # 気づく: 慌てて立ち上がるルキ (絵が下から持ち上がって少し行き過ぎ、椅子の音と同時に 2 px 揺れる) → 無音の間に えりの寄り → ルキの寄り (視線の交差)
 section#sorry
-img#ruki_stand(inset: 0; content: @stand; main: keys(at=0 scale=1.08 y=31 | at=0.323 scale=1.08 y=-5 ease=power3.out | at=1 scale=1.08 y=0 ease=sine.inOut),window=0,1920,forwards,pivot=55%,35%)
+img#ruki_stand(inset: 0; content: @stand; main: keys(at=0 scale=1.08 y=47 | at=0.323 scale=1.08 y=-7 ease=power3.out | at=1 scale=1.08 y=0 ease=sine.inOut),window=0,1920,forwards,pivot=55%,35%)
 img#eri_close(inset: 0; content: @eri_face; main: kb {scale: [1.05, 1.085], focus: ['40% 35%', '40% 35%'], ease:'sine.inOut'})
 img#ruki_close(inset: 0; main: kb {scale: [1.05, 1.085], focus: ['58% 28%', '58% 28%'], ease:'sine.inOut'}) [photo][ref:@seats][ref:@stand]Keep exactly the same characters (same faces, hairstyles and outfits), the same classroom design and the same warm morning lighting as in the reference image(s). Create a new camera angle as described, do not copy the reference composition. Character: Ruki: a 17-year-old Japanese boy with short, soft black hair and a gentle face, wearing a light sky-blue short-sleeve button-up school shirt (no tie) and navy-blue trousers. Shot: close-up of Ruki, standing, looking toward frame left at Eri who is just off-camera, with a bashful, awkward wry smile, his eyes meeting hers, ears slightly flushed, holding the white printout near his chest. Window light from frame right gives a soft rim light on his hair, creamy bokeh of the sunny classroom behind him. Natural, subtle and realistic.
 

@@ -68,7 +68,7 @@ veil#grain(grain: 0.07; color: #00000000; z-index: front; in: none; main: noise 
 section#open
 img#open_photo(inset: 0; content: @dawn; main: kb {scale: [1.04, 1.17], focus: ['37% 22%', '59% 55%'], ease:'sine.inOut'})
 # 塵 22 粒 (粒ごとの位置・大きさ・濃さと、場面の尺で漂う向き)
-shape#open_dust.bleed(left: "193;48;286;1099;745;871;895;1255;855;742;898;29;317;1049;193;5;791;502;208;33;157;439"; top: "453;319;438;231;445;315;203;126;522;333;450;337;293;583;161;310;468;298;262;589;574;216"; width: "3.3;4;2.5;2.2;2.7;2.8;5.2;3.1;2.1;4.4;2.3;4.7;2.5;5.5;5.8;3.1;4.1;5.2;2.9;3.5;3.5;2.4"; height: "3.3;4;2.5;2.2;2.7;2.8;5.2;3.1;2.1;4.4;2.3;4.7;2.5;5.5;5.8;3.1;4.1;5.2;2.9;3.5;3.5;2.4"; border-radius: 50%; background: #FFF0D6F2; box-shadow: 0px 0px 6px 2px #FFE2B48C; opacity: "0.38;0.21;0.39;0.22;0.38;0.40;0.37;0.46;0.50;0.53;0.48;0.22;0.21;0.33;0.27;0.39;0.51;0.41;0.18;0.23;0.35;0.24"; in: none; main: ramp {x: '-3;7;3;-12;-53;12;83;-38;-11;16;-16;-54;11;-4;17;96;67;-54;-39;-22;17;-60', y: '-44;5;14;4;-44;-29;-1;-17;-4;-5;-23;1;-13;9;-10;-4;8;-44;-42;-26;-43;13'}) ×22
+shape#open_dust.bleed(left: "290;72;429;1649;1118;1307;1343;1883;1283;1113;1347;44;476;1574;290;8;1187;753;312;50;236;659"; top: "680;479;657;347;668;473;305;189;783;500;675;506;440;875;242;465;702;447;393;884;861;324"; width: "4.9;6;3.8;3.3;4.1;4.2;7.8;4.7;3.2;6.6;3.4;7.1;3.8;8.2;8.7;4.7;6.1;7.8;4.3;5.2;5.2;3.6"; height: "4.9;6;3.8;3.3;4.1;4.2;7.8;4.7;3.2;6.6;3.4;7.1;3.8;8.2;8.7;4.7;6.1;7.8;4.3;5.2;5.2;3.6"; border-radius: 50%; background: #FFF0D6F2; box-shadow: 0px 0px 6px 2px #FFE2B48C; opacity: "0.38;0.21;0.39;0.22;0.38;0.40;0.37;0.46;0.50;0.53;0.48;0.22;0.21;0.33;0.27;0.39;0.51;0.41;0.18;0.23;0.35;0.24"; in: none; main: ramp {x: '-4;11;5;-18;-79;18;125;-57;-16;24;-24;-81;17;-6;26;144;101;-81;-58;-33;26;-90', y: '-66;8;21;6;-66;-43;-1;-25;-6;-7;-34;2;-19;14;-15;-6;12;-66;-63;-39;-64;20'}) ×22
 # 字幕の下の陰 (最初の台詞の手前で出て、エンドカードで消える)
 veil#sub_shade.sticky(background: linear(#00000000@72%,#0000009E,bottom); z-index: front; in: fade {duration: 0.6}; out: fade {duration: 0.9})
 
@@ -128,7 +128,7 @@ group#schedule_head(left: 380px; top: 364px; width: 1350px; height: 248px; in: {
   p#kick(left: 0px; top: 0px; font-size: 45px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) 開催時期
   p#head(left: 0px; top: 54px; font-size: 126px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) 毎年5月下旬 {r}・{/} 3日間
 shape#schedule_rule(left: 150px; top: 300px; width: 1620px; height: 3px; background: linear(#D8B26A,#D8B26A40,right); in: wipe {dir: 'right', duration: 4.2, ease: 'power1.inOut'}; out: fade {duration: 0.4})
-div#day_card(left: "100;473;847"; top: 332px; width: 500px; height: 574px; background: #0E0C0BD1; border: 2px solid #D8B26A73; box-shadow: 2; in: {y:70, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration: 0.4}) ×3
+div#day_card(left: "150;710;1271"; top: 332px; width: 500px; height: 574px; background: #0E0C0BD1; border: 2px solid #D8B26A73; box-shadow: 2; in: {y:70, opacity:0, duration:0.6, ease:'power3.out'}; out: fade {duration: 0.4}) ×3
   img#photo(left: 0px; top: 0px; width: 500px; height: 300px; content: "@dawn;@sky;@noma"; main: kb {scale: [1.16, 1], ease:'power1.out'}; out: fade {duration: 0.4})
   shape#tick(left: 34px; top: 290px; width: 22px; height: 22px; border-radius: 50%; background: $shu; border: 3px solid $gold; out: fade {duration: 0.4})
   p#day(left: 34px; top: 309px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.2em; out: fade {duration: 0.4}) {dn}1{/}日目;{dn}2{/}日目;{dn}3{/}日目
@@ -147,7 +147,7 @@ group#race_shake(left: 0px; top: 0px; width: 1920px; height: 1080px; main: noise
 img#race_shake.photo(inset: 0; main: kb {scale: [1.16, 1.22], focus: ['79% 50%', '33% 50%']}) [photo]Action photograph of an armored horse race at a traditional Japanese festival: riders in samurai armor without helmets, wearing white headbands, with tall colorful banners streaming from their backs, galloping at full speed side by side on a dirt track, thick clouds of dust kicked up behind them, spectators on a grassy hillside in the background, bright midday sun. Photorealistic sports photograph, fast shutter, panning motion blur in the background. No readable text, no letters.
 shade#race_shake.shade
 # 塵 16 粒 (横へ大きく流れる)
-shape#race_shake.dust.bleed(left: "717;806;53;676;1078;1277;90;1;806;151;573;273;505;989;769;234"; top: "620;540;656;90;372;664;523;182;531;205;170;219;577;255;281;148"; width: "3.8;4.1;4.8;2.1;3.7;3.1;3.1;5.4;2.3;5;4.3;3.7;2.9;3;3;5.5"; height: "3.8;4.1;4.8;2.1;3.7;3.1;3.1;5.4;2.3;5;4.3;3.7;2.9;3;3;5.5"; border-radius: 50%; background: #FFF0D6F2; box-shadow: 0px 0px 6px 2px #FFE2B48C; opacity: "0.37;0.29;0.42;0.27;0.36;0.44;0.49;0.35;0.21;0.20;0.23;0.48;0.22;0.21;0.53;0.48"; in: none; main: ramp {x: '173;-244;197;-295;236;-55;5;504;-41;349;221;-65;511;-244;86;-110', y: '-60;6;-63;-31;-31;-56;22;-38;23;-61;-68;14;-57;-18;-19;-60'}) ×16
+shape#race_shake.dust.bleed(left: "1076;1209;80;1014;1617;1916;135;2;1209;227;860;410;758;1484;1154;351"; top: "930;810;984;135;558;996;785;273;797;308;255;329;866;383;422;222"; width: "5.7;6.1;7.2;3.2;5.6;4.7;4.7;8.1;3.4;8;6.4;5.6;4.3;5;5;8.2"; height: "5.7;6.1;7.2;3.2;5.6;4.7;4.7;8.1;3.4;8;6.4;5.6;4.3;5;5;8.2"; border-radius: 50%; background: #FFF0D6F2; box-shadow: 0px 0px 6px 2px #FFE2B48C; opacity: "0.37;0.29;0.42;0.27;0.36;0.44;0.49;0.35;0.21;0.20;0.23;0.48;0.22;0.21;0.53;0.48"; in: none; main: ramp {x: '260;-366;296;-442;354;-82;8;756;-61;524;332;-97;767;-366;129;-165', y: '-90;9;-94;-46;-46;-84;33;-57;35;-91;-102;21;-85;-27;-28;-90'}) ×16
 scene_label#race_label(when: "2日目・正午から"; what: "甲冑競馬"; where: "雲雀ヶ原祭場地")
 
 # 神旗争奪戦: 空を仰ぐ引きを下から上へ流し、花火の閃光・「数百の騎馬武者」で争奪の寄りに切り替わる
@@ -174,7 +174,7 @@ veil#manners_dim(opacity: 0.42; color: #000000; in: none)
 div#manners_board(left: 300px; top: 170px; width: 1320px; height: 600px; background: #0C0A09C7; border: 2px solid #D8B26A80; in: {y:30, opacity:0, duration:0.6, ease:'power2.out'}; out: fade {duration: 0.4})
   p#kick(left: 80px; top: 64px; font-size: 30px; font-family: k; color: $gold; letter-spacing: 0.3em; out: fade {duration: 0.4}) お行列を見るときは
   p#head(left: 80px; top: 140px; font-size: 92px; font-family: s; letter-spacing: 0.1em; out: fade {duration: 0.4}) 観覧の心得
-  div#rule(left: 80px; top: "190;280"; width: 1170px; height: 92px; in: {x:-36, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration: 0.4}) ×2
+  div#rule(left: 80px; top: "285;420"; width: 1170px; height: 92px; in: {x:-36, opacity:0, duration:0.5, ease:'power3.out'}; out: fade {duration: 0.4}) ×2
     p#num(left: 0px; cy: 50%; width: 92px; height: 92px; font-size: 54px; font-family: s; text-align: center; vertical-align: center; background: $shu; border-radius: 148px; padding: 0px; out: fade {duration: 0.4}) 一;二
     p#words(left: 126px; cy: 50%; font-size: 62px; font-family: s; letter-spacing: 0.06em; out: fade {duration: 0.4}) お行列を横切らない;高い所から見下ろさない{sm}（建物の2階など）{/}
 

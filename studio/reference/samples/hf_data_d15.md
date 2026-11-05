@@ -63,9 +63,9 @@ svg brk = """<svg viewBox="0 0 20 112"><path d="M0 1.35 H12 Q18.65 1.35 18.65 8 
 svg brk5 = """<svg viewBox="0 0 177 17"><path d="M1.35 17 V7 Q1.35 1.35 7 1.35 H170 Q175.65 1.35 175.65 7 V17" fill="none" stroke="#ffb21a" stroke-width="2.7"/></svg>"""
 svg vdash = """<svg viewBox="0 0 4 249"><line x1="2" y1="0" x2="2" y2="249" stroke="#f3f5f9" stroke-width="2.7" stroke-dasharray="8 8"/></svg>"""
 # 全編の地 (根・z back): 左上の琥珀の光と右下の空色の光が全編 (47.7 秒) で一定の速さで漂い、40 px おき (hf の 60 px) の薄い方眼が下へ流れる・上端の進行線は動画の終わりまで伸びる
-div#glow1.bleed(left: -520px; top: -560px; width: 1400px; height: 1400px; border-radius: 700px; background: radial(#FFB21A29,#FFB21A00@62%,50%,50%); z-index: back; in: none; main: keys(at=0 x=-40 y=-20 | at=1 x=53 y=40 ease=none),window=0,47700,forwards)
-div#glow2.bleed(left: 220px; top: 840px; width: 1500px; height: 1500px; border-radius: 750px; background: radial(#4FC3F721,#4FC3F700@62%,50%,50%); z-index: back; in: none; main: keys(at=0 x=40 y=27 | at=1 x=-60 y=-33 ease=none),window=0,47700,forwards)
-div#grid.bleed(left: -60px; top: -60px; width: 1200px; height: 2040px; pattern: grid,40,#FFFFFF04; z-index: back; in: none; main: keys(at=0 y=0 | at=1 y=40 ease=none),window=0,47700,forwards)
+div#glow1.bleed(left: -520px; top: -560px; width: 1400px; height: 1400px; border-radius: 700px; background: radial(#FFB21A29,#FFB21A00@62%,50%,50%); z-index: back; in: none; main: keys(at=0 x=-60 y=-30 | at=1 x=80 y=60 ease=none),window=0,47700,forwards)
+div#glow2.bleed(left: 220px; top: 840px; width: 1500px; height: 1500px; border-radius: 750px; background: radial(#4FC3F721,#4FC3F700@62%,50%,50%); z-index: back; in: none; main: keys(at=0 x=60 y=41 | at=1 x=-90 y=-49 ease=none),window=0,47700,forwards)
+div#grid.bleed(left: -60px; top: -60px; width: 1200px; height: 2040px; pattern: grid,40,#FFFFFF04; z-index: back; in: none; main: keys(at=0 y=0 | at=1 y=60 ease=none),window=0,47700,forwards)
 progress#prog(left: 0px; top: 0px; width: 1080px; height: 8px; background: $amber; until: end; z-index: front)
 bgm#music(fade: 150,1400) 明るく軽快なピアノのリズム、124 BPM、前向きでポップな情報番組の調査速報向けの曲
 # 字幕: 暗い札の太字・数字は台詞の {a} で琥珀・句末の。は外す・場面 1 は下に寄せた変種
@@ -106,7 +106,7 @@ p#src(left: 72px; top: 582px; font-size: 30px; font-family: r; color: $ink2; let
 # 結論の札 (暗い板 + 琥珀の縁)・人の形は 1 つ目だけ琥珀で弾む
 div#head(left: 66px; top: 690px; width: 948px; height: 240px; background: #080E1BD1; border: 2px solid #FFB21A8C; border-radius: 26px; in: {y:70, scale:.94, opacity:0, duration:.45, ease:'back.out(1.5)'})
   p#lbl(left: 36px; top: 33px; font-size: 30px; color: $ink2) 副業をしている会社員は
-  svg#ppl(left: "455;492;529;566"; top: 99px; width: 48px; height: 80px; part: "pa;pg;pg;pg"; in: {y:40, opacity:0, duration:.3, ease:'back.out(2)', stagger: {each: .07}}) ×4
+  svg#ppl(left: "683;738;794;849"; top: 99px; width: 48px; height: 80px; part: "pa;pg;pg;pg"; in: {y:40, opacity:0, duration:.3, ease:'back.out(2)', stagger: {each: .07}}) ×4
   p#big(left: 36px; top: 96px; font-size: 74px; white-space: nowrap) {a}4人に1人{/}に近づく
 
 # status — 01 副業の状況: 常設の枠が入り、1,000 点の地が左から敷かれ「23.4%」で琥珀の点と札が数え、続く語で淡い砂色、「38.5%」で空色、最後に灰
@@ -127,7 +127,7 @@ board#b2(k: "01"; t: "副業の状況"; n: "回答者 {nb}1,000{/}人")
   svg#waf_c2(left: 126px; top: 400px; width: 716px; height: 446px; part: waf_c2; in: wipe {dir: 'right', duration: 0.5})
   svg#waf_c3(left: 126px; top: 400px; width: 716px; height: 446px; part: waf_c3; in: wipe {dir: 'right', duration: 0.68})
   svg#waf_c4(left: 126px; top: 400px; width: 716px; height: 446px; part: waf_c4; in: wipe {dir: 'right', duration: 0.52})
-  lg#lg(left: 44px; top: "571;609;647;685"; t: "いま副業をしている;過去にしていた;始めたいが、していない;関心なし"; v: "23.4%;9.2%;38.5%;28.9%"; p: "234人;92人;385人;289人"; c: "$amber;$sand;$sky;$slate"; ll: "206;168;244;111"; lw: "256;304;218;351") ×4
+  lg#lg(left: 44px; top: "857;914;971;1028"; t: "いま副業をしている;過去にしていた;始めたいが、していない;関心なし"; v: "23.4%;9.2%;38.5%;28.9%"; p: "234人;92人;385人;289人"; c: "$amber;$sand;$sky;$slate"; ll: "309;252;366;167"; lw: "384;456;327;527") ×4
 
 # trend — 02 推移: 目盛りと「4人に1人 (25%)」の破線が出て、折れ線が左から引かれ点が順に弾む →「14.1%」で最初の点 →「9.3ポイント」で差の破線・括弧・札と上の大きな数字
 section#trend(stagger: {each:0})
@@ -138,15 +138,15 @@ board#b3(k: "02"; t: "副業をしている割合の推移"; n: "各年 {nb}1,00
   p#hr3_post(left: 458px; top: 237px; font-size: 44px; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) ポイント
   p#hr3_side(right: 42px; top: 207px; font-size: 26px; font-family: r; color: $muted; line-height: 1.45; text-align: right; in: {x:30, opacity:0, duration:.4}) {nw}14.1%{/} → {na2}23.4%{/}[br]2023年 → 2026年
   # 目盛り (横線 4 本 + 左の %)・年の札 (頭に 20 ms ずつ)
-  div#gl(left: 135px; top: "631;511;391;271"; width: 770px; height: 2px; background: $bline; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4
+  div#gl(left: 135px; top: "947;767;587;407"; width: 770px; height: 2px; background: $bline; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4
   shape#ref(left: 135px; top: 496px; width: 770px; height: 3px; path: line_h; border: 3px solid #4FC3F7D9; dash: 6,5; delay: 410ms; in: {x:-30, opacity:0, duration:.4})
   # 折れ線は 1 枚の svg を 1.5 秒で左から (hf の linebox の幅 92 → 880・ease none)・点と値は線が着く時刻に (目盛りの文字の下に敷く)
   svg#line(left: 44px; top: 346px; width: 880px; height: 680px; part: trend; delay: 510ms; in: wipe {dir: 'right', duration: 1.5, ease: 'none'})
-  p#xl(cx: "136;249;362;476"; top: 972px; font-size: 32px; font-family: n; color: $ink2; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 2023;2024;2025;2026
+  p#xl(cx: "204;374;543;714"; top: 972px; font-size: 32px; font-family: n; color: $ink2; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 2023;2024;2025;2026
   p#reflbl(left: 144px; top: 456px; font-size: 24px; color: $sky; background: $board; padding: 0px 12px 0px 0px; delay: 410ms; in: {x:-30, opacity:0, duration:.4}) 4人に1人（25%）
-  p#gy(left: 44px; top: "620;500;380;260"; width: 76px; font-size: 26px; font-family: n; color: $muted; text-align: right; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 0%;10%;20%;30%
-  div#pt(left: "126;239;352;466"; top: "452;407;374;340"; width: 30px; height: 30px; border-radius: 148px; background: $amber; border: 6px solid $board; box-shadow: 0px 0px 0px 2px $amber; delay: "590ms;913ms;1237ms;1560ms"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
-  p#pv(cx: "136;249;362;476"; top: "411;367;333;285"; font-size: "29;29;29;40"; font-family: n; delay: "640ms;963ms;1287ms;1610ms"; in: {y:16, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
+  p#gy(left: 44px; top: "930;750;570;390"; width: 76px; font-size: 26px; font-family: n; color: $muted; text-align: right; delay: 260ms; in: {opacity:0, duration:.35, stagger: {each: .02}}) ×4 0%;10%;20%;30%
+  div#pt(left: "189;359;528;699"; top: "678;611;561;510"; width: 30px; height: 30px; border-radius: 148px; background: $amber; border: 6px solid $board; box-shadow: 0px 0px 0px 2px $amber; delay: "590ms;913ms;1237ms;1560ms"; in: {scale:0, duration:.25, ease:'back.out(2.5)'}) ×4
+  p#pv(cx: "204;374;543;714"; top: "617;551;500;428"; font-size: "44;44;44;60"; font-family: n; delay: "640ms;963ms;1287ms;1610ms"; in: {y:16, opacity:0, duration:.25}) ×4 14.1%;17.8%;20.6%;23.4%
   shape#g141(left: 204px; top: 693px; width: 570px; height: 3px; path: line_h; border: 3px solid #C3CCDD73; dash: 5,4; in: {scaleX:0, duration:.4, ease:'power2.out', pivot:'left'})
   svg#brk(left: 765px; top: 525px; width: 30px; height: 168px; part: brk; in: {scaleY:0, duration:.35, ease:'power3.out', pivot:'bottom'})
   p#brkl(left: 807px; top: 586px; font-size: 26px; color: $bg; background: $amber; border-radius: 8px; padding: 6px 12px 4px 12px; white-space: nowrap; in: {x:-20, opacity:0, duration:.3}) +9.3pt
@@ -155,11 +155,11 @@ board#b3(k: "02"; t: "副業をしている割合の推移"; n: "各年 {nb}1,00
 section#kinds(stagger: {each:0})
 chap#c3(no: "03"; delay: 60ms)
 board#b4(k: "03"; t: "副業の種類"; n: "している {nb}234{/}人・複数回答")
-  div#k4(left: 44px; top: "100;193;287;380;473;567"; width: 880px; height: 118px; border-radius: 18px; delay: 310ms; in: {x:-40, opacity:0, duration:.35, ease:'power3.out', stagger: {each: .09}}) ×6
+  div#k4(left: 44px; top: "150;290;431;570;710;851"; width: 880px; height: 118px; border-radius: 18px; delay: 310ms; in: {x:-40, opacity:0, duration:.35, ease:'power3.out', stagger: {each: .09}}) ×6
     div#ic(left: 6px; cy: 50%; width: 88px; height: 88px; border-radius: 22px; background: #FFFFFF0D)
       img#img(cx: 50%; cy: 50%; width: 70px; height: 70px; object-fit: contain; main: none) [transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 開いたノートパソコンと大きな万年筆のペン先と文書のページ;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 値札の下がった段ボールの配送箱;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 再生ボタンとタイムラインの帯とペンツールのある動画編集の窓;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 四角い保温の配達バッグを積んだ配達の自転車;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 人物のビデオ通話と吹き出しが映るノートパソコン;[transparent]フラットな app icon 風の 1 つのアイコン、丸みのある幾何学の形、琥珀と白の塗りに紺の輪郭、中央に余白: 山括弧とスラッシュの記号が並ぶコードエディタの窓
     p#lb(left: 118px; cy: 50%; font-size: 32px; line-height: 1.25) Webライター・[br]ブログ;せどり・物販;デザイン・[br]動画編集;配達・軽作業;オンライン[br]講師・相談;プログラミング
-    div#b(left: 432px; cy: 50%; width: "168;135;116;97;77;64"; height: 46px; border-radius: 0,7,7,0; background: "$amber;$bar;$bar;$bar;$bar;$bar"; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
+    div#b(left: 432px; cy: 50%; width: "252;203;174;146;116;96"; height: 46px; border-radius: 0,7,7,0; background: "$amber;$bar;$bar;$bar;$bar;$bar"; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
     p#v(left: .b.right+16; cy: 50%; font-size: 46px; font-family: n; white-space: nowrap; delay: 450ms; in: {opacity:0, duration:.3}) 26%{sm}61人{/};21%{sm}49人{/};18%{sm}42人{/};15%{sm}35人{/};12%{sm}28人{/};10%{sm}23人{/}
   p#badge4(left: 38px; top: 138px; font-size: 24px; color: $bg; background: $amber; border-radius: 148px; padding: 6px 14px 4px 14px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2.5)'}) 1位
   p#note4(left: 44px; top: 1036px; font-size: 22px; font-family: r; color: $muted; delay: 1060ms; in: {opacity:0, duration:.3}) ※複数回答のため、合計は100%になりません
@@ -173,17 +173,17 @@ board#b5(k: "04"; t: "月の副業収入"; n: "している {nb}234{/}人")
   p#hr5_big(left: 288px; top: 168px; font-size: 150px; font-family: n; color: $amber; line-height: 1; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) 2
   p#hr5_man(left: 380px; top: 237px; font-size: 44px; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) 万円
   div#base5(left: 44px; top: 852px; width: 880px; height: 3px; background: #C3CCDD99; delay: 260ms; in: {scaleX:0, duration:.4, ease:'power2.out'})
-  div#col(left: "29;131;234;336;439;541"; top: "301;319;422;456;499;551"; width: 112px; height: "267;249;146;112;69;17"; border-radius: 7,7,0,0; background: $bar; delay: 360ms; in: {scaleY:0, duration:.55, ease:'power3.out', pivot:'bottom', stagger: {each: .08}}) ×6
-  p#cv(cx: "66;168;271;373;476;578"; top: "248;266;369;403;446;498"; font-size: 44px; font-family: n; line-height: 1; delay: 710ms; in: {y:14, opacity:0, duration:.3, stagger: {each: .08}}) ×6 31%;29%;17%;13%;8%;2%
-  p#cp(cx: "66;168;271;373;476;578"; top: "281;299;402;436;479;531"; font-size: 22px; font-family: r; color: $muted; line-height: 1; delay: 710ms; in: {y:14, opacity:0, duration:.3, stagger: {each: .08}}) ×6 73人;68人;40人;30人;19人;4人
-  p#cx(cx: "66;168;271;373;476;578"; top: 866px; font-size: 26px; color: $ink2; line-height: 1.2; text-align: center; delay: 360ms; in: {opacity:0, duration:.3, stagger: {each: .08}}) ×6 1万円[br]未満;1〜3[br]万円;3〜5[br]万円;5〜10[br]万円;10〜30[br]万円;30万円[br]以上
+  div#col(left: "44;197;351;504;659;812"; top: "452;479;633;684;749;827"; width: 112px; height: "401;374;219;168;104;26"; border-radius: 7,7,0,0; background: $bar; delay: 360ms; in: {scaleY:0, duration:.55, ease:'power3.out', pivot:'bottom', stagger: {each: .08}}) ×6
+  p#cv(cx: "99;252;407;560;714;867"; top: "372;399;554;605;669;747"; font-size: 44px; font-family: n; line-height: 1; delay: 710ms; in: {y:14, opacity:0, duration:.3, stagger: {each: .08}}) ×6 31%;29%;17%;13%;8%;2%
+  p#cp(cx: "99;252;407;560;714;867"; top: "422;449;603;654;719;797"; font-size: 22px; font-family: r; color: $muted; line-height: 1; delay: 710ms; in: {y:14, opacity:0, duration:.3, stagger: {each: .08}}) ×6 73人;68人;40人;30人;19人;4人
+  p#cx(cx: "99;252;407;560;714;867"; top: 866px; font-size: 26px; color: $ink2; line-height: 1.2; text-align: center; delay: 360ms; in: {opacity:0, duration:.3, stagger: {each: .08}}) ×6 1万円[br]未満;1〜3[br]万円;3〜5[br]万円;5〜10[br]万円;10〜30[br]万円;30万円[br]以上
   svg#brk5(left: 44px; top: 327px; width: 266px; height: 26px; part: brk5; in: {scaleX:0, duration:.35, ease:'power3.out'})
   p#brk5l(left: 333px; top: 315px; font-size: 28px; color: $bg; background: $amber; border-radius: 10px; padding: 8px 16px 8px 16px; white-space: nowrap; in: {y:16, opacity:0, duration:.3, ease:'back.out(2)'}) 月3万円未満 6割（141人）
   svg#med(left: 249px; top: 477px; width: 6px; height: 374px; part: vdash; in: {scaleY:0, duration:.35, ease:'power2.out', pivot:'bottom'})
   p#medl(left: 224px; top: 944px; font-size: 26px; background: $bline; border-radius: 10px; padding: 8px 14px 6px 14px; white-space: nowrap; in: {y:14, opacity:0, duration:.3}) ▲ 中央値 約2万円
   p#note5(left: 44px; top: 1036px; font-size: 22px; font-family: r; color: $muted; delay: 1060ms; in: {opacity:0, duration:.3}) ※割合は「している」234人に占める比率
   # 「6割」で左 2 本が琥珀に灯る: 角の丸い棒は絵として描かれ fill の状態を受けないので、琥珀の棒の写しを上に重ねて 0.3 秒で出す (hf の背景色の 0.3 秒の tween)
-  div#colhi(left: "29;131"; top: "301;319"; width: 112px; height: "267;249"; border-radius: 7,7,0,0; background: $amber; overlap: b5.col; in: {opacity:0, duration:.3, ease:'none'}) ×2
+  div#colhi(left: "44;197"; top: "452;479"; width: 112px; height: "401;374"; border-radius: 7,7,0,0; background: $amber; overlap: b5.col; in: {opacity:0, duration:.3, ease:'none'}) ×2
 
 # hours — 05 かける時間: 「分かれ目は、時間。」→ 4 色の帯が左から塗られ札が続く →「週20時間」で他の帯を沈めて 8% が弾む →「63%」で琥珀の枠・数え上げ・メーター
 section#hours(stagger: {each:0})
@@ -191,9 +191,9 @@ chap#c5(no: "05"; delay: 60ms)
 board#b6(k: "05"; t: "副業にかける時間（週）"; n: "している {nb}234{/}人")
   p#kick6(left: 44px; top: 158px; font-size: 64px; line-height: 1.2; delay: 260ms; in: {y:30, opacity:0, duration:.4, ease:'power3.out'}) 分かれ目は、{a}時間{/}。
   # 帯 (hf の clip-path の 0.8 秒の塗りを、帯ごとの wipe の遅れに割った)
-  div#sg(left: "29;252;445;570"; top: 276px; width: "220;191;122;46"; height: 96px; border-radius: "9,0,0,9;0;0;0,9,9,0"; background: "$seg1;$seg2;$seg3;$amber"; delay: "560ms;860ms;1130ms;1300ms"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4
-  p#sgt(left: "29;252;445;570"; cy: 324px; width: "220;191;122;46"; font-size: 38px; font-family: n; color: "$ink;$ink;$bg;$bg"; text-align: center; overlap: b6.sg; delay: "560ms;860ms;1130ms;1300ms"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4 38%;33%;21%;8%
-  p#sl(left: "29;252;445;446"; top: 384px; width: "200;180;120;170"; font-size: 22px; color: $ink2; line-height: 1.35; text-align: "left;left;left;right"; delay: 860ms; in: {y:12, opacity:0, duration:.3, stagger: {each: .12}}) ×4 5時間未満[br]{sm}89人{/};5〜10時間[br]{sm}77人{/};10〜20時間[br]{sm}49人{/};20時間以上[br]{sm}19人{/}
+  div#sg(left: "44;378;668;855"; top: 276px; width: "330;287;183;69"; height: 96px; border-radius: "14,0,0,14;0;0;0,14,14,0"; background: "$seg1;$seg2;$seg3;$amber"; delay: "560ms;860ms;1130ms;1300ms"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4
+  p#sgt(left: "44;378;668;855"; cy: 324px; width: "330;287;183;69"; font-size: 38px; font-family: n; color: "$ink;$ink;$bg;$bg"; text-align: center; overlap: b6.sg; delay: "560ms;860ms;1130ms;1300ms"; in: wipe {dir: 'right', duration: '0.3;0.27;0.17;0.06', ease: 'none'}) ×4 38%;33%;21%;8%
+  p#sl(left: "44;378;668;669"; top: 384px; width: "300;270;180;255"; font-size: 22px; color: $ink2; line-height: 1.35; text-align: "left;left;left;right"; delay: 860ms; in: {y:12, opacity:0, duration:.3, stagger: {each: .12}}) ×4 5時間未満[br]{sm}89人{/};5〜10時間[br]{sm}77人{/};10〜20時間[br]{sm}49人{/};20時間以上[br]{sm}19人{/}
   # 琥珀の枠: 題 → 数える 63 + % + 2 行の文 → メーター (63%) → 人数
   div#call(left: 44px; top: 518px; width: 880px; height: 366px; background: #FFB21A14; border: 2px solid #FFB21A99; border-radius: 24px; in: {y:50, opacity:0, duration:.4, ease:'power3.out'})
     p#l(left: 32px; top: 26px; font-size: 30px; color: $ink2) 週20時間以上の人（19人）のうち
@@ -208,9 +208,9 @@ board#b6(k: "05"; t: "副業にかける時間（週）"; n: "している {nb}2
 section#impact(stagger: {each:0})
 chap#c6(no: "06"; delay: 60ms)
 board#b7(k: "06"; t: "本業への影響（自己評価）"; n: "している {nb}234{/}人")
-  div#sb(left: "29;230;495"; top: 152px; width: "198;262;122"; height: 96px; border-radius: "9,0,0,9;0;0,9,9,0"; background: "$teal;$gray6;$coral"; delay: "410ms;710ms;1100ms"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3
-  p#sbt(left: "29;230;495"; cy: 200px; width: "198;262;122"; font-size: 38px; font-family: n; color: "$bg;$ink;$bg"; text-align: center; overlap: b7.sb; delay: "410ms;710ms;1100ms"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3 34%;45%;21%
-  div#il(left: "29;187;349"; top: 267px; width: 225px; height: 39px; delay: 610ms; in: {y:10, opacity:0, duration:.3, stagger: {each: .1}}) ×3
+  div#sb(left: "44;345;743"; top: 152px; width: "297;393;183"; height: 96px; border-radius: "14,0,0,14;0;0,14,14,0"; background: "$teal;$gray6;$coral"; delay: "410ms;710ms;1100ms"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3
+  p#sbt(left: "44;345;743"; cy: 200px; width: "297;393;183"; font-size: 38px; font-family: n; color: "$bg;$ink;$bg"; text-align: center; overlap: b7.sb; delay: "410ms;710ms;1100ms"; in: wipe {dir: 'right', duration: '0.3;0.39;0.18', ease: 'none'}) ×3 34%;45%;21%
+  div#il(left: "44;281;524"; top: 267px; width: 225px; height: 39px; delay: 610ms; in: {y:10, opacity:0, duration:.3, stagger: {each: .1}}) ×3
     div#sq(left: 0px; cy: 50%; width: 26px; height: 26px; border-radius: 8px; background: "$teal;$gray6;$coral")
     p#t(left: 39px; cy: 50%; font-size: 26px; color: $ink2; white-space: nowrap) 良い影響 {sm}80人{/};影響なし {sm}105人{/};悪い影響 {sm}49人{/}
   div#sleep(left: 44px; top: 339px; width: 880px; height: 220px; background: #FF6B6B14; border: 2px solid #FF6B6B73; border-radius: 22px; delay: 1160ms; in: {y:40, opacity:0, duration:.45, ease:'power3.out'})
@@ -235,16 +235,16 @@ board#b7(k: "06"; t: "本業への影響（自己評価）"; n: "している {n
 section#reasons(stagger: {each:0})
 chap#c7(no: "07"; delay: 60ms)
 board#b8(k: "07"; t: "始めたいが、していない理由"; n: "{nb}385{/}人・複数回答")
-  div#r7(left: 44px; top: "94;178;262;346;430"; width: 880px; height: 118px; border-radius: 16px; delay: 310ms; in: {x:-40, opacity:0, duration:.35, ease:'power3.out', stagger: {each: .09}}) ×5
+  div#r7(left: 44px; top: "141;267;393;519;645"; width: 880px; height: 118px; border-radius: 16px; delay: 310ms; in: {x:-40, opacity:0, duration:.35, ease:'power3.out', stagger: {each: .09}}) ×5
     p#rk(left: 16px; top: 14px; width: 30px; font-size: 26px; font-family: n; color: $muted) 1;2;3;4;5
     p#lb(left: 58px; top: 10px; font-size: 30px; white-space: nowrap) 時間がない;何をすればいいか分からない;会社の規則で禁止・よく分からない;確定申告が面倒;会社に知られたくない
-    div#b(left: 16px; top: 70px; width: "347;273;220;160;127"; height: 34px; border-radius: 0,6,6,0; background: $bar; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
+    div#b(left: 16px; top: 70px; width: "521;410;330;240;191"; height: 34px; border-radius: 0,6,6,0; background: $bar; delay: 100ms; in: {scaleX:0, duration:.6, ease:'power3.out', pivot:'left'})
     p#v(left: .b.right+16; cy: 87px; font-size: 40px; font-family: n; white-space: nowrap; delay: 450ms; in: {opacity:0, duration:.3}) 52%{sm}200人{/};41%{sm}158人{/};33%{sm}127人{/};24%{sm}92人{/};19%{sm}73人{/}
   p#badge7(left: 260px; top: 152px; font-size: 24px; color: $bg; background: $amber; border-radius: 148px; padding: 6px 14px 4px 14px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2.5)'}) 1位
   # 空色の枠: 地の輪 + 61% の弧 (draw) + 中央の数え上げ + 右の文
   div#dn(left: 44px; top: 789px; width: 880px; height: 256px; background: #4FC3F714; border: 2px solid #4FC3F78C; border-radius: 22px; in: {y:50, opacity:0, duration:.4, ease:'power3.out'})
     shape#ring(left: 33px; top: 27px; width: 201px; height: 201px; border-radius: 50%; background: none; border: 30px solid #FFFFFF1A)
-    shape#arc(path: "M 89 28.2 C 114.3 28.2 136.6 44.7 143.9 68.9 C 151.2 93.1 141.8 119.2 120.7 133.2 C 99.7 147.2 71.9 145.8 52.5 129.7"; background: none; border: 30px solid $sky; in: draw {duration: 0.9, ease: 'power2.out'})
+    shape#arc(path: "M134 42.3 C171.4 42.3 204.9 67.1 215.9 103.4 C226.8 139.6 212.7 178.8 181.1 199.8 C149.6 220.8 107.9 218.7 78.8 194.5"; background: none; border: 30px solid $sky; in: draw {duration: 0.9, ease: 'power2.out'})
     p#num(cx: 134px; top: 87px; font-size: 66px; font-family: n; line-height: 1) [count:61 start=0 ms=900ms]%
     p#den(cx: 134px; top: 162px; font-size: 20px; font-family: r; color: $muted) 77／127人
     p#a(left: 268px; top: 24px; font-size: 27px; color: $ink2; white-space: nowrap) 「会社の規則」を理由に挙げた127人のうち
@@ -260,7 +260,7 @@ p#c8(right: 56px; top: 56px; font-size: 30px; color: $amber; delay: 60ms; in: {y
 div#s8(left: 56px; top: 186px; width: 968px; height: 1110px; in: {x:1100, duration:.5, ease:'power3.inOut'})
   p#chip(left: 0px; cy: 36px; font-size: 30px; color: $bg; background: $amber; border-radius: 8px; padding: 10px 16px 9px 16px; line-height: 1; delay: 110ms; in: {y:30, opacity:0, duration:.4, ease:'power3.out'}) まとめ
   p#t(left: 140px; cy: 36px; font-size: 48px; white-space: nowrap; delay: 110ms; in: {y:30, opacity:0, duration:.4, ease:'power3.out'}) 数字で見る、会社員の副業
-  div#tk(left: 0px; top: "63;176;289"; width: 968px; height: 150px; background: $board; border: 2px solid $bline; border-radius: 22px; delay: 260ms; in: {x:80, opacity:0, duration:.42, ease:'power3.out', stagger: {each: .2}}) ×3
+  div#tk(left: 0px; top: "95;264;434"; width: 968px; height: 150px; background: $board; border: 2px solid $bline; border-radius: 22px; delay: 260ms; in: {x:80, opacity:0, duration:.42, ease:'power3.out', stagger: {each: .2}}) ×3
     div#no(left: 30px; cy: 50%; width: 76px; height: 76px; border-radius: 148px; background: $amber; delay: 100ms; in: {scale:0, duration:.35, ease:'back.out(2.5)'})
       p#t(cx: 50%; cy: 50%; font-size: 44px; font-family: n; color: $bg; line-height: 1) 1;2;3
     p#a(left: 132px; top: 30px; font-size: 38px; white-space: nowrap) 3年で {na}14.1%{/} → {na}23.4%{/};稼ぎは小さく、{na}6{/}割が月3万円未満;分かれ目は「時間」

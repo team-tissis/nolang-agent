@@ -90,7 +90,7 @@ veil#blackout(color: #000000; opacity: 1; z-index: curtain; in: {opacity:0, dura
 # 瓶: 黒から明ける石の台の瓶 (0.3 s 後に光の帯が画面の左の外から右の外へ流れる — 静止の位置は画面の内側に置き、main の keys で外から外へ) → 同じ絵の寄り (ラベルの「田恵」)
 section#bottle
 img#bottle_photo(inset: 0; content: @bottle; main: kb {scale: [1.02, 1.07], focus: ['50% 29%', '50% 59%']})
-shape#sweep(left: 0px; top: 0px; width: 700px; height: 1920px; path: rect; border: none; background: linear(#FFE6BE00,#FFE2B429@50%,#FFE6BE00,100); mix-blend-mode: screen; in: none; main: keys(at=0 x=-467 | at=1 x=720 ease=power1.inOut),window=0,2600,forwards)
+shape#sweep(left: 0px; top: 0px; width: 700px; height: 1920px; path: rect; border: none; background: linear(#FFE6BE00,#FFE2B429@50%,#FFE6BE00,100); mix-blend-mode: screen; in: none; main: keys(at=0 x=-700 | at=1 x=1080 ease=power1.inOut),window=0,2600,forwards)
 img#label_photo(inset: 0; content: @bottle; main: kb {scale: [1.34, 1.4], focus: ['50% 99%', '50% 99%']})
 
 # 杯: 黒い瓶から脚つきのグラスへ注ぐ手元 → 言い終わりで朝の田にグラスを掲げる後ろ姿

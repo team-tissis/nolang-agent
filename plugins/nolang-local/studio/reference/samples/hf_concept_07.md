@@ -104,7 +104,7 @@ group#eq_rubber(left: 66px; top: 330px; width: 232px; height: 310px; in: {scale:
 p#eq_plus(cx: 362px; cy: 424px; font-size: 90px; text-shadow: 0px 6px 20px #00000099; in: {scale:0, opacity:0, duration:0.2, ease:'power1.out'}) ＋
 group#eq_carbon(left: 424px; top: 330px; width: 232px; height: 310px; in: {scale:0, opacity:0, duration:0.3, ease:'back.out(2)'})
   div#disc(cx: 50%; top: 0px; width: 190px; height: 190px; border-radius: 148px; background: radial($carbon_hi,$k@60%,35%,30%); border: 6px solid #FFFFFFE6; box-shadow: 0px 14px 34px #00000080)
-  shape#grain(left: "52;102;71"; top: "52;89;107"; width: 4px; height: 4px; border-radius: 50%; background: "#FFFFFF2E;#FFFFFF24;#FFFFFF1F") ×3
+  shape#grain(left: "78;153;107"; top: "78;134;161"; width: 4px; height: 4px; border-radius: 50%; background: "#FFFFFF2E;#FFFFFF24;#FFFFFF1F") ×3
   p#label(cx: 50%; top: 208px; font-size: 44px; line-height: 1.15; text-align: center; text-shadow: 0px 4px 14px #000000BF) カーボン[br]ブラック
 p#eq_equals(cx: 718px; cy: 424px; font-size: 90px; text-shadow: 0px 6px 20px #00000099; in: {scale:0, opacity:0, duration:0.2, ease:'power1.out'}) ＝
 group#eq_tire(left: 782px; top: 330px; width: 232px; height: 310px; in: {scale:0, opacity:0, rotation:-120, duration:0.45, ease:'back.out(1.7)'})
@@ -125,7 +125,7 @@ effect_row#row_wear.sticky(top: 494px) {y}摩耗{/}しにくくなる
 section#uv
 img#sun_photo(inset: 0; main: kb {scale: [1.12, 1.12], focus: ['50% 72%', '50% 28%']}) [photo]Vertical 9:16 photograph. A car's black tire in the foreground at the bottom of the frame, shot from the ground. Directly behind it, intense midday sunlight shines from the center of the frame with a radiant starburst and lens flare, suggesting strong ultraviolet rays. The upper third of the frame is plain bright blue sky.
 effect_row#row_uv(top: 668px) {y}紫外線{/}による劣化を抑える
-  svg#icon(part: sun; in: keys(at=0 x=-53 rotation=-60 opacity=0 | at=0.533 x=0 rotation=-13 opacity=1 ease=back(1.6) | at=1 ease=power2.out),duration=600)
+  svg#icon(part: sun; in: keys(at=0 x=-79 rotation=-60 opacity=0 | at=0.533 x=0 rotation=-13 opacity=1 ease=back(1.6) | at=1 ease=power2.out),duration=600)
 
 # 言い換え: 「黒いのは 単なるデザイン」に赤の打ち消し線を引き、黄の札「ではない！」を判子で
 section#design
@@ -152,7 +152,7 @@ p#end_lead(cx: 540px; cy: 340px; font-size: 56px; text-shadow: 0px 4px 18px #000
 group#end_main(in: {scale:1.3, opacity:0, duration:0.4, ease:'back.out(1.5)'})
   p#text(left: 63px; cy: 490px; font-size: 150px; line-height: 1.15; text-shadow: 0px 8px 30px #00000099) タイヤの
   yellow_tag#secret(left: 675px; cy: 490px; s: 100; line-height: 1.15; padding: 0px 21px 3px 21px) 秘密
-p#end_tags(cx: "153;307;513"; cy: 660px; font-size: 40px; color: $y; background: #00000099; border: 3px solid $y; border-radius: 148px; padding: 10px 24px; in: {y:16, opacity:0, duration:0.25, ease:'power1.out', stagger: {each: 0.12}}) ×3 丈夫;摩耗しにくい;紫外線に強い
+p#end_tags(cx: "230;461;770"; cy: 660px; font-size: 40px; color: $y; background: #00000099; border: 3px solid $y; border-radius: 148px; padding: 10px 24px; in: {y:16, opacity:0, duration:0.25, ease:'power1.out', stagger: {each: 0.12}}) ×3 丈夫;摩耗しにくい;紫外線に強い
 ```
 
 ```timeline.txt

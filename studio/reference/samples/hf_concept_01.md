@@ -149,7 +149,7 @@ def cursor_tag() = p(font-size: 14px; font-family: b; color: #FFFFFF; background
 # 冒頭: 白から溶ける全面の写真に、手続きの札 4 枚が順に
 section#intro
 img#in_p(inset: 0; main: kb {scale: [1.1, 1], focus: '19% 50%', ease:'power1.out'}) [ref:@cust]Wide establishing shot of the same woman (same face, wavy dark brown hair, cream-white knit sweater, pearl earrings) on a light linen sofa in her bright white living room, relaxed, using a white tablet held in both hands, 3/4 side angle, large window, plants
-div#ch(left: 104px; top: "191;259;327;395"; width: 340px; height: 84px; border-radius: 14px; background: #FFFFFFF5; box-shadow: 0px 12px 30px #0E2A471A; in: {x:-26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.2}}) ×4
+div#ch(left: 104px; top: "287;389;491;593"; width: 340px; height: 84px; border-radius: 14px; background: #FFFFFFF5; box-shadow: 0px 12px 30px #0E2A471A; in: {x:-26, opacity:0, duration:0.6, ease:'power3.out', stagger: {each: 0.2}}) ×4
   shape#c(left: 24px; cy: 50%; width: 46px; height: 46px; border-radius: 50%; background: $sky)
   icon#i(left: 34px; cy: 50%; font-size: 26px; color: $a; name: "file-text;clipboard-text;arrows-clockwise;credit-card")
   p#t(left: 88px; cy: 50%; font-size: 27px; letter-spacing: 0.05em) お申し込み;ご契約のお手続き;登録内容の変更;お支払い
@@ -169,11 +169,11 @@ telop#cf_tel 「{bb}誰かに聞きたい{/}」と思う瞬間
 # つなぐ: 画面を押す指の波紋 → 白地で 2 人の顔を弧で結び、点が渡って「つなぐ。」
 section#tap_connect
 img#tp_p(inset: 0; main: kb {scale: [1.02, 1.12], focus: ['', '76% 65%']}; out: fade {duration: 0.6}) [ref:@cust]Over-the-shoulder close-up from behind the same woman (cream-white knit sleeve and wavy dark brown hair visible) tapping a white tablet with her index finger; the screen shows a clean white app with one round soft-blue button glowing gently, very shallow depth of field
-shape#rp(left: "853;821"; top: "300;268"; width: "144;208"; height: "144;208"; border-radius: 50%; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
+shape#rp(left: "1280;1232"; top: "450;402"; width: "216;312"; height: "216;312"; border-radius: 50%; background: none; border: 3px solid #FFFFFFF2; glow: #1F6FE08C,16; in: keys(at=0 scale=0.1 opacity=0.95 | at=1 ease=power2.out),duration=1000; out: fade {duration: 0.4}) ×2
 soft_bg#cn_bg(delay: 2300ms; in: fade {duration: 0.6})
 rings#cn_r(x1: 173; x2: 507; top: -60px; d: 600; delay: 2300ms; in: fade {duration: 0.6})
-shape#cn_l1(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600ms; in: fade {duration: 0.4})
-shape#cn_l2(path: "M 507 300 C 600 233, 680 233, 773 300"; background: none; border: 4px solid $a; delay: 2750ms; in: draw {duration: 0.8})
+shape#cn_l1(path: "M761 450 C900 350 1020 350 1160 450"; background: none; border: 4px solid #1F6FE073; dash: 1,9; delay: 2600ms; in: fade {duration: 0.4})
+shape#cn_l2(path: "M761 450 C900 350 1020 350 1160 450"; background: none; border: 4px solid $a; delay: 2750ms; in: draw {duration: 0.8})
 img#av1(left: 310px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @cust; object-fit: cover; object-position: 55% 28%; zoom: 190%; delay: 2450ms; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 img#av2(left: 1160px; top: 300px; width: 300px; height: 300px; border-radius: 150px; border: 8px solid #FFFFFF; box-shadow: 0px 20px 50px #0E2A4729; content: @staff; object-fit: cover; object-position: 50% 28%; zoom: 190%; delay: 2650ms; in: {scale:0.85, opacity:0, duration:0.7, ease:'back.out(1.4)'})
 p#wh1(cx: 460px; top: 640px; font-size: 30px; letter-spacing: 0.12em; text-align: center; line-height: 1.3; color: $ink2; delay: 2750ms; in: {y:12, opacity:0, duration:0.5, ease:'power2.out'}) {k2}CUSTOMER{/}[br]お客様
@@ -269,7 +269,7 @@ div#fl(left: 1052px; top: 120px; width: 780px; height: 840px; border-radius: 22p
     p#b(left: 168px; top: 70px; font-size: 18px; color: $gray) {gn}●{/} Live Assist で通話中
   div#vl(left: 72px; top: 372px; width: 3px; height: 300px; background: $rule)
   div#vf(left: 72px; top: 372px; width: 3px; height: 3px; background: $a)
-  div#s(left: 48px; top: "216;283;349;416"; width: 684px; height: 96px) ×4
+  div#s(left: 48px; top: "324;425;524;624"; width: 684px; height: 96px) ×4
     shape#d(left: 0px; cy: 50%; width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; border: 3px solid $line)
     p#nm(left: 76px; cy: 50%; font-size: 27px; color: $mute; letter-spacing: 0.05em) お客様情報の入力;ご契約プランの選択;お支払い方法の登録;内容の確認・完了
     p#st(left: 570px; cy: 50%; font-size: 16px; font-family: b; color: $a; in: fade {duration: 0.3}; out: fade {duration: 0.25}) サポート中
@@ -291,7 +291,7 @@ telop#pr_tel2(top: 807px) 完了まで、[br]{bb}迷わせない{/}サポート
 section#anywhere
 soft_bg#aw_bg
 p#aw_h(cx: 960px; top: 74px; font-size: 52px; letter-spacing: 0.1em; in: {y:16, opacity:0, duration:0.7, ease:'power2.out'}) どこにいても、{bb}人による{/}サポートを。
-img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;385;585;585"; height: 360px; border-radius: 16px; box-shadow: 0px 18px 44px #0E2A4724; delay: "350ms;690ms;1030ms;1370ms;1710ms"; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
+img#tl(left: "72;671;1271;72;971"; top: "191;191;191;572;572"; width: "578;578;578;878;878"; height: 360px; border-radius: 16px; box-shadow: 0px 18px 44px #0E2A4724; delay: "350ms;690ms;1030ms;1370ms;1710ms"; in: {y:40, opacity:0, duration:0.7, ease:'power3.out'}; main: kb {scale: [1.12, 1.02]}) ×5 [ref:@cust][ref:@staff]The customer woman wearing a light beige trench coat over the cream knit, standing on a calm clean city sidewalk near a cafe terrace, looking at a smartphone whose screen shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman at a small white desk in a quiet corner of her bright home, looking at a laptop PC with a relaxed smile, the laptop shows a video call with the staff woman;[ref:@cust][ref:@staff]A white tablet propped on a stand on a light oak dining table at home showing a video call with the smiling staff woman, the customer's hands in soft-focus foreground;[ref:@cust][ref:@staff]Inside a bright modern Japanese service store with white counters and light blue accents, the customer woman in a beige trench coat at a counter where a tablet on a stand shows a video call with the staff woman;[ref:@cust][ref:@staff]The customer woman wearing a light gray blazer at a desk in a bright modern office, looking at a laptop that shows a video call with the staff woman next to a document
   div#lb(left: 22px; top: 282px; width: 225px; height: 54px; border-radius: 148px; background: #FFFFFFF2; box-shadow: 0px 6px 18px #0E2A4724)
   shape#c(left: 36px; cy: 309px; width: 34px; height: 34px; border-radius: 50%; background: $sky)
   icon#i(left: 42px; cy: 309px; font-size: 22px; color: $a; name: "device-mobile;laptop;device-tablet;storefront;buildings")
@@ -300,9 +300,9 @@ img#tl(left: "48;447;847;48;647"; top: "127;127;127;381;381"; width: "385;385;38
 # 価値: 3 枚の写真を薄く並べ、語った列から点灯して下の文字の組が上がる
 section#values
 soft_bg#vl_bg
-img#vp(left: "80;467;853"; top: 116px; width: 520px; height: 520px; border-radius: 18px; box-shadow: 0px 20px 50px #0E2A4724; in: {y:30, opacity:0, duration:0.8, ease:'power3.out'}; main: kb {scale: [1.12, 1]}) ×3 [ref:@cust]Tight close-up of the same woman looking at a tablet just below frame with a warm genuine smile, soft window light, creamy bokeh of the white living room, 85mm lens;[ref:@staff]The same staff woman working in a calm bright flexible workspace by a large window with plants and a light wood table, smiling while talking on a video call through a slim laptop;[photo]A modern Japanese corporate meeting room with large windows over a bright city, a small team of Japanese business people reviewing a large wall display showing an abstract customer-engagement dashboard with blue charts and connecting lines
+img#vp(left: "120;701;1280"; top: 116px; width: 520px; height: 520px; border-radius: 18px; box-shadow: 0px 20px 50px #0E2A4724; in: {y:30, opacity:0, duration:0.8, ease:'power3.out'}; main: kb {scale: [1.12, 1]}) ×3 [ref:@cust]Tight close-up of the same woman looking at a tablet just below frame with a warm genuine smile, soft window light, creamy bokeh of the white living room, 85mm lens;[ref:@staff]The same staff woman working in a calm bright flexible workspace by a large window with plants and a light wood table, smiling while talking on a video call through a slim laptop;[photo]A modern Japanese corporate meeting room with large windows over a bright city, a small team of Japanese business people reviewing a large wall display showing an abstract customer-engagement dashboard with blue charts and connecting lines
 #vp.dim(opacity: 0.32)
-div#vc(left: "80;467;853"; top: 681px; width: 520px; height: 294px; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}) ×3
+div#vc(left: "120;701;1280"; top: 681px; width: 520px; height: 294px; in: {y:18, opacity:0, duration:0.6, ease:'power3.out'}) ×3
   p#k(left: 4px; top: 0px; font-size: 16px; font-family: e; color: $a; letter-spacing: 0.26em) FOR CUSTOMERS;FOR STAFF;FOR BUSINESS
   p#n(left: 0px; top: 36px; font-size: 46px; font-family: b; letter-spacing: 0.1em) お客様;スタッフ;企業
   shape#ul(left: 0px; top: 99px; width: 60px; height: 3px; path: rect; background: $a; in: wipe {dir: 'right', duration: 0.5, ease: 'power2.out', delay: 0.4})

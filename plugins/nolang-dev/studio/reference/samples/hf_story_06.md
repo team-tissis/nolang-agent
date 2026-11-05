@@ -69,7 +69,7 @@ veil#grain(grain: 0.07; color: #00000000; z-index: front; in: none; main: noise 
 
 # 開幕: 黒 55% から明ける川の村 (寄りながら上へ) → 「この」で顔を出すカワウソが溶けて重なり、首もとに波紋が 2 重
 section#open
-img#river(inset: 0; content: @river; subject: center 90%; main: keys(at=0 scale=1 | at=1 scale=1.09 y=-24 ease=none),window=0,3400,forwards)
+img#river(inset: 0; content: @river; subject: center 90%; main: keys(at=0 scale=1 | at=1 scale=1.09 y=-36 ease=none),window=0,3400,forwards)
 img#peek(inset: 0; content: @peek; main: kb {scale: [1.16, 1], ease:'power2.out'}; in: {opacity:0, duration:0.28, ease:'power2.out'})
 shape#ripple(left: 330px; top: 1090px; width: 420px; height: 150px; border-radius: 50%; background: none; border: 3px solid #FFFFFF00; overlap: peek)
 shade_b#open_shade
@@ -87,7 +87,7 @@ group#ttl(out: {y:-24, opacity:0, duration:0.25, ease:'power1.in'})
 
 # 暮らし: 泳ぐ (斜めに流れる) → 魚を追う (寄る) → 人のそばの村。「でも」で村の色が抜け、「その姿は」でカワウソだけが溶けて消える
 section#life
-img#swim(inset: 0; content: @swim; main: keys(at=0 x=-31 y=33 scale=1.12 | at=1 x=17 y=-16 scale=1.12 ease=none),window=0,1340,forwards)
+img#swim(inset: 0; content: @swim; main: keys(at=0 x=-46 y=50 scale=1.12 | at=1 x=26 y=-24 scale=1.12 ease=none),window=0,1340,forwards)
 img#fish(inset: 0; content: @fish; main: kb {scale: [1.04, 1.17], ease:'power1.out'}; in: {opacity:0, duration:0.08})
 # 村は 2 枚 (下 = 居ない版・上 = 居る版) を群で一緒に寄せる
 group#village(main: keys(at=0 scale=1 | at=1 scale=1.16 ease=sine.inOut),window=0,6000,forwards; transform-origin: 21% 71%; in: {opacity:0, duration:0.35, ease:'power1.out'})
@@ -134,10 +134,10 @@ veil#flash(color: $white; opacity: 0.85; z-index: curtain; in: none)
 section#grid
 div#g_bg(inset: 0; background: $dark; border-radius: 24px; in: none)
 group#grid(main: keys(at=0 scale=1 | at=1 scale=1.05 ease=none),window=0,4470,forwards)
-  img#tile(left: "69;266;463;69;266;463;69;266;463;69;266;463"; top: "157;157;157;354;354;354;551;551;551;748;748;748"; width: 282px; height: 282px; border-radius: 14px; box-shadow: 0px 10px 26px #00000080; main: none; object-fit: cover; object-position: "50% 40%;52% 45%;60% 52%;42% 30%;8% 74%;52% 58%;47% 50%;50% 46%;72% 58%;52% 58%;50% 30%;34% 28%"; zoom: "140%;170%;150%;150%;300%;220%;300%;230%;230%;210%;260%;230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
+  img#tile(left: "104;399;695;104;399;695;104;399;695;104;399;695"; top: "236;236;236;531;531;531;827;827;827;1122;1122;1122"; width: 282px; height: 282px; border-radius: 14px; box-shadow: 0px 10px 26px #00000080; main: none; object-fit: cover; object-position: "50% 40%;52% 45%;60% 52%;42% 30%;8% 74%;52% 58%;47% 50%;50% 46%;72% 58%;52% 58%;50% 30%;34% 28%"; zoom: "140%;170%;150%;150%;300%;220%;300%;230%;230%;210%;260%;230%"; in: {opacity:0, scale:0.9, duration:0.35, ease:'back.out(1.6)', stagger:{each:0.075}}; out: {opacity:0, scale:0.94, duration:0.38, ease:'power1.in'}) ×12 @peek;@portrait;@swim;@fish;@village;@golden;@kochi;@peek;@swim;@memory;@portrait;@fish
 img#memory(inset: 0; content: @memory; main: kb {scale: [1, 1.13], focus: ['52% 59%', '52% 59%'], ease:'sine.inOut'}; in: {opacity:0, duration:0.5})
 # 塵 16 粒 (粒ごとの位置・大きさ・濃さ・同じ向きにゆっくり上へ漂う)
-shape#dust(left: "389;613;481;405;144;447;350;500;441;245;303;434;532;357;295;100"; top: "924;651;463;763;638;886;991;777;376;743;634;493;391;709;851;381"; width: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; height: "6;4.7;3.3;6;4;2.7;4.7;3.3;2.7;2.7;6;4;4.7;2.7;3.3;6"; border-radius: 50%; background: $mote; box-shadow: 0px 0px 4px 2px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 30, y: -140}) ×16
+shape#dust(left: "584;920;722;608;216;671;525;750;662;368;455;651;798;536;443;150"; top: "1386;977;695;1145;957;1329;1487;1166;564;1115;951;740;587;1064;1277;572"; width: "9;7.1;4.9;9;6;4.1;7.1;4.9;4.1;4.1;9;6;7.1;4.1;4.9;9"; height: "9;7.1;4.9;9;6;4.1;7.1;4.9;4.1;4.1;9;6;7.1;4.1;4.9;9"; border-radius: 50%; background: $mote; box-shadow: 0px 0px 4px 2px #FFF3D680; opacity: "0.55;0.43;0.53;0.53;0.30;0.46;0.48;0.47;0.26;0.52;0.54;0.42;0.48;0.50;0.43;0.52"; in: {opacity:0, duration:0.5}; main: ramp {x: 30, y: -140}) ×16
 shade_b#memory_shade(in: {opacity:0, duration:0.5})
 
 # あの日の川: 開幕の川の夕景版 (引き) に金の光が流れ、「そこには」で泳ぐカワウソが溶けて重なり波紋が 2 重 → 上の陰の上に題の再掲と 2 行の事実 → 暗転

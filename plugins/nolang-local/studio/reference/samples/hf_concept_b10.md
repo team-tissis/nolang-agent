@@ -56,18 +56,18 @@ subtitle.hug(top: 1300px; width: 1020px; font-size: 56px; line-height: 1.36; tex
 
 # 地 (全編・最背面): 地の色 (語で塗り替える) → 漂う色の光 5 つ → 点の地紋 → 下端の丘 3 つ → 回りながら漂う菱形 5 つ
 div#tint(inset: 0; background: $cream; z-index: back; in: none; out: none)
-div#b1(left: -280px; top: -200px; width: 780px; height: 780px; border-radius: 390px; background: radial(#FFB8A39E,#FFB8A300@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=80 y=64 ease=none | at=0.5 x=16 y=107 ease=none | at=0.75 x=64 y=32 ease=none | at=1 ease=none),duration=60000)
-div#b2(left: 560px; top: 380px; width: 860px; height: 860px; border-radius: 430px; background: radial(#9EE3C899,#9EE3C800@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-93 y=48 ease=none | at=0.5 x=-19 y=80 ease=none | at=0.75 x=-75 y=24 ease=none | at=1 ease=none),duration=60000)
-div#b3(left: -300px; top: 960px; width: 760px; height: 760px; border-radius: 381px; background: radial(#C9BDFF8C,#C9BDFF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=107 y=-56 ease=none | at=0.5 x=21 y=-93 ease=none | at=0.75 x=85 y=-28 ease=none | at=1 ease=none),duration=60000)
-div#b4(left: 560px; top: 1300px; width: 700px; height: 700px; border-radius: 351px; background: radial(#FFE38A9E,#FFE38A00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-80 y=-64 ease=none | at=0.5 x=-16 y=-107 ease=none | at=0.75 x=-64 y=-32 ease=none | at=1 ease=none),duration=60000)
-div#b5(left: 300px; top: -300px; width: 600px; height: 600px; border-radius: 300px; background: radial(#BFE3FF99,#BFE3FF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=60 y=44 ease=none | at=0.5 x=12 y=73 ease=none | at=0.75 x=48 y=22 ease=none | at=1 ease=none),duration=60000)
+div#b1(left: -280px; top: -200px; width: 780px; height: 780px; border-radius: 390px; background: radial(#FFB8A39E,#FFB8A300@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=120 y=96 ease=none | at=0.5 x=24 y=161 ease=none | at=0.75 x=96 y=48 ease=none | at=1 ease=none),duration=60000)
+div#b2(left: 560px; top: 380px; width: 860px; height: 860px; border-radius: 430px; background: radial(#9EE3C899,#9EE3C800@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-139 y=72 ease=none | at=0.5 x=-28 y=120 ease=none | at=0.75 x=-112 y=36 ease=none | at=1 ease=none),duration=60000)
+div#b3(left: -300px; top: 960px; width: 760px; height: 760px; border-radius: 381px; background: radial(#C9BDFF8C,#C9BDFF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=161 y=-84 ease=none | at=0.5 x=32 y=-139 ease=none | at=0.75 x=128 y=-42 ease=none | at=1 ease=none),duration=60000)
+div#b4(left: 560px; top: 1300px; width: 700px; height: 700px; border-radius: 351px; background: radial(#FFE38A9E,#FFE38A00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=-120 y=-96 ease=none | at=0.5 x=-24 y=-160 ease=none | at=0.75 x=-96 y=-48 ease=none | at=1 ease=none),duration=60000)
+div#b5(left: 300px; top: -300px; width: 600px; height: 600px; border-radius: 300px; background: radial(#BFE3FF99,#BFE3FF00@68%,50%,50%); z-index: back; in: none; out: none; main: keys(at=0 x=0 y=0 | at=0.25 x=90 y=66 ease=none | at=0.5 x=18 y=110 ease=none | at=0.75 x=72 y=33 ease=none | at=1 ease=none),duration=60000)
 div#dots(inset: 0; pattern: dots,31,#4A3B331A; z-index: back; in: none; out: none)
-shape#h1.bleed(left: -460px; top: 1590px; width: 1500px; height: 760px; border-radius: 50%; background: #D9F2E6; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=40 ease=none | at=0.5 x=-13 ease=none | at=0.75 x=20 ease=none | at=1 ease=none),duration=60000)
-shape#h2.bleed(left: 320px; top: 1650px; width: 1300px; height: 700px; border-radius: 50%; background: #FFE4D9; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=-47 ease=none | at=0.5 x=7 ease=none | at=0.75 x=-27 ease=none | at=1 ease=none),duration=60000)
+shape#h1.bleed(left: -460px; top: 1590px; width: 1500px; height: 760px; border-radius: 50%; background: #D9F2E6; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=60 ease=none | at=0.5 x=-19 ease=none | at=0.75 x=30 ease=none | at=1 ease=none),duration=60000)
+shape#h2.bleed(left: 320px; top: 1650px; width: 1300px; height: 700px; border-radius: 50%; background: #FFE4D9; z-index: back; in: none; out: none; main: keys(at=0 x=0 | at=0.25 x=-70 ease=none | at=0.5 x=11 ease=none | at=0.75 x=-40 ease=none | at=1 ease=none),duration=60000)
 shape#h3.bleed(left: -120px; top: 1760px; width: 900px; height: 520px; border-radius: 50%; background: #ECE7FF; z-index: back; in: none; out: none)
 # 漂う菱形 (45° に回した角丸の四角・60 秒で 270° 回りながら上下に揺れる)
 def gem(c) = div(border-radius: 8px; background: {c}; transform: rotate(45deg))
-gem#bgs(left: "68;622;127;572;354"; top: "978;1002;1127;1152;1101"; width: "18;22;13;15;11"; height: "18;22;13;15;11"; c: "$butter;$mint;$peach;$lav;#FFFFFF"; z-index: back; in: none; out: none; main: keys(at=0 y=0 rotation=0 | at=0.1667 y=-12 rotation=45 ease=none | at=0.3333 y=0 rotation=90 ease=none | at=0.5 y=-8 rotation=135 ease=none | at=0.6667 y=0 rotation=180 ease=none | at=0.8333 y=-11 rotation=225 ease=none | at=1 rotation=270 ease=none),duration=60000) ×5
+gem#bgs(left: "102;933;191;858;531"; top: "1467;1503;1691;1728;1652"; width: "27;33;20;23;17"; height: "27;33;20;23;17"; c: "$butter;$mint;$peach;$lav;#FFFFFF"; z-index: back; in: none; out: none; main: keys(at=0 y=0 rotation=0 | at=0.1667 y=-18 rotation=45 ease=none | at=0.3333 y=0 rotation=90 ease=none | at=0.5 y=-12 rotation=135 ease=none | at=0.6667 y=0 rotation=180 ease=none | at=0.8333 y=-16 rotation=225 ease=none | at=1 rotation=270 ease=none),duration=60000) ×5
 # 上端の進行線 (淡い地 + 珊瑚 → 橙 → 緑のグラデの棒が 60 秒で伸びる)
 div#track(left: 0px; top: 0px; width: 1080px; height: 12px; background: #4A3B3314; z-index: front; in: none; out: none)
 progress#bar(left: 0px; top: 0px; width: 1080px; height: 12px; background: linear(#FF8F7A,#FFC46B,#5CCFA5,90); until: end; z-index: front; overlap: track)
@@ -101,7 +101,7 @@ div#t_hero(left: 140px; top: 640px; width: 800px; height: 800px; border-radius: 
 p#t_chip(cx: 540px; top: 262px; font-size: 58px; font-family: r; line-height: 1; color: #FFFFFF; background: $coral; border: 8px solid #FFFFFF; border-radius: 148px; padding: 18px 48px 22px 48px; box-shadow: 0px 10px 0px #4A3B331A; rotation: -2; in: {scale:.2, rotation:-10, opacity:0, duration:.45, ease:'back.out(2.2)'}; out: {y:-90, opacity:0, duration:.22, ease:'power2.in'}) 1分でわかる
 p#t_title(cx: 540px; top: 400px; font-size: 90px; font-family: m; line-height: 1.1; white-space: nowrap; text-shadow: 0px 8px 0px #FF7E6B47; in: {y:-70, scale:.3, rotation:-14, opacity:0, duration:.42, ease:'back.out(2.4)', stagger:.08}; out: {y:-90, opacity:0, duration:.22, ease:'power2.in'}) エフェクチュエーション
 p#t_sub(cx: 540px; top: 530px; font-size: 42px; font-family: r; line-height: 1; letter-spacing: .32em; color: $lavd; in: {scaleX:1.6, y:10, opacity:0, duration:.6, ease:'power3.out'}; out: {y:-90, opacity:0, duration:.22, ease:'power2.in'}) EFFECTUATION
-gem#t_gems(left: "73;613;100;600"; top: "467;507;887;860"; width: 33px; height: 33px; c: "$butter;$mint;$peach;$lav"; in: {scale:0, rotation:-180, opacity:0, duration:.5, ease:'back.out(2)', stagger:.12}; out: {scale:0, opacity:0, duration:.22}) ×4
+gem#t_gems(left: "110;920;150;900"; top: "701;761;1331;1290"; width: 33px; height: 33px; c: "$butter;$mint;$peach;$lav"; in: {scale:0, rotation:-180, opacity:0, duration:.5, ease:'back.out(2)', stagger:.12}; out: {scale:0, opacity:0, duration:.22}) ×4
 
 # start — 始めたい / 動けない: 扉の前のカード → 語で左へ払われ、机で頭を抱えるカードが右から入って揺れる・地が灰紫に・上端の題の札 (以後ずっと)
 section#start
@@ -151,7 +151,7 @@ section#means
 def tile(t, c, f) = div(width: 410px; height: 410px; border-radius: 52px; background: #FFFFFF; box-shadow: 0px 24px 46px #785A3C24; in: {scale:.3, rotation:-10, opacity:0, duration:.5, ease:'back.out(2.2)'}; out: {y:-40, scale:.6, opacity:0, duration:.22, ease:'power2.in'})
   img#i(cx: 50%; top: 22px; width: 290px; height: 290px; border-radius: 30px; content: @icons; object-fit: cover; object-position: {f}; zoom: 200%; main: none)
   p#t(cx: 50%; top: 318px; font-size: 54px; font-family: m; line-height: 1; color: {c}; content: {t})
-tile#tl(left: "73;373;73;373"; top: "200;200;500;500"; height: 410px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0% 0%;100% 0%;0% 100%;100% 100%") ×4
+tile#tl(left: "110;560;110;560"; top: "300;300;750;750"; height: 410px; rotation: "-1.5;1.5;-1.5;1.5"; t: "知識;経験;スキル;人脈"; c: "#4E8FD6;$mintd;#E0795F;$lavd"; f: "0% 0%;100% 0%;0% 100%;100% 100%") ×4
 card#c4(src: "[ref:@hero]The young woman takes a small first step onto the first of a row of round pastel stepping stones that lead into the distance, with a tiny sprout growing beside her foot and small flowers along the path; she looks determined and happy."; in: {y:110, scale:.82, rotation:-4.8, opacity:0, duration:.6, ease:'back.out(1.5)'})
   img#img(main: kb {scale: [1, 1.08]})
 tag#tag4(n: "原則①"; t: "手中の鳥"; e: "Bird in Hand"; w: 345)
@@ -206,7 +206,7 @@ def rc(src, n, t) = div(width: 380px; height: 360px; in: {scale:.3, rotation:-8,
     img#img(left: 10px; top: 10px; width: 260px; height: 260px; border-radius: 36px; main: none; content: {src})
   p#t(cx: 50%; top: 294px; font-size: 32px; font-family: r; line-height: 1.1; white-space: nowrap; padding: 0px 0px 0px 51px; content: {t})
     p#n(left: 0px; cy: 50%; width: 44px; font-size: 26px; font-family: r; line-height: 1; text-align: center; color: #FFFFFF; background: $lavd; border-radius: 148px; padding: 9px 0px; content: {n})
-rc#rc(left: "8;234;459;121;346"; top: "360;360;360;613;613"; rotation: "-2;2;-2;2;-2"; src: "@bag;@pool;@quilt;@lemon;@pilot"; n: "1;2;3;4;5"; t: "手中の鳥;許容可能な損失;クレイジーキルト;レモネード;飛行機のパイロット") ×5
+rc#rc(left: "12;351;689;182;519"; top: "540;540;540;920;920"; rotation: "-2;2;-2;2;-2"; src: "@bag;@pool;@quilt;@lemon;@pilot"; n: "1;2;3;4;5"; t: "手中の鳥;許容可能な損失;クレイジーキルト;レモネード;飛行機のパイロット") ×5
 group#rc_title(in: {y:-30, scale:.4, opacity:0, duration:.55, ease:'back.out(2.2)'})
   p#b(cx: 540px; top: 236px; font-size: 82px; font-family: m; line-height: 1.1; color: $coral; white-space: nowrap; text-shadow: 0px 8px 0px #FF7E6B38) エフェクチュエーション
   p#s(cx: 540px; top: 336px; font-size: 46px; font-family: r; line-height: 1; background: #FFFFFF; border-radius: 148px; padding: 12px 34px 14px 34px; box-shadow: 0px 6px 0px #4A3B3314) の考え方
@@ -223,7 +223,7 @@ kcard#k2(left: 560px; top: 268px; rotation: 2.5; delay: 160ms; in: {scale:.4, ro
 p#ch1(left: 266px; top: 880px; font-size: 46px; font-family: r; line-height: 1; background: #FFFFFF; border: 4px solid $sky; border-radius: 22px; padding: 16px 34px 18px 34px; box-shadow: 0px 8px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) 概要欄
 p#ch2(left: 506px; top: 880px; font-size: 46px; font-family: r; line-height: 1; background: #FFFFFF; border: 4px solid $sky; border-radius: 22px; padding: 16px 34px 18px 34px; box-shadow: 0px 8px 0px #4A3B3314; in: {scale:.3, opacity:0, duration:.45, ease:'back.out(2.2)'}) コメント欄
 p#btn(cx: 540px; top: 1010px; font-size: 64px; font-family: m; line-height: 1; color: #FFFFFF; background: $coral; border: 9px solid #FFFFFF; border-radius: 148px; padding: 30px 60px 34px 60px; box-shadow: 0px 14px 0px #C2432E; white-space: nowrap; in: {scale:.3, opacity:0, duration:.5, ease:'back.out(2.2)'}) リンクからチェック！
-shape#downs(left: "296;343;390"; top: 1239px; width: 52px; height: 30px; path: tri,rot=180; background: $coral; opacity: .85; overlap: btn; in: {y:-20, opacity:0, duration:.3, ease:'power1.out', stagger:.08}; main: sine {y: 16, period: 0.9}) ×3
+shape#downs(left: "444;515;585"; top: 1239px; width: 52px; height: 30px; path: tri,rot=180; background: $coral; opacity: .85; overlap: btn; in: {y:-20, opacity:0, duration:.3, ease:'power1.out', stagger:.08}; main: sine {y: 16, period: 0.9}) ×3
 shape#cur(left: 760px; top: 1100px; width: 90px; height: 110px; path: cursor; background: #FFFFFF; border: 6px solid $ink; overlap: btn; in: {x:220, y:260, opacity:0, duration:.55, ease:'power2.out'})
 ```
 

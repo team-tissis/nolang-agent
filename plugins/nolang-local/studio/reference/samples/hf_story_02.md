@@ -70,7 +70,7 @@ group#org(in: {stagger: {each: .06}}; left: 90px; top: 380px; width: 900px; heig
     slam_x#cross(left: 126px; top: 14px; width: 72px; height: 72px)
   org_node#mgr_r(left: 530px; top: 260px; width: 240px; height: 112px; plate: plate_mgr)
     slam_x#cross(left: 126px; top: 14px; width: 72px; height: 72px)
-  org_node#staff(left: "27;227;427"; top: 468px; width: 220px; height: 104px; plate: plate_staff) ×3
+  org_node#staff(left: "41;341;641"; top: 468px; width: 220px; height: 104px; plate: plate_staff) ×3
     svg#cert(left: 120px; top: 22px; width: 60px; height: 50px; part: badge)
 telop#nobody(setup: "上の人たち、"; punchline: "誰も持ってなかった。"; punch_size: 65)
 

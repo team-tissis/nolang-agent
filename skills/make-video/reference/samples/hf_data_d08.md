@@ -125,7 +125,7 @@ def badge(t, c, lc, im) = div(width: 276px; height: 366px; opacity: .5; in: {y:5
   div#ring(left: 0px; top: 0px; width: 276px; height: 276px; border-radius: 148px; background: #FFFFFF; border: 8px solid {c}; box-shadow: 0px 14px 30px #8C5A282E)
   img#img(cx: 138px; cy: 138px; width: 226px; height: 226px; object-fit: contain; filter: saturate(0); main: none; content: {im})
   p#lb(cx: 138px; top: 294px; font-size: 46px; color: #FFFFFF; background: {lc}; border-radius: 148px; padding: 6px 28px 10px 28px; content: {t})
-badge#bd(left: "47;268;489"; top: 930px; t: "惣菜;青果;パン"; c: "$souzai;$seika;$pan"; lc: "#B9560B;#2B7D45;#9A6A12"; im: "@souzai;@seika;@pan") ×3
+badge#bd(left: "71;402;734"; top: 930px; t: "惣菜;青果;パン"; c: "$souzai;$seika;$pan"; lc: "#B9560B;#2B7D45;#9A6A12"; im: "@souzai;@seika;@pan") ×3
 
 # 01 調査の舞台: 店の絵が上から開き、店名の札と 3 つの数字の札 → 同じ板の中身を左へ抜き「4週間の廃棄」へ (はかりの絵・数える合計・売値・1 日あたり = ボトル 33 本)
 section#stage
@@ -139,7 +139,7 @@ board#st(n: "01"; t: "調査の舞台")
       p#b(left: 28px; top: 16px; font-size: 54px; line-height: 1.1; white-space: nowrap) まるみ屋 ひばり台店
       p#s(left: 28px; top: 84px; font-size: 26px; font-family: e; color: $ink2; white-space: nowrap) 住宅街にある地域スーパー（架空）
     # 数字の札 ×3 (題 + 大きい数字 + 小さい単位)
-    div#chips(left: "27;233;439"; top: 772px; width: 286px; height: 176px; background: $card; border: 3px solid $cardline; border-radius: 26px; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.6)', stagger: {each: .15}}) ×3
+    div#chips(left: "41;350;659"; top: 772px; width: 286px; height: 176px; background: $card; border: 3px solid $cardline; border-radius: 26px; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.6)', stagger: {each: .15}}) ×3
       p#l(left: 22px; top: 20px; font-size: 26px; font-family: e; color: $ink2) 売場面積;1日の来店;記録した期間
       p#v(left: 22px; top: 69px; font-size: 56px; line-height: 1.15; white-space: nowrap) 1,200{u}m²{/};約2,100{u}人{/};28{u}日（4週間）{/}
     p#note(left: 40px; top: 978px; font-size: 26px; font-family: d; color: $ink2; in: {opacity:0, duration:.4}) ※棚ごとに毎日、はかりで廃棄の重さを記録
@@ -154,7 +154,7 @@ board#st(n: "01"; t: "調査の舞台")
     p#note1(left: 440px; top: 518px; font-size: 22px; font-family: d; color: $ink2; in: {opacity:0, duration:.3}) ※売値で換算した金額
     shape#rule(left: 40px; top: 566px; width: 904px; height: 3px; path: line_h; border: 3px solid $line; dash: 6,6; in: {scaleX:0, duration:.4, pivot:'left'})
     # ボトル 33 本 (11 列 × 3 段・下を軸に弾んで 52 ms ずつ)
-    svg#bt(left: "61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3;61.3;111.3;161.3;211.3;261.3;311.3;361.3;411.3;461.3;511.3;561.3"; top: "485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;485.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;553.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3;621.3"; width: 50px; height: 92px; part: bottle; in: {scale:0, y:24, opacity:0, duration:.32, ease:'back.out(2.2)', pivot:'bottom', stagger: {each: .052}}) ×33
+    svg#bt(left: "91.9;166.9;242.0;317.0;392.0;467.0;542.0;617.0;692.0;767.0;841.9;91.9;166.9;242.0;317.0;392.0;467.0;542.0;617.0;692.0;767.0;841.9;91.9;166.9;242.0;317.0;392.0;467.0;542.0;617.0;692.0;767.0;841.9"; top: "728.0;728.0;728.0;728.0;728.0;728.0;728.0;728.0;728.0;728.0;728.0;829.9;829.9;829.9;829.9;829.9;829.9;829.9;829.9;829.9;829.9;829.9;931.9;931.9;931.9;931.9;931.9;931.9;931.9;931.9;931.9;931.9;931.9"; width: 50px; height: 92px; part: bottle; in: {scale:0, y:24, opacity:0, duration:.32, ease:'back.out(2.2)', pivot:'bottom', stagger: {each: .052}}) ×33
     div#perday(left: 40px; top: 592px; width: 330px; height: 138px; in: {y:30, opacity:0, duration:.4, ease:'back.out(1.6)'})
       p#l(left: 0px; top: 0px; font-size: 32px; font-family: e; color: $ink2) 1日あたり
       p#v(left: 0px; top: 52px; font-size: 96px; line-height: 1; white-space: nowrap) 約66{k2}kg{/}
@@ -190,7 +190,7 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
     div#b2(left: 0px; top: 72px; width: 940px; height: 120px; border-radius: 0px 0px 24px 24px; background: #FFF3C4; overlap: sh.band.b1; in: {scaleY:0, opacity:0, duration:.3, ease:'power2.out', pivot:'top'})
     div#b3(left: 0px; top: 168px; width: 940px; height: 120px; border-radius: 0px 0px 24px 24px; background: #FFF3C4; overlap: sh.band.b2; in: {scaleY:0, opacity:0, duration:.3, ease:'power2.out', pivot:'top'})
   group#rows(left: 0px; top: 186px; width: 984px; height: 672px; display: flex; flex-direction: column; gap: 0px)
-    shelf#r(flex: 1; width: 984px; nm: "惣菜;青果;パン;日配;精肉;鮮魚;その他"; sub: ";;;豆腐・乳製品・麺;;;加工食品・菓子など"; c: "$souzai;$seika;$pan;$nichi;$niku;$sengyo;$other"; bw: "304;205;148.5;134.3;127.3;113.1;268.7"; v: "430{u2}kg{/} {p2}23.4%{/};290{u2}kg{/} {p2}15.8%{/};210{u2}kg{/} {p2}11.4%{/};190{u2}kg{/} {p2}10.3%{/};180{u2}kg{/} {p2}9.8%{/};160{u2}kg{/} {p2}8.7%{/};380{u2}kg{/} {p2}20.7%{/}"; mx: "483;235;301;234;353;323;301"; mv: "47.3{u2}万円{/};8.7{u2}万円{/};18.9{u2}万円{/};8.6{u2}万円{/};27.0{u2}万円{/};22.4{u2}万円{/};19.0{u2}万円{/}") ×7
+    shelf#r(flex: 1; width: 984px; nm: "惣菜;青果;パン;日配;精肉;鮮魚;その他"; sub: ";;;豆腐・乳製品・麺;;;加工食品・菓子など"; c: "$souzai;$seika;$pan;$nichi;$niku;$sengyo;$other"; bw: "456;308;222.8;201.5;190.9;169.6;403.0"; v: "430{u2}kg{/} {p2}23.4%{/};290{u2}kg{/} {p2}15.8%{/};210{u2}kg{/} {p2}11.4%{/};190{u2}kg{/} {p2}10.3%{/};180{u2}kg{/} {p2}9.8%{/};160{u2}kg{/} {p2}8.7%{/};380{u2}kg{/} {p2}20.7%{/}"; mx: "725;353;452;351;530;485;452"; mv: "47.3{u2}万円{/};8.7{u2}万円{/};18.9{u2}万円{/};8.6{u2}万円{/};27.0{u2}万円{/};22.4{u2}万円{/};19.0{u2}万円{/}") ×7
   # 順位の変化の札 (行が入れ替わった後の位置に)
   p#rk1(right: 36px; top: 306px; font-size: 28px; color: #FFFFFF; background: #C23A62; border-radius: 148px; padding: 6px 16px 8px 16px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2)'}) ▲ 5位→2位
   p#rk2(right: 36px; top: 594px; font-size: 28px; color: #FFFFFF; background: #6D7F8F; border-radius: 148px; padding: 6px 16px 8px 16px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2)'}) ▼ 2位→5位
@@ -208,7 +208,7 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
   # 金額の段: 1kg あたりの売値の札 ×3 が語ごとに弾む
   div#summ(left: 40px; top: 868px; width: 904px; height: 190px; in: {opacity:0, duration:.3})
     p#t1(left: 0px; top: 0px; font-size: 30px; font-family: e; in: {y:20, duration:.3}) 1kgあたりの売値
-    div#pc(left: "0;205;410"; top: 46px; width: 290px; height: 100px; background: #FFFFFF; border: "3px solid $niku;3px solid $souzai;3px solid $seika"; border-radius: 22px; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2)'}) ×3
+    div#pc(left: "0;308;615"; top: 46px; width: 290px; height: 100px; background: #FFFFFF; border: "3px solid $niku;3px solid $souzai;3px solid $seika"; border-radius: 22px; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2)'}) ×3
       p#n(left: 18px; cy: 50%; font-size: 32px; color: "$niku;#C96A10;#2E8A4B") 精肉;惣菜;青果
       p#v(left: .n.right+12; cy: 50%; font-size: 52px; white-space: nowrap) 1,500{yn}円{/};1,100{yn}円{/};300{yn}円{/}
     p#note(left: 0px; top: 158px; font-size: 22px; font-family: d; color: $ink2; in: {opacity:0, duration:.3}) ※惣菜・青果・パンの3つは、金額では74.9万円（49.3%）
@@ -221,14 +221,14 @@ board#sh(n: "02"; t: "棚ごとの廃棄")
 section#days
 board#dy(n: "03"; t: "曜日別・1日の廃棄")
   bsub#sub 4週の平均
-  shape#gl(left: 100px; top: "200;277;353;430"; width: 850px; height: 3px; path: line_h; border: 2px solid #EEE3D4) ×4
+  shape#gl(left: 100px; top: "300;416;530;645"; width: 850px; height: 3px; path: line_h; border: 2px solid #EEE3D4) ×4
   div#axis(left: 100px; top: 759px; width: 850px; height: 3px; background: #CFC3B3)
-  p#yl(left: 30px; top: "497;343;190"; width: 56px; text-align: right; font-size: 22px; font-family: e; color: $ink2) ×3 0;50;100
+  p#yl(left: 30px; top: "746;515;285"; width: 56px; text-align: right; font-size: 22px; font-family: e; color: $ink2) ×3 0;50;100
   p#ykg(left: 20px; top: 246px; width: 80px; text-align: right; font-size: 22px; font-family: e; color: $ink2) kg
   # 縦棒 (高さ = kg × 3.07 px・下を軸に 90 ms ずつ伸びる)
-  div#col(left: "81;161.7;242.3;323;403.7;484.3;565"; top: "316.6;341.1;328.8;331.9;313.5;292;212.3"; width: 86px; height: "190.1;165.6;177.9;174.8;193.2;214.7;294.4"; border-radius: 16px 16px 6px 6px; background: "$cbar;$cmin;$cbar;$cbar;$cbar;$cbar;$a"; in: {scaleY:0, duration:.55, ease:'expo.out', pivot:'bottom', stagger: {each: .09}}) ×7
-  p#cv(left: "63;143.7;224.3;305;385.7;466.3;547"; top: "324.6;349.1;336.8;339.9;321.5;300;220.3"; width: 140px; text-align: center; font-size: "21;21;21;21;21;21;29"; color: "$ink;$ink;$ink;$ink;$ink;$ink;#FFFFFF"; white-space: nowrap; in: {y:14, opacity:0, duration:.3, stagger: {each: .09}}) ×7 62{k5}kg{/};54{k5}kg{/};58{k5}kg{/};57{k5}kg{/};63{k5}kg{/};70{k5}kg{/};96{k5}kg{/}
-  p#day(left: "76.3;157;237.7;318.3;399;479.7;560.3"; top: 774px; width: 100px; text-align: center; font-size: 38px; color: "$ink;$ink;$ink;$ink;$ink;$ink;$ai") ×7 月;火;水;木;金;土;日
+  div#col(left: "122;242.5;363.5;485;605.5;726.5;848"; top: "474.9;511.7;493.2;497.8;470.2;438;318.5"; width: 86px; height: "285.1;248.4;266.9;262.2;289.8;322.0;441.6"; border-radius: 16px 16px 6px 6px; background: "$cbar;$cmin;$cbar;$cbar;$cbar;$cbar;$a"; in: {scaleY:0, duration:.55, ease:'expo.out', pivot:'bottom', stagger: {each: .09}}) ×7
+  p#cv(left: "95;215.5;336.5;458;578.5;699.5;821"; top: "486.9;523.7;505.2;509.8;482.2;450;330.5"; width: 140px; text-align: center; font-size: "32;32;32;32;32;32;44"; color: "$ink;$ink;$ink;$ink;$ink;$ink;#FFFFFF"; white-space: nowrap; in: {y:14, opacity:0, duration:.3, stagger: {each: .09}}) ×7 62{k5}kg{/};54{k5}kg{/};58{k5}kg{/};57{k5}kg{/};63{k5}kg{/};70{k5}kg{/};96{k5}kg{/}
+  p#day(left: "114.4;236;356.5;477.5;599;719.5;840.4"; top: 774px; width: 100px; text-align: center; font-size: 38px; color: "$ink;$ink;$ink;$ink;$ink;$ink;$ai") ×7 月;火;水;木;金;土;日
   shape#avg(left: 104px; top: 456px; width: 846px; height: 4px; path: line_h; border: 4px solid #8D837A; dash: 8,6; overlap: dy.col; in: {scaleX:0, duration:.5, pivot:'left'})
   p#avgl(left: 10px; top: 428px; width: 92px; text-align: right; font-size: 21px; line-height: 1.2; color: $ink2; in: {opacity:0, duration:.3}) 平均[br]約66kg
   p#tmax(left: 854px; top: 268px; font-size: 24px; color: #FFFFFF; background: $ai; border-radius: 148px; padding: 4px 14px 6px 14px; in: {scale:.4, opacity:0, duration:.42, ease:'back.out(2)'}) 最多
@@ -237,7 +237,7 @@ board#dy(n: "03"; t: "曜日別・1日の廃棄")
     p#l(right: 0px; top: 0px; font-size: 26px; font-family: e; color: $ink2; white-space: nowrap) 日曜は火曜（54kg）の
     p#v(right: 0px; top: 38px; font-size: 84px; line-height: 1; color: $a; white-space: nowrap) 約1.8倍
   # 理由の札 ×2 (icon + 題 + 2 行)・間の矢印・夕方の札に判子
-  div#w(left: "21;356"; top: 852px; width: 418px; height: 222px; border-radius: 28px; background: "#FFF6DF;#FFE9E0"; in: {y:60, opacity:0, duration:.45, ease:'back.out(1.6)'}) ×2
+  div#w(left: "32;534"; top: 852px; width: 418px; height: 222px; border-radius: 28px; background: "#FFF6DF;#FFE9E0"; in: {y:60, opacity:0, duration:.45, ease:'back.out(1.6)'}) ×2
     svg#ic(left: 22px; top: 20px; width: 64px; height: 64px; part: "sun;sunset")
     p#h(left: 98px; top: 26px; font-size: 40px) 昼;夕方
     p#t(left: 24px; top: 104px; font-size: 32px; font-family: e; line-height: 1.38) 客足に合わせて[br]惣菜を多めに作る;客が早く引けて[br]売れ残る
@@ -262,7 +262,7 @@ board#ex(n: "04"; t: "実験：値引きを2時間早く")
     p#t17(left: 476px; top: 322px; font-size: 128px; line-height: 1; color: $a; in: {y:40, opacity:0, duration:.4, ease:'back.out(1.8)'}) 17:00
     p#early(left: 480px; top: 470px; font-size: 32px; background: $mk; border-radius: 14px; padding: 6px 16px 8px 16px; in: {scale:0, opacity:0, duration:.35, ease:'back.out(2)'}) 2時間 早く！
     # 商品の札 ×2 (絵 + 名)・右上に半額シールを判子で
-    div#it(left: "27;350"; top: 590px; width: 420px; height: 420px; border-radius: 30px; background: $card; border: 3px solid $cardline; in: {y:60, opacity:0, duration:.45, ease:'back.out(1.6)', stagger: {each: .15}}) ×2
+    div#it(left: "41;525"; top: 590px; width: 420px; height: 420px; border-radius: 30px; background: $card; border: 3px solid $cardline; in: {y:60, opacity:0, duration:.45, ease:'back.out(1.6)', stagger: {each: .15}}) ×2
       img#img(left: 60px; top: 30px; width: 300px; height: 300px; object-fit: contain; main: none; content: "@souzai;@pan")
       p#t(cx: 50%; bottom: 22px; font-size: 44px) 惣菜;パン
       div#st(left: 268px; top: 20px; width: 150px; height: 150px; border-radius: 148px; background: #FFD84D; border: 6px solid $a; box-shadow: 0px 6px 0px #0000001F; transform: rotate(-12deg); in: {scale:2.4, rotation:42, opacity:0, duration:.22, ease:'power4.in'})
@@ -316,16 +316,16 @@ board#hm(n: "05"; t: "家庭でできる1つの工夫")
   div#ga(left: 24px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #FFF1EC; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
     p#h2(left: 0px; top: 46px; width: 432px; text-align: center; font-size: 44px; color: $ai) 確かめない人
-    div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118;118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×40
+    div#don(left: "52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0"; top: "144;144;144;144;144;144;144;144;144;144;177;177;177;177;177;177;177;177;177;177;210;210;210;210;210;210;210;210;210;210;243;243;243;243;243;243;243;243;243;243"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×40
     p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 140人（58%）
-    div#doff(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×60
+    div#doff(left: "52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0"; top: "276;276;276;276;276;276;276;276;276;276;309;309;309;309;309;309;309;309;309;309;342;342;342;342;342;342;342;342;342;342;375;375;375;375;375;375;375;375;375;375;408;408;408;408;408;408;408;408;408;408;441;441;441;441;441;441;441;441;441;441"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×60
     p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $ai; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:40 start=0 ms=600ms ease=power2.out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 140人中 56人
   div#gb(left: 528px; top: 230px; width: 432px; height: 610px; border-radius: 30px; background: #EEF8F1; in: {y:50, opacity:0, duration:.45, ease:'back.out(1.4)'})
     p#h1(left: 0px; top: 14px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 買い物前に冷蔵庫を
     p#h2(left: 0px; top: 46px; width: 432px; text-align: center; font-size: 44px; color: $good) 確かめる人
-    div#don(left: "35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3"; top: "96;96;96;96;96;96;96;96;96;96;118;118;118;118;118;118;118"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×17
-    div#doff(left: "189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3;35.3;57.3;79.3;101.3;123.3;145.3;167.3;189.3;211.3;233.3"; top: "118;118;118;140;140;140;140;140;140;140;140;140;140;162;162;162;162;162;162;162;162;162;162;184;184;184;184;184;184;184;184;184;184;206;206;206;206;206;206;206;206;206;206;228;228;228;228;228;228;228;228;228;228;250;250;250;250;250;250;250;250;250;250;272;272;272;272;272;272;272;272;272;272;294;294;294;294;294;294;294;294;294;294"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×83
+    div#don(left: "52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0"; top: "144;144;144;144;144;144;144;144;144;144;177;177;177;177;177;177;177"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×17
+    div#doff(left: "284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0;52.9;85.9;118.9;151.9;184.9;218.0;251.0;284.0;317.0;350.0"; top: "177;177;177;210;210;210;210;210;210;210;210;210;210;243;243;243;243;243;243;243;243;243;243;276;276;276;276;276;276;276;276;276;276;309;309;309;309;309;309;309;309;309;309;342;342;342;342;342;342;342;342;342;342;375;375;375;375;375;375;375;375;375;375;408;408;408;408;408;408;408;408;408;408;441;441;441;441;441;441;441;441;441;441"; width: 28px; height: 28px; border-radius: 148px; background: #E9E0D3; in: {scale:0, duration:.25, stagger: {each: .004}}) ×83
     p#h3(left: 0px; top: 100px; width: 432px; text-align: center; font-size: 26px; font-family: e; color: $ink2) 100人
     p#pct(left: 0px; top: 480px; width: 432px; text-align: center; font-size: 104px; line-height: 1; color: $good; in: {scale:.6, opacity:0, duration:.3, ease:'back.out(2)'}) [count:17 start=0 ms=500ms ease=power2.out]{pu}%{/}
     p#cnt(left: 0px; top: 580px; width: 432px; text-align: center; font-size: 24px; font-family: e; color: $ink2; in: {opacity:0, duration:.3}) 100人中 17人
@@ -351,7 +351,7 @@ board#sm(n: "まとめ"; t: "今日のポイント")
     p#a(left: 124px; top: 24px; font-size: 32px; font-family: e) ロスの半分は
     p#b(left: 124px; top: 69px; font-size: 54px; line-height: 1.2; white-space: nowrap) 惣菜・青果・パン{s21} の3つの棚から{/}
     p#p(left: 124px; top: 144px; font-size: 27px; font-family: e; line-height: 1.4; color: $ink2) 山は{ea}日曜{/}（火曜の約1.8倍）
-    img#pic(left: "373;449;525"; top: 170px; width: 112px; height: 112px; object-fit: contain; main: none; content: "@souzai;@seika;@pan") ×3
+    img#pic(left: "560;674;788"; top: 170px; width: 112px; height: 112px; object-fit: contain; main: none; content: "@souzai;@seika;@pan") ×3
   div#c2(left: 32px; top: 458px; width: 920px; height: 296px; border-radius: 32px; background: #FFF8EE; border: 3px solid #F1E0C6; in: {x:80, opacity:0, duration:.45, ease:'back.out(1.4)'})
     div#no(left: 26px; top: 26px; width: 74px; height: 74px; border-radius: 148px; background: $a; in: {scale:0, duration:.35, ease:'back.out(2.4)'})
       p#t(cx: 50%; cy: 50%; font-size: 44px; color: #FFFFFF) 2

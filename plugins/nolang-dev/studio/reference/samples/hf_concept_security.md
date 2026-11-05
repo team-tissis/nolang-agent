@@ -114,9 +114,9 @@ div#bg_dots(inset: 0; pattern: dots,24,#1E2B3C11; z-index: back; border-radius: 
 section#hook(out: {scale:0.97, opacity:0, duration:0.4, ease:'power2.in'})
 # 絵の枠は hf より大きく取る (生成の絵は余白が広い — 見える人物の大きさを hf に合わせた)
 img#hk_emp(left: 38px; top: 76px; width: 662px; height: 897px; content: @employee; object-fit: contain; delay: 150ms; in: {x:-40, opacity:0, duration:0.9, ease:'power3.out'})
-shape#hk_l1(path: "M840 249 C840 307 623 313 623 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
-shape#hk_l2(path: "M840 249 L840 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
-shape#hk_l3(path: "M840 249 C840 307 1057 313 1057 368"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
+shape#hk_l1(path: "M1260 374 C1260 461 935 470 935 552"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
+shape#hk_l2(path: "M1260 374 L1260 552"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
+shape#hk_l3(path: "M1260 374 C1260 461 1586 470 1586 552"; background: none; border: 4px solid $amber; in: draw {duration: 0.6})
 card#hk_pw(left: 910px; top: 196px; width: 700px; height: 176px; in: {y:24, opacity:0, duration:0.6, ease:'power3.out'})
   icon#ki(left: 30px; top: 24px; font-size: 22px; name: key; color: $amber; background: $amber_l; padding: 10px)
   p#label(left: 87px; cy: 46px; font-size: 26px; color: $sub) いつものパスワード
@@ -128,7 +128,7 @@ card#hk_pw(left: 910px; top: 196px; width: 700px; height: 176px; in: {y:24, opac
   p#warn(left: 518px; top: 22px; font-size: 22px; color: $red_t; background: $red_l; border-radius: 148px; padding: 9px 16px 9px 45px; in: {scale:0.8, opacity:0, duration:0.45, ease:'power3.out'}) 使い回し
     icon#i(left: 14px; cy: 50%; font-size: 26px; name: warning; color: $red_t)
 #hk_pw.bad(border: 3px solid #D94A38E6; box-shadow: 0px 0px 0px 4px #D94A3840)
-svc#hk_s(left: "527;743;960"; height: 236px; t: "通販サイト;SNS;会社のアカウント"; i: "shopping-cart;chat-circle;buildings"; ic: "$blue;$teal;$indigo"; bg: "$blue_l;$teal_l;$indigo_l") ×3
+svc#hk_s(left: "791;1115;1440"; height: 236px; t: "通販サイト;SNS;会社のアカウント"; i: "shopping-cart;chat-circle;buildings"; ic: "$blue;$teal;$indigo"; bg: "$blue_l;$teal_l;$indigo_l") ×3
 
 # title — 声のない題: 2 重の輪を描き、研修の札・2 行の題 (「使い回し」は赤字 + 琥珀の下帯)・流れの 4 札が順に
 section#title(out: {scale:1.03, opacity:0, duration:0.4, ease:'power2.in'})
@@ -154,8 +154,8 @@ div#hdr.sticky(left: 80px; top: 36px; width: 1761px; height: 60px; z-index: fron
   p#brand(left: 62px; cy: 50%; font-size: 24px; letter-spacing: .06em) 情報セキュリティ研修
   div#sep(left: 310px; cy: 50%; width: 2px; height: 26px; background: $line)
   p#topic(left: 328px; cy: 50%; font-size: 24px; color: $sub) パスワードの使い回し
-  div#ln(left: "800;967;1074"; cy: 50%; width: 22px; height: 2px; background: $chip) ×3
-  div#st(left: "700;822;989;1096"; cy: 50%; width: "93;138;78;78"; height: 50px; border-radius: 148px; background: #FFFFFF; border: 2px solid $chip) ×4
+  div#ln(left: "1200;1451;1611"; cy: 50%; width: 22px; height: 2px; background: $chip) ×3
+  div#st(left: "1050;1233;1484;1644"; cy: 50%; width: "140;207;117;117"; height: 50px; border-radius: 148px; background: #FFFFFF; border: 2px solid $chip) ×4
     div#n(left: 8px; cy: 50%; width: 34px; height: 34px; border-radius: 148px; background: $gray)
       p#v(cx: 50%; cy: 50%; font-size: 20px; color: $sub) 1;2;3;4
     p#t(left: 52px; cy: 50%; font-size: 22px; color: $sub) 漏えい;リスト型攻撃;被害;対策
@@ -166,12 +166,12 @@ board#lk_head(s: "STEP 1"; t: "IDとパスワードの漏えい")
 # 会員の表 (窓の帯 + 地球の丸札の題 + 3 行)
 card#lk_site(left: 110px; top: 280px; width: 640px; height: 460px; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
   div#bar(left: 0px; top: 0px; width: 640px; height: 62px; border-radius: 24px 24px 0px 0px; background: #EEF2F7)
-    div#dot(left: "15;31;47"; cy: 50%; width: 14px; height: 14px; border-radius: 148px; background: #CFD8E3) ×3
+    div#dot(left: "23;47;71"; cy: 50%; width: 14px; height: 14px; border-radius: 148px; background: #CFD8E3) ×3
     p#url(left: 106px; cy: 50%; width: 512px; font-size: 21px; color: $sub; background: #FFFFFF; border-radius: 10px; padding: 6px 16px) 学生時代に登録したサービス
   icon#g(left: 30px; top: 86px; font-size: 36px; name: globe; color: $blue; background: $blue_l; padding: 16px)
   p#h(left: 118px; top: 88px; font-size: 28px) 会員データベース
   p#hs(left: 118px; top: 128px; font-size: 20px; color: $sub) 登録ユーザーのID・パスワード
-  div#r(left: 30px; top: "116;165;214"; width: 580px; height: 62px; border-radius: 14px; background: $field; border: 2px solid #F7F9FC00) ×3
+  div#r(left: 30px; top: "174;248;321"; width: 580px; height: 62px; border-radius: 14px; background: $field; border: 2px solid #F7F9FC00) ×3
     icon#u(left: 18px; cy: 50%; font-size: 26px; name: user; color: $sub)
     p#e(left: 58px; cy: 50%; font-size: 21px; font-family: m) taro.s@example.com;hanako.k@example.com;yamada88@example.com
     p#pw(right: 18px; cy: 50%; font-size: 21px; font-family: m; letter-spacing: .12em; color: $sub) ●●●●●●●●
@@ -181,15 +181,15 @@ card#lk_site(left: 110px; top: 280px; width: 640px; height: 460px; in: {y:30, op
 icon#lk_zap(left: 70px; top: 238px; font-size: 48px; name: lightning; color: #FFFFFF; background: $red; padding: 22px; box-shadow: 0px 8px 18px #D94A3859; in: {scale:0.4, opacity:0, duration:0.35, ease:'power3.out'})
 p#lk_badge(left: 632px; top: 256px; overlap: lk_site; font-size: 26px; color: #FFFFFF; background: $red_d; border-radius: 148px; padding: 10px 20px 10px 50px; in: {scale:0.7, opacity:0, duration:0.45, ease:'power3.out'}) 漏えい
   icon#i(left: 14px; cy: 50%; font-size: 28px; name: warning; color: #FFFFFF)
-shape#lk_arrow(path: "M515 340 L659 340 M636 319 L660 340 L636 361"; background: none; border: 6px solid $red; in: draw {duration: 0.5})
+shape#lk_arrow(path: "M773 510 L989 510 M954 479 L990 510 L954 542"; background: none; border: 6px solid $red; in: draw {duration: 0.5})
 # 漏れた ID とパスワードの札が表から飛び出し、右の一覧へ流れて消える
-p#lk_fly(left: 770px; overlap: lk_list; top: "309;358;407"; font-size: 20px; font-family: m; color: $red_t; background: $red_l; border-radius: 10px; padding: 10px 14px; in: {x:-130, scale:0.9, opacity:0, duration:0.3, ease:'power2.out'}) ×3 taro.s@example.com / taro0401;hanako.k@example.com / hana1234;yamada88@example.com / yamada88
+p#lk_fly(left: 770px; overlap: lk_list; top: "464;537;611"; font-size: 20px; font-family: m; color: $red_t; background: $red_l; border-radius: 10px; padding: 10px 14px; in: {x:-130, scale:0.9, opacity:0, duration:0.3, ease:'power2.out'}) ×3 taro.s@example.com / taro0401;hanako.k@example.com / hana1234;yamada88@example.com / yamada88
 # 漏えいの一覧 (赤の題の帯 + 4 行 + 「ほかにも」)・自分の行は琥珀
 card#lk_list(left: 1010px; top: 280px; width: 800px; height: 460px; in: {x:30, opacity:0, duration:0.5, ease:'power3.out'})
   div#hd(left: 0px; top: 0px; width: 800px; height: 76px; border-radius: 24px 24px 0px 0px; background: $red_l)
     icon#i(left: 28px; cy: 50%; font-size: 34px; name: warning; color: $red_t)
     p#t(left: 76px; cy: 50%; font-size: 28px; color: $red_t) 漏えいしたID・パスワード
-  div#r(left: 28px; top: "61;104;147;189"; width: 742px; height: 54px; border-radius: 12px; background: "$amber_l;$field;$field;$field"; border: "2px solid $amber;2px solid #F7F9FC00;2px solid #F7F9FC00;2px solid #F7F9FC00"; in: {y:14, opacity:0, duration:0.4, ease:'power3.out'}) ×4
+  div#r(left: 28px; top: "92;156;221;284"; width: 742px; height: 54px; border-radius: 12px; background: "$amber_l;$field;$field;$field"; border: "2px solid $amber;2px solid #F7F9FC00;2px solid #F7F9FC00;2px solid #F7F9FC00"; in: {y:14, opacity:0, duration:0.4, ease:'power3.out'}) ×4
     p#e(left: 18px; cy: 50%; font-size: 22px; font-family: m) taro.s@example.com;hanako.k@example.com;yamada88@example.com;s.suzuki@example.com
     p#pw(right: 18px; cy: 50%; font-size: 22px; font-family: m; color: $red_t) taro0401;hana1234;yamada88;suzu0715
   p#more(cx: 50%; cy: 375px; font-size: 22px; color: $sub; in: {y:14, opacity:0, duration:0.4, ease:'power3.out'}) ほかにも大量のID・パスワード
@@ -206,17 +206,17 @@ card#at_list(left: 96px; top: 330px; width: 400px; height: 330px; in: {x:-40, op
   div#hd(left: 0px; top: 0px; width: 400px; height: 64px; border-radius: 24px 24px 0px 0px; background: $red_l)
     icon#i(left: 20px; cy: 50%; font-size: 28px; name: warning; color: $red_t)
     p#t(left: 58px; cy: 50%; font-size: 24px; color: $red_t) 漏えいしたリスト
-  div#r(left: 18px; top: "52;89;125;162"; width: 364px; height: 46px; border-radius: 12px; background: "$amber_l;$field;$field;$field"; border: "2px solid $amber;2px solid #F7F9FC00;2px solid #F7F9FC00;2px solid #F7F9FC00") ×4
+  div#r(left: 18px; top: "78;134;188;243"; width: 364px; height: 46px; border-radius: 12px; background: "$amber_l;$field;$field;$field"; border: "2px solid $amber;2px solid #F7F9FC00;2px solid #F7F9FC00;2px solid #F7F9FC00") ×4
     p#e(left: 14px; cy: 50%; font-size: 18px; font-family: m) taro.s@example.com;hanako.k@example.com;yamada88@example.com;s.suzuki@example.com
     p#pw(right: 14px; cy: 50%; font-size: 18px; font-family: m; color: $red_t) taro0401;hana1234;yamada88;suzu0715
 img#at_att(left: 621px; top: 300px; width: 225px; height: 330px; content: @attacker; object-fit: contain; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
   p#l(cx: 50%; cy: 363px; font-size: 30px) 攻撃者
   p#s(cx: 50%; cy: 411px; font-size: 20px; color: $red_t; background: $red_l; border-radius: 148px; padding: 6px 14px; white-space: nowrap) 自動で次々にログインを試す
-shape#at_a0(path: "M337 330 L383 330 M367 315 L384 330 L367 345"; background: none; border: 4px solid $red; in: draw {duration: 0.4})
-shape#at_a1(path: "M593 313 C650 313 650 234 701 234 M687 222 L703 234 L687 246"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
-shape#at_a2(path: "M593 333 L701 357 M685 348 L703 357 L688 372"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
-shape#at_a3(path: "M593 353 C650 353 650 479 701 479 M687 467 L703 479 L687 491"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
-panel#at_p(left: 1070px; top: "181;304;427"; t: "通販サイト;SNS;会社のクラウド"; i: "shopping-cart;chat-circle;cloud"; ic: "$blue;$teal;$indigo"; bg: "$blue_l;$teal_l;$indigo_l") ×3
+shape#at_a0(path: "M506 495 L575 495 M551 473 L576 495 L551 518"; background: none; border: 4px solid $red; in: draw {duration: 0.4})
+shape#at_a1(path: "M890 470 C975 470 975 351 1052 351 M1031 333 L1055 351 L1031 369"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
+shape#at_a2(path: "M890 500 L1052 536 M1028 522 L1055 536 L1032 558"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
+shape#at_a3(path: "M890 530 C975 530 975 719 1052 719 M1031 701 L1055 719 L1031 737"; background: none; border: 4px solid $red; in: draw {duration: 0.45})
+panel#at_p(left: 1070px; top: "272;456;641"; t: "通販サイト;SNS;会社のクラウド"; i: "shopping-cart;chat-circle;cloud"; ic: "$blue;$teal;$indigo"; bg: "$blue_l;$teal_l;$indigo_l") ×3
 
 # damage — STEP 3: 被害の札 3 枚を語ごとに (注文の判子・偽の札と友人への手紙・赤い縁と目) →「たった一つ」で 3 枚を沈め、鍵 → 矢印 → 会社の札
 section#damage
@@ -228,7 +228,7 @@ dcard#dm_c1(left: 96px; t: "通販サイト"; i: shopping-cart; ic: $blue; bg: $
     div#r1(left: 24px; top: 99px; width: 435px; height: 64px; border-radius: 12px; background: #FFFFFF)
       icon#i(left: 16px; cy: 50%; font-size: 28px; name: package; color: $sub)
       p#t(left: 58px; cy: 50%; font-size: 22px) 商品 3点
-      icon#p(left: "220;241;262"; cy: 50%; font-size: 26px; name: package; color: $indigo) ×3
+      icon#p(left: "330;362;393"; cy: 50%; font-size: 26px; name: package; color: $indigo) ×3
     div#r2(left: 24px; top: 177px; width: 435px; height: 64px; border-radius: 12px; background: #FFFFFF; border: 2px solid #FFFFFF00)
       icon#i(left: 16px; cy: 50%; font-size: 28px; name: credit-card; color: $sub)
       p#t(left: 58px; cy: 50%; font-size: 22px) 登録済みのカードで支払い
@@ -243,14 +243,14 @@ dcard#dm_c2(left: 690px; t: "SNS"; i: chat-circle; ic: $teal; bg: $teal_l; tag: 
       p#tm(left: 80px; top: 46px; font-size: 16px; color: $sub) たった今
       p#msg(left: 18px; top: 81px; font-size: 22px) このリンク、見てみて！
       p#link(left: 18px; top: 118px; font-size: 18px; font-family: m; color: $blue) https://example.com/xxxx
-    icon#fr(left: "85;127;169"; cy: 225px; font-size: 26px; name: user-circle; color: $sub; background: $gray; padding: 12px) ×3
+    icon#fr(left: "128;191;254"; cy: 225px; font-size: 26px; name: user-circle; color: $sub; background: $gray; padding: 12px) ×3
     p#lbl(left: 24px; cy: 225px; font-size: 18px; color: $sub) 友人へ送信
-    icon#m(left: "107;149;191"; top: 190px; font-size: 15px; name: envelope; color: #FFFFFF; background: $red; padding: 6px; in: {scale:0.3, opacity:0, duration:0.45, ease:'power3.out'}) ×3
+    icon#m(left: "161;224;287"; top: 190px; font-size: 15px; name: envelope; color: #FFFFFF; background: $red; padding: 6px; in: {scale:0.3, opacity:0, duration:0.45, ease:'power3.out'}) ×3
 dcard#dm_c3(left: 1284px; t: "会社のクラウド"; i: cloud; ic: $indigo; bg: $indigo_l; tag: "侵入")
   dbody#b
     icon#bd(left: 24px; top: 22px; font-size: 33px; name: buildings; color: $indigo; background: $indigo_l; padding: 15px)
     p#n(left: 104px; cy: 54px; font-size: 22px) 社内の共有フォルダ
-    div#f(left: 24px; top: "67;123"; width: 435px; height: 70px; border-radius: 12px; background: #FFFFFF; border: 2px solid #FFFFFF00) ×2
+    div#f(left: 24px; top: "101;185"; width: 435px; height: 70px; border-radius: 12px; background: #FFFFFF; border: 2px solid #FFFFFF00) ×2
       icon#i(left: 16px; cy: 50%; font-size: 32px; name: "folder;folder-lock"; color: $indigo)
       p#t(left: 62px; cy: 50%; font-size: 24px) 社内の資料;お客さまの情報
       icon#e(left: 378px; cy: 50%; font-size: 22px; name: eye; color: #FFFFFF; background: $red; padding: 9px; in: {scale:0.5, opacity:0, duration:0.45, ease:'power3.out'})
@@ -263,16 +263,16 @@ card#dm_sum(left: 260px; top: 318px; width: 1400px; height: 380px; overlap: dm_c
   div#b(left: 891px; top: 66px; width: 420px; height: 246px; in: {scale:0.85, opacity:0, duration:0.45, ease:'power3.out'})
     icon#i(cx: 50%; top: 0px; font-size: 88px; name: buildings; color: $red_t; background: $red_l; padding: 40px)
     p#t(cx: 50%; cy: 218px; font-size: 40px; color: $red_t) 会社全体のリスク
-shape#dm_arrow(path: "M547 338 L728 338 M705 319 L729 338 L705 357"; background: none; border: 8px solid $red; in: draw {duration: 0.45})
+shape#dm_arrow(path: "M821 507 L1092 507 M1058 479 L1094 507 L1058 536"; background: none; border: 8px solid $red; in: draw {duration: 0.45})
 
 # measures — STEP 4: 番号の幽霊の枠 3 つ → 「1 つ目」ごとに本物の札が置き換わり、札の中の図を語で動かす → 下の帯「覚えずに → 管理ツール」
 section#measures
 board#ms_head(s: "STEP 4"; t: "今日からできる 3つの対策"; c: $green; cbg: $green_l)
-ghost#ms_g(left: "64;460;856"; n: "1;2;3") ×3
+ghost#ms_g(left: "96;690;1284"; n: "1;2;3") ×3
 # 1: サービスごとの札に別々の鍵 → 1 つが漏れて赤く揺れ、緑の壁と盾が止め、他の 2 つに ✓
 mcard#ms_c1(left: 96px; n: 1; t: "サービスごとに[br]別のパスワード"; f: "被害はそこで止まる")
   vis#v
-    div#t(left: "17;137;231"; top: 38px; width: 122px; height: 122px; border-radius: 20px; background: #FFFFFF; border: 2px solid $tile) ×3
+    div#t(left: "26;206;347"; top: 38px; width: 122px; height: 122px; border-radius: 20px; background: #FFFFFF; border: 2px solid $tile) ×3
       icon#i(cx: 50%; cy: 50%; font-size: 52px; name: "shopping-cart;chat-circle;buildings"; color: $sub)
       icon#k(left: 88px; top: 88px; font-size: 24px; name: key; color: #FFFFFF; background: "$blue;$teal;$indigo"; padding: 10px; in: {scale:0.6, opacity:0, duration:0.45, ease:'power3.out'})
       icon#ok(left: 98px; top: -10px; font-size: 20px; name: check; weight: bold; color: #FFFFFF; background: $green; padding: 8px; opacity: "0;1;1"; in: {scale:0.6, opacity:0, duration:0.45, ease:'power3.out'})
@@ -310,7 +310,7 @@ card#ms_strip(left: 96px; top: 700px; width: 1728px; height: 150px)
   p#a(left: 134px; cy: 50%; font-size: 32px; color: $sub) パスワードは覚えずに
   icon#ar(left: 477px; cy: 50%; font-size: 34px; name: arrow-right; color: $arrow)
   icon#vault(left: 567px; cy: 50%; font-size: 50px; name: lock; color: #FFFFFF; background: $blue; padding: 22px; in: {x:20, opacity:0, duration:0.5, ease:'power3.out'})
-  icon#kf(left: "923;976;1030;1083"; top: 40px; font-size: 26px; name: key; color: #FFFFFF; background: "$blue;$teal;$indigo;$amber"; padding: 12px; in: {x:40, scale:0.6, opacity:0, duration:0.4, ease:'power3.out'}) ×4
+  icon#kf(left: "1385;1464;1545;1625"; top: 40px; font-size: 26px; name: key; color: #FFFFFF; background: "$blue;$teal;$indigo;$amber"; padding: 12px; in: {x:40, scale:0.6, opacity:0, duration:0.4, ease:'power3.out'}) ×4
   p#b(left: 682px; cy: 50%; font-size: 40px; color: $blue; in: {x:20, opacity:0, duration:0.5, ease:'power3.out'}) パスワード管理ツールに任せる
   p#kl(left: 1384px; top: 104px; font-size: 18px; color: $sub; in: {opacity:0, duration:0.4}) サービスごとの長いパスワードも
 
@@ -319,7 +319,7 @@ section#outro
 img#ot_emp(left: 330px; top: 170px; width: 238px; height: 700px; object-fit: contain; in: {x:-40, opacity:0, duration:0.8, ease:'power3.out'}) [transparent][ref:@employee]同じ若い社員 (同じ顔・髪・紺のスーツ・白いシャツ) が背筋を伸ばして立ち、自信のある笑顔で片手にスマートフォンを持つ、安心したくつろいだ姿勢、全身、机なし
 card#ot_card(left: 740px; top: 214px; width: 1040px; height: 440px; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})
   p#h(left: 48px; top: 34px; font-size: 30px; color: $sub) 今日から、この3つ
-  div#i(left: 48px; top: "68;141;214"; width: 944px; height: 84px; opacity: 0.18) ×3
+  div#i(left: 48px; top: "102;212;321"; width: 944px; height: 84px; opacity: 0.18) ×3
     icon#ck(left: 0px; cy: 50%; font-size: 42px; name: check; weight: bold; color: #FFFFFF; background: #D5DDE7; padding: 15px)
     p#t(left: 96px; cy: 50%; font-size: 52px) 使い回さない;長くする {s}（12文字以上）{/};二段階認証をオンに
 div#ot_banner(left: 740px; top: 690px; width: 1040px; height: 130px; border-radius: 24px; background: $blue; box-shadow: 0px 16px 36px #2B6CB047; in: {y:30, opacity:0, duration:0.6, ease:'power3.out'})

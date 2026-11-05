@@ -130,7 +130,7 @@ div#teaser(left: 104px; top: 772px; width: 812px; height: 132px; background: #FB
   shape#zero(left: 152px; top: 40px; width: 3px; height: 54px; path: line_v; border: 2px solid $brick; dash: 4,3)
   p#l0(left: 112px; top: 93px; font-size: 20px; color: $ink2) 差なし 0
   p#l1(left: 676px; top: 93px; font-size: 20px; color: $ink2) 効果あり →
-  shape#dot(left: "282;379;168;480;67;185"; top: 52px; width: 30px; height: 30px; border-radius: 50%; background: $teal; border: 4px solid #FBF8F1F2; in: {scale:0, opacity:0, duration:0.4, ease:'back.out(2.5)', stagger:{each:0.13}}) ×6
+  shape#dot(left: "423;569;252;720;101;278"; top: 52px; width: 30px; height: 30px; border-radius: 50%; background: $teal; border: 4px solid #FBF8F1F2; in: {scale:0, opacity:0, duration:0.4, ease:'back.out(2.5)', stagger:{each:0.13}}) ×6
 # 研究デザインの図: 参加者 → 無作為に 2 群 → 運動群 / 対照群 → 記憶テスト (矢印は語で左から描く)
 div#dg(left: 96px; top: 210px; width: 1130px; height: 640px)
   dbox#pop(left: 0px; top: 250px; width: 230px; t: "参加者"; s: "研究ごとに募集")
@@ -150,7 +150,7 @@ div#st6(left: 1290px; top: 230px; width: 540px; height: 270px; in: up)
   p#l(left: 0px; top: 26px; font-size: 22px; color: $ink2) 読み比べる研究（無作為化比較試験）
   p#v(left: 0px; top: 72px; font-size: 132px; line-height: 1; font-family: n; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:6 start=0 roll ms=1000ms]
   p#u(left: .v.right+14; top: 135px; font-size: 46px) 本
-  div#mini(left: "0;36;72;108;144;180"; top: 222px; width: 44px; height: 44px; background: $card; border: 2px solid $ink2; border-radius: 8px) ×6
+  div#mini(left: "0;54;108;162;216;270"; top: 222px; width: 44px; height: 44px; background: $card; border: 2px solid $ink2; border-radius: 8px) ×6
     p#t(cx: 50%; cy: 50%; font-size: 22px; font-family: n) A;B;C;D;E;F
 div#st682(left: 1290px; top: 543px; width: 540px; height: 262px; in: up)
   div#rule(left: 0px; top: 0px; width: 540px; height: 2px; background: $ink)
@@ -193,8 +193,8 @@ panel#defs(left: 1330px; top: 300px; width: 494px; height: 270px; hd: "g の求�
 # 目安の物差し: 0 / 0.2 / 0.5 の目盛りと札・黄土の ▼ は g = 0.5 の位置 (語で x を動かす・g × 460 px)
 panel#scale(left: 1330px; top: 596px; width: 494px; height: 268px; hd: "大きさの目安")
   div#ruler(left: 40px; top: 120px; width: 414px; height: 2px; background: $ink)
-  div#tk(left: "27;119;257"; top: 111px; width: 2px; height: 22px; background: $ink) ×3
-  div#rl(left: "-1;91;229"; top: 142px; width: 84px; height: 63px) ×3
+  div#tk(left: "41;179;386"; top: 111px; width: 2px; height: 22px; background: $ink) ×3
+  div#rl(left: "-1;137;344"; top: 142px; width: 84px; height: 63px) ×3
     p#v(cx: 50%; top: 0px; font-size: 24px; font-family: n) 0;0.2;0.5
     p#w(cx: 50%; top: 32px; font-size: 20px; color: $ink2) 差なし;小;中程度
   shape#mk(left: 374px; top: 84px; width: 24px; height: 18px; path: tri; background: $ochre_f; transform: rotate(180deg))
@@ -231,9 +231,9 @@ group#tbl(in: {opacity:0, duration:0.5})
   p#h2(left: 410px; top: 250px; font-size: 18px; letter-spacing: 0.04em; color: $ink3) 人数
   p#h3(left: 506px; top: 250px; font-size: 18px; letter-spacing: 0.04em; color: $ink3) g［95% 信頼区間］
   p#gh(left: 960px; top: 250px; font-size: 18px; letter-spacing: 0.04em; color: $ink3; out: {opacity:0, duration:0.3}) 効果量 g
-  div#hair(left: 96px; top: "246;290;334;378;422"; width: 1194px; height: 2px; background: #1E2B3C1A) ×5
+  div#hair(left: 96px; top: "369;435;501;567;633"; width: 1194px; height: 2px; background: #1E2B3C1A) ×5
 # 表の行 (文字の丸・研究の中身・人数・g と区間)。g の数字は {v} で語ごとに色を替える
-div#row(left: 96px; top: "203;247;291;335;379;423"; width: 1194px; height: 62px; in: {x:-20, opacity:0, duration:0.5, ease:'power2.out', stagger:{each:0.09}}) ×6
+div#row(left: 96px; top: "305;371;437;503;569;635"; width: 1194px; height: 62px; in: {x:-20, opacity:0, duration:0.5, ease:'power2.out', stagger:{each:0.09}}) ×6
   p#l(left: 0px; cy: 50%; width: 38px; text-align: center; font-size: 21px; font-family: n; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 4px 0px) A;B;C;D;E;F
   p#nm(left: 52px; cy: 50%; font-size: 22px; white-space: nowrap) 大学生 ジョギング;高齢者 早歩き;高齢者 有酸素＋筋トレ;若年 自転車こぎ 1 回;会社員 ヨガ;高齢者 筋トレ
   p#nn(left: 326px; cy: 50%; width: 54px; text-align: right; font-size: 22px; font-family: n) 120;64;210;48;90;150
@@ -241,21 +241,21 @@ div#row(left: 96px; top: "203;247;291;335;379;423"; width: 1194px; height: 62px;
 # 軸 (−0.5〜1.5・0 は x = 592・1 あたり 167 px) と目盛り・両側の注記
 div#axis(left: 740px; top: 822px; width: 550px; height: 2px; background: $ink; in: {scaleX:0, duration:0.7, ease:'power2.out', pivot:'left'})
 group#ticks(in: {opacity:0, duration:0.4})
-  div#tk(left: "509;593;676;759;843"; top: 824px; width: 2px; height: 10px; background: $ink) ×5
-  p#tl(left: "490;573;657;740;823"; top: 836px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×5 −0.5;0;0.5;1.0;1.5
+  div#tk(left: "764;890;1014;1139;1265"; top: 824px; width: 2px; height: 10px; background: $ink) ×5
+  p#tl(left: "735;860;986;1110;1235"; top: 836px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×5 −0.5;0;0.5;1.0;1.5
   p#al(right: 1040px; top: 866px; font-size: 16px; font-family: m; color: $ink3) ← 対照群のほうが良い
   p#ar(left: 900px; top: 866px; font-size: 16px; font-family: m; color: $ink3) 運動群のほうが良い →
 shape#zero(left: 888px; top: 300px; width: 3px; height: 522px; path: line_v; border: 3px solid $brick; dash: 5,4; in: {scaleY:0, duration:0.6, ease:'power2.out', pivot:'top'})
 p#co0(left: 900px; top: 788px; font-size: 20px; color: $brick; in: {y:10, opacity:0, duration:0.4}; out: {opacity:0, duration:0.3}) 0 ＝ 差なし
 # 区間 (両端にかぎ・語で左から伸びる)・点の正方形の大きさ = まとめるときの重み
-shape#ci_a(path: "M608 219 L608 229 M608 224 L728 224 M728 219 L728 229"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
-shape#ci_b(path: "M623 263 L623 273 M623 268 L790 268 M790 263 L790 273"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
-shape#ci_c(path: "M578 307 L578 317 M578 312 L668 312 M668 307 L668 317"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
-shape#ci_d(path: "M648 351 L648 361 M648 356 L845 356 M845 351 L845 361"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
-shape#ci_e(path: "M515 395 L515 405 M515 400 L652 400 M652 395 L652 405"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
-shape#ci_f(path: "M577 439 L577 449 M577 444 L683 444 M683 439 L683 449"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_a(path: "M912 329 L912 344 M912 336 L1092 336 M1092 329 L1092 344"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_b(path: "M935 395 L935 410 M935 402 L1185 402 M1185 395 L1185 410"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_c(path: "M867 461 L867 476 M867 468 L1002 468 M1002 461 L1002 476"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_d(path: "M972 527 L972 542 M972 534 L1268 534 M1268 527 L1268 542"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_e(path: "M773 593 L773 608 M773 600 L978 600 M978 593 L978 608"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
+shape#ci_f(path: "M866 659 L866 674 M866 666 L1025 666 M1025 659 L1025 674"; background: none; border: 2px solid $ink; in: wipe {dir: 'right', duration: 0.55, ease: 'power2.out'})
 # hf の作り: 点の正方形は場面の頭から出ている (scale 0 から出す入場が fromTo の即時描画で効かず、区間だけが後から伸びる)
-div#sq(left: "658;698;612;739;573;619"; top: "213;259;300;348;390;433"; width: "21;18;24;16;20;22"; height: "21;18;24;16;20;22"; background: $ink; in: none) ×6
+div#sq(left: "987;1047;918;1109;860;929"; top: "320;389;450;522;585;650"; width: "32;27;36;24;30;33"; height: "32;27;36;24;30;33"; background: $ink; in: none) ×6
 # まとめの行と罫・予測区間 (破線) と 0 より下の赤茶の部分・◆ (まとめた効果)・区間の端の値
 div#sep(left: 96px; top: 718px; width: 1194px; height: 2px; background: $ink; in: {scaleX:0, duration:0.6, ease:'power2.out', pivot:'left'})
 div#pooled(left: 96px; top: 730px; width: 1194px; height: 62px; in: {x:-20, opacity:0, duration:0.5, ease:'power2.out'})
@@ -265,13 +265,13 @@ div#pooled(left: 96px; top: 730px; width: 1194px; height: 62px; in: {x:-20, opac
   p#g(left: 410px; cy: 50%; font-size: 22px; font-family: n; color: $ochre; white-space: nowrap) 0.34 {c}[0.11, 0.58]{/}
 shape#pi(left: 807px; top: 759px; width: 334px; height: 3px; path: line_h; border: 3px solid $ochre_f; dash: 4,3; in: {scaleX:0, duration:1.4, ease:'power2.inOut'})
 div#pineg(left: 807px; top: 759px; width: 82px; height: 4px; border-radius: 3px; background: $brick; in: {scaleX:0, duration:0.8, ease:'power2.out', pivot:'right'})
-shape#dia(points: "612,508 651,495 690,508 651,521"; background: $ochre_f; in: {scaleX:0, scaleY:0.2, duration:0.9, ease:'power3.out'})
+shape#dia(points: "918,762 977,743 1035,762 977,782"; background: $ochre_f; in: {scaleX:0, scaleY:0.2, duration:0.9, ease:'power3.out'})
 p#ci_lo(cx: 918px; top: 786px; font-size: 18px; font-family: n; color: $ochre; in: {y:8, opacity:0, duration:0.4}; out: {opacity:0, duration:0.4}) 0.11
 p#ci_hi(cx: 1035px; top: 786px; font-size: 18px; font-family: n; color: $ochre; in: {y:8, opacity:0, duration:0.4}; out: {opacity:0, duration:0.4}) 0.58
 p#pi_lo(cx: 807px; top: 786px; font-size: 18px; font-family: n; color: $ochre; in: {opacity:0, duration:0.4}) −0.33
 p#pi_hi(cx: 1143px; top: 786px; font-size: 18px; font-family: n; color: $ochre; in: {opacity:0, duration:0.4}) 1.01
 # 6 本の結果の広がり (かぎ + 札)
-shape#spread(path: "M583 205 L583 193 L746 193 L746 205"; background: none; border: 2px solid $ink2; in: {scaleX:0.3, opacity:0, duration:0.7, ease:'power3.out'}; out: {opacity:0, duration:0.4})
+shape#spread(path: "M875 308 L875 290 L1119 290 L1119 308"; background: none; border: 2px solid $ink2; in: {scaleX:0.3, opacity:0, duration:0.7, ease:'power3.out'}; out: {opacity:0, duration:0.4})
 p#spread_l(left: 874px; top: 258px; width: 244px; text-align: center; font-size: 18px; color: $ink2; in: {opacity:0, duration:0.4}; out: {opacity:0, duration:0.4}) 6 本の結果の広がり
 # 右の板 1: 読み方 (語ごとに凡例の行の地が黄土に光る)
 panel#fp1(left: 1346px; top: 236px; width: 478px; height: 369px; hd: "読み方")
@@ -305,17 +305,17 @@ panel#fp4(left: 1346px; top: 236px; width: 478px; height: 656px; hd: "0.34 を�
   p#y(left: 30px; top: 129px; font-size: 30px) 約
   p#v(left: .y.right+6; top: 69px; font-size: 104px; line-height: 1; font-family: n; color: $teal; in: {opacity:0, duration:0.35, ease:'power2.out'}) [count:63 start=0 roll ms=3890ms,4010ms ease=power1.inOut]
   p#u(left: .v.right+6; top: 123px; font-size: 44px) %
-  shape#dot(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310;310;310;310;310;310;310;310;333;333;333;333;333;333;333;333;333;333;356;356;356;356;356;356;356;356;356;356;380;380;380;380;380;380;380;380;380;380"; width: 26px; height: 26px; border-radius: 50%; background: $slate_l; border: 2px solid #C4CBD3) ×100
-  shape#fill(left: "20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67;90;113;136;160;183;206;230;20;43;67"; top: "170;170;170;170;170;170;170;170;170;170;193;193;193;193;193;193;193;193;193;193;217;217;217;217;217;217;217;217;217;217;240;240;240;240;240;240;240;240;240;240;263;263;263;263;263;263;263;263;263;263;286;286;286;286;286;286;286;286;286;286;310;310;310"; width: 26px; height: 26px; border-radius: 50%; background: $teal; in: {scale:0, duration:0.3, ease:'back.out(2)', stagger:{each:0.035}}) ×63
+  shape#dot(left: "30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345"; top: "255;255;255;255;255;255;255;255;255;255;290;290;290;290;290;290;290;290;290;290;326;326;326;326;326;326;326;326;326;326;360;360;360;360;360;360;360;360;360;360;395;395;395;395;395;395;395;395;395;395;429;429;429;429;429;429;429;429;429;429;465;465;465;465;465;465;465;465;465;465;500;500;500;500;500;500;500;500;500;500;534;534;534;534;534;534;534;534;534;534;570;570;570;570;570;570;570;570;570;570"; width: 26px; height: 26px; border-radius: 50%; background: $slate_l; border: 2px solid #C4CBD3) ×100
+  shape#fill(left: "30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101;135;170;204;240;275;309;345;30;65;101"; top: "255;255;255;255;255;255;255;255;255;255;290;290;290;290;290;290;290;290;290;290;326;326;326;326;326;326;326;326;326;326;360;360;360;360;360;360;360;360;360;360;395;395;395;395;395;395;395;395;395;395;429;429;429;429;429;429;429;429;429;429;465;465;465"; width: 26px; height: 26px; border-radius: 50%; background: $teal; in: {scale:0, duration:0.3, ease:'back.out(2)', stagger:{each:0.035}}) ×63
   p#nt(left: 30px; top: 177px; width: 418px; font-size: 20px; font-family: m; line-height: 1.55; color: $ink2) 平均的な運動群の人は、対照群の約 63% の人より成績が良い
   p#cp(left: 30px; top: 603px; width: 418px; font-size: 16px; font-family: m; color: $ink3) ● ＝ 対照群 100 人のうち、平均的な運動群の人が上回る人
 # 右の板 5: まとめるときの重み (人数の多い順の横棒・棒の幅 = 重み ÷ 24% × 181 px)
 panel#fp5(left: 1346px; top: 236px; width: 478px; height: 422px; hd: "まとめるときの重み")
   p#nt(left: 30px; top: 63px; font-size: 20px; font-family: m; color: $ink2) 人数の多い研究ほど重い
-  div#w(left: 30px; top: "71;105;138;171;205;238"; width: 418px; height: 36px) ×6
+  div#w(left: 30px; top: "107;158;207;257;308;357"; width: 418px; height: 36px) ×6
     p#l(left: 0px; cy: 50%; width: 36px; text-align: center; font-size: 20px; font-family: n; color: #FFFFFF; background: $ink; border-radius: 148px; padding: 4px 0px) C;F;A;E;B;D
     div#tr(left: 52px; cy: 50%; width: 272px; height: 26px; border-radius: 4px; background: $paper2)
-    div#f(left: 52px; cy: 50%; width: "169;151;137;122;97;79"; height: 26px; border-radius: 4px; background: $ink; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
+    div#f(left: 52px; cy: 50%; width: "254;227;206;183;146;119"; height: 26px; border-radius: 4px; background: $ink; in: {scaleX:0, duration:0.8, ease:'power3.out', pivot:'left'})
     p#n(left: 63px; cy: 50%; font-size: 15px; color: #FFFFFF) 210 人;150 人;120 人;90 人;64 人;48 人
     p#v(right: 0px; cy: 50%; font-size: 21px; font-family: n) 22.4%;20.0%;18.1%;16.1%;12.9%;10.5%
 # 右の板 6: 研究間の異質性 (I² = 54% が回り、0〜100% の帯が 54% まで伸びる)
@@ -342,17 +342,17 @@ chap#ch6 {cn}06{/} 運動の種類
 bt#bt7(no: "06"; ttl: "運動の種類で分けると"; sub: "有酸素運動の 3 本 と それ以外の 3 本")
 div#ax7(left: 420px; top: 740px; width: 580px; height: 2px; background: $ink; in: {scaleX:0, duration:0.7, ease:'power2.out', pivot:'left'})
 group#tk7(in: {opacity:0, duration:0.4})
-  div#tk(left: "307;362;417;473;528;583;638"; top: 741px; width: 2px; height: 10px; background: $ink) ×7
-  p#tl(left: "288;343;398;453;509;564;619"; top: 756px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×7 −0.2;0;0.2;0.4;0.6;0.8;1.0
+  div#tk(left: "461;543;626;710;792;875;957"; top: 741px; width: 2px; height: 10px; background: $ink) ×7
+  p#tl(left: "432;515;597;680;764;846;929"; top: 756px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×7 −0.2;0;0.2;0.4;0.6;0.8;1.0
   p#cap(left: 420px; top: 792px; width: 580px; text-align: center; font-size: 16px; font-family: m; color: $ink3) 効果量 g（◆ ＝ グループごとにまとめた効果と 95% 信頼区間）
 shape#z7(left: 542px; top: 330px; width: 3px; height: 410px; path: line_v; border: 3px solid $brick; dash: 5,4; in: {scaleY:0, duration:0.6, ease:'power2.out', pivot:'top'})
 div#band1(left: 80px; top: 338px; width: 1100px; height: 176px; border-radius: 14px; background: #D3E7E48C; in: {scaleX:0.96, opacity:0, duration:0.6, ease:'power2.out'})
 group#lab1(in: up)
   p#t(left: 96px; top: 368px; font-size: 36px; color: $teal) 有酸素運動
   p#s(left: 96px; top: 422px; font-size: 20px; font-family: m; line-height: 1.45; color: $ink2) A・B・D ／ 232 人[br]ジョギング・早歩き・自転車こぎ
-shape#d1(left: "482;545;612"; top: 372px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
-p#d1l(cx: "487;551;617"; top: 344px; font-size: 16px; font-family: n; color: $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 A;B;D
-shape#dia1(points: "457,287 530,272 603,287 530,301"; background: $teal; in: {scaleX:0, duration:0.9, ease:'power3.out'})
+shape#d1(left: "723;818;918"; top: 372px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
+p#d1l(cx: "731;827;926"; top: 344px; font-size: 16px; font-family: n; color: $teal; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 A;B;D
+shape#dia1(points: "686,431 795,408 905,431 795,452"; background: $teal; in: {scaleX:0, duration:0.9, ease:'power3.out'})
 group#big1(in: up)
   p#v(right: 741px; top: 390px; font-size: 72px; line-height: 1; font-family: n; color: $teal) 0.61
   p#c(right: 741px; top: 466px; font-size: 20px; font-family: n; color: $ink3) [0.34, 0.87]
@@ -360,17 +360,17 @@ div#band2(left: 80px; top: 548px; width: 1100px; height: 176px; border-radius: 1
 group#lab2(in: up)
   p#t(left: 96px; top: 578px; font-size: 36px; color: #4F5965) それ以外
   p#s(left: 96px; top: 632px; font-size: 20px; font-family: m; line-height: 1.45; color: $ink2) C・E・F ／ 450 人[br]筋トレ・組み合わせ・ヨガ
-shape#d2(left: "407;341;418"; top: 582px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $slate; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
-p#d2l(cx: "407;346;430"; top: 554px; font-size: 16px; font-family: n; color: #4F5965; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 C;E;F
-shape#dia2(points: "352,427 403,412 454,427 403,441"; background: $slate; in: {scaleX:0, duration:0.9, ease:'power3.out'})
+shape#d2(left: "611;512;627"; top: 582px; width: 16px; height: 16px; border-radius: 50%; background: $card; border: 3px solid $slate; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3
+p#d2l(cx: "611;519;645"; top: 554px; font-size: 16px; font-family: n; color: #4F5965; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.15}}) ×3 C;E;F
+shape#dia2(points: "528,641 605,618 681,641 605,662"; background: $slate; in: {scaleX:0, duration:0.9, ease:'power3.out'})
 group#big2(in: up)
   p#v(right: 741px; top: 600px; font-size: 72px; line-height: 1; font-family: n; color: #4F5965) 0.15
   p#c(right: 741px; top: 676px; font-size: 20px; font-family: n; color: $ink3) [−0.04, 0.33]
 # 重なりの表: 運動とテストの列・有酸素の 3 行のテストに黄土の帯 (語で左から)
 panel#t7(left: 1196px; top: 250px; width: 628px; height: 458px; hd: "ただし：運動とテストが重なっている")
-  p#hd(left: "17;53;196"; top: 78px; font-size: 16px; color: $ink3) ×3 研究;運動;記憶テスト
-  div#mk(left: 294px; top: "80;116;152"; width: 298px; height: 33px; border-radius: 4px; background: $ochre_l; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×3
-  div#r(left: 26px; top: "73;109;145;181;217;253"; width: 576px; height: 54px) ×6
+  p#hd(left: "26;80;294"; top: 78px; font-size: 16px; color: $ink3) ×3 研究;運動;記憶テスト
+  div#mk(left: 294px; top: "120;174;228"; width: 298px; height: 33px; border-radius: 4px; background: $ochre_l; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×3
+  div#r(left: 26px; top: "110;164;218;272;326;380"; width: 576px; height: 54px) ×6
     div#ln(left: 0px; top: 0px; width: 576px; height: 2px; background: #1E2B3C1A)
     p#lt(left: 0px; cy: 50%; font-size: 22px; font-family: n; color: "$teal;$teal;$teal;#56606C;#56606C;#56606C") A;B;D;C;E;F
     p#ex(left: 54px; cy: 50%; font-size: 20px; font-family: m) ジョギング;早歩き;自転車こぎ（1 回）;有酸素＋筋トレ;ヨガ・ストレッチ;筋トレ
@@ -387,21 +387,21 @@ bt#bt8(no: "07"; ttl: "言えないこと（限界）"; sub: "結果を読むと
 group#fr8(in: {opacity:0, duration:0.6})
   div#xa(left: 180px; top: 800px; width: 560px; height: 2px; background: $ink)
   div#ya(left: 178px; top: 330px; width: 2px; height: 471px; background: $ink)
-  div#xt(left: "119;197;275;353;430"; top: 801px; width: 2px; height: 10px; background: $ink) ×5
-  p#xl(left: "100;178;256;333;411"; top: 814px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×5 0;50;100;150;200
-  div#yt(left: 170px; top: "480;350;219"; width: 10px; height: 2px; background: $ink) ×3
-  p#yl(left: 112px; top: "472;342;211"; width: 50px; text-align: right; font-size: 18px; font-family: n; color: $ink2) ×3 0;0.5;1.0
+  div#xt(left: "179;296;413;530;645"; top: 801px; width: 2px; height: 10px; background: $ink) ×5
+  p#xl(left: "150;267;384;500;617"; top: 814px; width: 60px; text-align: center; font-size: 18px; font-family: n; color: $ink2) ×5 0;50;100;150;200
+  div#yt(left: 170px; top: "720;525;329"; width: 10px; height: 2px; background: $ink) ×3
+  p#yl(left: 112px; top: "708;513;317"; width: 50px; text-align: right; font-size: 18px; font-family: n; color: $ink2) ×3 0;0.5;1.0
   shape#z(left: 182px; top: 720px; width: 558px; height: 3px; path: line_h; border: 2px solid $brick; dash: 4,3)
   p#xn(left: 180px; top: 846px; width: 560px; text-align: center; font-size: 20px; color: $ink2) 参加者数（人）
   p#yn(left: 96px; top: 290px; font-size: 20px; color: $ink2) 効果量 g
-shape#sd(left: "299;212;439;187;253;346"; top: "356;296;427;234;489;416"; width: 22px; height: 22px; border-radius: 50%; background: $ink2; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.12}}) ×6
+shape#sd(left: "449;318;659;281;380;519"; top: "534;444;641;351;734;624"; width: 22px; height: 22px; border-radius: 50%; background: $ink2; in: {scale:0, duration:0.4, ease:'back.out(2)', stagger:{each:0.12}}) ×6
 group#sl(in: {opacity:0, duration:0.4})
-  p#l(left: "317;230;457;205;271;364"; top: "355;295;426;232;488;415"; font-size: 18px; color: $ink2) ×6 A;B;C;D;E;F
+  p#l(left: "476;345;686;308;407;546"; top: "533;443;639;348;732;623"; font-size: 18px; color: $ink2) ×6 A;B;C;D;E;F
 p#db_d(left: 326px; top: 348px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 48 人・g 0.92
 p#db_b(left: 363px; top: 442px; font-size: 18px; color: $brick; in: {opacity:0, duration:0.4}) 64 人・g 0.68
-shape#trend(path: "M220 270 L460 410"; background: none; border: 3px solid $ochre; dash: 5,4; in: draw {duration: 0.9})
+shape#trend(path: "M330 405 L690 615"; background: none; border: 3px solid $ochre; dash: 5,4; in: draw {duration: 0.9})
 p#trend_l(left: 548px; top: 438px; font-size: 20px; line-height: 1.35; color: $ochre; in: {opacity:0, duration:0.4}) 小さい研究ほど[br]効果が大きい
-shape#gh(left: "172;200;225"; top: "463;508;450"; width: 22px; height: 22px; path: rect,r=0.5; background: none; border: 2px solid $brick; dash: 1,5; in: {scale:0.4, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.15}}) ×3
+shape#gh(left: "258;300;338"; top: "695;762;675"; width: 22px; height: 22px; path: rect,r=0.5; background: none; border: 2px solid $brick; dash: 1,5; in: {scale:0.4, opacity:0, duration:0.45, ease:'back.out(2)', stagger:{each:0.15}}) ×3
 p#gh_l(left: 196px; top: 644px; font-size: 18px; line-height: 1.3; color: $brick; in: {opacity:0, duration:0.4}) ここにあるはずの研究が[br]見えていない？
 img#drawer(left: 790px; top: 600px; width: 170px; height: 200px; object-fit: contain; main: none; in: {y:30, opacity:0, duration:0.7, ease:'power3.out'}) [transparent]上の引き出しが開いた濃い紺の金属の書類棚。公表されなかった研究論文とマニラフォルダーが詰め込まれ、紙が数枚はみ出している。単体で全体が入り周りに少し余白、背景・地面・床の影なし
 p#drawer_l(left: 760px; top: 812px; width: 230px; text-align: center; font-size: 16px; line-height: 1.4; color: $ink2; in: {opacity:0, duration:0.4}) 結果の出なかった研究は[br]引き出しの中？

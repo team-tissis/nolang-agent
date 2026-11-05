@@ -130,8 +130,8 @@ img#life_photo(inset: 0; object-fit: cover; object-position: bottom; zoom: 180%;
 img#shadow_photo(inset: 0; content: @shadow; object-fit: cover; object-position: 72% 100%; zoom: 160%; main: kb {scale: [1, 1.06], focus: ['88% 100%', '88% 100%']}; in: {opacity:0, duration:0.12, ease:'power1.inOut'})
 # 爪と小さな人は絵の下 (y 55〜86%) にいるので、この絵の暗幕は下を浅く (55% まで素通し・周辺減光も薄く) して見せる
 shade#life_shade(background: linear(#03050C9E,#03050C00@20%,#03050C00@55%,#03050C59@78%,#03050CB3@92%,#03050CD9,180); life_shade.v.opacity: 0.35)
-shape#up_line(path: "M542 779 L585 739 L613 754 L662 687"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
-shape#up_head(path: "M628 684 L665 684 L665 721"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
+shape#up_line(path: "M813 1169 L878 1109 L920 1131 L993 1031"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
+shape#up_head(path: "M942 1026 L998 1026 L998 1082"; background: none; border: 9px solid $line; box-shadow: 0px 0px 16px #FF283CB3; in: draw {duration: 0.6})
 
 # 大きな壁: 霧の中にそびえる壁の絵・「大きな壁」の札を判子で
 section#wall
@@ -200,8 +200,8 @@ div#tint(inset: 0; background: linear(#AA0A149E,#460000B3,180); mix-blend-mode: 
 head#s10a(cx: 540px; cy: 744px) テクノロジー犯罪は
 group#vk(left: 0px; top: 780px; width: 1080px; height: 339px; in: {scale:2, opacity:0, duration:0.26, ease:'power4.in'})
   key#m(cx: 50%; cy: 50%; s: 93) 見えない暴力
-  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 12px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220ms; in: keys(at=0 x=-11 opacity=0.8 | at=0.2 x=7 opacity=0.8 | at=0.4 x=-5 opacity=0.8 | at=0.6 x=3 opacity=0.8 | at=0.8 x=-6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
-  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 12px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220ms; in: keys(at=0 x=11 opacity=0.8 | at=0.2 x=-7 opacity=0.8 | at=0.4 x=5 opacity=0.8 | at=0.6 x=-3 opacity=0.8 | at=0.8 x=6 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_r(cx: 50%; cy: 50%; s: 93; color: $gr; background: none; border: 12px solid $gr; box-shadow: none; opacity: 0; overlap: vk.m; delay: 220ms; in: keys(at=0 x=-16 opacity=0.8 | at=0.2 x=11 opacity=0.8 | at=0.4 x=-7 opacity=0.8 | at=0.6 x=5 opacity=0.8 | at=0.8 x=-9 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
+  key#ghost_c(cx: 50%; cy: 50%; s: 93; color: $gc; background: none; border: 12px solid $gc; box-shadow: none; opacity: 0; overlap: vk.m,vk.ghost_r; delay: 220ms; in: keys(at=0 x=17 opacity=0.8 | at=0.2 x=-10 opacity=0.8 | at=0.4 x=8 opacity=0.8 | at=0.6 x=-4 opacity=0.8 | at=0.8 x=9 opacity=0.8 | at=1 x=0),duration=1400) 見えない暴力
 
 # 社会全体で守る: 光の輪を囲む手の絵・「社会全体」で中央から金色の輪が 4 重に 3 回広がる
 section#society

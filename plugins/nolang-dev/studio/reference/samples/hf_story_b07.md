@@ -73,7 +73,7 @@ div#stripes.bleed(left: -200px; top: 0px; width: 1500px; height: 324px; pattern:
 p#hd_kicker(cx: 540px; top: 86px; font-size: 46px; color: $rose; letter-spacing: .04em; z-index: front; in: none) 【毎週の悪夢】
 p#hd_title(left: 0px; top: 144px; width: 1080px; font-size: 80px; line-height: 1.25; text-align: center; color: #FFFFFF; -webkit-text-stroke: 8px $ink; z-index: front; in: {scale:1.12, duration:.32, ease:'back.out(2)'}) 月曜日が嫌すぎる瞬間{y}5選{/}
 # 番号の札: 淡い枠で並び、項目の頭で黄 (.on)・次の項目で赤 (.done)
-p#pc(left: "229;284;339;394;449"; top: 262px; width: 64px; font-size: 32px; line-height: 1; padding: 6px 0px; text-align: center; color: #FFFFFFBF; background: #FFFFFF0F; border: 3px solid #FFFFFF73; border-radius: 12px; z-index: front; in: {scale:.4, opacity:0, duration:.18, ease:'back.out(3)', stagger: {each: .06}}) ×5 1;2;3;4;5
+p#pc(left: "344;426;509;591;674"; top: 262px; width: 64px; font-size: 32px; line-height: 1; padding: 6px 0px; text-align: center; color: #FFFFFFBF; background: #FFFFFF0F; border: 3px solid #FFFFFF73; border-radius: 12px; z-index: front; in: {scale:.4, opacity:0, duration:.18, ease:'back.out(3)', stagger: {each: .06}}) ×5 1;2;3;4;5
 #pc.on(background: $y; color: $ink; border: 3px solid $y)
 #pc.done(background: #FF3B5CD9; color: #FFFFFF; border: 3px solid #FF3B5CD9)
 # 全編の周辺減光 (場面の絵の直上) と、下半分を沈める暗いグラデ (字幕と見出しの地)
@@ -125,7 +125,7 @@ div#th(left: 900px; top: 470px; width: 120px; height: 520px; in: {x:220, opacity
   div#tube(left: 34px; top: 0px; width: 52px; height: 430px; border-radius: 26px; background: #FFFFFFEB; border: 6px solid $ink)
   div#fill(left: 48px; width: 24px; top: 399px; height: 20px; border-radius: 12px; background: $pink)
   div#bulb(left: 14px; top: 404px; width: 92px; height: 92px; border-radius: 148px; background: $pink; border: 6px solid $ink)
-  p#s(left: -52px; top: "27;115;204"; font-size: 34px; line-height: 1; text-shadow: 0px 2px 6px #000000) ×3 38;37;36
+  p#s(left: -52px; top: "41;173;306"; font-size: 34px; line-height: 1; text-shadow: 0px 2px 6px #000000) ×3 38;37;36
 #th.fill.hi(top: 50px; height: 369px; move: 900ms,power2.out)
 #th.fill.mid(top: 219px; height: 200px; move: 600ms,power2.inOut)
 ono#pt1(left: 500px; top: 500px; w: 170; overlap: th; t: ペタ; s: 69; c: $peta; -webkit-text-stroke: 10px $ink; transform: rotate(-12deg); in: {scale:1.8, opacity:0, duration:.1, ease:'power3.out'}; out: {opacity:0, duration:.15})

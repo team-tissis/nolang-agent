@@ -81,7 +81,7 @@ subtitle.hug(left: 50px; top: 1424px; width: 980px; font-size: 48px; line-height
 img#bg_base(inset: 0; z-index: back; main: kb {scale: [1.134, 1.05], focus: ['50% 46%', '50% 54%']}) 縦長の夜空の背景。深い藍色から青紫へのなめらかなグラデーションに小さな星と柔らかく光る点が散り、右上の隅に小さな光る三日月。画面の最下部 (下 16%) だけに、静かな日本の住宅街の平らなシルエット (屋根・小さな集合住宅・電柱と電線) と暖かい黄色の灯りの窓がいくつか。中央は大きく空いた何もない夜空。人物なし
 div#blob1(left: -160px; top: 520px; width: 520px; height: 520px; border-radius: 1498px; background: radial(#6B3FE08C,#6B3FE000@70%); z-index: back; main: sine {x: 120, y: -160, period: '256s'}; bleed)
 div#blob2(left: 720px; top: 1180px; width: 520px; height: 520px; border-radius: 1498px; background: radial(#FF5C9E40,#FF5C9E00@70%); z-index: back; main: sine {x: -140, y: -120, period: '256s'}; bleed)
-div#star(left: "388;107;334;99;250;317;521;580;58;176;684;172;679;39;374;339;601;324;466;300;229;222;583;682;674;183;383;441;179;706;658;459;609;28;688;579;227;649;381;351;140;634;167;107;448;112"; top: "838;590;444;393;37;886;104;767;661;697;480;670;277;120;837;620;963;694;376;33;188;617;690;951;191;632;845;568;180;244;269;289;323;102;600;843;802;755;288;25;457;718;580;884;205;379"; width: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; height: "3;3;3;3;3;3;3;3;3;3;3;3;3;3;3;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;4;5;5;5;5;5;5;5;5;5;5;5;5;5;5;5"; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 0px 10px 2px #FFFFFF8C; opacity: "0.74;0.54;0.95;0.52;0.82;0.50;0.61;0.93;0.62;0.91;0.69;0.95;0.95;0.58;0.80;0.95;0.97;0.55;0.67;0.64;0.77;0.70;0.81;0.49;0.80;0.52;0.88;0.72;0.55;0.68;0.55;0.88;0.84;0.67;0.75;0.94;0.65;0.88;0.50;0.67;0.63;0.79;0.63;0.92;0.68;0.50"; z-index: back; main: sine {opacity: 0.225, period: 1.716}) ×46
+div#star(left: "582;161;501;149;375;476;782;870;87;264;1026;258;1019;59;561;509;902;486;699;450;344;333;875;1023;1011;275;575;662;269;1059;987;689;914;42;1032;869;341;974;572;527;210;951;251;161;672;168"; top: "1257;885;666;590;56;1329;156;1151;992;1046;720;1005;416;180;1256;930;1445;1041;564;50;282;926;1035;1427;287;948;1268;852;270;366;404;434;485;153;900;1265;1203;1133;432;38;686;1077;870;1326;308;569"; width: "5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;6;6;6;6;6;6;6;6;6;6;6;6;6;6;6;6;8;8;8;8;8;8;8;8;8;8;8;8;8;8;8"; height: "5;5;5;5;5;5;5;5;5;5;5;5;5;5;5;6;6;6;6;6;6;6;6;6;6;6;6;6;6;6;6;8;8;8;8;8;8;8;8;8;8;8;8;8;8;8"; border-radius: 148px; background: #FFFFFF; box-shadow: 0px 0px 10px 2px #FFFFFF8C; opacity: "0.74;0.54;0.95;0.52;0.82;0.50;0.61;0.93;0.62;0.91;0.69;0.95;0.95;0.58;0.80;0.95;0.97;0.55;0.67;0.64;0.77;0.70;0.81;0.49;0.80;0.52;0.88;0.72;0.55;0.68;0.55;0.88;0.84;0.67;0.75;0.94;0.65;0.88;0.50;0.67;0.63;0.79;0.63;0.92;0.68;0.50"; z-index: back; main: sine {opacity: 0.225, period: 1.716}) ×46
 div#bgshade(inset: 0; background: linear(#0B0D2A59,#0B0D2A00@35%,#0B0D2A00@70%,#0B0D2A40,180); z-index: back)
 
 # 題つきの板 (番号の黄の丸札 + 題)・下から弾んで入り、上へ抜けて消える
@@ -127,7 +127,7 @@ section#dist(stagger: {each:0})
 div#hchip.sticky(left: 48px; top: 140px; width: 412px; height: 64px; border-radius: 32px; background: #FFFFFF1A; border: 2px solid #FFFFFF24; delay: 100ms; in: {x:-40, opacity:0, duration:0.45, ease:'back.out(1.8)'}; out: {opacity:0, duration:0.3})
   svg#m(left: 18px; cy: 50%; width: 36px; height: 36px; part: moon)
   p#t(left: 66px; cy: 50%; font-size: 30px) 高校生の睡眠 × スマホ
-p#pd.sticky(left: "505;543;581;619;657"; top: 148px; width: 46px; font-size: 22px; font-family: p; text-align: center; color: $ink3; background: #FFFFFF14; border: 2px solid #FFFFFF24; border-radius: 148px; padding: 10px 0px; delay: 150ms; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.05}}; out: {opacity:0, duration:0.3}) ×5 1;2;3;4;5
+p#pd.sticky(left: "758;815;872;929;986"; top: 148px; width: 46px; font-size: 22px; font-family: p; text-align: center; color: $ink3; background: #FFFFFF14; border: 2px solid #FFFFFF24; border-radius: 148px; padding: 10px 0px; delay: 150ms; in: {scale:0.4, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.05}}; out: {opacity:0, duration:0.3}) ×5 1;2;3;4;5
 #pd.on(color: $navy; background: $yellow; border: 2px solid $yellow)
 board#b2(n: "01"; t: "平日の睡眠時間")
   # 主役の数字: 平均 + 時と分が別々に回る (odometer)
@@ -140,11 +140,11 @@ board#b2(n: "01"; t: "平日の睡眠時間")
     p#mu(left: 542px; top: 66px; font-size: 58px) 分
   # 縦棒 5 本 (1% = 6.67 px・下端 600 から上へ伸びる)・値・軸の札 (時間帯 / 人数)
   div#base(left: 52px; top: 898px; width: 880px; height: 3px; background: #FFFFFF59; delay: 400ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'})
-  div#col(left: "56;173;291;408;525"; top: "547;420;347;460;560"; width: 112px; height: "53;180;253;140;40"; border-radius: 20px 20px 0px 0px; background: $sky; delay: 500ms; in: {scaleY:0, duration:0.7, ease:'back.out(1.4)', pivot:'bottom', stagger:{each:0.12}}) ×5
+  div#col(left: "84;260;437;612;788"; top: "821;630;521;690;840"; width: 112px; height: "80;270;380;210;60"; border-radius: 20px 20px 0px 0px; background: $sky; delay: 500ms; in: {scaleY:0, duration:0.7, ease:'back.out(1.4)', pivot:'bottom', stagger:{each:0.12}}) ×5
   # 35% の語でピンクに点く 2 本 (角ごとの角丸の棒は fill の印で塗り替えられないので、同じ形の色の棒を重ねて溶かす)
-  div#hot(left: "56;173"; top: "547;420"; width: 112px; height: "53;180"; border-radius: 20px 20px 0px 0px; background: $pink; overlap: b2.col; in: {opacity:0, duration:0.3}) ×2
-  p#colv(cx: "93;211;328;445;563"; top: "504;377;304;417;517"; font-size: 46px; delay: 850ms; in: {scale:0.5, y:16, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×5 8%;27%;38%;21%;6%
-  p#colx(cx: "93;211;328;445;563"; top: 912px; font-size: 32px; line-height: 1.3; text-align: center; delay: 600ms; in: {scale:0.9, y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.12}}) ×5 5時間[br]{sb}未満{/}[br]{sn}99人{/};5〜6[br]{sb}時間{/}[br]{sn}334人{/};6〜7[br]{sb}時間{/}[br]{sn}470人{/};7〜8[br]{sb}時間{/}[br]{sn}259人{/};8時間[br]{sb}以上{/}[br]{sn}74人{/}
+  div#hot(left: "84;260"; top: "821;630"; width: 112px; height: "80;270"; border-radius: 20px 20px 0px 0px; background: $pink; overlap: b2.col; in: {opacity:0, duration:0.3}) ×2
+  p#colv(cx: "140;317;492;668;845"; top: "756;566;456;626;776"; font-size: 46px; delay: 850ms; in: {scale:0.5, y:16, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×5 8%;27%;38%;21%;6%
+  p#colx(cx: "140;317;492;668;845"; top: 912px; font-size: 32px; line-height: 1.3; text-align: center; delay: 600ms; in: {scale:0.9, y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.12}}) ×5 5時間[br]{sb}未満{/}[br]{sn}99人{/};5〜6[br]{sb}時間{/}[br]{sn}334人{/};6〜7[br]{sb}時間{/}[br]{sn}470人{/};7〜8[br]{sb}時間{/}[br]{sn}259人{/};8時間[br]{sb}以上{/}[br]{sn}74人{/}
   # 6 時間未満のかぎと札 (語で出る)
   svg#brk(left: 84px; top: 548px; width: 288px; height: 34px; part: brk; in: {scaleX:0.3, opacity:0, duration:0.35, ease:'back.out(2)'})
   div#pill(left: 62px; top: 398px; width: 312px; height: 132px; border-radius: 30px; background: $pink; box-shadow: 0px 12px 30px #FF5C9E59; in: {scale:0.4, y:30, opacity:0, duration:0.5, ease:'back.out(2.2)'})
@@ -169,19 +169,19 @@ board#b3(n: "02"; t: "スマホを手から離す時刻")
     p#v(left: .k1.right+14; cy: 50%; font-size: 44px; font-family: p; color: $yellow) 約30分
     p#k2(left: .v.right+14; cy: 50%; font-size: 34px) 短く
   # 目盛り (0〜8 時間・1 分 = 0.867 px)
-  div#grid(left: "195;299;403;507;611"; top: 270px; width: 2px; height: 690px; background: #FFFFFF17; delay: 400ms; in: {opacity:0, duration:0.4}) ×5
-  p#tick(cx: "195;299;403;507;611"; top: 968px; font-size: 24px; color: $ink3; font-family: m; delay: 400ms; in: {opacity:0, duration:0.4}) ×5 0;2;4;6;8時間
+  div#grid(left: "293;449;605;761;917"; top: 270px; width: 2px; height: 690px; background: #FFFFFF17; delay: 400ms; in: {opacity:0, duration:0.4}) ×5
+  p#tick(cx: "293;449;605;761;917"; top: 968px; font-size: 24px; color: $ink3; font-family: m; delay: 400ms; in: {opacity:0, duration:0.4}) ×5 0;2;4;6;8時間
   # 行 = 札 (時刻 + 人数) + 棒 (幅 = 分 × 0.867) + 棒の中の右寄せの値
-  div#row(left: 0px; top: "181;273;365;457;549"; width: 984px; height: 120px) ×5
+  div#row(left: 0px; top: "272;410;548;686;824"; width: 984px; height: 120px) ×5
     p#a(left: 40px; top: 18px; font-size: 34px; delay: "450ms;580ms;710ms;840ms;970ms"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 22時より前;22〜23時;23〜24時;24時以降;見ながら寝落ち
     p#b(left: 40px; top: 66px; font-size: 26px; color: $ink3; font-family: m; delay: "450ms;580ms;710ms;840ms;970ms"; in: {scale:0.8, y:16, opacity:0, duration:0.35, ease:'power2.out'}) 136人・11%;297人・24%;408人・33%;272人・22%;123人・10%
-    div#bar(left: 292px; top: 22px; width: "381;357;327;298;287"; height: 70px; border-radius: 0px 20px 20px 0px; background: $muted; delay: "500ms;630ms;760ms;890ms;1020ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
+    div#bar(left: 292px; top: 22px; width: "572;536;491;447;431"; height: 70px; border-radius: 0px 20px 20px 0px; background: $muted; delay: "500ms;630ms;760ms;890ms;1020ms"; in: {scaleX:0, duration:0.75, ease:'power3.out', pivot:'left'})
     # 語で色が変わる棒 (ミント / 沈める紺 / ピンクを同じ形で重ねて溶かす)
-    div#hot(left: 292px; top: 22px; width: "381;357;327;298;287"; height: 70px; border-radius: 0px 20px 20px 0px; background: "$mint;$dim;$dim;$pink;$pink"; overlap: b3.row.bar; in: {opacity:0, duration:0.3})
-    p#val(left: 292px; cy: 57px; width: "368;344;314;285;274"; font-size: 34px; text-align: right; delay: "1000ms;1130ms;1260ms;1390ms;1520ms"; in: {opacity:0, duration:0.3}) 7時間19分;6時間52分;6時間18分;5時間44分;5時間31分
+    div#hot(left: 292px; top: 22px; width: "572;536;491;447;431"; height: 70px; border-radius: 0px 20px 20px 0px; background: "$mint;$dim;$dim;$pink;$pink"; overlap: b3.row.bar; in: {opacity:0, duration:0.3})
+    p#val(left: 292px; cy: 57px; width: "552;516;471;428;411"; font-size: 34px; text-align: right; delay: "1000ms;1130ms;1260ms;1390ms;1520ms"; in: {opacity:0, duration:0.3}) 7時間19分;6時間52分;6時間18分;5時間44分;5時間31分
   # 22 時前との差 (斜線のピンクの枠 + 差の分)・7 時間 19 分の黄の基準線
-  div#ghost(left: "493;482"; top: "472;564"; width: "82;94"; height: 70px; border-radius: 0px 20px 20px 0px; background: #FF5C9E29; pattern: hatch,45,#FF5C9E6B,13,7; border: 3px solid $pink; in: {scaleX:0, opacity:0, duration:0.45, ease:'power3.out', pivot:'left', stagger:{each:0.12}}) ×2
-  p#glab(cx: "534;529"; cy: "496;588"; font-size: 26px; text-shadow: 0px 2px 6px #0A0A28E6; overlap: b3.ghost; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×2 −95分;−108分
+  div#ghost(left: "740;723"; top: "708;846"; width: "123;141"; height: 70px; border-radius: 0px 20px 20px 0px; background: #FF5C9E29; pattern: hatch,45,#FF5C9E6B,13,7; border: 3px solid $pink; in: {scaleX:0, opacity:0, duration:0.45, ease:'power3.out', pivot:'left', stagger:{each:0.12}}) ×2
+  p#glab(cx: "801;794"; cy: "744;882"; font-size: 26px; text-shadow: 0px 2px 6px #0A0A28E6; overlap: b3.ghost; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)', stagger:{each:0.12}}) ×2 −95分;−108分
   div#ref(left: 861px; top: 280px; width: 4px; height: 670px; border-radius: 3px; background: $yellow; in: {scaleY:0, duration:0.45, ease:'power2.out', pivot:'top'})
   p#reflab(left: 742px; top: 252px; font-size: 24px; color: $navy; background: $yellow; border-radius: 20px; padding: 6px 14px; in: {scale:0.6, y:10, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 22時前 7時間19分
   # 95 分の札 (大きな数字が弾み、下線が伸びる)
@@ -196,23 +196,23 @@ svg#fx3(left: 14px; top: 1100px; width: 400px; height: 400px; part: burst3; over
 # 03 朝の眠気と居眠り: 凡例と目盛りを先に置き、黄の線 → ピンクの線が左から描かれ、点と値が順に弾む →「段階的」で札と右端の値を弾ませる・右下に居眠りの少女
 section#sleepy(stagger: {each:0})
 board#b4(n: "03"; t: "朝の眠気・授業中の居眠り")
-  div#lg(left: 44px; top: "113;144"; width: 900px; height: 36px; delay: 300ms; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.12}}) ×2
+  div#lg(left: 44px; top: "170;216"; width: 900px; height: 36px; delay: 300ms; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'power2.out', stagger:{each:0.12}}) ×2
     div#sw(left: 0px; cy: 50%; width: 52px; height: 8px; border-radius: 4px; background: "$yellow;$pink")
     div#dot(left: 16px; cy: 50%; width: 24px; height: 24px; border-radius: 148px; background: "$yellow;$pink"; box-shadow: 0px 0px 0px 4px #1D2060)
     p#t(left: 68px; cy: 50%; font-size: 30px) 朝とても眠い{e}（全体 43%・528人）{/};授業中に週3回以上 居眠り{e}（全体 18%・222人）{/}
   # 目盛り (0〜60%・1% = 5.07 px・0% は 573)
-  div#gl(left: 110px; top: "573;472;371;269"; width: 820px; height: 2px; background: #FFFFFF1A; delay: 300ms; in: {opacity:0, duration:0.4}) ×4
-  p#yt(left: 21px; width: 75px; cy: "573;472;371;269"; font-size: 24px; text-align: right; color: $ink3; font-family: m; delay: 300ms; in: {opacity:0, duration:0.4}) ×4 0%;20%;40%;60%
-  p#xt(cx: "113;230;347;463;580"; cy: 898px; font-size: 27px; color: $ink2; delay: 300ms; in: {opacity:0, duration:0.4}) ×5 22時前;22〜23時;23〜24時;24時以降;寝落ち
+  div#gl(left: 110px; top: "860;708;557;404"; width: 820px; height: 2px; background: #FFFFFF1A; delay: 300ms; in: {opacity:0, duration:0.4}) ×4
+  p#yt(left: 21px; width: 75px; cy: "860;708;557;404"; font-size: 24px; text-align: right; color: $ink3; font-family: m; delay: 300ms; in: {opacity:0, duration:0.4}) ×4 0%;20%;40%;60%
+  p#xt(cx: "170;345;521;695;870"; cy: 898px; font-size: 27px; color: $ink2; delay: 300ms; in: {opacity:0, duration:0.4}) ×5 22時前;22〜23時;23〜24時;24時以降;寝落ち
   # 線 (左から描く)・面 (薄く溶ける)・点 (弾む)・値 (上がる) を系列ごとに
   svg#aa(left: 158px; top: 368px; width: 720px; height: 502px; part: area_a; in: {opacity:0, duration:0.8})
   svg#ab(left: 158px; top: 368px; width: 720px; height: 502px; part: area_b; in: {opacity:0, duration:0.8})
   svg#la(left: 158px; top: 368px; width: 720px; height: 502px; part: line_a; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
   svg#lb(left: 158px; top: 368px; width: 720px; height: 502px; part: line_b; in: wipe {dir: 'right', duration: 1.1, ease: 'power1.inOut'})
-  div#da(left: "102;219;336;452;569"; top: "440;405;349;273;243"; width: 34px; height: 34px; border-radius: 148px; background: $yellow; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
-  div#db(left: "102;219;336;452;569"; top: "521;506;476;430;405"; width: 34px; height: 34px; border-radius: 148px; background: $pink; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
-  p#va(cx: "113;230;347;463;580"; cy: "422;392;336;260;224"; font-size: "28;20;20;20;28"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 24%;31%;42%;57%;63%
-  p#vb(cx: "113;230;347;463;580"; cy: "562;544;513;468;445"; font-size: "28;20;20;20;28"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 8%;11%;17%;26%;31%
+  div#da(left: "153;329;504;678;854"; top: "660;608;524;410;365"; width: 34px; height: 34px; border-radius: 148px; background: $yellow; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
+  div#db(left: "153;329;504;678;854"; top: "782;759;714;645;608"; width: 34px; height: 34px; border-radius: 148px; background: $pink; border: 6px solid $deep; in: {scale:0, duration:0.35, ease:'back.out(3)', stagger:{each:0.25}}) ×5
+  p#va(cx: "170;345;521;695;870"; cy: "633;588;504;390;336"; font-size: "42;30;30;30;42"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 24%;31%;42%;57%;63%
+  p#vb(cx: "170;345;521;695;870"; cy: "843;816;770;702;668"; font-size: "42;30;30;30;42"; color: "#FFFFFF;$ink2;$ink2;$ink2;#FFFFFF"; in: {y:10, opacity:0, duration:0.3, ease:'power2.out', stagger:{each:0.25}}) ×5 8%;11%;17%;26%;31%
   div#step(left: 44px; top: 962px; width: 408px; height: 68px; border-radius: 32px; background: #FFD23F24; border: 3px solid $yellow; in: {scale:0.5, y:10, opacity:0, duration:0.45, ease:'back.out(2.2)'})
     svg#i(left: 24px; cy: 50%; width: 34px; height: 34px; part: trend)
     p#t(left: 69px; cy: 50%; font-size: 30px) 遅いほど 段階的に増加
@@ -241,7 +241,7 @@ board#b5(n: "04"; t: "2週間の実験")
   div#res(left: 0px; top: 0px; width: 984px; height: 1150px)
     p#rc(left: 40px; top: 170px; font-size: 27px; background: #FFD23F24; border: 2px solid $yellow; border-radius: 30px; padding: 14px 22px; delay: 50ms; in: {scale:0.8, y:10, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 22:30 別の部屋で充電 ×2週間・続けた76人
     # 行 = 題 + 前 (薄い) → 矢印 → 後 (大きいポップ体)・2・3 行目はミントの地
-    div#rr(left: 40px; top: "168;299;429;560"; width: 904px; height: 180px; border-radius: 30px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "2px solid #FFFFFF1A;2px solid #39E0B88C;2px solid #39E0B88C;2px solid #FFFFFF1A"; delay: 150ms; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
+    div#rr(left: 40px; top: "252;449;644;840"; width: 904px; height: 180px; border-radius: 30px; background: "#FFFFFF0F;#39E0B81A;#39E0B81A;#FFFFFF0F"; border: "2px solid #FFFFFF1A;2px solid #39E0B88C;2px solid #39E0B88C;2px solid #FFFFFF1A"; delay: 150ms; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.1}}) ×4
       p#k(left: 28px; top: 22px; font-size: 32px; line-height: 1.3) 寝る時刻[br]{ks}平日の平均{/};睡眠時間[br]{ks}平日の平均{/};朝とても眠い;週3回以上の居眠り
       p#bef(left: 330px; top: 30px; width: 230px; font-size: 38px; text-align: right; color: $ink3) 0時31分;6時間04分;44人 58%;22人 29%
       svg#arr(left: 578px; top: 22.5%; width: 44px; height: 36px; part: "arr_gray;arr_mint;arr_mint;arr_gray")
@@ -249,10 +249,10 @@ board#b5(n: "04"; t: "2週間の実験")
     p#dl1(left: 69px; top: 358px; font-size: 30px; color: $navy; background: $sky; border-radius: 26px; padding: 10px 20px; delay: 600ms; in: {scale:0.5, opacity:0, duration:0.35, ease:'back.out(2.2)'}) 33分 早く
     p#dl2(left: 69px; top: 555px; font-size: 30px; color: $navy; background: $mint; border-radius: 26px; padding: 10px 20px; in: {scale:0.3, opacity:0, duration:0.45, ease:'back.out(3)'}) +37分
     # 前 (灰) と後 (ミント) の細い棒 (割合の長さ)
-    div#mba(left: 370px; top: "504;635"; width: "220;110"; height: 18px; border-radius: 0px 9px 9px 0px; background: #6E73B0; delay: 700ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
-    div#mbb(left: 370px; top: "524;655"; width: "129;65"; height: 18px; border-radius: 0px 9px 9px 0px; background: $mint; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
-    p#mla(left: "475;365"; top: "499;630"; font-size: 24px; color: $ink3; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 実験前 58%;実験前 29%
-    p#mlb(left: "384;320"; top: "519;650"; font-size: 24px; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 2週間後 34%;2週間後 17%
+    div#mba(left: 370px; top: "756;953"; width: "330;165"; height: 18px; border-radius: 0px 9px 9px 0px; background: #6E73B0; delay: 700ms; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
+    div#mbb(left: 370px; top: "786;983"; width: "194;98"; height: 18px; border-radius: 0px 9px 9px 0px; background: $mint; in: {scaleX:0, duration:0.5, ease:'power2.out', pivot:'left'}) ×2
+    p#mla(left: "713;548"; top: "749;945"; font-size: 24px; color: $ink3; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 実験前 58%;実験前 29%
+    p#mlb(left: "576;480"; top: "779;975"; font-size: 24px; delay: "350ms;450ms"; in: {scale:0.9, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)'}) ×2 2週間後 34%;2週間後 17%
     note#note(top: 1060px; delay: 1000ms; in: {opacity:0, duration:0.4}) ※希望者だけの実験で、比べる対照の群はありません
 svg#fx5(left: 590px; top: 476px; width: 520px; height: 520px; part: burst5; overlap: b5; in: {scale:0.652, opacity:0, duration:0.55, ease:'power2.out'}; out: {opacity:0, duration:0.3, ease:'power1.in'}; bleed)
 
@@ -260,7 +260,7 @@ svg#fx5(left: 590px; top: 476px; width: 520px; height: 520px; part: burst5; over
 section#tip(stagger: {each:0})
 board#b6(n: "05"; t: "続けるコツ")
   p#lead(left: 44px; top: 174px; font-size: 36px; delay: 300ms; in: {scale:0.9, y:16, opacity:0, duration:0.4, ease:'power2.out'}) 続けられなかった{b8}8{/}人の理由で多かったのは…
-  div#rsn(left: "27;341"; top: 290px; width: 432px; height: 250px; border-radius: 34px; background: "#FF5C9E1F;#FFFFFF12"; border: "2px solid #FF5C9EB3;2px solid #FFFFFF24"; delay: "500ms;650ms"; in: {scale:0.6, y:30, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
+  div#rsn(left: "41;512"; top: 290px; width: 432px; height: 250px; border-radius: 34px; background: "#FF5C9E1F;#FFFFFF12"; border: "2px solid #FF5C9EB3;2px solid #FFFFFF24"; delay: "500ms;650ms"; in: {scale:0.6, y:30, opacity:0, duration:0.45, ease:'back.out(2.2)'}) ×2
     svg#ic(cx: 50%; top: 12%; width: 110px; height: 110px; part: "rsn_alarm;rsn_chat")
     p#t(cx: 50%; top: 160px; font-size: 40px) 目覚ましがスマホ;友だちへの返信
   img#alarm(left: 30px; top: 628px; width: 430px; height: 430px; object-fit: contain; in: {scale:0.3, y:60, rotation:-20, opacity:0, duration:0.55, ease:'back.out(2.2)'}) [transparent]かわいいレトロな双子ベルの目覚まし時計: 月の黄色の本体、ピンクのベルとハンマー、目盛りだけの丸い白い文字盤 (数字なし)、短い針 2 本、鳴っていることを示すベルのまわりの小さな曲線。細い白のふちどりのステッカー、枠いっぱいに大きく
@@ -271,14 +271,14 @@ svg#fx6(left: -27px; top: 759px; width: 640px; height: 640px; part: burst6; over
 # まとめ: 結論の 3 枚 (番号 + 大きな数字 + 色の下線 + 文) が順に弾み、注記の板は「数字は」で出て「原因が」で縁が黄に 2 度光る
 section#summary(stagger: {each:0})
 board#b7(n: "まとめ"; nw: 93)
-  div#sm(left: 40px; top: "88;252;416"; width: 904px; height: 214px; border-radius: 32px; background: #FFFFFF0F; border: 2px solid #FFFFFF1F; delay: 350ms; in: {scale:0.85, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.2}}) ×3
+  div#sm(left: 40px; top: "132;378;624"; width: 904px; height: 214px; border-radius: 32px; background: #FFFFFF0F; border: 2px solid #FFFFFF1F; delay: 350ms; in: {scale:0.85, y:40, opacity:0, duration:0.45, ease:'back.out(1.6)', stagger:{each:0.2}}) ×3
     p#n(left: 24px; top: 24px; width: 54px; font-size: 30px; font-family: p; text-align: center; color: $navy; background: $yellow; border-radius: 148px; padding: 12px 0px) 1;2;3
     p#st(left: 24px; top: 84px; font-size: 76px; font-family: p; line-height: 1.2) 35{u}%{/};95{u}分差{/};+37{u}分{/}
     div#bar(left: 24px; top: 86%; width: 220px; height: 8px; border-radius: 4px; background: "$pink;$yellow;$mint")
     p#tx(left: 292px; top: 30px; font-size: 33px; line-height: 1.5) 高校生の{y}3人に1人以上{/}が[br]平日6時間未満しか寝ていない;離すのが1時間遅いと睡眠は{y}約30分{/}短く[br]22時前と24時以降で95分の差[br]眠気・居眠りも同じ順に増える;別の部屋に置くだけで2週間で[br]睡眠+37分・朝の眠気58%→34%[br]続けるコツは{y}目覚まし時計{/}
   div#notes(left: 40px; top: 876px; width: 904px; height: 238px; border-radius: 32px; background: #090A248C; border: 3px solid #FFFFFF2E; in: {scale:0.9, y:30, opacity:0, duration:0.4, ease:'power2.out'})
     p#tag(left: 24px; top: 22px; font-size: 26px; background: #FFFFFF29; border-radius: 24px; padding: 10px 20px) 注記
-    p#li(left: 30px; top: "59;89;120"; font-size: 28px; color: $ink2; font-family: m) ×3 ・数字はすべて自己申告;・調査は関係を示すもので、スマホだけが原因とは言い切れない;・実験は希望者だけで、比べる対照の群はない
+    p#li(left: 30px; top: "89;134;180"; font-size: 28px; color: $ink2; font-family: m) ×3 ・数字はすべて自己申告;・調査は関係を示すもので、スマホだけが原因とは言い切れない;・実験は希望者だけで、比べる対照の群はない
     div#hl(left: 0px; top: 0px; width: 904px; height: 238px; border-radius: 32px; border: 3px solid $yellow; opacity: 0)
 
 # 締め: 地だけに戻り、2 行の呼びかけ → 伸びをする少女が下から弾んで漂う → 出典 (常設の上端は前の場面の終わりで消す)
