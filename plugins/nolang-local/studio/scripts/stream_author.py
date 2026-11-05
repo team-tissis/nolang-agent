@@ -920,14 +920,60 @@ def run(
         log(st, event="reference_gate", message=gate)
         return 1
     sp0.finish()
-    mark_done(st, ended=sp0.inner.ended, exit_code=exit_code)
-    log(st, event="src_done", cuts=sp0.order, ended=sp0.inner.ended, exit=exit_code)
+    ended = sp0.inner.ended
+    if missing := unwritten_cuts(sp0):
+        # 著者が plan の途中で終えた (`=== end ===` を早く書いた・応答が切れた — 11-05 r9a: 5 cut の plan で 2 cut 書いて end)。
+        # 残りの cut だけを 1 回書き直させる (書けた物は渡して書き直させない)。それでも欠ければ印を「終えていない」で書き、
+        # orchestrator が `author_incomplete` に落とす
+        log(st, event="author_resume", missing=missing, written=sp0.order, ended=ended, exit=exit_code)
+        sp1 = Splitter(proj, st, "author_resume")
+        exit_code = stream_model(
+            st, resume_prompt(prompt, sp0, missing), sp1.feed, system_prompt=sp, effort=effort, tag="author_resume"
+        )
+        sp1.finish()
+        sp0.order += [c for c in sp1.order if c not in sp0.order]
+        ended = not unwritten_cuts(sp0)
+    mark_done(st, ended=ended, exit_code=exit_code)
+    log(st, event="src_done", cuts=sp0.order, ended=ended, exit=exit_code)
     if warm is not None:
         warm.join(timeout=30)  # warmup の記録を残してから終わる (著者の call の方が長いので普通は終わっている)
     if not all((proj / f).exists() for f in ("order.txt", "root_design.txt", "root_timeline.txt")):
         log(st, event="root_failed", have=sorted(p.name for p in proj.iterdir()))
         return 1
     return 0
+
+
+def unwritten_cuts(splitter: Splitter) -> list[str]:
+    """plan に在って著者がまだ書いていない cut の名 (plan の順)。plan が無ければ空。"""
+    plan = splitter.out.get("plan")
+    if plan is None:
+        return []
+    return [name for name, _ in plan_names(plan) if name not in splitter.order]
+
+
+def resume_prompt(prompt: str, splitter: Splitter, missing: list[str]) -> str:
+    """著者の呼び直しの user turn = 元の依頼 + 書けた所まで (plan・根・cut) + 残りの cut だけを同じ形で書く指示。"""
+    written = "".join(
+        f"=== {key} ===\n{body}"
+        for key, body in (
+            ("plan", splitter.out.get("plan", "")),
+            ("root_design", splitter.out.get("root_design", "")),
+            ("root_timeline", splitter.out.get("root_timeline", "")),
+            *((f"cut {name}", splitter.out[f"cut_{name}"]) for name in splitter.order if f"cut_{name}" in splitter.out),
+        )
+        if body
+    )
+    return (
+        prompt
+        + "\n\nYou already wrote the following and stopped before the plan was complete:\n\n"
+        + written
+        + "\nContinue from there: write only the remaining cuts of the plan — "
+        + ", ".join(missing)
+        + " — in the plan's order and in the same output shape, starting with `=== cut "
+        + missing[0]
+        + " ===` and finishing with `=== end ===`. Do not rewrite the plan, the root or the cuts above "
+        + "(their names and definitions stay as they are; use them).\n"
+    )
 
 
 def mark_done(st: Path, *, ended: bool, exit_code: int) -> None:

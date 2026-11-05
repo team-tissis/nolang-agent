@@ -564,15 +564,17 @@ class Run(cut_stages.CutStages, ABC):
     # 「low に落として質が少し下がる」側に倒れる。張りは 30 run の骨格のモンテカルロ (実測 6 停止/30 に較正) の frontier から
     # ユーザー裁定 (10-28) で「止まらない予測 94%・medium ~5 割」の点 = 作業側 medium の p80・締切側 p30。平均 9.4/10 だが
     # 10 本の周で 8/10 も 2 割ほど出る張り (単発の長尻 — 82 s を実測 — は締切ギリギリの判断の 2 割が踏む)。
-    # ほぼ確実に 9 割を守るなら作業側 50.0 (p90・medium ~3 割・実走 9/10)、確実に止めないなら 55.0 (実走 10/10・medium ~4%)
-    STAFF_SLOW_S: dict[str, float] = {"low": 20.0, "medium": 44.5}
+    # ほぼ確実に 9 割を守るなら作業側 50.0 (p90・medium ~3 割・実走 9/10)、確実に止めないなら 55.0 (実走 10/10・medium ~4%)。
+    # 11-05: 作業側 medium を 44.5 → 50.0 に (remote の実測 11 本の medium は 21〜89 s・p80 ≈ 58 s。warm が header より前に
+    # 走って再生開始が 50 s 早まり、後半 cut の担当 medium 54〜64 s が間に合わず 14 s 止まった r7b)
+    STAFF_SLOW_S: dict[str, float] = {"low": 20.0, "medium": 50.0}
     STAFF_FAST_S: dict[str, float] = {"low": 10.0, "medium": 31.0}
-    # 著者 brief の run の担当は絵をゼロから書くので出力が ~2 倍・所要も長い。10-28 の同時起動 bench (4 題材 × full / brief・
-    # 担当 low 27 本・medium 68 本) の brief / full の比 (low p30 2.3・p80 2.1 / medium p30 1.6・p80 1.4) を上の表に掛けた値
-    # (生の秒は bench の負荷で full も表より遅かった — 比で写すと止まらない予測 94% の張りがそのまま残る)。brief に full の表を
-    # 使うと締切を緩く読み、medium を選んで止まった (t2: 担当 medium 86 s・約 7 s の停止)
-    STAFF_SLOW_S_BRIEF: dict[str, float] = {"low": 42.0, "medium": 64.0}
-    STAFF_FAST_S_BRIEF: dict[str, float] = {"low": 23.0, "medium": 48.0}
+    # 著者 brief の run (plus) の担当は絵をゼロから設計し素材も頼むので所要が長い。11-05 の remote 実測 (plus 2 本・300 / 600 s・
+    # 担当 low 4 本 32〜51 s・medium 25 本 58〜196 s・中央 147) の p80 (SLOW) と p30 (FAST)。10-28 の bench 由来の旧表 (medium
+    # 64 s) は実測の 1/2〜1/3 で、締切を緩く読み medium を選び続けて止まった (miso: 担当 185 s・35 s の停止)
+    STAFF_SLOW_S_BRIEF: dict[str, float] = {"low": 50.0, "medium": 175.0}
+    STAFF_FAST_S_BRIEF: dict[str, float] = {"low": 40.0, "medium": 120.0}
+    STAFF_MEASURED_MIN = 2  # この run で終わった担当が effort ごとにこれだけあれば、作業側の見込みに実測の中央値も使う
     STAGE_TAIL_S = 3.0  # 担当の後の check + 直しの見込み
     AUTHOR_CHECK_S = 5.0  # cut_seen から担当開始まで (著者版の check)
     RENDER_HEAD_S = 10.0  # fed からその cut の segment が再生に届くまで
@@ -581,11 +583,23 @@ class Run(cut_stages.CutStages, ABC):
     OFFSET_DISCOUNT = 0.95  # 見込み秒の和の締切側の割引 (見込みより短い動画に早く着く)
 
     def _staff_s(self, effort: str, *, fast: bool) -> float:
+        """担当 1 本の見込み秒。作業側 (slow) は表と、この run で終わった同じ effort の担当の実測の中央値の遅い方 — 題材や
+        負荷で表より遅い run は実測が締切の読みを締める (速い run は表のまま = 張りは変えない)。締切側 (fast) は表のまま。"""
         if self.brief:
             table = self.STAFF_FAST_S_BRIEF if fast else self.STAFF_SLOW_S_BRIEF
         else:
             table = self.STAFF_FAST_S if fast else self.STAFF_SLOW_S
-        return table.get(effort, table["medium"])
+        est = table.get(effort, table["medium"])
+        if fast:
+            return est
+        measured = sorted(
+            self.staff_end_s[c] - self.staff_begin_s[c]
+            for c in self.staff_end_s
+            if self.staff_chosen.get(c) == effort and c in self.staff_begin_s
+        )
+        if len(measured) >= self.STAFF_MEASURED_MIN:
+            return max(est, measured[len(measured) // 2])
+        return est
 
     def _ready_est(self, c: str, now: float, *, fast: bool) -> float:
         """cut c が staged になる見込み (since 秒) — 実測があれば実測・走行中は担当の effort の見込みで先へ。"""
