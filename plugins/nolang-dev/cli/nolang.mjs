@@ -306,9 +306,15 @@ async function waitStatus(api, videoId, until, timeoutS) {
   for (;;) {
     const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
     if (st.status !== last?.status || st.playable !== last?.playable) log(`status: ${st.status}${st.playable ? " (再生できる)" : ""}`);
+    // patch の直した区間 (range_render) は全尺より先に描かれる — 見られるようになった時と出来上がった時を知らせる
+    const range = st.range_render ?? null;
+    if (range && (range.status !== last?.range_render?.status || Boolean(range.manifest_url) !== Boolean(last?.range_render?.manifest_url))) {
+      log(`range: ${range.status}${range.manifest_url ? " (直した区間を再生できる)" : ""}${range.mp4_url ? ` mp4 ${range.mp4_url}` : ""}`);
+    }
     last = st;
     if (st.status === "failed" || st.status === "expired") return st;
     if (st.status === "completed" || (until === "playable" && st.playable)) return st;
+    if (until === "range" && (range?.status === "ready" || range?.status === "failed" || (!range && st.playable))) return st;
     if (Date.now() > deadline) return { ...st, timed_out: true };
     await new Promise((r) => setTimeout(r, 5000));
   }
@@ -1042,8 +1048,11 @@ async function cmdPatch(positionals, flags) {
   log(`patch を頼んだ (対象 ${videoId}) — 決定論の編集が当たる依頼だけ成立する (判定に数秒〜30 秒)`);
   const res = await callApi(api, "POST", `/v1/unstable/videos/${videoId}/patch/`, body);
   if (res.stage === "applied") {
-    const st = await waitStatus(api, res.video_id, "playable", Number(flags.timeout || 300));
+    // 直した区間 (range_render) は全尺より先に描かれる: 既定は区間が出来た所 (無ければ全尺が再生できる所) まで待つ。
+    // --until playable で従来どおり全尺が再生できるまで
+    const st = await waitStatus(api, res.video_id, flags.until === "playable" ? "playable" : "range", Number(flags.timeout || 300));
     const ok = st.status !== "failed" && st.status !== "expired" && !st.timed_out;
+    const range = st.range_render ?? null;
     out({
       ok,
       stage: "applied",
@@ -1051,8 +1060,15 @@ async function cmdPatch(positionals, flags) {
       watch_url: res.watch_url,
       status: st.status,
       playable: Boolean(st.playable),
+      range_render: range,
       ...(ok
-        ? { tell_user: `直しを当てた動画ができました (元の動画はそのまま):\n${res.watch_url}`, next: TELL_FIRST }
+        ? {
+            tell_user: `直しを当てた動画ができました (元の動画はそのまま):\n${res.watch_url}`,
+            next:
+              range?.status === "ready"
+                ? `${TELL_FIRST}。直した区間だけの mp4 (range_render.mp4_url) で変更箇所を確かめられる (全尺は nolang status <video_id> --wait --until playable)`
+                : TELL_FIRST,
+          }
         : { error: st.timed_out ? "再生できるまでの待ち時間を超えた" : `描画が ${st.status} になった` }),
     });
     if (!ok) process.exitCode = EXIT.FAIL;
@@ -1397,7 +1413,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
         [--speech <音声の file か id> [--speakers N]]
                                         持ち込み音声 (mp3・m4a・wav など) を文字起こしし、その音声を切って使う動画にする
                                         (切り抜き・要約など。長さは音声から決まる — --seconds で目安を渡せる)
-  nolang patch <video_id か URL> --request-text "<直す点>" [--language ja] [--answered] [--confirmed]
+  nolang patch <video_id か URL> --request-text "<直す点>" [--language ja] [--answered] [--confirmed] [--until playable]
                                         完成した動画への最小の直し (server の決定論 patch)。台詞の言い換え・見た目・素材の
                                         差し替えなどが数十秒で当たり、音声と触らない cut は再利用される。成立しない依頼は
                                         stage が返るだけで何も作らない — その時は nolang edit へ
@@ -1411,7 +1427,7 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang start [dir] --title "…" [--seconds 秒|auto (既定)]
                                         cut ごとに流す: 開始だけ (dir に stream.json を作る)
   nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end)。投入の間は 180 秒以内に
-  nolang status <video_id> [--wait] [--until playable|completed] [--timeout 秒]
+  nolang status <video_id> [--wait] [--until playable|completed|range] [--timeout 秒]
   nolang abort <video_id>
   nolang assets search <kind> "<説明か名前>" [--mine] [--limit N]
                                         NoLang の素材を探す (kind: image|footage|bgm|soundeffect|speaker|avatar|font)
