@@ -1,9 +1,9 @@
 ---
 name: make-video
-description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。「NoLang にログインして」・NoLang の素材を探す / 送る依頼にも使う。台本と画面 (draft src) を CLI (nolang) の studio が書くか、自分で書いて MCP (nolang-local) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
+description: NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。「NoLang にログインして」・NoLang の素材を探す / 送る依頼にも使う。台本と画面 (draft src) を CLI (nolang) の studio が書くか、自分で書いて MCP (nolang) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
 ---
 
-# NoLang の動画を作る (nolang-local)
+# NoLang の動画を作る
 
 依頼を `nolang make` に渡すと、NoLang の studio と同じ段取り (著者が cut を書いた端から check と直し → 投入) で台本と画面 (draft src) が書かれ、NoLang のサーバーが声・絵・BGM・描画を担当する。手元に GPU も NoLang の repo も要らない。
 この file のパスはすべてこの skill の directory からの相対。
@@ -22,7 +22,8 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 - **標準は studio** (§S): シェル・`node` (20 以上)・`python3` と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
 - **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は 1 分半ほど。
 - **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役 をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
-- `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
+- **急ぎで、細かな作り込みが要らない時**: `nolang generate --request-text "<依頼文>" [--aspect] [--seconds]` — NoLang の server が台本と画面を書く (web の home と同じ・studio を使わないので手元の LLM の費用が掛からない)。`stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
+- `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 - **接続先を変える** (「stg で作って」「本番につないで」「localhost で」と頼まれた時だけ): `nolang use <local|dev|stg|prod>` (URL も可・`nolang use` で今の接続先・`default` で戻す)。ログインは接続先ごとなので、切り替えた先が未ログインなら上と同じくログインする。MCP の接続先はプラグインごとに固定で、切り替えられるのは CLI だけ。
@@ -63,7 +64,7 @@ description: デモ用の NoLang で動画を 1 本作る。「〇〇の動画�
 - 作るコマンドや素材のコマンドの前に `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度。まだ許可されていない・切れていた (`failed` なら `--background` をやり直す) 時は、そこで止まって (ターンを終えて) ユーザーの「許可した」を待つ — 止まる時のメッセージにも `authorize_url` と、デバイス認可なら `user_code` をもう一度本文に書く (「上の URL」と書かない)。
 - ブラウザに `ACCESS DENIED` (403) と出る → 接続元の IP が NoLang の許可リストに無い。同じブラウザで `https://<ログイン画面のホスト>/cdn-cgi/trace` を開き、`ip=` の値を管理者に伝えてもらう。
 - SSH・コンテナでは同じ `--background` が自動でデバイス認可を使う。ポート転送は不要。未対応のサーバーではブラウザ認可へ戻る。その戻り先が接続エラーになったら、**ログインをやり直さず**許可後のアドレスバーの URL を貼ってもらい、`nolang auth complete '<URL>'` で待機中のログインを完了する。`--browser --background` でブラウザ認可を指定でき、`--no-browser` で始めた従来の手動方式も同じ `complete` を使う。
-- 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (README.md の「つなぐ先の準備」)。
+- 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (接続先は `nolang use` で分かる。本番は `https://api.no-lang.com`・社内 dev は `nolang use dev`)。
 
 ## M. 決まった素材を使う (依頼に「この写真・この動画」「この曲」「この声」がある・手元の file を渡された時だけ)
 

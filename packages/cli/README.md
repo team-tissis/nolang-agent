@@ -24,6 +24,8 @@ nolang check <dir>                    dir の design.txt / timeline.txt を検�
 nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)
 nolang submit <dir> [--end]           書き足した cut を投入 (最後は --end)
 nolang create <dir> --title "…"       全 cut を一度に: 検査 → 生成開始 → 再生できたら視聴 URL
+nolang generate --request-text "…"    NoLang の server が台本と画面を書く (studio を使わない・手元の LLM は要らない)
+nolang patch <video_id> --request-text "…"   完成した動画の局所編集 (元の動画はそのまま・新しい URL)
 nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 ```
 
@@ -31,7 +33,7 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 
 ## 接続先
 
-`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → `dev` (`https://api-dev.no-lang.com`) の順で決まります。手元のスタックで試す時は `nolang use local` に切り替えます。
+`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → 本番 (`https://api.no-lang.com`) の順で決まります。社内の dev で試す時は `nolang use dev`、手元のスタックは `nolang use local` に切り替えます。
 どれも名前か URL で書けます: `local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`。
 `nolang use stg` で切り替え、`nolang use` で今の接続先、`nolang use default` で選びを外します。ログインは接続先ごとに保存され、切り替えても前のログインは残ります。
 CI など対話できない環境では、ログイン済みの機械の `eval "$(nolang auth env)"` が出す access token を `NOLANG_TOKEN` に入れます。この token は CLI が更新しないので、期限 (1 時間) が切れたら入れ直します。API key (`nlg-c-…`) は CLI と MCP では使えません (403)。API key は NoLang API 用です。
@@ -45,3 +47,7 @@ SSH・リモートコンテナ・Codespaces・Docker・WSL・画面の無い Lin
 一度に待機できるログインは設定ディレクトリごとに 1 件です。新しいログインを始めると古い待機は終了します。
 
 `make` の既定は Claude のままです。`--engine codex` では著者・担当・修正役をすべて Codex が自動実行します (codex-cli 0.162.0 で検証)。Codex の `auth.json` によるログインと NoLang のログインは別々に必要です。Codex のユーザー設定は読み込まず、CLI の既定モデルを使用します。MCP サーバーは利用者のローカル Codex を起動しません。
+
+## ライセンス
+
+Apache-2.0 (repo の `LICENSE`)。studio の文書 (`studio/reference/`) は NoLang の server と同じ版を同梱しています (`nolang reference` が server の現行と照合します)。

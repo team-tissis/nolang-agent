@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// nolang-backend から、このスキルの辞書 (skills/make-video/reference/) と、studio の一式 (studio/ —
-// `nolang make` が --remote で動かす著者・担当・投入の段取り) を写す。
-// 正本は backend (文法とサーバーは一緒に変わる)。ここには写しと、写した元の commit (reference/SOURCE.json) だけを置く。
+// nolang-backend から studio の一式 (packages/cli/studio/ — `nolang make` が --remote で動かす著者・担当・投入の段取りと、
+// 著者の読む文書一式 reference/) を写す。
+// 正本は backend (文法とサーバーは一緒に変わる)。ここには写しと、写した元の commit (studio/SOURCE.json) だけを置く。
+// skill (skills/make-video/) は文書の写しを持たない — 自分で書く経路は `nolang reference` / `nolang_draft_reference` で server の現行を読む。
 // backend 31e748d48f で置き場が分かれた: script は agent_client/・文書と author_core.py は libs/ai/llm_prompts/draft_author/ が正本。
 //
 //   node scripts/sync-reference.mjs <nolang-backend の repo root> [--commit <sha>] [--ref <branch>]
@@ -17,10 +18,7 @@ import { fileURLToPath } from "node:url";
 import { docHashes, readContract, referenceHash } from "../packages/cli/lib/reference.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
-const DEST = join(ROOT, "skills/make-video/reference");
-const DOCS = ["spec.md", "authoring.md", "capabilities.md", "looks.md", "sounds.md"];
-const DIRS = ["scaffolds", "samples"];
-const STUDIO_DEST = join(ROOT, "studio");
+const STUDIO_DEST = join(ROOT, "packages/cli/studio");
 const STUDIO_SKIP = new Set(["__pycache__", ".DS_Store"]);
 // backend の中の置き場 (31e748d48f 以降)
 const SKILL_MD = ".agents/skills/nolang-draft-studio/SKILL.md";
@@ -76,27 +74,6 @@ function gitCommit(dir) {
   }
 }
 
-// 束の rules.md (backend の `draft_check.rules.rules_markdown()` が台帳から作る・1 規則 1 行) の見出しの後ろに版の行を足す。
-// 版の行は MCP (shell の無い host) の照合に使う — skill の手順の最初に `nolang_draft_sync` を呼び、この値と比べる。
-// `Docs:` の行は文書ごとの指紋 — ずれた文書だけを `nolang_draft_reference` で server の現行から読む
-function rulesMarkdown(bundleRules, version) {
-  const lines = bundleRules.split("\n");
-  if (!lines[0].startsWith("# ")) throw new Error("束の rules.md が見出しで始まっていない");
-  return [
-    lines[0],
-    "",
-    `Version of these documents: contract: ${version.contract} · reference_hash: ${version.reference_hash} · synced_at: ${version.synced_at}`,
-    "",
-    `Docs: ${Object.entries(version.docs).map(([row, hash]) => `${row} ${hash}`).join(" · ")}`,
-    ...lines.slice(1),
-  ].join("\n");
-}
-
-for (const name of DOCS) await cp(join(from, REFERENCE, name), join(DEST, name));
-for (const name of DIRS) {
-  await rm(join(DEST, name), { recursive: true, force: true });
-  await cp(join(from, REFERENCE, name), join(DEST, name), { recursive: true });
-}
 await rm(STUDIO_DEST, { recursive: true, force: true });
 for (const [rel, srcRel] of STUDIO_FILES) {
   await cp(join(from, srcRel), join(STUDIO_DEST, rel), { recursive: true, filter: (src) => !STUDIO_SKIP.has(src.split("/").pop()) });
@@ -108,7 +85,7 @@ for (const name of ["author_core", "cut_stages"])
     throw new Error(`stream_author.py が ${name} を import するのに、写した元に scripts/${name}.py が無い`);
 
 // 文書一式の版: 写した studio/reference/ の指紋 (JS) を、backend の正本の実装 (author_core.reference_hash_of — server と client が
-// 使う python) の値と突き合わせる。食い違えば言語間の算法がずれている — 出荷すると全 run が「古い plugin」と判定されて毎回取り直す
+// 使う python) の値と突き合わせる。食い違えば言語間の算法がずれている — 出荷すると `nolang reference` が毎回 server から取り直す
 const referenceDir = join(STUDIO_DEST, "reference");
 const contract = (await readContract(referenceDir)).contract;
 const reference_hash = await referenceHash(referenceDir);
@@ -128,7 +105,6 @@ const py = JSON.parse(
 if (py.hash !== reference_hash) throw new Error(`文書一式の指紋が JS (${reference_hash.slice(0, 16)}) と python (${py.hash.slice(0, 16)}) で違う`);
 if (JSON.stringify(py.docs) !== JSON.stringify(docs)) throw new Error(`文書ごとの指紋が JS と python で違う: ${JSON.stringify(docs)} ≠ ${JSON.stringify(py.docs)}`);
 const synced_at = new Date().toISOString();
-await writeFile(join(DEST, "rules.md"), rulesMarkdown(await readFile(join(from, REFERENCE, "rules.md"), "utf8"), { contract, reference_hash, synced_at, docs }));
 
 const git = gitCommit(from);
 const source = {
@@ -140,7 +116,7 @@ const source = {
   contract,
   reference_hash,
   docs,
-  files: [...DOCS, ...DIRS.map((d) => d + "/"), "rules.md (束の rules.md + 版の行)", "../../../studio/ (skill 一式)"],
+  files: STUDIO_FILES.map(([rel]) => rel),
 };
-await writeFile(join(DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");
-console.error(`reference/ を写した (commit ${source.commit || "不明"})。npm run build でプラグインにも反映する`);
+await writeFile(join(STUDIO_DEST, "SOURCE.json"), JSON.stringify(source, null, 2) + "\n");
+console.error(`packages/cli/studio/ を写した (commit ${source.commit || "不明"})。npm run build でプラグインにも反映する`);

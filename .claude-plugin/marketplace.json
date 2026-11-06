@@ -3,17 +3,12 @@
   "owner": {
     "name": "mvrx"
   },
-  "description": "社内向けの NoLang プラグインの棚 (非公開)。nolang-dev = 社内 dev・nolang-local = 手元のデモスタック。",
+  "description": "NoLang の Claude Code プラグイン (nolang 1 本)。依頼文から動画を作る。",
   "plugins": [
     {
-      "name": "nolang-local",
-      "source": "./plugins/nolang-local",
-      "description": "デモ用の NoLang (localhost:18000) に MCP でつなぎ、Claude Code から動画を作る。"
-    },
-    {
-      "name": "nolang-dev",
-      "source": "./plugins/nolang-dev",
-      "description": "社内 dev の NoLang (dev.no-lang.com) に MCP / CLI でつなぎ、Claude Code から動画を作る。"
+      "name": "nolang",
+      "source": "./plugins/nolang",
+      "description": "NoLang に MCP / CLI でつなぎ、Claude Code から動画を作る。"
     }
   ]
 }

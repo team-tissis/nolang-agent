@@ -58,7 +58,7 @@ jobs:
       - name: Guard contract bumps (server first)
         run: |
           new=$(node -e 'console.log(JSON.parse(require("fs").readFileSync("backend/libs/ai/llm_prompts/draft_author/reference/contract.json")).contract)')
-          old=$(node -e 'try { console.log(JSON.parse(require("fs").readFileSync("skills/make-video/reference/SOURCE.json")).contract ?? 0) } catch { console.log(0) }')
+          old=$(node -e 'try { console.log(JSON.parse(require("fs").readFileSync("packages/cli/studio/SOURCE.json")).contract ?? 0) } catch { console.log(0) }')
           echo "contract: plugin $old → backend $new"
           if [ "$old" != 0 ] && [ "$new" -gt "$old" ] && [ "$SERVER_DEPLOYED" != true ]; then
             echo "::error::contract が $old → $new に上がる。server を先に deploy してから workflow_dispatch (server_deployed=true) で流す"

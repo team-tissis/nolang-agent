@@ -4,5 +4,5 @@ node_modules/
 # 作例・作業中の原稿の出力
 out/
 __pycache__/
-studio/logs/
-plugins/*/studio/logs/
+packages/cli/studio/logs/
+plugins/*/cli/studio/logs/

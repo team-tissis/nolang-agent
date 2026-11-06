@@ -1,0 +1,40 @@
+{
+  "from": "nolang-backend (agent_client/ + libs/ai/llm_prompts/draft_author/ + .agents/skills/nolang-draft-studio/SKILL.md)",
+  "ref": "v6",
+  "commit": "5c4dda09b3",
+  "dirty": false,
+  "synced_at": "2026-11-06T06:02:48.428Z",
+  "contract": 1,
+  "reference_hash": "b17897424c3924fe060314b5728605636dcc8284c48829366369f4cc43e104f5",
+  "docs": {
+    "contract.json": "30e435347147",
+    "spec.md": "92747d8bf0f5",
+    "authoring.md": "b283eddefaed",
+    "capabilities.md": "d11618c6f009",
+    "looks.md": "574ec4c08974",
+    "sounds.md": "e9299a0003c6",
+    "craft.md": "a84cbcce63ec",
+    "craft.NOTICE.md": "b5f807351e39",
+    "rules.md": "7533522f29ae",
+    "samples/": "293cbd5b2bd6",
+    "scaffolds/": "a1f7418dedc0"
+  },
+  "files": [
+    "SKILL.md",
+    "reference",
+    "scripts/author_core.py",
+    "scripts/cut_stages.py",
+    "scripts/README.md",
+    "tests/__init__.py",
+    "tests/test_stream_engine.py",
+    "scripts/stream_make.sh",
+    "scripts/stream_api.py",
+    "scripts/stream_author.py",
+    "scripts/stream_codex.py",
+    "scripts/stream_pipeline.py",
+    "scripts/stream_run.py",
+    "scripts/stream_stages.py",
+    "scripts/studio_new.py",
+    "scripts/upload_asset.py"
+  ]
+}

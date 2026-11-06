@@ -9,8 +9,8 @@ export const TARGETS = {
   stg: "https://api-stg.no-lang.com",
   prod: "https://api.no-lang.com",
 };
-// 既定は社内の dev (stg / prod は外部の著者の経路がまだ出ていない)。手元のスタックで試す時は `nolang use local`
-export const FALLBACK_API = TARGETS.dev;
+// 既定は本番。社内の dev で試す時は `nolang use dev`・手元のスタックは `nolang use local`
+export const FALLBACK_API = TARGETS.prod;
 
 // 名前か URL → 末尾の / を落とした URL
 export function apiUrl(value) {

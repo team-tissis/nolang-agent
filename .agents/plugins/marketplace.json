@@ -1,26 +1,14 @@
 {
   "name": "nolang",
   "interface": {
-    "displayName": "NoLang Demo"
+    "displayName": "NoLang"
   },
   "plugins": [
     {
-      "name": "nolang-dev",
+      "name": "nolang",
       "source": {
         "source": "local",
-        "path": "./plugins/nolang-dev"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    },
-    {
-      "name": "nolang-local",
-      "source": {
-        "source": "local",
-        "path": "./plugins/nolang-local"
+        "path": "./plugins/nolang"
       },
       "policy": {
         "installation": "AVAILABLE",

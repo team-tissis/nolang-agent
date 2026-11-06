@@ -1,0 +1,15 @@
+{
+  "name": "nolang",
+  "version": "0.1.5",
+  "description": "NoLang に MCP / CLI でつなぎ、Claude Code から動画を作る (台本・画面・声・BGM まで NoLang が作る)。",
+  "author": {
+    "name": "mvrx"
+  },
+  "license": "Apache-2.0",
+  "mcpServers": {
+    "nolang": {
+      "type": "http",
+      "url": "https://api.no-lang.com/agent/mcp"
+    }
+  }
+}

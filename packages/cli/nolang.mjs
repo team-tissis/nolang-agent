@@ -769,7 +769,7 @@ function clientContract() {
 
 function studioDir() {
   const here = dirname(new URL(import.meta.url).pathname);
-  const candidates = [process.env.NOLANG_STUDIO_DIR, join(here, "..", "studio"), join(here, "..", "..", "studio")].filter(Boolean);
+  const candidates = [process.env.NOLANG_STUDIO_DIR, join(here, "studio")].filter(Boolean); // studio は CLI の package の中 (npm でも箱でも同じ)
   const found = candidates.find((dir) => {
     try {
       return statSync(join(dir, "scripts", "stream_make.sh")).isFile();
@@ -777,7 +777,7 @@ function studioDir() {
       return false;
     }
   });
-  if (!found) throw new CliError("studio の一式 (studio/scripts/stream_make.sh) が見つからない — プラグインを入れ直す", { exit: EXIT.FAIL });
+  if (!found) throw new CliError("studio の一式 (studio/scripts/stream_make.sh) が見つからない — CLI を入れ直す", { exit: EXIT.FAIL });
   return found;
 }
 

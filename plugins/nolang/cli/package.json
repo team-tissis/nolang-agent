@@ -1,0 +1,42 @@
+{
+  "name": "@no-lang/cli",
+  "version": "0.1.5",
+  "description": "NoLang の動画を AI エージェント (Claude Code / Codex など) やシェルから作る CLI",
+  "keywords": [
+    "nolang",
+    "video",
+    "ai-agent",
+    "claude-code",
+    "codex",
+    "cli"
+  ],
+  "homepage": "https://no-lang.com",
+  "type": "module",
+  "bin": {
+    "nolang": "nolang.mjs"
+  },
+  "files": [
+    "nolang.mjs",
+    "lib/",
+    "studio/SKILL.md",
+    "studio/reference/",
+    "studio/scripts/",
+    "studio/SOURCE.json",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/team-tissis/nolang-agent",
+    "directory": "packages/cli"
+  }
+}
