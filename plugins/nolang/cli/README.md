@@ -13,12 +13,13 @@ npx @no-lang/cli <command>      # 入れずに使う
 
 Node.js 20 以上が要ります。依存パッケージはありません。
 
+このパッケージは起動係です。CLI の本体 (studio と文書一式を含む) は接続先の NoLang の server が配り (`GET <api>/agent/client/`)、`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/`) を server と照合して、変わっていれば取り直してから動きます (照合は 1 往復・取り直しは 1 MB 弱)。server を更新すると次の `nolang` が新しい本体で動くので、CLI を更新する作業はありません。
+
 ## 使い方
 
 ```
 nolang auth login                     NoLang にログイン (ローカルはブラウザ、リモートはコード入力)
 nolang doctor                         接続先とログインを確かめる
-nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
 nolang make <dir> --type concept --request-text "…" [--engine claude|codex]   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
 nolang check <dir>                    dir の design.txt / timeline.txt を検査
 nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)
@@ -33,9 +34,8 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 
 ## 接続先
 
-`--api` → 環境変数 `NOLANG_API_URL` → `nolang use` で選んだ接続先 → (プラグインに入った CLI なら) プラグインの接続先 → 本番 (`https://api.no-lang.com`) の順で決まります。社内の dev で試す時は `nolang use dev`、手元のスタックは `nolang use local` に切り替えます。
-どれも名前か URL で書けます: `local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`。
-`nolang use stg` で切り替え、`nolang use` で今の接続先、`nolang use default` で選びを外します。ログインは接続先ごとに保存され、切り替えても前のログインは残ります。
+`--api <URL>` → 環境変数 `NOLANG_API_URL` → (プラグインに入った CLI なら) プラグインの接続先 → 本番 (`https://api.no-lang.com`) の順で決まります。URL だけで、接続先を選んで保存する command はありません。ログインは接続先ごとに保存されます。
+CLI の本体 (束) を取るのは NoLang の API host (https) と `localhost` からだけで、束は NoLang の鍵の署名を検証してから動きます。
 CI など対話できない環境では、ログイン済みの機械の `eval "$(nolang auth env)"` が出す access token を `NOLANG_TOKEN` に入れます。この token は CLI が更新しないので、期限 (1 時間) が切れたら入れ直します。API key (`nlg-c-…`) は CLI と MCP では使えません (403)。API key は NoLang API 用です。
 
 ログイン情報は `~/.config/nolang/credentials.json` (権限 0600) に保存され、期限が切れても自動で更新されます。
@@ -50,4 +50,4 @@ SSH・リモートコンテナ・Codespaces・Docker・WSL・画面の無い Lin
 
 ## ライセンス
 
-Apache-2.0 (repo の `LICENSE`)。studio の文書 (`studio/reference/`) は NoLang の server と同じ版を同梱しています (`nolang reference` が server の現行と照合します)。
+Apache-2.0 (repo の `LICENSE`)。

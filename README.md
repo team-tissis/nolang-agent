@@ -63,15 +63,7 @@ MCP だけで使う時: Claude Code は「nolang を認証して」、Codex は 
 | 生成が `failed` になる・声が出ない | 原稿ではなくサーバー側のことが多い。視聴 URL (video_id) を添えて問い合わせる |
 | 同時生成の上限 | 同時に生成中にできるのは 2 本まで。前の動画の完成を待つ |
 
-## 社内の人へ: dev で使う
-
-プラグインは本番 (`api.no-lang.com`) につながる。社内の dev (`dev.no-lang.com`) で試す時は、入れた後に Claude Code に **「NoLang の接続先を dev にして」** (`nolang use dev`) と頼む。ログインは接続先ごと。
-MCP も dev で使う時は、プラグインの MCP (本番固定) とは別に登録する: `claude mcp add --transport http nolang-dev https://api-dev.no-lang.com/agent/mcp` (claude.ai は custom connector に同じ URL)。
-
-- dev の前提: `dev.no-lang.com` にログインできるアカウント・会社のネットワーク (在宅などで `ACCESS DENIED` と出る人は、同じブラウザで https://dev.no-lang.com/cdn-cgi/trace を開き、`ip=` の値を管理者に伝えて許可リストに足してもらう)。
-- dev 環境なので、止まっていたり、作った動画やデータが消えたりすることがある。送った写真・動画は dev のサーバーに保存される — 社外秘・個人情報を含む素材は使わない。
-
-### 更新する
+## 更新する
 
 CLI の本体 (studio と文書一式を含む) は接続先の NoLang の server が配り (`GET <api>/agent/client/`)、`nolang` が起動のたびに手元の束 (`~/.config/nolang/client/`) を server と照合して取り直す。server が更新されれば次の `nolang` が新しい本体で動くので、普段は何もしなくてよい。
 プラグイン自体 (起動係・スキル・hook) を入れ直すのは、この repo が変わった時だけ:
@@ -105,7 +97,7 @@ nolang-agent/
 
 ## 開発者向け: 手元のスタックにつなぐ
 
-手元 (や ubik) で動かしている NoLang のスタックにつなぐ: `nolang use local`。プラグインを直しながら試す時は、この repo のパスで棚を登録する (`/plugin marketplace add <この repo のパス>`)。MCP は `claude mcp add --transport http nolang-local http://localhost:18000/agent/mcp`。
+手元 (や ubik) で動かしている NoLang のスタックにつなぐ: `export NOLANG_API_URL=http://localhost:18000`。プラグインを直しながら試す時は、この repo のパスで棚を登録する (`/plugin marketplace add <この repo のパス>`)。MCP は `claude mcp add --transport http nolang-local http://localhost:18000/agent/mcp`。
 
 Claude Code / Codex が動いている機械の localhost で、次の 3 つが NoLang のスタックに届いている必要があります。
 
@@ -134,7 +126,6 @@ Host ubik-nolang
 ```
 nolang auth login [--device | --browser] [--background] | login --no-browser | wait | complete '<URL>' | status | logout
 nolang doctor                         接続先とログインを確かめる
-nolang use [local|dev|stg|prod|<URL>|default]   接続先を選ぶ (引数なしは今の接続先・default でプラグインの接続先に戻す)
 nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--mode light|standard|plus|super] [--review low|medium|none] [--fix defect|severe|warn|none] [--staff-assets] [--editable] [--engine claude|codex]
                                       NoLang の studio と同じ段取りで作る (engine 未指定は Claude、codex は全役割を Codex)。再生できたら URL を返す (スキルの標準)
                                       --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
@@ -155,8 +146,9 @@ nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
 - CLI の本体は接続先の server が配る束 (`GET <api>/agent/client/`・tar.gz 1 MB 弱)。`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/<指紋>/`) を `If-None-Match` で照合し (1 往復・届かなければ手元の束で動く)、変わっていれば取り直す。版番号は無く、指紋 = tar.gz の sha256。flag の表はこの README に持たない — `nolang make --help` が server と同じ版の物を出す。
+- 束 (= 実行する code) を取るのは NoLang の API host (`api.no-lang.com` と社内の dev / stg・https) と `localhost` からだけ。束には server の build が Ed25519 で署名していて、起動係は公開鍵 (`packages/cli/nolang.mjs` に焼き込み) で検証してから動かす — 署名の無い束・合わない束は動かさない (`localhost` の手元のスタックだけは署名なしでも動く)。許可の外の server で CLI を動かすには `NOLANG_CLIENT_DIR` (手元の checkout・取得なし)。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
-- 接続先: `--api` → `NOLANG_API_URL` → `nolang use` で選んだ接続先 → プラグインの接続先 (`cli/defaults.json`) → 本番 (`https://api.no-lang.com`)。名前 (`local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`) か URL で書ける。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインでは本番固定 (切り替えられるのは CLI だけ)。
+- 接続先: `--api <URL>` → 環境変数 `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 本番 (`https://api.no-lang.com`)。URL だけで、接続先を選んで保存する command は無い (社内の dev / stg や手元のスタックは shell の `NOLANG_API_URL` で向ける)。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインでは本番固定。
 - ログイン: 手元の機械はエージェントの `--background` も含めてブラウザ認可 (ブラウザが開き、許可するだけ・コード入力なし。始められなければデバイス認可へ自動で切り替え)。SSH・リモートコンテナ・Docker・WSL・画面の無い Linux はデバイス認可を選び、URL とコードをブラウザで入力して許可する (ポート転送不要)。エージェントは `--background` で案内 (デバイス認可ならコードも) を受け取り、`nolang auth wait` で完了を確かめる。`--device` / `--browser` で明示選択できる。ブラウザ認可の戻り先が接続エラーになっても、開始済みのログインに `auth complete '<許可後の URL>'` で貼り戻せる (`--background` も対応)。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
 - CI など非対話: `NOLANG_TOKEN` に access token (`eval "$(nolang auth env)"` が出すもの・1 時間で切れ、CLI は更新しない) を入れる。API key (`nlg-c-…`) は CLI と MCP では使えない (403・NoLang API 用)。
 - ログインは MCP と同じ認可サーバー (OAuth 2.1・PKCE・`127.0.0.1` で受ける)。client はログインごとに自動登録 (DCR)。
@@ -203,7 +195,7 @@ CLI 本体は `agent_client/cli/`。server はこれらを 1 つの束にして 
 - **license**: Apache-2.0 (`LICENSE`)。
 - **npm**: `@no-lang/cli` (コマンド名は `nolang`)。npm の `nolang` (スコープ無し) は NoLang と無関係の別パッケージなので使わない。公開は `cd packages/cli && npm publish`。
 - **GitHub**: `team-tissis/nolang-agent` (今は非公開)。公開すれば `/plugin marketplace add team-tissis/nolang-agent` と `npx skills add team-tissis/nolang-agent` で入る。
-- 一般ユーザー向けには、本番の API (`api.no-lang.com`) に `/agent/` と OAuth が出ている必要がある (今は 404)。出るまで社内は `nolang use dev` で使う。
+- 一般ユーザー向けには、本番の API (`api.no-lang.com`) に `/agent/` と OAuth が出ている必要がある (今は 404)。出るまで社内は shell の `NOLANG_API_URL=https://api-dev.no-lang.com` で dev を向けて使う (ログインは接続先ごと)。
 
 ## 今後
 

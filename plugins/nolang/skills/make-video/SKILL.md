@@ -26,7 +26,6 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 - `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
-- **接続先を変える** (「stg で作って」「本番につないで」「localhost で」と頼まれた時だけ): `nolang use <local|dev|stg|prod>` (URL も可・`nolang use` で今の接続先・`default` で戻す)。ログインは接続先ごとなので、切り替えた先が未ログインなら上と同じくログインする。MCP の接続先はプラグインごとに固定で、切り替えられるのは CLI だけ。
 
 ## S. studio で作る (標準)
 
@@ -60,7 +59,7 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 - 作るコマンドや素材のコマンドの前に `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度。まだ許可されていない・切れていた (`failed` なら `--background` をやり直す) 時は、そこで止まって (ターンを終えて) ユーザーの「許可した」を待つ — 止まる時のメッセージにも `authorize_url` と、デバイス認可なら `user_code` をもう一度本文に書く (「上の URL」と書かない)。
 - ブラウザに `ACCESS DENIED` (403) と出る → 接続元の IP が NoLang の許可リストに無い。同じブラウザで `https://<ログイン画面のホスト>/cdn-cgi/trace` を開き、`ip=` の値を管理者に伝えてもらう。
 - SSH・コンテナでは同じ `--background` が自動でデバイス認可を使う。ポート転送は不要。未対応のサーバーではブラウザ認可へ戻る。その戻り先が接続エラーになったら、**ログインをやり直さず**許可後のアドレスバーの URL を貼ってもらい、`nolang auth complete '<URL>'` で待機中のログインを完了する。`--browser --background` でブラウザ認可を指定でき、`--no-browser` で始めた従来の手動方式も同じ `complete` を使う。
-- 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (接続先は `nolang use` で分かる。本番は `https://api.no-lang.com`・社内 dev は `nolang use dev`)。
+- 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (接続先は `nolang doctor` の `api`。本番は `https://api.no-lang.com`)。
 
 ## M. 決まった素材を使う (依頼に「この写真・この動画」「この曲」「この声」がある・手元の file を渡された時だけ)
 
