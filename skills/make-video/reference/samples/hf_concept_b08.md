@@ -15,10 +15,10 @@ font "太字 (Bold) の角ゴシック体、力強く端正で読みやすい"
 fonts m="太めの明朝体、繊細で静かな印象"
 sfx off
 # hf の作り: 章札は章の頭に置き題を先に見せる (spoiler)・囁き 3 本は字幕を閉じて吹き出しだけで見せる (caption_gap)・章札の下に囁き / 柱の札が積まれる (stacked_labels)
-# hf の作り: 「見えない暴力」は赤と青緑の写しを本体に重ねて左右にずらし、透明へ消す (overlap・low_contrast・duplicate_text)・章扉の小札「問題点」は巨大な番号の上に乗る (overlap)
+# hf の作り: 「見えない暴力」は赤と青緑の写しを本体に重ねて左右にずらし、透明へ消す (overlap・duplicate_text)・章扉の小札「問題点」は巨大な番号の上に乗る (overlap)
 # hf の作り: 字幕と見出しは場面の切替 (溶け) の途中から出る (entrance_in_transition)
 # hf の作り: 章扉 03 の「社会へ」は最後の語で出し、すぐ次の場面へ溶ける (entrance_in_fadeout)
-lint off=spoiler,caption_gap,stacked_labels,overlap,low_contrast,duplicate_text,entrance_in_transition
+lint off=spoiler,caption_gap,stacked_labels,overlap,duplicate_text,entrance_in_transition
 master lufs=-15
 art "Cinematic semi-realistic digital painting, volumetric lighting, subtle film grain, high detail"
 prompt_tail "Vertical 9:16 portrait composition, the main subject large and centered in the middle of the frame, the scene fills the whole frame from top to bottom. Absolutely no text, no letters, no numbers, no logos, no watermarks, no UI text."

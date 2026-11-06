@@ -26,8 +26,6 @@ lint off=same_picture
 lint off=small_text
 # hf の作り: 図の色 (薄い地・半透明の線・帯の色) は場面ごとに直書き
 lint off=palette_drift
-# hf の作り: 白い字は濃い色の丸札・帯の上 (check は全編の周辺の陰の幕と比べる)
-lint off=low_contrast
 # hf の作り: 場面の終わりに紙が全面を覆って横切る (sc7 → sc8 → sc9)
 lint off=covered_text
 # hf の作り: 立地のカード 3 枚と単位図の積み上げは語ごとに 8〜9 回の効果音を重ねる (飾りの木琴・判子・ペン)

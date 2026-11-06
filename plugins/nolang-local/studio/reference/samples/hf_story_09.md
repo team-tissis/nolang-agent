@@ -15,8 +15,6 @@ font "ZEN角ゴシックNew Medium"
 fonts k="ZEN角ゴシックNew Bold" s="しっぽり明朝 ExtraBold" sm="しっぽり明朝 Medium" y="佑字 朴 Regular"
 # hf の作り: 場面の札と判子は場面の頭 / 主題の語で出し、札の語 (行列・指定) は台詞が後から言う
 lint off=spoiler
-# 周辺減光 (端で 4 割の黒) の上の墨の字は明るい和紙の絵の上で読める — lint は幕の色だけを見て濃さを見ない
-lint off=low_contrast
 sfx off
 master lufs=-15 tp=-1
 run g { color: $gold }

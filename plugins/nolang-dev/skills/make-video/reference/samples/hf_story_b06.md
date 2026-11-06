@@ -17,8 +17,8 @@ fonts d="超極太のディスプレイ用ゴシック体。最も太いウェ�
 sfx off
 # hf の作り: 見出しのテロップは台詞と同じ語を大きく先に見せる (spoiler・duplicate_text)・テロップで言う台詞には字幕を出さない (caption_gap)
 # hf の作り: 判子と擬音は文末に叩きつけてすぐ次の場面へ切る (flash_text)・和紙の地の溜めと紀行文の場面は絵を置かない (text_only_cut)・語ごとに効果音を重ねる (se_dense)
-# hf の作り: 金の放射の地に白の極太テロップ (墨の縁 + 朱の影で読ませる・low_contrast)
-lint off=spoiler,duplicate_text,caption_gap,flash_text,text_only_cut,se_dense,low_contrast
+# hf の作り: 金の放射の地に白の極太テロップ (墨の縁 + 朱の影で読ませる)
+lint off=spoiler,duplicate_text,caption_gap,flash_text,text_only_cut,se_dense
 art "明治時代の錦絵（多色刷りの浮世絵木版画）のスタイル。太く力強い墨の輪郭線、平坦で鮮やかな色面（藍・朱・黄土・若草色）、和紙の質感、ユーモラスで誇張された表情の戯画"
 prompt_tail "画面内に文字・数字・ロゴ・署名・落款・題箋を一切描かない"
 image hero = "急な山道に敷かれた細い線路の上を、馬が小さな木造の客車を必死に引っ張っている縦長の構図。客車には明治時代の洋装と和装の乗客がぎゅうぎゅう詰めで、窓から顔を出している。背景は険しい峠の山々と白い雲。馬は汗をかきながらも踏ん張っている。" aspect=9:16

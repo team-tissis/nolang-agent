@@ -18,9 +18,8 @@ prompt_tail "文字・数字・ロゴ・透かしなし。主題 1 つだけを�
 sfx off
 # hf の作り: 場面の頭の STEP の題と札の見出しは台詞より先に置く (spoiler)・図解だけの場面で写真を敷かない (text_only_cut)・札の中の注記は 1080 換算 18〜24 px の小さな字 (small_text)
 # hf の作り: 鍵・✓・同じ・ログイン成功・偽の小札は札の角からはみ出して付く (child_overflow)・番号の幽霊の枠は番号だけの空の枠 (empty_board)・語ごとの音は 1 本に 77 回 (se_dense)・「使い回し」の札は問いの最後の 1 秒だけ (flash_text)
-# check の見えない所: 帯の STEP 札の白字は青い札の上 (low_contrast は地の色で測る)
 # hf の作り: まとめの札は沈めた被害の 3 枚の上に重ね、漏れた札は一覧の板の下へ流れ込む (covered_text)
-lint off=spoiler,text_only_cut,small_text,child_overflow,empty_board,se_dense,flash_text,low_contrast,covered_text
+lint off=spoiler,text_only_cut,small_text,child_overflow,empty_board,se_dense,flash_text,covered_text
 run em { color: $blue }
 run u { color: $red_t; marker: #E9A23B66,30% }
 run sm { font-size: 28px; color: $sub }
