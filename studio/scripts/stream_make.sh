@@ -209,7 +209,7 @@ if lost:
 if video.exists():
     print(f"video: {video} ({video.stat().st_size // 1024} KB)")
 elif by("remote_started"):  # --remote: 描画と配信は server (手元に mp4 は無い)
-    print(f"video: server — {by('remote_started')[0]['watch_url']} (status: GET /v1/unstable/videos/<id>/)")
+    print(f"video: server — {by('remote_started')[0]['watch_url']} (status: GET /agent/v1/videos/<id>/)")
 else:
     print("video: なし (stream/run.out と stream/run.jsonl の check event を見る)")
 PYEOF

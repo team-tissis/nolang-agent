@@ -8,7 +8,7 @@
   "mcpServers": {
     "nolang-dev": {
       "type": "http",
-      "url": "https://api-dev.no-lang.com/mcp"
+      "url": "https://api-dev.no-lang.com/agent/mcp"
     }
   }
 }

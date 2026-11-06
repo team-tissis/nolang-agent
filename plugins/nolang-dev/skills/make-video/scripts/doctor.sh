@@ -17,14 +17,14 @@ probe() {
 }
 
 ok=1
-api=$(probe http://localhost:18000/mcp)
+api=$(probe http://localhost:18000/agent/mcp)
 auth=$(probe http://localhost:8000/.well-known/oauth-authorization-server)
 web=$(probe http://localhost:3000/)
 
 report() { # 名前 実際 期待の説明 正常か
   if [ "$4" = 1 ]; then echo "OK   $1 -> $2"; else echo "NG   $1 -> $2 ($3)"; ok=0; fi
 }
-report "localhost:18000/mcp (API)" "$api" "401 が正常" "$([ "$api" = 401 ] && echo 1 || echo 0)"
+report "localhost:18000/agent/mcp (API)" "$api" "401 が正常" "$([ "$api" = 401 ] && echo 1 || echo 0)"
 report "localhost:8000 (ログイン)" "$auth" "200 が正常" "$([ "$auth" = 200 ] && echo 1 || echo 0)"
 case "$web" in 2??|3??) w=1 ;; *) w=0 ;; esac
 report "localhost:3000 (視聴ページ)" "$web" "200 か 3xx が正常" "$w"

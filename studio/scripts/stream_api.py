@@ -1,4 +1,4 @@
-"""stream の orchestrator と NoLang API (`unstable/drafts/`) の間の形 — 受け口の答えの読み方・欠陥の記録・HTTP の窓口・文書一式の取り直し。
+"""stream の orchestrator と Agent API (`agent/v1/drafts/`) の間の形 — 受け口の答えの読み方・欠陥の記録・HTTP の窓口・文書一式の取り直し。
 
 cut の段 (`cut_stages.CutStages` — `stream_stages.Run`) はこの形だけを見て、運ぶ先 (remote = この HTTP の窓口・local = repo の dev script が手元の flow 関数を
 呼ぶ) を知らない。標準 library だけで動く (配布 bundle の client は使う側の python3)。
@@ -47,9 +47,9 @@ def read_answer(op: str, loaded: dict[str, object]) -> dict[str, object]:
 
 
 def claude_mcp_token(remote: str) -> str | None:
-    """Claude Code が remote MCP (`<remote>/mcp`) の OAuth で得た access token (`~/.claude/.credentials.json` の mcpOAuth)。
-    CLI / MCP の窓口は OAuth の token だけを受ける (API key は 403) — `/mcp` で NoLang に接続した token をそのまま REST にも使う
-    (同じ Bearer)。"""
+    """Claude Code が remote MCP (`<remote>/agent/mcp`) の OAuth で得た access token (`~/.claude/.credentials.json` の mcpOAuth)。
+    CLI / MCP の窓口は OAuth の token だけを受ける (API key は 403) — `/agent/mcp` で NoLang に接続した token をそのまま REST にも
+    使う (同じ Bearer)。"""
     path = Path(os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude"))) / ".credentials.json"
     try:
         entries = json.loads(path.read_text()).get("mcpOAuth", {})
@@ -58,7 +58,7 @@ def claude_mcp_token(remote: str) -> str | None:
     base = remote.rstrip("/")
     for entry in entries.values():
         url = str(entry.get("serverUrl", "")).rstrip("/")
-        if url in (base, base + "/mcp") and entry.get("accessToken"):
+        if url in (base, base + "/agent/mcp") and entry.get("accessToken"):
             return str(entry["accessToken"])
     return None
 
@@ -71,15 +71,15 @@ class RemoteApi:
     """NoLang API の HTTP の窓口 — 認証と client の版の header (`X-NoLang-Client`)・止めた頼みと届かない頼みの見分け・送り直し。"""
 
     ROUTES = {  # op → (method, path) — {id} は run の video
-        "cut": ("POST", "/v1/unstable/drafts/{id}/cuts/"),
-        "warm": ("POST", "/v1/unstable/drafts/{id}/warm/"),
-        "stills": ("POST", "/v1/unstable/drafts/{id}/stills/"),
-        "stills_status": ("GET", "/v1/unstable/drafts/{id}/stills/{job}/"),
-        "check": ("POST", "/v1/unstable/drafts/check/"),
-        "rename": ("POST", "/v1/unstable/drafts/rename/"),
-        "rules": ("GET", "/v1/unstable/drafts/rules/"),
-        "abort": ("DELETE", "/v1/unstable/drafts/{id}/"),
-        "status": ("GET", "/v1/unstable/drafts/{id}/"),
+        "cut": ("POST", "/agent/v1/drafts/{id}/cuts/"),
+        "warm": ("POST", "/agent/v1/drafts/{id}/warm/"),
+        "stills": ("POST", "/agent/v1/drafts/{id}/stills/"),
+        "stills_status": ("GET", "/agent/v1/drafts/{id}/stills/{job}/"),
+        "check": ("POST", "/agent/v1/drafts/check/"),
+        "rename": ("POST", "/agent/v1/drafts/rename/"),
+        "rules": ("GET", "/agent/v1/rules/"),
+        "abort": ("DELETE", "/agent/v1/drafts/{id}/"),
+        "status": ("GET", "/agent/v1/drafts/{id}/"),
     }
     # 何度送っても同じ答えの頼み — 届かなければ間を置いて送り直す (dev の check は混むと ALB の 60 s を超えて 504・切断も出る。
     # 1 回で諦めると stage が死んで cut が動画から落ちた)。投入 (`cut`) は送り直さない — 照合は `Run.submit`
@@ -170,11 +170,9 @@ class RemoteApi:
             return json.loads(resp.read().decode("utf-8"))
 
     def fetch_reference_bundle(self, expected_hash: str, dest: Path) -> None:
-        """`GET drafts/reference/` の束を dest (指紋の名の dir) に置く。tmp に展開して指紋を確かめてから rename するので、並行する
+        """`GET reference/` の束を dest (指紋の名の dir) に置く。tmp に展開して指紋を確かめてから rename するので、並行する
         run・途中の失敗で半端な dir は残らない。path は束の範囲の相対 path だけを受ける (絶対 path・`..`・file 以外は弾く)。"""
-        req = urllib.request.Request(
-            f"{self.base}/v1/unstable/drafts/reference/", headers=self.headers(content_type=None)
-        )
+        req = urllib.request.Request(f"{self.base}/agent/v1/reference/", headers=self.headers(content_type=None))
         with urllib.request.urlopen(req, timeout=120) as resp:
             data = resp.read()
         dest.parent.mkdir(parents=True, exist_ok=True)

@@ -19,7 +19,7 @@ usage: python stream_run.py <project> [--staff balanced|low|medium|high|xhigh|no
   [--no-stills]   (bench 専用の knob — レビューに静止画を見せない)
   --remote http://host:18000 [--token <OAuth の access token>] = 投入先を NoLang API (製品の draft stream・server が描く) にする。視聴 URL を `WATCH …`
     の 1 行で出す (token は OAuth の access token — --token か env NOLANG_TOKEN (`eval "$(nolang auth env)"`)・無ければ Claude Code が
-    `/mcp` の OAuth で得た token。CLI / MCP の窓口は API key を受けない (403))。
+    `/agent/mcp` の OAuth で得た token。CLI / MCP の窓口は API key を受けない (403))。
   --staff = 担当 (Opus・cut をプロの解説動画の密度と階層に仕上げる) を全 cut に、cut ごとに並列に (前の cut は著者の版を参考に渡す)。
     値は担当の effort (`none` = 担当なし)。`balanced` = cut 1・2 は low・cut 3 以降は medium の見込み完了が止まらない再生に間に合う時だけ medium
     (間に合わない見込みなら low に落とす。開始 中央 約 90 s・全 cut medium は約 130 s で止まらないは 6/10・質は小さく落ちる)。
@@ -87,7 +87,7 @@ START_POLL_S = 15
 
 class RemoteRun(Run):
     """NoLang API (nolang-api consumer・製品の draft stream) に運ぶ run。著者・担当・直しはこの機械の claude -p のまま、確定した cut の
-    stream の text を `unstable/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server に任せる。根は閉じた時点で根だけを先に流し
+    stream の text を `agent/v1/drafts/{id}/cuts/` へ投入し、素材・描画・配信は server に任せる。根は閉じた時点で根だけを先に流し
     (`submit_root`)、以後凍る。"""
 
     def __init__(self, project: Path, options: RunOptions, *, remote: str, token: str | None) -> None:
@@ -172,7 +172,7 @@ class RemoteRun(Run):
         transcribing = False
         while True:
             try:
-                got = self.api.post("/v1/unstable/drafts/speeches/", body)
+                got = self.api.post("/agent/v1/drafts/speeches/", body)
             except (urllib.error.URLError, ValueError) as e:
                 self.log(event="speech_failed", error=str(e)[:300])
                 return 1
@@ -198,7 +198,7 @@ class RemoteRun(Run):
             {k: v for k, v in (("profile", profile), ("seconds", seconds if seconds.isdigit() else None)) if v}
         )
         try:
-            got = self.api.get(f"/v1/unstable/drafts/templates/{video_id}/" + (f"?{query}" if query else ""))
+            got = self.api.get(f"/agent/v1/templates/{video_id}/" + (f"?{query}" if query else ""))
         except (OSError, ValueError) as e:
             self.log(event="reference_failed", video_id=video_id, error=str(e)[:300])
             return 1
@@ -287,7 +287,7 @@ class RemoteRun(Run):
         waits = 0
         while True:
             try:
-                r = self.api.open("/v1/unstable/drafts/", body)
+                r = self.api.open("/agent/v1/drafts/", body)
                 break
             except urllib.error.HTTPError as e:
                 # 本人の同時生成の上限 (429 CONCURRENT_GENERATION_LIMIT) は server が課金の前に判定する (api_draft_view: 同時上限 →
@@ -330,7 +330,7 @@ class RemoteRun(Run):
             if self.engine_failed():
                 return self.abort_engine()
             try:
-                r = self.api.get(f"/v1/unstable/videos/{self.video_id}/")
+                r = self.api.get(f"/agent/v1/videos/{self.video_id}/")
             except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
                 failures += 1
                 self.log(event="remote_poll_failed", n=failures, error=str(e)[:200])

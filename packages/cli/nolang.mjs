@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // nolang — NoLang の動画を AI エージェント (Claude Code / Codex など) から作る CLI。
 // 依存なし (Node 20+)。結果は stdout に JSON、途中経過は stderr に出す。
-// 裏は NoLang API (`v1/unstable/drafts/…`) と OAuth (MCP と同じ認可サーバー・同じアカウント)。
+// 裏は NoLang の Agent API (`agent/v1/…`) と OAuth (MCP と同じ認可サーバー・同じアカウント)。
 
 import { execFileSync, spawn } from "node:child_process";
 import { createHash, randomBytes } from "node:crypto";
@@ -135,7 +135,7 @@ const b64url = (buf) => buf.toString("base64url");
 async function discover(api) {
   let prmUrl = `${api}/.well-known/oauth-protected-resource`;
   // 401 の WWW-Authenticate が resource metadata の場所を教える (無ければ root の well-known)
-  const probe = await request(`${api}/v1/unstable/drafts/templates/`, { signal: AbortSignal.timeout(30000) });
+  const probe = await request(`${api}/agent/v1/templates/`, { signal: AbortSignal.timeout(30000) });
   const hinted = (probe.headers.get("www-authenticate") || "").match(/resource_metadata="([^"]+)"/);
   if (hinted) prmUrl = hinted[1];
   const prm = await getJson(prmUrl);
@@ -304,7 +304,7 @@ async function waitStatus(api, videoId, until, timeoutS) {
   const deadline = Date.now() + timeoutS * 1000;
   let last = null;
   for (;;) {
-    const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
+    const st = await callApi(api, "GET", `/agent/v1/videos/${videoId}/`);
     if (st.status !== last?.status || st.playable !== last?.playable) log(`status: ${st.status}${st.playable ? " (再生できる)" : ""}`);
     // patch の直した区間 (range_render) は全尺より先に描かれる — 見られるようになった時と出来上がった時を知らせる
     const range = st.range_render ?? null;
@@ -556,7 +556,7 @@ async function cmdAuthStatus(flags) {
     return;
   }
   // 実際に API を 1 回叩いて確かめる (期限切れなら refresh も試す)
-  await callApi(api, "GET", "/v1/unstable/drafts/templates/");
+  await callApi(api, "GET", "/agent/v1/templates/");
   const fresh = (await loadStore()).profiles[api];
   out({ api, logged_in: true, source: CRED_FILE, access_expires_at: new Date(fresh.expires_at).toISOString() });
 }
@@ -635,7 +635,7 @@ async function cmdDoctor(flags) {
   }
   if (checks.every((c) => c.ok)) {
     try {
-      await callApi(api, "GET", "/v1/unstable/drafts/templates/");
+      await callApi(api, "GET", "/agent/v1/templates/");
       add("ログイン済み", true, process.env.NOLANG_TOKEN ? "NOLANG_TOKEN" : CRED_FILE);
     } catch (error) {
       add("ログイン済み", false, error.exit === EXIT.AUTH ? "未ログイン → nolang auth login" : error.message);
@@ -647,7 +647,7 @@ async function cmdDoctor(flags) {
 }
 
 async function check(api, design, timeline) {
-  return callApi(api, "POST", "/v1/unstable/drafts/check/", { design, timeline, open_ended: false });
+  return callApi(api, "POST", "/agent/v1/drafts/check/", { design, timeline, open_ended: false });
 }
 
 async function cmdCheck(positionals, flags) {
@@ -694,16 +694,16 @@ async function cmdCreate(positionals, flags) {
     return;
   }
 
-  const started = await callApi(api, "POST", "/v1/unstable/drafts/", params);
+  const started = await callApi(api, "POST", "/agent/v1/drafts/", params);
   const videoId = started.video_id;
   log(`開始: ${started.watch_url} (生成中から再生できる)`);
   // 投入は 1 つずつ順に (呼んだ順が動画の順)。間を 180 秒空けるとサーバーが失敗にするので、待たずに続けて流す
   for (const [index, cut] of cuts.entries()) {
     const end = index === cuts.length - 1;
     try {
-      await callApi(api, "POST", `/v1/unstable/drafts/${videoId}/cuts/`, { text: cut.text, end });
+      await callApi(api, "POST", `/agent/v1/drafts/${videoId}/cuts/`, { text: cut.text, end });
     } catch (error) {
-      await callApi(api, "DELETE", `/v1/unstable/drafts/${videoId}/`).catch(() => {}); // worker を空ける
+      await callApi(api, "DELETE", `/agent/v1/drafts/${videoId}/`).catch(() => {}); // worker を空ける
       const defects = error.data?.defects || [];
       printDefects(defects);
       out({ ok: false, stage: "submit", video_id: videoId, cut: cut.name, error: error.message, defects, detail: error.data });
@@ -921,7 +921,7 @@ async function runStudioAndWait(root, args, api, { engine = "claude", timeout, s
     // 再生できるかはサーバーに直接聞く — studio は全 cut を投入し終えてから見に行くので、PLAYABLE の行を待つと最後の cut まで遅れる
     if (videoId && !playableLine && Date.now() - polledAt >= MAKE_SERVER_POLL_MS) {
       polledAt = Date.now();
-      const st = await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`).catch(() => null);
+      const st = await callApi(api, "GET", `/agent/v1/videos/${videoId}/`).catch(() => null);
       serverPlayable = Boolean(st?.playable);
       if (st?.status === "failed" || st?.status === "expired") serverFailed = st.status;
     }
@@ -1047,7 +1047,7 @@ async function cmdPatch(positionals, flags) {
   if (flags.confirmed) body.confirmed = true;
   if (flags.answered) body.answered = true;
   log(`patch を頼んだ (対象 ${videoId}) — 決定論の編集が当たる依頼だけ成立する (判定に数秒〜30 秒)`);
-  const res = await callApi(api, "POST", `/v1/unstable/videos/${videoId}/patch/`, body);
+  const res = await callApi(api, "POST", `/agent/v1/videos/${videoId}/patch/`, body);
   if (res.stage === "applied") {
     // 直した区間 (range_render) は全尺より先に描かれる: 既定は区間を再生できる所 (無ければ全尺が再生できる所) まで待ち、
     // 区間の視聴ページ (range_render.watch_url) を tell_user で知らせる (plugin の hook が通知にする)。
@@ -1108,7 +1108,7 @@ async function readStream(root) {
 async function resyncSubmitted(api, state, cuts) {
   let server = null;
   try {
-    server = (await callApi(api, "GET", `/v1/unstable/drafts/${state.video_id}/`)).submitted_cuts;
+    server = (await callApi(api, "GET", `/agent/v1/drafts/${state.video_id}/`)).submitted_cuts;
   } catch {
     return;
   }
@@ -1139,7 +1139,7 @@ async function cmdStart(positionals, flags) {
     ...clientContract(),
   };
   const api = await resolveApi(flags);
-  const started = await callApi(api, "POST", "/v1/unstable/drafts/", params);
+  const started = await callApi(api, "POST", "/agent/v1/drafts/", params);
   // 接続先も残す — 途中で nolang use を切り替えても、この動画の続きは開始したサーバーへ投入する
   const state = { api, video_id: started.video_id, watch_url: started.watch_url, title: params.title, started_at: Date.now(), last_submit_at: Date.now(), submitted: [] };
   await writeFile(join(root, STREAM_FILE), JSON.stringify(state, null, 2) + "\n");
@@ -1163,7 +1163,7 @@ async function cmdSubmit(positionals, flags) {
   const save = () => writeFile(join(root, STREAM_FILE), JSON.stringify(state, null, 2) + "\n");
   const send = async (cut, end) => {
     try {
-      await callApi(api, "POST", `/v1/unstable/drafts/${state.video_id}/cuts/`, { text: cut ? cut.text : "", end });
+      await callApi(api, "POST", `/agent/v1/drafts/${state.video_id}/cuts/`, { text: cut ? cut.text : "", end });
     } catch (error) {
       // 409 = 投入の交錯 (検査した prefix が投入の前に動いた)。server が次の位置にちょうどこの cut を受理済みなら、
       // 応答を失った投入の再送 — 台帳へ回収して続ける。それ以外は server の真実を見せて止める (再実行が照合して直す)
@@ -1222,7 +1222,7 @@ async function cmdStatus(positionals, flags) {
   const api = await resolveApi(flags);
   const st = flags.wait
     ? await waitStatus(api, videoId, flags.until || "completed", Number(flags.timeout || 900))
-    : await callApi(api, "GET", `/v1/unstable/videos/${videoId}/`);
+    : await callApi(api, "GET", `/agent/v1/videos/${videoId}/`);
   out(st);
   if (st.status === "failed" || st.status === "expired") process.exitCode = EXIT.FAIL;
 }
@@ -1234,7 +1234,7 @@ async function cmdReference(flags) {
   const api = await resolveApi(flags);
   const baked = join(studioDir(), "reference");
   const { contract } = await readContract(baked);
-  const { sync } = await callApi(api, "GET", "/v1/unstable/drafts/rules/");
+  const { sync } = await callApi(api, "GET", "/agent/v1/rules/");
   if (!sync) {
     log("接続先の server は文書の版を返さない (古い server) — 焼き込みの文書で書く");
     return out({ status: "unknown", dir: baked, changed: null });
@@ -1252,7 +1252,7 @@ async function cmdReference(flags) {
   const dest = join(CONFIG_DIR, "reference", sync.reference_hash);
   let status = "cached";
   if (!(await stat(join(dest, "contract.json")).catch(() => null))) {
-    const path = "/v1/unstable/drafts/reference/";
+    const path = "/agent/v1/reference/";
     const res = await request(`${api}${path}`, { headers: { authorization: `Bearer ${await accessToken(api)}` } });
     // 取れない (束を配らない server・一時の失敗) → 焼き込みで続ける。終了コード 1 は contract の止まれだけに使う (手順が書かずに止まる)
     if (!res.ok) {
@@ -1270,7 +1270,7 @@ async function cmdReference(flags) {
 async function cmdAbort(positionals, flags) {
   const videoId = positionals[0];
   if (!videoId) throw new CliError("使い方: nolang abort <video_id>", { exit: EXIT.USAGE });
-  out(await callApi(await resolveApi(flags), "DELETE", `/v1/unstable/drafts/${videoId}/`));
+  out(await callApi(await resolveApi(flags), "DELETE", `/agent/v1/drafts/${videoId}/`));
 }
 
 // ---- 素材 (検索と upload)。見つけた / 送った素材は `ref` (`id=<uuid>` など) を原稿の usage の位置に書けば使われる ----
@@ -1285,7 +1285,7 @@ async function cmdAssetsSearch(positionals, flags) {
   const params = new URLSearchParams({ kind, scope: flags.mine ? "mine" : "catalog", language: flags.language || "ja" });
   if (query) params.set("q", query);
   if (flags.limit) params.set("limit", flags.limit);
-  const result = await callApi(await resolveApi(flags), "GET", `/v1/unstable/assets/search/?${params}`);
+  const result = await callApi(await resolveApi(flags), "GET", `/agent/v1/assets/search/?${params}`);
   for (const row of result.results || []) {
     const extra = [row.duration_ms ? `${(row.duration_ms / 1000).toFixed(1)}s` : "", row.width ? `${row.width}x${row.height}` : ""].filter(Boolean).join(" ");
     log(`${row.ref}  ${row.name || ""}${extra ? `  (${extra})` : ""}`);
@@ -1298,7 +1298,7 @@ async function uploadImage(api, path, name) {
   const form = new FormData();
   form.append("image_file", new Blob([await readFile(path)], { type: mimeOf(path) }), basename(path));
   if (name) form.append("names_by_languages", JSON.stringify({ default: name }));
-  const row = await callApi(api, "POST", "/v1/unstable/assets/images/", form);
+  const row = await callApi(api, "POST", "/agent/v1/assets/images/", form);
   return String(row.image_id);
 }
 
@@ -1306,7 +1306,7 @@ async function uploadImage(api, path, name) {
 // 変換) を待つ。route = `footages` / `speeches`・extra = 確定に足す項目・idKey = 確定の応答の素材の id の欄
 async function uploadMultipart(api, path, { route, extra, idKey }) {
   const { size } = await stat(path);
-  const started = await callApi(api, "POST", `/v1/unstable/assets/${route}/uploads/`, { filename: basename(path), total_size: size });
+  const started = await callApi(api, "POST", `/agent/v1/assets/${route}/uploads/`, { filename: basename(path), total_size: size });
   const chunk = Number(started.chunk_size);
   const partUrls = [...started.part_urls].sort((a, b) => a.part_number - b.part_number);
   const parts = [];
@@ -1324,7 +1324,7 @@ async function uploadMultipart(api, path, { route, extra, idKey }) {
   } finally {
     await file.close();
   }
-  const done = await callApi(api, "PATCH", `/v1/unstable/assets/${route}/uploads/${started.upload_id}/`, {
+  const done = await callApi(api, "PATCH", `/agent/v1/assets/${route}/uploads/${started.upload_id}/`, {
     upload_id: started.upload_id,
     object_key: started.object_key,
     filename: basename(path),
@@ -1333,7 +1333,7 @@ async function uploadMultipart(api, path, { route, extra, idKey }) {
   });
   const deadline = Date.now() + 600_000;
   for (;;) {
-    const job = await callApi(api, "GET", `/v1/unstable/jobs/${done.job_id}/`);
+    const job = await callApi(api, "GET", `/agent/v1/jobs/${done.job_id}/`);
     if (job.status === "succeeded") return String(done[idKey]);
     if (job.status === "failed" || job.status === "canceled") {
       throw new CliError(`${basename(path)}: 仕上げの job が ${job.status} (${job.error_code || ""})`, { exit: EXIT.FAIL, data: job });

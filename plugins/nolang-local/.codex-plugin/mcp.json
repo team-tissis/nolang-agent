@@ -2,7 +2,7 @@
   "mcpServers": {
     "nolang-local": {
       "type": "http",
-      "url": "http://localhost:18000/mcp"
+      "url": "http://localhost:18000/agent/mcp"
     }
   }
 }

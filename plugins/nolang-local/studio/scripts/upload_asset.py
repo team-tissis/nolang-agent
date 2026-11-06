@@ -2,7 +2,7 @@
 """手元の画像・動画を NoLang の自分の素材に upload し、draft src に書く `ref` (`id=<uuid>`) を出す (python3 の標準だけ — repo 無しでも動く)。
 
 usage: python3 upload_asset.py <file>… --remote http://host:18000 [--token <OAuth の access token>] [--name 表示名]
-  token は OAuth の access token — --token か env NOLANG_TOKEN・無ければ Claude Code が `/mcp` で NoLang に接続した時の token (stream_run と同じ)。
+  token は OAuth の access token — --token か env NOLANG_TOKEN・無ければ Claude Code が `/agent/mcp` で NoLang に接続した時の token (stream_run と同じ)。
   画像は 1 回の POST、動画 (mp4 / mov / webm …) は分割 upload → 確定 → 仕上げの job (尺・codec の検査と thumbnail) の完了まで待つ。
   1 file ごとに `REF <file> id=<uuid>` を 1 行。src には `image 名 = id=<uuid>` (動画は置く所に `play: loop`)。upload した素材は
   NoLang の自分の素材の一覧に入り、`nolang_assets_search` の scope=mine でも引ける。制限 (形式・大きさ) は web の upload と同じ。
@@ -57,14 +57,14 @@ def _upload_image(remote: str, token: str, path: Path, name: str | None) -> str:
             f'--{boundary}\r\nContent-Disposition: form-data; name="names_by_languages"\r\n\r\n{names}\r\n'.encode()
         )
     body = b"".join(parts) + f"--{boundary}--\r\n".encode()
-    row = _call(remote, token, "POST", "/v1/unstable/assets/images/", body, f"multipart/form-data; boundary={boundary}")
+    row = _call(remote, token, "POST", "/agent/v1/assets/images/", body, f"multipart/form-data; boundary={boundary}")
     return str(row["image_id"])
 
 
 def _upload_footage(remote: str, token: str, path: Path, name: str | None) -> str:
     size = path.stat().st_size
     init = json.dumps({"filename": path.name, "total_size": size}).encode()
-    started = _call(remote, token, "POST", "/v1/unstable/assets/footages/uploads/", init, "application/json")
+    started = _call(remote, token, "POST", "/agent/v1/assets/footages/uploads/", init, "application/json")
     chunk = int(started["chunk_size"])
     etags: list[dict[str, object]] = []
     with path.open("rb") as stream:
@@ -80,11 +80,11 @@ def _upload_footage(remote: str, token: str, path: Path, name: str | None) -> st
         "parts": etags,
         **({"name": name} if name else {}),
     }
-    upload_path = f"/v1/unstable/assets/footages/uploads/{started['upload_id']}/"
+    upload_path = f"/agent/v1/assets/footages/uploads/{started['upload_id']}/"
     done = _call(remote, token, "PATCH", upload_path, json.dumps(complete).encode(), "application/json")
     deadline = time.monotonic() + _JOB_WAIT_S
     while time.monotonic() < deadline:  # 行は仕上げの job が作る (尺・codec の検査・S3 への配置・thumbnail)
-        job = _call(remote, token, "GET", f"/v1/unstable/jobs/{done['job_id']}/")
+        job = _call(remote, token, "GET", f"/agent/v1/jobs/{done['job_id']}/")
         if job["status"] == "succeeded":
             return str(done["footage_id"])
         if job["status"] in ("failed", "canceled"):
@@ -105,7 +105,7 @@ def main() -> None:
     remote = args.remote.rstrip("/")
     token = args.token or os.environ.get("NOLANG_TOKEN") or claude_mcp_token(remote)
     if not token:
-        raise SystemExit("token が無い (--token / NOLANG_TOKEN / Claude Code の `/mcp` で NoLang に接続)")
+        raise SystemExit("token が無い (--token / NOLANG_TOKEN / Claude Code の `/agent/mcp` で NoLang に接続)")
     for path in args.files:
         if not path.is_file():
             raise SystemExit(f"{path}: file が無い")
