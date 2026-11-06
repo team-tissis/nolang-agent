@@ -135,9 +135,8 @@ nolang check [dir]                    dir の design.txt / timeline.txt を検�
 nolang start [dir] --title "…" [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
 nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
 nolang create [dir] --title "…" [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
-nolang patch <video_id か URL> --request-text "<直す点>" [--answered] [--confirmed]   完成した動画の局所編集
-nolang edit <dir> <video_id> --request-text "<直す点>"   保存された原稿を編集役が書き換えて作り直す
-nolang status <video_id> [--wait] [--until playable|completed|range]   (range = patch の直した区間を再生できる所まで)
+nolang edit <dir> <video_id か URL> --request-text "<直す点>"   完成した動画を直す (編集役が原稿の依頼のぶんだけ書き換える・元の動画はそのまま)
+nolang status <video_id> [--wait] [--until playable|completed]
 nolang abort <video_id>
 nolang reference                      文書一式 (文法・見本・骨組み — server の現行) の dir を返す
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)

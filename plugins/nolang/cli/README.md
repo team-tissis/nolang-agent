@@ -26,7 +26,7 @@ nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir 
 nolang submit <dir> [--end]           書き足した cut を投入 (最後は --end)
 nolang create <dir> --title "…"       全 cut を一度に: 検査 → 生成開始 → 再生できたら視聴 URL
 nolang generate --request-text "…"    NoLang の server が台本と画面を書く (studio を使わない・手元の LLM は要らない)
-nolang patch <video_id> --request-text "…"   完成した動画の局所編集 (元の動画はそのまま・新しい URL)
+nolang edit <dir> <video_id> --request-text "…"   完成した動画を直す (元の動画はそのまま・新しい URL)
 nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 ```
 
