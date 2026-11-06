@@ -35,7 +35,7 @@ nolang status <video_id> --wait       完成を待って mp4 の URL を得る
 ## 接続先
 
 `--api <URL>` → 環境変数 `NOLANG_API_URL` → (プラグインに入った CLI なら) プラグインの接続先 → 本番 (`https://api.no-lang.com`) の順で決まります。URL だけで、接続先を選んで保存する command はありません。ログインは接続先ごとに保存されます。
-CLI の本体 (束) を取るのは NoLang の API host (https) と `localhost` からだけで、束は NoLang の鍵の署名を検証してから動きます。
+CLI の本体 (束) を取るのは本番と `localhost` からだけで、本番の束は NoLang の鍵の署名を検証してから動きます。他の NoLang の server から取るには、人が shell に `NOLANG_CLIENT_TRUSTED_ORIGIN=<その URL>` を書きます (その origin は署名なしでも動く)。
 CI など対話できない環境では、ログイン済みの機械の `eval "$(nolang auth env)"` が出す access token を `NOLANG_TOKEN` に入れます。この token は CLI が更新しないので、期限 (1 時間) が切れたら入れ直します。API key (`nlg-c-…`) は CLI と MCP では使えません (403)。API key は NoLang API 用です。
 
 ログイン情報は `~/.config/nolang/credentials.json` (権限 0600) に保存され、期限が切れても自動で更新されます。

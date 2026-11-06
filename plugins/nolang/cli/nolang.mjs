@@ -4,8 +4,9 @@
 // 変わっていれば取り直して展開)、束の cli/nolang.mjs を同じ process で動かす。版番号は無い: 束の指紋 = tar.gz の sha256 = ETag。
 // 束の置き場は NOLANG_CONFIG_DIR/client/<指紋>/ (既定 ~/.config/nolang)。依存なし (Node 20+)。
 // 接続先の決め方は束の CLI と同じ順 (--api → NOLANG_API_URL → プラグインの defaults.json → 本番)。URL だけを受ける。
-// 束 (= 実行する code) を取るのは NoLang の API host (https) と手元のスタック (localhost) からだけで、束は server の build が付けた
-// Ed25519 の署名を公開鍵で検証してから動かす (localhost だけは署名の無い束も受ける — source から動く開発の stack)。
+// 束 (= 実行する code) を取るのは本番の NoLang と手元のスタック (localhost) からだけで、本番の束は server の build が付けた Ed25519 の
+// 署名を公開鍵で検証してから動かす (localhost は署名の無い束も受ける — source から動く開発の stack)。他の server から取るのは、人が
+// NOLANG_CLIENT_TRUSTED_ORIGIN=<その URL> でその origin を信じると書いた時だけ (署名が無くても動かす・付いていれば検証する)。
 // 開発: NOLANG_CLIENT_DIR=<nolang-backend の agent_client> で、server から取らずにその checkout の CLI を動かす。
 import { createHash, createPublicKey, verify } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
@@ -21,10 +22,13 @@ const CLIENT_DIR = join(CONFIG_DIR, "client");
 const CURRENT_FILE = join(CLIENT_DIR, "current.json"); // 接続先 → 最後に使った束の指紋
 const PROD_API = "https://api.no-lang.com";
 // 束 (code) を取ってよい接続先。`--api` / NOLANG_API_URL に書かれた任意の host から code を取って動かすと、エージェントに許可された
-// `nolang` が任意 code の入口になるので、NoLang の API host と手元のスタック (localhost) に限る。許可の外で CLI を動かす時は
-// NOLANG_CLIENT_DIR (手元の checkout・取得なし)
-const BUNDLE_ORIGINS = new Set([PROD_API, "https://api-dev.no-lang.com", "https://api-stg.no-lang.com"]);
+// `nolang` が任意 code の入口になるので、本番と手元のスタック (localhost) に限る。他の origin は、人が shell に
+// NOLANG_CLIENT_TRUSTED_ORIGIN=<URL> と書いた時だけ (環境変数は `nolang …` の許可だけでは付けられず、値が origin なので他所には効かない)。
+// その origin の束は署名が無くても動かす (署名を付けない server のため)。許可の外で CLI を動かす時は NOLANG_CLIENT_DIR (手元の checkout・取得なし)
 const isLocalhost = (api) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(api);
+const TRUSTED_ORIGIN = (process.env.NOLANG_CLIENT_TRUSTED_ORIGIN || "").replace(/\/+$/, "");
+const unsignedOk = (api) => isLocalhost(api) || api === TRUSTED_ORIGIN;
+const signedOrigin = (api) => api === PROD_API || api === PACKAGED_API; // 署名を必ず求める取得元 (本番・プラグインの接続先)
 // 束の署名 (Ed25519) の公開鍵 (生の 32 byte・hex) — nolang-backend の libs/ai/llm_prompts/draft_author/client_bundle.py の
 // BUNDLE_PUBLIC_KEY と同じ値。鍵を替える時は新しい鍵をここに足した bootstrap を先に配り、build の秘密鍵を替えてから古い鍵を外す
 const BUNDLE_PUBLIC_KEYS = ["2cb56de2d1adb85a6ec5ad2ba44b1c1d56f323c7cd923a727d041dc72ba120a7"];
@@ -135,8 +139,8 @@ async function fetchBundle(api, known, timeoutMs) {
   const signature = res.headers.get("x-nolang-bundle-signature");
   if (signature) {
     if (!signedByNoLang(bytes, signature)) throw new BootstrapError(`${api} の client の束の署名が NoLang の鍵と合わない (${hash.slice(0, 12)}) — この束は動かさない`, EXIT.NETWORK);
-  } else if (!isLocalhost(api)) {
-    throw new BootstrapError(`${api} の client の束に署名が無い (${hash.slice(0, 12)}) — server の image が束に署名していない。署名の無い束を動かすのは localhost だけ`, EXIT.NETWORK);
+  } else if (!unsignedOk(api)) {
+    throw new BootstrapError(`${api} の client の束に署名が無い (${hash.slice(0, 12)}) — server の image が束に署名していない。署名の無い束を動かすのは localhost と NOLANG_CLIENT_TRUSTED_ORIGIN の origin だけ`, EXIT.NETWORK);
   }
   return { hash, bytes };
 }
@@ -179,9 +183,9 @@ async function prune(current) {
 // 今回動かす束 → { dir, hash }。手元に束があれば照合は CHECK_TIMEOUT_MS まで (届かなければ手元の束で動く)。無ければ取れるまで待つ
 async function ensureBundle(api) {
   if (process.env.NOLANG_CLIENT_DIR) return { dir: process.env.NOLANG_CLIENT_DIR, hash: "dev" };
-  if (!BUNDLE_ORIGINS.has(api) && !isLocalhost(api)) {
+  if (!signedOrigin(api) && !unsignedOk(api)) {
     throw new BootstrapError(
-      `${api} からは NoLang の client を取らない (取るのは ${[...BUNDLE_ORIGINS].join(" / ")} と localhost だけ)。他の server で動かすなら NOLANG_CLIENT_DIR=<nolang-backend の agent_client>`,
+      `${api} からは NoLang の client を取らない (取るのは ${PROD_API} と localhost だけ)。NoLang の他の server は人が shell に NOLANG_CLIENT_TRUSTED_ORIGIN=<その URL> と書いた時だけ。手元の checkout を動かすなら NOLANG_CLIENT_DIR=<nolang-backend の agent_client>`,
       EXIT.USAGE,
     );
   }
