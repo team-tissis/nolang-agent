@@ -197,7 +197,7 @@ board#b4(k: "PACE"; t: "5kmごとのペース"; s: "完走者の中央値｜1km�
   p#yl(left: 18px; cy: "321;441;561;681"; width: 90px; text-align: right; font-size: 26px; font-family: n; color: $dim; delay: 200ms; in: {opacity:0, duration:0.3}) ×4 6′00″;6′20″;6′40″;7′00″
   p#va(cx: "140;233;324;417;510;602"; cy: "269;251;263;281;311;365"; font-size: 30px; font-family: n; font-style: italic; delay: 40ms; in: {y:8, opacity:0, duration:0.2, stagger:{each:0.19}}) ×6 5′58″;5′55″;5′57″;6′00″;6′05″;6′14″
   shape#pb(left: "683;774;867"; top: "536;680;638"; width: 26px; height: 26px; border-radius: 50%; background: $fast; border: 4px solid #0B1020; delay: 260ms; in: {scale:0.2, opacity:0, duration:0.25, ease:'back.out(2.4)', stagger:{each:0.26}}) ×3
-  p#vb(cx: "695;788;879"; cy: "600;744;611"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300ms; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
+  p#vb(cx: "790;788;879"; cy: "600;744;611"; font-size: 30px; font-family: n; font-style: italic; color: $coral; delay: 300ms; in: {y:-8, opacity:0, duration:0.2, stagger:{each:0.26}}) ×3 6′38″;7′02″;6′55″
   chipj#chip(left: 644px; top: 240px; font-size: 24px; color: #FFFFFF; background: $fast; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) 崩れるのは30kmから
   p#d40(left: 726px; top: 512px; font-size: 34px; font-family: n; font-style: italic; color: $coral; in: {scale:0.4, opacity:0, duration:0.38, ease:'back.out(2.4)'}) +40秒
   # 52% の札 (薄い赤の板)
