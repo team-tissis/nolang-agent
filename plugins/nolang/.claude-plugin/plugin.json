@@ -1,6 +1,6 @@
 {
   "name": "nolang",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "NoLang に MCP / CLI でつなぎ、Claude Code から動画を作る (台本・画面・声・BGM まで NoLang が作る)。",
   "author": {
     "name": "mvrx"

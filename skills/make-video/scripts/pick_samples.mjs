@@ -5,14 +5,13 @@
 // 自分の型の NoLang の見本に依頼と同じ向きの物が無ければ、NoLang 側を使わず hf の写し 2 本 (同じ向きを先に) にする。
 //
 //   node scripts/pick_samples.mjs --type concept --aspect 16:9 --request "<依頼文>" [--reference <dir>]
-// --reference = 文書一式の dir (`nolang reference` が返した dir)。無ければプラグインの箱の CLI に入っている studio の文書 (cli/studio/reference/)
+// --reference = 文書一式の dir (`nolang reference` が返した dir — 文書はプラグインの箱に無く、nolang が server から取る束の中にある)
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-const CLI_REFERENCE = fileURLToPath(new URL("../../../cli/studio/reference/", import.meta.url));
-let SAMPLES_DIR = join(CLI_REFERENCE, "samples");
+let SAMPLES_DIR = null;
 const NEAR_TYPE = { cinematic: "story", compare: "concept", data: "compare", story: "cinematic", concept: "compare" };
 const SAMPLE_MAX_BYTES = 70_000;
 // 題の語: 漢字・片仮名の続き 2 字以上・英字で始まる英数 3 字以上 (平仮名だけの語・1 字の漢字は数えない)
@@ -85,10 +84,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     options: { type: { type: "string" }, aspect: { type: "string" }, request: { type: "string" }, reference: { type: "string" } },
   });
   if (!values.type) {
-    console.error('使い方: node scripts/pick_samples.mjs --type <concept|data|compare|story|cinematic> --aspect <16:9|9:16> --request "<依頼文>" [--reference <dir>]');
+    console.error('使い方: node scripts/pick_samples.mjs --type <concept|data|compare|story|cinematic> --aspect <16:9|9:16> --request "<依頼文>" --reference <dir>');
     process.exit(2);
   }
-  if (values.reference) SAMPLES_DIR = join(values.reference, "samples");
+  if (!values.reference) {
+    console.error("--reference が要る: `nolang reference` が返した dir を渡す");
+    process.exit(2);
+  }
+  SAMPLES_DIR = join(values.reference, "samples");
   if (!existsSync(SAMPLES_DIR)) {
     console.error(`見本の dir が無い: ${SAMPLES_DIR} — \`nolang reference\` が返した dir を --reference に渡す`);
     process.exit(2);

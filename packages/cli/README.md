@@ -13,6 +13,8 @@ npx @no-lang/cli <command>      # 入れずに使う
 
 Node.js 20 以上が要ります。依存パッケージはありません。
 
+このパッケージは起動係です。CLI の本体 (studio と文書一式を含む) は接続先の NoLang の server が配り (`GET <api>/agent/client/`)、`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/`) を server と照合して、変わっていれば取り直してから動きます (照合は 1 往復・取り直しは 1 MB 弱)。server を更新すると次の `nolang` が新しい本体で動くので、CLI を更新する作業はありません。
+
 ## 使い方
 
 ```
@@ -50,4 +52,4 @@ SSH・リモートコンテナ・Codespaces・Docker・WSL・画面の無い Lin
 
 ## ライセンス
 
-Apache-2.0 (repo の `LICENSE`)。studio の文書 (`studio/reference/`) は NoLang の server と同じ版を同梱しています (`nolang reference` が server の現行と照合します)。
+Apache-2.0 (repo の `LICENSE`)。

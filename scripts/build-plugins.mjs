@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// 正本 (packages/cli・skills/・hooks/) からプラグインの箱 (plugins/nolang) の中身を作り、manifest の version を CLI に揃える。
+// 正本 (packages/cli・skills/・hooks/) からプラグインの箱 (plugins/nolang) の中身を作り、manifest の version を CLI (起動係) に揃える。
+// CLI の本体 (studio・文書一式を含む) は箱に入れない — NoLang の server が `agent/client/` で配り、起動係が起動のたびに取る。
 // 箱は 1 つ = 本番の NoLang (接続先の切替は CLI の `nolang use`・社内 dev の MCP は `claude mcp add` か custom connector)。
-// Codex はプラグインの directory だけを cache に写すので、CLI (studio を含む) とスキルの実体を箱の中に置く (symlink は使わない)。
+// Codex はプラグインの directory だけを cache に写すので、CLI (起動係) とスキルの実体を箱の中に置く (symlink は使わない)。
 // hooks/ は Claude Code だけが読む (Codex の manifest には書かない)。
 // `--check` は書かずに、今の箱の中身が正本どおりかだけを見る (CI 用・ずれていれば終了コード 1)。
 import { cp, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -11,10 +12,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PLUGIN = { name: "nolang", api: "https://api.no-lang.com" };
-const CLI_FILES = ["nolang.mjs", "lib", "studio", "package.json", "README.md"];
+const CLI_FILES = ["nolang.mjs", "package.json", "README.md"];
 const MANIFESTS = [".claude-plugin/plugin.json", ".codex-plugin/plugin.json"];
-// 箱に入れない物: python の cache・studio の単体テストと実行の log
-const IGNORED = new Set([".DS_Store", "__pycache__", "tests", "logs"]);
+// 箱に入れない物
+const IGNORED = new Set([".DS_Store", "__pycache__", "test", "tests"]);
 const keep = (src) => !IGNORED.has(src.split("/").pop());
 
 async function buildInto(pluginDir) {

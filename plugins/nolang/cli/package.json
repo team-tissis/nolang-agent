@@ -1,7 +1,7 @@
 {
   "name": "@no-lang/cli",
-  "version": "0.1.5",
-  "description": "NoLang の動画を AI エージェント (Claude Code / Codex など) やシェルから作る CLI",
+  "version": "0.2.0",
+  "description": "NoLang の動画を AI エージェント (Claude Code / Codex など) やシェルから作る CLI (起動係 — 本体は NoLang の server が配る)",
   "keywords": [
     "nolang",
     "video",
@@ -17,11 +17,6 @@
   },
   "files": [
     "nolang.mjs",
-    "lib/",
-    "studio/SKILL.md",
-    "studio/reference/",
-    "studio/scripts/",
-    "studio/SOURCE.json",
     "README.md"
   ],
   "scripts": {

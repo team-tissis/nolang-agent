@@ -6,9 +6,9 @@
 
 ## 1. 原稿を書く (§A と §B 共通・この順で・寄り道しない)
 
-0. **文書を server から取る** (書き始める前に 1 回): 文法の文書 (spec.md・辞書・見本) は plugin に入っていない — server の現行の物を読む。
-   - シェルがある時: `nolang reference` → 出力の `dir` が文書一式の directory。以後この file で `<dir>/<名>` と書いてある所はそれを読む。終了コード 1 で contract の案内が出たら、書かずに止まって案内をユーザーに伝える。
-   - シェルが無い時 (MCP): `nolang_draft_sync()` → `contract` (開始の `client_contract` に渡す)・`min_supported`・`docs` (文書の一覧)。文書は `nolang_draft_reference(path="<名>")` で読む (大きい文書は節の一覧が返るので `section` に見出しを渡して節ごとに・見本は `path="samples/"` の一覧から §1 の 2 と同じ規則で選び、1 本ずつ読む)。
+0. **文書は server の現行を読む** (書き始める前に): 文法の文書 (spec.md・辞書・見本) は plugin に入っていない。
+   - シェルがある時: `nolang reference` → 出力の `dir` が文書一式の directory (nolang が起動のたびに server と揃える束の中)。以後この file で `<dir>/<名>` と書いてある所はそれを読む。
+   - シェルが無い時 (MCP): `nolang_draft_reference(path="<名>")` で読む (大きい文書は節の一覧が返るので `section` に見出しを渡して節ごとに・見本は `path="samples/"` の一覧から §1 の 2 と同じ規則で選び、1 本ずつ読む)。
 1. **依頼から決める**: 伝えること 1 文・縦横 (`16:9` / `9:16`)・長さの目安 (依頼に明示があればその秒数・無ければ指定しない = 内容に合わせる)・型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)。聞き返さず既定で進め、決めた値は最後にユーザーへ伝える。
 2. **文法と見本 2 本を読む**: 文法は §2 (`<dir>/spec.md` の全文)。見本は NoLang の studio と同じ選び方で: `node scripts/pick_samples.mjs --type <型> --aspect <縦横> --request "<依頼文>" --reference <dir>` が `<dir>/samples/` から 2 本を選ぶ: NoLang の src (`<型>_NN.md`・字幕と cut の組み方の手本) 1 本と、hf の写し (`hf_<型>_*.md`・絵と動きの作り込みの手本) 1 本 (同じ題材の見本を外し、同じ向きを先に。同じ向きの NoLang の src が無い型は hf の写しを 2 本)。出た 2 本を全文読む (1 行目の題・`見せる作り:` の要約・design.txt と timeline.txt の全量)。シェルが無い時は同じ規則で自分で選ぶ。骨組み `<dir>/scaffolds/` は文法の形を確かめる時だけ見る。
 3. **決まった素材を使う時だけ**: `SKILL.md` の §M で `ref` を得て、応答の `usage` の位置に書く。
@@ -43,9 +43,9 @@
 
 ### 手順 (§1 の原稿を、書いた cut から)
 
-文書は §1 の 0 で server から取っておく (`nolang_draft_sync` → `nolang_draft_reference`)。
+文書は §1 の 0 のとおり `nolang_draft_reference` で server の現行を読む。
 
-1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="ja", duration_s, client_contract=<nolang_draft_sync の contract>)` → `video_id` と `watch_url`。`client_contract` は必ず渡す (版が合わない plugin を server が開始前に止める — `DRAFT_CLIENT_CONTRACT_UNSUPPORTED` が返ったら、その `error` の案内をユーザーに伝えて止まる)。`template_video_id` は省略する (空のテンプレ)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400。規則と閾値は `GET drafts/rules/` の `profile` 列と `profiles.editable`・投入前の検査は `nolang_draft_check(profile="editable")`)。
+1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="ja", duration_s)` → `video_id` と `watch_url`。`template_video_id` は省略する (空のテンプレ)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400。規則と閾値は `GET drafts/rules/` の `profile` 列と `profiles.editable`・投入前の検査は `nolang_draft_check(profile="editable")`)。
 2. **1 つ目を投入**: `nolang_draft_submit_cut(video_id, text)` — text = 根の design + 根の timeline (先頭の `#v2` 行は除く) + 1 つ目の cut の `section#` block + `*** ` block。`defects` が返ったらその cut を直して投入し直す。
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目が受理されたら、案内の文の次の行に `watch_url` だけを書いてユーザーに渡す (数十秒で再生が始まり、続きは投入した端から伸びる)。
 4. **続きを流す**: 次の cut を書いたら `nolang_draft_submit_cut(video_id, text)` — text = その cut の `section#` block + `*** ` block だけ。最後の cut は `end=true`。投入の間は 180 秒以内。

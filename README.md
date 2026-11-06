@@ -4,9 +4,9 @@ NoLang を AI エージェントから使うための配布物です (Apache-2.0
 
 | 物 | 置き場 | 誰向け |
 |---|---|---|
-| CLI **`@no-lang/cli`** (コマンド名 `nolang`) | `packages/cli/` (studio と文書一式を同梱・npm だけで動く) | シェルを持つエージェント (Claude Code・Codex) と人 |
+| CLI **`@no-lang/cli`** (コマンド名 `nolang`) | `packages/cli/` (起動係だけ — 本体は NoLang の server が配り、起動のたびに揃う) | シェルを持つエージェント (Claude Code・Codex) と人 |
 | スキル **`make-video`** | `skills/make-video/` (薄い手順書・文書の写しは持たない) | エージェントが読む段取り |
-| プラグイン **`nolang`** | `plugins/nolang/` (build が作る: CLI + スキル + MCP の接続 + Claude Code のリンク通知の hook) | Claude Code / Codex に 1 回で入れる |
+| プラグイン **`nolang`** | `plugins/nolang/` (build が作る: CLI の起動係 + スキル + MCP の接続 + Claude Code のリンク通知の hook) | Claude Code / Codex に 1 回で入れる |
 
 入口は 2 つ。スキルは CLI を優先し、使えない時は MCP で作ります。
 
@@ -73,6 +73,9 @@ MCP も dev で使う時は、プラグインの MCP (本番固定) とは別に
 
 ### 更新する
 
+CLI の本体 (studio と文書一式を含む) は接続先の NoLang の server が配り (`GET <api>/agent/client/`)、`nolang` が起動のたびに手元の束 (`~/.config/nolang/client/`) を server と照合して取り直す。server が更新されれば次の `nolang` が新しい本体で動くので、普段は何もしなくてよい。
+プラグイン自体 (起動係・スキル・hook) を入れ直すのは、この repo が変わった時だけ:
+
 ```
 claude plugin marketplace update nolang
 claude plugin uninstall nolang@nolang
@@ -86,8 +89,7 @@ claude plugin install nolang@nolang
 
 ```
 nolang-agent/
-  packages/cli/                        # CLI @no-lang/cli の正本 (Node 20+・依存なし・テスト付き)
-    studio/                            #   nolang make が動かす studio と文書一式 (nolang-backend の写し・SOURCE.json に元の commit)
+  packages/cli/                        # CLI @no-lang/cli = 起動係 (Node 20+・依存なし)。本体 (nolang-backend の agent_client/) は server が配る
   skills/make-video/                   # スキルの正本 (CLI 優先・無ければ MCP)。文書の写しは持たない
   hooks/                               # Claude Code の hook: nolang の出力の tell_user (動画・ログインの URL) を通知で画面に出す
   plugins/nolang/                      # 箱 (plugin)。cli/・skills/・hooks/ は npm run build が正本から作る — 直接直さない
@@ -97,7 +99,6 @@ nolang-agent/
   .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang・plugin は nolang 1 本)
   .agents/plugins/marketplace.json     # Codex 用の棚
   scripts/build-plugins.mjs            # 正本 → plugins/nolang (--check はずれの検査)
-  scripts/sync-reference.mjs           # nolang-backend → packages/cli/studio/
   .github/workflows/ci.yml             # npm run check と npm pack --dry-run
   LICENSE                              # Apache-2.0
 ```
@@ -147,12 +148,13 @@ nolang patch <video_id か URL> --request-text "<直す点>" [--answered] [--con
 nolang edit <dir> <video_id> --request-text "<直す点>"   保存された原稿を編集役が書き換えて作り直す
 nolang status <video_id> [--wait] [--until playable|completed|range]   (range = patch の直した区間を再生できる所まで)
 nolang abort <video_id>
-nolang reference                      文書一式の版を server と照合し、古ければ server の現行を手元に置く (dir を返す)
+nolang reference                      文書一式 (文法・見本・骨組み — server の現行) の dir を返す
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
 nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画を自分の素材に送る → ref
 ```
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
+- CLI の本体は接続先の server が配る束 (`GET <api>/agent/client/`・tar.gz 1 MB 弱)。`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/<指紋>/`) を `If-None-Match` で照合し (1 往復・届かなければ手元の束で動く)、変わっていれば取り直す。版番号は無く、指紋 = tar.gz の sha256。flag の表はこの README に持たない — `nolang make --help` が server と同じ版の物を出す。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
 - 接続先: `--api` → `NOLANG_API_URL` → `nolang use` で選んだ接続先 → プラグインの接続先 (`cli/defaults.json`) → 本番 (`https://api.no-lang.com`)。名前 (`local` = `http://localhost:18000`・`dev` = `https://api-dev.no-lang.com`・`stg` = `https://api-stg.no-lang.com`・`prod` = `https://api.no-lang.com`) か URL で書ける。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインでは本番固定 (切り替えられるのは CLI だけ)。
 - ログイン: 手元の機械はエージェントの `--background` も含めてブラウザ認可 (ブラウザが開き、許可するだけ・コード入力なし。始められなければデバイス認可へ自動で切り替え)。SSH・リモートコンテナ・Docker・WSL・画面の無い Linux はデバイス認可を選び、URL とコードをブラウザで入力して許可する (ポート転送不要)。エージェントは `--background` で案内 (デバイス認可ならコードも) を受け取り、`nolang auth wait` で完了を確かめる。`--device` / `--browser` で明示選択できる。ブラウザ認可の戻り先が接続エラーになっても、開始済みのログインに `auth complete '<許可後の URL>'` で貼り戻せる (`--background` も対応)。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
@@ -172,44 +174,29 @@ CLI / MCP の原稿検査・素材・描画は共通の NoLang サーバーを�
 直すのは正本 (`packages/cli/`・`skills/`・`hooks/`) だけ。直したら:
 
 ```
-npm run build       # 正本 → plugins/nolang/ (cli/・skills/・hooks/ を作り直し、manifest の version を CLI に揃える)
-npm run check       # plugins/ が正本どおりか + CLI と studio の単体テスト (CI と同じ)
+npm run build       # 正本 → plugins/nolang/ (cli/・skills/・hooks/ を作り直し、manifest の version を起動係に揃える)
+npm run check       # plugins/ が正本どおりか + hook の単体テスト (CI と同じ)。CLI 本体のテストは nolang-backend (agent_client/cli/test)
 npm run validate    # claude plugin validate --strict (Claude Code が要る)
 ```
 
-- 版番号は `packages/cli/package.json` の 1 か所。build が 2 つの `plugin.json` に写し、CLI は実行時に `package.json` から読む。
+- 版番号 (`packages/cli/package.json`) は起動係の物。build が 2 つの `plugin.json` に写す。CLI 本体に版は無い (束の指紋 — `nolang --version`)。
+- CLI 本体を直す時は nolang-backend の `agent_client/cli/` を直す。手元で試す: `NOLANG_CLIENT_DIR=<nolang-backend>/agent_client nolang …` (server から取らずにその checkout を動かす)。
 - 反映: Claude Code はこの repo を直接読むので、次のセッション開始か `/reload-plugins`。Codex は入れた時に `~/.codex/plugins/cache/` へ写すので、入れ直す (`codex plugin remove nolang@nolang` → `codex plugin add nolang@nolang`)。
 
 置き方の決まり (Claude Code と Codex の両方で動かすため):
 - 箱は棚の下の sub directory に置く。棚と同じ directory (`./`) に箱を置くと、Claude Code は読むが Codex は棚ごと無視する。
 - `.mcp.json` を棚や箱の root に置かない。この repo で作業した時に Claude Code が project の MCP としても読んで二重になる。Claude Code 用は `plugin.json` の `mcpServers` に直接、Codex 用は `.codex-plugin/mcp.json` に書く。
-- CLI とスキルの実体は箱の中に置く (symlink にしない)。Codex は箱ごと cache に写すので、スキルからの相対パス (`../../cli/nolang.mjs`) がどちらでも同じになる。studio は CLI の中 (`cli/studio/`) — `skills/` の外なので中の SKILL.md を別の skill として拾わない。
+- CLI (起動係) とスキルの実体は箱の中に置く (symlink にしない)。Codex は箱ごと cache に写すので、スキルからの相対パス (`../../cli/nolang.mjs`) がどちらでも同じになる。
 
-### 辞書の同期 (nolang-backend → packages/cli/studio/)
+### 文書と studio (nolang-backend が正本・写しは持たない)
 
-正本は nolang-backend: 文書一式 (文法・見本・骨組み・`contract.json`)・`author_core.py`・`cut_stages.py` は `libs/ai/llm_prompts/draft_author/`、
-配布 script は `agent_client/scripts/`、studio で作る手順は `.agents/skills/nolang-draft-studio/SKILL.md`。ここには写しだけを置き、
-元の commit と文書の版 (`contract`・内容の指紋 `reference_hash`・文書ごとの指紋 `docs`) を `packages/cli/studio/SOURCE.json` に残す。
-スキルは文書の写しを持たない — 自分で書く経路は `nolang reference` (server と照合し、古ければ現行を手元に置く) か MCP の
-`nolang_draft_sync` → `nolang_draft_reference` で server の現行を読む。指紋の算法は `packages/cli/lib/reference.mjs` 1 か所。
-sync は指紋を JS と backend の python の両方で計算して食い違えば止まる (算法の正本と test vector は backend の `author_core.py` /
-`test_draft_reference_bundle.py`)。版の整合の設計は backend の `app_main/docs/feature/video_generate/reference_sync.md`。
-
-自動: backend の `agent-sync-dispatch` が push を知らせ、この repo の `sync-from-backend` が写して plugin の版を上げて push する
-(secret: backend 側 `NOLANG_AGENT_DISPATCH_TOKEN`・この repo 側 `BACKEND_READ_TOKEN`)。`contract` が上がる sync は止まる —
-server を先に deploy してから workflow_dispatch に `server_deployed=true` を付けて流す。
-
-手で写す時は commit 済みの物だけを写す (作業中の変更を持ち込まない):
-
-```
-mkdir -p /tmp/nbe && ssh <host> 'git -C <backend> archive HEAD .agents/skills/nolang-draft-studio agent_client libs/ai/llm_prompts/draft_author' | tar x -C /tmp/nbe
-npm run sync-reference -- /tmp/nbe \
-  --commit "$(ssh <host> git -C <backend> rev-parse HEAD)" --ref "$(ssh <host> git -C <backend> rev-parse --abbrev-ref HEAD)"
-npm run build
-```
+文法の文書一式・`author_core.py`・`cut_stages.py` は nolang-backend の `libs/ai/llm_prompts/draft_author/`、studio の script は `agent_client/scripts/`、
+CLI 本体は `agent_client/cli/`。server はこれらを 1 つの束にして `GET agent/client/` で配り、起動係が起動のたびに取る — この repo には写しも
+同期の workflow も無い (設計は backend の `app_main/docs/feature/video_generate/client_bundle.md`)。スキルも文書の写しを持たない — 自分で
+書く経路は `nolang reference` (束の中の文書の dir) か MCP の `nolang_draft_reference` で server の現行を読む。
 
 `SKILL.md` (studio で作る標準の手順・ログイン・素材) と `write-yourself.md` (自分で書く経路) はこの repo で書いた物。文法は server の
-`spec.md` を読ませる (手順の文書に文法の要約を手で写さない — 版の照合の外で古びる)。
+`spec.md` を読ませ、`nolang make` の flag は `--help` を読ませる (手順の文書に写さない — 束の外で古びる)。
 
 ## 公開 (まだしていない)
 
