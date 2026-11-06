@@ -1216,6 +1216,59 @@ async function cmdSubmit(positionals, flags) {
   out(result);
 }
 
+// 依頼文から 1 本 (NoLang が台本と画面を書く — web の home と同じ入口)。studio を使わないので速いが細かくは作れない
+async function cmdGenerate(positionals, flags) {
+  const text = flags["request-text"] || positionals.join(" ");
+  if (!text) {
+    throw new CliError(`使い方: nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--language ja] [--video-language ja] [--confirmed] [--wait]`, { exit: EXIT.USAGE });
+  }
+  const api = await resolveApi(flags);
+  // 同じ鍵の再送は server が 1 本にする (応答を失った時の呼び直しで動画を重ねない)
+  const body = { text, idempotency_key: randomBytes(16).toString("hex") };
+  if (flags.aspect) body.aspect_ratio = flags.aspect;
+  const durationS = parseSeconds(flags.seconds);
+  if (durationS) body.duration_s = durationS;
+  if (flags.language) body.language = flags.language;
+  if (flags["video-language"]) body.video_language = flags["video-language"];
+  if (flags.confirmed) body.confirmed = true;
+  log("NoLang が台本と画面を書く (受付の判定に数秒〜30 秒)");
+  const res = await callApi(api, "POST", "/agent/v1/videos/", body);
+  if (res.stage !== "accepted") {
+    const next =
+      res.stage === "unsupported"
+        ? "blockers (できない節と代案) をユーザーに見せ、そのまま作るなら --confirmed で同じ依頼を再送する"
+        : res.stage === "clarify"
+          ? "questions の答えを依頼文に足して出し直す (分からなければユーザーに聞く)"
+          : "作れない依頼 — 依頼文を変える";
+    out({ ok: false, stage: res.stage, blockers: res.blockers, questions: res.questions, next });
+    if (res.stage !== "unsupported" && res.stage !== "clarify") process.exitCode = EXIT.FAIL;
+    return;
+  }
+  const videoId = res.video_id;
+  log(`開始: ${res.watch_url} (生成中から再生できる)`);
+  const until = flags.wait ? "completed" : "playable";
+  const st = await waitStatus(api, videoId, until, Number(flags.timeout || (until === "completed" ? 900 : 420)));
+  const failed = st.status === "failed" || st.status === "expired";
+  out({
+    ok: !failed,
+    video_id: videoId,
+    watch_url: res.watch_url,
+    status: st.status,
+    playable: Boolean(st.playable),
+    download_url: st.download_url || "",
+    timed_out: Boolean(st.timed_out),
+    tell_user: failed
+      ? `動画の生成がサーバー側で失敗しました。video_id: ${videoId}`
+      : st.status === "completed"
+        ? `動画ができました:\n${res.watch_url}`
+        : st.playable
+          ? `動画が再生できるようになりました (生成は続いていて、そのまま最後まで見られます):\n${res.watch_url}`
+          : `動画の生成を始めました。生成中から再生できます (最初の場面が描けるまで 1〜2 分):\n${res.watch_url}`,
+    next: TELL_FIRST,
+  });
+  if (failed) process.exitCode = EXIT.FAIL;
+}
+
 async function cmdStatus(positionals, flags) {
   const videoId = positionals[0];
   if (!videoId) throw new CliError("使い方: nolang status <video_id> [--wait]", { exit: EXIT.USAGE });
@@ -1400,6 +1453,9 @@ const HELP = `nolang ${VERSION} — NoLang の動画を AI エージェントか
   nolang create [dir] --title "…"       check → 開始 → cut を順に投入 → 再生できるまで待つ → watch_url
         [--aspect 16:9|9:16] [--seconds 秒|auto (既定)] [--language ja] [--wait (完成まで)]
         [--dry-run]  サーバーに触れず、cut ごとの投入 text だけを出す
+  nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--language ja] [--video-language ja] [--confirmed] [--wait]
+                                        NoLang が台本と画面を書く (web の home と同じ・studio を使わないので速いが細かくは作れない)。
+                                        再生できたら URL を返す。stage=unsupported なら blockers を見せ、そのまま作るなら --confirmed で再送
   nolang make <dir> --type <concept|data|compare|story|cinematic> --request-text "<依頼文>"
         [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto = 内容に合わせる)] [--engine claude|codex]
         [--author low|medium|high|xhigh (著者の effort・既定 low)] [--author-brief (著者は台詞と絵コンテだけ書き、担当が絵をゼロから設計 — 台詞は著者の版で固定・--staff-assets を含意・--staff none とは併用不可。--author は brief の著者にも効く)] [--staff balanced|low|medium|high|xhigh|none (担当・既定 balanced = cut 1・2 は low・以降は再生に間に合う見込みの時だけ medium)] [--staff-warn (担当に warn の指摘も渡す)] [--editable]
@@ -1463,6 +1519,7 @@ const OPTIONS = {
   end: { type: "boolean" },
   type: { type: "string" },
   "request-text": { type: "string" },
+  "video-language": { type: "string" },
   request: { type: "string" },
   engine: { type: "string" },
   author: { type: "string" },
@@ -1516,6 +1573,8 @@ async function main() {
       return cmdCheck(rest, flags);
     case "create":
       return cmdCreate(rest, flags);
+    case "generate":
+      return cmdGenerate(rest, flags);
     case "status":
       return cmdStatus(rest, flags);
     case "make":

@@ -167,6 +167,7 @@ nolang check [dir]                    dir の design.txt / timeline.txt を検�
 nolang start [dir] --title "…" [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
 nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
 nolang create [dir] --title "…" [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
+nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--language ja] [--confirmed] [--wait]   NoLang が台本と画面を書く (web の home と同じ入口・studio なし)
 nolang status <video_id> [--wait] [--until playable|completed|range]   (range = patch の直した区間を再生できる所まで)
 nolang abort <video_id>
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
