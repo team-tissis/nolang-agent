@@ -13,7 +13,7 @@ NoLang を AI エージェントから使うための配布物です (Apache-2.0
 | 入口 | 向いている所 |
 |---|---|
 | **CLI `nolang`** | シェルを持つエージェント。`nolang make` = 手元の LLM が studio の段取りで台本と画面を書く (質が高い)・`nolang generate` = NoLang の server が書く (速い・手元の LLM は要らない) |
-| **MCP** `https://api.no-lang.com/agent/mcp` | シェルの無い client (claude.ai の custom connector・ChatGPT・Claude Code の `/mcp`)。主役は `nolang_create_video` (依頼文 → 視聴 URL)・`nolang_video_status`・`nolang_patch_video` |
+| **MCP** `https://api.no-lang.com/agent/mcp` | シェルの無い client (claude.ai の custom connector・ChatGPT・Claude Code の `/mcp`)。主役は `nolang_create_video` (依頼文 → 視聴 URL)・`nolang_video_status`・`nolang_edit_video` |
 
 ## 入れる (1 回だけ)
 
