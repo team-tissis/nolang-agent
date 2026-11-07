@@ -13,9 +13,17 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 コマンドとツールの出力はユーザーに見えない。ユーザーが動画を開けるかどうかは、あなたのメッセージに書いたリンクだけで決まる。
 
 - 出力に `tell_user` があれば、**次のツールを呼ぶ前に**、その文 (案内の文 + URL の行) を**そのまま**ユーザーへのメッセージに書く。省かない・要約しない・秒数や状態だけを伝えて済ませない・「上のリンク」と書かない。
+- `tell_user` は日本語で出る。ユーザーが日本語以外で話している時は、その言語に訳して書く (URL の行はそのまま)。
 - 試しに作る・速さを測る・何本か続けて作る・完成まで待つ時も同じ。作業を続ける時も、先にリンクを書いてから続ける。
 - 最後のメッセージ (完成・失敗の報告・まとめ) にも、その動画の URL をもう一度書く。
 - **書き方**: URL (視聴 `watch_url`・ログインの `authorize_url`・mp4 の `download_url`) は前後で改行し、**1 行にその URL だけ**を書く。前後に文字・括弧・句読点・markdown の装飾 (`**` や `[]()`) を付けず、表のセルにも入れない (そのまま押して開けるように)。`tell_user` の文はこの形になっているので、改行も含めてそのまま書く。
+
+## ¥. 費用と残高 (料金を聞かれた時・「お金がかかるなら先に」と言われた時・無料ユーザーかもしれない時)
+
+- `nolang account` (MCP なら `nolang_account`) — plan・残高 `remaining_credit`・無料の生成チケット `free_generate_ticket` (残があれば credit を使わず作れる)・課金方式・尺 1 分あたりの credit `credit_per_minute` (1 本の最低は `minimum_credit_per_video`)・今作れるか `can_generate`。何も消費しない。費用の目安 = 依頼の長さ (分) × `credit_per_minute`。ノーマル方式は生成後に実尺と AI の使用量で精算されるので前後する。
+- `can_generate: false` なら作らず、`tell_user` (理由とチャージ・プラン変更の `web_url`) を伝えて止める。`nolang make` は始める前に同じ確認を自分でして、作れなければ `error_code` (`INSUFFICIENT_CREDIT` / `PLAN_UPGRADE_REQUIRED`) で止まる。
+- 料金表・プラン・商用利用・保存期間などの決まりは NoLang の web: 料金 https://no-lang.com/pricing ・ 規約 https://no-lang.com/terms ・ FAQ https://no-lang.com/faq 。知らない事は推測で答えず、ここを読むか案内する。
+- `nolang make` の実行が権限の確認で止まった時 (長い動画は実取引と見なされる事がある) は、費用の目安 (上の `account` の値) を一言添えて、ユーザーに許可を求める。
 
 ## 0. どの作り方か
 
@@ -40,7 +48,7 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
    - サーバーが再生できる状態になった時点で返る (Claude の目安は既定 (balanced) で 1 分強・`--staff medium` で 1 分半ほど・`--staff none` で 1 分ほど。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。待ち時間 (super は 9 分半・ほかは 7 分) を超えても生成が続いていれば、`still_generating: true` と視聴 URL を返す (失敗ではない。`tell_user` を書いて終える)。
    - **同時に生成中にできる動画は 2 本まで** (法人プランはテナント全体で 2 本)。`nolang make` は再生できた時点で返るが、動画は完成まで生成中に数える。何本か続けて作る時に、上限のエラー (`CONCURRENT_GENERATION_LIMIT`・「同時に作れる動画の数の上限」) が出たら、`nolang status <前の video_id> --wait` で前の動画の完成を待ってから次を始める。
 4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
-5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。原因は `error` と `run_tail` (engine の出力の末尾) で分かる。サーバーが開始を断った時は、`error` が「サーバーが生成の開始を断った: …」になる — クレジット不足 (`INSUFFICIENT_CREDIT`) は待っても直らないので、ユーザーに伝えて止める。同時生成の上限は上の手順で待つ。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
+5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。原因は `error` と `run_tail` (engine の出力の末尾) で分かる。サーバーが開始を断った時は、`error` が「サーバーが生成の開始を断った (error_code): …」になる — クレジット不足 (`INSUFFICIENT_CREDIT`)・プラン不足 (`PLAN_UPGRADE_REQUIRED`) は待っても直らないので、`nolang account` の値と `web_url` を添えてユーザーに伝えて止める。同時生成の上限は上の手順で待つ。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 
 ## R. 完成した動画を直す (「この動画のここを直して」と頼まれた時)
 
@@ -51,11 +59,12 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 ## L. ログイン (「NoLang にログインして」と頼まれた時も、作る前も)
 
-`nolang auth status`。終了コード 0 ならログイン済み。3 (未ログイン) なら、自分で始める:
+`nolang auth status`。終了コード 0 ならログイン済み (ログインが通るのに使えない理由 — 規約未同意・残高 — は `nolang doctor` が分けて出す)。3 (未ログイン) なら、自分で始める:
 
 - `nolang auth login --background` (すぐ戻る)。**次のメッセージで真っ先に**出力の `tell_user` (URL・有効時間・デバイス認可ならコードを含む案内文) を**自分のメッセージの本文に**そのまま書く。手元の機械ならブラウザでログイン画面が開き、ユーザーは「許可」を押すだけ (コード入力なし)。SSH・コンテナなどのデバイス認可では、ユーザーが URL を開き、`user_code` を入力して自分で始めたログインであることを確認し、許可する。コードを省かない。伝えたら、待つ間に依頼の中身を決めてよい。
 - ブラウザ認可で進めない (ブラウザが別の機械にしか無い・許可後に接続エラーで URL も貼れない) と言われたら、`nolang auth login --background --device` (コードを入力する方式) でやり直す。
 - 作るコマンドや素材のコマンドの前に `nolang auth wait` (最大 120 秒・終了コード 0 で完了)。まだ (終了コード 3・`"waiting": true`) ならもう一度。まだ許可されていない・切れていた (`failed` なら `--background` をやり直す) 時は、そこで止まって (ターンを終えて) ユーザーの「許可した」を待つ — 止まる時のメッセージにも `authorize_url` と、デバイス認可なら `user_code` をもう一度本文に書く (「上の URL」と書かない)。
+- どのコマンドも終了コード 1 で `TERMS_AGREEMENT_REQUIRED` (403) になる → ログインは通っているが、NoLang の利用規約に未同意。ログインをやり直しても直らない。`error` の文と `web_url` をそのまま伝え、web でログインして規約に同意してもらってから続ける (`nolang doctor` は「ログイン済み OK・利用できる NG」と出る)。
 - ブラウザに `ACCESS DENIED` (403) と出る → 接続元の IP が NoLang の許可リストに無い。同じブラウザで `https://<ログイン画面のホスト>/cdn-cgi/trace` を開き、`ip=` の値を管理者に伝えてもらう。
 - SSH・コンテナでは同じ `--background` が自動でデバイス認可を使う。ポート転送は不要。未対応のサーバーではブラウザ認可へ戻る。その戻り先が接続エラーになったら、**ログインをやり直さず**許可後のアドレスバーの URL を貼ってもらい、`nolang auth complete '<URL>'` で待機中のログインを完了する。`--browser --background` でブラウザ認可を指定でき、`--no-browser` で始めた従来の手動方式も同じ `complete` を使う。
 - 終了コード 4 (つながらない) → `nolang doctor` の結果をユーザーに伝える (接続先は `nolang doctor` の `api`。本番は `https://api.no-lang.com`)。
@@ -70,5 +79,5 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 ## CLI の呼び方
 
-`nolang` が PATH にあればそれ、無ければ `node ../../cli/nolang.mjs` (この skill の directory から。以下 `nolang` と書く)。
+`nolang` が PATH にあればそれ、無ければ `node ${CLAUDE_PLUGIN_ROOT}/cli/nolang.mjs` (plugin の絶対 path。cwd に依らない。以下 `nolang` と書く)。
 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
