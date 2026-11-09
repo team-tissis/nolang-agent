@@ -20,7 +20,7 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 ## ¥. 費用と残高 (料金を聞かれた時・「お金がかかるなら先に」と言われた時・無料ユーザーかもしれない時)
 
-- `nolang account` (MCP なら `nolang_account`) — plan・残高 `remaining_credit`・無料の生成チケット `free_generate_ticket` (残があれば credit を使わず作れる)・課金方式・尺 1 分あたりの credit `credit_per_minute` (1 本の最低は `minimum_credit_per_video`)・今作れるか `can_generate`。何も消費しない。費用の目安 = 依頼の長さ (分) × `credit_per_minute`。ノーマル方式は生成後に実尺と AI の使用量で精算されるので前後する。
+- `nolang account` (MCP なら `nolang_account`) — plan・残高 `remaining_credit`・無料の動画生成 `has_free_video_generation` (無料プランの無料クレジットで作れるか。true なら credit を使わず作れる)・課金方式・尺 1 分あたりの credit `credit_per_minute` (1 本の最低は `minimum_credit_per_video`)・今作れるか `can_generate`。何も消費しない。費用の目安 = 依頼の長さ (分) × `credit_per_minute`。ノーマル方式は生成後に実尺と AI の使用量で精算されるので前後する。
 - `can_generate: false` なら作らず、`tell_user` (理由と、解消する画面の URL) を伝えて止める。URL は `blocked_by` に合う方 — `INSUFFICIENT_CREDIT` → `credit_url` (チャージ)・`PLAN_UPGRADE_REQUIRED` → `plan_url` (プラン変更) — で、ユーザーがそこで済ませれば作れるようになる。必ず 1 行で書く (上の「書き方」)。`nolang make` は始める前に同じ確認を自分でして、作れなければ `error_code` (`INSUFFICIENT_CREDIT` / `PLAN_UPGRADE_REQUIRED`) で止まる。
 - 料金表・プラン・商用利用・保存期間などの決まりは NoLang の web: 料金 https://no-lang.com/pricing ・ 規約 https://no-lang.com/terms ・ FAQ https://no-lang.com/faq 。知らない事は推測で答えず、ここを読むか案内する。
 - `nolang make` の実行が権限の確認で止まった時 (長い動画は実取引と見なされる事がある) は、費用の目安 (上の `account` の値) を一言添えて、ユーザーに許可を求める。
