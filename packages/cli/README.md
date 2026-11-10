@@ -19,7 +19,8 @@ Node.js 20 以上が要ります。依存パッケージはありません。
 
 ```
 nolang auth login                     NoLang にログイン (ローカルはブラウザ、リモートはコード入力)
-nolang doctor                         接続先とログインを確かめる
+nolang doctor                         接続先・ログイン・動画を作れるか (残高) を確かめる
+nolang account                        plan・残高・無料の動画生成の有無・尺 1 分あたりの credit・今作れるか (何も消費しない)
 nolang make <dir> --type concept --request-text "…" [--engine claude|codex]   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
 nolang check <dir>                    dir の design.txt / timeline.txt を検査
 nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)

@@ -97,29 +97,18 @@ nolang-agent/
 
 ## 開発者向け: 手元のスタックにつなぐ
 
-手元 (や ubik) で動かしている NoLang のスタックにつなぐ: `export NOLANG_API_URL=http://localhost:18000`。プラグインを直しながら試す時は、この repo のパスで棚を登録する (`/plugin marketplace add <この repo のパス>`)。MCP は `claude mcp add --transport http nolang-local http://localhost:18000/agent/mcp`。
+手元で動かしている NoLang のスタックにつなぐ: `export NOLANG_API_URL=http://localhost:18000` と
+`export NOLANG_CLIENT_TRUSTED_ORIGIN=http://localhost:18000` (同じ URL)。プラグインを直しながら試す時は、この repo のパスで棚を登録する
+(`/plugin marketplace add <この repo のパス>`)。MCP は `claude mcp add --transport http nolang-local http://localhost:18000/agent/mcp`。
 
-Claude Code / Codex が動いている機械の localhost で、次の 3 つが NoLang のスタックに届いている必要があります。
+Claude Code / Codex が動いている機械の localhost で、次の 3 つが NoLang のスタックに届いている必要があります (別の機械で動かして
+いるなら、その 3 つの port を SSH の LocalForward などで転送する)。確かめ方: `nolang doctor`。
 
 | port | 役割 |
 |---|---|
 | 18000 | API (CLI・MCP) |
 | 8000 | ログイン (OAuth) |
 | 3000 | 視聴ページ |
-
-例: デモのスタックが ubik の `127.10.0.14` にあるなら、手元の `~/.ssh/config` に
-
-```
-Host ubik-nolang
-    HostName <ubik のアドレス>
-    User <ユーザー>
-    LocalForward 18000 127.10.0.14:18000
-    LocalForward 8000 127.10.0.14:8000
-    LocalForward 3000 127.10.0.14:3000
-```
-
-を書いて `ssh -fN ubik-nolang` (VS Code の Remote-SSH で ubik-nolang につないでいる間も同じ転送が効きます)。確かめ方: `nolang doctor`。
-転送は「Claude Code / Codex が動いている機械」に要ります。手元の PC の LocalForward は、ubik の上で動く Claude Code には効きません。
 
 ## CLI
 
@@ -189,12 +178,11 @@ CLI 本体は `agent_client/cli/`。server はこれらを 1 つの束にして 
 `SKILL.md` (studio で作る標準の手順・ログイン・素材) と `write-yourself.md` (自分で書く経路) はこの repo で書いた物。文法は server の
 `spec.md` を読ませ、`nolang make` の flag は `--help` を読ませる (手順の文書に写さない — 束の外で古びる)。
 
-## 公開 (まだしていない)
+## 配布
 
 - **license**: Apache-2.0 (`LICENSE`)。
-- **npm**: `@no-lang/cli` (コマンド名は `nolang`)。npm の `nolang` (スコープ無し) は NoLang と無関係の別パッケージなので使わない。公開は `cd packages/cli && npm publish`。
-- **GitHub**: `team-tissis/nolang-agent` (今は非公開)。公開すれば `/plugin marketplace add team-tissis/nolang-agent` と `npx skills add team-tissis/nolang-agent` で入る。
-- 一般ユーザー向けには、本番の API (`api.no-lang.com`) に `/agent/` と OAuth が出ている必要がある (今は 404)。出るまで社内は shell の `NOLANG_API_URL` と `NOLANG_CLIENT_TRUSTED_ORIGIN` (同じ URL) で社内の server を向けて使う (ログインは接続先ごと・手順は nolang-backend の `docs/agent-api-rollout.md`)。
+- **npm**: `@no-lang/cli` (コマンド名は `nolang`)。npm の `nolang` (スコープ無し) は NoLang と無関係の別パッケージなので使わない。
+- **GitHub**: `team-tissis/nolang-agent`。`/plugin marketplace add team-tissis/nolang-agent` と `npx skills add team-tissis/nolang-agent` で入る。
 
 ## 今後
 
