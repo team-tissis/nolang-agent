@@ -1,6 +1,6 @@
 ---
 name: make-video
-description: NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。「NoLang にログインして」・NoLang の素材を探す / 送る依頼にも使う。台本と画面 (draft src) を CLI (nolang) の studio が書くか、自分で書いて MCP (nolang) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
+description: NoLang で動画を 1 本作る。「〇〇の動画を作って」「動画にして解説して」など、NoLang で動画を作る依頼の時に使う (手元の写真・動画や、決まった曲・声を使う依頼も)。「NoLang にログインして」・NoLang の素材を探す / 送る依頼にも使う。台本と画面 (draft src) を CLI (nolang) の studio か NoLang の server (MCP の nolang_create_video) が書くか、自分で書いて MCP (nolang) で投入すると、NoLang のサーバーが声・素材・描画を担当する。
 ---
 
 # NoLang の動画を作る
@@ -30,9 +30,12 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 - **標準は studio** (§S): シェル・`node` (20 以上)・`python3` と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
 - **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は 1 分半ほど。
 - **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役 をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
-- **急ぎで、細かな作り込みが要らない時**: `nolang generate --request-text "<依頼文>" [--aspect] [--seconds]` — NoLang の server が台本と画面を書く (web の home と同じ・studio を使わないので手元の LLM の費用が掛からない)。`stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
+- **急ぎで、細かな作り込みが要らない時**: `nolang generate --request-text "<依頼文>" --idempotency-key <鍵> [--aspect] [--seconds]` — NoLang の server が台本と画面を書く (web の home と同じ・studio を使わないので手元の LLM の費用が掛からない)。
+  - 動画の言語は書かなくてよい (依頼の明示 → 参照の動画 → 依頼文の言語の順で決まる)。依頼文と違う言語にする時だけ `--video-language <en など>`。
+  - 鍵は依頼ごとに新しく作る (uuid など)。応答を失って呼び直す時・`--confirmed` で再送する時は 1 回目と同じ鍵を付ける (動画が重ならない)。`stage: in_progress` = 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。
+  - `stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
 - `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
-- **シェルが無い (Web 版など)・CLI が動かない時は** `write-yourself.md` の「B」(MCP で作る)。
+- **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP の `nolang_create_video` — server が書く)。原稿を自分で書いて細かく作る時だけ `write-yourself.md` の「B」。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 
 ## S. studio で作る (標準)
@@ -48,15 +51,25 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
    - 話している音声 (トーク・インタビュー・講演の録音) から作る動画 (切り抜き・要点の紹介・ショート) は `--speech <音声の file か id>` (話者の人数が分かれば `--speakers N`)。サーバーが文字起こしし、その音声を切って使う (声は録音のまま)。長さは音声から決まる (目安があれば `--seconds`)。文字起こしを待つので、再生までは数分かかる。依頼文には「どこを使うか・何を切るか (フィラー・言い直し)」を書く。
    - サーバーが再生できる状態になった時点で返る (Claude の目安は既定 (balanced) で 1 分強・`--staff medium` で 1 分半ほど・`--staff none` で 1 分ほど。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。待ち時間 (super は 9 分半・ほかは 7 分) を超えても生成が続いていれば、`still_generating: true` と視聴 URL を返す (失敗ではない。`tell_user` を書いて終える)。
    - **同時に生成中にできる動画は plan で決まる本数まで** (free / standard は 2 本・premium と法人は 5 本。本人の数で、法人の同僚の分は数えない。実値は MCP の `nolang_account` の `concurrent_video_limit`)。`nolang make` は再生できた時点で返るが、動画は完成まで生成中に数える。何本か続けて作る時に、上限のエラー (`CONCURRENT_GENERATION_LIMIT`・「同時に作れる動画の数の上限」) が出たら、`nolang status <前の video_id> --wait` で前の動画の完成を待ってから次を始める。
-4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`)。
+4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`・`copyright` = BGM・声・素材のクレジット表記。動画を公開する時に載せるので、一緒に伝える)。
 5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。原因は `error` と `run_tail` (engine の出力の末尾) で分かる。サーバーが開始を断った時は、`error` が「サーバーが生成の開始を断った (error_code): …」になる — クレジット不足 (`INSUFFICIENT_CREDIT`)・プラン不足 (`PLAN_UPGRADE_REQUIRED`) は待っても直らないので、出力の `tell_user` (解消する画面の URL `fix_url` 入り) をそのまま伝えて止める。同時生成の上限は上の手順で待つ。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 
 ## R. 完成した動画を直す (「この動画のここを直して」と頼まれた時)
 
 元の動画はそのまま残り、直った動画が新しい URL でできる。対象は `video_id` (視聴 URL の UUID)。
 
-1. `nolang edit <dir> <video_id> --request-text "<直す点>"` (dir は新しい空の dir) — 保存された原稿 (無ければ動画から起こす) を種に、編集役が依頼のぶんだけ書き換え、触らない cut と声はそのまま通る (再生できるまで 1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。`ok: true` なら出力の `tell_user` を伝えて終わり。`edit: 変更なし` (patch の対象が無い) は項目ごとの判定 `verdict` を伝える。
+1. `nolang edit <dir> <video_id> --request-text "<直す点>"` (dir は新しい空の dir) — 保存された原稿 (無ければ動画から起こす) を種に、編集役が依頼のぶんだけ書き換え、触らない cut と声はそのまま通る (再生できるまで 1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。言語は元の動画のまま。縦横は依頼に書けば (「縦 9:16 に作り直して」) その縦横で作り直し、書かなければ元の動画のまま。`ok: true` なら出力の `tell_user` を伝えて終わり。`edit: 変更なし` (patch の対象が無い) は項目ごとの判定 `verdict` を伝える。
 2. `nolang edit` が新しい動画を作らずに失敗した時だけ、依頼文に `[video:<video_id>]` を書いて `nolang make` (参照つきの作り直し)。
+
+## C. シェルが無い時 (MCP — 依頼文から server が書く)
+
+`nolang generate` と同じ入口。つながっているか・認証は `write-yourself.md` の B の「つながっているか」。
+
+1. **作る**: `nolang_create_video(text, idempotency_key, aspect_ratio?, duration_s?, video_language?)` — text = §S の 3 と同じ依頼文 (参照の動画は `[video:<id>]`)。`video_language` (動画の言語) は省けば 依頼の明示 → 参照の動画 → 依頼文の言語 の順で決まる。`idempotency_key` は依頼ごとに新しい文字列 (uuid など) — 応答を失った・timeout で呼び直す時と `confirmed=true` の再送は同じ鍵 (動画が重ならない)。
+2. **`stage` で分ける**: `accepted` → `watch_url` をすぐ伝える (冒頭の「最重要」)・`unsupported` → `blockers` を見せ、そのまま作るなら `confirmed=true` で再送・`clarify` → `questions` をユーザーに聞き、答えを text に足して出し直す・`blocked` → 作れない依頼 (`blockers` を伝える)・`in_progress` → 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。
+3. **状態** (頼まれた時だけ): `nolang_video_status(video_id)` — `running` なら 30 秒ほど置いて呼び直す。`completed` で mp4 の `download_url` と `copyright` (BGM・声・素材のクレジット表記 — 動画を公開する時に載せるので、一緒に伝える)。
+4. **直す**: `nolang_edit_video(video_id, text)` — 元の動画はそのまま、直した動画が新しい URL でできる。言語と縦横は元の動画のまま — 縦横を変える時は `nolang_create_video` に `[video:<video_id>]` と縦横 (`aspect_ratio` か依頼文) を書いて頼む。
+- 費用は §¥ (`nolang_account`)・素材の検索は §M (`nolang_assets_search`)。
 
 ## L. ログイン (「NoLang にログインして」と頼まれた時も、作る前も)
 
@@ -80,5 +93,5 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 ## CLI の呼び方
 
-`nolang` が PATH にあればそれ、無ければ `node ${CLAUDE_PLUGIN_ROOT}/cli/nolang.mjs` (plugin の絶対 path。cwd に依らない。以下 `nolang` と書く)。
+`nolang` が PATH にあればそれ、無ければ plugin の中の CLI を絶対 path で `node <path>` (cwd に依らない。以下 `nolang` と書く): Claude Code は `${CLAUDE_PLUGIN_ROOT}/cli/nolang.mjs`・`CLAUDE_PLUGIN_ROOT` が無い Codex は、この skill の directory からの `../../cli/nolang.mjs` を絶対 path にした物 (どちらも同じ file)。
 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。

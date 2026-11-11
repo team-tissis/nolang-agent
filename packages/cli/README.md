@@ -22,14 +22,16 @@ nolang auth login                     NoLang にログイン (ローカルはブ
 nolang doctor                         接続先・ログイン・動画を作れるか (残高) を確かめる
 nolang account                        plan・残高・無料の動画生成の有無・尺 1 分あたりの credit・今作れるか (何も消費しない)
 nolang make <dir> --type concept --request-text "…" [--engine claude|codex]   NoLang の studio と同じ段取りで作る (再生できたら視聴 URL)
-nolang check <dir>                    dir の design.txt / timeline.txt を検査
-nolang start <dir> --title "…"        書いた cut から流す: 開始 (dir に stream.json を作る)
+nolang check <dir> --language ja      dir の design.txt / timeline.txt を検査
+nolang start <dir> --title "…" --language ja   書いた cut から流す: 開始 (dir に stream.json を作る)
 nolang submit <dir> [--end]           書き足した cut を投入 (最後は --end)
-nolang create <dir> --title "…"       全 cut を一度に: 検査 → 生成開始 → 再生できたら視聴 URL
-nolang generate --request-text "…"    NoLang の server が台本と画面を書く (studio を使わない・手元の LLM は要らない)
+nolang create <dir> --title "…" --language ja   全 cut を一度に: 検査 → 生成開始 → 再生できたら視聴 URL
+nolang generate --request-text "…" --idempotency-key <鍵>   NoLang の server が台本と画面を書く (studio を使わない・手元の LLM は要らない)
 nolang edit <dir> <video_id> --request-text "…"   完成した動画を直す (元の動画はそのまま・新しい URL)
-nolang status <video_id> --wait       完成を待って mp4 の URL を得る
+nolang status <video_id> --wait       完成を待って mp4 の URL (download_url) とクレジット表記 (copyright) を得る
 ```
+
+動画の言語は、`make` と `generate` では書かなくても決まります (依頼の明示 → 参照の動画 → 依頼文の言語。決め打つ時だけ `make` は `--language`、`generate` は `--video-language`)。原稿を自分で書く `check`・`start`・`create` では、台詞を書いた言語を `--language` で必ず渡します。`edit` は元の動画の言語のままです。`generate` の応答を失って呼び直す時は 1 回目と同じ `--idempotency-key` を付けます (動画が重ならない)。
 
 `nolang --help` で全部のコマンドが出ます。結果は stdout に JSON、途中経過は stderr。終了コードは 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
 

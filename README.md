@@ -49,7 +49,7 @@ MCP だけで使う時: Claude Code は「nolang を認証して」、Codex は 
 ```
 
 - 1〜2 分で視聴 URL が出る。Claude Code では、エージェントの返事より先に `PostToolUse:Bash says:` で始まる通知にもリンクが出る。生成中から再生でき、続きは見ている間に伸びる。
-- 縦長・長さ・型 (解説 / 数字 / 比較 / 物語 / 映像寄り) は言えばその通りに、言わなければ 16:9 で、長さは内容に合わせて決まる (auto)。
+- 縦長・長さ・型 (解説 / 数字 / 比較 / 物語 / 映像寄り) は言えばその通りに、言わなければ 16:9 で、長さは内容に合わせて決まる (auto)。動画は頼んだ言葉の言語で作られる (英語で頼めば英語の動画。別の言語にしたい時は「英語で」のように書く)。
 - 手元の写真・動画は自分の素材として送られて動画に入る。声・BGM・効果音・書体は説明文から選ばれる (決めたい時は「〇〇な声の候補を探して」)。
 - 完成した mp4 が欲しい時は「完成したら mp4 のリンクをちょうだい」。「この動画のここを直して」は元の動画を残したまま直した動画を作る。
 
@@ -113,23 +113,24 @@ Claude Code / Codex が動いている機械の localhost で、次の 3 つが 
 ## CLI
 
 ```
-nolang auth login [--device | --browser] [--background] | login --no-browser | wait | complete '<URL>' | status | logout
-nolang doctor                         接続先とログインを確かめる
-nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--author low|medium|high|xhigh] [--author-brief] [--staff balanced|low|medium|high|xhigh|none (既定 balanced)] [--mode light|standard|plus|super] [--review low|medium|none] [--fix defect|severe|warn|none] [--staff-assets] [--editable] [--engine claude|codex]
-                                      NoLang の studio と同じ段取りで作る (engine 未指定は Claude、codex は全役割を Codex)。再生できたら URL を返す (スキルの標準)
-                                      --editable = 生成後に編集画面で調整しやすい文法サブセットに収める
-nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--language ja] [--video-language ja] [--confirmed] [--wait]
-                                      NoLang の server が台本と画面を書く (web の home と同じ入口・studio なし)。stage=unsupported なら blockers を見せ、--confirmed で再送
-nolang check [dir]                    dir の design.txt / timeline.txt を検査
-nolang start [dir] --title "…" [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
+nolang auth login [--device | --browser] [--background] [--language <ja|en|…>] | login --no-browser | wait | complete '<URL>' | status | logout | env
+nolang doctor                         接続先・ログイン・動画を作れるか (残高) を確かめる
+nolang account [--language <ja|en|…>]   ユーザーの言語・plan・残高・無料の動画生成の有無・尺 1 分あたりの credit・今作れるか (何も消費しない)。--language でユーザーの言語を変える
+nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--language <ja|en|…> (動画の言語を決め打つ時だけ)] [--engine claude|codex]
+                                      NoLang の studio と同じ段取りで作る (スキルの標準)。再生できたら URL を返す。役や編集可能モードの flag は nolang make --help
+nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--video-language <ja|en|…>] [--confirmed] [--idempotency-key 鍵] [--wait]
+                                      NoLang の server が台本と画面を書く (web の home と同じ入口・studio なし)。動画の言語は省けば依頼文の言語。stage=unsupported なら blockers を見せ、--confirmed で再送
+                                      応答を失って呼び直す時は 1 回目と同じ --idempotency-key を付ける (動画が重ならない)
+nolang check [dir] --language <ja|en|…>   dir の design.txt / timeline.txt を検査 (start 済みの dir では --language を付けない)
+nolang start [dir] --title "…" --language <ja|en|…> [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
 nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 600 秒以内)
-nolang create [dir] --title "…" [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
-nolang edit <dir> <video_id か URL> --request-text "<直す点>"   完成した動画を直す (編集役が原稿の依頼のぶんだけ書き換える・元の動画はそのまま)
-nolang status <video_id> [--wait] [--until playable|completed]
+nolang create [dir] --title "…" --language <ja|en|…> [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
+nolang edit <dir> <video_id か URL> --request-text "<直す点>"   完成した動画を直す (元の動画はそのまま・言語は元のまま・縦横は依頼に書けば変わる)
+nolang status <video_id> [--wait] [--until playable|completed]   completed なら download_url (mp4) と copyright (クレジット表記)
 nolang abort <video_id>
 nolang reference                      文書一式 (文法・見本・骨組み — server の現行) の dir を返す
 nolang assets search <kind> "<説明か名前>" [--mine]   NoLang の素材を探す → ref (id=<uuid> など)
-nolang assets upload <file>… [--name 表示名]       手元の画像 / 動画を自分の素材に送る → ref
+nolang assets upload <file>… [--name 表示名] [--speakers N]   手元の画像 / 動画 / 音声を自分の素材に送る → ref
 ```
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
@@ -166,7 +167,7 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 置き方の決まり (Claude Code と Codex の両方で動かすため):
 - 箱は棚の下の sub directory に置く。棚と同じ directory (`./`) に箱を置くと、Claude Code は読むが Codex は棚ごと無視する。
 - `.mcp.json` を棚や箱の root に置かない。この repo で作業した時に Claude Code が project の MCP としても読んで二重になる。Claude Code 用は `plugin.json` の `mcpServers` に直接、Codex 用は `.codex-plugin/mcp.json` に書く。
-- CLI (起動係) とスキルの実体は箱の中に置く (symlink にしない)。Codex は箱ごと cache に写すので、スキルからの相対パス (`../../cli/nolang.mjs`) がどちらでも同じになる。
+- CLI (起動係) とスキルの実体は箱の中に置く (symlink にしない)。Codex は箱ごと cache に写すので、スキルからの相対パス (`../../cli/nolang.mjs`) がどちらでも同じになる。スキルは Claude Code では `${CLAUDE_PLUGIN_ROOT}/cli/nolang.mjs`、`CLAUDE_PLUGIN_ROOT` の無い Codex ではこの相対パスを絶対 path にして呼ぶ。
 
 ### 文書と studio (nolang-backend が正本・写しは持たない)
 
