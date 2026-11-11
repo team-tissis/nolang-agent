@@ -41,7 +41,7 @@
 
 ### 持ち込み音声を切って使う・文字起こしだけ取る (`nolang transcribe` と `--speech`)
 
-- `nolang transcribe <音声の file か id>… [--speakers N] [--language <言語>]`: 音声 (mp3・m4a・wav など・4 本まで) を文字起こしして、発話の台帳 (`brief` = 発話ごとの id・時刻・原文と `@clip` の書き方) を返す。**クレジットを消費する** (音声の長さに比例・1 分あたり約 3・同じ音声は 1 度だけ)。動画の file は受けない (音声を抜き出してから)。
+- `nolang transcribe <音声か動画の file か id>… [--speakers N] [--language <言語>]`: 音声 (mp3・m4a・wav など) か話している動画 (mp4・webm・mov) を文字起こしして (4 本まで)、発話の台帳 (`brief` = 発話ごとの id・時刻・原文と `@clip` の書き方) を返す。**クレジットを消費する** (音声の長さに比例・1 分あたり約 3・同じ音声は 1 度だけ)。動画は同じ id の動画素材にもなり、原稿で声と同じ時計の映像を置ける (`brief` の `content: @clip`)。
 - その音声を原稿で切って使う (本人の語りのまま字幕や図を重ねる) 時は、`brief` の書き方で `@clip` を書き、返った id を `nolang check`・`nolang create`・`nolang start` に `--speech <id>[,<id>]` で渡す (3 つとも同じ値)。
 - 参考の動画の台詞と時刻を読むだけなら `--speech` は付けない (声は NoLang が合成する)。
 
