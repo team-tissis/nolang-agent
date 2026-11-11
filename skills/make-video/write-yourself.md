@@ -39,6 +39,19 @@
 - **テンプレの形で新しく書く**: `pull` → `brief.md` と原稿を読んで新しく書き、同じ `--pin <テンプレの video_id>` を付ける (テンプレの文字の style と書体がそのまま使われる)。
 - `nolang check` の `--language` と `--pin` は、`create` / `start` に渡すのと同じ値にする (投入の検査と同じ答えになる)。`start` 済みの dir では付けない (その動画の設定で見る・書き途中の検査 — 最後の cut まで書いたら `--end`)。
 
+### 持ち込み音声を切って使う・文字起こしだけ取る (`nolang transcribe` と `--speech`)
+
+- `nolang transcribe <音声の file か id>… [--speakers N] [--language <言語>]`: 音声 (mp3・m4a・wav など・4 本まで) を文字起こしして、発話の台帳 (`brief` = 発話ごとの id・時刻・原文と `@clip` の書き方) を返す。**クレジットを消費する** (音声の長さに比例・1 分あたり約 3・同じ音声は 1 度だけ)。動画の file は受けない (音声を抜き出してから)。
+- その音声を原稿で切って使う (本人の語りのまま字幕や図を重ねる) 時は、`brief` の書き方で `@clip` を書き、返った id を `nolang check`・`nolang create`・`nolang start` に `--speech <id>[,<id>]` で渡す (3 つとも同じ値)。
+- 参考の動画の台詞と時刻を読むだけなら `--speech` は付けない (声は NoLang が合成する)。
+
+### 投入の前に絵を確かめる (`nolang stills`)
+
+- `nolang start` の後、`nolang stills <dir> [cut]` が、まだ投入していない cut (既定 = 次の cut) を本物の絵の静止画にして `<dir>/stills/<cut>/` に置く (数十秒〜・最大 4 枚)。画像を見て、よければ `nolang submit`、直すなら cut を書き換えて `nolang check <dir>` → もう一度 `nolang stills`。
+- ここで作った絵と声は、同じ文面の cut を投入すればそのまま使われる。**作った時点で請求の対象** (投入しなくても精算に入る) なので、見るだけの試し描きを重ねない。
+- `unwarmed` に名が返った絵は、間に合わず仮の絵で描いた物 (中身で判断しない)。
+- 静止画・`nolang check` (start 済みの dir) は投入の間の 600 秒を数え直す。
+
 ## B. MCP で作る (シェルが無い時)
 
 ### つながっているか
