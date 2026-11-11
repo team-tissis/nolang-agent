@@ -45,6 +45,13 @@
 - その音声を原稿で切って使う (本人の語りのまま字幕や図を重ねる) 時は、`brief` の書き方で `@clip` を書き、返った id を `nolang check`・`nolang create`・`nolang start` に `--speech <id>[,<id>]` で渡す (3 つとも同じ値)。
 - 参考の動画の台詞と時刻を読むだけなら `--speech` は付けない (声は NoLang が合成する)。
 
+### 動く映像を入れる (AI クリップ・`--clip-seconds`)
+
+- `nolang create` / `nolang start` に `--clip-seconds <秒>` を付けると、原稿の `media: footage` の絵 (`img#名(media: footage) 説明`) が動画生成で作られる。書き方は `nolang reference` の dir の `ai_clips.md` を読む。
+- 秒数は新しく作るクリップの合計の上限。その秒数ぶんを先行消費し (1 秒あたり約 8 クレジット)、作った分へ精算する。上限を超えた分は生成画像になる。
+- **standard 以上のプランだけ** (無料プランは断られる — `nolang account` で plan を確かめる)。付けなければ `media: footage` は生成画像になる。
+- 実写の映像が主体の動画 (料理・Vlog など) や、ユーザーが動く映像を求めた場面だけに使う。作り終えたクリップは、描く前に中断しても請求される。
+
 ### 投入の前に絵を確かめる (`nolang stills`)
 
 - `nolang start` の後、`nolang stills <dir> [cut]` が、まだ投入していない cut (既定 = 次の cut) を本物の絵の静止画にして `<dir>/stills/<cut>/` に置く (数十秒〜・最大 4 枚)。画像を見て、よければ `nolang submit`、直すなら cut を書き換えて `nolang check <dir>` → もう一度 `nolang stills`。
