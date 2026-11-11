@@ -25,11 +25,40 @@
 ## A. CLI で流す
 
 1. **ログイン**: `SKILL.md` の §L。
-2. **流し始める** (根と 1 つ目の cut を書いたら): `nolang start <dir> --title "<題>" [--seconds <秒> (目安がある時だけ)]` (縦横は design の `canvas` から) → すぐ `nolang submit <dir>`。DEFECT が返ったら、その cut だけを直して `nolang submit <dir>` し直す (DEFECT は stderr に `DEFECT:コード file:行 原因。直し方: …`・投入済みの cut は直せないので変えない)。通信が切れて投入の結果が分からなくても、そのままもう一度 `nolang submit <dir>` でよい (server の受理状態と照合して続きから投入する)。
+2. **流し始める** (根と 1 つ目の cut を書いたら): `nolang start <dir> --title "<題>" --language <台詞の言語: ja / en / …> [--seconds <秒> (目安がある時だけ)] [--pin <video_id> (下の「前の動画の素材を継ぐ」)]` (縦横は design の `canvas` から) → すぐ `nolang submit <dir>`。DEFECT が返ったら、その cut だけを直して `nolang submit <dir>` し直す (DEFECT は stderr に `DEFECT:コード file:行 原因。直し方: …`・投入済みの cut は直せないので変えない)。通信が切れて投入の結果が分からなくても、そのままもう一度 `nolang submit <dir>` でよい (server の受理状態と照合して続きから投入する)。
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目の submit が成功したら、出力の `tell_user` (案内の文 + 次の行に URL) を**そのままユーザーへのメッセージの本文に書く**。数十秒で再生が始まり、続きは投入した端から伸びる。
-4. **続きを流す**: 次の cut を design.txt と timeline.txt に書き足して `nolang submit <dir>`。これを cut の数だけ繰り返す。**投入の間は 180 秒以内** (空くとサーバーが生成を失敗にする) — 1 cut を書いたらすぐ submit する。最後の cut は `nolang submit <dir> --end`。
+4. **続きを流す**: 次の cut を design.txt と timeline.txt に書き足して `nolang submit <dir>`。これを cut の数だけ繰り返す。**投入の間は 600 秒以内** (空くとサーバーが生成を失敗にする) — 1 cut を書いたらすぐ submit する。最後の cut は `nolang submit <dir> --end`。
 5. **終える**: `--end` の submit が返ったら、出力の `tell_user` (案内の文 + 次の行に URL) を書いて、ターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で「完成しました」と URL・mp4 は `download_url`)。
-6. **失敗した時** (submit が `No Video matches`・status が `failed`): その動画は終わり。原稿を見直して (§1 の 4 の規則を破っていないか)、`<dir>/stream.json` を消して start から作り直すのは 1 回まで。それでも `failed` なら止めて、ユーザーに video_id と「check は通ったが生成で失敗した」ことを伝える (サーバー側の問題のことが多い・管理者に伝えてもらう)。**原因を探すために試しの動画を作らない** (cut を減らした版を何本も create するなど — 1 本ごとに GPU と費用を使い、何十分もかかる)。
+6. **失敗した時** (submit が `404 NOT_FOUND` (`Video not found.`)・status が `failed`): その動画は終わり。原稿を見直して (§1 の 4 の規則を破っていないか)、`<dir>/stream.json` を消して start から作り直すのは 1 回まで (start に `--pin <失敗した video_id>` を付ける — その回が作った絵と選んだ声を継ぎ、作り直さない)。それでも `failed` なら止めて、ユーザーに video_id と「check は通ったが生成で失敗した」ことを伝える (サーバー側の問題のことが多い・管理者に伝えてもらう)。**原因を探すために試しの動画を作らない** (cut を減らした版を何本も create するなど — 1 本ごとに GPU と費用を使い、何十分もかかる)。
+   - submit が `503 DRAFT_WORKER_UNAVAILABLE` の時は、その cut は投入されていない。そのままもう一度 `nolang submit <dir>`。2 回続けて同じなら server の側で生成が落ちている (status は `running` のまま残る) — 待たずに `<dir>/stream.json` を消して、同じ原稿で `nolang start … --pin <その video_id>` からやり直す (その回が作った絵と選んだ声を継ぐ)。出力の `fix` に同じ手順が出る。
+
+### 前の動画の素材を継ぐ (`nolang pull` と `--pin`)
+
+- `nolang pull <dir> <video_id か URL>`: テンプレか自分の動画の保存済みの原稿を `<dir>/reference/` に書く (`design.txt`・`timeline.txt`・`brief.md` = 形の要約)。
+- `--pin <video_id>` (`nolang check`・`nolang create`・`nolang start`): その動画の素材の台帳を継ぐ。原稿の素材のうち、その動画の原稿と**文面が同じ物**が同じ素材に決まる — 自分の動画なら絵・声・文字の style、テンプレなら文字の style・書体・`id=` の素材。文面を変えた素材は選び直し・作り直しになる。
+- **自分の動画を直して描き直す**: `pull` → `reference/` の `design.txt` と `timeline.txt` を `<dir>` 直下に写す → 直す所だけ書き換える (残したい絵・声の行は 1 字も変えない・変えたい絵は説明を書き換える) → `nolang check <dir> --language <言語> --pin <video_id>` → `nolang create <dir> --title "<題>" --language <言語> --pin <video_id>`。根の画風の行 (`art` など) を変えると、絵は全部作り直しになる。
+- **テンプレの形で新しく書く**: `pull` → `brief.md` と原稿を読んで新しく書き、同じ `--pin <テンプレの video_id>` を付ける (テンプレの文字の style と書体がそのまま使われる)。
+- `nolang check` の `--language` と `--pin` は、`create` / `start` に渡すのと同じ値にする (投入の検査と同じ答えになる)。`start` 済みの dir では付けない (その動画の設定で見る・書き途中の検査 — 最後の cut まで書いたら `--end`)。
+
+### 持ち込み音声を切って使う・文字起こしだけ取る (`nolang transcribe` と `--speech`)
+
+- `nolang transcribe <音声か動画の file か id>… [--speakers N] [--language <言語>]`: 音声 (mp3・m4a・wav など) か話している動画 (mp4・webm・mov) を文字起こしして (4 本まで)、発話の台帳 (`brief` = 発話ごとの id・時刻・原文と `@clip` の書き方) を返す。**クレジットを消費する** (音声の長さに比例・1 分あたり約 3・同じ音声は 1 度だけ)。動画は同じ id の動画素材にもなり、原稿で声と同じ時計の映像を置ける (`brief` の `content: @clip`)。
+- その音声を原稿で切って使う (本人の語りのまま字幕や図を重ねる) 時は、`brief` の書き方で `@clip` を書き、返った id を `nolang check`・`nolang create`・`nolang start` に `--speech <id>[,<id>]` で渡す (3 つとも同じ値)。
+- 参考の動画の台詞と時刻を読むだけなら `--speech` は付けない (声は NoLang が合成する)。
+
+### 動く映像を入れる (AI クリップ・`--clip-seconds`)
+
+- `nolang create` / `nolang start` に `--clip-seconds <秒>` を付けると、原稿の `media: footage` の絵 (`img#名(media: footage) 説明`) が動画生成で作られる。書き方は `nolang reference` の dir の `ai_clips.md` を読む。
+- 秒数は新しく作るクリップの合計の上限。その秒数ぶんを先行消費し (1 秒あたり約 8 クレジット)、作った分へ精算する。上限を超えた分は生成画像になる。
+- **standard 以上のプランだけ** (無料プランは断られる — `nolang account` で plan を確かめる)。付けなければ `media: footage` は生成画像になる。
+- 実写の映像が主体の動画 (料理・Vlog など) や、ユーザーが動く映像を求めた場面だけに使う。作り終えたクリップは、描く前に中断しても請求される。
+
+### 投入の前に絵を確かめる (`nolang stills`)
+
+- `nolang start` の後、`nolang stills <dir> [cut]` が、まだ投入していない cut (既定 = 次の cut) を本物の絵の静止画にして `<dir>/stills/<cut>/` に置く (数十秒〜・最大 4 枚)。画像を見て、よければ `nolang submit`、直すなら cut を書き換えて `nolang check <dir>` → もう一度 `nolang stills`。
+- ここで作った絵と声は、同じ文面の cut を投入すればそのまま使われる。**作った時点で請求の対象** (投入しなくても精算に入る) なので、見るだけの試し描きを重ねない。
+- `unwarmed` に名が返った絵は、間に合わず仮の絵で描いた物 (中身で判断しない)。
+- 静止画・`nolang check` (start 済みの dir) は投入の間の 600 秒を数え直す。
 
 ## B. MCP で作る (シェルが無い時)
 
@@ -48,7 +77,7 @@
 1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="ja", duration_s)` → `video_id` と `watch_url`。`template_video_id` は省略する (空のテンプレ)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400。規則と閾値は `GET drafts/rules/` の `profile` 列と `profiles.editable`・投入前の検査は `nolang_draft_check(profile="editable")`)。
 2. **1 つ目を投入**: `nolang_draft_submit_cut(video_id, text)` — text = 根の design + 根の timeline (先頭の `#v2` 行は除く) + 1 つ目の cut の `section#` block + `*** ` block。`defects` が返ったらその cut を直して投入し直す。
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目が受理されたら、案内の文の次の行に `watch_url` だけを書いてユーザーに渡す (数十秒で再生が始まり、続きは投入した端から伸びる)。
-4. **続きを流す**: 次の cut を書いたら `nolang_draft_submit_cut(video_id, text)` — text = その cut の `section#` block + `*** ` block だけ。最後の cut は `end=true`。投入の間は 180 秒以内 — 次の cut を書くのに 60 秒より長く掛かる時は、書いている間 60 秒ごとに `nolang_draft_keep_alive(video_id)` を呼ぶ (合図があっても、投入が 1800 秒無ければ生成は閉じる)。
+4. **続きを流す**: 次の cut を書いたら `nolang_draft_submit_cut(video_id, text)` — text = その cut の `section#` block + `*** ` block だけ。最後の cut は `end=true`。投入の間は 600 秒以内 — 次の cut を書くのに 60 秒より長く掛かる時は、書いている間 60 秒ごとに `nolang_draft_keep_alive(video_id)` を呼ぶ (合図があっても、投入が 1800 秒無ければ生成は閉じる)。
 5. **終える**: 最後の cut が受理されたら、もう一度 `watch_url` を単独の行で書いてターンを終える。完成の確認は頼まれた時だけ (`nolang_video_status` の `completed`)。
 
 1 つ目の text の形 (例):
@@ -71,9 +100,9 @@ bgm music
 ### 守ること (守らないと失敗する)
 
 - `submit_cut` を並列に呼ばない。呼んだ順が動画の順になる。
-- start の後、投入の間が 180 秒空くとサーバーが生成を失敗にする → 構成を先に決めておき、1 cut を書いたらすぐ投入する (MCP は `nolang_draft_keep_alive` で延ばせる・上限 1800 秒)。途中で止めた・空いて失敗した生成は、再生できる所まで流した尺ぶんの credit が引かれる (残りは返る)。
+- start の後、投入の間が 600 秒空くとサーバーが生成を失敗にする → 構成を先に決めておき、1 cut を書いたらすぐ投入する (MCP は `nolang_draft_keep_alive` で延ばせる・上限 1800 秒)。途中で止めた・空いて失敗した生成は、再生できる所まで流した尺ぶんの credit が引かれる (残りは返る)。
 - `defects` が返った cut は流れていない。直して同じ cut を投入し直す (次の cut に進まない)。
-- `No Video matches the given query.` = その動画はもう失敗している。`nolang_video_status` で `failed` を確かめ、start からやり直す。start 直後の失敗が続くならサーバー側の問題なので、スタックの管理者に伝える (原稿の問題ではない)。
+- `NOT_FOUND` (`Video not found.`) = その動画はもう失敗している。`nolang_video_status` で `failed` を確かめ、start からやり直す。`DRAFT_WORKER_UNAVAILABLE` (503) = その cut は投入されていない — 同じ cut をもう一度投入し、続けて同じなら server の側で生成が落ちているので start からやり直す。start 直後の失敗が続くならサーバー側の問題なので、スタックの管理者に伝える (原稿の問題ではない)。
 
 ## 2. 文法 (書く前に全文読む)
 

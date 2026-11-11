@@ -29,7 +29,8 @@
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目の submit が成功したら、出力の `tell_user` (案内の文 + 次の行に URL) を**そのままユーザーへのメッセージの本文に書く**。数十秒で再生が始まり、続きは投入した端から伸びる。
 4. **続きを流す**: 次の cut を design.txt と timeline.txt に書き足して `nolang submit <dir>`。これを cut の数だけ繰り返す。**投入の間は 600 秒以内** (空くとサーバーが生成を失敗にする) — 1 cut を書いたらすぐ submit する。最後の cut は `nolang submit <dir> --end`。
 5. **終える**: `--end` の submit が返ったら、出力の `tell_user` (案内の文 + 次の行に URL) を書いて、ターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で「完成しました」と URL・mp4 は `download_url`)。
-6. **失敗した時** (submit が `No Video matches`・status が `failed`): その動画は終わり。原稿を見直して (§1 の 4 の規則を破っていないか)、`<dir>/stream.json` を消して start から作り直すのは 1 回まで (start に `--pin <失敗した video_id>` を付ける — その回が作った絵と選んだ声を継ぎ、作り直さない)。それでも `failed` なら止めて、ユーザーに video_id と「check は通ったが生成で失敗した」ことを伝える (サーバー側の問題のことが多い・管理者に伝えてもらう)。**原因を探すために試しの動画を作らない** (cut を減らした版を何本も create するなど — 1 本ごとに GPU と費用を使い、何十分もかかる)。
+6. **失敗した時** (submit が `404 NOT_FOUND` (`Video not found.`)・status が `failed`): その動画は終わり。原稿を見直して (§1 の 4 の規則を破っていないか)、`<dir>/stream.json` を消して start から作り直すのは 1 回まで (start に `--pin <失敗した video_id>` を付ける — その回が作った絵と選んだ声を継ぎ、作り直さない)。それでも `failed` なら止めて、ユーザーに video_id と「check は通ったが生成で失敗した」ことを伝える (サーバー側の問題のことが多い・管理者に伝えてもらう)。**原因を探すために試しの動画を作らない** (cut を減らした版を何本も create するなど — 1 本ごとに GPU と費用を使い、何十分もかかる)。
+   - submit が `503 DRAFT_WORKER_UNAVAILABLE` の時は、その cut は投入されていない。そのままもう一度 `nolang submit <dir>`。2 回続けて同じなら server の側で生成が落ちている (status は `running` のまま残る) — 待たずに `<dir>/stream.json` を消して、同じ原稿で `nolang start … --pin <その video_id>` からやり直す (その回が作った絵と選んだ声を継ぐ)。出力の `fix` に同じ手順が出る。
 
 ### 前の動画の素材を継ぐ (`nolang pull` と `--pin`)
 
@@ -101,7 +102,7 @@ bgm music
 - `submit_cut` を並列に呼ばない。呼んだ順が動画の順になる。
 - start の後、投入の間が 600 秒空くとサーバーが生成を失敗にする → 構成を先に決めておき、1 cut を書いたらすぐ投入する (MCP は `nolang_draft_keep_alive` で延ばせる・上限 1800 秒)。途中で止めた・空いて失敗した生成は、再生できる所まで流した尺ぶんの credit が引かれる (残りは返る)。
 - `defects` が返った cut は流れていない。直して同じ cut を投入し直す (次の cut に進まない)。
-- `No Video matches the given query.` = その動画はもう失敗している。`nolang_video_status` で `failed` を確かめ、start からやり直す。start 直後の失敗が続くならサーバー側の問題なので、スタックの管理者に伝える (原稿の問題ではない)。
+- `NOT_FOUND` (`Video not found.`) = その動画はもう失敗している。`nolang_video_status` で `failed` を確かめ、start からやり直す。`DRAFT_WORKER_UNAVAILABLE` (503) = その cut は投入されていない — 同じ cut をもう一度投入し、続けて同じなら server の側で生成が落ちているので start からやり直す。start 直後の失敗が続くならサーバー側の問題なので、スタックの管理者に伝える (原稿の問題ではない)。
 
 ## 2. 文法 (書く前に全文読む)
 
