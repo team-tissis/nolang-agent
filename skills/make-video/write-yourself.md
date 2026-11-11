@@ -25,11 +25,19 @@
 ## A. CLI で流す
 
 1. **ログイン**: `SKILL.md` の §L。
-2. **流し始める** (根と 1 つ目の cut を書いたら): `nolang start <dir> --title "<題>" [--seconds <秒> (目安がある時だけ)]` (縦横は design の `canvas` から) → すぐ `nolang submit <dir>`。DEFECT が返ったら、その cut だけを直して `nolang submit <dir>` し直す (DEFECT は stderr に `DEFECT:コード file:行 原因。直し方: …`・投入済みの cut は直せないので変えない)。通信が切れて投入の結果が分からなくても、そのままもう一度 `nolang submit <dir>` でよい (server の受理状態と照合して続きから投入する)。
+2. **流し始める** (根と 1 つ目の cut を書いたら): `nolang start <dir> --title "<題>" --language <台詞の言語: ja / en / …> [--seconds <秒> (目安がある時だけ)] [--pin <video_id> (下の「前の動画の素材を継ぐ」)]` (縦横は design の `canvas` から) → すぐ `nolang submit <dir>`。DEFECT が返ったら、その cut だけを直して `nolang submit <dir>` し直す (DEFECT は stderr に `DEFECT:コード file:行 原因。直し方: …`・投入済みの cut は直せないので変えない)。通信が切れて投入の結果が分からなくても、そのままもう一度 `nolang submit <dir>` でよい (server の受理状態と照合して続きから投入する)。
 3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目の submit が成功したら、出力の `tell_user` (案内の文 + 次の行に URL) を**そのままユーザーへのメッセージの本文に書く**。数十秒で再生が始まり、続きは投入した端から伸びる。
 4. **続きを流す**: 次の cut を design.txt と timeline.txt に書き足して `nolang submit <dir>`。これを cut の数だけ繰り返す。**投入の間は 180 秒以内** (空くとサーバーが生成を失敗にする) — 1 cut を書いたらすぐ submit する。最後の cut は `nolang submit <dir> --end`。
 5. **終える**: `--end` の submit が返ったら、出力の `tell_user` (案内の文 + 次の行に URL) を書いて、ターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で「完成しました」と URL・mp4 は `download_url`)。
 6. **失敗した時** (submit が `No Video matches`・status が `failed`): その動画は終わり。原稿を見直して (§1 の 4 の規則を破っていないか)、`<dir>/stream.json` を消して start から作り直すのは 1 回まで。それでも `failed` なら止めて、ユーザーに video_id と「check は通ったが生成で失敗した」ことを伝える (サーバー側の問題のことが多い・管理者に伝えてもらう)。**原因を探すために試しの動画を作らない** (cut を減らした版を何本も create するなど — 1 本ごとに GPU と費用を使い、何十分もかかる)。
+
+### 前の動画の素材を継ぐ (`nolang pull` と `--pin`)
+
+- `nolang pull <dir> <video_id か URL>`: テンプレか自分の動画の保存済みの原稿を `<dir>/reference/` に書く (`design.txt`・`timeline.txt`・`brief.md` = 形の要約)。
+- `--pin <video_id>` (`nolang check`・`nolang create`・`nolang start`): その動画の素材の台帳を継ぐ。原稿の素材のうち、その動画の原稿と**文面が同じ物**が同じ素材に決まる — 自分の動画なら絵・声・文字の style、テンプレなら文字の style・書体・`id=` の素材。文面を変えた素材は選び直し・作り直しになる。
+- **自分の動画を直して描き直す**: `pull` → `reference/` の `design.txt` と `timeline.txt` を `<dir>` 直下に写す → 直す所だけ書き換える (残したい絵・声の行は 1 字も変えない・変えたい絵は説明を書き換える) → `nolang check <dir> --language <言語> --pin <video_id>` → `nolang create <dir> --title "<題>" --language <言語> --pin <video_id>`。根の画風の行 (`art` など) を変えると、絵は全部作り直しになる。
+- **テンプレの形で新しく書く**: `pull` → `brief.md` と原稿を読んで新しく書き、同じ `--pin <テンプレの video_id>` を付ける (テンプレの文字の style と書体がそのまま使われる)。
+- `nolang check` の `--language` と `--pin` は、`create` / `start` に渡すのと同じ値にする (投入の検査と同じ答えになる)。`start` 済みの dir では付けない (その動画の設定で見る・書き途中の検査 — 最後の cut まで書いたら `--end`)。
 
 ## B. MCP で作る (シェルが無い時)
 
