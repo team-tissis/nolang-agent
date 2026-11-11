@@ -122,7 +122,7 @@ nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒
                                       NoLang の server が台本と画面を書く (web の home と同じ入口・studio なし)。stage=unsupported なら blockers を見せ、--confirmed で再送
 nolang check [dir]                    dir の design.txt / timeline.txt を検査
 nolang start [dir] --title "…" [--seconds 秒|auto]   cut ごとに流す: 開始だけ (dir に stream.json)
-nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 180 秒以内)
+nolang submit [dir] [--end]           書き足した cut を投入 (最後は --end・投入の間は 600 秒以内)
 nolang create [dir] --title "…" [--seconds 秒|auto] [--aspect 16:9|9:16] [--wait] [--dry-run]   全 cut を一度に (人が手で使う時)
 nolang edit <dir> <video_id か URL> --request-text "<直す点>"   完成した動画を直す (編集役が原稿の依頼のぶんだけ書き換える・元の動画はそのまま)
 nolang status <video_id> [--wait] [--until playable|completed]
