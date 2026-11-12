@@ -1,12 +1,11 @@
 {
   "name": "nolang",
   "version": "0.3.1",
-  "description": "NoLang に MCP / CLI でつなぎ、Codex から動画を作る (台本・画面・声・BGM まで NoLang が作る)。",
+  "description": "NoLang の CLI (nolang) で、Codex から動画を作る (台本・画面・声・BGM まで NoLang が作る)。",
   "author": {
     "name": "mvrx"
   },
   "skills": "./skills/",
-  "mcpServers": "./.codex-plugin/mcp.json",
   "interface": {
     "displayName": "NoLang",
     "shortDescription": "依頼文から動画を作る"

@@ -8,7 +8,7 @@
     {
       "name": "nolang",
       "source": "./plugins/nolang",
-      "description": "NoLang に MCP / CLI でつなぎ、Claude Code から動画を作る。"
+      "description": "NoLang の CLI (nolang) で、Claude Code から動画を作る。"
     }
   ]
 }

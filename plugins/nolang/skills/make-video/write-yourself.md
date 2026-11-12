@@ -68,10 +68,8 @@ NoLang に台本を書かせる `nolang_create_video` より、クレジット�
 ### つながっているか
 
 - `nolang_draft_submit` が見えれば準備完了 (実際の名前には client ごとの接頭辞が付く)。
-- 認証がまだの時:
-  - Claude Code: `authenticate` しか見えない → それを呼び、返った URL をユーザーに開いてもらう (NoLang にログインして許可)。ブラウザが `http://localhost:<port>/callback?code=…` で接続エラーになったら、アドレスバーの URL を貼ってもらい `complete_authentication` に渡す。
-  - Codex: ユーザーに端末で `codex mcp login nolang` を実行してもらい (ブラウザでログインして許可)、Codex を起動し直してもらう。
-- つながらない・ログインできない → (シェルがあれば `nolang doctor` の結果を添えて) ユーザーに伝える。接続先は `https://api.no-lang.com` (API) と `https://no-lang.com` (ログイン)。
+- 見えない時: ユーザーに、client の connector (MCP) に `https://api.no-lang.com/agent/mcp` を足して接続してもらう (接続の時に NoLang にログインして許可する)。
+- つながらない・ログインできない → ユーザーに伝える。接続先は `https://api.no-lang.com` (API) と `https://no-lang.com` (ログイン)。
 
 ### 手順
 

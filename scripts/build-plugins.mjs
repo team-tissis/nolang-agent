@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 正本 (packages/cli・skills/・hooks/) からプラグインの箱 (plugins/nolang) の中身を作り、manifest の version を CLI (起動係) に揃える。
 // CLI の本体 (studio・文書一式を含む) は箱に入れない — NoLang の server が `agent/client/` で配り、起動係が起動のたびに取る。
-// 箱は 1 つ = 本番の NoLang (社内の dev / stg は shell の NOLANG_API_URL で向ける・dev の MCP は `claude mcp add` か custom connector)。
+// 箱は 1 つ = 本番の NoLang (社内の dev / stg は shell の NOLANG_API_URL で向ける)。MCP の接続は箱に入れない (シェルの無い client が connector でつなぐ)。
 // Codex はプラグインの directory だけを cache に写すので、CLI (起動係) とスキルの実体を箱の中に置く (symlink は使わない)。
 // hooks/ は Claude Code だけが読む (Codex の manifest には書かない)。
 // `--check` は書かずに、今の箱の中身が正本どおりかだけを見る (CI 用・ずれていれば終了コード 1)。

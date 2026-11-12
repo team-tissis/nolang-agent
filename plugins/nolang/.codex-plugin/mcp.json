@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "nolang": {
-      "type": "http",
-      "url": "https://api.no-lang.com/agent/mcp"
-    }
-  }
-}

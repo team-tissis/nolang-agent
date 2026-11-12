@@ -6,18 +6,18 @@ NoLang を AI エージェントから使うための配布物です (Apache-2.0
 |---|---|---|
 | CLI **`@no-lang/cli`** (コマンド名 `nolang`) | `packages/cli/` (起動係だけ — 本体は NoLang の server が配り、起動のたびに揃う) | シェルを持つエージェント (Claude Code・Codex) と人 |
 | スキル **`make-video`** | `skills/make-video/` (薄い手順書・文書の写しは持たない) | エージェントが読む段取り |
-| プラグイン **`nolang`** | `plugins/nolang/` (build が作る: CLI の起動係 + スキル + MCP の接続 + Claude Code のリンク通知の hook) | Claude Code / Codex に 1 回で入れる |
+| プラグイン **`nolang`** | `plugins/nolang/` (build が作る: CLI の起動係 + スキル + Claude Code のリンク通知の hook。MCP の接続は入れない) | Claude Code / Codex に 1 回で入れる |
 
-入口は 2 つ。スキルは CLI を優先し、使えない時は MCP で作ります。
+入口は 2 つで、client ごとに 1 つだけ使います。シェルのある client はプラグイン (CLI)、シェルの無い client は MCP の connector です。
 
 | 入口 | 向いている所 |
 |---|---|
 | **CLI `nolang`** | シェルを持つエージェント。`nolang make` = 手元の LLM が studio の段取りで台本と画面を書く (質が高い)・`nolang generate` = NoLang の server が書く (速い・手元の LLM は要らない) |
-| **MCP** `https://api.no-lang.com/agent/mcp` | シェルの無い client (claude.ai の custom connector・ChatGPT・Claude Code の `/mcp`)。主役は `nolang_create_video` (依頼文 → 視聴 URL)・`nolang_video_status`・`nolang_edit_video` |
+| **MCP** `https://api.no-lang.com/agent/mcp` | シェルの無い client (claude.ai・ChatGPT など) が connector としてつなぐ。既定は model が原稿を書いて `nolang_draft_submit` で渡す (クレジットが安い・検査と直しは server)。急ぎは `nolang_create_video` (依頼文 → server が書く)。状態は `nolang_video_status`・直しは `nolang_edit_video` |
 
 ## 入れる (1 回だけ)
 
-前提: **Node.js 20 以上**。`nolang make` には加えて **python3** と実行エンジン (**Claude Code** か **Codex**・台本は手元の LLM が書くのでその利用量を使う。1 本で API 換算 約 1〜3 ドル)。`nolang generate` と MCP は Node すら要らない (server が書く)。
+前提: **Node.js 20 以上**。`nolang make` には加えて **python3** と実行エンジン (**Claude Code** か **Codex**・台本は手元の LLM が書くのでその利用量を使う。1 本で API 換算 約 1〜3 ドル)。`nolang generate` は Node だけで動く (server が書く)。MCP は何も入れずに connector をつなぐだけ。
 
 Claude Code (端末で。Claude Code の中なら `/plugin marketplace add …` と `/plugin install …`):
 
@@ -38,7 +38,7 @@ codex plugin add nolang@nolang
 ## ログインする (1 回だけ)
 
 Claude Code に **「NoLang にログインして」** と頼む (頼まなくても、初めて動画を頼んだ時に聞かれます)。許可の URL が出る (同じ機械ならブラウザも開く) ので、NoLang にログインして「許可」を押し、「許可した」と返す。ログインは 30 日使わなければ切れる。
-MCP だけで使う時: Claude Code は「nolang を認証して」、Codex は `codex mcp login nolang`、claude.ai は connector の接続でログインする (CLI のログインとは別に保存される)。
+シェルの無い client (claude.ai など) は、connector に `https://api.no-lang.com/agent/mcp` を足して接続する時にログインする。プラグインは MCP の接続を持たない (同じ client に入口を 2 つ載せない)。
 
 ## 頼む
 
@@ -82,12 +82,11 @@ claude plugin install nolang@nolang
 ```
 nolang-agent/
   packages/cli/                        # CLI @no-lang/cli = 起動係 (Node 20+・依存なし)。本体 (nolang-backend の agent_client/) は server が配る
-  skills/make-video/                   # スキルの正本 (CLI 優先・無ければ MCP)。文書の写しは持たない
+  skills/make-video/                   # スキルの正本 (CLI で作る。connector だけの client 向けの MCP の手順も持つ)。文書の写しは持たない
   hooks/                               # Claude Code の hook: nolang の出力の tell_user (動画・ログインの URL) を通知で画面に出す
   plugins/nolang/                      # 箱 (plugin)。cli/・skills/・hooks/ は npm run build が正本から作る — 直接直さない
-    .claude-plugin/plugin.json         #   Claude Code 用 (MCP の接続設定も中に書く)
+    .claude-plugin/plugin.json         #   Claude Code 用
     .codex-plugin/plugin.json          #   Codex 用 (hooks は書かない)
-    .codex-plugin/mcp.json             #   Codex 用の MCP の接続設定
   .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang・plugin は nolang 1 本)
   .agents/plugins/marketplace.json     # Codex 用の棚
   scripts/build-plugins.mjs            # 正本 → plugins/nolang (--check はずれの検査)
@@ -166,7 +165,7 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 
 置き方の決まり (Claude Code と Codex の両方で動かすため):
 - 箱は棚の下の sub directory に置く。棚と同じ directory (`./`) に箱を置くと、Claude Code は読むが Codex は棚ごと無視する。
-- `.mcp.json` を棚や箱の root に置かない。この repo で作業した時に Claude Code が project の MCP としても読んで二重になる。Claude Code 用は `plugin.json` の `mcpServers` に直接、Codex 用は `.codex-plugin/mcp.json` に書く。
+- MCP の接続設定 (`mcpServers`・`.mcp.json`) を棚にも箱にも置かない。プラグインを入れる client はシェルを持つので CLI を使う — 同じ client に MCP も載せると、作る道とログインが二重になる。
 - CLI (起動係) とスキルの実体は箱の中に置く (symlink にしない)。Codex は箱ごと cache に写すので、スキルからの相対パス (`../../cli/nolang.mjs`) がどちらでも同じになる。スキルは Claude Code では `${CLAUDE_PLUGIN_ROOT}/cli/nolang.mjs`、`CLAUDE_PLUGIN_ROOT` の無い Codex ではこの相対パスを絶対 path にして呼ぶ。
 
 ### 文書と studio (nolang-backend が正本・写しは持たない)
@@ -187,5 +186,4 @@ CLI 本体は `agent_client/cli/`。server はこれらを 1 つの束にして 
 
 ## 今後
 
-- MCP の接続先の切替 (プラグインは本番固定・dev は `claude mcp add` で別登録)。
 - OpenAI の plugin directory・Anthropic の connector directory への申請 (公開後)。

@@ -36,7 +36,7 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
   - `stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
 - `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP)。既定は原稿を自分で書いて `nolang_draft_submit` で渡す (`write-yourself.md` の「B」— クレジットが安い)。急ぎの時だけ `nolang_create_video` (server が書く)。
-- **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
+- **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_account` を 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 
 ## S. studio で作る (標準)
 
