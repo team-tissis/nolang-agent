@@ -1,6 +1,6 @@
 {
   "name": "nolang",
-  "version": "0.3.1",
+  "version": "0.0.1",
   "description": "NoLang の CLI (nolang) で、Claude Code から動画を作る (台本・画面・声・BGM まで NoLang が作る)。",
   "author": {
     "name": "mvrx"

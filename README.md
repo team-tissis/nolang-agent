@@ -133,7 +133,7 @@ nolang assets upload <file>… [--name 表示名] [--speakers N]   手元の画�
 ```
 
 - 結果は stdout に JSON・途中経過は stderr。終了コード 0 成功 / 1 原稿の欠陥・生成の失敗 / 2 使い方 / 3 未ログイン / 4 接続。
-- CLI の本体は接続先の server が配る束 (`GET <api>/agent/client/`・tar.gz 1 MB 弱)。`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/<指紋>/`) を `If-None-Match` で照合し (1 往復・届かなければ手元の束で動く)、変わっていれば取り直す。版番号は無く、指紋 = tar.gz の sha256。flag の表はこの README に持たない — `nolang make --help` が server と同じ版の物を出す。
+- CLI の本体は接続先の server が配る束 (`GET <api>/agent/client/`・tar.gz 1 MB 弱)。`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/<指紋>/`) を `If-None-Match` で照合し (1 往復・届かなければ手元の束で動く)、変わっていれば取り直す。手元に束が無い初めての起動では、届かない・5xx の時に 3 秒・6 秒おいて計 3 回まで取り直す (server の入れ替え中をやり過ごす・最長 約 70 秒)。版番号は無く、指紋 = tar.gz の sha256。flag の表はこの README に持たない — `nolang make --help` が server と同じ版の物を出す。
 - 束 (= 実行する code) を取るのは本番 (`api.no-lang.com`) と `localhost` からだけ。本番の束には server の build が Ed25519 で署名していて、起動係は公開鍵 (`packages/cli/nolang.mjs` に焼き込み) で検証してから動かす — 署名の無い束・合わない束は動かさない (`localhost` の手元のスタックは署名なしでも動く)。他の NoLang の server から取るのは、人が shell に `NOLANG_CLIENT_TRUSTED_ORIGIN=<その URL>` と書いた時だけ (その origin の束は署名が無くても動く)。手元の checkout の CLI を動かすには `NOLANG_CLIENT_DIR` (取得なし)。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
 - 接続先: `--api <URL>` → 環境変数 `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 本番 (`https://api.no-lang.com`)。URL だけで、接続先を選んで保存する command は無い (本番以外の NoLang の server は shell の `NOLANG_API_URL` と `NOLANG_CLIENT_TRUSTED_ORIGIN` で向ける)。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインでは本番固定。

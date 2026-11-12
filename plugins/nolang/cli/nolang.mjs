@@ -13,6 +13,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, normalize } from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import { gunzipSync } from "node:zlib";
 
@@ -44,6 +45,10 @@ const PACKAGED_API = (() => {
 // 手元に束がある時の照合の待ち (header が来るまで — 超えたら手元の束で動く・起動を遅らせない) と、束の本体を取る待ち
 const CHECK_TIMEOUT_MS = 1500;
 const FETCH_TIMEOUT_MS = 60_000;
+// 手元に束が無い時 (初めての起動): header の待ちは 1 回 FIRST_TIMEOUT_MS・届かなければ FIRST_RETRY_WAITS_MS を置いて取り直す
+// (server の入れ替えの数十秒をやり過ごす)。全部で最長 約 70 秒 = エージェントの shell の時間切れ (既定 120 秒) の内
+const FIRST_TIMEOUT_MS = 20_000;
+const FIRST_RETRY_WAITS_MS = [3_000, 6_000];
 const KEEP = 2; // 残す束の数 (新しい順。各接続先の今の束は残す)
 const EXIT = { USAGE: 2, NETWORK: 4 }; // 束の CLI の EXIT と同じ値
 
@@ -125,7 +130,7 @@ async function fetchBundle(api, known, timeoutMs) {
     clearTimeout(timer);
   }
   if (res.status === 304) return null;
-  if (!res.ok) throw new Error(`GET ${api}/agent/client/ → ${res.status}`);
+  if (!res.ok) throw Object.assign(new Error(`GET ${api}/agent/client/ → ${res.status}`), { status: res.status });
   timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS); // header は来た — 本体の取り寄せは長めに
   let bytes;
   try {
@@ -180,7 +185,24 @@ async function prune(current) {
   for (const [name] of dirs.slice(KEEP)) if (!keep.has(name)) await rm(join(CLIENT_DIR, name), { recursive: true, force: true });
 }
 
-// 今回動かす束 → { dir, hash }。手元に束があれば照合は CHECK_TIMEOUT_MS まで (届かなければ手元の束で動く)。無ければ取れるまで待つ
+const reasonOf = (error) => error.cause?.code || error.cause?.message || error.message;
+
+// 手元に束が無い時の取得。届かない・5xx・途中で切れたは一時の物として取り直す (断られた 4xx・署名の不一致は取り直さない)
+async function fetchFirstBundle(api) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fetchBundle(api, null, FIRST_TIMEOUT_MS);
+    } catch (error) {
+      const wait = FIRST_RETRY_WAITS_MS[attempt];
+      const refused = error instanceof BootstrapError || (error.status >= 400 && error.status < 500 && error.status !== 408 && error.status !== 429);
+      if (refused || wait === undefined) throw error;
+      log(`${api} から client を取れない (${reasonOf(error)}) — ${wait / 1000} 秒後に取り直す (${attempt + 2}/${FIRST_RETRY_WAITS_MS.length + 1} 回目)`);
+      await sleep(wait);
+    }
+  }
+}
+
+// 今回動かす束 → { dir, hash }。手元に束があれば照合は CHECK_TIMEOUT_MS まで (届かなければ手元の束で動く)。無ければ取り直しながら待つ (fetchFirstBundle)
 async function ensureBundle(api) {
   if (process.env.NOLANG_CLIENT_DIR) return { dir: process.env.NOLANG_CLIENT_DIR, hash: "dev" };
   if (!signedOrigin(api) && !unsignedOk(api)) {
@@ -193,9 +215,9 @@ async function ensureBundle(api) {
   const cached = current[api] && installed(current[api]) ? current[api] : null;
   let got;
   try {
-    got = await fetchBundle(api, cached, cached ? CHECK_TIMEOUT_MS : FETCH_TIMEOUT_MS);
+    got = cached ? await fetchBundle(api, cached, CHECK_TIMEOUT_MS) : await fetchFirstBundle(api);
   } catch (error) {
-    const why = error.cause?.code || error.cause?.message || error.message;
+    const why = reasonOf(error);
     if (cached) {
       log(`注意: ${api} から client を取れない (${why}) — 手元の client で動く`);
       return { dir: join(CLIENT_DIR, cached), hash: cached };
