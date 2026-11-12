@@ -27,14 +27,14 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 ## 0. どの作り方か
 
-- **標準は studio** (§S): シェル・`node` (20 以上)・`python3` と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
+- **標準は studio** (§S): シェル・`node` (20 以上) と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
 - **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は 1 分半ほど。
 - **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役 をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
 - **急ぎで、細かな作り込みが要らない時**: `nolang generate --request-text "<依頼文>" --idempotency-key <鍵> [--aspect] [--seconds]` — NoLang の server が台本と画面を書く (web の home と同じ・studio を使わないので手元の LLM の費用が掛からない)。
   - 動画の言語は書かなくてよい (依頼の明示 → 参照の動画 → 依頼文の言語の順で決まる)。依頼文と違う言語にする時だけ `--video-language <en など>`。
   - 鍵は依頼ごとに新しく作る (uuid など)。応答を失って呼び直す時・`--confirmed` で再送する時は 1 回目と同じ鍵を付ける (動画が重ならない)。`stage: in_progress` = 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。
   - `stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
-- `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
+- 選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP)。既定は原稿を自分で書いて `nolang_draft_submit` で渡す (`write-yourself.md` の「B」— クレジットが安い)。急ぎの時だけ `nolang_create_video` (server が書く)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_account` を 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 

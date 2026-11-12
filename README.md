@@ -17,7 +17,7 @@ NoLang を AI エージェントから使うための配布物です (Apache-2.0
 
 ## 入れる (1 回だけ)
 
-前提: **Node.js 20 以上**。`nolang make` には加えて **python3** と実行エンジン (**Claude Code** か **Codex**・台本は手元の LLM が書くのでその利用量を使う。1 本で API 換算 約 1〜3 ドル)。`nolang generate` は Node だけで動く (server が書く)。MCP は何も入れずに connector をつなぐだけ。
+前提: **Node.js 20 以上**。`nolang make` には加えて実行エンジン (**Claude Code** か **Codex**・python は要らない・台本は手元の LLM が書くのでその利用量を使う。1 本で API 換算 約 1〜3 ドル)。`nolang generate` は Node だけで動く (server が書く)。MCP は何も入れずに connector をつなぐだけ。
 
 Claude Code (端末で。Claude Code の中なら `/plugin marketplace add …` と `/plugin install …`):
 
@@ -58,7 +58,7 @@ Claude Code に **「NoLang にログインして」** と頼む (頼まなく�
 | 症状 | どうする |
 |---|---|
 | ログインの URL を開くのが遅れた | 待ち受けは 15 分。過ぎたらもう一度「NoLang にログインして」 |
-| 「python3 / claude が無い」と言われる | 入れれば studio の作り方 (質が高い) になる。無いままでも `nolang generate` (server が書く) で作れる |
+| 「claude が無い」と言われる | 入れれば studio の作り方 (質が高い) になる。無いままでも `nolang generate` (server が書く) で作れる |
 | つながらない・様子がおかしい | 「nolang doctor を実行して」と頼み、結果を添えて問い合わせる |
 | 生成が `failed` になる・声が出ない | 原稿ではなくサーバー側のことが多い。視聴 URL (video_id) を添えて問い合わせる |
 | 同時生成の上限 | 同時に生成中にできるのは free / standard で 2 本・premium と法人で 5 本 (本人の数)。前の動画の完成を待つ |
@@ -143,11 +143,11 @@ nolang assets upload <file>… [--name 表示名] [--speakers N]   手元の画�
 
 ### studio の実行エンジン
 
-`nolang make ... --engine codex` は、手元の `codex app-server` を著者・担当・修正役 の各呼出しで起動し、本文を受け取ったカットから検査・投入します。既定の Claude のモデル・effort・プロンプト・キャッシュ予熱は変わりません。
+`nolang make ... --engine codex` は、著者・担当・修正役の各呼出しを手元の `codex exec` (配布されたままの Codex CLI の非対話の起動) で実行します。`codex exec` は本文を書き終えてから 1 度で返すので、書いた端から流れる Claude より再生開始が遅くなります。既定の Claude のモデル・effort・プロンプトは変わりません。
 
-Codex は元の `CODEX_HOME` (既定 `~/.codex`) の `auth.json` のみを共有し、ユーザーの設定・hook・plugin・MCP・会話履歴を読み込まない一時環境で動きます。モデルはその Codex CLI の既定を使い、使用モデルと effort を `stream/author.jsonl` に記録します。API key の環境変数だけの認証や keyring だけの認証は現在対象外です。Codex の本文・usage イベントは `stream/codex_*.jsonl`、エラーは `.err` に残ります。途中失敗は投入側へ伝えて中断し、Claude に自動で切り替えません。
+Codex は元の `CODEX_HOME` (既定 `~/.codex`) の `auth.json` のみを共有し、ユーザーの設定・hook・plugin・MCP・会話履歴を読み込まない一時環境で動きます。モデルはその Codex CLI の既定を使います。API key の環境変数だけの認証や keyring だけの認証は現在対象外です。呼出しごとの記録 (役・effort・所要・token) は `stream/run.jsonl`、エラーは `stream/codex_*.err` に残ります。
 
-CLI / MCP の原稿検査・素材・描画は共通の NoLang サーバーを使います。自動の著者・担当・修正は手元の studio の機能なので、シェルのないリモート MCP クライアントは `nolang_create_video` (server が書く) か、原稿を自分で書いて投入する手順を使います。
+CLI / MCP の原稿検査・素材・描画は共通の NoLang サーバーを使います。自動の著者・担当・修正は手元の LLM の CLI (Claude Code か Codex) が書くので、シェルのないリモート MCP クライアントは `nolang_create_video` (server が書く) か、原稿を自分で書いて投入する手順を使います。
 
 ## 開発
 
@@ -170,8 +170,9 @@ npm run validate    # claude plugin validate --strict (Claude Code が要る)
 
 ### 文書と studio (nolang-backend が正本・写しは持たない)
 
-文法の文書一式・`author_core.py`・`cut_stages.py` は nolang-backend の `libs/ai/llm_prompts/draft_author/`、studio の script は `agent_client/scripts/`、
-CLI 本体は `agent_client/cli/`。server はこれらを 1 つの束にして `GET agent/client/` で配り、起動係が起動のたびに取る — この repo には写しも
+文法の文書一式は nolang-backend の `libs/ai/llm_prompts/draft_author/reference/`、CLI 本体 (`nolang make` / `nolang edit` の runner を含む) は
+`agent_client/cli/`。`make` / `edit` の段取り (check・担当の割り振り・直し・投入) は server が回し、runner は server が頼む LLM の call を
+手元の CLI で実行するだけ — 束に python の script は無い。server は CLI 本体と文書を 1 つの束にして `GET agent/client/` で配り、起動係が起動のたびに取る — この repo には写しも
 同期の workflow も無い (設計は backend の `app_main/docs/feature/video_generate/client_bundle.md`)。スキルも文書の写しを持たない — 自分で
 書く経路は `nolang reference` (束の中の文書の dir) か MCP の `nolang_draft_reference` で server の現行を読む。
 

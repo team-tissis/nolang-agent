@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // nolang — 起動係 (bootstrap)。CLI の本体は NoLang の server が配る束 (`GET <api>/agent/client/` の tar.gz: cli/ = CLI 本体・
-// scripts/ = studio・reference/ = 文書一式) で、server と一緒に変わる。ここは起動のたびに束を ETag で照合し (304 なら手元の束・
+// reference/ = 文書一式) で、server と一緒に変わる。ここは起動のたびに束を ETag で照合し (304 なら手元の束・
 // 変わっていれば取り直して展開)、束の cli/nolang.mjs を同じ process で動かす。版番号は無い: 束の指紋 = tar.gz の sha256 = ETag。
 // 束の置き場は NOLANG_CONFIG_DIR/client/<指紋>/ (既定 ~/.config/nolang)。依存なし (Node 20+)。
 // 接続先の決め方は束の CLI と同じ順 (--api → NOLANG_API_URL → プラグインの defaults.json → 本番)。URL だけを受ける。
@@ -222,7 +222,7 @@ try {
   process.stdout.write(JSON.stringify({ ok: false, error: error.message }, null, 2) + "\n");
   process.exit(error.exit ?? EXIT.NETWORK);
 }
-process.env.NOLANG_CLIENT_BUNDLE = bundle.hash; // 束の CLI と studio の script が X-NoLang-Client に載せる
+process.env.NOLANG_CLIENT_BUNDLE = bundle.hash; // 束の CLI が X-NoLang-Client に載せる
 const { run } = await import(pathToFileURL(join(bundle.dir, "cli", "nolang.mjs")).href);
 await run(argv, { packagedApi: PACKAGED_API, bootstrap: BOOTSTRAP });
 // 失敗した時だけ: この間に server が更新されていれば、やり直しで直る事を 1 行で知らせる (束の照合は起動時の 1 回だけ)
