@@ -35,7 +35,7 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
   - 鍵は依頼ごとに新しく作る (uuid など)。応答を失って呼び直す時・`--confirmed` で再送する時は 1 回目と同じ鍵を付ける (動画が重ならない)。`stage: in_progress` = 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。
   - `stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
 - `python3` か選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
-- **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP の `nolang_create_video` — server が書く)。原稿を自分で書いて細かく作る時だけ `write-yourself.md` の「B」。
+- **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP)。既定は原稿を自分で書いて `nolang_draft_submit` で渡す (`write-yourself.md` の「B」— クレジットが安い)。急ぎの時だけ `nolang_create_video` (server が書く)。
 - **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_draft_templates` などを 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
 
 ## S. studio で作る (標準)
@@ -61,9 +61,12 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 1. `nolang edit <dir> <video_id> --request-text "<直す点>"` (dir は新しい空の dir) — 保存された原稿 (無ければ動画から起こす) を種に、編集役が依頼のぶんだけ書き換え、触らない cut と声はそのまま通る (再生できるまで 1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。言語は元の動画のまま。縦横は依頼に書けば (「縦 9:16 に作り直して」) その縦横で作り直し、書かなければ元の動画のまま。`ok: true` なら出力の `tell_user` を伝えて終わり。`edit: 変更なし` (patch の対象が無い) は項目ごとの判定 `verdict` を伝える。
 2. `nolang edit` が新しい動画を作らずに失敗した時だけ、依頼文に `[video:<video_id>]` を書いて `nolang make` (参照つきの作り直し)。
 
-## C. シェルが無い時 (MCP — 依頼文から server が書く)
+## C. シェルが無い時 (MCP)
 
-`nolang generate` と同じ入口。つながっているか・認証は `write-yourself.md` の B の「つながっているか」。
+作り方は 2 つ。つながっているか・認証は `write-yourself.md` の B の「つながっているか」。
+
+- **既定 = 原稿を自分で書く**: `write-yourself.md` の §1 と「B」に従い、書いた原稿を `nolang_draft_submit` で渡す。検査と直しは NoLang の server がする。台本と画面を書く LLM の分が掛からないので、下の `nolang_create_video` よりクレジットが安い。
+- **急ぎの時・書き方に従えない時 = NoLang に書かせる** (`nolang generate` と同じ入口):
 
 1. **作る**: `nolang_create_video(text, idempotency_key, aspect_ratio?, duration_s?, video_language?)` — text = §S の 3 と同じ依頼文 (参照の動画は `[video:<id>]`)。`video_language` (動画の言語) は省けば 依頼の明示 → 参照の動画 → 依頼文の言語 の順で決まる。`idempotency_key` は依頼ごとに新しい文字列 (uuid など) — 応答を失った・timeout で呼び直す時と `confirmed=true` の再送は同じ鍵 (動画が重ならない)。
 2. **`stage` で分ける**: `accepted` → `watch_url` をすぐ伝える (冒頭の「最重要」)・`unsupported` → `blockers` を見せ、そのまま作るなら `confirmed=true` で再送・`clarify` → `questions` をユーザーに聞き、答えを text に足して出し直す・`blocked` → 作れない依頼 (`blockers` を伝える)・`in_progress` → 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。

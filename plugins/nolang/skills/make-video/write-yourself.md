@@ -20,7 +20,7 @@
    - **子を持つ要素を `.sticky` にしない**: cut を跨ぐ `.sticky` は子の無い要素 (1 枚の札・線・`veil`) だけに付ける。常設の帯・章の札・進行の点灯のように子を持つ物は `def` にして、各 cut に置き直す (今の章の点灯や済みの印は、cut ごとの引数か変種で)。子を持つ `.sticky` は、cut を順に投入する所で止まる (check の `DEFECT:prefix_broken`) か、check を通っても生成の最後で失敗する (`同じ lane の group は floor が同じであること` — engine の不具合で check では拾えない)。見本の多くがこの作りを含むので、写す時に直す (`pick_samples.mjs` が見本ごとに知らせる)。
    - 文字は枠に収まる長さに (見本の文字の長さが目安・長いと check の `shrink_estimate`)。要素の `#名` は cut ごとに付け替え、cut を跨いで同じ名を使わない (根の `.sticky` の物を除く)。
    - 1 cut = design の `section#名` の block + timeline の `*** 名` の block (名は一致させる)。CLI なら作業用の directory (例 `./nolang-videos/<英小文字の名>/`) に `design.txt` と `timeline.txt` として保存する。
-   - **書く順**: 根 + 1 つ目の cut を書いたら流し始め (§A の 2・§B)、以後は 1 cut 書き足すごとに投入する。全部を書き終えてから投入しない (再生が始まるまで何分も待たせる)。
+   - **書く順**: CLI (§A) は、根 + 1 つ目の cut を書いたら流し始め (§A の 2)、以後は 1 cut 書き足すごとに投入する。全部を書き終えてから投入しない (再生が始まるまで何分も待たせる)。MCP (§B) は、最後の cut まで書いてから 1 回で渡す。
 
 ## A. CLI で流す
 
@@ -62,58 +62,29 @@
 
 ## B. MCP で作る (シェルが無い時)
 
+原稿を全部書いてから、1 回で渡す。検査と直しは NoLang の server がする (cut を順に流す・合図を送る手順は要らない)。
+NoLang に台本を書かせる `nolang_create_video` より、クレジットが安く済む (台本と画面を書く LLM の分が掛からない)。
+
 ### つながっているか
 
-- `nolang_draft_check` などの `nolang_draft_*` ツールが見えれば準備完了 (実際の名前には client ごとの接頭辞が付く)。
+- `nolang_draft_submit` が見えれば準備完了 (実際の名前には client ごとの接頭辞が付く)。
 - 認証がまだの時:
   - Claude Code: `authenticate` しか見えない → それを呼び、返った URL をユーザーに開いてもらう (NoLang にログインして許可)。ブラウザが `http://localhost:<port>/callback?code=…` で接続エラーになったら、アドレスバーの URL を貼ってもらい `complete_authentication` に渡す。
   - Codex: ユーザーに端末で `codex mcp login nolang` を実行してもらい (ブラウザでログインして許可)、Codex を起動し直してもらう。
 - つながらない・ログインできない → (シェルがあれば `nolang doctor` の結果を添えて) ユーザーに伝える。接続先は `https://api.no-lang.com` (API) と `https://no-lang.com` (ログイン)。
 
-### 手順 (§1 の原稿を、書いた cut から)
+### 手順
 
 文書は §1 の 0 のとおり `nolang_draft_reference` で server の現行を読む。
 
-1. **開始** (根と 1 つ目の cut を書いたら): `nolang_draft_start(title, aspect_ratio, language="<台詞の言語 — ja / en …>", duration_s)` → `video_id` と `watch_url`。`language` は書いた台詞と同じ言語を必ず渡す (省くと ja)。生成後にユーザーが編集画面で調整したい動画は `editable=true` — 編集画面で扱える文法サブセットに収めて書く (破った投入は `DEFECT:editable_*` で 400・投入前の検査は `nolang_draft_check(profile="editable")`)。
-2. **1 つ目を投入**: `nolang_draft_submit_cut(video_id, text)` — text = 根の design + 根の timeline (先頭の `#v2` 行は除く) + 1 つ目の cut の `section#` block + `*** ` block。`defects` が返ったらその cut を直して投入し直す。
-3. **知らせる** (必ず・2 つ目の cut を書く前に): 1 つ目が受理されたら、案内の文の次の行に `watch_url` だけを書いてユーザーに渡す (数十秒で再生が始まり、続きは投入した端から伸びる)。
-4. **続きを流す**: 次の cut を書いたら `nolang_draft_submit_cut(video_id, text)` — text = その cut の `section#` block + `*** ` block だけ。最後の cut は `end=true`。投入の間は 600 秒以内 — 次の cut を書くのに 60 秒より長く掛かる時は、書いている間 60 秒ごとに `nolang_draft_keep_alive(video_id)` を呼ぶ (合図があっても、投入が 1800 秒無ければ生成は閉じる)。
-5. **終える**: 最後の cut が受理されたら、もう一度 `watch_url` を単独の行で書いてターンを終える。完成の確認は頼まれた時だけ (`nolang_video_status` の `completed` — `download_url` とクレジット表記 `copyright` も伝える)。
+1. **書く**: §1 の原稿を最後の cut まで書く (design = 根 + 全 cut の `section#名` の block・timeline = 根 + 全 cut の `*** 名` の block)。
+2. **確かめる** (任意): `nolang_draft_check(design, timeline, language, aspect_ratio)` — `defects` が返ったら直す。残しても server の直し役が直すが、0 にしてから出すと意図どおりに仕上がる。何も消費しない。
+3. **渡す**: `nolang_draft_submit(title, aspect_ratio, language, design, timeline)` → `stage: accepted` と `watch_url`。`language` は書いた台詞の言語 (必須)。`aspect_ratio` は根の `canvas` と同じ比 (16:9 = `canvas 1920x1080`・9:16 = `canvas 1080x1920`)。生成後にユーザーが編集画面で調整したい動画は `editable=true` (編集画面で扱える文法サブセットに収めて書く・投入前の検査は `nolang_draft_check(profile="editable")`)。
+4. **知らせる** (必ず・次の tool を呼ぶ前に): 案内の文の次の行に `watch_url` だけを書いてユーザーに渡す (生成中から再生でき、完成まで数分)。他に頼まれていなければターンを終える。完成の確認は頼まれた時だけ (`nolang_video_status` の `completed` — `download_url` とクレジット表記 `copyright` も伝える)。
 
-1 つ目の text の形 (例):
+### 守ること
 
-```
-#v2
-canvas 1920x1080 bg=#0B1220
-…根の design の残り…
-cast narrator = "…"
-transition = dissolve,300,overlap=300
-section#title
-img#t_bg(inset: 0; content: @bg)
-h1#t_h(left: 120px; top: 294px; width: 1680px; height: 216px) 見出し
-*** title
-[>#subtitle]
-bgm music
-@narrator: [>#t_h]最初の台詞。
-```
-
-### 守ること (守らないと失敗する)
-
-- `submit_cut` を並列に呼ばない。呼んだ順が動画の順になる。
-- start の後、投入の間が 600 秒空くとサーバーが生成を失敗にする → 構成を先に決めておき、1 cut を書いたらすぐ投入する (MCP は `nolang_draft_keep_alive` で延ばせる・上限 1800 秒)。途中で止めた・空いて失敗した生成は、再生できる所まで流した尺ぶんの credit が引かれる (残りは返る)。
-- `defects` が返った cut は流れていない。直して同じ cut を投入し直す (次の cut に進まない)。
-- `NOT_FOUND` (`Video not found.`) = その動画はもう失敗している。`nolang_video_status` で `failed` を確かめ、start からやり直す。`DRAFT_WORKER_UNAVAILABLE` (503) = その cut は投入されていない — 同じ cut をもう一度投入し、続けて同じなら server の側で生成が落ちているので start からやり直す。start 直後の失敗が続くならサーバー側の問題なので、スタックの管理者に伝える (原稿の問題ではない)。
-
-## 2. 文法 (書く前に全文読む)
-
-`<dir>/spec.md` (MCP は `nolang_draft_reference(path="spec.md")`) を全文読む (draft src の書き方の全量・約 12 KB — 4 つの圧縮の規則と例・`Differences` (CSS / GSAP との違い)・`What cannot be written` (書けない物))。この file に要約を置かないのは、手写しの要約は文法が変わると古びるため (spec.md は §1 の 0 で server から取る)。
-spec.md の中の `bash` の block は `nolang` の command の一覧 (`make` / `check` / `create` / `pull` / `assets` …)。ここでは書いた cut から流す §A / §B の手順に従う (`create` は全 cut を書き終えてから一度に投入する)。素材は名や id で指定しない (例外は依頼に決まった素材がある時だけ — `SKILL.md` の §M)。
-
-## 3. 辞書 (詰まった時だけ引く)
-
-`<dir>` は §1 の 0 の directory (MCP は `nolang_draft_reference(path="<名>")`)。
-
-- `<dir>/authoring.md` 文法の辞書。大きいので節ごとに読む: `grep -n '^##' <dir>/authoring.md` で見出しの行番号を出し、Read の `offset` / `limit` で読む。節は HTML form · Tokens · design.txt (要素) · timeline.txt (時刻) · Defects · Idioms。宣言は CSS の名で書く (`font-size` `background` `border-radius` `box-shadow` …)。CSS に名のある宣言の短縮名 (`w:` `bg:` …) は `DEFECT:KEY` (icon の `size:` と shape の `fill:` は本物の key)。
-- `<dir>/rules.md` check の `findings` の規則名と直し方。
-- `<dir>/looks.md` 見た目の作り方 / `<dir>/sounds.md` 音 / `<dir>/capabilities.md` できる表現と代用。
-- `<dir>/samples/` 型ごとの見本 (`<型>_NN.md` は NoLang の src・`hf_*` は絵と動きの作り込みの見本・§1 の 2 で 1 本ずつ選ぶ)。
+- `stage: in_progress` = 同じ原稿を受付の途中 — 少し置いて同じ原稿で呼び直す。同じ原稿の再送は同じ動画を返す (応答を失った時の呼び直しで動画が重ならない)。
+- 形の誤り (`design` に cut が無い・design と timeline の cut が揃わない・根の `canvas` が `aspect_ratio` と違う) は error で返る。直して出し直す。
+- `nolang_video_status` が `failed` = 直しきれない cut があった (クレジットは戻る)。`nolang_draft_check` の `defects` を直して出し直す。
+- 持ち込み音声・参照の動画の素材の引き継ぎ・AI クリップは、この入口では使えない (シェルのある環境で §A)。NoLang の素材は `nolang_assets_search` の `ref` を原稿に書けば使える。
