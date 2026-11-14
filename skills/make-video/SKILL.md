@@ -29,36 +29,37 @@ description: NoLang で動画を 1 本作る。「〇〇の動画を作って」
 
 - **標準は studio** (§S): シェル・`node` (20 以上) と実行エンジンがあれば `nolang make` を 1 回。原稿はあなたが書かない。
 - **Claude Code では従来どおり**: `claude` があれば `nolang make` (engine 未指定)。著者・担当・修正役は Claude。再生開始の目安は 1 分半ほど。
-- **Codex では**: `codex` があれば必ず `nolang make ... --engine codex`。著者・担当・修正役 をすべて Codex で自動実行する。`claude` が同居していても呼ばない。Codex のログインは NoLang と別で、手元の `auth.json` を使う認証が必要 (codex-cli 0.162.0 で検証)。未認証ならその旨を知らせ、Claude に切り替えない。
+- **Claude Code で `claude` コマンドが使えない時**: `nolang auth status` の `make_engines` に `claude` が無い、または手元の CLI を起動できない時は、shell と subagent が使えれば `--engine host` を使い、`host-engine.md` に従う。
+- **Codex では**: subagent が使えても `nolang make ... --engine codex` を優先する。`nolang auth status` の `make_engines` は CLI の有無を示し、`make` は生成開始前に Codex の認証を確認する。`codex` が無い、または生成開始前に `auth.json` 不在・Codex 認証不可と分かった場合は、shell と subagent が使えれば `--engine host` に切り替えて `host-engine.md` に従う。認証情報の中身を読んだり表示したりせず、Claude に切り替えない。
 - **急ぎで、細かな作り込みが要らない時**: `nolang generate --request-text "<依頼文>" --idempotency-key <鍵> [--aspect] [--seconds]` — NoLang の server が台本と画面を書く (web の home と同じ・studio を使わないので手元の LLM の費用が掛からない)。
   - 動画の言語は書かなくてよい (依頼の明示 → 参照の動画 → 依頼文の言語の順で決まる)。依頼文と違う言語にする時だけ `--video-language <en など>`。
   - 鍵は依頼ごとに新しく作る (uuid など)。応答を失って呼び直す時・`--confirmed` で再送する時は 1 回目と同じ鍵を付ける (動画が重ならない)。`stage: in_progress` = 同じ鍵の依頼を server が判定中 — 30 秒ほど置いて同じ鍵で呼び直す。
   - `stage: unsupported` なら `blockers` をユーザーに見せ、そのまま作るなら `--confirmed` で再送。
-- 選択したエンジンが無い・`nolang make` が使えないと言う時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
+- 優先するエンジンも上の host 経路も使えない、または `nolang make` を使わないよう指定された時は、`nolang generate` か、`write-yourself.md` の「A」(原稿を自分で書いて CLI で流す)。
 - **シェルが無い (claude.ai・ChatGPT など)・CLI が動かない時は** §C (MCP)。既定は原稿を自分で書いて `nolang_draft_submit` で渡す (`write-yourself.md` の「B」— クレジットが安い)。急ぎの時だけ `nolang_create_video` (server が書く)。
-- **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_account` を 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。途中のどのコマンドでも終了コード 3 (未ログイン) が出たら、同じくログインしてからやり直す。
+- **ログインはこちらから頼む** (ユーザーはログインを知らなくてよい): 依頼を受けたら、作る前に 1 回 `nolang auth status` (MCP なら `nolang_account` を 1 回呼ぶ)。未ログインなら §L (MCP は `write-yourself.md` の B) でログインを済ませてから進める。NoLang のログイン切れで終了コード 3 が出たら、同じくログインしてからやり直す。Codex の認証や `auth.json` に関する終了コード 3 は別の前提条件なので、NoLang の再ログインではなく上の host 経路に従う。
 
 ## S. studio で作る (標準)
 
 1. **ログイン**: §L。
-2. **依頼から決める**: 型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)・縦横 (`16:9` / `9:16`)・長さ (依頼に明示があればその秒数・無ければ auto = 内容に合わせる)。聞き返さず既定で進め、決めた値は最後に伝える。決まった素材 (この写真・この曲・この声) がある時だけ §M で `ref` を得る。
-3. **作る**: `nolang make ./nolang-videos/<英小文字の名> --type <型> --aspect <縦横> --request-text "<依頼文>"` (長さの明示がある時だけ `--seconds <秒>` を足す・Bash の timeout は 600000)。
+2. **依頼から決める**: ジャンル (`explain` = 概念・数字・比較・手順の説明 / `film` = 物語・予告・ブランド映像など映像主体)・モード (下記)・縦横 (既定 `16:9`、縦動画・Shorts・Reels・TikTok の指定がある時だけ `9:16`。短い尺だけでは縦にしない)・長さ (依頼に明示があればその秒数・無ければ auto = 内容に合わせる)。聞き返さず既定で進め、決めた値は最後に伝える。決まった素材 (この写真・この曲・この声) がある時だけ §M で `ref` を得る。
+3. **作る**: `nolang make ./nolang-videos/<英小文字の名> --genre <ジャンル> --mode <モード> --aspect <縦横> --request-text "<依頼文>"` (長さの明示がある時だけ `--seconds <秒>` を足す・Bash の timeout は 600000)。
    - **動画の言語は書かなくてよい**: 依頼文に言語の指定 (「英語で」) があればその言語、無ければ依頼文の言語で作られる (決まらない時はユーザーの言語)。だから依頼文はユーザーの言葉のまま渡し、別の言語に書き直さない。決め打ちたい時だけ `--language <code>` (`ja` `en` `ko` `zh-Hans` `es` …)。「これからは英語で」のようにユーザーの言語そのものを変える依頼は `nolang account --language <code>`。
-   - Codex ではコマンドに `--engine codex` を追加する。Claude Code では追加しない。
+   - Codex では `--engine codex` を優先する。§0 の代替条件に当たる時だけ `--engine host` と `host-engine.md` の開始・待機手順を使う。Claude Code の engine も §0 に従う。
    - 依頼文 = ユーザーの依頼をそのまま + 決めた値 + 素材の `ref` (`id=<uuid>` と使い所) + 台本やテロップの文言があればそのまま。題材の事実が要る時は先に調べて依頼文に書く (著者は調べない)。
-   - **役の組は `--mode light|standard|plus|super` で選ぶ** (既定 standard・light = 最速で質は落ちる・plus = 構図が上がり開始 +40〜70 s・super = 質は最上で再生開始まで 6〜10 分)。役 (著者 `--author`・担当 `--staff`・直し役 `--fix`・レビュー `--review`) を個別に動かす時の値と意味は `nolang make --help` を読む (CLI は server と一緒に更新されるので、この file には flag の表を持たない)。
+   - **`--mode` は動画の構成で選ぶ**: 一つのグラフ・図・地図を全 cut で育てる動画は `standard` (一人の著者が全 cut を書くので同じ図が続く)。それ以外は `plus` (各 cut を個別に設計する。再生開始は 20〜40 秒ほど遅い)。`film` は `plus`。`light` (最速・質は下がる) と `super` (最上の質・再生開始まで 6〜10 分) は速さや最高品質を明示された時だけ。役 (著者 `--author`・担当 `--staff`・直し役 `--fix`・レビュー `--review`) を個別に動かす時の値と意味は `nolang make --help` を読む。
    - 生成後にユーザーが NoLang の編集画面で自分で調整したい動画は `--editable` — 編集画面で扱える文法サブセット (要素数・動きの preset など) に収めて書く (表現の密度は下がる)。
    - 話している音声 (トーク・インタビュー・講演の録音) から作る動画 (切り抜き・要点の紹介・ショート) は `--speech <音声の file か id>` (話者の人数が分かれば `--speakers N`)。サーバーが文字起こしし、その音声を切って使う (声は録音のまま)。長さは音声から決まる (目安があれば `--seconds`)。文字起こしを待つので、再生までは数分かかる。依頼文には「どこを使うか・何を切るか (フィラー・言い直し)」を書く。
    - サーバーが再生できる状態になった時点で返る (Claude の目安は既定 (balanced) で 1 分強・`--staff medium` で 1 分半ほど・`--staff none` で 1 分ほど。Codex の速度はモデルと依頼による)。生成はその後も裏で最後まで続く。待ち時間 (super は 9 分半・ほかは 7 分) を超えても生成が続いていれば、`still_generating: true` と視聴 URL を返す (失敗ではない。`tell_user` を書いて終える)。
    - **同時に生成中にできる動画は plan で決まる本数まで** (free / standard は 2 本・premium と法人は 5 本。本人の数で、法人の同僚の分は数えない。実値は MCP の `nolang_account` の `concurrent_video_limit`)。`nolang make` は再生できた時点で返るが、動画は完成まで生成中に数える。何本か続けて作る時に、上限のエラー (`CONCURRENT_GENERATION_LIMIT`・「同時に作れる動画の数の上限」) が出たら、`nolang status <前の video_id> --wait` で前の動画の完成を待ってから次を始める。
-4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`・`copyright` = BGM・声・素材のクレジット表記。動画を公開する時に載せるので、一緒に伝える)。
-5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。原因は `error` と `run_tail` (engine の出力の末尾) で分かる。サーバーが開始を断った時は、`error` が「サーバーが生成の開始を断った (error_code): …」になる — クレジット不足 (`INSUFFICIENT_CREDIT`)・プラン不足 (`PLAN_UPGRADE_REQUIRED`) は待っても直らないので、出力の `tell_user` (解消する画面の URL `fix_url` 入り) をそのまま伝えて止める。同時生成の上限は上の手順で待つ。`python3` / 選択したエンジンが無い時は `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
+4. **知らせる** (最優先・冒頭の「最重要」): 出力の `tell_user` (案内の文 + 次の行に URL) を、次のツールを呼ぶ前に**そのままユーザーへのメッセージの本文に書く**。host エンジンでは全 subagent が終了するまでセッションを維持する。それ以外で他に頼まれていなければ、そこでターンを終える。完成の確認は頼まれた時だけ (`nolang status <video_id> --wait` → `completed` で URL と mp4 の `download_url`・`copyright` = BGM・声・素材のクレジット表記。動画を公開する時に載せるので、一緒に伝える)。
+5. **失敗した時** (`ok: false`): `error` と、あれば `watch_url` をユーザーに伝える。原因は `error` と `run_tail` (engine の出力の末尾) で分かる。サーバーが開始を断った時は、`error` が「サーバーが生成の開始を断った (error_code): …」になる — クレジット不足 (`INSUFFICIENT_CREDIT`)・プラン不足 (`PLAN_UPGRADE_REQUIRED`) は待っても直らないので、出力の `tell_user` (解消する画面の URL `fix_url` 入り) をそのまま伝えて止める。同時生成の上限は上の手順で待つ。host の失敗では worker の起動と原稿ファイルの到着を確認する (`host-engine.md`)。生成開始前に選択したエンジンが使えないと分かった時は、まず §0 の host 経路を使い、それも使えなければ `nolang generate` か `write-yourself.md` の A で作る。同じ依頼の作り直しは別の dir で 1 回まで。原因を探すために試しの動画を作らない。
 
 ## R. 完成した動画を直す (「この動画のここを直して」と頼まれた時)
 
 元の動画はそのまま残り、直った動画が新しい URL でできる。対象は `video_id` (視聴 URL の UUID)。
 
-1. `nolang edit <dir> <video_id> --request-text "<直す点>"` (dir は新しい空の dir) — 保存された原稿 (無ければ動画から起こす) を種に、編集役が依頼のぶんだけ書き換え、触らない cut と声はそのまま通る (再生できるまで 1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。言語は元の動画のまま。縦横は依頼に書けば (「縦 9:16 に作り直して」) その縦横で作り直し、書かなければ元の動画のまま。`ok: true` なら出力の `tell_user` を伝えて終わり。`edit: 変更なし` (patch の対象が無い) は項目ごとの判定 `verdict` を伝える。
+1. `nolang edit <dir> <video_id> --request-text "<直す点>"` (dir は新しい空の dir。Codex では `--engine codex` を付ける。host しか使えない時は `host-engine.md` に従って参照付きの `nolang make` で作り直す) — 保存された原稿 (無ければ動画から起こす) を種に、編集役が依頼のぶんだけ書き換え、触らない cut と声はそのまま通る (再生できるまで 1〜3 分)。作り直し級の依頼 (長さ・縦横・全体のスタイル変換) は、ここから自動で元の動画を参照にした作り直しに倒れる。言語は元の動画のまま。縦横は依頼に書けば (「縦 9:16 に作り直して」) その縦横で作り直し、書かなければ元の動画のまま。`ok: true` なら出力の `tell_user` を伝えて終わり。`edit: 変更なし` (patch の対象が無い) は項目ごとの判定 `verdict` を伝える。
 2. `nolang edit` が新しい動画を作らずに失敗した時だけ、依頼文に `[video:<video_id>]` を書いて `nolang make` (参照つきの作り直し)。
 
 ## C. シェルが無い時 (MCP)

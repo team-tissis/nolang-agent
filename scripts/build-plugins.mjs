@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 正本 (packages/cli・skills/・hooks/) からプラグインの箱 (plugins/nolang) の中身を作り、manifest の version を CLI (起動係) に揃える。
+// 正本 (packages/cli・skills/・agents/・hooks/) からプラグインの箱 (plugins/nolang) の中身を作り、manifest の version を CLI (起動係) に揃える。
 // CLI の本体 (studio・文書一式を含む) は箱に入れない — NoLang の server が `agent/client/` で配り、起動係が起動のたびに取る。
 // 箱は 1 つ = 本番の NoLang (社内の dev / stg は shell の NOLANG_API_URL で向ける)。MCP の接続は箱に入れない (シェルの無い client が connector でつなぐ)。
 // Codex はプラグインの directory だけを cache に写すので、CLI (起動係) とスキルの実体を箱の中に置く (symlink は使わない)。
@@ -26,6 +26,9 @@ async function buildInto(pluginDir) {
   // Claude Code の hook (tell_user を通知で出す)。plugin の hooks/hooks.json は有効にした時に読まれる
   await rm(join(pluginDir, "hooks"), { recursive: true, force: true });
   await cp(join(ROOT, "hooks"), join(pluginDir, "hooks"), { recursive: true, filter: keep });
+  // host エンジンの役を受ける Claude Code の subagent 定義
+  await rm(join(pluginDir, "agents"), { recursive: true, force: true });
+  await cp(join(ROOT, "agents"), join(pluginDir, "agents"), { recursive: true, filter: keep });
   await rm(join(pluginDir, "skills"), { recursive: true, force: true });
   await cp(join(ROOT, "skills"), join(pluginDir, "skills"), { recursive: true, filter: keep });
   for (const manifest of MANIFESTS) {

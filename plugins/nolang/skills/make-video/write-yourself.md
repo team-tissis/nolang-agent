@@ -10,7 +10,7 @@
    - シェルがある時: `nolang reference` → 出力の `dir` が文書一式の directory (nolang が起動のたびに server と揃える束の中)。以後この file で `<dir>/<名>` と書いてある所はそれを読む。
    - シェルが無い時 (MCP): `nolang_draft_reference(path="<名>")` で読む (大きい文書は節の一覧が返るので `section` に見出しを渡して節ごとに・見本は `path="samples/"` の一覧から §1 の 2 と同じ規則で選び、1 本ずつ読む)。
 1. **依頼から決める**: 伝えること 1 文・縦横 (`16:9` / `9:16`)・長さの目安 (依頼に明示があればその秒数・無ければ指定しない = 内容に合わせる)・型 (`concept` 解説 / `data` 数字 / `compare` 比べる / `story` 物語 / `cinematic` 映像寄り)・言語 (台詞を書く言語 = 依頼に明示があればそれ・無ければ依頼文の言語)。聞き返さず既定で進め、決めた値は最後にユーザーへ伝える。
-2. **文法と見本 2 本を読む**: 文法は §2 (`<dir>/spec.md` の全文)。見本は NoLang の studio と同じ選び方で: `node scripts/pick_samples.mjs --type <型> --aspect <縦横> --request "<依頼文>" --reference <dir>` が `<dir>/samples/` から 2 本を選ぶ: NoLang の src (`<型>_NN.md`・字幕と cut の組み方の手本) 1 本と、hf の写し (`hf_<型>_*.md`・絵と動きの作り込みの手本) 1 本 (同じ題材の見本を外し、同じ向きを先に。同じ向きの NoLang の src が無い型は hf の写しを 2 本)。出た 2 本を全文読む (1 行目の題・`見せる作り:` の要約・design.txt と timeline.txt の全量)。シェルが無い時は同じ規則で自分で選ぶ。骨組み `<dir>/scaffolds/` は文法の形を確かめる時だけ見る。
+2. **文法と見本 2 本を読む**: 文法は §2 (`<dir>/spec.md` の全文) と、あれば `<dir>/core.md` の全文 (NoLang 固有の語彙。それ以外の文書は必要な項目を調べる辞書として使う)。見本は NoLang の studio と同じ選び方で: `node scripts/pick_samples.mjs --type <型> --aspect <縦横> --request "<依頼文>" --reference <dir>` が `<dir>/samples/` から 2 本を選ぶ: NoLang の src (`<型>_NN.md`・字幕と cut の組み方の手本) 1 本と、hf の写し (`hf_<型>_*.md`・絵と動きの作り込みの手本) 1 本 (同じ題材の見本を外し、同じ向きを先に。同じ向きの NoLang の src が無い型は hf の写しを 2 本)。出た 2 本を全文読む (1 行目の題・`見せる作り:` の要約・design.txt と timeline.txt の全量)。シェルが無い時は同じ規則で自分で選ぶ。骨組み `<dir>/scaffolds/` は文法の形を確かめる時だけ見る。
 3. **決まった素材を使う時だけ**: `SKILL.md` の §M で `ref` を得て、応答の `usage` の位置に書く。
 4. **書く** (design system が先・書いた cut から流す):
    - **書く前に構成を決める**: cut の名と中身 (1 cut 1 行) を先に決める。cut は書いた端から投入し、投入した cut は直せないので、書きながら前の cut に戻らない。

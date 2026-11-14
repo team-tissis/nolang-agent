@@ -83,8 +83,9 @@ claude plugin install nolang@nolang
 nolang-agent/
   packages/cli/                        # CLI @no-lang/cli = 起動係 (Node 20+・依存なし)。本体 (nolang-backend の agent_client/) は server が配る
   skills/make-video/                   # スキルの正本 (CLI で作る。connector だけの client 向けの MCP の手順も持つ)。文書の写しは持たない
+  agents/                              # host エンジンの役を受ける subagent (Claude Code 用)
   hooks/                               # Claude Code の hook: nolang の出力の tell_user (動画・ログインの URL) を通知で画面に出す
-  plugins/nolang/                      # 箱 (plugin)。cli/・skills/・hooks/ は npm run build が正本から作る — 直接直さない
+  plugins/nolang/                      # 箱 (plugin)。cli/・skills/・agents/・hooks/ は npm run build が正本から作る — 直接直さない
     .claude-plugin/plugin.json         #   Claude Code 用
     .codex-plugin/plugin.json          #   Codex 用 (hooks は書かない)
   .claude-plugin/marketplace.json      # Claude Code 用の棚 (marketplace nolang・plugin は nolang 1 本)
@@ -115,7 +116,7 @@ Claude Code / Codex が動いている機械の localhost で、次の 3 つが 
 nolang auth login [--device | --browser] [--background] [--language <ja|en|…>] | login --no-browser | wait | complete '<URL>' | status | logout | env
 nolang doctor                         接続先・ログイン・動画を作れるか (残高) を確かめる
 nolang account [--language <ja|en|…>]   ユーザーの言語・plan・残高・無料の動画生成の有無・尺 1 分あたりの credit・今作れるか (何も消費しない)。--language でユーザーの言語を変える
-nolang make <dir> --type <型> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--language <ja|en|…> (動画の言語を決め打つ時だけ)] [--engine claude|codex]
+nolang make <dir> --genre <explain|film> --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒|auto (既定 auto)] [--language <ja|en|…> (動画の言語を決め打つ時だけ)] [--engine claude|codex|host]
                                       NoLang の studio と同じ段取りで作る (スキルの標準)。再生できたら URL を返す。役や編集可能モードの flag は nolang make --help
 nolang generate --request-text "<依頼文>" [--aspect 16:9|9:16] [--seconds 秒] [--video-language <ja|en|…>] [--confirmed] [--idempotency-key 鍵] [--wait]
                                       NoLang の server が台本と画面を書く (web の home と同じ入口・studio なし)。動画の言語は省けば依頼文の言語。stage=unsupported なら blockers を見せ、--confirmed で再送
@@ -136,6 +137,7 @@ nolang assets upload <file>… [--name 表示名] [--speakers N]   手元の画�
 - CLI の本体は接続先の server が配る束 (`GET <api>/agent/client/`・tar.gz 1 MB 弱)。`nolang` は起動のたびに手元の束 (`~/.config/nolang/client/<指紋>/`) を `If-None-Match` で照合し (1 往復・届かなければ手元の束で動く)、変わっていれば取り直す。手元に束が無い初めての起動では、届かない・5xx の時に 3 秒・6 秒おいて計 3 回まで取り直す (server の入れ替え中をやり過ごす・最長 約 70 秒)。版番号は無く、指紋 = tar.gz の sha256。flag の表はこの README に持たない — `nolang make --help` が server と同じ版の物を出す。
 - 束 (= 実行する code) を取るのは本番 (`api.no-lang.com`) と `localhost` からだけ。本番の束には server の build が Ed25519 で署名していて、起動係は公開鍵 (`packages/cli/nolang.mjs` に焼き込み) で検証してから動かす — 署名の無い束・合わない束は動かさない (`localhost` の手元のスタックは署名なしでも動く)。他の NoLang の server から取るのは、人が shell に `NOLANG_CLIENT_TRUSTED_ORIGIN=<その URL>` と書いた時だけ (その origin の束は署名が無くても動く)。手元の checkout の CLI を動かすには `NOLANG_CLIENT_DIR` (取得なし)。
 - リンクの通知: プラグインの hook (`hooks/`) が、コマンドの出力に `tell_user` (動画・ログインの URL を含む案内) があれば、モデルを通さずに Claude Code の画面に通知として出す (モデルがリンクを書き忘れても届く)。
+- 許可 hook: このプラグイン自身の CLI の `auth status`・`job take`・`wait`・文字と選択だけを渡す `make`、作業ディレクトリ内の `stream/jobs/<job>/parts/NNN.txt` への書き込み、プラグインのスキル文書の読み込みを許可します。素材アップロード・`--speech`・接続先変更・コマンドの連結・それ以外のファイルは通常の許可確認に従います。
 - 接続先: `--api <URL>` → 環境変数 `NOLANG_API_URL` → プラグインの接続先 (`cli/defaults.json`) → 本番 (`https://api.no-lang.com`)。URL だけで、接続先を選んで保存する command は無い (本番以外の NoLang の server は shell の `NOLANG_API_URL` と `NOLANG_CLIENT_TRUSTED_ORIGIN` で向ける)。ログインは接続先ごとに持ち、ログインしても接続先は変わらない。MCP の接続先はプラグインでは本番固定。
 - ログイン: 手元の機械はエージェントの `--background` も含めてブラウザ認可 (ブラウザが開き、許可するだけ・コード入力なし。始められなければデバイス認可へ自動で切り替え)。SSH・リモートコンテナ・Docker・WSL・画面の無い Linux はデバイス認可を選び、URL とコードをブラウザで入力して許可する (ポート転送不要)。エージェントは `--background` で案内 (デバイス認可ならコードも) を受け取り、`nolang auth wait` で完了を確かめる。`--device` / `--browser` で明示選択できる。ブラウザ認可の戻り先が接続エラーになっても、開始済みのログインに `auth complete '<許可後の URL>'` で貼り戻せる (`--background` も対応)。トークンは `~/.config/nolang/credentials.json` (0600)・期限が切れても自動で更新 (30 日使わなければ再ログイン)。
 - CI など非対話: `NOLANG_TOKEN` に access token (`eval "$(nolang auth env)"` が出すもの・1 時間で切れ、CLI は更新しない) を入れる。API key (`nlg-c-…`) は CLI と MCP では使えない (403・NoLang API 用)。
@@ -147,14 +149,18 @@ nolang assets upload <file>… [--name 表示名] [--speakers N]   手元の画�
 
 Codex は元の `CODEX_HOME` (既定 `~/.codex`) の `auth.json` のみを共有し、ユーザーの設定・hook・plugin・MCP・会話履歴を読み込まない一時環境で動きます。モデルはその Codex CLI の既定を使います。API key の環境変数だけの認証や keyring だけの認証は現在対象外です。呼出しごとの記録 (役・effort・所要・token) は `stream/run.jsonl`、エラーは `stream/codex_*.err` に残ります。
 
-CLI / MCP の原稿検査・素材・描画は共通の NoLang サーバーを使います。自動の著者・担当・修正は手元の LLM の CLI (Claude Code か Codex) が書くので、シェルのないリモート MCP クライアントは `nolang_create_video` (server が書く) か、原稿を自分で書いて投入する手順を使います。
+Codex では、手元の CLI とその認証が使えれば、subagent が使えても `--engine codex` を優先します。生成開始前に CLI または認証が使えないと分かった場合は、shell と subagent が使えれば `--engine host` に切り替えます。
+
+`--engine host` は LLM の CLI を起動せず、呼び出したセッションの subagent が原稿を書きます。Claude Code では `claude` コマンドが使えない時の代替経路です。役の起動・並列数・生成完了までの待機は `skills/make-video/host-engine.md` に従います。Codex 用の agent 定義や設定追加は不要です。
+
+CLI / MCP の原稿検査・素材・描画は共通の NoLang サーバーを使います。著者・担当・修正は手元の LLM (CLI または host セッションの subagent) が書くので、シェルのないリモート MCP クライアントは `nolang_create_video` (server が書く) か、原稿を自分で書いて投入する手順を使います。
 
 ## 開発
 
-直すのは正本 (`packages/cli/`・`skills/`・`hooks/`) だけ。直したら:
+直すのは正本 (`packages/cli/`・`skills/`・`agents/`・`hooks/`) だけ。直したら:
 
 ```
-npm run build       # 正本 → plugins/nolang/ (cli/・skills/・hooks/ を作り直し、manifest の version を起動係に揃える)
+npm run build       # 正本 → plugins/nolang/ (cli/・skills/・agents/・hooks/ を作り直し、manifest の version を起動係に揃える)
 npm run check       # plugins/ が正本どおりか + hook の単体テスト (CI と同じ)。CLI 本体のテストは nolang-backend (agent_client/cli/test)
 npm run validate    # claude plugin validate --strict (Claude Code が要る)
 ```

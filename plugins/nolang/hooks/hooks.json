@@ -1,10 +1,28 @@
 {
-  "description": "nolang の出力の tell_user (動画・ログインの URL) を、モデルを通さずに通知として画面に出す",
+  "description": "nolang の出力の tell_user (動画・ログインの URL) を、モデルを通さずに通知として画面に出す。studio 自身の CLI 操作・原稿の書き込み・スキルの読み込みを許可する",
   "hooks": {
     "PostToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/tell-user.mjs\"", "timeout": 10 }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/tell-user.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v node >/dev/null 2>&1 || exit 0; node \"${CLAUDE_PLUGIN_ROOT}/hooks/allow-nolang.mjs\"",
+            "timeout": 10
+          }
+        ]
       }
     ]
   }
